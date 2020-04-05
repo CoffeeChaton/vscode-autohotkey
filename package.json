@@ -1,9 +1,9 @@
 {
-  "name": "407vscode-autohotkey-plus",
+  "name": "407vscode-autohotkey-",
   "displayName": "407 AutoHotkey Outline displayName",
   "description": "407 AutoHotkey Outline description",
   "version": "2.2.3",
-  "publisher": "407Cat",
+  "publisher": "CoffeeCat407",
   "engines": {
     "vscode": "^1.43.0"
   },
