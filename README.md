@@ -24,12 +24,13 @@ AutoHotKey language support for VS Code
  - function
  - for
  - class
+ - loop
+ - switch
 ![codeSymbole2](image/codeSymbol2.png)
 
-3. 
+3. Better view
  - Static Var
  - Return
- - Switch
  - Case
  - Default
  - GoSub
@@ -37,7 +38,7 @@ AutoHotKey language support for VS Code
  - Label
  - New
  - HotStr
- - HotKeys
+ - HotKeys, like '~F12'
  - directive, like '#Include' '#Warn' 
  - Global
  - Throw
