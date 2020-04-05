@@ -1,7 +1,7 @@
 # vscode-autohotkey-Outline
 
 > Base of [ cweijan /vscode-autohotkey ](https://github.com/cweijan/vscode-autohotkey)
-> https://t.me/ceenekomimi
+> my telegram https://t.me/ceenekomimi
 
 
 AutoHotKey language support for VS Code
