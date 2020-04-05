@@ -54,5 +54,6 @@ AutoHotKey language support for VS Code
 ## CodeFormat
 1. Right click then click format document.
 - **Formatter follows my coding habits, so it may not unsuited for you**.
-![codeFormat](image/codeFormat.jpg)
+- my style fork is not Formatter Label and Return.
+
 
