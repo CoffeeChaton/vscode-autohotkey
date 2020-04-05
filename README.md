@@ -11,12 +11,6 @@ AutoHotKey language support for VS Code
 * [Code Symbol](#CodeSymbol) and [Method Symbol](#MethodSymbol)
 * [Goto Definition](#GotoDefinition)
 
-**Change Default Execute Path:**
-1. The default is C:\\Program Files\\Autohotkey\\AutoHotkeyU64.exe
-2. Press "Ctrl+Shift+P" to open command palette.
-3. Input "Config Ahk" to select config command.
-![runConfig](image/runConfig.jpg)
-
 ## MethodSymbol
 1. Detech source method as symbol
 2. You can add a comment to the method using a semicolon on the previous line of the method
