@@ -21,8 +21,27 @@ AutoHotKey language support for VS Code
 ![codeSymbole](image/codeSymbol.jpg)
 
 2. You can see Leveled outline
-![codeSymbole2](image/codeSymbol2.jpg)
-![codeSymbole3](image/codeSymbol3.jpg)
+ - function
+ - for
+ - class
+![codeSymbole2](image/codeSymbol2.png)
+
+3. 
+ - Static Var
+ - Return
+ - Switch
+ - Case
+ - Default
+ - GoSub
+ - GoTo
+ - Label
+ - New
+ - HotStr
+ - HotKeys
+ - directive, like '#Include' '#Warn' 
+ - Global
+ - Throw
+![codeSymbole3](image/codeSymbol3.png)
 
 ## GotoDefinition
 
