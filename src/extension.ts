@@ -1,37 +1,31 @@
-import * as vscode from "vscode";
-import { ProviderResult } from "vscode";
-import { Detecter } from "./core/Detecter";
-import { ScriptRunner } from "./core/ScriptRunner";
-import { AhkDebugSession } from "./debugger/AhkDebug";
-import { DefProvider } from "./provider/DefProvider";
-import { FileProvider } from "./provider/FileProvider";
-import { FormatProvider } from "./provider/FormatProvider";
-import { SymBolProvider } from "./provider/SymbolProvider";
+/* eslint-disable import/no-unresolved */
 
+import * as vscode from 'vscode';
+import { Detecter } from './core/Detecter';
+import DefProvider from './provider/DefProvider';
+import { FileProvider } from './provider/FileProvider';
+import { FormatProvider } from './provider/FormatProvider';
+import SymBolProvider from './provider/SymbolProvider';
+
+
+// eslint-disable-next-line import/prefer-default-export
 export function activate(context: vscode.ExtensionContext) {
-
-    Detecter.buildByPath(vscode.workspace.rootPath);
-    const language = { language: "ahk" };
-    const scriptRunner = new ScriptRunner(context);
-    context.subscriptions.push(
-        // vscode.languages.registerCompletionItemProvider(language, new CompletionProvider(), " ", "."),
-        vscode.languages.registerDefinitionProvider(language, new DefProvider()),
-        vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
-        vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
-        FileProvider.createEditorListenr(),
-        vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new InlineDebugAdapterFactory()),
-        vscode.commands.registerCommand("run.ahk", () => scriptRunner.run()),
-        vscode.commands.registerCommand("debug.ahk", () => scriptRunner.startDebugger()),
-        vscode.commands.registerCommand("compile.ahk", () => scriptRunner.compile()),
-        vscode.commands.registerCommand("run.ahk.config", () => scriptRunner.reqConfigPath())
-    )
-
+  const language = { language: 'ahk' };
+  const ahkRootPath = vscode.workspace.rootPath; // WTF?
+  if (ahkRootPath) Detecter.buildByPath(ahkRootPath);
+  context.subscriptions.push(
+    vscode.languages.registerDefinitionProvider(language, new DefProvider()),
+    vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
+    vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
+    FileProvider.createEditorListenr(),
+  );
 }
 
-class InlineDebugAdapterFactory implements vscode.DebugAdapterDescriptorFactory {
 
-    createDebugAdapterDescriptor(_session: vscode.DebugSession): ProviderResult<vscode.DebugAdapterDescriptor> {
-        return new vscode.DebugAdapterInlineImplementation(new AhkDebugSession());
-    }
+/*
 
-}
+TODO    registerColorProvider(selector: DocumentSelector,
+Provider: DocumentColor Provider): Disposable
+https://code.visualstudio.com/api/references/vscode-api#Diagnostic
+https://code.visualstudio.com/api/references/vscode-api#MessageItem
+*/
