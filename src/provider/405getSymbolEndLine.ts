@@ -9,13 +9,11 @@ import inCommentBlock from './405inCommentBlock';
 // eslint-disable-next-line max-statements
 export default function getSymbolEndLine(document: vscode.TextDocument,
   line: number, lineCount: number, startPos: vscode.Position): vscode.Range {
-  // const startPos = new vscode.Position(line, 0);
   const nextLine = line + 1;
   let CommentBlock = false;
   let block = 0;
   const blockStart = /\{$/;
   const blockEnd = /^\}/;
-  // line and line +1
 
   for (let i = line; i < lineCount; i += 1) {
     const { text } = document.lineAt(i);
@@ -24,11 +22,11 @@ export default function getSymbolEndLine(document: vscode.TextDocument,
     const textFix = trimContent(text, false).trim();
     if (textFix === '') continue; // just ''
 
-    const s = textFix.search(blockStart);
+    const s = textFix.search(blockStart);// {$
     if (s > -1) block += 1;
-
-    const e = textFix.search(blockEnd);
+    const e = textFix.search(blockEnd); // ^}
     if (e > -1) block -= 1;
+
 
     if (block === 0) {
       switch (i) {
@@ -42,10 +40,11 @@ export default function getSymbolEndLine(document: vscode.TextDocument,
     }
   }
 
+  // I don't think it will run to the here
   const { text } = document.lineAt(nextLine);
-  const temp = `Error line at ${nextLine} getSymbolEndLine--48--83--81  \n  ${text} `;
-  // console.log(temp);
-  vscode.window.showWarningMessage(temp);
+  const temp = `Error line at ${nextLine} \n AHK OUTLINE ERROR getSymbolEndLine--48--83--81  \n  ${text} `;
+  console.log(temp);
+  // vscode.window.showWarningMessage(temp);
   // eslint-disable-next-line
   const endPos = new vscode.Position(nextLine, 0);
   return new vscode.Range(startPos, endPos);
