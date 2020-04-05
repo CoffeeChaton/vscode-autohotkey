@@ -1,13 +1,11 @@
 # vscode-autohotkey-Outline
 
 > Base of [ cweijan /vscode-autohotkey ](https://github.com/cweijan/vscode-autohotkey)
-> 
-
-> You can see changes in the [changelog](/CHANGELOG.md)
+> https://t.me/ceenekomimi
 
 
 AutoHotKey language support for VS Code
-* Code Assistant
+
 * [Code Symbol](#CodeSymbol) and [Method Symbol](#MethodSymbol)
 * [Goto Definition](#GotoDefinition)
 
@@ -31,3 +29,4 @@ AutoHotKey language support for VS Code
 1. Right click then click format document.
 - **Formatter follows my coding habits, so it may not unsuited for you**.
 ![codeFormat](image/codeFormat.jpg)
+
