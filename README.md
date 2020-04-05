@@ -12,8 +12,10 @@ AutoHotKey language support for VS Code
 ## MethodSymbol
 1. Detech source method as symbol
 2. You can add a comment to the method using a semicolon on the previous line of the method
-
+3. Now you can see "Splitting a Long Line into a Series of Shorter Ones" at Outline, but now can't GotoDefinition, i will fix it.
 ![methodSymbol](image/methodSymbol.jpg)
+![methodSymbol2](image/methodSymbol2.png)
+
 
 ## CodeSymbol
 
@@ -37,8 +39,8 @@ AutoHotKey language support for VS Code
  - GoTo
  - Label
  - New
- - HotStr
- - HotKeys, like '~F12'
+ - HotStr, like '::ahk,,::AutoHotkey'
+ - HotKeys, like '~F12::'
  - directive, like '#Include' '#Warn' 
  - Global
  - Throw
