@@ -15,10 +15,10 @@ function showTimeSpend(document: vscode.TextDocument, timeStart: number) {
   const name = document.uri.path.match(/([\w\s]+\.ahk|ext)$/i);
   if (name !== null) {
     const version = 'v10:52';
-    const timeSpend = `${version} timeSpend : ${Date.now() - timeStart} ms at ${name[1]}`;
+    const timeSpend = `timeSpend ${Date.now() - timeStart} ms at ${name[1]}`;
     // vscode.window.showInformationMessage(timeSpend);
     vscode.window.setStatusBarMessage(timeSpend);
-    vscode.window.showWarningMessage(timeSpend);
+    //  vscode.window.showWarningMessage(timeSpend);
     // const a = vscode.window.createOutputChannel(version);
     // a.show();
     // a.appendLine(timeSpend);
