@@ -20,6 +20,10 @@ AutoHotKey language support for VS Code
 1. You can add two semicolon to comment code block
 ![codeSymbole](image/codeSymbol.jpg)
 
+2. You can see Leveled outline
+![codeSymbole2](image/codeSymbol2.jpg)
+![codeSymbole3](image/codeSymbol3.jpg)
+
 ## GotoDefinition
 
 1. Press ctrl and move the mouse coordinates to the calling code 
