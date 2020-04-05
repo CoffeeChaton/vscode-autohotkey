@@ -18,7 +18,7 @@ export class AhkFunc {
     public line: number, public comnent: string, public lineConsumed: number) { }
 }
 function getAhkMultilineFunc(document: vscode.TextDocument,
-  line: number, funcName :string): AhkFunc | null {
+  line: number, funcName :string, fnComment :string): AhkFunc | null {
   // https://www.autohotkey.com/docs/Scripts.htm#continuation
   // style
   // ^fn_Name( something
@@ -32,7 +32,7 @@ function getAhkMultilineFunc(document: vscode.TextDocument,
 
     // ^, something , something ........ ) {$
     if (iLine.search(/\)\s*\{$/) > -1) {
-      return new AhkFunc(funcName, funcName, line, '', i - line);
+      return new AhkFunc(funcName, funcName, line, fnComment, i - line);
     }
 
     // ^, something , something ......)$
@@ -40,12 +40,13 @@ function getAhkMultilineFunc(document: vscode.TextDocument,
     if (iLine.search(/\)$/) > -1) {
       const iLine2 = trimContent(document.lineAt(i + 2).text, true).trim();
       if (iLine2.search(/^\{/) !== 0) return null; // not ^{
-      return new AhkFunc(funcName, funcName, line, '', i - line + 1); // ^{
+      return new AhkFunc(funcName, funcName, line, fnComment, i - line + 1); // ^{
     }
   }
   return null;
 }
-function getAhkFuncByLine(document: vscode.TextDocument, line: number): AhkFunc | null {
+// eslint-disable-next-line max-len
+function getAhkFuncByLine(document: vscode.TextDocument, line: number, fnComment :string): AhkFunc | null {
   const { text } = document.lineAt(line);
   const textFix = trimContent(text, true).trim();
   if (textFix === '') return null; // just ''
@@ -64,22 +65,22 @@ function getAhkFuncByLine(document: vscode.TextDocument, line: number): AhkFunc 
   // style ^fn_Name(){$
   const fnTail = /\)\s*\{$/;
   if (textFix.search(fnTail) > -1) {
-    return new AhkFunc(funcName, funcName, line, '', 0);
+    return new AhkFunc(funcName, funcName, line, fnComment, 0);
   }
 
   // style
-  // ^fn_Name( something something something )$
-  // ^{ ...something something
+  // ^fn_Name( ... )$
+  // ^{ ...
   const fnTail2 = /\)$/;
   if (textFix.search(fnTail2) > -1) {
     const nextLine = trimContent(document.lineAt(line + 1).text, true).trim();
     if (nextLine.indexOf('{') !== 0) return null; // nextLine is not ^{
-    return new AhkFunc(funcName, funcName, line, '', 1);
+    return new AhkFunc(funcName, funcName, line, fnComment, 1);
   }
 
-  if (textFix.indexOf(')') > -1) return null;// fn_Name( something something ) something
+  if (textFix.indexOf(')') > -1) return null;// fn_Name( ... ) something ,this is not ahk function
 
-  return getAhkMultilineFunc(document, line, funcName);
+  return getAhkMultilineFunc(document, line, funcName, fnComment);
 }
 export class Detecter {
   private static docFuncMap = { key: String, FuncList: Array<AhkFunc>() };
@@ -149,10 +150,11 @@ export class Detecter {
   }
 
   public static getFuncByLine(document: vscode.TextDocument, line: number): AhkFunc | null {
-    return getAhkFuncByLine(document, line);
+    const fnComment = Detecter.getRemarkByLine(document, line - 1);
+    return getAhkFuncByLine(document, line, fnComment);
   }
 
-  private static getRemarkByLine(document: vscode.TextDocument, line: number) {
+  private static getRemarkByLine(document: vscode.TextDocument, line: number): string {
     if (line >= 0) {
       const { text } = document.lineAt(line);
       const markMatch = text.match(/^\s*;(.+)/);
@@ -160,7 +162,7 @@ export class Detecter {
         return markMatch[1];
       }
     }
-    return null;
+    return '';
   }
 }
 
