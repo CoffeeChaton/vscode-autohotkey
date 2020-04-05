@@ -1,9 +1,9 @@
-/* eslint-disable no-magic-numbers */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
 /* eslint-disable no-continue */
 
 // eslint-disable-next-line import/no-unresolved
 import * as vscode from 'vscode';
-import trimContent from './405trimContent';
+import { trimContent } from './405trimContent';
 import inCommentBlock from './405inCommentBlock';
 
 // eslint-disable-next-line max-statements

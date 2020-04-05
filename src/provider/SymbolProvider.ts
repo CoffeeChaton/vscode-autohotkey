@@ -1,6 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-labels */
-/* eslint-disable import/extensions */
 /* eslint-disable max-statements */
 /* eslint-disable no-continue */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
@@ -8,17 +5,17 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import getSymbolEndLine from './405getSymbolEndLine';
-import trimContent from './405trimContent';
+import { trimContent, getSkipSign } from './405trimContent';
 import inCommentBlock from './405inCommentBlock';
 
-function showTimeSpend(document: vscode.TextDocument, timeStart: number) {
+function showTimeSpend(document: vscode.TextDocument, timeStart: number): void {
   const name = document.uri.path.match(/([\w\s]+\.ahk|ext)$/i);
   if (name !== null) {
-    const version = 'v0.1';
+    const version = ''; // 'pm 10:15';
     const timeSpend = `${version} timeSpend ${Date.now() - timeStart} ms at ${name[1]}`;
     // vscode.window.showInformationMessage(timeSpend);
     vscode.window.setStatusBarMessage(timeSpend);
-    // vscode.window.showWarningMessage(timeSpend);
+    //  vscode.window.showWarningMessage(timeSpend);
     // const a = vscode.window.createOutputChannel(version);
     // a.show();
     // a.appendLine(timeSpend);
@@ -26,50 +23,42 @@ function showTimeSpend(document: vscode.TextDocument, timeStart: number) {
     console.log(timeSpend);
   }
 }
-// ;;
-function getDoubleCommentSymbol(document: vscode.TextDocument, line: number, text: string)
-: vscode.SymbolInformation | null {
-  const DoubleComment = text.indexOf(';;');
-  const indexNotFind = -1;
-  if (DoubleComment > indexNotFind) {
-    const Length = 2;
-    const name = text.substring(DoubleComment + Length).trim();
-    const startPos = new vscode.Position(line, 0);
-    const endPos = new vscode.Position(line, text.length);
-    return new vscode.SymbolInformation(name,
-      vscode.SymbolKind.Module, '',
-      new vscode.Location(document.uri, new vscode.Range(startPos, endPos)));
-  }
-  return null;
-}
+
 // { ;;
 function getCommentBlockSymbol(document: vscode.TextDocument,
   line: number, lineCount: number, text: string): vscode.SymbolInformation | null {
-  const searchNotFind = -1;
-  const regex = /^\s*\{\s\s*;;/; // {;; name
-  const CommentBlock = text.search(regex);
-  if (CommentBlock > searchNotFind) { // find
-    // text.search(regex);
-    const semiColonLength = 2;
-    const name = text.substring(text.indexOf(';;') + semiColonLength).trim();
-    const kind = vscode.SymbolKind.Package;
+  const kind = vscode.SymbolKind.Package;
+  const Length = 2; // ;; Length
+  const notFind = -1;
+
+  const CommentBlockRegex = /^\{\s\s*;;/; // ^{;; name
+  const CommentBlock = text.trim().search(CommentBlockRegex);
+  if (CommentBlock > notFind) { // find
+    const name = text.substring(text.indexOf(';;') + Length).trim();
     const startPos = new vscode.Position(line, 0);
     const BlockRange = getSymbolEndLine(document, line, lineCount, startPos);
     return new vscode.SymbolInformation(name, kind, '',
       new vscode.Location(document.uri, BlockRange));
   }
-  const hotKeyMatch = getDoubleCommentSymbol(document, line, text); // ;;
-  if (hotKeyMatch) return hotKeyMatch;
+  const DoubleComment = text.indexOf(';;'); // ;;
+  if (DoubleComment > notFind) {
+    const name = text.substring(DoubleComment + Length).trim();
+    const startPos = new vscode.Position(line, DoubleComment);
+    const endPos = new vscode.Position(line, text.length);
+    return new vscode.SymbolInformation(name, kind, '',
+      new vscode.Location(document.uri, new vscode.Range(startPos, endPos)));
+  }
 
   return null;
 }
 // Class Loop For Switch
 function getBlockSymbol(document: vscode.TextDocument,
-  line: number, lineCount: number, textP: string): vscode.SymbolInformation | null {
+  line: number, lineCount: number,
+  textP: string, startPos: vscode.Position): vscode.SymbolInformation | null {
   const matchList: RegExp[] = [
     /^\s*class[\s,]+(\w+)/i, // class
     /^\s*loop[\s,%]+(\w+)/i, // Loop
-    /^\s*for[\s,\w]+in\s+(\w+)/i, // For Key , Value in Expression
+    /^\s*for[\s,\w]+in\s+(\w+)/i, // For Key , Value in (Expression)
     /^\s*switch\s+(\w+)/i, // Switch
   ];
   const nameList: string[] = [
@@ -91,7 +80,6 @@ function getBlockSymbol(document: vscode.TextDocument,
     if (BlockSymbol) {
       const name = nameList[i] + BlockSymbol[1];
       const kind = kindList[i];
-      const startPos = new vscode.Position(line, 0);
       const BlockRange = getSymbolEndLine(document, line, lineCount, startPos);
       return new vscode.SymbolInformation(name, kind, '',
         new vscode.Location(document.uri, BlockRange));
@@ -100,8 +88,8 @@ function getBlockSymbol(document: vscode.TextDocument,
   return null;
 }
 // Return
-function getLineSymbol(document: vscode.TextDocument,
-  line: number, textFix: string, length: number): vscode.SymbolInformation | null {
+function getLineSymbol(document: vscode.TextDocument, line: number,
+  textFix: string, length: number, startPos: vscode.Position): vscode.SymbolInformation | null {
   const matchList: RegExp[] = [
     /^Static\b(.+)/i, //  Static var :=
     /^Return[\s,]+(.+)/i, // Return
@@ -112,7 +100,7 @@ function getLineSymbol(document: vscode.TextDocument,
     /^(\w+):$/, // Label:
     /:=\s*new\s\s*(.+)/i, //  := new
     /^:[^:]*:([^:]+)::/, // HotStr
-    /^([^:]+)::/, // TODO HotKeys
+    /^([^:]+)::/, // HotKeys
     /^#(\w+)/, // directive
     /^Global[\s,]+([^:]+)/i, // global
     /^Throw[\s,]+(.+)/i, // global
@@ -135,18 +123,18 @@ function getLineSymbol(document: vscode.TextDocument,
   // https://code.visualstudio.com/api/references/vscode-api#SymbolKind
   const kindList: vscode.SymbolKind[] = [
     vscode.SymbolKind.Variable, // Static
-    vscode.SymbolKind.Variable,
+    vscode.SymbolKind.Variable, // Return
     vscode.SymbolKind.Variable, // Case
     vscode.SymbolKind.Variable, // Default
-    vscode.SymbolKind.Variable,
-    vscode.SymbolKind.Variable,
-    vscode.SymbolKind.Package,
+    vscode.SymbolKind.Variable, // GoSub
+    vscode.SymbolKind.Variable, // GoTo
+    vscode.SymbolKind.Package, // Label
     vscode.SymbolKind.Class, // not Object  is feature
-    vscode.SymbolKind.Event,
-    vscode.SymbolKind.Event,
-    vscode.SymbolKind.Event,
-    vscode.SymbolKind.Variable,
-    vscode.SymbolKind.Event,
+    vscode.SymbolKind.Event, // HotStr
+    vscode.SymbolKind.Event, // HotKeys
+    vscode.SymbolKind.Event, // directive
+    vscode.SymbolKind.Variable, // Global
+    vscode.SymbolKind.Event, // Throw
   ];
   const textP = textFix.trim();
   for (let i = 0; i < matchList.length; i += 1) {
@@ -155,7 +143,6 @@ function getLineSymbol(document: vscode.TextDocument,
       const name = nameList[i] + BlockSymbol[1];
       const kind = kindList[i];
       //
-      const startPos = new vscode.Position(line, 0);
       const endPos = new vscode.Position(line, length);
       const LineRange = new vscode.Range(startPos, endPos);
       //
@@ -165,86 +152,64 @@ function getLineSymbol(document: vscode.TextDocument,
   }
   return null;
 }
-function getSkipSign(textFix:string):boolean {
-  const skipList: RegExp[] = [
-    /^,/,
-    /^\./,
-    /^if\b/,
-    /^while\b/,
-    /^else\b/,
-    /^\{/,
-    /^sleep\b/,
-  ];
 
-  for (let i = 0; i < skipList.length; i += 1) {
-    if (textFix.trim().toLowerCase().search(skipList[i]) !== -1) return true;
-  }
-
-  return false;
-}
-function fnMain(document: vscode.TextDocument,
-  // eslint-disable-next-line no-unused-vars
-  token: vscode.CancellationToken)
-  : vscode.ProviderResult<vscode.SymbolInformation[] | vscode.DocumentSymbol[]> {
-  const timeStart = Date.now();
-  const lineCountRule = 10000;
-  const lineCount = Math.min(document.lineCount, lineCountRule);
-  const result: vscode.SymbolInformation[] = [];
-  let CommentBlock = false;
-  let lineConsumed = 0; // FIXME
-
-  for (let line = 0; line < lineCount; line += 1) {
-    const { text } = document.lineAt(line);
-
-    CommentBlock = inCommentBlock(text, CommentBlock);
-    if (CommentBlock) continue; // in /*  block
-
-    const CommentBlockSymbol = getCommentBlockSymbol(document, line, lineCount, text); // { ;; or ;;
-    if (CommentBlockSymbol) result.push(CommentBlockSymbol); // not continue
-
-    if (lineConsumed > 0) {
-      lineConsumed -= 1;
-      continue;
-    }
-
-    const textFix = trimContent(text, false);
-    if (textFix.trim() === '') continue; // just ''
-
-    const skipSign = getSkipSign(textFix);
-    if (skipSign) continue;
-
-    const func = Detecter.getFuncByLine(document, line); // function
-    if (func) {
-      lineConsumed = func.lineConsumed;
-      const startPos = new vscode.Position(line, 0);
-      const funcRange = getSymbolEndLine(document, line + lineConsumed, lineCount, startPos);
-      result.push(new vscode.SymbolInformation(func.name,
-        vscode.SymbolKind.Method, func.comnent,
-        new vscode.Location(document.uri, funcRange)));
-      continue;
-    }
-
-    const BlockSymbol = getBlockSymbol(document, line, lineCount, textFix); // class
-    if (BlockSymbol) {
-      result.push(BlockSymbol);
-      continue;
-    }
-
-    const { length } = text;
-    const LineSymbol = getLineSymbol(document, line, textFix, length); // Return
-    if (LineSymbol) {
-      result.push(LineSymbol);
-      continue;
-    }
-  }
-  showTimeSpend(document, timeStart);
-  return result;
-}
 export default class SymBolProvider implements vscode.DocumentSymbolProvider {
   // eslint-disable-next-line class-methods-use-this
   provideDocumentSymbols(document: vscode.TextDocument,
-    token: vscode.CancellationToken)
+    // eslint-disable-next-line no-unused-vars
+    _token: vscode.CancellationToken)
     : vscode.ProviderResult<vscode.SymbolInformation[] | vscode.DocumentSymbol[]> {
-    return fnMain(document, token);
+    const timeStart = Date.now();
+    const lineCountRule = 10000;
+    const lineCount = Math.min(document.lineCount, lineCountRule);
+    const result: vscode.SymbolInformation[] = [];
+    let CommentBlock = false;
+    let lineConsumed = 0;
+
+    for (let line = 0; line < lineCount; line += 1) {
+      const { text } = document.lineAt(line);
+
+      CommentBlock = inCommentBlock(text, CommentBlock);
+      if (CommentBlock) continue; // in /*  block
+
+      // { ;; or ;;
+      const CommentBlockSymbol = getCommentBlockSymbol(document, line, lineCount, text);
+      if (CommentBlockSymbol) result.push(CommentBlockSymbol); // not continue
+
+      if (lineConsumed > 0) {
+        lineConsumed -= 1;
+        continue;
+      }
+
+      const textFix = trimContent(text, false);
+      if (textFix.trim() === '') continue; // just ''
+      if (getSkipSign(textFix)) continue;
+
+      const startPos = new vscode.Position(line, 0);
+      const func = Detecter.getFuncByLine(document, line); // function
+      if (func) {
+        lineConsumed = func.lineConsumed;
+        const funcRange = getSymbolEndLine(document, line + lineConsumed, lineCount, startPos);
+        result.push(new vscode.SymbolInformation(func.name,
+          vscode.SymbolKind.Method, func.Remark,
+          new vscode.Location(document.uri, funcRange)));
+        continue;
+      }
+
+      const BlockSymbol = getBlockSymbol(document, line, lineCount, textFix, startPos); // class
+      if (BlockSymbol) {
+        result.push(BlockSymbol);
+        continue;
+      }
+
+      const { length } = text;
+      const LineSymbol = getLineSymbol(document, line, textFix, length, startPos); // Return
+      if (LineSymbol) {
+        result.push(LineSymbol);
+        continue;
+      }
+    }
+    showTimeSpend(document, timeStart);
+    return result;
   }
 }

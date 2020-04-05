@@ -1,8 +1,9 @@
 export default function (text: string, CommentBlock: boolean): boolean {
+  const textFix = text.trim();
   const NotFind = -1;
   const CommentBlockStart = /^\s*\/\*/; //    /*
-  if (text.search(CommentBlockStart) > NotFind) return true;
+  if (textFix.search(CommentBlockStart) > NotFind) return true;
   const CommentBlockEnd = /^\s*\*\//;//  CommentBlock end  */
-  if (text.search(CommentBlockEnd) > NotFind) return false;
+  if (textFix.search(CommentBlockEnd) > NotFind) return false;
   return CommentBlock;
 }

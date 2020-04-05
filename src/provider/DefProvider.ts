@@ -52,7 +52,6 @@ export default class DefProvider implements vscode.DefinitionProvider {
     }
     for (const method of await Detecter.getFuncList(document)) {
       if (method.name.indexOf(word) !== indexOfZero) {
-        // eslint-disable-next-line consistent-return
         return new vscode.Location(document.uri,
           new vscode.Position(method.line, document.lineAt(method.line).text.indexOf(word)));
       }
@@ -63,7 +62,6 @@ export default class DefProvider implements vscode.DefinitionProvider {
       // eslint-disable-next-line no-await-in-loop
       for (const method of await Detecter.getFuncList(tempDocument)) {
         if (method.name.indexOf(word) !== indexOfZero) {
-          // eslint-disable-next-line consistent-return
           return new vscode.Location(tempDocument.uri,
             new vscode.Position(method.line, tempDocument.lineAt(method.line).text.indexOf(word)));
         }

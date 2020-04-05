@@ -14,7 +14,7 @@ import SymBolProvider from './provider/SymbolProvider';
 // eslint-disable-next-line import/prefer-default-export
 export function activate(context: vscode.ExtensionContext) {
   const language = { language: 'ahk' };
-  const ahkRootPath = vscode.workspace.rootPath; // WTF?
+  const ahkRootPath = vscode.workspace.rootPath;
   if (ahkRootPath) Detecter.buildByPath(ahkRootPath);
   context.subscriptions.push(
     vscode.languages.registerDefinitionProvider(language, new DefProvider()),

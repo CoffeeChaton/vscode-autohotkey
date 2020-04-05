@@ -2,7 +2,7 @@
 /* eslint-disable init-declarations */
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
-/* eslint-disable no-magic-numbers */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
 /* eslint-disable no-continue */
 /* eslint complexity: ["error", 30] */
 /* eslint max-statements: [1, 200] */
@@ -44,7 +44,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
     _token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
     let formatDocument = '';
     let deep = 0;
-    const tagDeep = 0;
+    // const tagDeep = 0;
     let oneCommandCode = false;
 
     for (let line = 0; line < document.lineCount; line += 1) {
