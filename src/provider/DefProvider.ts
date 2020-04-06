@@ -1,6 +1,9 @@
+/* eslint max-statements: [1, 200] */
+/* eslint-disable no-await-in-loop */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
 /* eslint-disable no-restricted-syntax */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
 // eslint-disable-next-line import/no-unresolved
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
@@ -43,27 +46,27 @@ export default class DefProvider implements vscode.DefinitionProvider {
   // eslint-disable-next-line class-methods-use-this
   public async tryGetMethodLink(document: vscode.TextDocument, position: vscode.Position)
     : Promise<vscode.Location | null> {
-    const indexOfZero = -1;
     const { text } = document.lineAt(position.line);
     const word = document.getText(document.getWordRangeAtPosition(position));
-    const callReg = new RegExp(`\\b${word}\\s*\\(.*?\\)`);
+
+    //  const callReg = new RegExp(`\\b${word}\\s*\\(.*?\\)`);
+    const callReg = new RegExp(`\\b${word}\\s*\\(`);
     if (!callReg.exec(text)) {
       return null;
     }
-    for (const method of await Detecter.getFuncList(document)) {
-      if (method.name.indexOf(word) !== indexOfZero) {
+    for (const AhkFunc of await Detecter.getFuncList(document)) {
+      if (AhkFunc.name.indexOf(word) !== -1) {
         return new vscode.Location(document.uri,
-          new vscode.Position(method.line, document.lineAt(method.line).text.indexOf(word)));
+          new vscode.Position(AhkFunc.line, document.lineAt(AhkFunc.line).text.indexOf(word)));
       }
     }
     for (const filePath of Detecter.getCacheFile()) {
-      // eslint-disable-next-line no-await-in-loop
       const tempDocument = await vscode.workspace.openTextDocument(filePath);
-      // eslint-disable-next-line no-await-in-loop
-      for (const method of await Detecter.getFuncList(tempDocument)) {
-        if (method.name.indexOf(word) !== indexOfZero) {
+      for (const AhkFunc of await Detecter.getFuncList(tempDocument)) {
+        if (AhkFunc.name.indexOf(word) !== -1) {
           return new vscode.Location(tempDocument.uri,
-            new vscode.Position(method.line, tempDocument.lineAt(method.line).text.indexOf(word)));
+            new vscode.Position(AhkFunc.line,
+              tempDocument.lineAt(AhkFunc.line).text.indexOf(word)));
         }
       }
     }

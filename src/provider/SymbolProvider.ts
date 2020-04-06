@@ -28,22 +28,21 @@ function showTimeSpend(document: vscode.TextDocument, timeStart: number): void {
 function getCommentBlockSymbol(document: vscode.TextDocument,
   line: number, lineCount: number, text: string): vscode.SymbolInformation | null {
   const kind = vscode.SymbolKind.Package;
-  const Length = 2; // ;; Length
-  const notFind = -1;
 
   const CommentBlockRegex = /^\{\s\s*;;/; // ^{;; name
   const CommentBlock = text.trim().search(CommentBlockRegex);
-  if (CommentBlock > notFind) { // find
-    const name = text.substring(text.indexOf(';;') + Length).trim();
+  if (CommentBlock > -1) {
+    const length = 2; // length for ;;
+    const name = `${text.substring(text.indexOf(';;') + length).trim()}`;
     const startPos = new vscode.Position(line, 0);
     const BlockRange = getSymbolEndLine(document, line, lineCount, startPos);
     return new vscode.SymbolInformation(name, kind, '',
       new vscode.Location(document.uri, BlockRange));
   }
-  const DoubleComment = text.indexOf(';;'); // ;;
-  if (DoubleComment > notFind) {
-    const name = text.substring(DoubleComment + Length).trim();
-    const startPos = new vscode.Position(line, DoubleComment);
+  const CommentLine = text.indexOf(';;'); // ;;
+  if (CommentLine > -1) {
+    const name = text.substring(CommentLine).trim();
+    const startPos = new vscode.Position(line, CommentLine);
     const endPos = new vscode.Position(line, text.length);
     return new vscode.SymbolInformation(name, kind, '',
       new vscode.Location(document.uri, new vscode.Range(startPos, endPos)));
@@ -91,10 +90,10 @@ function getBlockSymbol(document: vscode.TextDocument,
 function getLineSymbol(document: vscode.TextDocument, line: number,
   textFix: string, length: number, startPos: vscode.Position): vscode.SymbolInformation | null {
   const matchList: RegExp[] = [
-    /^Static\b(.+)/i, //  Static var :=
-    /^Return[\s,]+(.+)/i, // Return
-    /^Case\s+(.+):/i, // Case 8 var "str"
-    /^Default(\s)+:/i, // Default
+    /^static\b(.+)/i, //  Static var :=
+    /^return[\s,]+(.+)/i, // Return
+    /^case\s\s*(.+):/i, // Case 8 var "str"
+    /^default(\s)\s*:/i, // Default
     /^GoSub[\s,]+(\w+)/i, // GoSub, Label
     /^GoTo[\s,]+(\w+)/i, // GoTo, Label
     /^(\w+):$/, // Label:
@@ -102,22 +101,22 @@ function getLineSymbol(document: vscode.TextDocument, line: number,
     /^:[^:]*:([^:]+)::/, // HotStr
     /^([^:]+)::/, // HotKeys
     /^#(\w+)/, // directive
-    /^Global[\s,]+([^:]+)/i, // global
-    /^Throw[\s,]+(.+)/i, // global
+    /^global[\s,]+([^:]+)/i, // global , ...
+    /^throw[\s,]+(.+)/i, // throw
   ];
   const nameList: string[] = [
     'Static Var ',
     'Return ',
-    'Case ', // TODO Case Block
+    'Case ', // TODO Case Block use switch deep
     'Default', // Default
     'GoSub ',
     'GoTo ',
     'Label ',
-    'New ',
+    'new ',
     '', // HotStr
     '', // HotKeys
     '#', // directive
-    'Global ',
+    'global ',
     'Throw ',
   ];
   // https://code.visualstudio.com/api/references/vscode-api#SymbolKind
@@ -140,14 +139,12 @@ function getLineSymbol(document: vscode.TextDocument, line: number,
   for (let i = 0; i < matchList.length; i += 1) {
     const BlockSymbol = textP.match(matchList[i]);
     if (BlockSymbol) {
-      const name = nameList[i] + BlockSymbol[1];
-      const kind = kindList[i];
+      const name = `${nameList[i]}${BlockSymbol[1]}`;
       //
       const endPos = new vscode.Position(line, length);
       const LineRange = new vscode.Range(startPos, endPos);
-      //
       const LineLocation = new vscode.Location(document.uri, LineRange);
-      return new vscode.SymbolInformation(name, kind, '', LineLocation);
+      return new vscode.SymbolInformation(name, kindList[i], '', LineLocation);
     }
   }
   return null;

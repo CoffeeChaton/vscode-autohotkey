@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.languages.registerDefinitionProvider(language, new DefProvider()),
     vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
-    vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
+    //  vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
     FileProvider.createEditorListenr(),
   );
 }

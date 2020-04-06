@@ -6,21 +6,27 @@ my telegram <https://t.me/ceenekomimi>
 
 AutoHotKey language support for VS Code
 
-- [Code Symbol](#CodeSymbol) and [Method Symbol](#MethodSymbol)
-- [Goto Definition](#GotoDefinition)
+- [vscode-autohotkey-Outline](#vscode-autohotkey-outline)
+  - [MethodSymbol](#methodsymbol)
+  - [CodeSymbol](#codesymbol)
+  - [GotoDefinition](#gotodefinition)
+  - [CodeFormat](#codeformat)
 
 ## MethodSymbol
 
-1. Detech source method as symbol
-2. You can add a comment to the method using a semicolon on the previous line of the method
-3. Now you can see "Splitting a Long Line into a Series of Shorter Ones" at Outline, but now can't GotoDefinition, i will fix it.
+1. Detect source method as symbol
+2. You can add a `;@ comment` to the method using a semicolon on the previous line of the method.
+3. Now you can see "Splitting a Long Line into a Series of Shorter Ones" at Outline.
+
    ![methodSymbol](image/methodSymbol.jpg)
-   ![methodSymbol2](image/methodSymbol2.png)
+   ![methodSymbol2](image/methodSymbol2.jpg)
 
 ## CodeSymbol
 
-1. You can add two semicolon to comment code block
-   ![codeSymbole](image/codeSymbol.jpg)
+1. You can add two semicolon `;;` to comment line
+   or add `{ ;;` to comment code block.
+
+   ![codeSymbol](image/codeSymbol.jpg)
 
 2. You can see Leveled outline
 
@@ -29,9 +35,10 @@ AutoHotKey language support for VS Code
 - class
 - loop
 - switch
-  ![codeSymbole2](image/codeSymbol2.png)
 
-3. Better view
+  ![codeSymboleBlock](image/codeSymboleBlock.jpg)
+
+1. Better view
 
 - Static Var
 - Return
@@ -41,11 +48,12 @@ AutoHotKey language support for VS Code
 - GoTo
 - Label
 - New
-- HotStr, like '::ahk,,::AutoHotkey'
-- HotKeys, like '~F12::'
-- directive, like '#Include' '#Warn'
+- HotString, like `::ahk,,::AutoHotkey`
+- HotKeys, like `~F12::`
+- directive, like `#Include or #Warn`
 - Global
 - Throw
+
   ![codeSymbole3](image/codeSymbol3.png)
 
 ## GotoDefinition

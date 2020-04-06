@@ -1,4 +1,3 @@
-/* eslint-disable lines-between-class-members */
 /* eslint-disable max-statements */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable no-restricted-syntax */
@@ -13,6 +12,7 @@ import * as fs from 'fs';
 import * as vscode from 'vscode';
 import { Out } from '../common/out';
 import { trimContent, getSkipSign } from '../provider/405trimContent';
+import inCommentBlock from '../provider/405inCommentBlock';
 
 export class AhkFunc {
   constructor(public full: string, public name: string,
@@ -62,12 +62,18 @@ export class Detecter {
       : docId as vscode.TextDocument;
 
     if (usingCache && this.docFuncMap[document.uri.path] !== null) {
-      return this.docFuncMap[document.uri.path];
+      const funcList: AhkFunc[] = this.docFuncMap[document.uri.path];
+      return funcList;
     }
 
+    let CommentBlock = false;
     const funcList: AhkFunc[] = [];
     const lineCount = Math.min(document.lineCount, 10000);
     for (let line = 0; line < lineCount; line += 1) {
+      const { text } = document.lineAt(line);
+      CommentBlock = inCommentBlock(text, CommentBlock);
+      if (CommentBlock) continue; // in /*  block
+
       const func = Detecter.getFuncByLine(document, line);
       if (func) {
         funcList.push(func);
@@ -76,6 +82,7 @@ export class Detecter {
     this.docFuncMap[document.uri.path] = funcList;
     return funcList;
   }
+
   private static getRemarkByLine(document: vscode.TextDocument, line: number): string {
     if (line > 0) {
       const { text } = document.lineAt(line - 1);
@@ -87,15 +94,14 @@ export class Detecter {
     return '';
   }
 
-  // TODO  You can add a comment to the method using a semicolon on the previous line of the method
   public static getFuncByLine(document: vscode.TextDocument, line: number): AhkFunc | null {
     const { text } = document.lineAt(line);
     const textFix = trimContent(text, true).trim();
     if (textFix === '') return null; // just ''
     if (getSkipSign(textFix)) return null;
 
-    const fnHead = /^(\w\w*)\s*\(/;
-    const fnFull = textFix.match(fnHead); // TODO fnName and (parameter,parameter)
+    const fnHead = /^(\w\w*)\(/;
+    const fnFull = textFix.match(fnHead); // TODO fnName(parameter,parameter)
     if (fnFull === null) return null; // NOT fnHead
 
     const funcName = fnFull[1];

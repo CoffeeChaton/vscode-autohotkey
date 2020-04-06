@@ -1,10 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable init-declarations */
 /* eslint-disable no-unused-vars */
-/* eslint-disable max-len */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
 /* eslint-disable no-continue */
-/* eslint complexity: ["error", 30] */
 /* eslint max-statements: [1, 200] */
 // eslint-disable-next-line import/no-unresolved
 import * as vscode from 'vscode';
@@ -53,7 +51,8 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
       text = text.toLowerCase();
       text = trimContent(text);
       /*
-      if (text.match(/#ifwinactive$/) || text.match(/#ifwinnotactive$/) || (text.match(/\breturn\b/) && tagDeep === deep)) {
+      if (text.match(/#ifwinactive$/)
+        || text.match(/#ifwinnotactive$/) || (text.match(/\breturn\b/) && tagDeep === deep)) {
         deep -= 1;
         notDeep = false;
       }
