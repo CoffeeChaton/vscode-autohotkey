@@ -6,7 +6,12 @@
     "lib": ["es2018", "es2019", "dom", "es2018.regexp"],
     "sourceMap": true,
     "rootDir": "src",
-    "strictNullChecks" : true
+    "strictNullChecks": true,
+    "removeComments": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "alwaysStrict": true,
+    "noImplicitThis": true
   },
   "exclude": ["node_modules"],
 

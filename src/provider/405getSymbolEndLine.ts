@@ -42,8 +42,9 @@ export default function getSymbolEndLine(document: vscode.TextDocument,
 
   // I don't think it will run to the here
   const { text } = document.lineAt(nextLine);
-  const temp = `Error line at ${nextLine} \n AHK OUTLINE ERROR getSymbolEndLine--48--83--81  \n  ${text} `;
-  console.log(temp);
+  const temp = `ERROR LINE AT ${nextLine} \n AHK OUTLINE ERROR getSymbolEndLine--48--83--81  \n  ${text} `;
+  // console.log(temp);
+  vscode.window.showWarningMessage(temp);
   // vscode.window.showWarningMessage(temp);
   // eslint-disable-next-line
   const endPos = new vscode.Position(nextLine, 0);

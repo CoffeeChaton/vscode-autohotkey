@@ -2,8 +2,6 @@
 
 > Base of [cweijan /vscode-autohotkey](https://github.com/cweijan/vscode-autohotkey)
 
-my telegram <https://t.me/ceenekomimi>
-
 AutoHotKey language support for VS Code
 
 - [vscode-autohotkey-Outline](#vscode-autohotkey-outline)
@@ -15,7 +13,7 @@ AutoHotKey language support for VS Code
 ## MethodSymbol
 
 1. Detect source method as symbol
-2. You can add a `;@ comment` to the method using a semicolon on the previous line of the method.
+2. You can add a `;@ remark` to the method using a semicolon on the previous line of the method.
 3. Now you can see "Splitting a Long Line into a Series of Shorter Ones" at Outline.
 
    ![methodSymbol](image/methodSymbol.jpg)
@@ -36,7 +34,7 @@ AutoHotKey language support for VS Code
 - loop
 - switch
 
-  ![codeSymboleBlock](image/codeSymboleBlock.jpg)
+  ![codeSymbolBlock](image/codeSymbolBlock.jpg)
 
 1. Better view
 
@@ -51,19 +49,22 @@ AutoHotKey language support for VS Code
 - HotString, like `::ahk,,::AutoHotkey`
 - HotKeys, like `~F12::`
 - directive, like `#Include or #Warn`
-- Global
+- global
 - Throw
 
-  ![codeSymbole3](image/codeSymbol3.png)
+  ![codeSymbol3](image/codeSymbol3.png)
 
 ## GotoDefinition
 
 1. Press ctrl and move the mouse coordinates to the calling code
+2. or at cursor coordinates `F12`
    ![gotoDefinition](image/gotoDefinition.jpg)
 
 ## CodeFormat
 
 1. Right click then click format document.
+2. or `alt` + `shift` + `f`
 
 - **Formatter follows my coding habits, so it may not unsuited for you**.
-- my style fork is not Formatter Label and Return.
+- my style fork is not formatter Label and Return.
+- default close now.

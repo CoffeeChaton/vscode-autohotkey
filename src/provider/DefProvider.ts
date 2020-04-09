@@ -32,13 +32,12 @@ export default class DefProvider implements vscode.DefinitionProvider {
     const { text } = document.lineAt(position.line);
     const includeMatch = text.match(/(?<=#include).+?\.(ahk|ext)\b/i);
     if (includeMatch) {
-      const substrZero = 0;
-      const parent = document.uri.path.substr(substrZero, document.uri.path.lastIndexOf('/'));
-      const uri = vscode.Uri.file(includeMatch[0].trim().replace(/(%A_ScriptDir%|%A_WorkingDir%)/,
-        parent));
-      const PositionZero = 0;
+      const notFind = document.uri.path.lastIndexOf('/');
+      if (notFind <= 0) return null;
+      const parent = document.uri.path.substr(0, notFind);
+      const uri = vscode.Uri.file(includeMatch[0].trim().replace(/(%A_ScriptDir%|%A_WorkingDir%)/, parent));
       return new vscode.Location(uri,
-        new vscode.Position(PositionZero, PositionZero));
+        new vscode.Position(0, 0));
     }
     return null;
   }
@@ -50,7 +49,7 @@ export default class DefProvider implements vscode.DefinitionProvider {
     const word = document.getText(document.getWordRangeAtPosition(position));
 
     //  const callReg = new RegExp(`\\b${word}\\s*\\(.*?\\)`);
-    const callReg = new RegExp(`\\b${word}\\s*\\(`);
+    const callReg = new RegExp(`\\b${word}\\(`);
     if (!callReg.exec(text)) {
       return null;
     }
