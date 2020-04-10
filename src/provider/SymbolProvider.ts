@@ -30,7 +30,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
     // eslint-disable-next-line no-unused-vars
     _token: vscode.CancellationToken)
     : vscode.ProviderResult<vscode.SymbolInformation[] | vscode.DocumentSymbol[]> {
-    const timeStart = Date.now();
+    // const timeStart = Date.now();
     const lineCountRule = 10000;
     const lineCount = Math.min(document.lineCount, lineCountRule);
     const result: vscode.SymbolInformation[] = [];
@@ -73,7 +73,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         result.push(BlockSymbol);
       }
     }
-    this.showTimeSpend(document, timeStart);
+    //  this.showTimeSpend(document, timeStart);
     return result;
   }
 
@@ -138,7 +138,6 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
     return null;
   }
 
-
   private BlockMatchList: readonly RegExp[] = [
     /^class[\s,]+(\w+)/i, // class
     /^loop[\s,%]+(\w+)/i, // Loop
@@ -179,7 +178,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
   ];
 
   private oneLineNameList: readonly string[] = [
-    'Static Var ',
+    'Static ',
     'Return ',
     'Case ', // TODO Case Block use switch deep
     'Default', // Default

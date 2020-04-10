@@ -27,7 +27,6 @@ export default function getSymbolEndLine(document: vscode.TextDocument,
     const e = textFix.search(blockEnd); // ^}
     if (e > -1) block -= 1;
 
-
     if (block === 0) {
       switch (i) {
         case line: break; // nothing, just break switch block, "{" may be at next like
@@ -40,13 +39,9 @@ export default function getSymbolEndLine(document: vscode.TextDocument,
     }
   }
 
-  // I don't think it will run to the here
-  const { text } = document.lineAt(nextLine);
-  const temp = `ERROR LINE AT ${nextLine} \n AHK OUTLINE ERROR getSymbolEndLine--48--83--81  \n  ${text} `;
-  // console.log(temp);
+  // const { text } = document.lineAt(nextLine);
+  const temp = `from line ${nextLine},lose a "{" or "}" at line_first or line_end.`;
   vscode.window.showWarningMessage(temp);
-  // vscode.window.showWarningMessage(temp);
-  // eslint-disable-next-line
   const endPos = new vscode.Position(nextLine, 0);
   return new vscode.Range(startPos, endPos);
 }

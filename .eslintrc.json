@@ -6,7 +6,7 @@
   "extends": [
     "airbnb-base",
     "eslint:recommended"
-    // "plugin:jsx-a11y/recommended" FUCK!!!
+    // "plugin:jsx-a11y/recommended"
   ],
   "globals": {
     "Atomics": "readonly",
