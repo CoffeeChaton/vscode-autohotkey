@@ -1,5 +1,4 @@
 /* eslint-disable import/no-unresolved */
-
 import * as vscode from 'vscode';
 import { Detecter } from './core/Detecter';
 import DefProvider from './provider/DefProvider';
@@ -10,7 +9,7 @@ import SymBolProvider from './provider/SymbolProvider';
 // eslint-disable-next-line import/prefer-default-export
 export function activate(context: vscode.ExtensionContext) {
   const language = { language: 'ahk' };
-  const ahkRootPath = vscode.workspace.rootPath; // TODO rootPath -->  workspaceFolders
+  const ahkRootPath = vscode.workspace.rootPath; //  rootPath --x-->  workspaceFolders, not need
   if (ahkRootPath) Detecter.buildByPath(ahkRootPath);
 
   context.subscriptions.push(
@@ -22,7 +21,5 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 
-// TODO    registerColorProvider(selector: DocumentSelector,
-// Provider: DocumentColor Provider): Disposable
-// https://code.visualstudio.com/api/references/vscode-api#Diagnostic
+// TODO https://code.visualstudio.com/api/references/vscode-api#Diagnostic
 // https://code.visualstudio.com/api/references/vscode-api#MessageItem

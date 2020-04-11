@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
@@ -29,7 +30,8 @@ export default class DefProvider implements vscode.DefinitionProvider {
     const { text } = document.lineAt(position.line);
     const includeMatch = text.trim().match(/(?<=#include).+?\.(ahk|ext)\b/i);
     if (includeMatch) {
-      const notFind = document.uri.path.lastIndexOf('/');
+      const notFind = Math.max(document.uri.path.lastIndexOf('/'),
+        document.uri.path.lastIndexOf('\\'));
       if (notFind <= 0) return null;
       const parent = document.uri.path.substr(0, notFind);
       const uri = vscode.Uri.file(includeMatch[0].replace(/(%A_ScriptDir%|%A_WorkingDir%)/, parent));
@@ -42,6 +44,7 @@ export default class DefProvider implements vscode.DefinitionProvider {
   // eslint-disable-next-line class-methods-use-this
   public async tryGetMethodLink(document: vscode.TextDocument, position: vscode.Position)
     : Promise<vscode.Location | null> {
+    // const time1 = Date.now();
     const { text } = document.lineAt(position.line);
     const word = document.getText(document.getWordRangeAtPosition(position));
     const callReg = new RegExp(`\\b${word}\\(`);
@@ -50,13 +53,15 @@ export default class DefProvider implements vscode.DefinitionProvider {
     }
     for (const AhkFunc of await Detecter.getFuncList(document)) {
       if (AhkFunc.name === word) {
+        //  vscode.window.setStatusBarMessage(`${Date.now() - time1}ms`);
         return AhkFunc.location;
       }
     }
     for (const fileUri of Detecter.getCacheFileUri()) {
       const tempDocument = await vscode.workspace.openTextDocument(fileUri);
-      for (const AhkFunc of await Detecter.getFuncList(tempDocument, true)) {
+      for (const AhkFunc of await Detecter.getFuncList(tempDocument)) {
         if (AhkFunc.name === word) {
+          //  vscode.window.setStatusBarMessage(`${Date.now() - time1}ms`);
           return AhkFunc.location;
         }
       }
