@@ -27,12 +27,12 @@ export default class DefProvider implements vscode.DefinitionProvider {
   public async tryGetFileLink(document: vscode.TextDocument, position: vscode.Position)
     : Promise<vscode.Location | null> {
     const { text } = document.lineAt(position.line);
-    const includeMatch = text.match(/(?<=#include).+?\.(ahk|ext)\b/i);
+    const includeMatch = text.trim().match(/(?<=#include).+?\.(ahk|ext)\b/i);
     if (includeMatch) {
       const notFind = document.uri.path.lastIndexOf('/');
       if (notFind <= 0) return null;
       const parent = document.uri.path.substr(0, notFind);
-      const uri = vscode.Uri.file(includeMatch[0].trim().replace(/(%A_ScriptDir%|%A_WorkingDir%)/, parent));
+      const uri = vscode.Uri.file(includeMatch[0].replace(/(%A_ScriptDir%|%A_WorkingDir%)/, parent));
       return new vscode.Location(uri,
         new vscode.Position(0, 0));
     }
@@ -49,15 +49,15 @@ export default class DefProvider implements vscode.DefinitionProvider {
       return null;
     }
     for (const AhkFunc of await Detecter.getFuncList(document)) {
-      if (AhkFunc.vscSymbol.name === word) {
-        return AhkFunc.vscSymbol.location;
+      if (AhkFunc.name === word) {
+        return AhkFunc.location;
       }
     }
     for (const fileUri of Detecter.getCacheFileUri()) {
       const tempDocument = await vscode.workspace.openTextDocument(fileUri);
-      for (const AhkFunc of await Detecter.getFuncList(tempDocument)) {
-        if (AhkFunc.vscSymbol.name === word) {
-          return AhkFunc.vscSymbol.location;
+      for (const AhkFunc of await Detecter.getFuncList(tempDocument, true)) {
+        if (AhkFunc.name === word) {
+          return AhkFunc.location;
         }
       }
     }

@@ -60,7 +60,28 @@
         "language": "ahk",
         "path": "./snippets/ahk.json"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "AhkOutline",
+      "properties": {
+        "AhkOutline.showVersion": {
+          "type": "boolean",
+          "default": false,
+          "description": "show ahk outline version."
+        },
+        "AhkOutline.displayTime": {
+          "type": "boolean",
+          "default": true,
+          "description": "display resolution time as millisecond"
+        },
+        "AhkOutline.displayFileName": {
+          "type": "boolean",
+          "default": false,
+          "description": "display this ahk file Name."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

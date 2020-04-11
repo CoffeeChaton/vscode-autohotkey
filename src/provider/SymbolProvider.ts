@@ -12,18 +12,34 @@ import inCommentBlock from '../tools/inCommentBlock';
 function showTimeSpend(path: string, timeStart: number): void {
   const startSub = Math.max(path.lastIndexOf('/') + 1,
     path.lastIndexOf('\\') + 1);
-  const name = path.substring(startSub, path.length);
-  const version = 'v0.2';
-  const timeSpend = `${version},  ${Date.now() - timeStart} ms,  ${name}`;
-  vscode.window.setStatusBarMessage(timeSpend);
+  const configuration = vscode.workspace.getConfiguration('AhkOutline');
+  const config = {
+    displayTime: configuration.get('displayTime'),
+    showVersion: configuration.get('showVersion'),
+    displayFileName: configuration.get('displayFileName'),
+  };
+  const version = config.showVersion ? 'v0.31, ' : '';
+  const timeSpend = config.displayTime ? `${Date.now() - timeStart} ms` : '';
+  const name = config.displayFileName ? path.substring(startSub, path.length) : '';
+
+  const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
+  statusBarItem.tooltip = 'this extensions by CoffeeChaton/vscode-ahk-outline';
+  statusBarItem.text = `$(ruby)${version}${timeSpend}${name}`;
+  statusBarItem.color = '#9F8A4E';
+
+  //  TODO statusBarItem.command
+  // statusBarItem.command = 'projectManager.listProjects';
+  statusBarItem.show();// FIXME
+  //  statusBarItem.dispose();//
   // vscode.window.showInformationMessage(timeSpend);
-  //  vscode.window.showWarningMessage(timeSpend);
+  // vscode.window.showWarningMessage(timeSpend);
   // const a = vscode.window.createOutputChannel(version);
   // a.show();
   // a.appendLine(timeSpend);
-  // vscode.window.showWarningMessage(timeSpend);
   // console.log(timeSpend);
+  // vscode.window.setStatusBarMessage(timeSpend);
 }
+
 export default class SymBolProvider implements vscode.DocumentSymbolProvider {
   provideDocumentSymbols(document: vscode.TextDocument,
     // eslint-disable-next-line no-unused-vars
@@ -53,8 +69,8 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
       if (line >= BodyEndLine) {
         const func = Detecter.getFuncByLine(document, line, lineCount);
         if (func) {
-          BodyEndLine = func.BodyEndLine;
-          result.push(func.vscSymbol);
+          BodyEndLine = func.location.range.end.line;
+          result.push(func);
           continue;
         }
       }

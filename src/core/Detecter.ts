@@ -15,33 +15,23 @@ import { removeSpecialChar, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
 //  new vscode.SymbolInformation(name, kind, '',
 //     new vscode.Location(document.uri, Range));
-export class AhkMethod {
-  constructor(public Remark: string,
-    public BodyEndLine: number,
-    public vscSymbol: vscode.SymbolInformation) { }
+interface docMap {
+  key: string;
+  obj: vscode.SymbolInformation[] | null
 }
-
 // eslint-disable-next-line max-len
+// eslint-disable-next-line import/prefer-default-export
 export class Detecter {
-  public static docFuncMap: {
-    uri: vscode.Uri[],
-    ahkFuncList: AhkMethod[],
-  }
+  public static docFuncMap: docMap[] = [];
 
-  public static getCacheFileUri(): vscode.Uri[] {
-    if (this.docFuncMap.uri.length === 0) {
-      this.docFuncMap.uri = [];
-    }
-    const uriList: vscode.Uri[] = [];
-    for (const uri of this.docFuncMap.uri) {
-      if (uri.path.match(/\.(ahk|ext)$/i)) {
-        uriList.push(uri);
+  public static getCacheFileUri(): string[] {
+    const uriList: string[] = [];
+    for (const fileName of this.docFuncMap) {
+      if (fileName.key.match(/\b(ahk|ext)$/i)) {
+        uriList.push(fileName.key);
       }
     }
     return uriList;
-    // TODO getCacheFileUri
-    // return Object.keys(this.docFuncMap).filter((key) => key.match(/\b(ahk|ext)$/i)
-    //   && this.docFuncMap[key].length > 0);
   }
 
   /**
@@ -49,10 +39,6 @@ export class Detecter {
    * @param buildPath
    */
   public static async buildByPath(buildPath: string): Promise<void> {
-    this.docFuncMap = {
-      uri: [],
-      ahkFuncList: [],
-    };
     if (fs.statSync(buildPath).isDirectory()) {
       fs.readdir(buildPath, (err, files) => {
         if (err) {
@@ -67,7 +53,6 @@ export class Detecter {
         }
       });
     } else if (buildPath.match(/\b(ahk|ext)$/i)) {
-      this.docFuncMap.uri.push(vscode.Uri.file(buildPath));
       this.getFuncList(vscode.Uri.file(buildPath));
     }
   }
@@ -77,19 +62,26 @@ export class Detecter {
    * @param document
    */
   public static async getFuncList(docId: vscode.TextDocument | vscode.Uri,
-    usingCache = false): Promise<AhkMethod[]> {
+    usingCache = false): Promise<vscode.SymbolInformation[]> {
     const document = docId instanceof vscode.Uri
       ? await vscode.workspace.openTextDocument(docId as vscode.Uri)
       : docId as vscode.TextDocument;
-    // TODO getFuncList any
-    const funcList: AhkMethod[] = this.docFuncMap.ahkFuncList;
+
+    const path = document.uri.fsPath;
+    let i = 0;
+    let funcList: vscode.SymbolInformation[] = [];
+    for (const { key, obj } of this.docFuncMap) {
+      if (key === path) {
+        funcList = obj || [];
+        break;
+      }
+      i += 1;
+    }
+
     if (usingCache && funcList.length !== 0) {
+      // TODO
       return funcList;
     }
-    // this.docFuncMap.ahkFuncList = [];
-    // if (usingCache && funcList !== undefined) {
-    //   return funcList; //    --interface
-    // }
 
     let BodyEndLine: number = 0;
     let CommentBlock = false;
@@ -103,14 +95,14 @@ export class Detecter {
       if (line >= BodyEndLine) {
         const func = this.getFuncByLine(document, line, lineCount);
         if (func) {
-          BodyEndLine = func.BodyEndLine;
+          BodyEndLine = func.location.range.end.line;
           funcList.push(func);
-
-          this.docFuncMap.ahkFuncList.push(func);
         }
       }
     }
-    // TODO this.docFuncMap.ahkFuncList.push(funcList);
+
+    this.docFuncMap[i] = { key: path, obj: funcList };
+
     return funcList;
   }
 
@@ -126,21 +118,16 @@ export class Detecter {
   // eslint-disable-next-line max-params
   private static getFuncByLineWrapper(startLine: number,
     document: vscode.TextDocument, lineCount: number,
-    line: number, Remark: string, name: string): AhkMethod {
+    line: number, Remark: string, name: string): vscode.SymbolInformation {
     const startPos = new vscode.Position(line, 0);
     const kind = vscode.SymbolKind.Method;
     const Range = getSymbolEndLine(document, startLine, lineCount, startPos);
-    const BodyEndLine = Range.end.line;
-    const vscSymbol = new vscode.SymbolInformation(name, kind, Remark,
+    return new vscode.SymbolInformation(name, kind, Remark,
       new vscode.Location(document.uri, Range));
-    return new AhkMethod(Remark,
-      BodyEndLine,
-      vscSymbol);
   }
 
-
   public static getFuncByLine(document: vscode.TextDocument,
-    line: number, lineCount: number): AhkMethod | null {
+    line: number, lineCount: number): vscode.SymbolInformation | null {
     const { text } = document.lineAt(line);
     const textFix = removeSpecialChar(text, true).trim();
     if (textFix === '') return null; // just ''
@@ -151,7 +138,6 @@ export class Detecter {
     if (fnHead === null) return null; // NOT fnHead
 
     const name = fnHead[1];
-    // const kind = vscode.SymbolKind.Method;
     const Remark = this.getRemarkByLine(document, line);
     // const startPos = new vscode.Position(line, 0);
     // style ^fn_Name(){$
