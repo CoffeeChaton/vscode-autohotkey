@@ -9,13 +9,13 @@ import getSymbolEndLine from '../tools/getSymbolEndLine';
 import { removeSpecialChar, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
 
-function showTimeSpend(document: vscode.TextDocument, timeStart: number): void {
-  const name = document.uri.path.match(/([\w\s]+\.ahk|ext)$/i);
-  if (name !== null) {
-    const version = 'v0.03';
-    const timeSpend = `${version}, timeSpend ${Date.now() - timeStart} ms at ${name[1]}`;
-    vscode.window.setStatusBarMessage(timeSpend);
-  }
+function showTimeSpend(path: string, timeStart: number): void {
+  const startSub = Math.max(path.lastIndexOf('/') + 1,
+    path.lastIndexOf('\\') + 1);
+  const name = path.substring(startSub, path.length);
+  const version = 'v0.2';
+  const timeSpend = `${version},  ${Date.now() - timeStart} ms,  ${name}`;
+  vscode.window.setStatusBarMessage(timeSpend);
   // vscode.window.showInformationMessage(timeSpend);
   //  vscode.window.showWarningMessage(timeSpend);
   // const a = vscode.window.createOutputChannel(version);
@@ -29,12 +29,12 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
     // eslint-disable-next-line no-unused-vars
     _token: vscode.CancellationToken)
     : vscode.ProviderResult<vscode.SymbolInformation[] | vscode.DocumentSymbol[]> {
-    //  const timeStart = Date.now();
+    const timeStart = Date.now();
     const lineCountRule = 10000;
     const lineCount = Math.min(document.lineCount, lineCountRule);
     const result: vscode.SymbolInformation[] = [];
     let CommentBlock = false;
-    let lineConsumed = 0;
+    let BodyEndLine: number = 0;
 
     for (let line = 0; line < lineCount; line += 1) {
       const { text } = document.lineAt(line);
@@ -46,42 +46,33 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
       const CommentBlockSymbol = this.getCommentBlockSymbol(document, line, lineCount, text);
       if (CommentBlockSymbol) result.push(CommentBlockSymbol); // not continue
 
-      if (lineConsumed > 0) {
-        lineConsumed -= 1;
-        continue;
-      }
-
       const textFix = removeSpecialChar(text, false);
       if (textFix.trim() === '') continue; // just ''
       if (getSkipSign(textFix)) continue;
 
-      const startPos = new vscode.Position(line, 0);
-      const func = Detecter.getFuncByLine(document, line); // function
-      if (func) {
-        lineConsumed = func.lineConsumed;
-        const funcRange = getSymbolEndLine(document, line + lineConsumed, lineCount, startPos);
-        result.push(new vscode.SymbolInformation(func.name,
-          vscode.SymbolKind.Method, func.Remark,
-          new vscode.Location(document.uri, funcRange)));
-        continue;
+      if (line >= BodyEndLine) {
+        const func = Detecter.getFuncByLine(document, line, lineCount);
+        if (func) {
+          BodyEndLine = func.BodyEndLine;
+          result.push(func.vscSymbol);
+          continue;
+        }
       }
 
-      const BlockSymbol = this.getSymbol(document, line,
-        lineCount, textFix, startPos); // class Return
+      const BlockSymbol = this.getSymbol(document, line, lineCount, textFix); // class Return
       if (BlockSymbol) {
         result.push(BlockSymbol);
+        continue;
       }
     }
-    // showTimeSpend(document, timeStart);
+    showTimeSpend(document.uri.fsPath, timeStart);
     return result;
   }
 
-  private getSymbol(document: vscode.TextDocument,
-    line: number, lineCount: number,
-    textFix: string, startPos: vscode.Position): vscode.SymbolInformation | null {
+  private getSymbol(document: vscode.TextDocument, line: number, lineCount: number,
+    textFix: string): vscode.SymbolInformation | null {
     const textP = textFix.trim();
     const { length } = document.lineAt(line).text;
-    // TODO-----------------------------------------------
 
     const {
       matchList, nameList, kindList, findBlock,
@@ -92,9 +83,11 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
       if (BlockSymbol) {
         const name = `${nameList[i]}${BlockSymbol[1]}`;
         const kind = kindList[i];
-
-        const Range = findBlock[i] ? getSymbolEndLine(document, line, lineCount, startPos)
+        const startPos = new vscode.Position(line, 0);
+        const Range = findBlock[i]
+          ? getSymbolEndLine(document, line, lineCount, startPos)
           : new vscode.Range(startPos, new vscode.Position(line, length));
+
         return new vscode.SymbolInformation(name, kind, '',
           new vscode.Location(document.uri, Range));
       }
@@ -131,7 +124,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
     return null;
   }
 
-  private matchList: readonly RegExp[] = [
+  private readonly matchList: readonly RegExp[] = [
     /^class[\s,]+(\w+)/i, // class
     /^loop[\s,%]+(\w+)/i, // Loop
     /^for[\s,\w]+in\s+(\w+)/i, // For Key , Value in Expression
@@ -152,7 +145,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
     /^throw[\s,][\s,]*(.+)/i, // throw
   ];
 
-  private nameList: readonly string[] = [
+  private readonly nameList: readonly string[] = [
     'Class ',
     'Loop ',
     'For ',
@@ -173,7 +166,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
     'Throw ',
   ];
 
-  private kindList: readonly vscode.SymbolKind[] = [
+  private readonly kindList: readonly vscode.SymbolKind[] = [
     // https://code.visualstudio.com/api/references/vscode-api#SymbolKind
     vscode.SymbolKind.Class,
     vscode.SymbolKind.Package,
@@ -195,7 +188,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
     vscode.SymbolKind.Event, // Throw
   ];
 
-  private findBlock: readonly boolean[] = [
+  private readonly findBlock: readonly boolean[] = [
     true,
     true,
     true,

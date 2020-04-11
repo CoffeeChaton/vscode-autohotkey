@@ -1,7 +1,4 @@
-/* eslint max-statements: [1, 200] */
 /* eslint-disable no-await-in-loop */
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/extensions */
 /* eslint-disable no-restricted-syntax */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
 // eslint-disable-next-line import/no-unresolved
@@ -47,25 +44,20 @@ export default class DefProvider implements vscode.DefinitionProvider {
     : Promise<vscode.Location | null> {
     const { text } = document.lineAt(position.line);
     const word = document.getText(document.getWordRangeAtPosition(position));
-
-    //  const callReg = new RegExp(`\\b${word}\\s*\\(.*?\\)`);
     const callReg = new RegExp(`\\b${word}\\(`);
     if (!callReg.exec(text)) {
       return null;
     }
     for (const AhkFunc of await Detecter.getFuncList(document)) {
-      if (AhkFunc.name.indexOf(word) !== -1) {
-        return new vscode.Location(document.uri,
-          new vscode.Position(AhkFunc.line, document.lineAt(AhkFunc.line).text.indexOf(word)));
+      if (AhkFunc.vscSymbol.name === word) {
+        return AhkFunc.vscSymbol.location;
       }
     }
-    for (const filePath of Detecter.getCacheFile()) {
-      const tempDocument = await vscode.workspace.openTextDocument(filePath);
+    for (const fileUri of Detecter.getCacheFileUri()) {
+      const tempDocument = await vscode.workspace.openTextDocument(fileUri);
       for (const AhkFunc of await Detecter.getFuncList(tempDocument)) {
-        if (AhkFunc.name.indexOf(word) !== -1) {
-          return new vscode.Location(tempDocument.uri,
-            new vscode.Position(AhkFunc.line,
-              tempDocument.lineAt(AhkFunc.line).text.indexOf(word)));
+        if (AhkFunc.vscSymbol.name === word) {
+          return AhkFunc.vscSymbol.location;
         }
       }
     }

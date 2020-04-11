@@ -1,9 +1,9 @@
 {
-  "name": "408vscode-autohotkey-",
+  "name": "vscode-autohotkey-outline",
   "displayName": "AutoHotkey Outline",
   "description": "AutoHotkey Outline",
   "version": "2.2.3",
-  "publisher": "CoffeeCat407",
+  "publisher": "CoffeeChaton",
   "engines": {
     "vscode": "^1.43.0"
   },

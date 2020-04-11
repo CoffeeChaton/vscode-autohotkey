@@ -40,7 +40,7 @@ export default function getSymbolEndLine(document: vscode.TextDocument,
   }
 
   // const { text } = document.lineAt(nextLine);
-  const temp = `from line ${nextLine},lose a "{" or "}" at line_first or line_end.`;
+  const temp = `from line ${nextLine},miss a "{" or "}" at line_first or line_end.`;
   vscode.window.showWarningMessage(temp);
   const endPos = new vscode.Position(nextLine, 0);
   return new vscode.Range(startPos, endPos);
