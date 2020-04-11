@@ -21,7 +21,7 @@ export function getSkipSign(text: string): boolean {
   return false;
 }
 
-export function trimContent(text: string, NotStr: boolean): string {
+export function removeSpecialChar(text: string, NotStr: boolean): string {
   let textFix = text;
   if (textFix.trim() === '') return '';
 

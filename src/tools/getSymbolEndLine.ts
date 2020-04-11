@@ -3,8 +3,8 @@
 
 // eslint-disable-next-line import/no-unresolved
 import * as vscode from 'vscode';
-import { trimContent } from './405trimContent';
-import inCommentBlock from './405inCommentBlock';
+import { removeSpecialChar } from './removeSpecialChar';
+import inCommentBlock from './inCommentBlock';
 
 // eslint-disable-next-line max-statements
 export default function getSymbolEndLine(document: vscode.TextDocument,
@@ -19,7 +19,7 @@ export default function getSymbolEndLine(document: vscode.TextDocument,
     const { text } = document.lineAt(i);
     CommentBlock = inCommentBlock(text, CommentBlock);
     if (CommentBlock) continue; // in /*  block
-    const textFix = trimContent(text, false).trim();
+    const textFix = removeSpecialChar(text, false).trim();
     if (textFix === '') continue; // just ''
 
     const s = textFix.search(blockStart);// {$
@@ -29,7 +29,7 @@ export default function getSymbolEndLine(document: vscode.TextDocument,
 
     if (block === 0) {
       switch (i) {
-        case line: break; // nothing, just break switch block, "{" may be at next like
+        case line: break; // just break switch block, "{" may be at next like
         case nextLine: // can not find "{" at lineStart or lineStart++
           return new vscode.Range(startPos, new vscode.Position(nextLine, text.length));
         default:

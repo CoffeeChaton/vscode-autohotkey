@@ -34,9 +34,7 @@ AutoHotKey language support for VS Code
 - loop
 - switch
 
-  ![codeSymbolBlock](image/codeSymbolBlock.jpg)
-
-1. Better view
+  ![codeSymbol2](image/codeSymbol2.jpg)
 
 - Static Var
 - Return
@@ -46,13 +44,12 @@ AutoHotKey language support for VS Code
 - GoTo
 - Label
 - New
-- HotString, like `::ahk,,::AutoHotkey`
+- HotString, like `::ahk::`
 - HotKeys, like `~F12::`
-- directive, like `#Include or #Warn`
+- directive, like `#Include` or `#Warn`
 - global
 - Throw
-
-  ![codeSymbol3](image/codeSymbol3.png)
+  ![codeSymbol3](image/codeSymbol3.jpg)
 
 ## GotoDefinition
 
@@ -65,6 +62,6 @@ AutoHotKey language support for VS Code
 1. Right click then click format document.
 2. or `alt` + `shift` + `f`
 
-- **Formatter follows my coding habits, so it may not unsuited for you**.
+- Formatter follows my coding habits, so it may not unsuited for you.
 - my style fork is not formatter Label and Return.
-- default close now.
+- **default close now.**

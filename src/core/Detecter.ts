@@ -11,8 +11,8 @@
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 import { Out } from '../common/out';
-import { trimContent, getSkipSign } from '../provider/405trimContent';
-import inCommentBlock from '../provider/405inCommentBlock';
+import { removeSpecialChar, getSkipSign } from '../tools/removeSpecialChar';
+import inCommentBlock from '../tools/inCommentBlock';
 
 export class AhkFunc {
   constructor(public full: string, public name: string,
@@ -107,7 +107,7 @@ export class Detecter {
     /* TODO ** return new vscode.SymbolInformation;
     */
     const { text } = document.lineAt(line);
-    const textFix = trimContent(text, true).trim();
+    const textFix = removeSpecialChar(text, true).trim();
     if (textFix === '') return null; // just ''
     if (getSkipSign(textFix)) return null;
 
@@ -129,7 +129,7 @@ export class Detecter {
     // ^{ ...
     const fnTail2 = /\)$/;
     if (textFix.search(fnTail2) > -1) {
-      const nextLine = trimContent(document.lineAt(line + 1).text, true).trim();
+      const nextLine = removeSpecialChar(document.lineAt(line + 1).text, true).trim();
       if (nextLine.indexOf('{') !== 0) return null; // nextLine is not ^{
       return new AhkFunc(funcName, funcName, line, Remark, 1);
     }
@@ -143,7 +143,7 @@ export class Detecter {
     // ^, something , something
     // ^, something , something
     for (let i = line; i < (line + 5); i += 1) {
-      const iLine = trimContent(document.lineAt(i + 1).text, true).trim();
+      const iLine = removeSpecialChar(document.lineAt(i + 1).text, true).trim();
       if (iLine.indexOf(',') !== 0) {
         return null;
       }
@@ -156,7 +156,7 @@ export class Detecter {
       // ^, something , something ......)$
       // ^{
       if (iLine.search(/\)$/) > -1) {
-        const iLine2 = trimContent(document.lineAt(i + 2).text, true).trim();
+        const iLine2 = removeSpecialChar(document.lineAt(i + 2).text, true).trim();
         if (iLine2.search(/^\{/) !== 0) return null; // not ^{
         return new AhkFunc(funcName, funcName, line, Remark, i - line); // ^{
       }
