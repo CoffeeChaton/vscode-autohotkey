@@ -2,4 +2,6 @@ out
 node_modules
 .vscode-test/
 .vsix
+.history/
 package-lock.json
+Untitled-1.json

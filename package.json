@@ -1,135 +1,135 @@
 {
-  "name": "vscode-autohotkey-outline",
-  "displayName": "AutoHotkey Outline",
-  "description": "AutoHotkey Outline",
-  "version": "2.2.3",
-  "publisher": "CoffeeChaton",
-  "engines": {
-    "vscode": "^1.43.0"
-  },
-  "bugs": {
-    "url": "https://github.com/CoffeeChaton/vscode-ahk-outline/issues"
-  },
-  "homepage": "https://github.com/CoffeeChaton/vscode-ahk-outline/blob/master/README.md",
-  "activationEvents": [
-    "onLanguage:ahk"
-  ],
-  "main": "./out/extension",
-  "categories": [
-    "Programming Languages",
-    "Snippets"
-  ],
-  "license": "SEE LICENSE IN LICENSE.md",
-  "icon": "icon.png",
-  "galleryBanner": {
-    "color": "#5c2d91",
-    "theme": "dark"
-  },
-  "keywords": [
-    "vscode",
-    "autohotkey",
-    "ahk"
-  ],
-  "contributes": {
-    "commands": [
-      {
-        "command": "AhkOutline.statusBar.Click",
-        "title": "AhkOutline StatusBar Click title"
-      }
+    "name": "vscode-autohotkey-outline",
+    "displayName": "AutoHotkey Outline",
+    "description": "AutoHotkey Outline of VSCode",
+    "version": "2.2.3",
+    "publisher": "CoffeeChaton",
+    "engines": {
+        "vscode": "^1.43.0"
+    },
+    "activationEvents": [
+        "onLanguage:ahk"
     ],
-    "breakpoints": [
-      {
-        "language": "ahk"
-      }
+    "main": "./out/extension",
+    "homepage": "https://github.com/CoffeeChaton/vscode-ahk-outline/blob/master/README.md",
+    "bugs": {
+        "url": "https://github.com/CoffeeChaton/vscode-ahk-outline/issues"
+    },
+    "categories": [
+        "Programming Languages",
+        "Snippets"
     ],
-    "languages": [
-      {
-        "id": "ahk",
-        "aliases": [
-          "AutoHotkey",
-          "autohotkey",
-          "ahk"
+    "license": "SEE LICENSE IN LICENSE.md",
+    "icon": "icon.png",
+    "galleryBanner": {
+        "color": "#5c2d91",
+        "theme": "dark"
+    },
+    "keywords": [
+        "vscode",
+        "autohotkey",
+        "ahk"
+    ],
+    "contributes": {
+        "breakpoints": [
+            {
+                "language": "ahk"
+            }
         ],
-        "extensions": [
-          ".ahk",
-          ".ext"
+        "commands": [
+            {
+                "command": "ahk.bar.click",
+                "title": "TODO AhkOutline StatusBar Click"
+            }
         ],
-        "configuration": "./ahk.configuration.json"
-      }
-    ],
-    "grammars": [
-      {
-        "language": "ahk",
-        "scopeName": "source.ahk",
-        "path": "./syntaxes/ahk.tmLanguage.json"
-      }
-    ],
-    "snippets": [
-      {
-        "language": "ahk",
-        "path": "./snippets/ahk.json"
-      }
-    ],
-    "configuration": {
-      "type": "object",
-      "title": "AhkOutline",
-      "properties": {
-        "AhkOutline.statusBar.showVersion": {
-          "type": "boolean",
-          "default": false,
-          "description": "show ahk outline version at status bar, default is false."
+        "configuration": {
+            "type": "object",
+            "title": "AhkOutline",
+            "properties": {
+                "AhkOutline.statusBar.showVersion": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "show ahk outline version at status bar, default is false."
+                },
+                "AhkOutline.statusBar.showTime": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "display resolution time as millisecond at status bar, default is true."
+                },
+                "AhkOutline.statusBar.showFileName": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "display your ahk file name at status bar, default is false."
+                },
+                "AhkOutline.statusBar.displayColor": {
+                    "type": "string",
+                    "default": "#940C49",
+                    "description": "color of ruby, at status bar, use HEX Color exp: '#940C49' or '#D382FF' or '#FFFFFF'"
+                }
+            }
         },
-        "AhkOutline.statusBar.showTime": {
-          "type": "boolean",
-          "default": true,
-          "description": "display resolution time as millisecond at status bar, default is true."
-        },
-        "AhkOutline.statusBar.showFileName": {
-          "type": "boolean",
-          "default": false,
-          "description": "display your ahk file name at status bar, default is false."
-        },
-        "AhkOutline.statusBar.displayColor": {
-          "type": "string",
-          "default": "#940C49",
-          "description": "color of ruby, at status bar, use HEX Color exp: '#940C49' or '#D382FF' or '#FFFFFF'"
-        }
-      }
+        "languages": [
+            {
+                "id": "ahk",
+                "aliases": [
+                    "AutoHotkey",
+                    "autohotkey",
+                    "ahk"
+                ],
+                "extensions": [
+                    ".ahk",
+                    ".ext"
+                ],
+                "configuration": "./ahk.configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "ahk",
+                "scopeName": "source.ahk",
+                "path": "./syntaxes/ahk.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "ahk",
+                "path": "./snippets/ahk.json"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "@types/node": "^8.10.25",
+        "@types/vscode": "^1.43.0",
+        "@typescript-eslint/eslint-plugin": "^2.26.0",
+        "@typescript-eslint/parser": "^2.26.0",
+        "eslint": "^6.8.0",
+        "eslint-config-airbnb-base": "^14.1.0",
+        "eslint-config-prettier": "^6.10.1",
+        "eslint-plugin-import": "^2.20.2",
+        "eslint-plugin-prettier": "^3.1.2",
+        "eslint-plugin-typescript": "^0.14.0",
+        "prettier": "^2.0.2",
+        "prettier-eslint-cli": "^5.0.0",
+        "typescript": "^3.8.3",
+        "typescript-eslint-parser": "^22.0.0",
+        "@types/glob": "^7.1.1",
+        "@types/mocha": "^7.0.1",
+        "glob": "^7.1.6",
+        "mocha": "^7.0.1",
+        "vscode-test": "^1.3.0"
+    },
+    "dependencies": {
+        "fs": "0.0.1-security",
+        "generator-code": "^1.2.11",
+        "get-port": "^5.1.1",
+        "prettier-eslint": "^9.0.1",
+        "vscode-debugadapter": "^1.40.0-pre.1",
+        "xml2js": "^0.4.23"
     }
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
-  },
-  "devDependencies": {
-    "@types/node": "^8.10.25",
-    "@types/vscode": "^1.43.0",
-    "@typescript-eslint/eslint-plugin": "^2.26.0",
-    "@typescript-eslint/parser": "^2.26.0",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-config-prettier": "^6.10.1",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-typescript": "^0.14.0",
-    "prettier": "^2.0.2",
-    "prettier-eslint-cli": "^5.0.0",
-    "typescript": "^3.8.3",
-    "typescript-eslint-parser": "^22.0.0",
-    "@types/glob": "^7.1.1",
-    "@types/mocha": "^7.0.1",
-    "glob": "^7.1.6",
-    "mocha": "^7.0.1",
-    "vscode-test": "^1.3.0"
-  },
-  "dependencies": {
-    "fs": "0.0.1-security",
-    "generator-code": "^1.2.11",
-    "get-port": "^5.1.1",
-    "prettier-eslint": "^9.0.1",
-    "vscode-debugadapter": "^1.40.0-pre.1",
-    "xml2js": "^0.4.23"
-  }
 }
