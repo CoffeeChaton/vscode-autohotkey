@@ -5,18 +5,23 @@ import DefProvider from './provider/DefProvider';
 import { FileProvider } from './provider/FileProvider';
 // import { FormatProvider } from './provider/FormatProvider';
 import SymBolProvider from './provider/SymbolProvider';
+import { configChangEvent, statusBarClick } from './configUI';
+
 
 // eslint-disable-next-line import/prefer-default-export
 export function activate(context: vscode.ExtensionContext) {
   const language = { language: 'ahk' };
-  const ahkRootPath = vscode.workspace.rootPath; //  rootPath --x-->  workspaceFolders, not need
+  const ahkRootPath = vscode.workspace.rootPath;
   if (ahkRootPath) Detecter.buildByPath(ahkRootPath);
-
   context.subscriptions.push(
     vscode.languages.registerDefinitionProvider(language, new DefProvider()),
     vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
     //  vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
     FileProvider.createEditorListenr(),
+    vscode.workspace.onDidChangeConfiguration(() => { configChangEvent(); }),
+    vscode.commands.registerCommand('AhkOutline.statusBar.Click', () => {
+      statusBarClick();
+    }),
   );
 }
 

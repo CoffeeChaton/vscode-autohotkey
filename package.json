@@ -7,7 +7,10 @@
   "engines": {
     "vscode": "^1.43.0"
   },
-  "private": true,
+  "bugs": {
+    "url": "https://github.com/CoffeeChaton/vscode-ahk-outline/issues"
+  },
+  "homepage": "https://github.com/CoffeeChaton/vscode-ahk-outline/blob/master/README.md",
   "activationEvents": [
     "onLanguage:ahk"
   ],
@@ -28,6 +31,12 @@
     "ahk"
   ],
   "contributes": {
+    "commands": [
+      {
+        "command": "AhkOutline.statusBar.Click",
+        "title": "AhkOutline StatusBar Click title"
+      }
+    ],
     "breakpoints": [
       {
         "language": "ahk"
@@ -65,20 +74,25 @@
       "type": "object",
       "title": "AhkOutline",
       "properties": {
-        "AhkOutline.showVersion": {
+        "AhkOutline.statusBar.showVersion": {
           "type": "boolean",
           "default": false,
-          "description": "show ahk outline version."
+          "description": "show ahk outline version at status bar, default is false."
         },
-        "AhkOutline.displayTime": {
+        "AhkOutline.statusBar.showTime": {
           "type": "boolean",
           "default": true,
-          "description": "display resolution time as millisecond"
+          "description": "display resolution time as millisecond at status bar, default is true."
         },
-        "AhkOutline.displayFileName": {
+        "AhkOutline.statusBar.showFileName": {
           "type": "boolean",
           "default": false,
-          "description": "display this ahk file Name."
+          "description": "display your ahk file name at status bar, default is false."
+        },
+        "AhkOutline.statusBar.displayColor": {
+          "type": "string",
+          "default": "#940C49",
+          "description": "color of ruby, at status bar, use HEX Color exp: '#940C49' or '#D382FF' or '#FFFFFF'"
         }
       }
     }

@@ -22,7 +22,7 @@ interface docMap {
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/prefer-default-export
 export class Detecter {
-  private static docFuncMap: docMap[] = [];
+  public static docFuncMap: docMap[] = [];
 
   public static getCacheFileUri(): string[] {
     const uriList: string[] = [];

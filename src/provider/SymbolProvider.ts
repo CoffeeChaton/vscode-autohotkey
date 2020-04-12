@@ -8,7 +8,7 @@ import { Detecter } from '../core/Detecter';
 import getSymbolEndLine from '../tools/getSymbolEndLine';
 import { removeSpecialChar, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
-import { showTimeSpend } from '../tools/showTimeSpend';
+import { showTimeSpend } from '../configUI';
 
 export default class SymBolProvider implements vscode.DocumentSymbolProvider {
   provideDocumentSymbols(document: vscode.TextDocument,
