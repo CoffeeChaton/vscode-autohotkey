@@ -1,10 +1,7 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable init-declarations */
 /* eslint-disable no-unused-vars */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
-/* eslint-disable no-continue */
 /* eslint max-statements: [1, 200] */
-// eslint-disable-next-line import/no-unresolved
+
 import * as vscode from 'vscode';
 
 function fullDocumentRange(document: vscode.TextDocument): vscode.Range {
@@ -32,9 +29,8 @@ function trimContent(text: string) {
     return textFix;
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export class FormatProvider implements vscode.DocumentFormattingEditProvider {
-    private static oneCommandList = ['ifnotexist', 'ifexist', 'ifwinactive', 'ifwinnotactive', 'ifwinexist',
+    private static readonly oneCommandList = ['ifnotexist', 'ifexist', 'ifwinactive', 'ifwinnotactive', 'ifwinexist',
         'ifwinnotexist', 'ifinstring', 'ifnotinstring', 'if', 'else', 'loop', 'for', 'while', 'catch'];
 
     // eslint-disable-next-line class-methods-use-this

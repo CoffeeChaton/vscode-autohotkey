@@ -20,7 +20,21 @@ export function getSkipSign(text: string): boolean {
     return false;
 }
 
-export function removeSpecialChar(text: string, NotStr: boolean): string {
+export function removeSpecialChar(text: string): string {
+    const searchEC: RegExp = /`./g;
+
+    let textFix = text;
+    if (textFix.trim() === '') return '';
+    textFix = textFix.replace(searchEC, '');
+
+    const comment = textFix.indexOf(';');
+    if (comment > -1) {
+        textFix = textFix.substring(0, comment);
+    }
+
+    return textFix;
+}
+export function removeSpecialChar2(text: string): string {
     const searchEC: RegExp = /`./g;
     const searchDQM: RegExp = /"([^"]*)"/g; // Double quotation marks
     const searchSQM: RegExp = /'([^']*)'/g; // Single quotation marks
@@ -28,10 +42,10 @@ export function removeSpecialChar(text: string, NotStr: boolean): string {
     let textFix = text;
     if (textFix.trim() === '') return '';
     textFix = textFix.replace(searchEC, '');
-    if (NotStr) {
-        textFix = textFix.replace(searchDQM, ''); // remove ""
-        textFix = textFix.replace(searchSQM, ''); // remove ''
-    }
+
+    textFix = textFix.replace(searchDQM, ''); // remove ""
+    textFix = textFix.replace(searchSQM, ''); // remove ''
+
     const comment = textFix.indexOf(';');
     if (comment > -1) {
         textFix = textFix.substring(0, comment);

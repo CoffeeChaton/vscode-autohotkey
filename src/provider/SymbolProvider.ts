@@ -3,7 +3,7 @@
 
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
-import getSymbolEndLine from '../tools/getSymbolEndLine';
+import getLocation from '../tools/getLocation';
 import { removeSpecialChar, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
 import { showTimeSpend } from '../configUI';
@@ -27,8 +27,8 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
             const CommentBlockSymbol = this.getCommentBlockSymbol(document, line, lineCount, text);
             if (CommentBlockSymbol) result.push(CommentBlockSymbol); // don't continue
 
-            const textFix = removeSpecialChar(text, false);
-            if (textFix.trim() === '') continue;
+            const textFix = removeSpecialChar(text).trim();
+            if (textFix === '') continue;
             if (getSkipSign(textFix)) continue;
 
             if (line >= BodyEndLine) {
@@ -49,20 +49,17 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
 
     private getSymbol(document: vscode.TextDocument, line: number, lineCount: number,
         textFix: string): vscode.SymbolInformation | null {
-        const textP = textFix.trim();
-        const { length } = document.lineAt(line).text;
         const {
             matchList, findBlockList, kindList, nameList,
         } = this;
         for (let i = 0; i < matchList.length; i += 1) {
-            const BlockSymbol = textP.match(matchList[i]);
+            const BlockSymbol = textFix.match(matchList[i]);
             if (BlockSymbol) {
-                const startPos = new vscode.Position(line, 0);
-                const Range = findBlockList[i]
-                    ? getSymbolEndLine(document, line, lineCount, startPos)
-                    : new vscode.Range(startPos, new vscode.Position(line, length));
+                const Location = findBlockList[i]
+                    ? getLocation(document, line, lineCount)
+                    : new vscode.Location(document.uri, document.lineAt(line).range);
                 return new vscode.SymbolInformation(`${nameList[i]}${BlockSymbol[1]}`,
-                    kindList[i], '', new vscode.Location(document.uri, Range));
+                    kindList[i], '', Location);
             }
         }
         return null;
@@ -76,19 +73,14 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         const CommentBlock = text.trim().search(CommentBlockRegex);
         if (CommentBlock > -1) {
             const name = text.substring(text.indexOf(';;') + 2).trim();
-            const startPos = new vscode.Position(line, 0);
-            const Range = getSymbolEndLine(document, line, lineCount, startPos);
-            return new vscode.SymbolInformation(name, kind, '',
-                new vscode.Location(document.uri, Range));
+            return new vscode.SymbolInformation(name, kind, '', getLocation(document, line, lineCount));
         }
 
         const CommentLine = text.indexOf(';;');
         if (CommentLine > -1) {
             const name = text.substring(CommentLine).trim();
-            const startPos = new vscode.Position(line, CommentLine);
-            const Range = new vscode.Range(startPos, new vscode.Position(line, text.length));
-            return new vscode.SymbolInformation(name, kind, '',
-                new vscode.Location(document.uri, Range));
+            const Range = new vscode.Range(new vscode.Position(line, CommentLine), new vscode.Position(line, text.length));
+            return new vscode.SymbolInformation(name, kind, '', new vscode.Location(document.uri, Range));
         }
 
         return null;

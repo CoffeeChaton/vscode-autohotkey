@@ -1,8 +1,6 @@
-/* eslint-disable max-statements */
+
 /* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
-// eslint-disable-next-line import/no-unresolved
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 
@@ -16,15 +14,20 @@ export default class DefProvider implements vscode.DefinitionProvider {
         }
         const methodLink = await this.tryGetMethodLink(document, position);
         if (methodLink) {
-            return methodLink;
+            if (methodLink.location.range.start.line === document.lineAt(position).lineNumber) {
+                return Detecter.AhkFuncReference(document, position);
+            }
+            return new vscode.Location(methodLink.location.uri, methodLink.location.range.start);
         }
 
+        // TODO return ahk Built-in func
+        // for ()...
         return null;
     }
 
     // eslint-disable-next-line class-methods-use-this
-    public async tryGetFileLink(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Location | null> {
-        const { text } = document.lineAt(position.line);
+    private async tryGetFileLink(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Location | null> {
+        const { text } = document.lineAt(position);
         const includeMatch = text.trim().match(/(?<=#include).+?\.(ahk|ext)\b/i);
         if (includeMatch) {
             const length = Math.max(document.uri.path.lastIndexOf('/'), document.uri.path.lastIndexOf('\\'));
@@ -37,23 +40,24 @@ export default class DefProvider implements vscode.DefinitionProvider {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    public async tryGetMethodLink(document: vscode.TextDocument, position: vscode.Position)
-        : Promise<vscode.Location | null> {
-        const { text } = document.lineAt(position.line);
-        const word = document.getText(document.getWordRangeAtPosition(position));
-        const callReg = new RegExp(`\\b${word}\\(`);
-        if (!callReg.exec(text)) {
+    private async tryGetMethodLink(document: vscode.TextDocument, position: vscode.Position)
+        : Promise<vscode.SymbolInformation | null> {
+        const { text } = document.lineAt(position);
+        const word = document.getText(document.getWordRangeAtPosition(position)).toLowerCase();
+        const wordReg = new RegExp(`\\b${word}\\(`, 'i');
+        if (!wordReg.exec(text)) {
             return null;
         }
         for (const AhkFunc of await Detecter.getFuncList(document)) {
-            if (AhkFunc.name === word) return AhkFunc.location;
+            if (AhkFunc.name.toLowerCase() === word) return AhkFunc;
         }
-        for (const fileUri of Detecter.getCacheFileUri()) {
-            const tempDocument = await vscode.workspace.openTextDocument(fileUri);
+        for (const fileName of Detecter.getCacheFileUri()) {
+            const tempDocument = await vscode.workspace.openTextDocument(fileName);
             for (const AhkFunc of await Detecter.getFuncList(tempDocument)) {
-                if (AhkFunc.name === word) return AhkFunc.location;
+                if (AhkFunc.name.toLowerCase() === word) return AhkFunc;
             }
         }
+
         return null;
     }
 }

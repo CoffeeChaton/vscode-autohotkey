@@ -56,6 +56,8 @@ AutoHotKey language support for VS Code
 1. Press ctrl and move the mouse coordinates to the calling code
 2. or at cursor coordinates `F12`
    ![gotoDefinition](image/gotoDefinition.jpg)
+3. List all references
+   ![ListAllReferences](image/ListAllReferences.jpg)
 
 ## CodeFormat
 

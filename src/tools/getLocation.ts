@@ -1,15 +1,12 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
-/* eslint-disable no-continue */
 
-// eslint-disable-next-line import/no-unresolved
 import * as vscode from 'vscode';
 import { removeSpecialChar } from './removeSpecialChar';
 import inCommentBlock from './inCommentBlock';
 
-
-// eslint-disable-next-line max-statements
-export default function getSymbolEndLine(document: vscode.TextDocument,
-    line: number, lineCount: number, startPos: vscode.Position): vscode.Range {
+export default function getLocation(document: vscode.TextDocument,
+    line: number, lineCount: number): vscode.Location {
+    const startPos: vscode.Position = new vscode.Position(line, 0);
     const blockStart = /\{$/;
     const blockEnd = /^\}/;
     const nextLine = line + 1;
@@ -19,7 +16,7 @@ export default function getSymbolEndLine(document: vscode.TextDocument,
         const { text } = document.lineAt(i);
         CommentBlock = inCommentBlock(text, CommentBlock);
         if (CommentBlock) continue;
-        const textFix = removeSpecialChar(text, false).trim();
+        const textFix = removeSpecialChar(text).trim();
         if (textFix === '') continue;
 
         const s = textFix.search(blockStart);// {$
@@ -32,15 +29,13 @@ export default function getSymbolEndLine(document: vscode.TextDocument,
                 case line: // just break switch block, "{" may be at next like
                     break;
                 case nextLine: // can not find "{" at lineStart or lineStart++
-                    return new vscode.Range(startPos, new vscode.Position(nextLine, text.length));
-                default: return new vscode.Range(startPos, new vscode.Position(i, text.indexOf('}')));
+                    return new vscode.Location(document.uri, new vscode.Range(startPos, new vscode.Position(nextLine, text.length)));
+                default: return new vscode.Location(document.uri, new vscode.Range(startPos, new vscode.Position(i, text.indexOf('}'))));
             }
         }
     }
 
-    // const { text } = document.lineAt(nextLine);
     const temp = `from line ${nextLine},miss a "{" or "}" at line_first or line_end.`;
     vscode.window.showWarningMessage(temp);
-    const endPos = new vscode.Position(nextLine, 0);
-    return new vscode.Range(startPos, endPos);
+    return new vscode.Location(document.uri, document.lineAt(line).range);
 }

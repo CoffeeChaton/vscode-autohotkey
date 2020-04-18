@@ -6,8 +6,6 @@ import { FileProvider } from './provider/FileProvider';
 import SymBolProvider from './provider/SymbolProvider';
 import { configChangEvent, statusBarClick } from './configUI';
 
-
-// eslint-disable-next-line import/prefer-default-export
 export function activate(context: vscode.ExtensionContext) {
     const language = { language: 'ahk' };
     const ahkRootPath = vscode.workspace.rootPath;

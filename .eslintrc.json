@@ -31,6 +31,7 @@
         "import/prefer-default-export": 0,
         "max-len": ["error", { "code": 150, "tabWidth": 4 }],
         "import/no-unresolved": 0,
+        //--------
         "indent": [2, 4, { "SwitchCase": 1 }],
         "import/extensions": [
             "error",

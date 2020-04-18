@@ -2,7 +2,7 @@
     "name": "vscode-autohotkey-outline",
     "displayName": "AutoHotkey Outline",
     "description": "AutoHotkey Outline of VSCode",
-    "version": "2.2.3",
+    "version": "2.3.1",
     "publisher": "CoffeeChaton",
     "engines": {
         "vscode": "^1.43.0"
