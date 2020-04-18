@@ -5,14 +5,14 @@ import { removeSpecialChar } from './removeSpecialChar';
 import inCommentBlock from './inCommentBlock';
 
 export default function getLocation(document: vscode.TextDocument,
-    line: number, lineCount: number): vscode.Location {
-    const startPos: vscode.Position = new vscode.Position(line, 0);
+    defLine: number, searchLine: number, lineCount: number): vscode.Location {
+    const startPos: vscode.Position = new vscode.Position(defLine, 0);
     const blockStart = /\{$/;
     const blockEnd = /^\}/;
-    const nextLine = line + 1;
+    const nextLine = searchLine + 1;
     let CommentBlock = false;
     let block = 0;
-    for (let i = line; i < lineCount; i += 1) {
+    for (let i = searchLine; i < lineCount; i += 1) {
         const { text } = document.lineAt(i);
         CommentBlock = inCommentBlock(text, CommentBlock);
         if (CommentBlock) continue;
@@ -26,7 +26,7 @@ export default function getLocation(document: vscode.TextDocument,
 
         if (block === 0) {
             switch (i) {
-                case line: // just break switch block, "{" may be at next like
+                case searchLine: // just break switch block, "{" may be at next like
                     break;
                 case nextLine: // can not find "{" at lineStart or lineStart++
                     return new vscode.Location(document.uri, new vscode.Range(startPos, new vscode.Position(nextLine, text.length)));
@@ -37,5 +37,5 @@ export default function getLocation(document: vscode.TextDocument,
 
     const temp = `from line ${nextLine},miss a "{" or "}" at line_first or line_end.`;
     vscode.window.showWarningMessage(temp);
-    return new vscode.Location(document.uri, document.lineAt(line).range);
+    return new vscode.Location(document.uri, document.lineAt(searchLine).range);
 }

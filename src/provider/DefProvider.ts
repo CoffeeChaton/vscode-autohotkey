@@ -1,4 +1,3 @@
-
 /* eslint-disable no-await-in-loop */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
 import * as vscode from 'vscode';
@@ -9,17 +8,12 @@ export default class DefProvider implements vscode.DefinitionProvider {
     public async provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken)
         : Promise<vscode.Location | vscode.Location[] | vscode.LocationLink[] | null> {
         const fileLink = await this.tryGetFileLink(document, position);
-        if (fileLink) {
-            return fileLink;
-        }
-        const methodLink = await this.tryGetMethodLink(document, position);
-        if (methodLink) {
-            if (methodLink.location.range.start.line === document.lineAt(position).lineNumber) {
-                return Detecter.AhkFuncReference(document, position);
-            }
-            return new vscode.Location(methodLink.location.uri, methodLink.location.range.start);
-        }
+        if (fileLink) return fileLink;
 
+        const methodLink = await this.tryGetFuncWrapper(document, position);
+        if (methodLink) return methodLink;
+
+        // TODO search class
         // TODO return ahk Built-in func
         // for ()...
         return null;
@@ -40,14 +34,7 @@ export default class DefProvider implements vscode.DefinitionProvider {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    private async tryGetMethodLink(document: vscode.TextDocument, position: vscode.Position)
-        : Promise<vscode.SymbolInformation | null> {
-        const { text } = document.lineAt(position);
-        const word = document.getText(document.getWordRangeAtPosition(position)).toLowerCase();
-        const wordReg = new RegExp(`\\b${word}\\(`, 'i');
-        if (!wordReg.exec(text)) {
-            return null;
-        }
+    public async tryGetSymbol(document: vscode.TextDocument, word: string): Promise<vscode.SymbolInformation | null> {
         for (const AhkFunc of await Detecter.getFuncList(document)) {
             if (AhkFunc.name.toLowerCase() === word) return AhkFunc;
         }
@@ -58,6 +45,24 @@ export default class DefProvider implements vscode.DefinitionProvider {
             }
         }
 
+        return null;
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    private async tryGetFuncWrapper(document: vscode.TextDocument, position: vscode.Position)
+        : Promise<vscode.Location | vscode.Location[] | vscode.LocationLink[] | null> {
+        const { text } = document.lineAt(position);
+        const word = document.getText(document.getWordRangeAtPosition(position)).toLowerCase();
+        const wordReg = new RegExp(`(?<!\\.)\\b(${word})\\(`, 'ig'); // not search class.Method()
+        if (text.search(wordReg) === -1) return null;
+
+        const AhkFunc = await this.tryGetSymbol(document, word);
+        if (AhkFunc) {
+            if (AhkFunc.location.uri === document.uri && AhkFunc.location.range.start.line === document.lineAt(position).lineNumber) {
+                return Detecter.AhkFuncReference(wordReg);
+            }
+            return new vscode.Location(AhkFunc.location.uri, AhkFunc.location.range.start);
+        }
         return null;
     }
 }

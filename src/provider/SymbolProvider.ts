@@ -39,15 +39,34 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
                     continue;
                 }
             }
+            const ReturnValue = this.getReturnByLine(document, line, lineCount, textFix);
+            if (ReturnValue) result.push(ReturnValue);
 
-            const BlockSymbol = this.getSymbol(document, line, lineCount, textFix);
+            const BlockSymbol = this.getSymbolByLine(document, line, lineCount, textFix);
             if (BlockSymbol) result.push(BlockSymbol);
         }
         showTimeSpend(document.uri.fsPath, timeStart);
         return result;
     }
 
-    private getSymbol(document: vscode.TextDocument, line: number, lineCount: number,
+    private getReturnByLine(document: vscode.TextDocument, line: number, lineCount: number,
+        textFix: string): vscode.SymbolInformation | null {
+        const regexp = /\breturn\b[\s,][\s,]*(.+)/i;
+        const BlockSymbol = textFix.match(regexp);
+        if (BlockSymbol) {
+            let name = BlockSymbol[1].trim();
+            const Func = name.match(/^(\w\w*)\(/);
+            if (Func) name = `${Func[1]}()`;
+            const obj = name.match(/^(\{\s*\w\w*\s*:)/);
+            if (obj) name = `obj ${obj[1]}`;
+            //
+            const Location = new vscode.Location(document.uri, document.lineAt(line).range);
+            return new vscode.SymbolInformation(`Return ${name.trim()}`, vscode.SymbolKind.Variable, '', Location);
+        }
+        return null;
+    }
+
+    private getSymbolByLine(document: vscode.TextDocument, line: number, lineCount: number,
         textFix: string): vscode.SymbolInformation | null {
         const {
             matchList, findBlockList, kindList, nameList,
@@ -56,7 +75,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
             const BlockSymbol = textFix.match(matchList[i]);
             if (BlockSymbol) {
                 const Location = findBlockList[i]
-                    ? getLocation(document, line, lineCount)
+                    ? getLocation(document, line, line, lineCount)
                     : new vscode.Location(document.uri, document.lineAt(line).range);
                 return new vscode.SymbolInformation(`${nameList[i]}${BlockSymbol[1]}`,
                     kindList[i], '', Location);
@@ -73,7 +92,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         const CommentBlock = text.trim().search(CommentBlockRegex);
         if (CommentBlock > -1) {
             const name = text.substring(text.indexOf(';;') + 2).trim();
-            return new vscode.SymbolInformation(name, kind, '', getLocation(document, line, lineCount));
+            return new vscode.SymbolInformation(name, kind, '', getLocation(document, line, line, lineCount));
         }
 
         const CommentLine = text.indexOf(';;');
@@ -93,13 +112,12 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         /^switch\s\s*(\w\w*)/i,
         // ----------------------
         /^static\b(\w\w*)/i,
-        /^return[\s,][\s,]*(.+)/i,
         /^case\s\s*(.+):/i,
         /^default(\s)\s*:/i,
         /^GoSub[\s,][\s,]*(\w\w*)/i,
         /^GoTo[\s,][\s,]*(\w\w*)/i,
         /^(\w.?\w):$/, // Label:
-        /:=\s*new\s\s*(\w\w*)/i, //  := new
+        /\bnew\b\s*(\w\w*)/i, //  := new
         /^:[^:]*:([^:][^:]*)::/, // HotStr
         /^([^:][^:]*)::/, // HotKeys
         /^#(\w\w*)/, // directive
@@ -114,7 +132,6 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         'Switch ',
         //--------------------------
         'Static ',
-        'Return ',
         'Case ', // TODO Case Block use switch deep
         'Default',
         'GoSub ',
@@ -136,7 +153,6 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         vscode.SymbolKind.Package,
         //--------------
         vscode.SymbolKind.Variable, // Static
-        vscode.SymbolKind.Variable, // Return
         vscode.SymbolKind.Variable, // Case
         vscode.SymbolKind.Variable, // Default
         vscode.SymbolKind.Variable, // GoSub
@@ -156,7 +172,6 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         true,
         true,
         //----------------
-        false,
         false,
         false,
         false,

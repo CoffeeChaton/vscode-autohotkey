@@ -63,8 +63,8 @@
                 },
                 "AhkOutline.statusBar.displayColor": {
                     "type": "string",
-                    "default": "#940C49",
-                    "description": "color of ruby, at status bar, use HEX Color exp: '#940C49' or '#D382FF' or '#FFFFFF'"
+                    "default": "#FFB8C6",
+                    "description": "color of status bar, use HTML Color, exp: '#940C49' or '#D382FF' or '#FFFFFF' or 'rgb(255,255,100)"
                 }
             }
         },

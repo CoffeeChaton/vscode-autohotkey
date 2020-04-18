@@ -56,11 +56,11 @@ export class Detecter {
             ? await vscode.workspace.openTextDocument(docId as vscode.Uri)
             : docId as vscode.TextDocument;
 
-        const path = document.uri.fsPath;
+        const { fsPath } = document.uri;
         let i = 0;
         let funcList: vscode.SymbolInformation[] = [];
         for (const { key, obj } of this.docFuncMap) {
-            if (key === path) {
+            if (key === fsPath) {
                 funcList = obj || [];
                 break;
             }
@@ -85,16 +85,16 @@ export class Detecter {
             }
         }
 
-        this.docFuncMap[i] = { key: path, obj: funcList };
+        this.docFuncMap[i] = { key: fsPath, obj: funcList };
 
         return funcList;
     }
 
-    private static getRemarkByLine(document: vscode.TextDocument, line: number): string {
+    private static getContainerNameByLine(document: vscode.TextDocument, line: number): string {
         if (line > 0) {
             const { text } = document.lineAt(line - 1);
-            const RemarkMatch = text.match(/^\s*;@(.+)/);
-            if (RemarkMatch) return RemarkMatch[1].trim();
+            const containerName = text.match(/^\s*;@(.+)/);
+            if (containerName) return containerName[1].trim();
         }
         return '';
     }
@@ -111,14 +111,15 @@ export class Detecter {
         if (fnHead === null) return null;
 
         const name = fnHead[1];
-        const Remark = this.getRemarkByLine(document, line);
-        const kind = vscode.SymbolKind.Method;
+        const Remark = this.getContainerNameByLine(document, line);
+        const kind = vscode.SymbolKind.Function;
         // style
         // line + 0 ^fn_Name(){$
         const fnTail = /\)\s*\{$/;
         if (textFix.search(fnTail) > -1) {
-            const startLine = line + 0;// + 0
-            return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, startLine, lineCount));
+            const defLine = line;
+            const searchLine = line + 0;// + 0
+            return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, defLine, searchLine, lineCount));
         }
 
         // style
@@ -128,9 +129,9 @@ export class Detecter {
         if (textFix.search(fnTail2) > -1) {
             const nextLine = removeSpecialChar2(document.lineAt(line + 1).text).trim();
             if (nextLine.indexOf('{') !== 0) return null; // nextLine is not ^{
-
-            const startLine = line + 1;// + 1
-            return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, startLine, lineCount));
+            const defLine = line;
+            const searchLine = line + 1;// + 1
+            return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, defLine, searchLine, lineCount));
         }
 
         if (textFix.indexOf(')') > -1) return null;// fn_Name( ... ) ...  ,this is not ahk function
@@ -148,8 +149,9 @@ export class Detecter {
 
             // i+1   ^, something , something ........ ) {$
             if (nextLine.search(/\)\s*\{$/) > -1) {
-                const startLine = i;// i
-                return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, startLine, lineCount));
+                const defLine = line;
+                const searchLine = i;// i
+                return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, defLine, searchLine, lineCount));
             }
 
             // i+1   ^, something , something ......)$
@@ -157,9 +159,9 @@ export class Detecter {
             if (nextLine.search(/\)$/) > -1) {
                 const iLine2 = removeSpecialChar2(document.lineAt(i + 2).text).trim();// i+2
                 if (iLine2.search(/^\{/) !== 0) return null;
-
-                const startLine = i + 1;// + 1
-                return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, startLine, lineCount));
+                const defLine = line;
+                const searchLine = i + 1;// + 1
+                return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, defLine, searchLine, lineCount));
             }
         }
         return null;
@@ -176,25 +178,24 @@ export class Detecter {
             CommentBlock = inCommentBlock(text, CommentBlock);
             if (CommentBlock) continue;
             const textFix = removeSpecialChar2(text).trim();
-            const array = textFix.search(wordReg);
-            if (array > -1) LocationList2.push(new vscode.Location(document.uri, new vscode.Position(line, array)));
+            const textFixPos = textFix.search(wordReg);
+            if (textFixPos > -1) {
+                LocationList2.push(new vscode.Location(document.uri, new vscode.Position(line, text.search(wordReg))));
+            }
         }
 
         return LocationList2;
     }
 
-    public static async AhkFuncReference(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Location[]> {
-        const word = document.getText(document.getWordRangeAtPosition(position)).toLowerCase();
-        const wordReg = new RegExp(`\\b${word}\\(`, 'i');
-        const LocationList: vscode.Location[] = [];
+    public static async AhkFuncReference(wordReg: RegExp): Promise<vscode.Location[]> {
+        const List: vscode.Location[] = [];
         for (const fileName of Detecter.getCacheFileUri()) {
             // eslint-disable-next-line no-await-in-loop
-            const Locations = await this.getFuncReference(fileName, wordReg);
-            for (const Location of Locations) {
-                LocationList.push(Location);
+            const iLocations = await this.getFuncReference(fileName, wordReg);
+            for (const iLocation of iLocations) { // for ( vscode.Location of vscode.Location[] )
+                List.push(iLocation);
             }
         }
-
-        return LocationList;
+        return List;
     }
 }

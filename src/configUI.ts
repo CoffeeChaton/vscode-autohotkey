@@ -2,19 +2,13 @@
 
 import * as vscode from 'vscode';
 
-interface IConfigs {
-    showVersion: boolean;
-    showTime: boolean
-    showFileName: boolean
-    displayColor: string
-}
 
 const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
 statusBarItem.tooltip = 'this extensions by CoffeeChaton/vscode-ahk-outline';
 statusBarItem.command = 'ahk.bar.click';
 
 let configuration = vscode.workspace.getConfiguration('AhkOutline.statusBar');
-let configs: IConfigs = {
+let config = {
     showVersion: configuration.get('showVersion') as boolean,
     showTime: configuration.get('showTime') as boolean,
     showFileName: configuration.get('showFileName') as boolean,
@@ -23,7 +17,7 @@ let configs: IConfigs = {
 
 export function configChangEvent(): void {
     configuration = vscode.workspace.getConfiguration('AhkOutline.statusBar');
-    configs = {
+    config = {
         showVersion: configuration.get('showVersion') as boolean,
         showTime: configuration.get('showTime') as boolean,
         showFileName: configuration.get('showFileName') as boolean,
@@ -32,13 +26,13 @@ export function configChangEvent(): void {
 }
 
 export function showTimeSpend(path: string, timeStart: number): void {
-    const version = configs.showVersion ? 'v0.34, ' : '';
-    const timeSpend = configs.showTime ? `${Date.now() - timeStart} ms` : '';
-    const name = configs.showFileName
+    const version = config.showVersion ? 'v0.35, ' : '';
+    const timeSpend = config.showTime ? `${Date.now() - timeStart} ms` : '';
+    const name = config.showFileName
         ? `, ${path.substring(Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\')) + 1, path.length)}`
         : '';
-    statusBarItem.text = `$(ruby) ${version}${timeSpend}${name}`;
-    statusBarItem.color = configs.displayColor;
+    statusBarItem.text = `$(heart) ${version}${timeSpend}${name}`;
+    statusBarItem.color = config.displayColor;
     statusBarItem.show();
 }
 
