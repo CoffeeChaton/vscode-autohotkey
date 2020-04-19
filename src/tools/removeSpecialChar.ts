@@ -5,9 +5,9 @@
 export function getSkipSign(text: string): boolean {
     const skipList: RegExp[] = [
         /^;/,
-        /^if\b/,
-        /^while\b/,
-        /^else\b/,
+        // /^if\b/,
+        // /^while\b/,
+        // /^else\b/,
         /^sleep\b/,
         /^msgbox\b/,
         /^gui\b/,

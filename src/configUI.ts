@@ -1,7 +1,7 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3] }] */
 
 import * as vscode from 'vscode';
-
+import { Detecter } from './core/Detecter';
 
 const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
 statusBarItem.tooltip = 'this extensions by CoffeeChaton/vscode-ahk-outline';
@@ -15,6 +15,10 @@ let config = {
     displayColor: configs.get('displayColor') as string,
 };
 let isAHKv2 = vscode.workspace.getConfiguration('AhkOutline').get('isAHKv2') as boolean;
+let hoverConfig = {
+    ShowParm: vscode.workspace.getConfiguration('AhkOutline.Hover').get('ShowParm') as boolean,
+    ShowComment: vscode.workspace.getConfiguration('AhkOutline.Hover').get('ShowComment') as boolean,
+};
 
 export function configChangEvent(): void {
     configs = vscode.workspace.getConfiguration('AhkOutline.statusBar');
@@ -25,6 +29,10 @@ export function configChangEvent(): void {
         displayColor: configs.get('displayColor') as string,
     };
     isAHKv2 = vscode.workspace.getConfiguration('AhkOutline').get('isAHKv2') as boolean;
+    hoverConfig = {
+        ShowParm: vscode.workspace.getConfiguration('AhkOutline.Hover').get('ShowParm') as boolean,
+        ShowComment: vscode.workspace.getConfiguration('AhkOutline.Hover').get('ShowComment') as boolean,
+    };
 }
 
 export function showTimeSpend(path: string, timeStart: number): void {
@@ -40,8 +48,13 @@ export function showTimeSpend(path: string, timeStart: number): void {
 export function getAhkVersion(): boolean {
     return isAHKv2;
 }
+export function getHoverShow(): { ShowParm: boolean, ShowComment: boolean; } {
+    return hoverConfig;
+}
 export function statusBarClick() {
-    vscode.window.showWarningMessage('ahk.bar.click');
+    const ahkRootPath = vscode.workspace.rootPath;
+    if (ahkRootPath) Detecter.buildByPath(ahkRootPath);
+    vscode.window.showInformationMessage('clear docFuncMap cash');
 }
 // console.log(timeSpend);
 // vscode.window.setStatusBarMessage(timeSpend);

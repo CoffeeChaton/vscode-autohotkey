@@ -70,6 +70,16 @@
                     "type": "boolean",
                     "default": false,
                     "description": "if your ahk version is not v2,please don't Tick this."
+                },
+                "AhkOutline.Hover.ShowParm": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "when hover a function to show this Parm."
+                },
+                "AhkOutline.Hover.ShowComment": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "when hover a function to show this Comment."
                 }
             }
         },

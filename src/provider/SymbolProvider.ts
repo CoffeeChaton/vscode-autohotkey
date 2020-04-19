@@ -46,6 +46,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
             if (BlockSymbol) result.push(BlockSymbol);
         }
         showTimeSpend(document.uri.fsPath, timeStart);
+
         return result;
     }
 

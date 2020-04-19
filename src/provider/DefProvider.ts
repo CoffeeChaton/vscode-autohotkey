@@ -14,7 +14,7 @@ export default class DefProvider implements vscode.DefinitionProvider {
         if (methodLink) return methodLink;
 
         // TODO search class
-        // TODO return ahk Built-in func
+        // return ahk Built-in func
         // for ()...
         return null;
     }
@@ -44,7 +44,6 @@ export default class DefProvider implements vscode.DefinitionProvider {
                 if (AhkFunc.name.toLowerCase() === word) return AhkFunc;
             }
         }
-
         return null;
     }
 

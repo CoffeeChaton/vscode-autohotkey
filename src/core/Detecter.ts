@@ -69,6 +69,7 @@ export class Detecter {
         }
 
         if (usingCache && funcList.length !== 0) return funcList;
+        this.docFuncMap[i] = { key: fsPath, obj: null };
 
         const isAHKv2 = getAhkVersion();
         let BodyEndLine: number = 0;

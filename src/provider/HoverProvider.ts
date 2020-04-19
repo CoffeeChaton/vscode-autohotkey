@@ -7,67 +7,113 @@ import DefProvider from './DefProvider';
 // import getLocation from '../tools/getLocation';
 import { removeSpecialChar, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
-// import { showTimeSpend } from '../configUI';
+import { getHoverShow } from '../configUI';
 
+
+// eslint-disable-next-line no-unused-vars
+const a: vscode.HoverProvider = {
+    // eslint-disable-next-line no-unused-vars
+    provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Hover> {
+        return new vscode.Hover('Hello World');
+    },
+};
 
 export default class HoverProvider implements vscode.HoverProvider {
     // eslint-disable-next-line no-unused-vars
     public async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken) {
-        const { text } = document.lineAt(position);
-        const word = document.getText(document.getWordRangeAtPosition(position)).toLowerCase();
-        const wordReg = new RegExp(`(?<!\\.)\\b(${word})\\(`, 'ig'); // not search class.Method()
-        if (text.search(wordReg) === -1) return new vscode.Hover('this is not function');
+        const isFunc = await this.getFuncHover(document, position);
+        if (isFunc) return isFunc;
 
-        const Def = new DefProvider();
-        const Symbol = await Def.tryGetSymbol(document, word);
-        if (Symbol) {
-            const temp = await this.getFuncReturn(Symbol);
-            return temp;
-        }
+        // TODO https://www.autohotkey.com/docs/commands/index.htm
+        // const commands = this.getCommandsHover(document, position);
+        // if (commands) return commands;
+
+        return new vscode.Hover('');
+    }
+
+    private async getFuncHover(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Hover | null> {
+        const { text } = document.lineAt(position);
+        const Range = document.getWordRangeAtPosition(position);
+        if (Range === undefined) return null;
+        const word = document.getText(Range).toLowerCase();
+        const wordReg = new RegExp(`(?<!\\.)\\b(${word})\\(`, 'ig'); // not search class.Method()
+        if (text.search(wordReg) === -1) return null;
+
+        const Hover = await this.getFuncReturn(document, word);
+        if (Hover) return Hover;
 
         let line1 = 'Cannot find the function defined of package,  \n';
-        line1 += 'if this function is BuiltIn please use [ahk docs](https://www.autohotkey.com/docs/Functions.htm) to search';
-        // TODO https://www.autohotkey.com/docs/commands/index.htm
-        // TODO hover MarkdownString color
+        line1 += 'if this function is in standard library please use [ahk docs](https://www.autohotkey.com/docs/Functions.htm) to search';
         return new vscode.Hover(new vscode.MarkdownString(line1, true));
     }
 
     // eslint-disable-next-line max-statements
-    private async getFuncReturn(Symbol: vscode.SymbolInformation) {
-        const document = await vscode.workspace.openTextDocument(Symbol.location.uri);
-        const iMax = Symbol.location.range.end.line;
-        const markdownLineBreaks = '  \n';
-        const regexp4 = /^[@^,\-+]/;
-        const regexp3 = /^(\{\s*\w\w*\s*:)/;
-        const regexp2 = /^(\w\w*)\(/;
-        const regexp = /\breturn\b[\s,][\s,]*(.+)/i;
-        const title: string = `**${Symbol.name}**  \n ${Symbol.containerName}  \n`;
-        let CommentBlock = false;
-        let head = '\n';
-        let body = '\n';
-        for (let { line } = Symbol.location.range.start; line <= iMax; line += 1) {
-            const { text } = document.lineAt(line);
-            CommentBlock = inCommentBlock(text, CommentBlock);
+    private async getFuncReturn(tempDocument: vscode.TextDocument, word: string): Promise<vscode.Hover | null> {
+        const Def = new DefProvider();
+        const hoverSymbol = await Def.tryGetSymbol(tempDocument, word);
+        if (hoverSymbol === null) return null;
+        const document = await vscode.workspace.openTextDocument(hoverSymbol.location.uri);
+        const container = hoverSymbol.containerName || 'not containerName';
+        const title: string = `${container}  \n${hoverSymbol.name}`;
+        let commentBlock = false;
+        let commentText = '';
+        let paramFlag = true;
+        let paramText = '';
+        let body = '';
+        const { ShowParm, ShowComment } = getHoverShow();
+        const iMax = hoverSymbol.location.range.end.line;
+        let starLine = hoverSymbol.location.range.start.line;
+        for (starLine; starLine <= iMax; starLine += 1) {
+            const { text } = document.lineAt(starLine);
             const textFix = removeSpecialChar(text).trim();
-            if (textFix === '') continue;
+            commentBlock = inCommentBlock(textFix, commentBlock);
             if (getSkipSign(textFix)) continue;
-            if (CommentBlock) {
-                if (textFix.search(regexp4) === 0) {
-                    head += `${textFix}${markdownLineBreaks}`;
-                }
+            if (ShowParm && paramFlag) {
+                const temp = this.getParamText(textFix, paramFlag);
+                paramText += temp.str2;
+                paramFlag = temp.flag2;
+            }
+            if (commentBlock) {
+                commentText += ShowComment ? this.getCommentText(text) : '';
                 continue;
             }
-            const ReturnVal = textFix.match(regexp);
-            if (ReturnVal) {
-                let name = ReturnVal[1].trim();
-                const Func = name.match(regexp2);
-                if (Func) name = `${Func[1]}()`;
-                const obj = name.match(regexp3);
-                if (obj) name = `ahk obj ${obj[1]}`;
-                body += `*   Return ${name.trim()}${markdownLineBreaks}`;
-            }
+            body += this.getReturnText(textFix);
         }
         if (body.trim() === '') body = 'void (this function while not return.)';
-        return new vscode.Hover(new vscode.MarkdownString(`${title}${markdownLineBreaks}${head}\n---\n${body}`, true));
+        commentText = commentText || 'not comment   \n';
+        commentText = ShowComment ? commentText : '';
+        paramText = paramText || '()';
+        const md = new vscode.MarkdownString('', true).appendCodeblock(`${title}${paramText}`, 'ahk')
+            .appendMarkdown(commentText).appendCodeblock(body, 'ahk');
+        return new vscode.Hover(md);
+    }
+
+    private getParamText(textFix: string, paramFlag: boolean): { str2: string, flag2: boolean, } {
+        const paramFinish = /\)\s*\{$/;
+        const paramFinish2 = /^\{/;
+        let textFix2 = textFix;
+        const first = textFix2.indexOf('(');
+        if (first > -1) textFix2 = textFix2.substring(first, textFix2.length);
+        let str2 = textFix2;
+        const flag2 = (textFix.search(paramFinish) > -1 || textFix.search(paramFinish2) > -1) ? false : paramFlag;
+        str2 = flag2 ? str2 : `${str2}  \n`;
+        return { str2, flag2 };
+    }
+
+    private getCommentText(text: string): string {
+        const regexp = /^@/;
+        if (text.trim().search(regexp) === 0) {
+            return `${text.trim()}   \n`;
+        }
+        return '';
+    }
+
+    private getReturnText(textFix: string): string {
+        const regexp1 = /\breturn\b[\s,][\s,]*./i;
+        const ReturnMatch = textFix.match(regexp1);
+        if (ReturnMatch) {
+            return `${textFix.trim()}  \n`;
+        }
+        return '';
     }
 }
