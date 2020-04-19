@@ -65,6 +65,11 @@
                     "type": "string",
                     "default": "#FFB8C6",
                     "description": "color of status bar, use HTML Color, exp: '#940C49' or '#D382FF' or '#FFFFFF' or 'rgb(255,255,100)"
+                },
+                "AhkOutline.isAHKv2": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "if your ahk version is not v2,please don't Tick this."
                 }
             }
         },

@@ -6,7 +6,7 @@ import { Detecter } from '../core/Detecter';
 import getLocation from '../tools/getLocation';
 import { removeSpecialChar, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
-import { showTimeSpend } from '../configUI';
+import { showTimeSpend, getAhkVersion } from '../configUI';
 
 
 export default class SymBolProvider implements vscode.DocumentSymbolProvider {
@@ -17,7 +17,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         const result: vscode.SymbolInformation[] = [];
         let CommentBlock = false;
         let BodyEndLine: number = 0;
-
+        const isAHKv2 = getAhkVersion();
         for (let line = 0; line < lineCount; line += 1) {
             const { text } = document.lineAt(line);
 
@@ -31,7 +31,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
             if (textFix === '') continue;
             if (getSkipSign(textFix)) continue;
 
-            if (line >= BodyEndLine) {
+            if (isAHKv2 || line >= BodyEndLine) {
                 const func = Detecter.getFuncByLine(document, line, lineCount);
                 if (func) {
                     BodyEndLine = func.location.range.end.line;

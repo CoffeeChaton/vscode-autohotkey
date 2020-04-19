@@ -7,22 +7,24 @@ const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignmen
 statusBarItem.tooltip = 'this extensions by CoffeeChaton/vscode-ahk-outline';
 statusBarItem.command = 'ahk.bar.click';
 
-let configuration = vscode.workspace.getConfiguration('AhkOutline.statusBar');
+let configs = vscode.workspace.getConfiguration('AhkOutline.statusBar');
 let config = {
-    showVersion: configuration.get('showVersion') as boolean,
-    showTime: configuration.get('showTime') as boolean,
-    showFileName: configuration.get('showFileName') as boolean,
-    displayColor: configuration.get('displayColor') as string,
+    showVersion: configs.get('showVersion') as boolean,
+    showTime: configs.get('showTime') as boolean,
+    showFileName: configs.get('showFileName') as boolean,
+    displayColor: configs.get('displayColor') as string,
 };
+let isAHKv2 = vscode.workspace.getConfiguration('AhkOutline').get('isAHKv2') as boolean;
 
 export function configChangEvent(): void {
-    configuration = vscode.workspace.getConfiguration('AhkOutline.statusBar');
+    configs = vscode.workspace.getConfiguration('AhkOutline.statusBar');
     config = {
-        showVersion: configuration.get('showVersion') as boolean,
-        showTime: configuration.get('showTime') as boolean,
-        showFileName: configuration.get('showFileName') as boolean,
-        displayColor: configuration.get('displayColor') as string,
+        showVersion: configs.get('showVersion') as boolean,
+        showTime: configs.get('showTime') as boolean,
+        showFileName: configs.get('showFileName') as boolean,
+        displayColor: configs.get('displayColor') as string,
     };
+    isAHKv2 = vscode.workspace.getConfiguration('AhkOutline').get('isAHKv2') as boolean;
 }
 
 export function showTimeSpend(path: string, timeStart: number): void {
@@ -35,7 +37,9 @@ export function showTimeSpend(path: string, timeStart: number): void {
     statusBarItem.color = config.displayColor;
     statusBarItem.show();
 }
-
+export function getAhkVersion(): boolean {
+    return isAHKv2;
+}
 export function statusBarClick() {
     vscode.window.showWarningMessage('ahk.bar.click');
 }

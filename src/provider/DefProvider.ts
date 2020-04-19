@@ -48,7 +48,6 @@ export default class DefProvider implements vscode.DefinitionProvider {
         return null;
     }
 
-    // eslint-disable-next-line class-methods-use-this
     private async tryGetFuncWrapper(document: vscode.TextDocument, position: vscode.Position)
         : Promise<vscode.Location | vscode.Location[] | vscode.LocationLink[] | null> {
         const { text } = document.lineAt(position);

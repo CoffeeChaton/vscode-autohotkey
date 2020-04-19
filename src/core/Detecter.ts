@@ -5,6 +5,7 @@ import { Out } from '../common/out';
 import getLocation from '../tools/getLocation';
 import { removeSpecialChar2, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
+import { getAhkVersion } from '../configUI';
 
 interface docMap {
     key: string;
@@ -69,6 +70,7 @@ export class Detecter {
 
         if (usingCache && funcList.length !== 0) return funcList;
 
+        const isAHKv2 = getAhkVersion();
         let BodyEndLine: number = 0;
         let CommentBlock = false;
         const lineCount = Math.min(document.lineCount, 10000);
@@ -76,7 +78,7 @@ export class Detecter {
             const { text } = document.lineAt(line);
             CommentBlock = inCommentBlock(text, CommentBlock);
             if (CommentBlock) continue;
-            if (line >= BodyEndLine) { // ahk v1 can't use Nested function
+            if (isAHKv2 || line >= BodyEndLine) { // ahk v1 can't use Nested function
                 const func = this.getFuncByLine(document, line, lineCount);
                 if (func) {
                     BodyEndLine = func.location.range.end.line;
