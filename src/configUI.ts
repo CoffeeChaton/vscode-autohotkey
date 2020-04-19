@@ -36,7 +36,7 @@ export function configChangEvent(): void {
 }
 
 export function showTimeSpend(path: string, timeStart: number): void {
-    const version = config.showVersion ? 'v0.35, ' : '';
+    const version = config.showVersion ? 'v0.36, ' : '';
     const timeSpend = config.showTime ? `${Date.now() - timeStart} ms` : '';
     const name = config.showFileName
         ? `, ${path.substring(Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\')) + 1, path.length)}`

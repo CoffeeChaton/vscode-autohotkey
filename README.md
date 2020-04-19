@@ -5,20 +5,19 @@
 AutoHotKey language support for VS Code
 
 - [vscode-autohotkey-Outline](#vscode-autohotkey-outline)
-  - [MethodSymbol](#methodsymbol)
   - [CodeSymbol](#codesymbol)
   - [GotoDefinition](#gotodefinition)
   - [Hover](#hover)
   - [CodeFormat](#codeformat)
 
-## MethodSymbol
+<!-- ## MethodSymbol
 
 1. Detect source method as symbol
 2. You can add a `;@ remark` to the method using a semicolon on the previous line of the method.
 3. Now you can see "Splitting a Long Line into a Series of Shorter Ones" at Outline.
 
    ![methodSymbol](image/methodSymbol.jpg)
-   ![methodSymbol2](image/methodSymbol2.jpg)
+   ![methodSymbol2](image/methodSymbol2.jpg) -->
 
 ## CodeSymbol
 
@@ -35,7 +34,7 @@ AutoHotKey language support for VS Code
 - loop
 - switch
 
-  ![codeSymbol2](image/codeSymbol2.jpg)
+  <!-- ![codeSymbol2](image/codeSymbol2.jpg) -->
 
 - Static Var
 - Return
@@ -56,7 +55,7 @@ AutoHotKey language support for VS Code
 
 1. Press ctrl and move the mouse coordinates to the calling code
 2. or at cursor coordinates `F12`
-   ![gotoDefinition](image/gotoDefinition.jpg)
+   <!-- ![gotoDefinition](image/gotoDefinition.jpg) -->
 3. List all references
    ![ListAllReferences](image/ListAllReferences.jpg)
 
@@ -65,7 +64,7 @@ AutoHotKey language support for VS Code
 1. Hover function to show return value or comment
 
     ![Hover1](image/Hover1.jpg)
-    ![Hover2](image/Hover2.jpg)
+    <!-- ![Hover2](image/Hover2.jpg) -->
     ![Hover3](image/Hover3.jpg)
 
 2. how to add comment of function ?
@@ -78,7 +77,7 @@ AutoHotKey language support for VS Code
     @ exp@email.com
     @ [Markdown Rule](https://en.wikipedia.org/wiki/Markdown)
     @ <https://en.wikipedia.org/wiki/Markdown>
-    @ ![Image](/D:/icon.png "icon")
+    @ ![Image](icon.png "icon")
     @ ~~strikethrough~~
     @ _italic_ _LLLL111_
     @  `monospace`
