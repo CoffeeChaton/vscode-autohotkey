@@ -59,9 +59,8 @@ AutoHotKey language support for VS Code
 
 1. Hover function to show return value or comment
 
-    ![Hover1](image/Hover1.jpg)
-
-    ![Hover2](image/Hover2.jpg)
+    ![hover1](image/hover1.jpg)
+    ![hover2](image/hover2.jpg)
 
 2. how to add comment of function ?
 
