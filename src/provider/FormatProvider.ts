@@ -30,7 +30,7 @@ function trimContent(text: string) {
 }
 
 export class FormatProvider implements vscode.DocumentFormattingEditProvider {
-    private static readonly oneCommandList = ['ifnotexist', 'ifexist', 'ifwinactive', 'ifwinnotactive', 'ifwinexist',
+    private static readonly oneCommandList: readonly string[] = ['ifnotexist', 'ifexist', 'ifwinactive', 'ifwinnotactive', 'ifwinexist',
         'ifwinnotexist', 'ifinstring', 'ifnotinstring', 'if', 'else', 'loop', 'for', 'while', 'catch'];
 
     // eslint-disable-next-line class-methods-use-this

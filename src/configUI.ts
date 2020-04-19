@@ -56,5 +56,5 @@ export function statusBarClick() {
     if (ahkRootPath) Detecter.buildByPath(ahkRootPath);
     vscode.window.showInformationMessage('clear docFuncMap cash');
 }
-// console.log(timeSpend);
+// console.log(JSON.stringify(temp));
 // vscode.window.setStatusBarMessage(timeSpend);

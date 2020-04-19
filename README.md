@@ -8,6 +8,7 @@ AutoHotKey language support for VS Code
   - [MethodSymbol](#methodsymbol)
   - [CodeSymbol](#codesymbol)
   - [GotoDefinition](#gotodefinition)
+  - [Hover](#hover)
   - [CodeFormat](#codeformat)
 
 ## MethodSymbol
@@ -58,6 +59,31 @@ AutoHotKey language support for VS Code
    ![gotoDefinition](image/gotoDefinition.jpg)
 3. List all references
    ![ListAllReferences](image/ListAllReferences.jpg)
+
+## Hover
+
+1. Hover function to show return value or comment
+
+    ![Hover1](image/Hover1.jpg)
+    ![Hover2](image/Hover2.jpg)
+    ![Hover3](image/Hover3.jpg)
+
+2. how to add comment of function ?
+
+ ```
+/*
+    @ in comment block.
+    @ and the line first character is '@'
+    @ can use partial grammar of markdown.
+    @ exp@email.com
+    @ [Markdown Rule](https://en.wikipedia.org/wiki/Markdown)
+    @ <https://en.wikipedia.org/wiki/Markdown>
+    @ ![Image](/D:/icon.png "icon")
+    @ ~~strikethrough~~
+    @ _italic_ _LLLL111_
+    @  `monospace`
+*/
+ ```
 
 ## CodeFormat
 

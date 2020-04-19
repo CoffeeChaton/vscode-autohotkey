@@ -1,26 +1,17 @@
 /* eslint-disable class-methods-use-this */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
 
 import * as vscode from 'vscode';
 import DefProvider from './DefProvider';
 // import { Detecter } from '../core/Detecter';
-// import getLocation from '../tools/getLocation';
 import { removeSpecialChar, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
 import { getHoverShow } from '../configUI';
 
 
-// eslint-disable-next-line no-unused-vars
-const a: vscode.HoverProvider = {
-    // eslint-disable-next-line no-unused-vars
-    provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Hover> {
-        return new vscode.Hover('Hello World');
-    },
-};
-
 export default class HoverProvider implements vscode.HoverProvider {
     // eslint-disable-next-line no-unused-vars
-    public async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken) {
+    async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken) {
         const isFunc = await this.getFuncHover(document, position);
         if (isFunc) return isFunc;
 
@@ -28,7 +19,7 @@ export default class HoverProvider implements vscode.HoverProvider {
         // const commands = this.getCommandsHover(document, position);
         // if (commands) return commands;
 
-        return new vscode.Hover('');
+        return null;
     }
 
     private async getFuncHover(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Hover | null> {
@@ -52,8 +43,9 @@ export default class HoverProvider implements vscode.HoverProvider {
         const Def = new DefProvider();
         const hoverSymbol = await Def.tryGetSymbol(tempDocument, word);
         if (hoverSymbol === null) return null;
+        //   console.log(JSON.stringify(hoverSymbol));
         const document = await vscode.workspace.openTextDocument(hoverSymbol.location.uri);
-        const container = hoverSymbol.containerName || 'not containerName';
+        const container = hoverSymbol.containerName; // || 'not containerName';
         const title: string = `${container}  \n${hoverSymbol.name}`;
         let commentBlock = false;
         let commentText = '';
@@ -61,8 +53,8 @@ export default class HoverProvider implements vscode.HoverProvider {
         let paramText = '';
         let body = '';
         const { ShowParm, ShowComment } = getHoverShow();
-        const iMax = hoverSymbol.location.range.end.line;
         let starLine = hoverSymbol.location.range.start.line;
+        const iMax = hoverSymbol.location.range.end.line;
         for (starLine; starLine <= iMax; starLine += 1) {
             const { text } = document.lineAt(starLine);
             const textFix = removeSpecialChar(text).trim();

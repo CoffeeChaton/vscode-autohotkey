@@ -52,10 +52,8 @@ export class Detecter {
      * detect method list by document
      * @param document
      */
-    public static async getFuncList(docId: vscode.TextDocument | vscode.Uri, usingCache = false): Promise<vscode.SymbolInformation[]> {
-        const document = docId instanceof vscode.Uri
-            ? await vscode.workspace.openTextDocument(docId as vscode.Uri)
-            : docId as vscode.TextDocument;
+    public static async getFuncList(uri: vscode.Uri, usingCache = false): Promise<vscode.SymbolInformation[]> {
+        const document = await vscode.workspace.openTextDocument(uri);
 
         const { fsPath } = document.uri;
         let i = 0;
@@ -69,7 +67,8 @@ export class Detecter {
         }
 
         if (usingCache && funcList.length !== 0) return funcList;
-        this.docFuncMap[i] = { key: fsPath, obj: null };
+        this.docFuncMap[i] = { key: '', obj: null };
+        funcList = [];
 
         const isAHKv2 = getAhkVersion();
         let BodyEndLine: number = 0;
@@ -168,37 +167,5 @@ export class Detecter {
             }
         }
         return null;
-    }
-
-    public static async getFuncReference(fileName: string, wordReg: RegExp): Promise<vscode.Location[]> {
-        const document = await vscode.workspace.openTextDocument(fileName);
-        const LocationList2: vscode.Location[] = [];
-
-        let CommentBlock = false;
-        const lineCount = Math.min(document.lineCount, 10000);
-        for (let line = 0; line < lineCount; line += 1) {
-            const { text } = document.lineAt(line);
-            CommentBlock = inCommentBlock(text, CommentBlock);
-            if (CommentBlock) continue;
-            const textFix = removeSpecialChar2(text).trim();
-            const textFixPos = textFix.search(wordReg);
-            if (textFixPos > -1) {
-                LocationList2.push(new vscode.Location(document.uri, new vscode.Position(line, text.search(wordReg))));
-            }
-        }
-
-        return LocationList2;
-    }
-
-    public static async AhkFuncReference(wordReg: RegExp): Promise<vscode.Location[]> {
-        const List: vscode.Location[] = [];
-        for (const fileName of Detecter.getCacheFileUri()) {
-            // eslint-disable-next-line no-await-in-loop
-            const iLocations = await this.getFuncReference(fileName, wordReg);
-            for (const iLocation of iLocations) { // for ( vscode.Location of vscode.Location[] )
-                List.push(iLocation);
-            }
-        }
-        return List;
     }
 }

@@ -118,7 +118,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         /^GoSub[\s,][\s,]*(\w\w*)/i,
         /^GoTo[\s,][\s,]*(\w\w*)/i,
         /^(\w.?\w):$/, // Label:
-        /\bnew\b\s*(\w\w*)/i, //  := new
+        /\bnew\b\s\s*(\w\w*)/i, //  := new
         /^:[^:]*:([^:][^:]*)::/, // HotStr
         /^([^:][^:]*)::/, // HotKeys
         /^#(\w\w*)/, // directive
