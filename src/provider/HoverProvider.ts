@@ -1,12 +1,12 @@
 /* eslint-disable class-methods-use-this */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
 
 import * as vscode from 'vscode';
 import DefProvider from './DefProvider';
 // import { Detecter } from '../core/Detecter';
 import { removeSpecialChar, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
-import { getHoverShow } from '../configUI';
+import { getHoverConfig } from '../configUI';
 
 
 export default class HoverProvider implements vscode.HoverProvider {
@@ -45,66 +45,81 @@ export default class HoverProvider implements vscode.HoverProvider {
         if (hoverSymbol === null) return null;
         //   console.log(JSON.stringify(hoverSymbol));
         const document = await vscode.workspace.openTextDocument(hoverSymbol.location.uri);
-        const container = hoverSymbol.containerName; // || 'not containerName';
-        const title: string = `${container}  \n${hoverSymbol.name}`;
         let commentBlock = false;
         let commentText = '';
         let paramFlag = true;
         let paramText = '';
-        let body = '';
-        const { ShowParm, ShowComment } = getHoverShow();
-        let starLine = hoverSymbol.location.range.start.line;
-        const iMax = hoverSymbol.location.range.end.line;
-        for (starLine; starLine <= iMax; starLine += 1) {
-            const { text } = document.lineAt(starLine);
+        let returnList = '';
+        const { showParm, showComment } = getHoverConfig();
+        const starLine = hoverSymbol.location.range.start.line;
+        const endLine = hoverSymbol.location.range.end.line;
+        for (let line = starLine; line <= endLine; line += 1) {
+            const { text } = document.lineAt(line);
             const textFix = removeSpecialChar(text).trim();
             commentBlock = inCommentBlock(textFix, commentBlock);
             if (getSkipSign(textFix)) continue;
-            if (ShowParm && paramFlag) {
-                const temp = this.getParamText(textFix, paramFlag);
-                paramText += temp.str2;
-                paramFlag = temp.flag2;
+            if (showParm && paramFlag) {
+                const { str, flag } = this.getParamText(text, paramFlag, line, starLine);
+                paramText += str;
+                paramFlag = flag;
             }
             if (commentBlock) {
-                commentText += ShowComment ? this.getCommentText(text) : '';
+                commentText += showComment ? this.getCommentText(text) : '';
                 continue;
             }
-            body += this.getReturnText(textFix);
+            returnList += this.getReturnText(textFix);
         }
-        if (body.trim() === '') body = 'void (this function while not return.)';
-        commentText = commentText || 'not comment   \n';
-        commentText = ShowComment ? commentText : '';
+
         paramText = paramText || '()';
-        const md = new vscode.MarkdownString('', true).appendCodeblock(`${title}${paramText}`, 'ahk')
-            .appendMarkdown(commentText).appendCodeblock(body, 'ahk');
-        return new vscode.Hover(md);
+        const container = hoverSymbol.containerName; // || 'not containerName';
+        const title = `${container}  \n${hoverSymbol.name}${paramText}`;
+        commentText = commentText || 'not comment   \n';
+        returnList = returnList || 'void (this function does not return.)';
+
+        return new vscode.Hover(new vscode.MarkdownString('', true).appendCodeblock(title, 'ahk')
+            .appendMarkdown(commentText).appendCodeblock(returnList, 'ahk'));
     }
 
-    private getParamText(textFix: string, paramFlag: boolean): { str2: string, flag2: boolean, } {
-        const paramFinish = /\)\s*\{$/;
-        const paramFinish2 = /^\{/;
-        let textFix2 = textFix;
-        const first = textFix2.indexOf('(');
-        if (first > -1) textFix2 = textFix2.substring(first, textFix2.length);
-        let str2 = textFix2;
-        const flag2 = (textFix.search(paramFinish) > -1 || textFix.search(paramFinish2) > -1) ? false : paramFlag;
-        str2 = flag2 ? str2 : `${str2}  \n`;
-        return { str2, flag2 };
+    private getParamText(text: string, paramFlag: boolean, line: number, starLine: number): { str: string, flag: boolean, } {
+        const paramBlockFinish = /\)\s*\{$/;
+        const paramBlockFinish2 = /^\{/;
+        let str = text.trim();
+        if (starLine === line) {
+            const first = str.indexOf('(');
+            if (first > -1) str = str.substring(first, str.length).trim();
+        }
+        const flag = (str.search(paramBlockFinish) > -1 || str.search(paramBlockFinish2) > -1)
+            ? false : paramFlag; // at this block, paramFlag are always true.
+        str = flag ? str : `${str}  \n`;
+        return { str, flag };
     }
 
     private getCommentText(text: string): string {
-        const regexp = /^@/;
+        const regexp = /^[@-]/;
         if (text.trim().search(regexp) === 0) {
             return `${text.trim()}   \n`;
         }
         return '';
     }
 
+    private static readonly regexArray: readonly RegExp[] = [
+        /\breturn\b[\s,][\s,]*(.+)/i, // TODO /ig
+        /^(\w\w*)\(/, // returnFunc
+        /^(\{\s*\w\w*\s*:)/, // returnObj
+    ]
+
     private getReturnText(textFix: string): string {
-        const regexp1 = /\breturn\b[\s,][\s,]*./i;
-        const ReturnMatch = textFix.match(regexp1);
+        const ReturnMatch = textFix.match(HoverProvider.regexArray[0]);
         if (ReturnMatch) {
-            return `${textFix.trim()}  \n`;
+            let name = ReturnMatch[1].trim();
+            const returnFunc = name.match(HoverProvider.regexArray[1]);
+            if (returnFunc) {
+                name = `${returnFunc[1]}(...)`;
+            } else {
+                const returnObj = name.match(HoverProvider.regexArray[2]);
+                if (returnObj) name = `obj ${returnObj[1]}`;
+            }
+            return `Return ${name.trim()}  \n`;
         }
         return '';
     }

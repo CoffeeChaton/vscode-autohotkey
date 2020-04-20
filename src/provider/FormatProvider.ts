@@ -92,7 +92,13 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
             if (deep < 0) {
                 deep = 0;
             }
-            formatDocument += (' '.repeat(deep * 4) + document.lineAt(line).text.replace(/ {2,}/g, ' ').replace(/^\s*/, ''));
+
+            let thisLineDeepStr = '';// https://www.autohotkey.com/docs/Scripts.htm#continuation
+            if (text.trim().match(/(?:^[,.:?])|(?:^\+[^+])|(?:^-[^-])|(?:^and\b)|(?:^or\b)|(?:^\|\|)|(?:^&&)/)) {
+                thisLineDeepStr = ' '.repeat(4);
+            }
+
+            formatDocument += (' '.repeat(deep * 4) + thisLineDeepStr + document.lineAt(line).text.replace(/ {2,}/g, ' ').replace(/^\s*/, ''));
             if (line !== document.lineCount - 1) {
                 formatDocument += '\n';
             }

@@ -63,7 +63,7 @@
                 },
                 "AhkOutline.statusBar.displayColor": {
                     "type": "string",
-                    "default": "#FFB8C6",
+                    "default": "#AFABE7",
                     "description": "color of status bar, use HTML Color, exp: '#940C49' or '#D382FF' or '#FFFFFF' or 'rgb(255,255,100)"
                 },
                 "AhkOutline.isAHKv2": {
@@ -71,12 +71,12 @@
                     "default": false,
                     "description": "if your ahk version is not v2,please don't Tick this."
                 },
-                "AhkOutline.Hover.ShowParm": {
+                "AhkOutline.hover.showParm": {
                     "type": "boolean",
                     "default": true,
                     "description": "when hover a function to show this Parm."
                 },
-                "AhkOutline.Hover.ShowComment": {
+                "AhkOutline.hover.showComment": {
                     "type": "boolean",
                     "default": true,
                     "description": "when hover a function to show this Comment."

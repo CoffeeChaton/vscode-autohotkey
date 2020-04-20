@@ -50,17 +50,24 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         return result;
     }
 
+    private static readonly returnRegex: readonly RegExp[] = [
+        /\breturn\b[\s,][\s,]*(.+)/i, // TODO
+        /^(\w\w*)\(/,
+        /^(\{\s*\w\w*\s*:)/,
+    ]
+
     private getReturnByLine(document: vscode.TextDocument, line: number, lineCount: number,
         textFix: string): vscode.SymbolInformation | null {
-        const regexp = /\breturn\b[\s,][\s,]*(.+)/i;
-        const BlockSymbol = textFix.match(regexp);
-        if (BlockSymbol) {
-            let name = BlockSymbol[1].trim();
-            const Func = name.match(/^(\w\w*)\(/);
-            if (Func) name = `${Func[1]}()`;
-            const obj = name.match(/^(\{\s*\w\w*\s*:)/);
-            if (obj) name = `obj ${obj[1]}`;
-            //
+        const ReturnMatch = textFix.match(SymBolProvider.returnRegex[0]);
+        if (ReturnMatch) {
+            let name = ReturnMatch[1].trim();
+            const Func = name.match(SymBolProvider.returnRegex[1]);
+            if (Func) {
+                name = `${Func[1]}(...)`;
+            } else {
+                const obj = name.match(SymBolProvider.returnRegex[1]);
+                if (obj) name = `obj ${obj[1]}`;
+            }
             const Location = new vscode.Location(document.uri, document.lineAt(line).range);
             return new vscode.SymbolInformation(`Return ${name.trim()}`, vscode.SymbolKind.Variable, '', Location);
         }
@@ -71,7 +78,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         textFix: string): vscode.SymbolInformation | null {
         const {
             matchList, findBlockList, kindList, nameList,
-        } = this;
+        } = SymBolProvider;
         for (let i = 0; i < matchList.length; i += 1) {
             const BlockSymbol = textFix.match(matchList[i]);
             if (BlockSymbol) {
@@ -89,8 +96,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         line: number, lineCount: number, text: string): vscode.SymbolInformation | null {
         const kind = vscode.SymbolKind.Package;
 
-        const CommentBlockRegex = /^\{\s\s*;;/;
-        const CommentBlock = text.trim().search(CommentBlockRegex);
+        const CommentBlock = text.trim().search(SymBolProvider.commentBlockRegex);
         if (CommentBlock > -1) {
             const name = text.substring(text.indexOf(';;') + 2).trim();
             return new vscode.SymbolInformation(name, kind, '', getLocation(document, line, line, lineCount));
@@ -106,27 +112,29 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         return null;
     }
 
-    private readonly matchList: readonly RegExp[] = [
+    private static readonly commentBlockRegex: RegExp = /^\{\s\s*;;/;
+
+    private static readonly matchList: readonly RegExp[] = [
         /^class[\s,][\s,]*(\w\w*)/i,
         /^loop[\s,%][\s,%]*(\w\w*)/i,
         /^for[\s,\w]+in\s\s*(\w\w*)/i,
         /^switch\s\s*(\w\w*)/i,
         // ----------------------
         /^static\b(\w\w*)/i,
-        /^case\s\s*(.+):/i,
+        /^case\s\s*[^:]+:/i,
         /^default(\s)\s*:/i,
         /^GoSub[\s,][\s,]*(\w\w*)/i,
         /^GoTo[\s,][\s,]*(\w\w*)/i,
         /^(\w.?\w):$/, // Label:
         /\bnew\b\s\s*(\w\w*)/i, //  := new
-        /^:[^:]*:([^:][^:]*)::/, // HotStr
+        /^:[^:]*?:([^:][^:]*)::/, // HotStr
         /^([^:][^:]*)::/, // HotKeys
         /^#(\w\w*)/, // directive
         /^global[\s,][\s,]*(\w[^:]*)/i, // global , ...
         /^throw[\s,][\s,]*(.+)/i, // throw
     ];
 
-    private readonly nameList: readonly string[] = [
+    private static readonly nameList: readonly string[] = [
         'Class ',
         'Loop ',
         'For ',
@@ -146,7 +154,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         'Throw ',
     ];
 
-    private readonly kindList: readonly vscode.SymbolKind[] = [
+    private static readonly kindList: readonly vscode.SymbolKind[] = [
         // https://code.visualstudio.com/api/references/vscode-api#SymbolKind
         vscode.SymbolKind.Class,
         vscode.SymbolKind.Package,
@@ -167,7 +175,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         vscode.SymbolKind.Event, // Throw
     ];
 
-    private readonly findBlockList: readonly boolean[] = [
+    private static readonly findBlockList: readonly boolean[] = [
         true,
         true,
         true,
