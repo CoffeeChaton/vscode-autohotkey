@@ -9,47 +9,55 @@ statusBarItem.command = 'ahk.bar.click';
 
 let configs = vscode.workspace.getConfiguration('AhkOutline');
 let config = {
-    statusBar_showVersion: configs.get('statusBar.showVersion') as boolean,
-    statusBar_showTime: configs.get('statusBar.showTime') as boolean,
-    statusBar_showFileName: configs.get('statusBar.showFileName') as boolean,
-    statusBar_displayColor: configs.get('statusBar.displayColor') as string,
+    statusBar: {
+        showVersion: configs.get('statusBar.showVersion') as boolean,
+        showTime: configs.get('statusBar.showTime') as boolean,
+        showFileName: configs.get('statusBar.showFileName') as boolean,
+        displayColor: configs.get('statusBar.displayColor') as string,
+    },
     isAHKv2: configs.get('isAHKv2') as boolean,
-    hover_showParm: configs.get('hover.showParm') as boolean,
-    hover_showComment: configs.get('hover.showComment') as boolean,
+    hover: {
+        showParm: configs.get('hover.showParm') as boolean,
+        showComment: configs.get('hover.showComment') as boolean,
+    },
 };
 
 export function configChangEvent(): void {
     configs = vscode.workspace.getConfiguration('AhkOutline');
     config = {
-        statusBar_showVersion: configs.get('statusBar.showVersion') as boolean,
-        statusBar_showTime: configs.get('statusBar.showTime') as boolean,
-        statusBar_showFileName: configs.get('statusBar.showFileName') as boolean,
-        statusBar_displayColor: configs.get('statusBar.displayColor') as string,
+        statusBar: {
+            showVersion: configs.get('statusBar.showVersion') as boolean,
+            showTime: configs.get('statusBar.showTime') as boolean,
+            showFileName: configs.get('statusBar.showFileName') as boolean,
+            displayColor: configs.get('statusBar.displayColor') as string,
+        },
         isAHKv2: configs.get('isAHKv2') as boolean,
-        hover_showParm: configs.get('hover.showParm') as boolean,
-        hover_showComment: configs.get('hover.showComment') as boolean,
+        hover: {
+            showParm: configs.get('hover.showParm') as boolean,
+            showComment: configs.get('hover.showComment') as boolean,
+        },
     };
 }
 
-export function showTimeSpend(path: string, timeStart: number): void {
-    const version = config.statusBar_showVersion ? 'v0.36b1, ' : '';
-    const timeSpend = config.statusBar_showTime ? `${Date.now() - timeStart} ms` : '';
-    const name = config.statusBar_showFileName
-        ? `, ${path.substring(Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\')) + 1, path.length)}`
+export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
+    const path = uri.fsPath;//= == '\\server\c$\folder\file.txt'
+    const {
+        showVersion, showTime, showFileName, displayColor,
+    } = config.statusBar;
+    const version = showVersion ? 'v0.37, ' : '';
+    const timeSpend = showTime ? `${Date.now() - timeStart} ms` : '';
+    const name = showFileName
+        ? `, ${path.substr(path.lastIndexOf('\\') + 1)}`
         : '';
     statusBarItem.text = `$(heart) ${version}${timeSpend}${name}`;
-    statusBarItem.color = config.statusBar_displayColor;
+    statusBarItem.color = displayColor;
     statusBarItem.show();
 }
 export function getAhkVersion(): boolean {
     return config.isAHKv2;
 }
 export function getHoverConfig(): { showParm: boolean, showComment: boolean; } {
-    const hoverConfig = {
-        showParm: config.hover_showParm,
-        showComment: config.hover_showComment,
-    };
-    return hoverConfig;
+    return config.hover;
 }
 export function statusBarClick() {
     const ahkRootPath = vscode.workspace.rootPath;

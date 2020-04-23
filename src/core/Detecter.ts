@@ -1,3 +1,4 @@
+/* eslint max-classes-per-file: ["error", 3] */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
 import * as fs from 'fs';
 import * as vscode from 'vscode';
@@ -6,29 +7,17 @@ import getLocation from '../tools/getLocation';
 import { removeSpecialChar2, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
 import { getAhkVersion } from '../configUI';
-
-interface docMap {
-    key: string;
-    obj: vscode.SymbolInformation[] | null
-}
+import { EMode } from '../tools/globalSet';
 
 export class Detecter {
-    public static docFuncMap: docMap[] = [];
+    private static AhkClassDefMap: Map<string, vscode.SymbolInformation[]> = new Map(); // TODO AhkClassMap add Method Property
 
-    public static getCacheFileUri(): string[] {
-        const uriList: string[] = [];
-        for (const fileName of this.docFuncMap) {
-            if (fileName.key.match(/\b(ahk|ext)$/i)) {
-                uriList.push(fileName.key);
-            }
-        }
-        return uriList;
+    private static AhkFuncMap: Map<string, vscode.SymbolInformation[]> = new Map();
+
+    public static getCacheFileUri() {
+        return Detecter.AhkFuncMap.keys();
     }
 
-    /**
-     * load method list by path
-     * @param buildPath
-     */
     public static async buildByPath(buildPath: string): Promise<void> {
         if (fs.statSync(buildPath).isDirectory()) {
             fs.readdir(buildPath, (err, files) => {
@@ -40,36 +29,19 @@ export class Detecter {
                     if (file.match(/(^\.|out|target|\.history)/)) {
                         continue;
                     }
-                    this.buildByPath(`${buildPath}/${file}`);
+                    Detecter.buildByPath(`${buildPath}/${file}`);
                 }
             });
         } else if (buildPath.match(/\b(ahk|ext)$/i)) {
-            this.getFuncList(vscode.Uri.file(buildPath));
+            Detecter.getDocDef(vscode.Uri.file(buildPath), EMode.ahkVoid);
         }
     }
 
-    /**
-     * detect method list by document
-     * @param document
-     */
-    public static async getFuncList(uri: vscode.Uri, usingCache = false): Promise<vscode.SymbolInformation[]> {
+    public static async getDocDef(uri: vscode.Uri, mode: EMode): Promise<vscode.SymbolInformation[] | null> {
         const document = await vscode.workspace.openTextDocument(uri);
-
         const { fsPath } = document.uri;
-        let i = 0;
-        let funcList: vscode.SymbolInformation[] = [];
-        for (const { key, obj } of this.docFuncMap) {
-            if (key === fsPath) {
-                funcList = obj || [];
-                break;
-            }
-            i += 1;
-        }
-
-        if (usingCache && funcList.length !== 0) return funcList;
-        this.docFuncMap[i] = { key: '', obj: null };
-        funcList = [];
-
+        const funcList: vscode.SymbolInformation[] = [];
+        const classList: vscode.SymbolInformation[] = [];
         const isAHKv2 = getAhkVersion();
         let BodyEndLine: number = 0;
         let CommentBlock = false;
@@ -78,8 +50,13 @@ export class Detecter {
             const { text } = document.lineAt(line);
             CommentBlock = inCommentBlock(text, CommentBlock);
             if (CommentBlock) continue;
+            const ahkClass = Detecter.getClassByLine(document, line, lineCount);
+            if (ahkClass) {
+                classList.push(ahkClass);
+                continue;
+            }
             if (isAHKv2 || line >= BodyEndLine) { // ahk v1 can't use Nested function
-                const func = this.getFuncByLine(document, line, lineCount);
+                const func = Detecter.getFuncByLine(document, line, lineCount);
                 if (func) {
                     BodyEndLine = func.location.range.end.line;
                     funcList.push(func);
@@ -87,20 +64,43 @@ export class Detecter {
             }
         }
 
-        this.docFuncMap[i] = { key: fsPath, obj: funcList };
+        Detecter.AhkFuncMap.set(fsPath, funcList);
 
-        return funcList;
+        Detecter.AhkClassDefMap.set(fsPath, classList);
+
+        switch (mode) {
+            case EMode.ahkFunc:
+                return funcList;
+            case EMode.ahkClass:
+                return classList;
+            case EMode.ahkVoid:
+                return null;
+            default:
+                throw new Error('input mode not "func" or "class"');
+        }
     }
 
     private static getContainerNameByLine(document: vscode.TextDocument, line: number): string {
         if (line > 0) {
             const { text } = document.lineAt(line - 1);
-            const containerName = text.match(/^\s*;@(.+)/);
-            if (containerName) return containerName[1].trim();
+            const text2 = text.trim();
+            const containerName = text2.match(/^;@/);
+            if (containerName) return text2.trim().substr(1);
         }
         return '';
     }
 
+    public static getClassByLine(document: vscode.TextDocument, line: number, lineCount: number): vscode.SymbolInformation | null {
+        const textFix = removeSpecialChar2(document.lineAt(line).text).trim();
+        if (textFix === '') return null;
+        if (getSkipSign(textFix)) return null;
+        const classDefReg = /^class\b\s\s*(\w\w+)/i;
+        const classMatch = textFix.match(classDefReg);
+        if (classMatch === null) return null;
+        const Location = getLocation(document, line, line, lineCount);
+        return new vscode.SymbolInformation(classMatch[1], vscode.SymbolKind.Class,
+            Detecter.getContainerNameByLine(document, line), Location);
+    }
 
     // eslint-disable-next-line max-statements
     public static getFuncByLine(document: vscode.TextDocument, line: number, lineCount: number): vscode.SymbolInformation | null {
@@ -113,15 +113,15 @@ export class Detecter {
         if (fnHead === null) return null;
 
         const name = fnHead[1];
-        const Remark = this.getContainerNameByLine(document, line);
+        const Remark = Detecter.getContainerNameByLine(document, line);
         const kind = vscode.SymbolKind.Function;
+
         // style
         // line + 0 ^fn_Name(){$
         const fnTail = /\)\s*\{$/;
         if (textFix.search(fnTail) > -1) {
-            const defLine = line;
             const searchLine = line + 0;// + 0
-            return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, defLine, searchLine, lineCount));
+            return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, line, searchLine, lineCount));
         }
 
         // style
@@ -130,10 +130,9 @@ export class Detecter {
         const fnTail2 = /\)$/;
         if (textFix.search(fnTail2) > -1) {
             const nextLine = removeSpecialChar2(document.lineAt(line + 1).text).trim();
-            if (nextLine.indexOf('{') !== 0) return null; // nextLine is not ^{
-            const defLine = line;
+            if (nextLine.search(/^{/) === -1) return null; // nextLine is not ^{
             const searchLine = line + 1;// + 1
-            return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, defLine, searchLine, lineCount));
+            return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, line, searchLine, lineCount));
         }
 
         if (textFix.indexOf(')') > -1) return null;// fn_Name( ... ) ...  ,this is not ahk function
@@ -147,13 +146,12 @@ export class Detecter {
         const iMax = Math.min(line + iMaxRule, lineCount);
         for (let i = line; i < iMax; i += 1) {
             const nextLine = removeSpecialChar2(document.lineAt(i + 1).text).trim();
-            if (nextLine.indexOf(',') !== 0) return null;
+            if (nextLine.search(/^,/) === -1) return null;
 
             // i+1   ^, something , something ........ ) {$
             if (nextLine.search(/\)\s*\{$/) > -1) {
-                const defLine = line;
                 const searchLine = i;// i
-                return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, defLine, searchLine, lineCount));
+                return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, line, searchLine, lineCount));
             }
 
             // i+1   ^, something , something ......)$
@@ -161,9 +159,8 @@ export class Detecter {
             if (nextLine.search(/\)$/) > -1) {
                 const iLine2 = removeSpecialChar2(document.lineAt(i + 2).text).trim();// i+2
                 if (iLine2.search(/^\{/) !== 0) return null;
-                const defLine = line;
                 const searchLine = i + 1;// + 1
-                return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, defLine, searchLine, lineCount));
+                return new vscode.SymbolInformation(name, kind, Remark, getLocation(document, line, searchLine, lineCount));
             }
         }
         return null;

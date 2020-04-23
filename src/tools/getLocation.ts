@@ -35,7 +35,7 @@ export default function getLocation(document: vscode.TextDocument,
         }
     }
 
-    const temp = `from line ${nextLine},miss a "{" or "}" at line_first or line_end.`;
-    vscode.window.showWarningMessage(temp);
+    // const temp = `from line ${nextLine},miss a "{" or "}" at line_first or line_end.`;
+    // vscode.window.showWarningMessage(temp);
     return new vscode.Location(document.uri, document.lineAt(searchLine).range);
 }

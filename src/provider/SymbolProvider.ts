@@ -1,4 +1,5 @@
-/* eslint-disable class-methods-use-this */
+/* eslint-disable max-statements */
+
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
 
 import * as vscode from 'vscode';
@@ -10,8 +11,10 @@ import { showTimeSpend, getAhkVersion } from '../configUI';
 
 
 export default class SymBolProvider implements vscode.DocumentSymbolProvider {
-    // eslint-disable-next-line no-unused-vars
-    provideDocumentSymbols(document: vscode.TextDocument, _token: vscode.CancellationToken): vscode.ProviderResult<vscode.SymbolInformation[]> {
+    // eslint-disable-next-line class-methods-use-this
+    provideDocumentSymbols(document: vscode.TextDocument,
+        // eslint-disable-next-line no-unused-vars
+        token: vscode.CancellationToken): vscode.ProviderResult<vscode.SymbolInformation[]> {
         const timeStart = Date.now();
         const lineCount = Math.min(document.lineCount, 10000);
         const result: vscode.SymbolInformation[] = [];
@@ -24,12 +27,18 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
             CommentBlock = inCommentBlock(text, CommentBlock);
             if (CommentBlock) continue;
 
-            const CommentBlockSymbol = this.getCommentBlockSymbol(document, line, lineCount, text);
+            const CommentBlockSymbol = SymBolProvider.getCommentBlockSymbol(document, line, lineCount, text);
             if (CommentBlockSymbol) result.push(CommentBlockSymbol); // don't continue
 
             const textFix = removeSpecialChar(text).trim();
             if (textFix === '') continue;
             if (getSkipSign(textFix)) continue;
+
+            const ahkClass = Detecter.getFuncByLine(document, line, lineCount);
+            if (ahkClass) {
+                result.push(ahkClass);
+                continue;
+            }
 
             if (isAHKv2 || line >= BodyEndLine) {
                 const func = Detecter.getFuncByLine(document, line, lineCount);
@@ -39,33 +48,27 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
                     continue;
                 }
             }
-            const ReturnValue = this.getReturnByLine(document, line, lineCount, textFix);
+            const ReturnValue = SymBolProvider.getReturnByLine(document, line, lineCount, textFix);
             if (ReturnValue) result.push(ReturnValue);
 
-            const BlockSymbol = this.getSymbolByLine(document, line, lineCount, textFix);
+            const BlockSymbol = SymBolProvider.getSymbolByLine(document, line, lineCount, textFix);
             if (BlockSymbol) result.push(BlockSymbol);
         }
-        showTimeSpend(document.uri.fsPath, timeStart);
+        showTimeSpend(document.uri, timeStart);
 
         return result;
     }
 
-    private static readonly returnRegex: readonly RegExp[] = [
-        /\breturn\b[\s,][\s,]*(.+)/i, // TODO
-        /^(\w\w*)\(/,
-        /^(\{\s*\w\w*\s*:)/,
-    ]
-
-    private getReturnByLine(document: vscode.TextDocument, line: number, lineCount: number,
+    private static getReturnByLine(document: vscode.TextDocument, line: number, lineCount: number,
         textFix: string): vscode.SymbolInformation | null {
-        const ReturnMatch = textFix.match(SymBolProvider.returnRegex[0]);
+        const ReturnMatch = textFix.match(/\breturn\b[\s,][\s,]*(.+)/i);
         if (ReturnMatch) {
             let name = ReturnMatch[1].trim();
-            const Func = name.match(SymBolProvider.returnRegex[1]);
+            const Func = name.match(/^(\w\w*)\(/);
             if (Func) {
                 name = `${Func[1]}(...)`;
             } else {
-                const obj = name.match(SymBolProvider.returnRegex[1]);
+                const obj = name.match(/^(\{\s*\w\w*\s*:)/);
                 if (obj) name = `obj ${obj[1]}`;
             }
             const Location = new vscode.Location(document.uri, document.lineAt(line).range);
@@ -74,7 +77,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         return null;
     }
 
-    private getSymbolByLine(document: vscode.TextDocument, line: number, lineCount: number,
+    private static getSymbolByLine(document: vscode.TextDocument, line: number, lineCount: number,
         textFix: string): vscode.SymbolInformation | null {
         const {
             matchList, findBlockList, kindList, nameList,
@@ -92,19 +95,19 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         return null;
     }
 
-    private getCommentBlockSymbol(document: vscode.TextDocument,
+    private static getCommentBlockSymbol(document: vscode.TextDocument,
         line: number, lineCount: number, text: string): vscode.SymbolInformation | null {
         const kind = vscode.SymbolKind.Package;
 
-        const CommentBlock = text.trim().search(SymBolProvider.commentBlockRegex);
+        const CommentBlock = text.trim().search(/^\{\s\s*;;/);
         if (CommentBlock > -1) {
-            const name = text.substring(text.indexOf(';;') + 2).trim();
+            const name = text.substr(text.indexOf(';;') + 2).trim();
             return new vscode.SymbolInformation(name, kind, '', getLocation(document, line, line, lineCount));
         }
 
         const CommentLine = text.indexOf(';;');
         if (CommentLine > -1) {
-            const name = text.substring(CommentLine).trim();
+            const name = text.substr(CommentLine + 2).trim();
             const Range = new vscode.Range(new vscode.Position(line, CommentLine), new vscode.Position(line, text.length));
             return new vscode.SymbolInformation(name, kind, '', new vscode.Location(document.uri, Range));
         }
@@ -112,10 +115,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         return null;
     }
 
-    private static readonly commentBlockRegex: RegExp = /^\{\s\s*;;/;
-
     private static readonly matchList: readonly RegExp[] = [
-        /^class[\s,][\s,]*(\w\w*)/i,
         /^loop[\s,%][\s,%]*(\w\w*)/i,
         /^for[\s,\w]+in\s\s*(\w\w*)/i,
         /^switch\s\s*(\w\w*)/i,
@@ -135,7 +135,6 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
     ];
 
     private static readonly nameList: readonly string[] = [
-        'Class ',
         'Loop ',
         'For ',
         'Switch ',
@@ -154,9 +153,8 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         'Throw ',
     ];
 
+    // https://code.visualstudio.com/api/references/vscode-api#SymbolKind
     private static readonly kindList: readonly vscode.SymbolKind[] = [
-        // https://code.visualstudio.com/api/references/vscode-api#SymbolKind
-        vscode.SymbolKind.Class,
         vscode.SymbolKind.Package,
         vscode.SymbolKind.Package,
         vscode.SymbolKind.Package,
@@ -167,7 +165,7 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         vscode.SymbolKind.Variable, // GoSub
         vscode.SymbolKind.Variable, // GoTo
         vscode.SymbolKind.Package, // Label
-        vscode.SymbolKind.Class, // not Object  is feature
+        vscode.SymbolKind.Object, //  Object
         vscode.SymbolKind.Event, // HotStr
         vscode.SymbolKind.Event, // HotKeys
         vscode.SymbolKind.Event, // directive
@@ -176,7 +174,6 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
     ];
 
     private static readonly findBlockList: readonly boolean[] = [
-        true,
         true,
         true,
         true,

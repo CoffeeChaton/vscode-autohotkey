@@ -16,20 +16,20 @@ AutoHotKey language support for VS Code
 2. You can add a `;@ remark` to the method using a semicolon on the previous line of the method.
 3. Now you can see "Splitting a Long Line into a Series of Shorter Ones" at Outline.
 
-    ![methodSymbol2](image/methodSymbol2.jpg)
+    ![methodSymbol2](image/methodSymbol2.png)
 
 ## CodeSymbol
 
 1. You can add two semicolon `;;` to comment line
    or add `{ ;;` to comment code block.
 
-    ![codeSymbol](image/codeSymbol.jpg)
+    ![codeSymbol](image/codeSymbol.png)
 
 2. You can see Leveled outline
 
 -   function
--   for
 -   class
+-   for
 -   loop
 -   switch
 
@@ -66,16 +66,17 @@ AutoHotKey language support for VS Code
 
 ```
 /*
-   @ in comment block.
-   @ and the line first character is '@'
-   @ can use partial grammar of markdown.
-   @ exp@email.com
-   @ [Markdown Rule](https://en.wikipedia.org/wiki/Markdown)
-   @ <https://en.wikipedia.org/wiki/Markdown>
-   @ ![Image](icon.png "icon")
-   @ ~~strikethrough~~
-   @ _italic_ _LLLL111_
-   @  `monospace`
+    @ in comment block.
+    @ and the line first character is '@'
+    @ can use partial grammar of markdown.
+    @ exp@email.com
+    @ [Markdown Rule](https://en.wikipedia.org/wiki/Markdown)
+    @ <https://en.wikipedia.org/wiki/Markdown>
+    @ ![Image](/D:/icon.png "icon")
+    @ ~~ABC~~
+    @ _ABC_ _ABC_
+    @ - - -
+    @  `monospace`
 */
 ```
 

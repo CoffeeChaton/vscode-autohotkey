@@ -25,7 +25,7 @@ export function removeSpecialChar(text: string): string {
 
     let textFix = text;
     if (textFix.trim() === '') return '';
-    textFix = textFix.replace(searchEC, '');
+    textFix = textFix.replace(searchEC, ' ');
 
     const comment = textFix.indexOf(';');
     if (comment > -1) {
@@ -41,7 +41,7 @@ export function removeSpecialChar2(text: string): string {
 
     let textFix = text;
     if (textFix.trim() === '') return '';
-    textFix = textFix.replace(searchEC, '');
+    textFix = textFix.replace(searchEC, ' ');
 
     textFix = textFix.replace(searchDQM, ''); // remove ""
     textFix = textFix.replace(searchSQM, ''); // remove ''
