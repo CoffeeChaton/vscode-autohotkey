@@ -7,7 +7,7 @@ import { Out } from '../common/out';
 import getLocation from '../tools/getLocation';
 import { removeSpecialChar, removeSpecialChar2, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
-import { showTimeSpend, getAhkVersion } from '../configUI';
+import { showTimeSpend } from '../configUI';
 import { EMode } from '../tools/globalSet';
 
 class AhkSymBolTools {
@@ -143,12 +143,19 @@ class AhkSymBolTools {
         return null;
     }
 
-    public static getClassByLine(document: vscode.TextDocument, textFix: string, line: number): vscode.SymbolInformation | null {
+    public static getClassByLine(document: vscode.TextDocument, classList: vscode.SymbolInformation[], textFix: string, line: number)
+        : vscode.SymbolInformation | null {
         const classDefReg = /^class\b\s\s*(\w\w+)/i;
         const classMatch = textFix.match(classDefReg);
         if (classMatch === null) return null;
         const Location = getLocation(document, line, line);// 95% case of 'class keyword line' === 'first block line'
-        return new vscode.SymbolInformation(classMatch[1], vscode.SymbolKind.Class, '', Location);
+        let containerName = '';
+        for (const ahkClass of classList) {
+            if (ahkClass.location.range.contains(Location.range)) {
+                containerName = ahkClass.name;
+            }
+        }
+        return new vscode.SymbolInformation(classMatch[1], vscode.SymbolKind.Class, containerName, Location);
     }
 
     public static getFuncByLine(document: vscode.TextDocument, textFix: string, line: number): vscode.SymbolInformation | null {
@@ -184,7 +191,7 @@ class AhkSymBolTools {
         if (justThisLine.indexOf(')') > -1) return null;// fn_Name( ... ) ...  ,this is not ahk function
 
         const iMaxRule = 15;
-        const iMax = Math.min(line + iMaxRule, document.lineCount, 10000) - 1;
+        const iMax = Math.min(line + iMaxRule, document.lineCount, 10000);
 
         for (let searchLine = line + 1; searchLine < iMax; searchLine += 1) {
             const searchText = removeSpecialChar2(document.lineAt(searchLine).text).trim();
@@ -199,6 +206,8 @@ class AhkSymBolTools {
 
 
 export class Detecter {
+    private static AhkMethodMap: Map<string, vscode.SymbolInformation[]> = new Map();
+
     private static AhkClassDefMap: Map<string, vscode.SymbolInformation[]> = new Map(); // TODO AhkClassMap add Method Property
 
     private static AhkFuncMap: Map<string, vscode.SymbolInformation[]> = new Map();
@@ -207,14 +216,27 @@ export class Detecter {
         return Detecter.AhkFuncMap.keys();// === Detecter.AhkClassDefMap.keys();
     }
 
+    private static isMethod(classList: vscode.SymbolInformation[], funcMethod: vscode.SymbolInformation)
+        : vscode.SymbolInformation {
+        const thisSymbol = funcMethod;
+        for (const ahkClass of classList) {
+            if (ahkClass.location.range.contains(funcMethod.location.range)) {
+                thisSymbol.containerName = ahkClass.name;
+                thisSymbol.kind = vscode.SymbolKind.Method;
+                return thisSymbol;
+            }
+        }
+        return thisSymbol;
+    }
+
     // eslint-disable-next-line max-statements
     private static async getDocDefCore(uri: vscode.Uri): Promise<vscode.SymbolInformation[]> {
         const document = await vscode.workspace.openTextDocument(uri);
         const result: vscode.SymbolInformation[] = [];
         const funcList: vscode.SymbolInformation[] = [];
         const classList: vscode.SymbolInformation[] = [];
-        const isAHKv2 = getAhkVersion();
-        let BodyEndLine = 0;
+        const methodList: vscode.SymbolInformation[] = [];
+
         let CommentBlock = false;
         const lineCount = Math.min(document.lineCount, 10000);
         const timeStart = Date.now();
@@ -230,21 +252,25 @@ export class Detecter {
             const textFix = removeSpecialChar(text).trim();
             if (textFix === '' || getSkipSign(textFix)) continue;
 
-            const ahkClass = AhkSymBolTools.getClassByLine(document, textFix, line);
+            const ahkClass = AhkSymBolTools.getClassByLine(document, classList, textFix, line);
             if (ahkClass) {
                 classList.push(ahkClass);
                 result.push(ahkClass);
                 continue;
             }
-            if (isAHKv2 || line >= BodyEndLine) { // ahk v1 can't use Nested function
-                const func = AhkSymBolTools.getFuncByLine(document, textFix, line);
-                if (func) {
-                    BodyEndLine = func.location.range.end.line;
-                    funcList.push(func); // TODO check Range.contains(positionOrRange: Position | Range): boolean
-                    result.push(func);
-                    continue;
+
+            const funcMethod = AhkSymBolTools.getFuncByLine(document, textFix, line);
+            if (funcMethod) {
+                const thisSymbol = Detecter.isMethod(classList, funcMethod);
+                if (thisSymbol.kind === vscode.SymbolKind.Method) {
+                    methodList.push(thisSymbol);
+                } else {
+                    funcList.push(thisSymbol);
                 }
+                result.push(thisSymbol);
+                continue;
             }
+
             const ReturnValue = AhkSymBolTools.getReturnByLine(document, line, textFix);
             if (ReturnValue) result.push(ReturnValue);
 
@@ -258,16 +284,32 @@ export class Detecter {
         return result;
     }
 
-    public static async getDocDef(fsPath: string, mode: EMode, Update: boolean): Promise<vscode.SymbolInformation[] | null> {
-        const ahkSymbol = Update ? Detecter.getDocDefCore(vscode.Uri.file(fsPath)) : null;
-
+    public static getDocDefQuick(fsPath: string, mode: EMode): vscode.SymbolInformation[] | null {
         switch (mode) {
             case EMode.ahkFunc:
                 return Detecter.AhkFuncMap.get(fsPath) || null;
             case EMode.ahkClass:
                 return Detecter.AhkClassDefMap.get(fsPath) || null;
+            case EMode.ahkMethod:
+                return Detecter.AhkMethodMap.get(fsPath) || null;
+            default:
+                vscode.window.showErrorMessage('--------ERROR----271--83');
+                return null;
+        }
+    }
+
+    public static async getDocDef(fsPath: string, mode: EMode, Update: boolean): Promise<vscode.SymbolInformation[] | null> {
+        const ahkSymbol = Update ? Detecter.getDocDefCore(vscode.Uri.file(fsPath)) : null;
+
+        switch (mode) {
             case EMode.ahkVoid:
                 return null;
+            case EMode.ahkFunc:
+                return Detecter.AhkFuncMap.get(fsPath) || null;
+            case EMode.ahkClass:
+                return Detecter.AhkClassDefMap.get(fsPath) || null;
+            case EMode.ahkMethod:
+                return Detecter.AhkMethodMap.get(fsPath) || null;
             case EMode.ahkAll:
                 if (Update) return ahkSymbol;
                 vscode.window.showErrorMessage('--------ERROR----270');

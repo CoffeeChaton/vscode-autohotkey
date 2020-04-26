@@ -28,11 +28,10 @@ async function ahkInclude(document: vscode.TextDocument, position: vscode.Positi
     return null;
 }
 
-export async function tryGetSymbol(word: string, mode: EMode): Promise<vscode.SymbolInformation | null> {
+export function tryGetSymbol(word: string, mode: EMode): vscode.SymbolInformation | null {
     const wordLower = word.toLowerCase();
     for (const fsPath of Detecter.getCacheFileUri()) {
-        // eslint-disable-next-line no-await-in-loop
-        const docSymbolList = await Detecter.getDocDef(fsPath, mode, false);
+        const docSymbolList = Detecter.getDocDefQuick(fsPath, mode);
         if (docSymbolList) {
             for (const AhkSymbol of docSymbolList) {
                 if (AhkSymbol.name.toLowerCase() === wordLower) return AhkSymbol;
@@ -79,7 +78,7 @@ class DefCore {
         } = DefSet;
         const { text } = document.lineAt(position);
         if (text.trim().search(DefReg) > -1) {
-            const AhkSymbol = await tryGetSymbol(word, Mode);
+            const AhkSymbol = tryGetSymbol(word, Mode);
             if (AhkSymbol === null) return null;
 
             if (AhkSymbol.location.uri === document.uri
@@ -89,7 +88,7 @@ class DefCore {
             }
         }
         if (text.trim().search(usingReg) > -1) {
-            const AhkSymbol = await tryGetSymbol(word, Mode);
+            const AhkSymbol = tryGetSymbol(word, Mode);
             if (AhkSymbol === null) return null;
 
             vscode.window.showInformationMessage('goto Def');
@@ -142,8 +141,7 @@ export class DefProvider implements vscode.DefinitionProvider {
         const classLink = await Def.classDef(document, position, word);
         if (classLink) return classLink;
 
-        // return ahk Built-in func
-        // TODO GoSub  GoTo
+        // TODO GoSub GoTo ahk Built-in func
         return null;
     }
 }

@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+// import { CompletionFunc } from './provider/CompletionItemProvider';
 import { Detecter } from './core/Detecter';
 import { DefProvider } from './provider/DefProvider';
 import { FileProvider } from './provider/FileProvider';
@@ -13,6 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (ahkRootPath) Detecter.buildByPath(ahkRootPath);
     context.subscriptions.push(
         vscode.languages.registerHoverProvider(language, new HoverProvider()),
+        //   vscode.languages.registerCompletionItemProvider(language, new CompletionFunc(), '('),
         vscode.languages.registerDefinitionProvider(language, new DefProvider()),
         vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
         // vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
@@ -23,3 +25,5 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // TODO https://code.visualstudio.com/api/references/vscode-api#Diagnostic
+// ParameterInformation
+// SignatureInformation

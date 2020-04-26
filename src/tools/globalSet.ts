@@ -2,8 +2,9 @@
 /* eslint-disable no-magic-numbers */
 export const enum EMode {
     // src\core\Detecter.ts getDocDef
-    ahkFunc = 0,
-    ahkClass = 1,
-    ahkVoid = 2,
-    ahkAll = 10
+    ahkVoid = 'void',
+    ahkFunc = 'ahkFunction',
+    ahkClass = 'ahkClass',
+    ahkMethod = 'ahkMethod',
+    ahkAll = 'ahkAll'
 }

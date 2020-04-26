@@ -9,6 +9,7 @@ AutoHotKey language support for VS Code
     -   [GotoDefinition](#gotodefinition)
     -   [Hover](#hover)
     -   [CodeFormat](#codeformat)
+    -   [IntelliSense](#IntelliSense)
 
 ## MethodSymbol
 
@@ -87,3 +88,7 @@ AutoHotKey language support for VS Code
 -   Formatter follows my coding habits, so it may not unsuited for you.
 -   my style fork is not formatter Label and Return.
 -   **default close now.**
+
+## IntelliSense
+
+1. TODO

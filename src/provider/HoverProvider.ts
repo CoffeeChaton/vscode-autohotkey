@@ -1,4 +1,4 @@
-/* eslint max-classes-per-file: ["error", 3] */
+/* eslint max-classes-per-file: ["error", 4] */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
 
 import * as vscode from 'vscode';
@@ -7,82 +7,9 @@ import { removeSpecialChar, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
 import { getHoverConfig } from '../configUI';
 import { EMode } from '../tools/globalSet';
+import getFuncParm from '../tools/getFuncParm';
 
-
-class HoverFunc {
-    public static async getFuncHover(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Hover | null> {
-        const { text } = document.lineAt(position);
-        const Range = document.getWordRangeAtPosition(position);
-        if (Range === undefined) return null;
-        const word = document.getText(Range).toLowerCase();
-        const wordReg = new RegExp(`(?<!\\.)\\b(${word})\\(`, 'i'); // not search class.Method()
-        if (text.search(wordReg) === -1) return null;
-
-        const Hover = await HoverFunc.getFuncReturn(word);
-        if (Hover) return Hover;
-
-        let line1 = 'Cannot find the function defined of package,  \n';
-        line1 += 'if this function is in standard library please use [ahk docs](https://www.autohotkey.com/docs/Functions.htm) to search';
-        return new vscode.Hover(new vscode.MarkdownString(line1, true));
-    }
-
-    private static async getFuncReturn(word: string): Promise<vscode.Hover | null> {
-        const AhkSymbol = await tryGetSymbol(word, EMode.ahkFunc);
-        if (AhkSymbol === null) return null;
-        //   console.log(JSON.stringify(hoverSymbol));
-        const document = await vscode.workspace.openTextDocument(AhkSymbol.location.uri);
-        let commentBlock = false;
-        let commentText = '';
-        let paramFlag = true;
-        let paramText = '';
-        let returnList = '';
-        const { showParm, showComment } = getHoverConfig();
-        const starLine = AhkSymbol.location.range.start.line;
-        const endLine = AhkSymbol.location.range.end.line;
-        for (let line = starLine; line <= endLine; line += 1) {
-            const { text } = document.lineAt(line);
-            const textFix = removeSpecialChar(text).trim();
-            if (getSkipSign(textFix)) continue;
-            commentBlock = inCommentBlock(textFix, commentBlock);
-            if (showParm && paramFlag) {
-                const { str, flag } = HoverFunc.getParamText(text, paramFlag, line, starLine);
-                paramText += str;
-                paramFlag = flag;
-            }
-            if (commentBlock) {
-                commentText += showComment ? HoverFunc.getCommentText(text) : '';
-                continue;
-            }
-            returnList += HoverFunc.getReturnText(textFix);
-        }
-
-        paramText = paramText || '()';
-        const container = AhkSymbol.containerName || 'not container';
-        const title = `kind: ${container}  \n${AhkSymbol.name}${paramText}`;
-        commentText = commentText || 'not comment   \n';
-        returnList = returnList || 'void (this function not return value.)';
-
-        return new vscode.Hover(new vscode.MarkdownString('', true).appendCodeblock(title, 'ahk')
-            .appendMarkdown(commentText).appendCodeblock(returnList, 'ahk'));
-    }
-
-    private static getParamText(text: string, paramFlag: boolean, line: number, starLine: number): { str: string, flag: boolean, } {
-        const paramBlockFinish = /\)\s*\{$/;
-        const paramBlockFinish2 = /^\{/;
-        let str = text;
-        const comment = str.lastIndexOf(';');
-        if (comment > -1) str = str.substring(0, comment).trim();
-
-        if (starLine === line) {
-            const first = str.indexOf('(');
-            if (first > -1) str = str.substr(first).trim();
-        }
-        const flag = (str.search(paramBlockFinish) > -1 || str.search(paramBlockFinish2) > -1)
-            ? false : paramFlag; // at this block, paramFlag are always true.
-        str = flag ? str : `${str}  \n`;
-        return { str, flag };
-    }
-
+class share {
     private static getCommentText(text: string): string {
         const regexp = /^@/;
         const textFix = text.trimStart();
@@ -107,15 +34,90 @@ class HoverFunc {
         }
         return '';
     }
+
+    private static HoverMd(mode: EMode, paramText: string, commentText: string, returnList: string, AhkSymbol: vscode.SymbolInformation)
+        : vscode.Hover {
+        const kind = mode;
+        const paramText2 = paramText || '()';
+        const container = AhkSymbol.containerName || 'not container';
+        const title = `(${kind})  ${container}  \n${AhkSymbol.name}${paramText2}`;
+        const commentText2 = commentText || 'not comment   \n';
+        const returnList2 = returnList || 'void (this function not return value.)';
+
+        return new vscode.Hover(new vscode.MarkdownString('', true).appendCodeblock(title, 'ahk')
+            .appendMarkdown(commentText2).appendCodeblock(returnList2, 'ahk'));
+    }
+
+    public static async getHoverBody(word: string, mode: EMode): Promise<vscode.Hover | null> {
+        const AhkSymbol = tryGetSymbol(word, mode);
+        if (AhkSymbol === null) return null; //   console.log(JSON.stringify(hoverSymbol));
+        // TODO *3 if mode == EMode.ahkClass
+        const document = await vscode.workspace.openTextDocument(AhkSymbol.location.uri);
+        let commentBlock = false;
+        let commentText = '';
+        let returnList = '';
+        const { showParm, showComment } = getHoverConfig();
+        const starLine = AhkSymbol.location.range.start.line;
+        const endLine = AhkSymbol.location.range.end.line;
+        for (let line = starLine; line <= endLine; line += 1) {
+            const { text } = document.lineAt(line);
+            const textFix = removeSpecialChar(text).trim();
+            if (getSkipSign(textFix)) continue;
+            commentBlock = inCommentBlock(textFix, commentBlock);
+
+            if (commentBlock) {
+                commentText += showComment ? share.getCommentText(text) : '';
+                continue;
+            }
+            returnList += share.getReturnText(textFix);
+        }
+        const paramText = getFuncParm(document, AhkSymbol, showParm);
+        return share.HoverMd(mode, paramText, commentText, returnList, AhkSymbol);
+    }
+}
+
+class HoverFunc {
+    public static async main(word: string, text: string): Promise<vscode.Hover | null> {
+        const usingDef = new RegExp(`(?<!\\.)\\b(${word})\\(`, 'i'); // not search class.Method()
+        if (text.search(usingDef) === -1) return null;
+
+        const Hover = await share.getHoverBody(word, EMode.ahkFunc);
+        if (Hover) return Hover;
+
+        return null;
+    }
+}
+
+class HoverMethod {
+    public static async main(word: string, text: string): Promise<vscode.Hover | null> {
+        const usingDef = new RegExp(`\\b(${word})\\(`, 'i'); // search Method()
+        if (text.search(usingDef) === -1) return null;
+
+        const Hover = await share.getHoverBody(word, EMode.ahkMethod);
+        if (Hover) return Hover;
+
+        let line1 = 'Cannot find this Function defined of package,  \n';
+        line1 += 'if this Function is in standard library,  \n';
+        line1 += 'please use [ahk docs](https://www.autohotkey.com/docs/Functions.htm) to search';
+        return new vscode.Hover(new vscode.MarkdownString(line1, true));
+    }
 }
 
 export default class HoverProvider implements vscode.HoverProvider {
     // eslint-disable-next-line class-methods-use-this
     async provideHover(document: vscode.TextDocument, position: vscode.Position,
         // eslint-disable-next-line no-unused-vars
-        token: vscode.CancellationToken) {
-        const isFunc = await HoverFunc.getFuncHover(document, position);
+        token: vscode.CancellationToken): Promise<vscode.Hover | null> {
+        const { text } = document.lineAt(position);
+        const Range = document.getWordRangeAtPosition(position);
+        if (Range === undefined) return null;
+        const word = document.getText(Range).toLowerCase();
+
+        const isFunc = await HoverFunc.main(word, text);
         if (isFunc) return isFunc;
+
+        const isMethod = await HoverMethod.main(word, text);
+        if (isMethod) return isMethod;
 
         // TODO https://www.autohotkey.com/docs/commands/index.htm
         // const commands = this.getCommandsHover(document, position);
