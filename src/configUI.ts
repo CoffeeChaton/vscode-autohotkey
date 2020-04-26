@@ -44,7 +44,7 @@ export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     const {
         showVersion, showTime, showFileName, displayColor,
     } = config.statusBar;
-    const version = showVersion ? 'v0.38.2, ' : '';
+    const version = showVersion ? 'v0.38, ' : '';
     const timeSpend = showTime ? `${Date.now() - timeStart} ms` : '';
     const name = showFileName
         ? `, ${fsPath.substr(fsPath.lastIndexOf('\\') + 1)}`

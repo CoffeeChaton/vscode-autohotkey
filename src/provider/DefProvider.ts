@@ -87,7 +87,6 @@ class DefCore {
                 vscode.window.showInformationMessage('list all using');
                 return DefCore.getReference(usingReg);
             }
-            vscode.window.showInformationMessage('Can\'t list all using Now');
         }
         if (text.trim().search(usingReg) > -1) {
             const AhkSymbol = await tryGetSymbol(word, Mode);
@@ -96,15 +95,14 @@ class DefCore {
             vscode.window.showInformationMessage('goto Def');
             return new vscode.Location(AhkSymbol.location.uri, new vscode.Position(AhkSymbol.location.range.start.line, 0));
         }
-        // class using
         return null;
     }
 }
 class Def {
     public static async funcDef(document: vscode.TextDocument, position: vscode.Position, word: string)
         : Promise<vscode.Location | vscode.Location[] | null> {
-        // funcName( | not search class.Method()
-        const DefReg = new RegExp(`(?<!\\.)\\b(${word})\\(`, 'i');
+        // funcName( | Func("funcName" , not search class.Method()
+        const DefReg = new RegExp(`(?<!\\.)\\b(${word})\\(|(?:(?<=\\bfunc\\()["']\\b(${word})\\b["'])`, 'i');
         // funcName( | Func("funcName"
         const usingReg = new RegExp(`(?:(?<!\\.)\\b(${word})\\()|(?:(?<=\\bfunc\\()["']\\b(${word})\\b["'])`, 'i');
         const Mode = EMode.ahkFunc;
