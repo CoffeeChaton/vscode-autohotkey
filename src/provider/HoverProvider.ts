@@ -35,17 +35,16 @@ class share {
         return '';
     }
 
-    private static HoverMd(mode: EMode, paramText: string, commentText: string, returnList: string, AhkSymbol: vscode.SymbolInformation)
+    private static HoverMd(mode: EMode, paramText: string, commentText: string, showComment: boolean, returnList: string, AhkSymbol: vscode.SymbolInformation)
         : vscode.Hover {
         const kind = mode;
-        const paramText2 = paramText || '()';
-        const container = AhkSymbol.containerName || 'not container';
-        const title = `(${kind})  ${container}  \n${AhkSymbol.name}${paramText2}`;
+        const container = AhkSymbol.containerName; // || 'not container';
+        const title = `(${kind})  ${container}  \n${AhkSymbol.name}(${paramText}){`;
         const commentText2 = commentText || 'not comment   \n';
+        const commentText3 = showComment ? '' : commentText2;
         const returnList2 = returnList || 'void (this function not return value.)';
-
         return new vscode.Hover(new vscode.MarkdownString('', true).appendCodeblock(title, 'ahk')
-            .appendMarkdown(commentText2).appendCodeblock(returnList2, 'ahk'));
+            .appendMarkdown(commentText3).appendCodeblock(returnList2, 'ahk'));
     }
 
     public static async getHoverBody(word: string, mode: EMode): Promise<vscode.Hover | null> {
@@ -64,7 +63,6 @@ class share {
             const textFix = removeSpecialChar(text).trim();
             if (getSkipSign(textFix)) continue;
             commentBlock = inCommentBlock(textFix, commentBlock);
-
             if (commentBlock) {
                 commentText += showComment ? share.getCommentText(text) : '';
                 continue;
@@ -72,7 +70,7 @@ class share {
             returnList += share.getReturnText(textFix);
         }
         const paramText = getFuncParm(document, AhkSymbol, showParm);
-        return share.HoverMd(mode, paramText, commentText, returnList, AhkSymbol);
+        return share.HoverMd(mode, paramText, commentText, showComment, returnList, AhkSymbol);
     }
 }
 

@@ -20,5 +20,7 @@ export default function getFuncParm(document: vscode.TextDocument, AhkFunc: vsco
         paramText += textFix;
         if (textFix.search(paramBlockFinish) > -1 || textFix.search(paramBlockFinish2) > -1) break;
     }
+    paramText = paramText.trim().replace(/\{$/, '');
+    paramText = paramText.trim().replace(/\)$/, '').trim();
     return paramText;
 }
