@@ -13,8 +13,7 @@ AutoHotKey language support for VS Code
 ## MethodSymbol
 
 1. Detect source method as symbol
-2. You can add a `;@ remark` to the method using a semicolon on the previous line of the method.
-3. Now you can see "Splitting a Long Line into a Series of Shorter Ones" at Outline.
+2. Now you can see "Splitting a Long Line into a Series of Shorter Ones" at Outline.
 
     ![methodSymbol2](image/methodSymbol2.png)
 

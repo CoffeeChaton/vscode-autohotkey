@@ -2,8 +2,7 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
 
 import * as vscode from 'vscode';
-import DefProvider from './DefProvider';
-// import { Detecter } from '../core/Detecter';
+import { tryGetSymbol } from './DefProvider';
 import { removeSpecialChar, getSkipSign } from '../tools/removeSpecialChar';
 import inCommentBlock from '../tools/inCommentBlock';
 import { getHoverConfig } from '../configUI';
@@ -16,10 +15,10 @@ class HoverFunc {
         const Range = document.getWordRangeAtPosition(position);
         if (Range === undefined) return null;
         const word = document.getText(Range).toLowerCase();
-        const wordReg = new RegExp(`(?<!\\.)\\b(${word})\\(`, 'ig'); // not search class.Method()
+        const wordReg = new RegExp(`(?<!\\.)\\b(${word})\\(`, 'i'); // not search class.Method()
         if (text.search(wordReg) === -1) return null;
 
-        const Hover = await HoverFunc.getFuncReturn(document, word);
+        const Hover = await HoverFunc.getFuncReturn(word);
         if (Hover) return Hover;
 
         let line1 = 'Cannot find the function defined of package,  \n';
@@ -27,20 +26,19 @@ class HoverFunc {
         return new vscode.Hover(new vscode.MarkdownString(line1, true));
     }
 
-    // eslint-disable-next-line max-statements
-    private static async getFuncReturn(tempDocument: vscode.TextDocument, word: string): Promise<vscode.Hover | null> {
-        const hoverSymbol = await DefProvider.tryGetSymbol(tempDocument, word, EMode.ahkFunc);
-        if (hoverSymbol === null) return null;
+    private static async getFuncReturn(word: string): Promise<vscode.Hover | null> {
+        const AhkSymbol = await tryGetSymbol(word, EMode.ahkFunc);
+        if (AhkSymbol === null) return null;
         //   console.log(JSON.stringify(hoverSymbol));
-        const document = await vscode.workspace.openTextDocument(hoverSymbol.location.uri);
+        const document = await vscode.workspace.openTextDocument(AhkSymbol.location.uri);
         let commentBlock = false;
         let commentText = '';
         let paramFlag = true;
         let paramText = '';
         let returnList = '';
         const { showParm, showComment } = getHoverConfig();
-        const starLine = hoverSymbol.location.range.start.line;
-        const endLine = hoverSymbol.location.range.end.line;
+        const starLine = AhkSymbol.location.range.start.line;
+        const endLine = AhkSymbol.location.range.end.line;
         for (let line = starLine; line <= endLine; line += 1) {
             const { text } = document.lineAt(line);
             const textFix = removeSpecialChar(text).trim();
@@ -59,10 +57,10 @@ class HoverFunc {
         }
 
         paramText = paramText || '()';
-        const container = hoverSymbol.containerName; // || 'not containerName';
-        const title = `${container}  \n${hoverSymbol.name}${paramText}`;
+        const container = AhkSymbol.containerName || 'not container';
+        const title = `kind: ${container}  \n${AhkSymbol.name}${paramText}`;
         commentText = commentText || 'not comment   \n';
-        returnList = returnList || 'void (this function does not return.)';
+        returnList = returnList || 'void (this function not return value.)';
 
         return new vscode.Hover(new vscode.MarkdownString('', true).appendCodeblock(title, 'ahk')
             .appendMarkdown(commentText).appendCodeblock(returnList, 'ahk'));
@@ -98,9 +96,9 @@ class HoverFunc {
         const ReturnMatch = textFix.match(/\breturn\b[\s,][\s,]*(.+)/i);
         if (ReturnMatch) {
             let name = ReturnMatch[1].trim();
-            const returnFunc = name.match(/^(\w\w*)\(/);
-            if (returnFunc) {
-                name = `${returnFunc[1]}(...)`;
+            const Func = name.match(/^(\w\w*)\(/);
+            if (Func) {
+                name = `${Func[1]}(...)`;
             } else {
                 const returnObj = name.match(/^(\{\s*\w\w*\s*:)/);
                 if (returnObj) name = `obj ${returnObj[1]}`;

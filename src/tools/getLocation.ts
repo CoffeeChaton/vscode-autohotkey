@@ -1,11 +1,12 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
 
 import * as vscode from 'vscode';
 import { removeSpecialChar } from './removeSpecialChar';
 import inCommentBlock from './inCommentBlock';
 
 export default function getLocation(document: vscode.TextDocument,
-    defLine: number, searchLine: number, lineCount: number): vscode.Location {
+    defLine: number, searchLine: number): vscode.Location {
+    const lineCount = Math.min(document.lineCount, 10000);
     const startPos: vscode.Position = new vscode.Position(defLine, 0);
     const blockStart = /\{$/;
     const blockEnd = /^\}/;
@@ -35,7 +36,5 @@ export default function getLocation(document: vscode.TextDocument,
         }
     }
 
-    // const temp = `from line ${nextLine},miss a "{" or "}" at line_first or line_end.`;
-    // vscode.window.showWarningMessage(temp);
     return new vscode.Location(document.uri, document.lineAt(searchLine).range);
 }

@@ -8,7 +8,9 @@ function fullDocumentRange(document: vscode.TextDocument): vscode.Range {
     const lastLineId = document.lineCount - 1;
     return new vscode.Range(0, 0, lastLineId, document.lineAt(lastLineId).text.length);
 }
-
+/* TODO https://code.visualstudio.com/api/references/vscode-api#OnEnterRule
+        https://code.visualstudio.com/api/references/vscode-api#LanguageConfiguration
+*/
 function trimContent(text: string) {
     let textFix = text;
     const comment = textFix.indexOf(';');

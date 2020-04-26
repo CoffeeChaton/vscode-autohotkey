@@ -140,6 +140,7 @@
         "vscode-test": "^1.3.0"
     },
     "dependencies": {
+        "eslint-config-airbnb": "^18.1.0",
         "fs": "0.0.1-security",
         "generator-code": "^1.2.11",
         "get-port": "^5.1.1",

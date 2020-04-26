@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { Detecter } from './core/Detecter';
-import DefProvider from './provider/DefProvider';
+import { DefProvider } from './provider/DefProvider';
 import { FileProvider } from './provider/FileProvider';
 // import { FormatProvider } from './provider/FormatProvider';
 import SymBolProvider from './provider/SymbolProvider';

@@ -40,14 +40,14 @@ export function configChangEvent(): void {
 }
 
 export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
-    const path = uri.fsPath;//= == '\\server\c$\folder\file.txt'
+    const { fsPath } = uri;//= == '\\server\c$\folder\file.txt'
     const {
         showVersion, showTime, showFileName, displayColor,
     } = config.statusBar;
-    const version = showVersion ? 'v0.37, ' : '';
+    const version = showVersion ? 'v0.38.2, ' : '';
     const timeSpend = showTime ? `${Date.now() - timeStart} ms` : '';
     const name = showFileName
-        ? `, ${path.substr(path.lastIndexOf('\\') + 1)}`
+        ? `, ${fsPath.substr(fsPath.lastIndexOf('\\') + 1)}`
         : '';
     statusBarItem.text = `$(heart) ${version}${timeSpend}${name}`;
     statusBarItem.color = displayColor;
@@ -66,4 +66,6 @@ export function statusBarClick() {
 }
 // console.log(JSON.stringify(temp));
 // vscode.window.setStatusBarMessage(timeSpend);
+// vscode.window.showErrorMessage()
+// vscode.window.showInformationMessage()
 // ❤♡

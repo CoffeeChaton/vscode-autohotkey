@@ -3,16 +3,27 @@
         "module": "commonjs",
         "target": "ESNext",
         "outDir": "out",
-        "lib": ["ES2018", "ES2019", "dom", "ES2018.RegExp", "ES2020.string"],
+        "lib": [
+            "ES2018",
+            "ES2019",
+            "dom",
+            "ES2018.RegExp",
+            "ES2020.string",
+            "ESNext"
+        ],
         "sourceMap": true,
         "rootDir": "src",
         "strictNullChecks": true,
         "removeComments": true,
+        /* Strict Type-Checking Options */
         "strict": true,
         "noImplicitAny": true,
         "alwaysStrict": true,
         "noImplicitThis": true,
-        "noImplicitReturns": true
+        "noImplicitReturns": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true
     },
     "exclude": ["node_modules"],
 
