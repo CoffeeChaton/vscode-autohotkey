@@ -21,36 +21,23 @@ class share {
 
     private static getReturnText(textFix: string): string {
         const ReturnMatch = textFix.match(/\breturn\b[\s,][\s,]*(.+)/i);
-        if (ReturnMatch) {
-            let name = ReturnMatch[1].trim();
-            const Func = name.match(/^(\w\w*)\(/);
-            if (Func) {
-                name = `${Func[1]}(...)`;
-            } else {
-                const returnObj = name.match(/^(\{\s*\w\w*\s*:)/);
-                if (returnObj) name = `obj ${returnObj[1]}`;
-            }
-            return `Return ${name.trim()}  \n`;
-        }
-        return '';
-    }
+        if (ReturnMatch === null) return '';
 
-    private static HoverMd(mode: EMode, paramText: string, commentText: string, showComment: boolean, returnList: string, AhkSymbol: vscode.SymbolInformation)
-        : vscode.Hover {
-        const kind = mode;
-        const container = AhkSymbol.containerName; // || 'not container';
-        const title = `(${kind})  ${container}  \n${AhkSymbol.name}(${paramText}){`;
-        const commentText2 = commentText || 'not comment   \n';
-        const commentText3 = showComment ? '' : commentText2;
-        const returnList2 = returnList || 'void (this function not return value.)';
-        return new vscode.Hover(new vscode.MarkdownString('', true).appendCodeblock(title, 'ahk')
-            .appendMarkdown(commentText3).appendCodeblock(returnList2, 'ahk'));
+        let name = ReturnMatch[1].trim();
+        const Func = name.match(/^(\w\w*)\(/);
+        if (Func) {
+            name = `${Func[1]}(...)`;
+        } else {
+            const returnObj = name.match(/^(\{\s*\w\w*\s*:)/);
+            if (returnObj) name = `obj ${returnObj[1]}`;
+        }
+        return `Return ${name.trim()}  \n`;
     }
 
     public static async getHoverBody(word: string, mode: EMode): Promise<vscode.Hover | null> {
         const AhkSymbol = tryGetSymbol(word, mode);
         if (AhkSymbol === null) return null; //   console.log(JSON.stringify(hoverSymbol));
-        // TODO *3 if mode == EMode.ahkClass
+        // TODO if mode == EMode.ahkClass
         const document = await vscode.workspace.openTextDocument(AhkSymbol.location.uri);
         let commentBlock = false;
         let commentText = '';
@@ -70,7 +57,17 @@ class share {
             returnList += share.getReturnText(textFix);
         }
         const paramText = getFuncParm(document, AhkSymbol, showParm);
-        return share.HoverMd(mode, paramText, commentText, showComment, returnList, AhkSymbol);
+        const HoverMd = () => {
+            const kind = mode;
+            const container = AhkSymbol.containerName; // || 'not container';
+            const title = `(${kind})  ${container}  \n${AhkSymbol.name}(${paramText}){`;
+            const commentText2 = commentText || 'not comment   \n';
+            const commentText3 = showComment ? commentText2 : '';
+            const returnList2 = returnList || 'void (this function not return value.)';
+            return new vscode.Hover(new vscode.MarkdownString('', true).appendCodeblock(title, 'ahk')
+                .appendMarkdown(commentText3).appendCodeblock(returnList2, 'ahk'));
+        };
+        return HoverMd();
     }
 }
 

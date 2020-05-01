@@ -103,7 +103,7 @@
             "name": "keyword.other.ahk"
         },
         {
-            "match": "\\b(?!MsgBox)(?<!\\.)(?i:if|else|switch|case|return|loop|break|for|while|class|extends|catch|finally|throw|try|until|continue|critical|exit|exitapp)\\b",
+            "match": "\\b(?!MsgBox)(?<!\\.)(?i:if|else|switch|case|this|new|return|loop|break|for|while|class|extends|catch|finally|throw|try|until|continue|critical|exit|exitapp)\\b",
             "name": "keyword.control.ahk"
         },
         {

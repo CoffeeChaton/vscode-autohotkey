@@ -1,4 +1,4 @@
-/* eslint max-classes-per-file: ["error", 4] */
+/* eslint max-classes-per-file: ["error", 3] */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
@@ -7,12 +7,13 @@ import inCommentBlock from '../tools/inCommentBlock';
 import { EMode } from '../tools/globalSet';
 
 type TDefSet = {
-    document: vscode.TextDocument;
-    position: vscode.Position;
-    Mode: EMode;
-    word: string;
-    DefReg: RegExp;
-    usingReg: RegExp;
+    readonly document: vscode.TextDocument;
+    readonly position: vscode.Position;
+    readonly Mode: EMode;
+    readonly word: string;
+    readonly DefReg: RegExp;
+    readonly usingReg: RegExp;
+    readonly timeStart: number;
 };
 
 async function ahkInclude(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Location | null> {
@@ -42,88 +43,94 @@ export function tryGetSymbol(word: string, mode: EMode): vscode.SymbolInformatio
 }
 
 class DefCore {
-    private static async getDocReference(fileName: string, usingReg: RegExp): Promise<vscode.Location[]> {
-        const document = await vscode.workspace.openTextDocument(vscode.Uri.file(fileName));
-        const LocationList2: vscode.Location[] = [];
-        let CommentBlock = false;
-        const lineCount = Math.min(document.lineCount, 10000);
-        for (let line = 0; line < lineCount; line += 1) {
-            const { text } = document.lineAt(line);
-            CommentBlock = inCommentBlock(text, CommentBlock);
-            if (CommentBlock) continue;
-            const textFix = removeSpecialChar(text).trim();
-            const textFixPos = textFix.search(usingReg);
-            if (textFixPos > -1) {
-                LocationList2.push(new vscode.Location(document.uri, new vscode.Position(line, text.search(usingReg))));
-            }
-        }
-        return LocationList2;
-    }
-
-    private static async getReference(usingReg: RegExp): Promise<vscode.Location[]> {
+    private static async getReference(usingReg: RegExp, timeStart: number, word: string): Promise<vscode.Location[]> {
         const List: vscode.Location[] = [];
         for (const fileName of Detecter.getCacheFileUri()) {
             // eslint-disable-next-line no-await-in-loop
-            const iLocations = await DefCore.getDocReference(fileName, usingReg);
-            for (const iLocation of iLocations) { // for ( vscode.Location of vscode.Location[] )
-                List.push(iLocation);
+            const document = await vscode.workspace.openTextDocument(vscode.Uri.file(fileName));
+            let CommentBlock = false;
+            const lineCount = Math.min(document.lineCount, 10000);
+            for (let line = 0; line < lineCount; line += 1) {
+                const { text } = document.lineAt(line);
+                CommentBlock = inCommentBlock(text, CommentBlock);
+                if (CommentBlock) continue;
+                const textFix = removeSpecialChar(text).trim();
+                const textFixPos = textFix.search(usingReg);
+                if (textFixPos > -1) {
+                    List.push(new vscode.Location(document.uri, new vscode.Position(line, text.search(usingReg))));
+                }
             }
         }
+        console.info(`list all using of ${word} (${Date.now() - timeStart} ms)`);
+        vscode.window.showInformationMessage(`list all using of ${word}`);
         return List;
     }
 
     public static async ahkDef(DefSet: TDefSet): Promise<vscode.Location | vscode.Location[] | null> {
         const {
-            document, position, Mode, word, DefReg, usingReg,
+            document, position, Mode, word, DefReg, usingReg, timeStart,
         } = DefSet;
-        const { text } = document.lineAt(position);
-        if (text.trim().search(DefReg) > -1) {
-            const AhkSymbol = tryGetSymbol(word, Mode);
-            if (AhkSymbol === null) return null;
+        const textTrim = document.lineAt(position).text.trim();
+        const AhkSymbol = tryGetSymbol(word, Mode);
+        if (AhkSymbol === null) return null;
+
+        const searchDef = () => {
+            if (textTrim.trim().search(DefReg) === -1) return null;
 
             if (AhkSymbol.location.uri === document.uri
                 && AhkSymbol.location.range.start.line === document.lineAt(position).lineNumber) {
-                vscode.window.showInformationMessage('list all using');
-                return DefCore.getReference(usingReg);
+                return DefCore.getReference(usingReg, timeStart, word);
             }
-        }
-        if (text.trim().search(usingReg) > -1) {
-            const AhkSymbol = tryGetSymbol(word, Mode);
-            if (AhkSymbol === null) return null;
+            return null;
+        };
+        const searchUsing = () => {
+            if (textTrim.trim().search(usingReg) === -1) return null;
 
-            vscode.window.showInformationMessage('goto Def');
+            console.info(`goto Def of ${word} (${Date.now() - timeStart} ms)`);
+            vscode.window.showInformationMessage(`goto Def of ${word}`);
             return new vscode.Location(AhkSymbol.location.uri, new vscode.Position(AhkSymbol.location.range.start.line, 0));
-        }
+        };
+
+        const Def = searchDef();
+        if (Def !== null) return Def;
+
+        const Using = searchUsing();
+        if (Using !== null) return Using;
+
         return null;
     }
 }
-class Def {
-    public static async funcDef(document: vscode.TextDocument, position: vscode.Position, word: string)
-        : Promise<vscode.Location | vscode.Location[] | null> {
-        // funcName( | Func("funcName" , not search class.Method()
-        const DefReg = new RegExp(`(?<!\\.)\\b(${word})\\(|(?:(?<=\\bfunc\\()["']\\b(${word})\\b["'])`, 'i');
-        // funcName( | Func("funcName"
-        const usingReg = new RegExp(`(?:(?<!\\.)\\b(${word})\\()|(?:(?<=\\bfunc\\()["']\\b(${word})\\b["'])`, 'i');
-        const Mode = EMode.ahkFunc;
-        const funcDefSet = {
-            document, position, Mode, word, DefReg, usingReg,
-        };
-        return DefCore.ahkDef(funcDefSet);
-    }
 
-    public static async classDef(document: vscode.TextDocument, position: vscode.Position, word: string)
-        : Promise<vscode.Location | vscode.Location[] | null> {
+async function userDef(document: vscode.TextDocument, position: vscode.Position, word: string): Promise<vscode.Location | vscode.Location[] | null> {
+    const timeStart = Date.now();
+    const DefRegex: RegExp[] = [
+        new RegExp(`^class\\b\\s\\s*\\b(${word})\\b`, 'i'),
         // class ClassName
-        const DefReg = new RegExp(`^class\\b\\s\\s*\\b(${word})\\b`, 'i');
-        // new className | className. | extends  className | global className
+        new RegExp(`(?<!\\.)\\b(${word})\\(`, 'i'),
+        // funcName( , not search class.Method()
+    ];
+
+    const usingRegex: RegExp[] = [
         // eslint-disable-next-line max-len
-        const usingReg = new RegExp(`(?:\\bnew\\s\\s*\\b(${word})\\b)|(?:(${word})\\.)|(?:\\bextends\\b\\s\\s*(${word}))|(?:\\bglobal\\b\\s\\s*\\b(${word})\\b)`, 'i');
-        const Mode = EMode.ahkClass;
-        const classDefSet = {
-            document, position, Mode, word, DefReg, usingReg,
+        new RegExp(`(?:\\bnew\\s\\s*\\b(${word})\\b)|(?:(${word})\\.)|(?:\\bextends\\b\\s\\s*(${word}))|(?:\\bglobal\\b\\s\\s*\\b(${word})\\b)|(?:\\{\\s*base:\\s*(${word}))|(?:\\w\\w*\\.base\\s*:=\\s*(${word}))`, 'i'),
+        // new className | className. | extends  className | global className |  {base: className | .base := baseObject
+        new RegExp(`(?:(?<!\\.)\\b(${word})\\()|(?:(?<=\\bfunc\\()["']\\b(${word})\\b["'])`, 'i'),
+        // funcName( | Func("funcName"
+    ];
+    const Modes: EMode[] = [
+        EMode.ahkClass,
+        EMode.ahkFunc,
+    ];
+    const iMax = Modes.length;
+    for (let i = 0; i < iMax; i += 1) {
+        const DefSet: TDefSet = {
+            document, position, Mode: Modes[i], word, DefReg: DefRegex[i], usingReg: usingRegex[i], timeStart,
         };
-        return DefCore.ahkDef(classDefSet);
+        // eslint-disable-next-line no-await-in-loop
+        const temp = await DefCore.ahkDef(DefSet);
+        if (temp) return temp;
     }
+    return null;
 }
 
 export class DefProvider implements vscode.DefinitionProvider {
@@ -135,13 +142,9 @@ export class DefProvider implements vscode.DefinitionProvider {
         const fileLink = await ahkInclude(document, position);
         if (fileLink) return fileLink;
 
-        const funcLink = await Def.funcDef(document, position, word);
-        if (funcLink) return funcLink;
-
-        const classLink = await Def.classDef(document, position, word);
-        if (classLink) return classLink;
-
-        // TODO GoSub GoTo ahk Built-in func
+        const userDefLink = await userDef(document, position, word);
+        if (userDefLink) return userDefLink;
+        // TODO class.Method, this.classVar,GoSub, GoTo, ahk Built-in func
         return null;
     }
 }

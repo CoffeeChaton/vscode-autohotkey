@@ -1,65 +1,83 @@
-/* eslint-disable no-unused-vars */
+/* eslint max-classes-per-file: ["error", 3] */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
 /* eslint max-statements: [1, 200] */
 
 import * as vscode from 'vscode';
+import { removeSpecialChar2 } from '../tools/removeSpecialChar';
+import inCommentBlock from '../tools/inCommentBlock';
 
 function fullDocumentRange(document: vscode.TextDocument): vscode.Range {
-    const lastLineId = document.lineCount - 1;
-    return new vscode.Range(0, 0, lastLineId, document.lineAt(lastLineId).text.length);
+    const endLine = document.lineCount - 1;
+    return new vscode.Range(0, 0, endLine, document.lineAt(endLine).text.length);
 }
 /* TODO https://code.visualstudio.com/api/references/vscode-api#OnEnterRule
         https://code.visualstudio.com/api/references/vscode-api#LanguageConfiguration
 */
-function trimContent(text: string) {
-    let textFix = text;
-    const comment = textFix.indexOf(';');
-    if (comment !== -1) {
-        textFix = textFix.substring(0, comment);
-    }
+function trimContent(text: string): string {
+    let textFix = text.toLowerCase();
+    textFix = removeSpecialChar2(textFix);
 
-    const msgbox = textFix.indexOf('msgbox');
-    if (msgbox !== -1) {
-        textFix = `${textFix.substring(0, msgbox)}mb`;
-    }
+    const TraditionAssignment = textFix.search(/^[\w%]\s*=/);
+    if (TraditionAssignment > -1) textFix = '';
 
-    const gui = textFix.match(/gui[\s|,]/);
-    if (gui !== null) {
-        textFix = textFix.substring(0, textFix.indexOf('gui'));
-    }
+    const msgbox = textFix.search(/^\s*msgbox\b/i);
+    if (msgbox > -1) textFix = textFix.substring(0, msgbox + 'msgbox'.length);
+
+    const gui = textFix.search(/^\s*gui\b/i);
+    if (gui > -1) textFix = textFix.substring(0, gui + 'gui'.length);
 
     return textFix;
 }
 
 export class FormatProvider implements vscode.DocumentFormattingEditProvider {
-    private static readonly oneCommandList: readonly string[] = ['ifnotexist', 'ifexist', 'ifwinactive', 'ifwinnotactive', 'ifwinexist',
-        'ifwinnotexist', 'ifinstring', 'ifnotinstring', 'if', 'else', 'loop', 'for', 'while', 'catch'];
+    private static readonly commandRegexps: readonly RegExp[] = [
+        /\bifnotexist\b(.*)/,
+        /\bifExist\b(.*)/i,
+        /\bifWinActive\b(.*)/i,
+        /\bifwinnotactive\b(.*)/,
+        /\bifWinExist\b(.*)/i,
+        /\bifWinNotExist\b(.*)/i,
+        /\bifInString\b(.*)/i,
+        /\bifnotinstring\b(.*)/,
+        /\bif\b(.*)/,
+        /\belse\b(.*)/,
+        /\bloop\b(.*)/,
+        /\bfor\b(.*)/,
+        /\bwhile\b(.*)/,
+        /\btry\b(.*)/,
+        /\bcatch\b(.*)/,
+    ];
+
+    private static readonly ContinueLongLineRegex = /(?:^[,.?])|(?:^:[^:])|(?:^\+[^+])|(?:^-[^-])|(?:^and\b)|(?:^or\b)|(?:^\|\|)|(?:^&&)/;
+    // [ContinueLongLine](https://www.autohotkey.com/docs/Scripts.htm#continuation)
 
     // eslint-disable-next-line class-methods-use-this
     public provideDocumentFormattingEdits(document: vscode.TextDocument,
-        _options: vscode.FormattingOptions,
-        _token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
+        // eslint-disable-next-line no-unused-vars
+        options: vscode.FormattingOptions, token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
+        const { tabSize, insertSpaces } = options;
+        const TabSpaces = insertSpaces ? ' ' : '\t';
+        const tabSize2 = insertSpaces ? tabSize : 1;
         let formatDocument = '';
         let deep = 0;
-        // const tagDeep = 0;
-        let oneCommandCode = false;
-
-        for (let line = 0; line < document.lineCount; line += 1) {
+        let oneCommandCode = 0;
+        let CommentBlock = false;
+        const lineMax = document.lineCount;
+        for (let line = 0; line < lineMax; line += 1) {
             let notDeep = true;
-            let { text } = document.lineAt(line);
-            text = text.toLowerCase();
-            text = trimContent(text);
+            const { text } = document.lineAt(line);
+            CommentBlock = inCommentBlock(text, CommentBlock);
+            const textFix = CommentBlock ? '' : trimContent(text);
             /*
-            if (text.match(/#ifwinactive$/)
-              || text.match(/#ifwinnotactive$/) || (text.match(/\breturn\b/) && tagDeep === deep)) {
+            if (text.match(/#ifwinactive$/) || text.match(/#ifwinnotactive$/) || (text.match(/\breturn\b/) && tagDeep === deep)) {
               deep -= 1;
               notDeep = false;
             }
             */
-            const blockEnd = text.match(/}/);
+            const blockEnd = textFix.match(/}/g); // What does this block mean?
             if (blockEnd !== null) {
                 let temp = blockEnd.length;
-                const t2 = text.match(/{[^{}]*}/);
+                const t2 = textFix.match(/{[^{}]*}/g);
                 if (t2) {
                     temp -= t2.length;
                 }
@@ -76,16 +94,15 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
               }
             }
             */
-            if (oneCommandCode && text.match(/{/) !== null) {
-                const blockEnd2 = text.match(/}/);
+            const blockEnd2 = textFix.match(/{/g);
+            if (oneCommandCode && blockEnd2 !== null) {
                 if (blockEnd2) {
                     let temp = blockEnd2.length;
-                    const t2 = text.match(/{[^{}]*}/);
-                    if (t2) {
-                        temp -= t2.length;
-                    }
+                    temp -= (textFix.match(/{[^{}]*}/g) || []).length;
                     if (temp > 0) {
-                        oneCommandCode = false;
+                        oneCommandCode += (textFix.match(/\(/g) || []).length;
+                        oneCommandCode -= (textFix.match(/\)/g) || []).length;
+                        oneCommandCode -= 1;
                         deep -= 1;
                     }
                 }
@@ -95,18 +112,23 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
                 deep = 0;
             }
 
-            let thisLineDeepStr = '';// https://www.autohotkey.com/docs/Scripts.htm#continuation
-            if (text.trim().match(/(?:^[,.:?])|(?:^\+[^+])|(?:^-[^-])|(?:^and\b)|(?:^or\b)|(?:^\|\|)|(?:^&&)/)) {
-                thisLineDeepStr = ' '.repeat(4);
-            }
-
-            formatDocument += (' '.repeat(deep * 4) + thisLineDeepStr + document.lineAt(line).text.replace(/ {2,}/g, ' ').replace(/^\s*/, ''));
-            if (line !== document.lineCount - 1) {
-                formatDocument += '\n';
-            }
+            const thisLineDeep = textFix.trim().search(FormatProvider.ContinueLongLineRegex) > -1
+                ? TabSpaces.repeat(tabSize2)
+                : TabSpaces.repeat(0);
+            const LineDeep = (oneCommandCode === 0) ? thisLineDeep : '';
+            const LineBody = document.lineAt(line).text.trimStart();
+            const Deep = TabSpaces.repeat(deep * tabSize2);
+            // TODO += str
+            formatDocument += Deep + LineDeep + LineBody;
+            formatDocument += '\n';
 
             if (oneCommandCode) {
-                oneCommandCode = false;
+                oneCommandCode += (textFix.match(/\(/g) || []).length;
+                oneCommandCode -= (textFix.match(/\)/g) || []).length;
+                oneCommandCode -= 1;
+                if (oneCommandCode < 0) {
+                    oneCommandCode = 0;
+                }
                 deep -= 1;
             }
             /*
@@ -115,10 +137,10 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
               notDeep = false;
             }
             */
-            const blockStart = text.match(/{/);
+            const blockStart = textFix.match(/{/g);
             if (blockStart !== null) {
                 let temp = blockStart.length;
-                const t2 = text.match(/{[^{}]*}/);
+                const t2 = textFix.match(/{[^{}]*}/g);
                 if (t2) {
                     temp -= t2.length;
                 }
@@ -128,25 +150,29 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
                 }
             }
             /*
-            if (text.match(/:$/)) {
+            if (text.match(/:$/)) { // label
               deep += 1;
               tagDeep = deep;
               notDeep = false;
             }
             */
             if (notDeep) {
-                for (const oneCommand of FormatProvider.oneCommandList) {
-                    const temp = new RegExp(`\\b${oneCommand}\\b(.*)`).exec(text);
-                    if (temp !== null && !temp[1].includes('/')) {
-                        oneCommandCode = true;
-                        deep += 1;
-                        break;
-                    }
+                for (const commandRegexp of FormatProvider.commandRegexps) {
+                    const temp = textFix.match(commandRegexp);
+                    if (temp === null) continue;
+                    oneCommandCode = 1;
+                    oneCommandCode += (temp[1].match(/\(/g) || []).length;
+                    oneCommandCode -= (temp[1].match(/\)/g) || []).length;
+                    deep += 1;
+                    break;
                 }
             }
         }
         const result: vscode.TextEdit[] = [];
-        result.push(new vscode.TextEdit(fullDocumentRange(document), formatDocument.replace(/\n{2,}/g, '\n\n')));
+        result.push(new vscode.TextEdit(fullDocumentRange(document),
+            formatDocument.replace(/\n{2,}/g, '\n\n')
+                .replace(/\n*$/, '\n'))); // end line \n
+        vscode.window.showInformationMessage('Format Document is Beta Test');
         return result;
     }
 }

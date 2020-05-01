@@ -63,8 +63,8 @@
                 },
                 "AhkOutline.statusBar.displayColor": {
                     "type": "string",
-                    "default": "#AFABE7",
-                    "description": "color of status bar, use HTML Color, exp: '#940C49' or '#D382FF' or '#FFFFFF' or 'rgb(255,255,100)"
+                    "default": "#e783e1",
+                    "description": "color of status bar, use '' to use theme color,or use HTML Color, exp: '#D382FF' or 'rgb(255,255,100)"
                 },
                 "AhkOutline.isAHKv2": {
                     "type": "boolean",

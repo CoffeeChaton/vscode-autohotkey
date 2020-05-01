@@ -1,86 +1,79 @@
+/* eslint-disable max-statements */
 /* eslint-disable no-unused-vars */
 /* eslint max-classes-per-file: ["error", 3] */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
 
 import * as vscode from 'vscode';
+import { Detecter } from '../core/Detecter';
 import { tryGetSymbol } from './DefProvider';
 import { EMode } from '../tools/globalSet';
-import getFuncParm from '../tools/getFuncParm';
 
-class CompletionComma implements vscode.CompletionItemProvider {
+
+export class CompletionComma implements vscode.CompletionItemProvider {
     // eslint-disable-next-line class-methods-use-this
     provideCompletionItems(document: vscode.TextDocument, position: vscode.Position,
         // eslint-disable-next-line no-unused-vars
         token: vscode.CancellationToken, context: vscode.CompletionContext)
-        : vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList | null> {
-        const result: vscode.CompletionItem[] = [];
-        const kind = vscode.CompletionItemKind.Color;
-        const { text } = document.lineAt(position.line);// TODO CompletionItemProvider
-        const position2 = new vscode.Position(position.line, position.character - 1);
-        const Range = document.getWordRangeAtPosition(position2);
+        : vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList> {
+        const Range = document.getWordRangeAtPosition(new vscode.Position(position.line, position.character - 1));
         if (Range === undefined) return null;
-        const objName = document.getText(Range);
-        const AhkSymbol = tryGetSymbol(objName, EMode.ahkClass);
-        if (AhkSymbol) {
-            const CompletionItem = new vscode.CompletionItem(objName, kind); // TODO search for class methods
-            CompletionItem.commitCharacters = ['\t', '.'];
-            CompletionItem.detail = 'ahkOutline IntelliSense';
-            CompletionItem.documentation = 'TODO--21--89--564';
-            CompletionItem.preselect = true;
-            result.push(CompletionItem);
-            return result;
-        }
-        //  TODO const objName = for ( text -- )
-        // const AhkSymbol = tryGetSymbol(objName, EMode.ahkClass);
-        // if (AhkSymbol) {
-        // }
-        return null;
-    }
+        const word = document.getText(Range);
+        const result: vscode.CompletionItem[] = [];
+        const inClassList = [Detecter.getMethodMap(), Detecter.getClassMap()];
+        const kinds = [vscode.CompletionItemKind.Method, vscode.CompletionItemKind.Class];
+        const iMax = inClassList.length;
 
-    // eslint-disable-next-line class-methods-use-this
-    resolveCompletionItem(item: vscode.CompletionItem, token: vscode.CancellationToken): vscode.ProviderResult<vscode.CompletionItem> {
-        const label = 'TODO-----18118-----';// TODO
-        const kind = vscode.CompletionItemKind.Class;
-        return new vscode.CompletionItem(label, kind);
-    }
-}
-
-// TODO fn_name(,,)
-export class CompletionFunc implements vscode.CompletionItemProvider {
-    // eslint-disable-next-line class-methods-use-this
-    provideCompletionItems(document: vscode.TextDocument, position: vscode.Position,
-        // eslint-disable-next-line no-unused-vars
-        token: vscode.CancellationToken, context: vscode.CompletionContext)
-        : vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList | null> {
-        return new Promise(() => {
-            const result: vscode.CompletionItem[] = [];
-            const kind = vscode.CompletionItemKind.Color;
-            const position2 = new vscode.Position(position.line, position.character - 2);
-            const Range = document.getWordRangeAtPosition(position2);
-            if (Range === undefined) return null;
-            const funcName = document.getText(Range);
-            const AhkSymbol = tryGetSymbol(funcName, EMode.ahkFunc);
-            if (AhkSymbol) {
-                const CompletionItem = new vscode.CompletionItem(funcName, kind);
-                CompletionItem.commitCharacters = ['(', 'func'];
-                CompletionItem.detail = 'ahkOutline IntelliSense';
-                CompletionItem.documentation = 'TODO--21--89--564';
-                CompletionItem.preselect = true;
-                // FIXME
-                CompletionItem.label = 'str';// getFuncParm(await vscode.workspace.openTextDocument(AhkSymbol.location.uri), AhkSymbol, true);
-                result.push(CompletionItem);
-                return result;
+        const resultPush = (classSymbol: vscode.SymbolInformation | null, word2: string) => {
+            if (classSymbol) {
+                for (let i = 0; i < iMax; i += 1) {
+                    const inClass = inClassList[i];
+                    const classInsides = inClass.get(classSymbol.location.uri.fsPath) || [];
+                    for (const classInside of classInsides) {
+                        console.log(': ---------------------------------------------------------');
+                        console.log('CompletionComma -> resultPush -> classInside', classInside);
+                        console.log(': ---------------------------------------------------------');
+                        if (classInside.containerName.toLowerCase() !== word2.toLowerCase()) continue;
+                        const kind = kinds[i];
+                        let Name = classInside.name;
+                        if (kind === vscode.CompletionItemKind.Method) Name += '()';
+                        const CompletionItem = new vscode.CompletionItem(Name, kinds[i]);
+                        result.push(CompletionItem);
+                    }
+                }
             }
-            //  TODO *3 const objName = for ( text -- )
-            // const AhkSymbol = tryGetSymbol(objName, EMode.ahkClass);
-            // if (AhkSymbol) {
-            // }
-            return null;
-        });
+        };
+
+        const classSymbolStatic = tryGetSymbol(word, EMode.ahkClass);
+        resultPush(classSymbolStatic, word);
+
+        let startLine = 0;
+        let endLine = position.line;
+        const thisDocFuncList = Detecter.getFuncMap().get(document.uri.fsPath) || [];
+        for (const func of thisDocFuncList) {
+            if (func.location.range.contains(position)) {
+                startLine = func.location.range.start.line;
+                endLine = func.location.range.end.line;
+                break;
+            }
+        }
+        const usingNew = new RegExp(`^${word}\\s*:=\\s*new\\s\\s*(\\w\\w*)`);
+        for (let line = endLine; line >= startLine; line -= 1) {
+            const { text } = document.lineAt(line);
+            const match = text.trim().match(usingNew);
+            if (match === null) continue;
+            const objName = match[1];
+            const classSymbol = tryGetSymbol(objName, EMode.ahkClass);
+            resultPush(classSymbol, objName);
+            break;
+        }
+        // TODO     InstanceVar  static ClassVar     Property[]
+        return result;
     }
 
     // eslint-disable-next-line class-methods-use-this
-    resolveCompletionItem(item: vscode.CompletionItem, token: vscode.CancellationToken): vscode.ProviderResult<vscode.CompletionItem> {
-        return item;
-    }
+    // resolveCompletionItem(item: vscode.CompletionItem, token: vscode.CancellationToken): vscode.ProviderResult<vscode.CompletionItem> {
+    //     const label = 'TODO-----18118-----';
+    //     const kind = vscode.CompletionItemKind.Class;
+    //     return new vscode.CompletionItem(label, kind);
+    // }
 }

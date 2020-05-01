@@ -50,7 +50,7 @@ AutoHotKey language support for VS Code
 
 ## GotoDefinition
 
-1. Press ctrl and move the mouse coordinates to the calling code
+1. use `ctrl + click` to go to Definition
 2. or at cursor coordinates `F12`
 3. List all references
    ![ListAllReferences](image/ListAllReferences.jpg)
@@ -87,8 +87,8 @@ AutoHotKey language support for VS Code
 
 -   Formatter follows my coding habits, so it may not unsuited for you.
 -   my style fork is not formatter Label and Return.
--   **default close now.**
+-   **beta test now.**
 
 ## IntelliSense
 
-1. TODO
+![IntelliSense For Class](image/IntelliSenseForClass.gif)

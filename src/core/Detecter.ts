@@ -12,19 +12,19 @@ import { EMode } from '../tools/globalSet';
 
 class AhkSymBolTools {
     private static readonly matchList: readonly RegExp[] = [
-        /^loop[\s,%][\s,%]*(\w\w*)/i,
-        /^for[\s,\w]+in\s\s*(\w\w*)/i,
-        /^switch\s\s*(\w\w*)/i,
+        /^loop[\s,%][\s,%]*(\w\w\w\w*)/i,
+        /^for[\s,\w]+in\s\s*(\w\w\w\w*)/i,
+        /^switch\s\s*(\w\w\w\w*)/i,
         // ----------------------
-        /^static\b(\w\w*)/i,
+        /^static\s\s*(\w\w*)/i,
         /^case\s\s*([^:][^:]*):/i,
         /^default(\s)\s*:/i,
         /^GoSub[\s,][\s,]*(\w\w*)/i,
         /^GoTo[\s,][\s,]*(\w\w*)/i,
-        /^(\w.?\w):$/, // Label:
-        /\bnew\b\s\s*(\w\w*)/i, //  := new
+        /^(\w\w*):$/, // Label:
+        /^(\w\w*)\s*:=\s*\bnew\b/i, // objName := new className
         /^:[^:]*?:([^:][^:]*)::/, // HotStr
-        /^([^:][^:]*)::/, // HotKeys
+        /^([^:][^:]*?)::/, // HotKeys
         /^#(\w\w*)/, // directive
         /^global[\s,][\s,]*(\w[^:]*)/i, // global , ...
         /^throw[\s,][\s,]*(.+)/i, // throw
@@ -41,7 +41,7 @@ class AhkSymBolTools {
         'GoSub ',
         'GoTo ',
         'Label ',
-        'new ',
+        '', // new
         '', // HotStr
         '', // HotKeys
         '#', // directive
@@ -97,7 +97,7 @@ class AhkSymBolTools {
                 name = `${Func[1]}(...)`;
             } else {
                 const obj = name.match(/^(\{\s*\w\w*\s*:)/);
-                if (obj) name = `obj ${obj[1]}`;
+                if (obj) name = `ahkObject ${obj[1]}`;
             }
 
             const Location = new vscode.Location(document.uri, document.lineAt(line).range);
@@ -184,6 +184,8 @@ class AhkSymBolTools {
         const fnHead = textFix.match(fnHeadMatch);
         if (fnHead === null) return null;
         const name = fnHead[1];
+        if (name.toLowerCase() === 'if' || name.toLowerCase() === 'while') return null;
+
         const thisLine = getFuncTail(textFix, name, line);
         if (thisLine) return thisLine;
 
@@ -214,6 +216,18 @@ export class Detecter {
 
     public static getCacheFileUri(): IterableIterator<string> {
         return Detecter.AhkFuncMap.keys();// === Detecter.AhkClassDefMap.keys();
+    }
+
+    public static getMethodMap() {
+        return Detecter.AhkMethodMap;
+    }
+
+    public static getClassMap() {
+        return Detecter.AhkClassDefMap;
+    }
+
+    public static getFuncMap() {
+        return Detecter.AhkFuncMap;
     }
 
     private static isMethod(classList: vscode.SymbolInformation[], funcMethod: vscode.SymbolInformation)
@@ -279,6 +293,7 @@ export class Detecter {
         }
         showTimeSpend(document.uri, timeStart);
         const { fsPath } = document.uri;
+        Detecter.AhkMethodMap.set(fsPath, methodList);
         Detecter.AhkFuncMap.set(fsPath, funcList);
         Detecter.AhkClassDefMap.set(fsPath, classList);
         return result;
@@ -293,7 +308,9 @@ export class Detecter {
             case EMode.ahkMethod:
                 return Detecter.AhkMethodMap.get(fsPath) || null;
             default:
-                vscode.window.showErrorMessage('--------ERROR----271--83');
+                console.log(': --------ERROR----271--83--mode is');
+                console.log('Detecter -> getFuncTail -> mode', mode);
+                console.log(': -------------------------------------');
                 return null;
         }
     }

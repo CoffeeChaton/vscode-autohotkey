@@ -9,5 +9,5 @@ export default class SymBolProvider implements vscode.DocumentSymbolProvider {
         token: vscode.CancellationToken): vscode.ProviderResult<vscode.SymbolInformation[]> {
         return Detecter.getDocDef(document.uri.fsPath, EMode.ahkAll, true);
     }
-    // IS BAD   https://code.visualstudio.com/api/references/vscode-api#DocumentSymbol  IS BAD
+    // TODO  https://code.visualstudio.com/api/references/vscode-api#DocumentSymbol
 }
