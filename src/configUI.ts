@@ -40,29 +40,31 @@ export function configChangEvent(): void {
 }
 
 export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
-    const { fsPath } = uri;//= == '\\server\c$\folder\file.txt'
-    const {
-        showVersion, showTime, showFileName, displayColor,
-    } = config.statusBar;
-    const version = showVersion ? 'v0.39b1, ' : '';
-    const timeSpend = showTime ? `${Date.now() - timeStart} ms` : '';
-    const name = showFileName
-        ? `, ${fsPath.substr(fsPath.lastIndexOf('\\') + 1)}`
+    const fsPathRaw = uri.fsPath;//= == '\\server\c$\folder\file.txt'
+    const version = config.statusBar.showVersion ? 'v0.39b5, ' : '';
+    const timeSpend = config.statusBar.showTime ? `${Date.now() - timeStart} ms` : '';
+    const name = config.statusBar.showFileName
+        ? `, ${fsPathRaw.substr(fsPathRaw.lastIndexOf('\\') + 1)}`
         : '';
-    statusBarItem.text = `$(heart) ${version}${timeSpend}${name}`;
-    statusBarItem.color = displayColor;
+    const text = `$(heart) ${version}${timeSpend}${name}`;
+    statusBarItem.text = text;
+    console.log(`${timeSpend}  ${name}`);
+    statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
 }
+
 export function getAhkVersion(): boolean {
     return config.isAHKv2;
 }
-export function getHoverConfig(): { showParm: boolean, showComment: boolean; } {
+
+export function getHoverConfig(): { showParm: boolean; showComment: boolean } {
     return config.hover;
 }
-export function statusBarClick() {
+
+export function statusBarClick(): void {
     const ahkRootPath = vscode.workspace.rootPath;
     if (ahkRootPath) Detecter.buildByPath(ahkRootPath);
-    vscode.window.showInformationMessage('clear docFuncMap cash');
+    vscode.window.showInformationMessage('Update docFuncMap cash');
 }
 // console.log(JSON.stringify(temp));
 // vscode.window.setStatusBarMessage(timeSpend);

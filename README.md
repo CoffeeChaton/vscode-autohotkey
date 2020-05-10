@@ -9,7 +9,7 @@ AutoHotKey language support for VS Code
     -   [GotoDefinition](#gotodefinition)
     -   [Hover](#hover)
     -   [CodeFormat](#codeformat)
-    -   [IntelliSense](#IntelliSense)
+    <!-- -   [IntelliSense](#IntelliSense) -->
 
 ## MethodSymbol
 
@@ -50,10 +50,12 @@ AutoHotKey language support for VS Code
 
 ## GotoDefinition
 
-1. use `ctrl + click` to go to Definition
-2. or at cursor coordinates `F12`
-3. List all references
-   ![ListAllReferences](image/ListAllReferences.jpg)
+1. Go to Definition (via `F12` or `Ctrl+Click`)
+2. open the definition to the side with ( via `Ctrl+Alt+Click` )
+3. Peek Definition (via `Alt+F12`)
+4. List all references
+![ListAllReferences](image/ListAllReferences.jpg)
+    <!-- 5. Go to References search (via Shift+F12) -->
 
 ## Hover
 
@@ -89,6 +91,6 @@ AutoHotKey language support for VS Code
 -   my style fork is not formatter Label and Return.
 -   **beta test now.**
 
-## IntelliSense
+<!-- ## IntelliSense
 
-![IntelliSense For Class](image/IntelliSenseForClass.gif)
+![IntelliSense For Class](image/IntelliSenseForClass.gif) -->

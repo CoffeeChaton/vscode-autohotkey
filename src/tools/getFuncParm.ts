@@ -1,16 +1,15 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
 import * as vscode from 'vscode';
 
-export default function getFuncParm(document: vscode.TextDocument, AhkFunc: vscode.SymbolInformation, showParm: boolean): string {
+export default function getFuncParm(document: vscode.TextDocument, Range: vscode.Range, showParm: boolean): string {
     if (!showParm) return '';
     const paramBlockFinish = /\)\s*\{$/;
     const paramBlockFinish2 = /^\{/;
-    const starLine = AhkFunc.location.range.start.line;
-    const endLine = AhkFunc.location.range.end.line;
+    const starLine = Range.start.line;
+    const endLine = Range.end.line;
     let paramText = '';
     for (let line = starLine; line <= endLine; line += 1) {
-        const { text } = document.lineAt(line);
-        let textFix = text;
+        let textFix = document.lineAt(line).text;
         const comment = textFix.lastIndexOf(';');
         if (comment > -1) textFix = textFix.substring(0, comment).trim();
         if (starLine === line) {
