@@ -1,15 +1,10 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-
-  "cSpell.words": [
-    "Codeblock",
-    "Comand",
-    "Listenr",
-    "debugadapter",
-    "ifnotexist",
-    "linebreak",
-    "paren",
-    "parens"
-  ]
-
+    "cSpell.words": [
+        "Codeblock",
+        "Ifmsgbox",
+        "bltrim",
+        "hotstring",
+        "ifwin"
+    ]
 }

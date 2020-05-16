@@ -1,7 +1,5 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3] }] */
-
 import * as vscode from 'vscode';
-import { Detecter } from './core/Detecter';
 
 const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
 statusBarItem.tooltip = 'this extensions by CoffeeChaton/vscode-ahk-outline';
@@ -61,11 +59,6 @@ export function getHoverConfig(): { showParm: boolean; showComment: boolean } {
     return config.hover;
 }
 
-export function statusBarClick(): void {
-    const ahkRootPath = vscode.workspace.rootPath;
-    if (ahkRootPath) Detecter.buildByPath(ahkRootPath);
-    vscode.window.showInformationMessage('Update docFuncMap cash');
-}
 // console.log(JSON.stringify(temp));
 // vscode.window.setStatusBarMessage(timeSpend);
 // vscode.window.showErrorMessage()

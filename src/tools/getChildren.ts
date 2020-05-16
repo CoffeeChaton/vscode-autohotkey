@@ -1,22 +1,23 @@
-/* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable @typescript-eslint/prefer-regexp-exec */
+/* eslint-disable security/detect-object-injection */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
-/* eslint max-classes-per-file: ["error", 3] */
 import * as vscode from 'vscode';
 import { getFuncDef } from './getFuncDef';
 import { getRange } from './getRange';
 import { removeSpecialChar, removeSpecialChar2, getSkipSign } from './removeSpecialChar';
-import inCommentBlock from './inCommentBlock';
+import { inCommentBlock } from './inCommentBlock';
+import { inLTrimRange } from './inLTrimRange';
 // import * as Oniguruma from 'vscode-oniguruma';
 
+
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-export type funcLimit = (document: vscode.TextDocument, textFix: string,
-    line: number, RangeEnd: number, inClass: boolean) => Readonly<vscode.DocumentSymbol> | undefined;
+export type funcLimit = (document: Readonly<vscode.TextDocument>, textFix: Readonly<string>,
+    line: Readonly<number>, RangeEnd: Readonly<number>, inClass: Readonly<boolean>) => Readonly<vscode.DocumentSymbol> | undefined;
 
 export function getChildren(document: vscode.TextDocument,
     RangeStart: number, RangeEnd: number, inClass: boolean, fnList: funcLimit[]): Readonly<vscode.DocumentSymbol>[] {
     const result = [];
     let CommentBlock = false;
+    let inLTrim = false;
     let Resolved = -1;
     const iMax = fnList.length;
     for (let line = RangeStart + 1; line < RangeEnd; line += 1) {
@@ -28,6 +29,9 @@ export function getChildren(document: vscode.TextDocument,
 
         const textFix = removeSpecialChar2(textRaw).trim();
         if (textFix === '' || getSkipSign(textFix)) continue;
+
+        inLTrim = inLTrimRange(textFix, inLTrim);
+        if (inLTrim) continue;
 
         for (let i = 0; i < iMax; i += 1) {
             const DocumentSymbol: Readonly<vscode.DocumentSymbol> | undefined = fnList[i](document, textFix, line, RangeEnd, inClass);
@@ -41,8 +45,16 @@ export function getChildren(document: vscode.TextDocument,
     return result;
 }
 
-export const LineClass = {
-    matchListOne: [
+interface LineClassI {
+    matchListOne: readonly RegExp[];
+    nameListOne: readonly string[];
+    kindListOne: readonly vscode.SymbolKind[];
+    getReturnByLine: funcLimit;
+    getLine: funcLimit;
+}
+
+export const LineClass: Readonly<LineClassI> = Object.freeze({
+    matchListOne: Object.freeze([
         /^static\s\s*(\w\w*)/i,
         /^case\s\s*([^:][^:]*):/i, // FIXME
         /^default(\s)\s*:/i,
@@ -55,9 +67,9 @@ export const LineClass = {
         /^#(\w\w*)/, // directive
         /^global[\s,][\s,]*(\w[^:]*)/i, // global , ...
         /^throw[\s,][\s,]*(.+)/i, // throw
-    ] as readonly RegExp[],
+    ]),
 
-    nameListOne: [
+    nameListOne: Object.freeze([
         'Static ',
         'Case ', // TODO Case Block use switch deep
         'Default',
@@ -70,9 +82,9 @@ export const LineClass = {
         '#', // directive
         'global ',
         'Throw ',
-    ] as readonly string[],
+    ]),
 
-    kindListOne: [
+    kindListOne: Object.freeze([
         // https://code.visualstudio.com/api/references/vscode-api#SymbolKind
         vscode.SymbolKind.Variable, // Static
         vscode.SymbolKind.Variable, // Case
@@ -86,18 +98,19 @@ export const LineClass = {
         vscode.SymbolKind.Event, // directive
         vscode.SymbolKind.Variable, // Global
         vscode.SymbolKind.Event, // Throw
-    ] as readonly vscode.SymbolKind[],
+    ]),
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    getReturnByLine(document: vscode.TextDocument, line: number, textFix1: string, RangeEnd: number): Readonly<vscode.DocumentSymbol> | undefined {
-        const ReturnMatch = textFix1.match(/\breturn\b[\s,][\s,]*(.+)/i);
+    getReturnByLine(document: vscode.TextDocument, textFix: string, line: number,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | undefined {
+        const ReturnMatch = (/\breturn\b[\s,][\s,]*(.+)/i).exec(textFix);
         if (ReturnMatch) {
             let name = ReturnMatch[1].trim();
-            const Func = name.match(/^(\w\w*)\(/);
+            const Func = (/^(\w\w*)\(/).exec(name);
             if (Func) {
                 name = `${Func[1]}(...)`;
             } else {
-                const obj = name.match(/^(\{\s*\w\w*\s*:)/);
+                const obj = (/^(\{\s*\w\w*\s*:)/).exec(name);
                 if (obj) name = `ahkObject ${obj[1]}`;
             }
             const rangeRaw = document.lineAt(line).range;
@@ -106,10 +119,10 @@ export const LineClass = {
         return undefined;
     },
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    getLine(document: vscode.TextDocument, textFix2: string,
+
+    getLine(document: vscode.TextDocument, textFix: string, line: number,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        line: number, RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | undefined {
+        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | undefined {
         const textFix1 = removeSpecialChar(document.lineAt(line).text).trim();
         const iMax = LineClass.matchListOne.length;
         for (let i = 0; i < iMax; i += 1) {
@@ -120,30 +133,40 @@ export const LineClass = {
                     '', LineClass.kindListOne[i], rangeRaw, rangeRaw));
             }
         }
-        const ReturnValue = LineClass.getReturnByLine(document, line, textFix1, RangeEnd);
+        const ReturnValue = LineClass.getReturnByLine(document, textFix1, line, RangeEnd, inClass);
         if (ReturnValue) return ReturnValue;
         return undefined;
     },
-};
+});
 
-export const Core = {
-    matchList: [
+interface CoreI {
+    matchList: readonly RegExp[];
+    nameList: readonly string[];
+    kindList: readonly vscode.SymbolKind[];
+    getBlock: funcLimit;
+    getFunc: funcLimit;
+    getClass: funcLimit;
+    getComment: funcLimit;
+}
+
+export const Core: Readonly<CoreI> = Object.freeze({
+    matchList: Object.freeze([
         /^loop[\s,%][\s,%]*(\w\w\w\w*)/i,
         /^for\b[\s,\w]+in\s\s*(\w\w\w\w*)/i,
         /^switch\s\s*(\w\w\w*)/i,
-    ] as readonly RegExp[],
+    ]),
 
-    nameList: [
+    nameList: Object.freeze([
         'Loop ',
         'For ',
         'Switch ',
-    ] as readonly string[],
+    ]),
 
-    kindList: [
+    kindList: Object.freeze([
         vscode.SymbolKind.Package,
         vscode.SymbolKind.Package,
         vscode.SymbolKind.Package,
-    ] as readonly vscode.SymbolKind[],
+    ]),
 
     getBlock(document: vscode.TextDocument, textFix: string, line: number,
         RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | undefined {
@@ -168,8 +191,8 @@ export const Core = {
         const wrapper = (searchLine: number, name: string): Readonly<vscode.DocumentSymbol> => {
             const getDetail = (): string => {
                 if (line === 0) return '';
-                const match = document.lineAt(line - 1).text.trim().match(/^;@(.+)/);
-                if (match) return match[1];
+                const PreviousLineText = document.lineAt(line - 1).text.trim();
+                if (PreviousLineText.startsWith(';@')) return PreviousLineText.substr(2);
                 return '';
             };
             const Range = getRange(document, line, searchLine, RangeEnd);
@@ -182,7 +205,7 @@ export const Core = {
             return Object.freeze(funcSymbol);
         };
         const isFunc = getFuncDef(document, line);
-        if (!isFunc) return undefined;
+        if (isFunc === undefined) return undefined;
 
         return wrapper(isFunc.searchLine, isFunc.name);
     },
@@ -190,12 +213,11 @@ export const Core = {
     getClass(document: vscode.TextDocument, textFix: string, line: number,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | undefined {
-        const classDefReg = /^class\b\s\s*(\w\w*)/i;
-        const classMatch = textFix.match(classDefReg);
-        if (classMatch === null) return undefined;
+        const classExec = (/^class\b\s\s*(\w\w*)/i).exec(textFix);
+        if (classExec === null) return undefined;
         const Range = getRange(document, line, line, RangeEnd);
         const selectionRange = document.lineAt(line).range;
-        const classSymbol = new vscode.DocumentSymbol(classMatch[1], '', vscode.SymbolKind.Class, Range, selectionRange);
+        const classSymbol = new vscode.DocumentSymbol(classExec[1], '', vscode.SymbolKind.Class, Range, selectionRange);
         const fnList: funcLimit[] = [Core.getClass, Core.getFunc, Core.getComment, Core.getBlock, LineClass.getLine];
         classSymbol.children = getChildren(document, Range.start.line, Range.end.line, true, fnList);
         return Object.freeze(classSymbol);
@@ -225,4 +247,4 @@ export const Core = {
         }
         return undefined;
     },
-};
+});

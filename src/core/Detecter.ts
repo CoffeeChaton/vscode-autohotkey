@@ -7,7 +7,6 @@ import type { funcLimit } from '../tools/getChildren';
 import { showTimeSpend } from '../configUI';
 import { EMode } from '../tools/globalSet';
 
-
 export const Detecter = {
     AhkClassDefMap: new Map() as Map<string, vscode.DocumentSymbol[]>,
 
@@ -68,7 +67,7 @@ export const Detecter = {
         }
     },
 
-    getDocDef(fsPath: string): Promise<vscode.DocumentSymbol[]> {
+    async getDocDef(fsPath: string): Promise<vscode.DocumentSymbol[]> {
         return Detecter.getDocDefCore(fsPath);
     },
 

@@ -8,7 +8,11 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:promise/recommended",
+        "plugin:security/recommended",
+        "airbnb-typescript"
+        //  "prettier/@typescript-eslint"
         // "plugin:jsx-a11y/recommended"
     ],
     "globals": {
@@ -17,12 +21,12 @@
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 2018,
+        "ecmaVersion": 2020,
         "sourceType": "module",
         "project": "tsconfig.json"
         //  "tsconfigRootDir": "functions"
     },
-    "plugins": ["@typescript-eslint"],
+    "plugins": ["@typescript-eslint", "promise", "security"],
     "settings": {
         "import/resolver": {
             "node": {
@@ -31,6 +35,8 @@
         }
     },
     "rules": {
+        // "indent": ["error", 4, { "SwitchCase": 1 }],
+        "@typescript-eslint/indent": ["error", 4, { "SwitchCase": 1 }],
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",
         "@typescript-eslint/ban-ts-ignore": "warn",
@@ -65,7 +71,7 @@
         "@typescript-eslint/prefer-function-type": "warn",
 
         "@typescript-eslint/prefer-namespace-keyword": "warn",
-        //    "@typescript-eslint/promise-function-async": "warn",
+        "@typescript-eslint/promise-function-async": "warn",
         "@typescript-eslint/require-array-sort-compare": "warn",
         "@typescript-eslint/restrict-plus-operands": "warn",
 
@@ -79,7 +85,6 @@
         "max-len": ["error", { "code": 150, "tabWidth": 4 }],
         "import/no-unresolved": 0,
         //--------
-        "indent": [2, 4, { "SwitchCase": 1 }],
         "import/extensions": [
             "error",
             "ignorePackages",

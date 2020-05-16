@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 
-export default class SymBolProvider implements vscode.DocumentSymbolProvider {
+export class SymBolProvider implements vscode.DocumentSymbolProvider {
     // eslint-disable-next-line class-methods-use-this
     public provideDocumentSymbols(document: vscode.TextDocument,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

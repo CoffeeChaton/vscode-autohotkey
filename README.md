@@ -54,8 +54,8 @@ AutoHotKey language support for VS Code
 2. open the definition to the side with ( via `Ctrl+Alt+Click` )
 3. Peek Definition (via `Alt+F12`)
 4. List all references
-![ListAllReferences](image/ListAllReferences.jpg)
-    <!-- 5. Go to References search (via Shift+F12) -->
+   ![ListAllReferences](image/ListAllReferences.jpg)
+   <!-- 5. Go to References search (via Shift+F12) -->
 
 ## Hover
 
@@ -87,8 +87,6 @@ AutoHotKey language support for VS Code
 1. Right click then click format document.
 2. or `alt` + `shift` + `f`
 
--   Formatter follows my coding habits, so it may not unsuited for you.
--   my style fork is not formatter Label and Return.
 -   **beta test now.**
 
 <!-- ## IntelliSense

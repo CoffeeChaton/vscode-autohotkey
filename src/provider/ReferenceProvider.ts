@@ -7,8 +7,8 @@ export class ReferenceProvider implements vscode.ReferenceProvider {
     //  Go to References search (via Shift+F12),
     // eslint-disable-next-line class-methods-use-this
     provideReferences(document: vscode.TextDocument, position: vscode.Position,
-        context: vscode.ReferenceContext, token: vscode.CancellationToken)
-        : vscode.ProviderResult<vscode.Location[]> {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        context: vscode.ReferenceContext, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Location[] | undefined> {
         // const word = document.getText(document.getWordRangeAtPosition(position)).toLowerCase();
         // const fileLink = await ahkInclude(document, position);
         // if (fileLink) return fileLink;

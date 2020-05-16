@@ -4,20 +4,18 @@ import * as vscode from 'vscode';
 // import { Detecter } from '../core/Detecter';
 import { tryGetSymbol } from './DefProvider';
 import { removeSpecialChar, getSkipSign } from '../tools/removeSpecialChar';
-import inCommentBlock from '../tools/inCommentBlock';
+import { inCommentBlock } from '../tools/inCommentBlock';
 import { getHoverConfig } from '../configUI';
 import { EMode } from '../tools/globalSet';
-import getFuncParm from '../tools/getFuncParm';
+import { getFuncParm } from '../tools/getFuncParm';
 // import { getFuncDef } from '../tools/getFuncDef';
 
 const share = {
     getCommentText(text: string): string {
-        const regexp = /^@/;
         const textFix = text.trimStart();
-        if (textFix.search(regexp) === 0) {
-            return `${textFix.substr(1)}   \n`;
-        }
-        return '';
+        return textFix.startsWith('@')
+            ? `${textFix.substr(1)}   \n`
+            : '';
     },
 
     getReturnText(textFix: string): string {
@@ -39,14 +37,14 @@ const share = {
         const [AhkSymbol, Uri] = tryGetSymbol(word, mode);
         if (AhkSymbol === undefined || Uri === undefined) return undefined; //   console.log(JSON.stringify(hoverSymbol));
         // TODO if mode == EMode.ahkClass
-        // --set--vvv---
+        // --set start---
         const document = await vscode.workspace.openTextDocument(Uri);
         const HoverConfig = getHoverConfig();
         const showParmRaw = HoverConfig.showParm;
         const showCommentRaw = HoverConfig.showComment;
         const starLine = AhkSymbol.range.start.line;
         const endLine = AhkSymbol.range.end.line;
-        // --set--^^^---
+        // --set end---
         let commentBlock = false;
         let commentText = '';
         let returnList = '';
@@ -66,7 +64,7 @@ const share = {
         const HoverMd = (): vscode.Hover => {
             const kind = mode;
             // FIXME     const container = AhkSymbol.containerName; // || 'not container';
-            const title = `(${kind})   \n${AhkSymbol.name}(${paramText}){`;
+            const title = `(${kind})   ${AhkSymbol.detail}\n${AhkSymbol.name}(${paramText}){`;
             const commentText2 = commentText || 'not comment   \n';
             const commentText3 = showCommentRaw ? commentText2 : '';
             const returnList2 = returnList || 'void (this function not return value.)';
@@ -121,7 +119,7 @@ const HoverFunc = {
 //     }
 // }
 
-export default class HoverProvider implements vscode.HoverProvider {
+export class HoverProvider implements vscode.HoverProvider {
     // eslint-disable-next-line class-methods-use-this
     public async provideHover(document: vscode.TextDocument, position: vscode.Position,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

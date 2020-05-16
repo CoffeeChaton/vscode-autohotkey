@@ -45,7 +45,9 @@ export class RangeFormatProvider implements vscode.DocumentRangeFormattingEditPr
                 .replace(/\bReturn  */g, 'Return ') // return space+
                 //    .replace(/ *\? */g, ' ? ')
                 .replace(/\( */g, '(')
-                .replace(/ *\)/g, ')');
+                .replace(/ *\)/g, ')')
+                .replace(/\bif\(/ig, 'if (')
+                .replace(/\bwhile\(/ig, 'while (');
             // \s === [ \f\n\r\t\v]
             // TODO more TEST & options
         }

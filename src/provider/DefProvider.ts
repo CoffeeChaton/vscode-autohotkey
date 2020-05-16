@@ -3,18 +3,33 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { removeSpecialChar } from '../tools/removeSpecialChar';
-import inCommentBlock from '../tools/inCommentBlock';
+import { inCommentBlock } from '../tools/inCommentBlock';
 import { EMode } from '../tools/globalSet';
 
 function ahkInclude(document: vscode.TextDocument, position: vscode.Position): vscode.Location | undefined {
-    const includeExec = (/(?<=#include).+?\.\b(?:ahk|ext)\b/i).exec(document.lineAt(position).text.trim()); // at #include line
+    const includeExec = (/^#include(?:again)?\s*(?:\*i )?\s*(\S\S*\.(?:ahk|ext))$/i).exec(document.lineAt(position).text.trim()); // at #include line
     if (includeExec) {
         const length = Math.max(document.uri.path.lastIndexOf('/'), document.uri.path.lastIndexOf('\\'));
         if (length <= 0) return undefined;
         const parent = document.uri.path.substr(0, length);
-        const uri = vscode.Uri.file(includeExec[0].replace(/(%A_ScriptDir%|%A_WorkingDir%)/, parent));
+        const fsPath = includeExec[1].replace(/%A_Space%/, ' ').replace(/%A_Tab%/, '\t');
+        const fsPathFix = (/(%A_ScriptDir%)|(%A_WorkingDir%)|(%A_LineFile%)/).test(fsPath)
+            ? includeExec[1].replace(/(%A_ScriptDir%)|(%A_WorkingDir%)|(%A_LineFile%)/, parent)
+            : `${parent}\\${fsPath}`;
+        const uri = vscode.Uri.file(fsPathFix);
         return new vscode.Location(uri, new vscode.Position(0, 0));
     }
+    //   OK         #Include FileOrDirName
+    //   TODO  #Include <LibName>
+    //   OK         #IncludeAgain FileOrDirName
+    //   OK       \*i\s
+    // Will not support
+    //              A_AhkPath, A_ComputerName, A_ComSpec, A_Desktop, A_DesktopCommon, A_IsCompiled
+    //              A_MyDocuments, A_ProgramFiles, A_Programs, A_ProgramsCommon
+    //              A_ScriptFullPath, A_ScriptName, A_StartMenu,A_StartMenuCommon
+    //              A_Startup,A_StartupCommon, A_Temp, A_UserName ,A_WinDir
+    //              A_UserName, A_WinDir
+    // TODO https://www.autohotkey.com/docs/Functions.htm#lib
     return undefined;
 }
 
@@ -56,7 +71,7 @@ async function getReference(usingReg: RegExp, timeStart: number, word: string): 
             }
         }
     }
-    vscode.window.showInformationMessage(`list all using of ${word} (${Date.now() - timeStart} ms)`);
+    //  vscode.window.showInformationMessage(`list all using of ${word} (${Date.now() - timeStart} ms)`);
     return List;
 }
 
@@ -83,7 +98,7 @@ async function ahkDef(document: vscode.TextDocument,
     const searchUsing = (): vscode.Location | undefined => {
         if (textTrim.search(usingReg) === -1) return undefined;
         //      console.info(`goto Def of ${word} (${Date.now() - timeStart} ms)`);
-        vscode.window.showInformationMessage(`goto Def of ${word} (${Date.now() - timeStart} ms)`);
+        //  vscode.window.showInformationMessage(`goto Def of ${word} (${Date.now() - timeStart} ms)`);
         return new vscode.Location(vscode.Uri.file(fsPath), new vscode.Position(AhkSymbol.range.start.line, 0));
     };
 

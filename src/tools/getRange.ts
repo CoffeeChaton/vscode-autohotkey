@@ -2,12 +2,12 @@
 
 import * as vscode from 'vscode';
 import { removeSpecialChar2, getSkipSign } from './removeSpecialChar';
-import inCommentBlock from './inCommentBlock';
+import { inCommentBlock } from './inCommentBlock';
 
 export function getRange(document: vscode.TextDocument, defLine: number, searchLine: number, RangeEnd: number): vscode.Range {
     const startPos: vscode.Position = new vscode.Position(defLine, 0);
-    const blockStart = /\{$/;
-    const blockEnd = /^\}/;
+    const blockStart = '{'; // /\{$/;
+    const blockEnd = '}'; // /^\}/;
     const nextLine = searchLine + 1;
     let CommentBlock = false;
     let block = 0;
@@ -19,10 +19,10 @@ export function getRange(document: vscode.TextDocument, defLine: number, searchL
         const textFix = removeSpecialChar2(textRaw).trim();
         if (textFix === '') continue;
 
-        const s = textFix.search(blockStart);// {$
-        if (s > -1) block += 1;
-        const e = textFix.search(blockEnd); // ^}
-        if (e > -1) block -= 1;
+        const s = textFix.endsWith(blockStart);// {$
+        if (s) block += 1;
+        const e = textFix.startsWith(blockEnd); // ^}
+        if (e) block -= 1;
 
         if (block === 0) {
             switch (line) {
