@@ -101,7 +101,7 @@ function getOneCommandCode(textFix: string, oneCommandCode: number): number {
         // eslint-disable-next-line no-continue
         if (textFix.search(commandRegexps[j]) > -1) {
             return textFix.endsWith('{')
-                ? 0
+                ? 0 // TODO fmt +1
                 : oneCommandCodeFix + 1;
         }
         // break;
@@ -109,7 +109,7 @@ function getOneCommandCode(textFix: string, oneCommandCode: number): number {
 
     return (thisLineDeep(textFix) !== 0)
         ? oneCommandCodeFix // || 1
-        : 0;
+        : 0; // TODO fmt +1
 }
 
 function getDeepLTrimStart(textFix: string, deepLTrim: number): number {
@@ -206,9 +206,9 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
 
             oneCommandCode = notDeep
                 ? getOneCommandCode(textFix, oneCommandCode)
-                : 0;
+                : 0; // TODO fmt +1
         }
-        vscode.window.showInformationMessage('Format Document is Beta v0.2.5.1');
+        vscode.window.showInformationMessage('Format Document is Beta v0.2.6');
 
         fmtDocWARN = fmtDocWARN.replace(/\n{2,}/g, '\n\n')
             .replace(/\n*$/, '\n');// doc finish just need one \n
@@ -225,7 +225,8 @@ for k,v in Monitors
     if (v.Num = MonitorNum)
         return v
 
-TEST NO
+TEST NOT good
+TODO fmt +1
 for k,v in Monitors
     for k,v in Monitors
         for k,v in Monitors

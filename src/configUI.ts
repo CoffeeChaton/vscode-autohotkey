@@ -38,8 +38,8 @@ export function configChangEvent(): void {
 }
 
 export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
-    const fsPathRaw = uri.fsPath;//= == '\\server\c$\folder\file.txt'
-    const version = config.statusBar.showVersion ? 'v0.39b5, ' : '';
+    const fsPathRaw = uri.fsPath;
+    const version = config.statusBar.showVersion ? 'v0.4, ' : '';
     const timeSpend = config.statusBar.showTime ? `${Date.now() - timeStart} ms` : '';
     const name = config.statusBar.showFileName
         ? `, ${fsPathRaw.substr(fsPathRaw.lastIndexOf('\\') + 1)}`

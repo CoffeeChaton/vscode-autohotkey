@@ -16,8 +16,6 @@ AutoHotKey language support for VS Code
 1. Detect source method as symbol
 2. Now you can see "Splitting a Long Line into a Series of Shorter Ones" at Outline.
 
-    ![methodSymbol2](image/methodSymbol2.png)
-
 ## CodeSymbol
 
 1. You can add two semicolon `;;` to comment line
@@ -29,23 +27,21 @@ AutoHotKey language support for VS Code
 
 -   function
 -   class
--   for
--   loop
 -   switch
-
+<!-- -   for
+-   loop -->
 -   Static Var
 -   Return
--   Case
--   Default
--   GoSub
--   GoTo
--   Label
+-   Case, Default
+-   GoSub, GoTo
+-   Labels, like `this_is_a_label:`
 -   New
 -   HotString, like `::ahk::`
 -   HotKeys, like `~F12::`
 -   directive, like `#Include` or `#Warn`
 -   global
 -   Throw
+-   Reload, Exit, ExitApp, Pasue
     ![codeSymbol3](image/codeSymbol3.jpg)
 
 ## GotoDefinition
@@ -55,7 +51,7 @@ AutoHotKey language support for VS Code
 3. Peek Definition (via `Alt+F12`)
 4. List all references
    ![ListAllReferences](image/ListAllReferences.jpg)
-   <!-- 5. Go to References search (via Shift+F12) -->
+      <!-- 5. Go to References search (via Shift+F12) -->
 
 ## Hover
 
@@ -66,7 +62,7 @@ AutoHotKey language support for VS Code
 
 2. how to add comment of function ?
 
-```
+```ahk
 /*
     @ in comment block.
     @ and the line first character is '@'
