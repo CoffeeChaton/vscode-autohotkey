@@ -1,18 +1,18 @@
 
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
-const skipList: RegExp[] = [
-    /^;/,
-    /^sleep\b/,
-    /^msgbox\b/,
-    /^gui\b/,
-    /^send(?:raw|input|play|event)?\b/,
-    /^[\w%[\]][\w%[\]]*\s*=/, // TraditionAssignment
-];
-const iMax = skipList.length;
 export function getSkipSign(text: string): boolean {
+    const skipList: RegExp[] = [
+        /^;/,
+        /^sleep\b/,
+        /^msgbox\b/,
+        /^gui\b/,
+        /^send(?:raw|input|play|event)?\b/,
+        /^[\w%[\]][\w%[\]]*\s*=/, // TraditionAssignment
+    ];
+    const iMax = skipList.length;
     const textFix = text.trim().toLowerCase();
     for (let i = 0; i < iMax; i += 1) {
-        if (textFix.search(skipList[i]) !== -1) return true;
+        if (skipList[i].test(textFix)) return true;
     }
     return false;
 }

@@ -9,8 +9,12 @@ import { inLTrimRange } from '../tools/inLTrimRange';
 
 //  TODO https://code.visualstudio.com/api/references/vscode-api#OnEnterRule
 //         https://code.visualstudio.com/api/references/vscode-api#LanguageConfiguration
-//         LTrim https://wyagd001.github.io/zh-cn/docs/Scripts.htm#continuation
 // Switch case
+
+function minZero(a: number): number {
+    if (a > 0) return a;
+    return 0;
+}
 
 const enum ECS { // EnumContextSensitive  --> ECS
     ifBlock = '#if',
@@ -37,24 +41,40 @@ function Hashtag(textFix: string): ECS | null {
 
 function isLabelOrHotStr(textFix: string): boolean {
     if ((/^(?!case)\s\s*\w*\w:$/).test(textFix) // `labe:` not `case 0:`
-        || (textFix.startsWith(':') && textFix.endsWith('::'))) { // ex: ::btw::by the way
+        || (textFix.startsWith(':') && textFix.endsWith('::'))) { // `::btw::`
         return true;
     }
     return false;
 }
 
 function isReturn(tagDeep: number, deep: number, textFix: string): boolean {
+    // FIXME use textRaw
     if (tagDeep === deep && textFix === 'return') return true;
     return false;
 }
 
-// function calcBlockRegex(textFix: string): number {
-//     const BlockRegex = /{[^{}]*}/g;
-//     return (textFix.match(BlockRegex) || []).length;
-// }
+function thisLineDeep(textFix: string): 1 | 0 {
+    // [ContinueLongLine](https://www.autohotkey.com/docs/Scripts.htm#continuation)
+    const CLL = [
+        /^[,.?]/,
+        /^:[^:]/,
+        /^\+[^+]/,
+        /^-[^-]/,
+        /^and\b/,
+        /^or\b/,
+        /^\|\|/,
+        /^&&/,
+    ];
+    const iMax = CLL.length;
+    for (let i = 0; i < iMax; i += 1) {
+        if (CLL[i].test(textFix)) return 1;
+    }
+    return 0;
+}
 
-export class FormatProvider implements vscode.DocumentFormattingEditProvider {
-    private static readonly commandRegexps: readonly RegExp[] = [
+function getOneCommandCode(textFix: string, oneCommandCode: number): number {
+    const oneCommandCodeFix = minZero(oneCommandCode);
+    const commandRegexps: readonly RegExp[] = [
         /\bif(?:msgbox)?\b/,
         /\belse\b/,
         /\bloop\b/,
@@ -68,52 +88,69 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         /\bcatch\b/,
         /\bswitch\b/,
     ];
+    const commandRegexpsLength = commandRegexps.length;
 
-    private static readonly ContinueLongLineRegex = /^(?:(?:[,.?:])|(?:\+[^+])|(?:-[^-])|(?:and\b)|(?:or\b)|(?:\|\|)|(?:&&))\s/;
-    // [ContinueLongLine](https://www.autohotkey.com/docs/Scripts.htm#continuation)
+    for (let j = 0; j < commandRegexpsLength; j += 1) {
+        // eslint-disable-next-line no-continue
+        if (textFix.search(commandRegexps[j]) > -1) {
+            return textFix.endsWith('{')
+                ? 0
+                : oneCommandCodeFix + 1;
+        }
+        // break;
+    }
 
+    return (thisLineDeep(textFix) !== 0)
+        ? oneCommandCodeFix // || 1
+        : 0;
+}
+
+function getDeepLTrimStart(textFix: string, deepLTrim: number): number {
+    if (textFix.startsWith(')')) return deepLTrim - 1;
+    return deepLTrim;
+}
+
+function getDeepLTrimEnd(textFix: string, deepLTrim: number): number {
+    if (textFix.startsWith('(')) return deepLTrim + 1;
+    return deepLTrim;
+}
+
+export class FormatProvider implements vscode.DocumentFormattingEditProvider {
     // eslint-disable-next-line class-methods-use-this
     public provideDocumentFormattingEdits(document: vscode.TextDocument, options: vscode.FormattingOptions,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
         const TabSpaces = options.insertSpaces ? ' ' : '\t';
         const tabSize2 = options.insertSpaces ? options.tabSize : 1;
-        const thisLineText = (textFix: string, line: number, CommentBlock: boolean, oneCommandCode: number, deep: number, LTrim: boolean): string => {
-            if (LTrim) return `${document.lineAt(line).text}`;
-            const LineBody = document.lineAt(line).text.trimStart();
-            if (LineBody === '') return '';
-            const thisLineDeep = (): 1 | 0 => (textFix.search(FormatProvider.ContinueLongLineRegex) > -1
-                ? 1
-                : 0);
-            const LineDeep = CommentBlock ? 0 : thisLineDeep();
-            const curlyBracketsChange = textFix.startsWith('{') || textFix.startsWith('}')
+        const thisLineTextWARN = (textFix: string, line: number, CommentBlock: boolean,
+            // eslint-disable-next-line max-params
+            oneCommandCode: number, deep: number, LTrim: boolean, deepLTrim: number): string => {
+            if (LTrim) {
+                return `${document.lineAt(line).text}`;
+            }
+            const LineBodyWARN = document.lineAt(line).text.trimStart();
+            if (LineBodyWARN === '') {
+                return LineBodyWARN;
+            }
+
+            const LineDeep: 0 | 1 = CommentBlock || (oneCommandCode !== 0)
+                ? 0
+                : thisLineDeep(textFix);
+            const curlyBracketsChange: 0 | -1 = textFix.startsWith('{') || textFix.startsWith('}')
                 ? -1
                 : 0;
-            const deepFix = (deep + oneCommandCode + curlyBracketsChange + LineDeep) > -1
-                ? (deep + oneCommandCode + curlyBracketsChange + LineDeep)
-                : 0;
+            const deepFix = minZero(deep + oneCommandCode + curlyBracketsChange + LineDeep + deepLTrim);
+
             const DeepStr = TabSpaces.repeat(deepFix * tabSize2);
-            return `${DeepStr}${LineBody}`;
+            return `${DeepStr}${LineBodyWARN}`;
         };
-        const commandRegexpsLength = FormatProvider.commandRegexps.length;
-        const getOneCommandCode = (notDeep: boolean, textFix: string, oneCommandCode: number): number => {
-            if (notDeep === false) return 0;
-            for (let j = 0; j < commandRegexpsLength; j += 1) {
-                // eslint-disable-next-line no-continue
-                if (textFix.search(FormatProvider.commandRegexps[j]) > -1) {
-                    return textFix.endsWith('{') ? 0 : oneCommandCode + 1;
-                }
-                // break;
-            }
-            return 0;
-        };
-        let formatDocument = '';
+        let fmtDocWARN = ''; // WARN TO USE THIS !!
         let deep = 0;
         let tagDeep = 0;
         let oneCommandCode = 0;
         let CommentBlock = false;
         let inLTrim = false; // ( LTrim
-
+        let deepLTrim = 0; // ( LTrim
         // const parentheses = [{ line: 0, deep: 0 }]; // ()
         // const squareBrackets = [{ line: 0, deep: 0 }]; // []
         // const curlyBrackets = [{ line: 0, deep: 0 }]; // {}
@@ -126,7 +163,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
             let notDeep = true;
             const textRaw = document.lineAt(line).text;
             CommentBlock = inCommentBlock(textRaw, CommentBlock);
-            let textFix = CommentBlock || getSkipSign(textRaw) ? '' : removeSpecialChar2(textRaw.trim().toLowerCase());
+            let textFix = CommentBlock || getSkipSign(textRaw) ? '' : removeSpecialChar2(textRaw.toLowerCase()).trim();
             inLTrim = inLTrimRange(textRaw, inLTrim);
             if (inLTrim) textFix = '';
 
@@ -137,10 +174,16 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
                 deep -= 1;
             }
 
+
+            deepLTrim = getDeepLTrimEnd(textFix, deepLTrim);
+
             if (deep < 0) deep = 0;
-            formatDocument += thisLineText(textFix, line, CommentBlock, oneCommandCode, deep, inLTrim); // `${Deep}${LineDeep}${LineBody}\n`;
-            formatDocument += '\n';
+            fmtDocWARN += thisLineTextWARN(textFix, line, CommentBlock, oneCommandCode, deep, inLTrim, deepLTrim);
+            fmtDocWARN += '\n';
             // after
+
+            deepLTrim = getDeepLTrimStart(textFix, deepLTrim);
+
             if (Hashtag(textFix)) { // #IF  #hotstring
                 deep += 1;
                 notDeep = false;
@@ -148,20 +191,40 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
 
             if (isLabelOrHotStr(textFix)) { // label:
                 deep += 1;
-                tagDeep = deep;
                 notDeep = false;
+                tagDeep = deep;
             }
 
             deep += (textFix.match(/\{/g) || []).length - (textFix.match(/\}/g) || []).length;
 
-            oneCommandCode = getOneCommandCode(notDeep, textFix, oneCommandCode);
+            oneCommandCode = notDeep
+                ? getOneCommandCode(textFix, oneCommandCode)
+                : 0;
         }
-        vscode.window.showInformationMessage('Format Document is Beta v0.2.5');
+        vscode.window.showInformationMessage('Format Document is Beta v0.2.5.1');
 
-        formatDocument = formatDocument.replace(/\n{2,}/g, '\n\n')
+        fmtDocWARN = fmtDocWARN.replace(/\n{2,}/g, '\n\n')
             .replace(/\n*$/, '\n');// doc finish just need one \n
         return [
-            new vscode.TextEdit(fullDocumentRange(document), formatDocument),
+            new vscode.TextEdit(fullDocumentRange(document), fmtDocWARN),
         ];
     }
 }
+/* TODO
+```ahk
+    for k,v in Monitors
+        if (v.Num = MonitorNum)
+            return v
+
+loop 3
+	loop 5
+		loop 20
+			if gg(){
+				dddddd:=gggggg
+				loop 30
+					loop 30
+						if dd()
+							bbb :=ddd()
+			}
+```
+*/
