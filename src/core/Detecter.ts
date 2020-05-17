@@ -35,7 +35,7 @@ export const Detecter = {
         const fuList: vscode.DocumentSymbol[] = [];
         const inClass = false;
         // eslint-disable-next-line @typescript-eslint/unbound-method
-        const fnList: funcLimit[] = [Core.getClass, Core.getFunc, Core.getComment, Core.getBlock, LineClass.getLine];
+        const fnList: funcLimit[] = [Core.getClass, Core.getFunc, Core.getComment, Core.getSwitchBlock, LineClass.getLine];
         const result: vscode.DocumentSymbol[] = getChildren(document, -1, RangeEnd, inClass, fnList);
         showTimeSpend(document.uri, timeStart);
 

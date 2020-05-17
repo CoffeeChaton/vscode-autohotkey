@@ -7,7 +7,7 @@ export function getSkipSign(text: string): boolean {
         /^msgbox\b/,
         /^gui\b/,
         /^send(?:raw|input|play|event)?\b/,
-        /^[\w%[\]][\w%[\]]*\s*=/, // TraditionAssignment
+        /^[\w%[\]][\w%[\]]*\s*=[^=]/, // TraditionAssignment
     ];
     const iMax = skipList.length;
     const textFix = text.trim().toLowerCase();

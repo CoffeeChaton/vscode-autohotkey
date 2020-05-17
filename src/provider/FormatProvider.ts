@@ -58,16 +58,23 @@ function thisLineDeep(textFix: string): 1 | 0 {
     const CLL = [
         /^[,.?]/,
         /^:[^:]/,
-        /^\+[^+]/,
-        /^-[^-]/,
+        /^\+[^+]/, // +
+        /^-[^-]/, // -
         /^and\b/,
         /^or\b/,
         /^\|\|/,
         /^&&/,
+        /^[!~&/<>|^]/,
+        /^\*[^/]/, // *
+        /^\//, // /
+        /^new\b\s/,
+        /^not\b\s/,
+        // Don't do it /^%/,
     ];
     const iMax = CLL.length;
     for (let i = 0; i < iMax; i += 1) {
-        if (CLL[i].test(textFix)) return 1;
+        if (CLL[i].test(textFix) && (textFix.includes('::') === false)) return 1;
+        // Hotkeys && HotStrings has '::'
     }
     return 0;
 }
@@ -210,21 +217,24 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         ];
     }
 }
-/* TODO
-```ahk
-    for k,v in Monitors
-        if (v.Num = MonitorNum)
-            return v
+/*
 
-loop 3
-	loop 5
-		loop 20
-			if gg(){
-				dddddd:=gggggg
-				loop 30
-					loop 30
-						if dd()
-							bbb :=ddd()
-			}
+```ahk
+TEST OK
+for k,v in Monitors
+    if (v.Num = MonitorNum)
+        return v
+
+TEST NO
+for k,v in Monitors
+    for k,v in Monitors
+        for k,v in Monitors
+            if gg(){
+                dddddd:=gggggg
+                for k,v in Monitors
+                    for k,v in Monitors
+                        if dd()
+                            bbb :=ddd()
+            }
 ```
 */

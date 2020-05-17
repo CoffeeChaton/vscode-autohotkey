@@ -67,6 +67,10 @@ export const LineClass: Readonly<LineClassI> = Object.freeze({
         /^#(\w\w*)/, // directive
         /^global[\s,][\s,]*(\w[^:]*)/i, // global , ...
         /^throw[\s,][\s,]*(.+)/i, // throw
+        /^exit\b[\s,][\s,]*(.+)/i, // FIXME *99
+        /^exitApp\b[\s,][\s,]*(.+)/i,
+        /^pause\b[\s,][\s,]*(.+)/i,
+        /^(reload)\b/i,
     ]),
 
     nameListOne: Object.freeze([
@@ -82,6 +86,10 @@ export const LineClass: Readonly<LineClassI> = Object.freeze({
         '#', // directive
         'global ',
         'Throw ',
+        'exit ',
+        'exitApp ',
+        'pause ',
+        '', // reload
     ]),
 
     kindListOne: Object.freeze([
@@ -98,6 +106,10 @@ export const LineClass: Readonly<LineClassI> = Object.freeze({
         vscode.SymbolKind.Event, // directive
         vscode.SymbolKind.Variable, // Global
         vscode.SymbolKind.Event, // Throw
+        vscode.SymbolKind.Event, // exit
+        vscode.SymbolKind.Event, // exitApp
+        vscode.SymbolKind.Event, // pause
+        vscode.SymbolKind.Event, // reload
     ]),
 
     getReturnByLine(document: vscode.TextDocument, textFix: string, line: number,
@@ -143,7 +155,7 @@ interface CoreI {
     matchList: readonly RegExp[];
     nameList: readonly string[];
     kindList: readonly vscode.SymbolKind[];
-    getBlock: funcLimit;
+    getSwitchBlock: funcLimit;
     getFunc: funcLimit;
     getClass: funcLimit;
     getComment: funcLimit;
@@ -151,34 +163,37 @@ interface CoreI {
 
 export const Core: Readonly<CoreI> = Object.freeze({
     matchList: Object.freeze([
-        /^loop[\s,%][\s,%]*(\w\w\w\w*)/i,
-        /^for\b[\s,\w]+in\s\s*(\w\w\w\w*)/i,
+        // /^loop[\s,%][\s,%]*(\w\w\w\w*)/i,
+        // /^for\b[\s,\w]+in\s\s*(\w\w\w\w*)/i,
         /^switch\s\s*(\w\w\w*)/i,
     ]),
 
     nameList: Object.freeze([
-        'Loop ',
-        'For ',
+        // 'Loop ',
+        // 'For ',
         'Switch ',
     ]),
 
     kindList: Object.freeze([
-        vscode.SymbolKind.Package,
-        vscode.SymbolKind.Package,
+        // vscode.SymbolKind.Package,
+        // vscode.SymbolKind.Package,
         vscode.SymbolKind.Package,
     ]),
 
-    getBlock(document: vscode.TextDocument, textFix: string, line: number,
+    getSwitchBlock(document: vscode.TextDocument, textFix: string, line: number,
         RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | undefined {
         const iMax = Core.matchList.length;
         for (let i = 0; i < iMax; i += 1) {
             const BlockSymbol = textFix.match(Core.matchList[i]);
             if (BlockSymbol) {
-                const Range = getRange(document, line, line, RangeEnd); //    document.lineAt(line).range;
+                const Range = getRange(document, line, line, RangeEnd);
+                // if (Range.start.line + 1 === Range.end.line) {
+                //     ; //FIXME
+                // }
                 const selectionRange = document.lineAt(line).range;
                 const Block = new vscode.DocumentSymbol(`${Core.nameList[i]}${BlockSymbol[1]}`, '',
                     Core.kindList[i], Range, selectionRange);
-                const fnList: funcLimit[] = [Core.getComment, Core.getBlock, LineClass.getLine];
+                const fnList: funcLimit[] = [Core.getComment, Core.getSwitchBlock, LineClass.getLine];
                 Block.children = getChildren(document, Range.start.line, Range.end.line, inClass, fnList);
                 return Object.freeze(Block);
             }
@@ -200,7 +215,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
             const detail = getDetail();
             const selectionRange = document.lineAt(line).range;
             const funcSymbol = new vscode.DocumentSymbol(name, detail, kind, Range, selectionRange);
-            const fnList: funcLimit[] = [Core.getFunc, Core.getComment, Core.getBlock, LineClass.getLine];
+            const fnList: funcLimit[] = [Core.getFunc, Core.getComment, Core.getSwitchBlock, LineClass.getLine];
             funcSymbol.children = getChildren(document, Range.start.line, Range.end.line, inClass, fnList);
             return Object.freeze(funcSymbol);
         };
@@ -218,7 +233,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
         const Range = getRange(document, line, line, RangeEnd);
         const selectionRange = document.lineAt(line).range;
         const classSymbol = new vscode.DocumentSymbol(classExec[1], '', vscode.SymbolKind.Class, Range, selectionRange);
-        const fnList: funcLimit[] = [Core.getClass, Core.getFunc, Core.getComment, Core.getBlock, LineClass.getLine];
+        const fnList: funcLimit[] = [Core.getClass, Core.getFunc, Core.getComment, Core.getSwitchBlock, LineClass.getLine];
         classSymbol.children = getChildren(document, Range.start.line, Range.end.line, true, fnList);
         return Object.freeze(classSymbol);
     },
@@ -234,7 +249,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
             const Range = getRange(document, line, line, RangeEnd);
             const selectionRange = document.lineAt(line).range;
             const CommentBlock = new vscode.DocumentSymbol(name, '', kind, Range, selectionRange);
-            const fnList: funcLimit[] = [Core.getClass, Core.getFunc, Core.getComment, Core.getBlock, LineClass.getLine];
+            const fnList: funcLimit[] = [Core.getClass, Core.getFunc, Core.getComment, Core.getSwitchBlock, LineClass.getLine];
             CommentBlock.children = getChildren(document, Range.start.line, Range.end.line, inClass, fnList);
             return Object.freeze(CommentBlock);
         }
