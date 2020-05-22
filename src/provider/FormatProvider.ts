@@ -6,15 +6,13 @@ import * as vscode from 'vscode';
 import { removeSpecialChar2, getSkipSign } from '../tools/removeSpecialChar';
 import { inCommentBlock } from '../tools/inCommentBlock';
 import { inLTrimRange } from '../tools/inLTrimRange';
+import { getSwitchRange, inSwitchBlock } from './fmtTools/SwitchCase';
 
 //  TODO https://code.visualstudio.com/api/references/vscode-api#OnEnterRule
 //         https://code.visualstudio.com/api/references/vscode-api#LanguageConfiguration
 // Switch case
+// #LTrim
 
-function minZero(a: number): number {
-    if (a > 0) return a;
-    return 0;
-}
 
 const enum ECS { // EnumContextSensitive  --> ECS
     ifBlock = '#if',
@@ -32,7 +30,7 @@ function Hashtag(textFix: string): ECS | null {
     if (HashtagIfWin.test(textFix) || HashtagIf.test(textFix)) {
         return ECS.ifBlock; // https://www.autohotkey.com/docs/commands/_If.htm#Basic_Operation
     }
-    const HashtagHotStr = /#hotstring\b/;
+    const HashtagHotStr = /^#hotstring\b/;
     if (HashtagHotStr.test(textFix)) {
         return ECS.HotStringBlock; // https://www.autohotkey.com/docs/commands/_Hotstring.htm
     }
@@ -79,37 +77,36 @@ function thisLineDeep(textFix: string): 1 | 0 {
     return 0;
 }
 
+const commandRegexps: readonly RegExp[] = [
+    // /^\}\s*if\b/,
+    /^if(?:msgbox)?\b/,
+    /^else\b/,
+    /^loop\b/,
+    /^for\b/,
+    /^while\b/,
+    /^if(?:not)?exist\b/,
+    /^ifwin(?:not)?(?:active|exist)\b/,
+    /^if(?:not)?(?:in)string\b/,
+    /^ifmsgbox\b/,
+    /^try\b/,
+    /^catch\b/,
+    /^switch\b/,
+];
+const commandRegexpsLength = commandRegexps.length;
 function getOneCommandCode(textFix: string, oneCommandCode: number): number {
-    const oneCommandCodeFix = minZero(oneCommandCode);
-    const commandRegexps: readonly RegExp[] = [
-        /\bif(?:msgbox)?\b/,
-        /\belse\b/,
-        /\bloop\b/,
-        /\bfor\b/,
-        /\bwhile\b/,
-        /\bif(?:not)?exist\b/,
-        /\bifwin(?:not)?(?:active|exist)\b/,
-        /\bif(?:not)?(?:in)string\b/,
-        /\bifmsgbox\b/,
-        /\btry\b/,
-        /\bcatch\b/,
-        /\bswitch\b/,
-    ];
-    const commandRegexpsLength = commandRegexps.length;
-
+    const occ = Math.max(oneCommandCode, 0);
+    const textFixTwo = textFix.startsWith('}') ? textFix.replace(/^\}\s*/, '') : textFix;
     for (let j = 0; j < commandRegexpsLength; j += 1) {
         // eslint-disable-next-line no-continue
-        if (textFix.search(commandRegexps[j]) > -1) {
-            return textFix.endsWith('{')
-                ? 0 // TODO fmt +1
-                : oneCommandCodeFix + 1;
+        if (textFixTwo.search(commandRegexps[j]) > -1) {
+            return textFixTwo.endsWith('{')
+                ? 0
+                : occ + 1;
         }
-        // break;
     }
-
-    return (thisLineDeep(textFix) !== 0)
-        ? oneCommandCodeFix // || 1
-        : 0; // TODO fmt +1
+    return (thisLineDeep(textFixTwo) !== 0)
+        ? occ
+        : 0;
 }
 
 function getDeepLTrimStart(textFix: string, deepLTrim: number): number {
@@ -131,7 +128,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         const tabSize2 = options.insertSpaces ? options.tabSize : 1;
         const thisLineTextWARN = (textFix: string, line: number, CommentBlock: boolean,
             // eslint-disable-next-line max-params
-            oneCommandCode: number, deep: number, LTrim: boolean, deepLTrim: number): string => {
+            oneCommandCode: number, deep: number, LTrim: boolean, deepLTrim: number, switchRangeArray: vscode.Range[]): string => {
             if (LTrim) {
                 return `${document.lineAt(line).text}`;
             }
@@ -139,14 +136,14 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
             if (LineBodyWARN === '') {
                 return LineBodyWARN;
             }
-
+            const switchDeep = inSwitchBlock(textFix, line, switchRangeArray);
             const LineDeep: 0 | 1 = CommentBlock || (oneCommandCode !== 0)
                 ? 0
                 : thisLineDeep(textFix);
-            const curlyBracketsChange: 0 | -1 = textFix.startsWith('{') || textFix.startsWith('}')
+            const curlyBracketsChange: 0 | -1 = textFix.startsWith('}') || (oneCommandCode > 0 && textFix.startsWith('{'))
                 ? -1
                 : 0;
-            const deepFix = minZero(deep + oneCommandCode + curlyBracketsChange + LineDeep + deepLTrim);
+            const deepFix = Math.max(deep + oneCommandCode + curlyBracketsChange + LineDeep + deepLTrim + switchDeep, 0);
 
             const DeepStr = TabSpaces.repeat(deepFix * tabSize2);
             return `${DeepStr}${LineBodyWARN}`;
@@ -158,6 +155,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         let CommentBlock = false;
         let inLTrim = false; // ( LTrim
         let deepLTrim = 0; // ( LTrim
+        const switchRangeArray: vscode.Range[] = [];
         // const parentheses = [{ line: 0, deep: 0 }]; // ()
         // const squareBrackets = [{ line: 0, deep: 0 }]; // []
         // const curlyBrackets = [{ line: 0, deep: 0 }]; // {}
@@ -185,11 +183,14 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
             deepLTrim = getDeepLTrimEnd(textFix, deepLTrim);
 
             if (deep < 0) deep = 0;
-            fmtDocWARN += thisLineTextWARN(textFix, line, CommentBlock, oneCommandCode, deep, inLTrim, deepLTrim);
+            fmtDocWARN += thisLineTextWARN(textFix, line, CommentBlock, oneCommandCode, deep, inLTrim, deepLTrim, switchRangeArray);
             fmtDocWARN += '\n';
             // after
 
             deepLTrim = getDeepLTrimStart(textFix, deepLTrim);
+
+            const switchRange = getSwitchRange(document, textFix, line, lineMax);
+            if (switchRange) switchRangeArray.push(switchRange);
 
             if (Hashtag(textFix)) { // #IF  #hotstring
                 deep += 1;
@@ -208,7 +209,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
                 ? getOneCommandCode(textFix, oneCommandCode)
                 : 0; // TODO fmt +1
         }
-        vscode.window.showInformationMessage('Format Document is Beta v0.2.6');
+        vscode.window.showInformationMessage('Format Document is Beta v0.3');
 
         fmtDocWARN = fmtDocWARN.replace(/\n{2,}/g, '\n\n')
             .replace(/\n*$/, '\n');// doc finish just need one \n

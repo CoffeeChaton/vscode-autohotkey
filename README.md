@@ -51,7 +51,7 @@ AutoHotKey language support for VS Code
 3. Peek Definition (via `Alt+F12`)
 4. List all references
    ![ListAllReferences](image/ListAllReferences.jpg)
-      <!-- 5. Go to References search (via Shift+F12) -->
+    <!-- 5. Go to References search (via Shift+F12) -->
 
 ## Hover
 
@@ -82,8 +82,11 @@ AutoHotKey language support for VS Code
 
 1. Right click then click format document.
 2. or `alt` + `shift` + `f`
+3. add switch case format
 
 -   **beta test now.**
+
+![fmt](image/fmt.png)
 
 <!-- ## IntelliSense
 
