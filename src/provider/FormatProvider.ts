@@ -67,7 +67,7 @@ function thisLineDeep(textFix: string): 1 | 0 {
         /^\//, // /
         /^new\b\s/,
         /^not\b\s/,
-        // Don't do it /^%/,
+        // Don't do it /^%/, because ``` %i%Name := ... ```
     ];
     const iMax = CLL.length;
     for (let i = 0; i < iMax; i += 1) {
@@ -78,7 +78,6 @@ function thisLineDeep(textFix: string): 1 | 0 {
 }
 
 const commandRegexps: readonly RegExp[] = [
-    // /^\}\s*if\b/,
     /^if(?:msgbox)?\b/,
     /^else\b/,
     /^loop\b/,
@@ -95,9 +94,8 @@ const commandRegexps: readonly RegExp[] = [
 const commandRegexpsLength = commandRegexps.length;
 function getOneCommandCode(textFix: string, oneCommandCode: number): number {
     const occ = Math.max(oneCommandCode, 0);
-    const textFixTwo = textFix.startsWith('}') ? textFix.replace(/^\}\s*/, '') : textFix;
+    const textFixTwo = textFix.replace(/^\}\s*/, '')
     for (let j = 0; j < commandRegexpsLength; j += 1) {
-        // eslint-disable-next-line no-continue
         if (textFixTwo.search(commandRegexps[j]) > -1) {
             return textFixTwo.endsWith('{')
                 ? 0
@@ -115,6 +113,17 @@ function getDeepLTrimStart(textFix: string, deepLTrim: number): number {
 }
 
 function getDeepLTrimEnd(textFix: string, deepLTrim: number): number {
+    /*
+    test code
+    ```ahk
+    a := "
+    ( LTrim
+        some..
+        some...
+    )
+    "
+    ```
+    */
     if (textFix.startsWith('(')) return deepLTrim + 1;
     return deepLTrim;
 }
@@ -125,7 +134,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
         const TabSpaces = options.insertSpaces ? ' ' : '\t';
-        const tabSize2 = options.insertSpaces ? options.tabSize : 1;
+        const TabSize = options.insertSpaces ? options.tabSize : 1;
         const thisLineTextWARN = (textFix: string, line: number, CommentBlock: boolean,
             // eslint-disable-next-line max-params
             oneCommandCode: number, deep: number, LTrim: boolean, deepLTrim: number, switchRangeArray: vscode.Range[]): string => {
@@ -145,7 +154,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
                 : 0;
             const deepFix = Math.max(deep + oneCommandCode + curlyBracketsChange + LineDeep + deepLTrim + switchDeep, 0);
 
-            const DeepStr = TabSpaces.repeat(deepFix * tabSize2);
+            const DeepStr = TabSpaces.repeat(deepFix * TabSize);
             return `${DeepStr}${LineBodyWARN}`;
         };
         let fmtDocWARN = ''; // WARN TO USE THIS !!

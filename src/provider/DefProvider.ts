@@ -158,6 +158,7 @@ async function userDef(document: vscode.TextDocument,
             DefReg[i],
             usingReg[i],
             timeStart,
+            // TODO shift F12
         );
         if (Location) return Location;
     }

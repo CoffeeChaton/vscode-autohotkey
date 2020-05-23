@@ -1,9 +1,10 @@
 /* eslint max-classes-per-file: ["error", 3] */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
 import * as vscode from 'vscode';
-
+import { getReference } from './DefProvider';
 
 export class ReferenceProvider implements vscode.ReferenceProvider {
+    // TODO shift F12
     //  Go to References search (via Shift+F12),
     // eslint-disable-next-line class-methods-use-this
     provideReferences(document: vscode.TextDocument, position: vscode.Position,
@@ -16,6 +17,7 @@ export class ReferenceProvider implements vscode.ReferenceProvider {
         // const userDefLink = await userDef(document, position, word);
         // if (userDefLink) return userDefLink;
         // // TODO class.Method, this.classVar,GoSub, GoTo, ahk Built-in func
+
         return undefined;
     }
 }

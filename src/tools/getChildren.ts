@@ -95,8 +95,8 @@ export const LineClass: Readonly<LineClassI> = Object.freeze({
     kindListOne: Object.freeze([
         // https://code.visualstudio.com/api/references/vscode-api#SymbolKind
         vscode.SymbolKind.Variable, // Static
-        vscode.SymbolKind.Variable, // Case
-        vscode.SymbolKind.Variable, // Default
+        vscode.SymbolKind.Enum, // Case
+        vscode.SymbolKind.Enum, // Default
         vscode.SymbolKind.Variable, // GoSub
         vscode.SymbolKind.Variable, // GoTo
         vscode.SymbolKind.Package, // Label
@@ -165,7 +165,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
     matchList: Object.freeze([
         // /^loop[\s,%][\s,%]*(\w\w\w\w*)/i,
         // /^for\b[\s,\w]+in\s\s*(\w\w\w\w*)/i,
-        /^switch\s\s*(\w\w\w*)/i,
+        /^switch\s\s*(\S\S*)\{?/i,
     ]),
 
     nameList: Object.freeze([
@@ -177,7 +177,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
     kindList: Object.freeze([
         // vscode.SymbolKind.Package,
         // vscode.SymbolKind.Package,
-        vscode.SymbolKind.Package,
+        vscode.SymbolKind.EnumMember,
     ]),
 
     getSwitchBlock(document: vscode.TextDocument, textFix: string, line: number,
@@ -207,7 +207,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
             const getDetail = (): string => {
                 if (line === 0) return '';
                 const PreviousLineText = document.lineAt(line - 1).text.trim();
-                if (PreviousLineText.startsWith(';@')) return PreviousLineText.substr(2);
+                if (PreviousLineText.startsWith(';@')) return PreviousLineText.substr(2);// 2=== ';@'.len
                 return '';
             };
             const Range = getRange(document, line, searchLine, RangeEnd);
