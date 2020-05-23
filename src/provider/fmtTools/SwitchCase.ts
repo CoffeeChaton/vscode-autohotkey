@@ -5,14 +5,14 @@ import * as vscode from 'vscode';
 import { getRange } from '../../tools/getRange';
 
 // Switch case
-// #LTrim
 
 export function getSwitchRange(document: vscode.TextDocument, textFix: string, line: number, RangeEnd: number): vscode.Range | undefined {
-    if (textFix.search(/^switch\s/) === -1) return undefined;
+    if ((/^switch\s/).test(textFix) === false) return undefined;
+
     const lineFix = textFix.endsWith('{') ? line : line + 1;
     const range = getRange(document, lineFix, lineFix, RangeEnd);
     const PosStart = new vscode.Position(range.start.line, document.lineAt(range.start.line + 1).range.end.character);
-    const PosEnd = new vscode.Position(range.end.line - 1, document.lineAt(range.end.line - 1).range.end.character)
+    const PosEnd = new vscode.Position(range.end.line - 1, document.lineAt(range.end.line - 1).range.end.character);
     return new vscode.Range(PosStart, PosEnd);
 }
 
@@ -25,8 +25,8 @@ export function inSwitchBlock(textFix: string, line: number, switchRangeArray: v
         }
     }
 
-    if (textFix.search(/^case\s/) !== -1
-        || textFix.search(/^default\s/) !== -1) {
+    if ((/^case\s/).test(textFix)
+        || (/^default\s/).test(textFix)) {
         switchDeep -= 1;
     }
     return switchDeep;
