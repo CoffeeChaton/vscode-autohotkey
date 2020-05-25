@@ -82,24 +82,26 @@ async function ahkDef(document: vscode.TextDocument,
     word: string,
     DefReg: RegExp,
     usingReg: RegExp,
-    timeStart: number): Promise<vscode.Location | vscode.Location[] | undefined> {
+    timeStart: number,
+    listAllUsing: boolean): Promise<vscode.Location[] | undefined> {
     const textTrim = document.lineAt(position).text.trim().toLowerCase();
     const [AhkSymbol, fsPath] = tryGetSymbol(word, Mode);
     if (AhkSymbol === undefined) return undefined;
 
     const searchDef = (): Promise<vscode.Location[]> | undefined => {
         if (textTrim.search(DefReg) === -1) return undefined;
-        if (fsPath === document.uri.fsPath
-            && AhkSymbol.range.start.line === document.lineAt(position).lineNumber) {
+        if (listAllUsing ||
+            (fsPath === document.uri.fsPath
+                && AhkSymbol.range.start.line === document.lineAt(position).lineNumber)) {
             return getReference(usingReg, timeStart, word);
         }
         return undefined;
     };
-    const searchUsing = (): vscode.Location | undefined => {
+    const searchUsing = (): vscode.Location[] | undefined => {
         if (textTrim.search(usingReg) === -1) return undefined;
         //      console.info(`goto Def of ${word} (${Date.now() - timeStart} ms)`);
         //  vscode.window.showInformationMessage(`goto Def of ${word} (${Date.now() - timeStart} ms)`);
-        return new vscode.Location(vscode.Uri.file(fsPath), new vscode.Position(AhkSymbol.range.start.line, 0));
+        return [new vscode.Location(vscode.Uri.file(fsPath), new vscode.Position(AhkSymbol.range.start.line, 0))];
     };
 
     const Def = searchDef();
@@ -112,8 +114,8 @@ async function ahkDef(document: vscode.TextDocument,
 }
 
 
-async function userDef(document: vscode.TextDocument,
-    position: vscode.Position, wordLower: string): Promise<vscode.Location | vscode.Location[] | undefined> {
+export async function userDef(document: vscode.TextDocument,
+    position: vscode.Position, wordLower: string, listAllUsing: boolean): Promise<vscode.Location[] | undefined> {
     const timeStart = Date.now();
     const DefReg: readonly RegExp[] = [
         new RegExp(`^class\\b\\s\\s*\\b(${wordLower})\\b`, 'i'),
@@ -158,7 +160,7 @@ async function userDef(document: vscode.TextDocument,
             DefReg[i],
             usingReg[i],
             timeStart,
-            // TODO shift F12
+            listAllUsing
         );
         if (Location) return Location;
     }
@@ -178,7 +180,8 @@ export class DefProvider implements vscode.DefinitionProvider {
         const fileLink = ahkInclude(document, position);
         if (fileLink) return fileLink;
 
-        const userDefLink = await userDef(document, position, wordLower);
+        const listAllUsing = false;
+        const userDefLink = await userDef(document, position, wordLower, listAllUsing);
         if (userDefLink) return userDefLink;
         // TODO class.Method, this.classVar,GoSub, GoTo, ahk Built-in func
         return undefined;

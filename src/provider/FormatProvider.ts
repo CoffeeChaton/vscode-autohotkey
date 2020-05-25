@@ -46,7 +46,7 @@ function isLabelOrHotStr(textFix: string): boolean {
 }
 
 function isReturn(tagDeep: number, deep: number, textFix: string): boolean {
-    // FIXME use textRaw
+    // FIXME *99 use textRaw
     if (tagDeep === deep && textFix === 'return') return true;
     return false;
 }
