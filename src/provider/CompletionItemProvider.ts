@@ -17,7 +17,7 @@ export class CompletionComma implements vscode.CompletionItemProvider {
         if (Range === undefined) return null;
         const word = document.getText(Range);
         const result: vscode.CompletionItem[] = [];
-        const inClassList = [Detecter.getClassMap()];
+        const inClassList = [Detecter.getDocMap()];
         const kinds = [vscode.CompletionItemKind.Method, vscode.CompletionItemKind.Class];
         const iMax = inClassList.length;
 

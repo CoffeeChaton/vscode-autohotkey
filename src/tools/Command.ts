@@ -10,8 +10,6 @@ export function statusBarClick(): void {
         return;
     }
     Detecter.DocMap.clear();
-    Detecter.AhkClassDefMap.clear();
-    Detecter.AhkFuncMap.clear();
     Detecter.buildByPath(ahkRootPath);
     vscode.window.showInformationMessage('Update docFuncMap cash');
 }

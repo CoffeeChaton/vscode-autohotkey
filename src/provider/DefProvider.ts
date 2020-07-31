@@ -33,13 +33,41 @@ function ahkInclude(document: vscode.TextDocument, position: vscode.Position): v
     return false;
 }
 
+function fnC(mode: EMode, kind: vscode.SymbolKind): boolean {
+    // const enum EMode {
+    //     ahkFunc = 'Function',
+    //     ahkClass = 'Class',
+    //     ahkMethod = 'Method',
+    // }
+
+    // enum SymbolKind {
+    //     Class = 4,
+    //     Method = 5,
+    //     Function = 11,
+    // }
+    switch (mode) {
+        case 'Class':
+            // eslint-disable-next-line no-magic-numbers
+            return kind === 4;
+        case 'Method':
+            // eslint-disable-next-line no-magic-numbers
+            return kind === 5;
+        case 'Function':
+            // eslint-disable-next-line no-magic-numbers
+            return kind === 11;
+        default:
+            return false;
+    }
+}
 export function tryGetSymbol(wordLower: string, mode: EMode): [Readonly<vscode.DocumentSymbol> | false, string] {
-    for (const fsPath of Detecter.getCacheFileUri()) {
-        const docSymbolList = Detecter.getDocDefQuick(fsPath, mode);
+    const strList = Detecter.getDocMapFile();
+    for (const fsPath of strList) {
+        const docSymbolList = Detecter.getDocMap(fsPath);
         if (!docSymbolList) continue;
         const iMax = docSymbolList.length;
         for (let i = 0; i < iMax; i += 1) {
-            if (docSymbolList[i].name.toLowerCase() === wordLower) return [docSymbolList[i], fsPath];
+            if (fnC(mode, docSymbolList[i].kind)
+                && docSymbolList[i].name.toLowerCase() === wordLower) return [docSymbolList[i], fsPath];
         }
     }
     return [false, ''];
@@ -53,7 +81,7 @@ export function tryGetSymbol(wordLower: string, mode: EMode): [Readonly<vscode.D
 
 async function getReference(usingReg: RegExp, timeStart: number, word: string): Promise<vscode.Location[]> {
     const List: vscode.Location[] = [];
-    for (const fsPath of Detecter.getCacheFileUri()) {
+    for (const fsPath of Detecter.getDocMapFile()) {
         // eslint-disable-next-line no-await-in-loop
         const document = await vscode.workspace.openTextDocument(fsPath);
         let CommentBlock = false;

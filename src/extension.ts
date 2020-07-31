@@ -16,12 +16,12 @@ export function activate(context: vscode.ExtensionContext): void {
     const language = { language: 'ahk' };
     context.subscriptions.push(
         vscode.languages.registerHoverProvider(language, new HoverProvider()),
-        vscode.languages.registerCompletionItemProvider(language, new CompletionComma(), '.'),
+        //   vscode.languages.registerCompletionItemProvider(language, new CompletionComma(), '.'),
         vscode.languages.registerDefinitionProvider(language, new DefProvider()),
         vscode.languages.registerReferenceProvider(language, new ReferenceProvider()),
         vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
         vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
-        vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
+        //   vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
         // vscode.languages.registerRenameProvider(language, new RenameProvider()),
         FileProvider.createEditorListenr(),
         vscode.workspace.onDidChangeConfiguration(() => { configChangEvent(); }),
