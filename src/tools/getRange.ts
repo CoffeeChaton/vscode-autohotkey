@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
 
 import * as vscode from 'vscode';
 import { removeSpecialChar2, getSkipSign } from './removeSpecialChar';
@@ -10,7 +10,7 @@ export function getRange(document: vscode.TextDocument, defLine: number, searchL
     const blockStart = '{'; // /\{$/;
     const blockEnd = '}'; // /^\}/;
     const nextLine = searchLine + 1;
-    let inLTrim = false; // ( LTrim
+    let inLTrim: 0 | 1 | 2 = 0; // ( LTrim
     let CommentBlock = false;
     let block = 0;
     for (let line = searchLine; line <= RangeEnd; line += 1) {
@@ -18,10 +18,10 @@ export function getRange(document: vscode.TextDocument, defLine: number, searchL
         CommentBlock = inCommentBlock(textRaw, CommentBlock);
         if (CommentBlock) continue;
         if (getSkipSign(textRaw)) continue;
-        let textFix = removeSpecialChar2(textRaw).trim();
+        const textFix = removeSpecialChar2(textRaw).trim();
         if (textFix === '') continue;
         inLTrim = inLTrimRange(textRaw, inLTrim);
-        if (inLTrim) textFix = '';
+        if (inLTrim) continue;
 
         if (textFix.endsWith(blockStart)) block += 1; // {$
         if (textFix.startsWith(blockEnd)) block -= 1; // ^}

@@ -6,8 +6,8 @@ import { getRange } from '../../tools/getRange';
 
 // Switch case
 
-export function getSwitchRange(document: vscode.TextDocument, textFix: string, line: number, RangeEnd: number): vscode.Range | undefined {
-    if ((/^switch\s/).test(textFix) === false) return undefined;
+export function getSwitchRange(document: vscode.TextDocument, textFix: string, line: number, RangeEnd: number): vscode.Range | false {
+    if ((/^switch\s/).test(textFix) === false) return false;
 
     const lineFix = textFix.endsWith('{') ? line : line + 1;
     const range = getRange(document, lineFix, lineFix, RangeEnd);

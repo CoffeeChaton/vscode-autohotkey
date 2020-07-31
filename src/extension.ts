@@ -10,7 +10,7 @@ import { SymBolProvider } from './provider/SymbolProvider';
 import { HoverProvider } from './provider/HoverProvider';
 import { configChangEvent } from './configUI';
 import { statusBarClick } from './tools/Command';
-import { ReferenceProvider } from './provider/ReferenceProvider'
+import { ReferenceProvider } from './provider/ReferenceProvider';
 
 export function activate(context: vscode.ExtensionContext): void {
     const language = { language: 'ahk' };
@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.languages.registerReferenceProvider(language, new ReferenceProvider()),
         vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
         vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
-        // vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
+        vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
         // vscode.languages.registerRenameProvider(language, new RenameProvider()),
         FileProvider.createEditorListenr(),
         vscode.workspace.onDidChangeConfiguration(() => { configChangEvent(); }),

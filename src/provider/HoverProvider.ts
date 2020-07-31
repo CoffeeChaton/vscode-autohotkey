@@ -33,9 +33,9 @@ const share = {
         return `Return ${name.trim()}  \n`;
     },
 
-    async getHoverBody(word: string, mode: EMode): Promise<vscode.Hover | undefined> {
+    async getHoverBody(word: string, mode: EMode): Promise<vscode.Hover | false> {
         const [AhkSymbol, Uri] = tryGetSymbol(word, mode);
-        if (AhkSymbol === undefined || Uri === undefined) return undefined; //   console.log(JSON.stringify(hoverSymbol));
+        if (AhkSymbol === false || Uri === undefined) return false; //   console.log(JSON.stringify(hoverSymbol));
         // TODO if mode == EMode.ahkClass
         // --set start---
         const document = await vscode.workspace.openTextDocument(Uri);

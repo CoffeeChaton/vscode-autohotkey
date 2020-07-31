@@ -6,11 +6,11 @@ import { removeSpecialChar } from '../tools/removeSpecialChar';
 import { inCommentBlock } from '../tools/inCommentBlock';
 import { EMode } from '../tools/globalSet';
 
-function ahkInclude(document: vscode.TextDocument, position: vscode.Position): vscode.Location | undefined {
+function ahkInclude(document: vscode.TextDocument, position: vscode.Position): vscode.Location | false {
     const includeExec = (/^#include(?:again)?\s*(?:\*i )?\s*(\S\S*\.(?:ahk|ext))$/i).exec(document.lineAt(position).text.trim()); // at #include line
     if (includeExec) {
         const length = Math.max(document.uri.path.lastIndexOf('/'), document.uri.path.lastIndexOf('\\'));
-        if (length <= 0) return undefined;
+        if (length <= 0) return false;
         const parent = document.uri.path.substr(0, length);
         const fsPath = includeExec[1].replace(/%A_Space%/, ' ').replace(/%A_Tab%/, '\t');
         const fsPathFix = (/(%A_ScriptDir%)|(%A_WorkingDir%)|(%A_LineFile%)/).test(fsPath)
@@ -30,28 +30,26 @@ function ahkInclude(document: vscode.TextDocument, position: vscode.Position): v
     //              A_Startup,A_StartupCommon, A_Temp, A_UserName ,A_WinDir
     //              A_UserName, A_WinDir
     // TODO https://www.autohotkey.com/docs/Functions.htm#lib
-    return undefined;
+    return false;
 }
 
-export function tryGetSymbol(wordLower: string, mode: EMode): [Readonly<vscode.DocumentSymbol> | undefined, string] {
+export function tryGetSymbol(wordLower: string, mode: EMode): [Readonly<vscode.DocumentSymbol> | false, string] {
     for (const fsPath of Detecter.getCacheFileUri()) {
         const docSymbolList = Detecter.getDocDefQuick(fsPath, mode);
-        if (docSymbolList === undefined) continue;
+        if (!docSymbolList) continue;
         const iMax = docSymbolList.length;
         for (let i = 0; i < iMax; i += 1) {
             if (docSymbolList[i].name.toLowerCase() === wordLower) return [docSymbolList[i], fsPath];
         }
     }
-    return [undefined, ''];
+    return [false, ''];
 }
-
 
 // interface LimitDefCore {
 //     getReference(usingReg: RegExp, timeStart: number, word: string): Promise<vscode.Location[]>;
 //     ahkDef(document: vscode.TextDocument, position: vscode.Position, Mode: EMode, word: string,
 //         DefReg: RegExp, usingReg: RegExp, timeStart: number): Promise<vscode.Location | vscode.Location[] | undefined>;
 // }
-
 
 async function getReference(usingReg: RegExp, timeStart: number, word: string): Promise<vscode.Location[]> {
     const List: vscode.Location[] = [];
@@ -71,7 +69,7 @@ async function getReference(usingReg: RegExp, timeStart: number, word: string): 
             }
         }
     }
-    //  vscode.window.showInformationMessage(`list all using of ${word} (${Date.now() - timeStart} ms)`);
+    vscode.window.showInformationMessage(`list all using of ${word} (${Date.now() - timeStart} ms)`);
     return List;
 }
 
@@ -83,36 +81,35 @@ async function ahkDef(document: vscode.TextDocument,
     DefReg: RegExp,
     usingReg: RegExp,
     timeStart: number,
-    listAllUsing: boolean): Promise<vscode.Location[] | undefined> {
+    listAllUsing: boolean): Promise<vscode.Location[] | false> {
     const textTrim = document.lineAt(position).text.trim().toLowerCase();
     const [AhkSymbol, fsPath] = tryGetSymbol(word, Mode);
-    if (AhkSymbol === undefined) return undefined;
+    if (AhkSymbol === false) return false;
 
-    const searchDef = (): Promise<vscode.Location[]> | undefined => {
-        if (textTrim.search(DefReg) === -1) return undefined;
-        if (listAllUsing ||
-            (fsPath === document.uri.fsPath
+    const searchDef = (): Promise<vscode.Location[]> | false => {
+        if (textTrim.search(DefReg) === -1) return false;
+        if (listAllUsing
+            || (fsPath === document.uri.fsPath
                 && AhkSymbol.range.start.line === document.lineAt(position).lineNumber)) {
             return getReference(usingReg, timeStart, word);
         }
-        return undefined;
+        return false;
     };
-    const searchUsing = (): vscode.Location[] | undefined => {
-        if (textTrim.search(usingReg) === -1) return undefined;
+    const searchUsing = (): vscode.Location[] | false => {
+        if (textTrim.search(usingReg) === -1) return false;
         //      console.info(`goto Def of ${word} (${Date.now() - timeStart} ms)`);
         //  vscode.window.showInformationMessage(`goto Def of ${word} (${Date.now() - timeStart} ms)`);
         return [new vscode.Location(vscode.Uri.file(fsPath), new vscode.Position(AhkSymbol.range.start.line, 0))];
     };
 
     const Def = searchDef();
-    if (Def !== undefined) return Def;
+    if (Def !== false) return Def;
 
     const Using = searchUsing();
-    if (Using !== undefined) return Using;
+    if (Using !== false) return Using;
 
-    return undefined;
+    return false;
 }
-
 
 export async function userDef(document: vscode.TextDocument,
     position: vscode.Position, wordLower: string, listAllUsing: boolean): Promise<vscode.Location[] | undefined> {
@@ -160,13 +157,12 @@ export async function userDef(document: vscode.TextDocument,
             DefReg[i],
             usingReg[i],
             timeStart,
-            listAllUsing
+            listAllUsing,
         );
         if (Location) return Location;
     }
     return undefined;
 }
-
 
 export class DefProvider implements vscode.DefinitionProvider {
     // Go to Definition (via F12 || Ctrl+Click)

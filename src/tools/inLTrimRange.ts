@@ -1,7 +1,11 @@
-export function inLTrimRange(textFix: string, LTrim: boolean): boolean {
-    // FIXME *1 const textFix = removeSpecialChar2(textRaw.trim().toLowerCase());
-    if (textFix.startsWith(')')) return false;
-    if (textFix.startsWith('(') && !(/\bltrim\b/i).test(textFix)) return true;
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2] }] */
+import { removeSpecialChar2 } from './removeSpecialChar';
 
+export function inLTrimRange(textRaw: string, LTrim: 0 | 1 | 2): 0 | 1 | 2 {
+    const textTrim = textRaw.trimStart();
+    if (textTrim.startsWith(')')) return 0;
+    if (textTrim.startsWith('(')) {
+        return (/\bltrim\bi/).test(removeSpecialChar2(textTrim)) ? 2 : 1;
+    }
     return LTrim;
 }

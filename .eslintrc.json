@@ -11,7 +11,10 @@
         "plugin:@typescript-eslint/recommended",
         "plugin:promise/recommended",
         "plugin:security/recommended",
-        "airbnb-typescript"
+        "airbnb-typescript",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript"
         //  "prettier/@typescript-eslint"
         // "plugin:jsx-a11y/recommended"
     ],
@@ -27,10 +30,14 @@
         "ecmaFeatures": {
             "impliedStrict": true
         }
-
-        //  "tsconfigRootDir": "functions"
     },
-    "plugins": ["@typescript-eslint", "promise", "security"],
+    "plugins": [
+        "@typescript-eslint",
+        "promise",
+        "security",
+        "no-setter-return",
+        "import"
+    ],
     "settings": {
         "import/resolver": {
             "node": {
@@ -39,19 +46,27 @@
         }
     },
     "rules": {
+        //  eslint7  "@typescript-eslint/rule-name": "error",
+        "no-useless-backreference": "error",
+        "default-case-last": 2,
+        "import/export": 2,
+        "import/default": 2,
+        "import/namespace": 2,
+        "import/named": 2,
+        //  eslint7  "no-setter-return/rule-name": 2,
         // "indent": ["error", 4, { "SwitchCase": 1 }],
         "@typescript-eslint/indent": ["error", 4, { "SwitchCase": 1 }],
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",
-        "@typescript-eslint/ban-ts-ignore": "warn",
+        //  eslint7 "@typescript-eslint/ban-ts-ignore": "warn",
         "@typescript-eslint/ban-types": "warn",
-        "@typescript-eslint/camelcase": "warn",
-        "@typescript-eslint/class-name-casing": "warn",
+        //  eslint7 "@typescript-eslint/camelcase": "warn",
+        // eslint7  "@typescript-eslint/class-name-casing": "warn",
         "@typescript-eslint/explicit-function-return-type": "warn",
         "@typescript-eslint/explicit-member-accessibility": "warn",
-        "@typescript-eslint/generic-type-naming": "warn",
-        "@typescript-eslint/interface-name-prefix": "warn",
-        "@typescript-eslint/member-naming": "warn",
+        //  eslint7   "@typescript-eslint/generic-type-naming": "warn",
+        //  eslint7 "@typescript-eslint/interface-name-prefix": "warn",
+        //  eslint7   "@typescript-eslint/member-naming": "warn",
         "@typescript-eslint/member-ordering": "warn",
         "@typescript-eslint/no-array-constructor": "warn",
         "@typescript-eslint/no-empty-interface": "warn",

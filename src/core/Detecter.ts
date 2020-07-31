@@ -79,10 +79,9 @@ export const Detecter = {
                     return;
                 }
                 for (const file of files) {
-                    if ((/^\.|out|target|\.history/).test(file)) {
-                        continue;
+                    if (!(/^\.|out|target|\.history/).test(file)) {
+                        Detecter.buildByPath(`${buildPath}/${file}`);
                     }
-                    Detecter.buildByPath(`${buildPath}/${file}`);
                 }
             });
         } else if ((/\.(?:ahk|ext)$/i).test(buildPath)) {

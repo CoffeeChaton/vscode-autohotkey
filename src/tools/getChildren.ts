@@ -8,16 +8,15 @@ import { inCommentBlock } from './inCommentBlock';
 import { inLTrimRange } from './inLTrimRange';
 // import * as Oniguruma from 'vscode-oniguruma';
 
-
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 export type funcLimit = (document: Readonly<vscode.TextDocument>, textFix: Readonly<string>,
-    line: Readonly<number>, RangeEnd: Readonly<number>, inClass: Readonly<boolean>) => Readonly<vscode.DocumentSymbol> | undefined;
+    line: Readonly<number>, RangeEnd: Readonly<number>, inClass: Readonly<boolean>) => Readonly<vscode.DocumentSymbol> | false;
 
 export function getChildren(document: vscode.TextDocument,
     RangeStart: number, RangeEnd: number, inClass: boolean, fnList: funcLimit[]): Readonly<vscode.DocumentSymbol>[] {
     const result = [];
     let CommentBlock = false;
-    let inLTrim = false;
+    let inLTrim: 0 | 1 | 2 = 0;
     let Resolved = -1;
     const iMax = fnList.length;
     for (let line = RangeStart + 1; line < RangeEnd; line += 1) {
@@ -30,11 +29,11 @@ export function getChildren(document: vscode.TextDocument,
         const textFix = removeSpecialChar2(textRaw).trim();
         if (textFix === '' || getSkipSign(textFix)) continue;
 
-        inLTrim = inLTrimRange(textFix, inLTrim);
+        inLTrim = inLTrimRange(textRaw, inLTrim);
         if (inLTrim) continue;
 
         for (let i = 0; i < iMax; i += 1) {
-            const DocumentSymbol: Readonly<vscode.DocumentSymbol> | undefined = fnList[i](document, textFix, line, RangeEnd, inClass);
+            const DocumentSymbol: Readonly<vscode.DocumentSymbol> | false = fnList[i](document, textFix, line, RangeEnd, inClass);
             if (DocumentSymbol) {
                 result.push(DocumentSymbol);
                 Resolved = DocumentSymbol.range.end.line;
@@ -114,7 +113,7 @@ export const LineClass: Readonly<LineClassI> = Object.freeze({
 
     getReturnByLine(document: vscode.TextDocument, textFix: string, line: number,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | undefined {
+        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | false {
         const ReturnMatch = (/\breturn\b[\s,][\s,]*(.+)/i).exec(textFix);
         if (ReturnMatch) {
             let name = ReturnMatch[1].trim();
@@ -128,13 +127,12 @@ export const LineClass: Readonly<LineClassI> = Object.freeze({
             const rangeRaw = document.lineAt(line).range;
             return Object.freeze(new vscode.DocumentSymbol(`Return ${name.trim()}`, '', vscode.SymbolKind.Variable, rangeRaw, rangeRaw));
         }
-        return undefined;
+        return false;
     },
-
 
     getLine(document: vscode.TextDocument, textFix: string, line: number,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | undefined {
+        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | false {
         const textFix1 = removeSpecialChar(document.lineAt(line).text).trim();
         const iMax = LineClass.matchListOne.length;
         for (let i = 0; i < iMax; i += 1) {
@@ -147,7 +145,7 @@ export const LineClass: Readonly<LineClassI> = Object.freeze({
         }
         const ReturnValue = LineClass.getReturnByLine(document, textFix1, line, RangeEnd, inClass);
         if (ReturnValue) return ReturnValue;
-        return undefined;
+        return false;
     },
 });
 
@@ -181,7 +179,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
     ]),
 
     getSwitchBlock(document: vscode.TextDocument, textFix: string, line: number,
-        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | undefined {
+        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | false {
         const iMax = Core.matchList.length;
         for (let i = 0; i < iMax; i += 1) {
             const BlockSymbol = textFix.match(Core.matchList[i]);
@@ -198,11 +196,11 @@ export const Core: Readonly<CoreI> = Object.freeze({
                 return Object.freeze(Block);
             }
         }
-        return undefined;
+        return false;
     },
 
     getFunc(document: vscode.TextDocument, textFix: string, line: number,
-        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | undefined {
+        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | false {
         const wrapper = (searchLine: number, name: string): Readonly<vscode.DocumentSymbol> => {
             const getDetail = (): string => {
                 if (line === 0) return '';
@@ -220,16 +218,16 @@ export const Core: Readonly<CoreI> = Object.freeze({
             return Object.freeze(funcSymbol);
         };
         const isFunc = getFuncDef(document, line);
-        if (isFunc === undefined) return undefined;
+        if (isFunc === false) return false;
 
         return wrapper(isFunc.searchLine, isFunc.name);
     },
 
     getClass(document: vscode.TextDocument, textFix: string, line: number,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | undefined {
+        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | false {
         const classExec = (/^class\b\s\s*(\w\w*)/i).exec(textFix);
-        if (classExec === null) return undefined;
+        if (classExec === null) return false;
         const Range = getRange(document, line, line, RangeEnd);
         const selectionRange = document.lineAt(line).range;
         const classSymbol = new vscode.DocumentSymbol(classExec[1], '', vscode.SymbolKind.Class, Range, selectionRange);
@@ -239,7 +237,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
     },
 
     getComment(document: vscode.TextDocument, textFix: string, line: number,
-        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | undefined {
+        RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | false {
         const kind = vscode.SymbolKind.Package;
         const textRaw = document.lineAt(line).text;
 
@@ -260,6 +258,6 @@ export const Core: Readonly<CoreI> = Object.freeze({
             const Range = new vscode.Range(new vscode.Position(line, CommentLine), new vscode.Position(line, textRaw.length));
             return Object.freeze(new vscode.DocumentSymbol(name, '', kind, Range, Range));
         }
-        return undefined;
+        return false;
     },
 });
