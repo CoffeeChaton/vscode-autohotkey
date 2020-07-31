@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.languages.registerReferenceProvider(language, new ReferenceProvider()),
         vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
         vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
-        //   vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
+        vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
         // vscode.languages.registerRenameProvider(language, new RenameProvider()),
         FileProvider.createEditorListenr(),
         vscode.workspace.onDidChangeConfiguration(() => { configChangEvent(); }),

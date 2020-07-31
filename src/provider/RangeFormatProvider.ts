@@ -62,7 +62,7 @@ function fnLR(strElement: string): string {
 
 function fnStrGroup(text: string): string {
     const headInt = text.search(/\S/);
-    const body = (headInt > 0)
+    const body = (headInt >= 0)
         ? text.substring(headInt)
         : '';
     const head = (headInt > 0)
@@ -74,7 +74,9 @@ function fnStrGroup(text: string): string {
     let newBody = '';
     for (let s = 0; s < sMax; s += 1) {
         const strElement = strGroup[s];
-        if (s > 0 && s < sMax) newBody += '"';
+        if (s > 0 && s < sMax) {
+            newBody += '"';
+        }
         newBody += ((s % 2) !== 0 || strElement.includes('::') || strElement.includes('`'))
             ? strElement
             : fnLR(strElement);
