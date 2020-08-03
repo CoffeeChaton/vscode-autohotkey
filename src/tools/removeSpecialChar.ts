@@ -2,18 +2,19 @@
 
 export function getSkipSign(text: string): boolean {
     const skipList: RegExp[] = [
-        /^s*;/,
-        /^s*sleep\b/i,
-        /^s*msgbox\b/i,
-        /^s*gui\b/i,
-        /^s*send(?:raw|input|play|event)?[,\s]/i,
-        /^s*menu[,\s]/i,
+        /^;/,
+        /^sleep\b/i,
+        /^msgbox\b/i,
+        /^gui\b/i,
+        /^send(?:raw|input|play|event)?[,\s]/i,
+        /^menu[,\s]/i,
         //   /^s*loop[,\s][,\s]*parse,/,
-        /^s*[\w%[\]][\w%[\]]*\s*=[^=]/, // TraditionAssignment
+        /^[\w%[\]][\w%[\]]*\s*=[^=]/, // TraditionAssignment
     ];
+    const textTrim = text.trim();
     const iMax = skipList.length;
     for (let i = 0; i < iMax; i += 1) {
-        if (skipList[i].test(text)) return true;
+        if (skipList[i].test(textTrim)) return true;
         //    if (textFix.search(skipList[i]) > -1) return true;
     }
     return false;

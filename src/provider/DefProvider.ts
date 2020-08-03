@@ -1,3 +1,5 @@
+/* eslint-disable security/detect-object-injection */
+/* eslint-disable security/detect-non-literal-regexp */
 /* eslint max-classes-per-file: ["error", 3] */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
 import * as vscode from 'vscode';
@@ -5,6 +7,7 @@ import { Detecter } from '../core/Detecter';
 import { removeSpecialChar } from '../tools/removeSpecialChar';
 import { inCommentBlock } from '../tools/inCommentBlock';
 import { EMode } from '../tools/globalSet';
+import { kindCheck } from './DefTools/kindCheck';
 
 function ahkInclude(document: vscode.TextDocument, position: vscode.Position): vscode.Location | false {
     const includeExec = (/^#include(?:again)?\s*(?:\*i )?\s*(\S\S*\.(?:ahk|ext))$/i).exec(document.lineAt(position).text.trim()); // at #include line
@@ -33,44 +36,20 @@ function ahkInclude(document: vscode.TextDocument, position: vscode.Position): v
     return false;
 }
 
-function fnC(mode: EMode, kind: vscode.SymbolKind): boolean {
-    // const enum EMode {
-    //     ahkFunc = 'Function',
-    //     ahkClass = 'Class',
-    //     ahkMethod = 'Method',
-    // }
-
-    // enum SymbolKind {
-    //     Class = 4,
-    //     Method = 5,
-    //     Function = 11,
-    // }
-    switch (mode) {
-        case 'Class':
-            // eslint-disable-next-line no-magic-numbers
-            return kind === 4;
-        case 'Method':
-            // eslint-disable-next-line no-magic-numbers
-            return kind === 5;
-        case 'Function':
-            // eslint-disable-next-line no-magic-numbers
-            return kind === 11;
-        default:
-            return false;
-    }
-}
-export function tryGetSymbol(wordLower: string, mode: EMode): [Readonly<vscode.DocumentSymbol> | false, string] {
-    const strList = Detecter.getDocMapFile();
-    for (const fsPath of strList) {
-        const docSymbolList = Detecter.getDocMap(fsPath);
+export function tryGetSymbol(wordLower: string, mode: EMode): [Readonly<vscode.DocumentSymbol> | false, vscode.Uri | false] {
+    const UriS = Detecter.getDocMapFile();
+    for (const Uri of UriS) {
+        const docSymbolList = Detecter.getDocMap(Uri);
         if (!docSymbolList) continue;
         const iMax = docSymbolList.length;
         for (let i = 0; i < iMax; i += 1) {
-            if (fnC(mode, docSymbolList[i].kind)
-                && docSymbolList[i].name.toLowerCase() === wordLower) return [docSymbolList[i], fsPath];
+            const kind = kindCheck(mode, docSymbolList[i].kind);
+            if (kind && docSymbolList[i].name.toLowerCase() === wordLower) {
+                return [docSymbolList[i], Uri];
+            }
         }
     }
-    return [false, ''];
+    return [false, false];
 }
 
 // interface LimitDefCore {
@@ -97,6 +76,7 @@ async function getReference(usingReg: RegExp, timeStart: number, word: string): 
             }
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     vscode.window.showInformationMessage(`list all using of ${word} (${Date.now() - timeStart} ms)`);
     return List;
 }
@@ -111,13 +91,13 @@ async function ahkDef(document: vscode.TextDocument,
     timeStart: number,
     listAllUsing: boolean): Promise<vscode.Location[] | false> {
     const textTrim = document.lineAt(position).text.trim().toLowerCase();
-    const [AhkSymbol, fsPath] = tryGetSymbol(word, Mode);
-    if (AhkSymbol === false) return false;
+    const [AhkSymbol, Uri] = tryGetSymbol(word, Mode);
+    if (AhkSymbol === false || Uri === false) return false;
 
     const searchDef = (): Promise<vscode.Location[]> | false => {
         if (textTrim.search(DefReg) === -1) return false;
         if (listAllUsing
-            || (fsPath === document.uri.fsPath
+            || (Uri.fsPath === document.uri.fsPath
                 && AhkSymbol.range.start.line === document.lineAt(position).lineNumber)) {
             return getReference(usingReg, timeStart, word);
         }
@@ -127,7 +107,7 @@ async function ahkDef(document: vscode.TextDocument,
         if (textTrim.search(usingReg) === -1) return false;
         //      console.info(`goto Def of ${word} (${Date.now() - timeStart} ms)`);
         //  vscode.window.showInformationMessage(`goto Def of ${word} (${Date.now() - timeStart} ms)`);
-        return [new vscode.Location(vscode.Uri.file(fsPath), new vscode.Position(AhkSymbol.range.start.line, 0))];
+        return [new vscode.Location(Uri, new vscode.Position(AhkSymbol.range.start.line, 0))];
     };
 
     const Def = searchDef();
@@ -143,10 +123,12 @@ export async function userDef(document: vscode.TextDocument,
     position: vscode.Position, wordLower: string, listAllUsing: boolean): Promise<vscode.Location[] | undefined> {
     const timeStart = Date.now();
     const DefReg: readonly RegExp[] = [
-        new RegExp(`^class\\b\\s\\s*\\b(${wordLower})\\b`, 'i'),
+        new RegExp(`class\\b\\s\\s*\\b(${wordLower})\\b`, 'i'),
         // class ClassName
         new RegExp(`(?<!\\.)\\b(${wordLower})\\(`, 'i'),
         // funcName( , not search class.Method()
+        new RegExp(`global\\s\\s*(${wordLower})\\s\\s*:?=`, 'i'),
+        // global var_name :=
     ];
 
     const usingReg: readonly RegExp[] = [
@@ -155,24 +137,14 @@ export async function userDef(document: vscode.TextDocument,
         // class ClassName | new className | className. | extends  className | global className |  {base: className | .base := baseObject
         new RegExp(`(?:(?<!\\.)\\b(${wordLower})\\()|(?:(?<=\\bfunc\\()["']\\b(${wordLower})\\b["'])`, 'i'),
         // funcName( | Func("funcName"
+        new RegExp(`global\\s\\s*(${wordLower})\\b`, 'i'),
+        // global var_name
     ];
-    // {
-    //     const inClass = () => {
-    //         const classMap = Detecter.getClassMap().get(document.uri) || [];
-    //         const iMax = classMap.length;
-    //         for (let i = 0; i < iMax; i += 1) {
-    //             if (classMap[i].range.contains(position)) return classMap[i];
-    //         }
-    //         return undefined;
-    //     };
-    //     const userDefClass = inClass();
-    //     if (userDefClass) {
-    //         // FIXME
-    //     }
-    // }
+
     const Modes: readonly EMode[] = [
         EMode.ahkClass,
         EMode.ahkFunc,
+        EMode.ahkGlobal,
     ];
     const iMax = Modes.length;
     for (let i = 0; i < iMax; i += 1) {

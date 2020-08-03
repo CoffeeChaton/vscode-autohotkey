@@ -5,9 +5,9 @@ import { inLTrimRange } from '../tools/inLTrimRange';
 import { removeSpecialChar2, getSkipSign } from '../tools/removeSpecialChar';
 /*
 TODO wait to fix /** / block
-     wait to fix ^\s*,
 ok
     ; block
+    fix ^\s*,
 }
 */
 function textReplace(textElement: string): string {
@@ -25,46 +25,44 @@ function textReplace(textElement: string): string {
         .replace(/ *&& */g, ' && ')
         .replace(/ *<> */g, ' <> ')
         .replace(/\breturn  */g, 'return ')
-        .replace(/\bReturn  */g, 'Return ') // return space+
+        .replace(/\bReturn  */g, 'Return ')
         // .replace(/ *\? */g, ' ? ')
-        .replace(/\( */g, '(') // space-in-parens
-        .replace(/ *\)/g, ')') // space-in-parens
-        .replace(/\[ */g, '[') // array-bracket-spacing
-        .replace(/ *\]/g, ']') // array-bracket-spacing
-        .replace(/ *\{ */g, ' {') // space-before-blocks
-        .replace(/ *\}/g, '}') //  space-before-blocks
-        .replace(/\} +/g, '} ')
-        .replace(/\) *\{ */g, ') {') // ) {
-        .replace(/\bif\(/g, 'if (') // space-after-keywords
-        .replace(/\bIf\(/g, 'If (') // space-after-keywords
-        .replace(/\bIF\(/g, 'IF (') // space-after-keywords
-        .replace(/\bwhile\(/g, 'while (') // space-after-keywords
-        .replace(/\bWhile\(/g, 'While (') // space-after-keywords
-        .replace(/\bWHILE\(/g, 'WHILE (') // space-after-keywords
+        .replace(/\( */g, '(')
+        .replace(/ *\)/g, ')')
+        .replace(/\[ */g, '[')
+        .replace(/ *\]/g, ']')
+        .replace(/ *\{ */g, ' {')
+        .replace(/ *\}/g, '}')
+        .replace(/\}  */g, '} ')
+        .replace(/\) *\{ */g, ') {')
+        .replace(/\bif\(/g, 'if (')
+        .replace(/\bIf\(/g, 'If (')
+        .replace(/\bIF\(/g, 'IF (')
+        .replace(/\bwhile\(/g, 'while (')
+        .replace(/\bWhile\(/g, 'While (')
+        .replace(/\bWHILE\(/g, 'WHILE (')
         .replace(/ *;/g, ' ;');// TODO options of ";"
     // \s === [ \f\n\r\t\v]
     // TODO more TEST & options
 }
 function fnLR(strElement: string): string {
     const LR = strElement.indexOf(';');
-    let str = '';
-    if (LR === 0) {
-        str = strElement;
-    } else if (LR === -1) {
-        str = textReplace(strElement);
-    } else if (LR > 0) {
+    if (LR === -1) return textReplace(strElement);
+    if (LR === 0) return strElement;
+    if (LR > 0) {
         const Left = strElement.substring(0, LR + 1);
         const Right = strElement.substring(LR + 1, strElement.length) || '';
-        str = textReplace(Left) + Right;
+        return textReplace(Left) + Right;
     }
-    return str;
+    return strElement;
 }
 
 function fnStrGroup(text: string): string {
     const headInt = text.search(/\S/);
     const body = (headInt >= 0)
         ? text.substring(headInt)
-        : '';
+        : text;
+
     const head = (headInt > 0)
         ? text.substring(0, headInt)
         : '';
@@ -73,10 +71,11 @@ function fnStrGroup(text: string): string {
     const sMax = strGroup.length;
     let newBody = '';
     for (let s = 0; s < sMax; s += 1) {
+        newBody += (s > 0 && s < sMax)
+            ? '"'
+            : '';
+
         const strElement = strGroup[s];
-        if (s > 0 && s < sMax) {
-            newBody += '"';
-        }
         newBody += ((s % 2) !== 0 || strElement.includes('::') || strElement.includes('`'))
             ? strElement
             : fnLR(strElement);
@@ -87,7 +86,8 @@ let globalTime = Date.now();
 function showWarn(timeStart: number): void {
     const min = 10000;
     if (globalTime - timeStart > min) {
-        vscode.window.showInformationMessage(`Format Selection is Alpha 0.3, ${Date.now() - timeStart}ms`);
+        const time = Date.now() - timeStart;
+        vscode.window.showInformationMessage(`Format Selection is Alpha 0.3, ${time}ms`);
         globalTime = timeStart;
     }
 }

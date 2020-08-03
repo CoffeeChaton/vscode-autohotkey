@@ -35,7 +35,7 @@ const share = {
 
     async getHoverBody(word: string, mode: EMode): Promise<vscode.Hover | false> {
         const [AhkSymbol, Uri] = tryGetSymbol(word, mode);
-        if (AhkSymbol === false || Uri === undefined) return false; //   console.log(JSON.stringify(hoverSymbol));
+        if (AhkSymbol === false || Uri === false) return false; //   console.log(JSON.stringify(hoverSymbol));
         // TODO if mode == EMode.ahkClass
         // --set start---
         const document = await vscode.workspace.openTextDocument(Uri);
@@ -78,6 +78,7 @@ const share = {
 const HoverFunc = {
     async main(document: vscode.TextDocument, position: vscode.Position,
         word: string, textRaw: string): Promise<vscode.Hover | undefined> {
+        // eslint-disable-next-line security/detect-non-literal-regexp
         const usingDef = new RegExp(`(?<!\\.)\\b(${word})\\(`, 'i'); // not search class.Method()
         if (textRaw.search(usingDef) === -1) return undefined;
 

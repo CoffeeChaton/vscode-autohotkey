@@ -1,4 +1,5 @@
 export function isLabelOrHotStr(textFix: string): boolean {
+    if (textFix === '') return false;
     return (textFix.endsWith('::') || (/^(?!case)\s\s*\w*\w:$/).test(textFix));
 }
 /*

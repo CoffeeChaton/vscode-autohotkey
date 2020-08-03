@@ -66,11 +66,6 @@
                     "default": "#e783e1",
                     "description": "color of status bar, use '' to use theme color,or use HTML Color, exp: '#D382FF' or 'rgb(255,255,100)"
                 },
-                "AhkOutline.isAHKv2": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "if your ahk version is not v2,please don't Tick this."
-                },
                 "AhkOutline.hover.showParm": {
                     "type": "boolean",
                     "default": true,

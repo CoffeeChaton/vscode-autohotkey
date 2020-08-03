@@ -9,11 +9,11 @@ import { inLTrimRange } from './inLTrimRange';
 // import * as Oniguruma from 'vscode-oniguruma';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-export type funcLimit = (document: Readonly<vscode.TextDocument>, textFix: Readonly<string>,
+export type FuncLimit = (document: Readonly<vscode.TextDocument>, textFix: Readonly<string>,
     line: Readonly<number>, RangeEnd: Readonly<number>, inClass: Readonly<boolean>) => Readonly<vscode.DocumentSymbol> | false;
 
 export function getChildren(document: vscode.TextDocument,
-    RangeStart: number, RangeEnd: number, inClass: boolean, fnList: funcLimit[]): Readonly<vscode.DocumentSymbol>[] {
+    RangeStart: number, RangeEnd: number, inClass: boolean, fnList: FuncLimit[]): Readonly<vscode.DocumentSymbol>[] {
     const result = [];
     let CommentBlock = false;
     let inLTrim: 0 | 1 | 2 = 0;
@@ -48,8 +48,8 @@ interface LineClassI {
     matchListOne: readonly RegExp[];
     nameListOne: readonly string[];
     kindListOne: readonly vscode.SymbolKind[];
-    getReturnByLine: funcLimit;
-    getLine: funcLimit;
+    getReturnByLine: FuncLimit;
+    getLine: FuncLimit;
 }
 
 export const LineClass: Readonly<LineClassI> = Object.freeze({
@@ -83,7 +83,7 @@ export const LineClass: Readonly<LineClassI> = Object.freeze({
         '', // HotStr
         '', // HotKeys
         '#', // directive
-        'global ',
+        '', // global
         'Throw ',
         'exit ',
         'exitApp ',
@@ -103,7 +103,7 @@ export const LineClass: Readonly<LineClassI> = Object.freeze({
         vscode.SymbolKind.Event, // HotStr
         vscode.SymbolKind.Event, // HotKeys
         vscode.SymbolKind.Event, // directive
-        vscode.SymbolKind.Variable, // Global
+        vscode.SymbolKind.Variable, // global
         vscode.SymbolKind.Event, // Throw
         vscode.SymbolKind.Event, // exit
         vscode.SymbolKind.Event, // exitApp
@@ -136,10 +136,11 @@ export const LineClass: Readonly<LineClassI> = Object.freeze({
         const textFix1 = removeSpecialChar(document.lineAt(line).text).trim();
         const iMax = LineClass.matchListOne.length;
         for (let i = 0; i < iMax; i += 1) {
-            const oneLineSymbol = textFix1.match(LineClass.matchListOne[i]);
+            const oneLineSymbol = LineClass.matchListOne[i].exec(textFix1);
             if (oneLineSymbol) {
                 const rangeRaw = document.lineAt(line).range;
-                return Object.freeze(new vscode.DocumentSymbol(`${LineClass.nameListOne[i]}${oneLineSymbol[1]}`,
+                const name = `${LineClass.nameListOne[i]}${oneLineSymbol[1].trim()}`;
+                return Object.freeze(new vscode.DocumentSymbol(name,
                     '', LineClass.kindListOne[i], rangeRaw, rangeRaw));
             }
         }
@@ -153,10 +154,10 @@ interface CoreI {
     matchList: readonly RegExp[];
     nameList: readonly string[];
     kindList: readonly vscode.SymbolKind[];
-    getSwitchBlock: funcLimit;
-    getFunc: funcLimit;
-    getClass: funcLimit;
-    getComment: funcLimit;
+    getSwitchBlock: FuncLimit;
+    getFunc: FuncLimit;
+    getClass: FuncLimit;
+    getComment: FuncLimit;
 }
 
 export const Core: Readonly<CoreI> = Object.freeze({
@@ -182,7 +183,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
         RangeEnd: number, inClass: boolean): Readonly<vscode.DocumentSymbol> | false {
         const iMax = Core.matchList.length;
         for (let i = 0; i < iMax; i += 1) {
-            const BlockSymbol = textFix.match(Core.matchList[i]);
+            const BlockSymbol = Core.matchList[i].exec(textFix);
             if (BlockSymbol) {
                 const Range = getRange(document, line, line, RangeEnd);
                 // if (Range.start.line + 1 === Range.end.line) {
@@ -191,7 +192,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
                 const selectionRange = document.lineAt(line).range;
                 const Block = new vscode.DocumentSymbol(`${Core.nameList[i]}${BlockSymbol[1]}`, '',
                     Core.kindList[i], Range, selectionRange);
-                const fnList: funcLimit[] = [Core.getComment, Core.getSwitchBlock, LineClass.getLine];
+                const fnList: FuncLimit[] = [Core.getComment, Core.getSwitchBlock, LineClass.getLine];
                 Block.children = getChildren(document, Range.start.line, Range.end.line, inClass, fnList);
                 return Object.freeze(Block);
             }
@@ -213,7 +214,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
             const detail = getDetail();
             const selectionRange = document.lineAt(line).range;
             const funcSymbol = new vscode.DocumentSymbol(name, detail, kind, Range, selectionRange);
-            const fnList: funcLimit[] = [Core.getFunc, Core.getComment, Core.getSwitchBlock, LineClass.getLine];
+            const fnList: FuncLimit[] = [Core.getFunc, Core.getComment, Core.getSwitchBlock, LineClass.getLine];
             funcSymbol.children = getChildren(document, Range.start.line, Range.end.line, inClass, fnList);
             return Object.freeze(funcSymbol);
         };
@@ -231,7 +232,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
         const Range = getRange(document, line, line, RangeEnd);
         const selectionRange = document.lineAt(line).range;
         const classSymbol = new vscode.DocumentSymbol(classExec[1], '', vscode.SymbolKind.Class, Range, selectionRange);
-        const fnList: funcLimit[] = [Core.getClass, Core.getFunc, Core.getComment, Core.getSwitchBlock, LineClass.getLine];
+        const fnList: FuncLimit[] = [Core.getClass, Core.getFunc, Core.getComment, Core.getSwitchBlock, LineClass.getLine];
         classSymbol.children = getChildren(document, Range.start.line, Range.end.line, true, fnList);
         return Object.freeze(classSymbol);
     },
@@ -247,7 +248,7 @@ export const Core: Readonly<CoreI> = Object.freeze({
             const Range = getRange(document, line, line, RangeEnd);
             const selectionRange = document.lineAt(line).range;
             const CommentBlock = new vscode.DocumentSymbol(name, '', kind, Range, selectionRange);
-            const fnList: funcLimit[] = [Core.getClass, Core.getFunc, Core.getComment, Core.getSwitchBlock, LineClass.getLine];
+            const fnList: FuncLimit[] = [Core.getClass, Core.getFunc, Core.getComment, Core.getSwitchBlock, LineClass.getLine];
             CommentBlock.children = getChildren(document, Range.start.line, Range.end.line, inClass, fnList);
             return Object.freeze(CommentBlock);
         }

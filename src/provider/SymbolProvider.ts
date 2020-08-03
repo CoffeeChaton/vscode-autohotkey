@@ -7,7 +7,7 @@ export class SymBolProvider implements vscode.DocumentSymbolProvider {
     public provideDocumentSymbols(document: vscode.TextDocument,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken): vscode.ProviderResult<vscode.DocumentSymbol[]> {
-        return Detecter.updateDocDef(document.uri.fsPath);
+        return Detecter.updateDocDef(document.uri);
     }
     // May 08 2020, vscode.SymbolInformation  -> vscode.DocumentSymbol[]
 }

@@ -7,7 +7,6 @@ import { Detecter } from '../core/Detecter';
 import { tryGetSymbol } from './DefProvider';
 import { EMode } from '../tools/globalSet';
 
-
 export class CompletionComma implements vscode.CompletionItemProvider {
     // eslint-disable-next-line class-methods-use-this
     public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position,
