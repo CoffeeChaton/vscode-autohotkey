@@ -1,14 +1,16 @@
 {
     "compilerOptions": {
         "module": "CommonJS",
-        "target": "ESNext",
+        "target": "ES2018",
         "outDir": "out",
         "lib": [
+            "ES2017.String",
             "ES2018",
             "ES2019",
             "dom",
             "ES2018.RegExp",
             "ES2020.string",
+            "ES2020",
             "ESNext"
         ],
         "sourceMap": true,
@@ -26,6 +28,5 @@
         "strictPropertyInitialization": true
     },
     "exclude": ["node_modules"],
-
     "typeRoots": ["node_modules/@types"]
 }

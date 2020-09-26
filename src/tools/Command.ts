@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable security/detect-object-injection */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
 import * as vscode from 'vscode';
@@ -13,3 +14,5 @@ export function statusBarClick(): void {
     Detecter.buildByPath(ahkRootPath);
     vscode.window.showInformationMessage('Update docFuncMap cash');
 }
+// const uri = vscode.Uri.parse('https://github.com/CoffeeChaton/vscode-ahk-outline');
+// vscode.env.openExternal(uri);

@@ -6,9 +6,8 @@ import { inCommentBlock } from './inCommentBlock';
 import { inLTrimRange } from './inLTrimRange';
 
 export function getRange(document: vscode.TextDocument, defLine: number, searchLine: number, RangeEnd: number): vscode.Range {
+    //  selectionRange must be contained in fullRange
     const startPos: vscode.Position = new vscode.Position(defLine, 0);
-    const blockStart = '{'; // /\{$/;
-    const blockEnd = '}'; // /^\}/;
     const nextLine = searchLine + 1;
     let inLTrim: 0 | 1 | 2 = 0; // ( LTrim
     let CommentBlock = false;
@@ -21,10 +20,10 @@ export function getRange(document: vscode.TextDocument, defLine: number, searchL
         const textFix = removeSpecialChar2(textRaw).trim();
         if (textFix === '') continue;
         inLTrim = inLTrimRange(textRaw, inLTrim);
-        if (inLTrim) continue;
+        if (inLTrim > 0) continue;
 
-        if (textFix.endsWith(blockStart)) block += 1; // {$
-        if (textFix.startsWith(blockEnd)) block -= 1; // ^}
+        if (textFix.endsWith('{')) block += 1; // {$
+        if (textFix.startsWith('}')) block -= 1; // ^}
 
         if (block === 0) {
             switch (line) {
@@ -46,4 +45,47 @@ export function getRange(document: vscode.TextDocument, defLine: number, searchL
     console.log('lineCount', RangeEnd);
     console.log(': ----getRange---ERROR---------------');
     return document.lineAt(searchLine).range;
+}
+
+export function getCaseBlockRange(document: vscode.TextDocument, defLine: number, searchLine: number, RangeEnd: number): vscode.Range {
+    if (removeSpecialChar2(document.lineAt(defLine).text).search(/{\s*?$/) > -1) {
+        return getRange(document, defLine, searchLine, RangeEnd);
+    }
+    if (removeSpecialChar2(document.lineAt(defLine + 1).text).search(/^\s*{/) > -1) {
+        return getRange(document, defLine, searchLine, RangeEnd);
+    }
+    const startPos: vscode.Position = new vscode.Position(defLine, 0);
+    const nextLine = searchLine + 1;
+    let inLTrim: 0 | 1 | 2 = 0; // ( LTrim
+    let CommentBlock = false;
+    let Resolved = -1;
+    for (let line = nextLine; line <= RangeEnd; line += 1) {
+        if (line < Resolved) continue;
+        const textRaw = document.lineAt(line).text;
+        CommentBlock = inCommentBlock(textRaw, CommentBlock);
+        if (CommentBlock) continue;
+        if (getSkipSign(textRaw)) continue;
+        const textFix = removeSpecialChar2(textRaw).trim();
+        if (textFix === '') continue;
+        inLTrim = inLTrimRange(textRaw, inLTrim);
+        if (inLTrim > 0) continue;
+
+        if ((/^switch\s/i).test(textFix)) {
+            const SwitchRange = getRange(document, line, line, RangeEnd);
+            Resolved = SwitchRange.end.line;
+            continue;
+        }
+        if ((/^case\s/i).test(textFix) || (/^default\b\s*:/i).test(textFix)) {
+            return new vscode.Range(startPos, new vscode.Position(line - 1, 0));
+        }
+    }
+    return new vscode.Range(startPos, new vscode.Position(RangeEnd, 0));
+    //     const fsPathRaw = document.uri.fsPath;
+    //     console.log(': ----getRange---ERROR----------------');
+    //     console.log('fsPath', fsPathRaw);
+    //     console.log('defLine', defLine);
+    //     console.log('searchLine', searchLine);
+    //     console.log('lineCount', RangeEnd);
+    //     console.log(': ----getRange---ERROR---------------');
+    //     return document.lineAt(searchLine).range;
 }

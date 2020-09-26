@@ -1,18 +1,21 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint no-continue: "error" */
 /* eslint-disable max-statements */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
 import * as vscode from 'vscode';
-import { removeSpecialChar2, getSkipSign } from '../tools/removeSpecialChar';
-import { inCommentBlock } from '../tools/inCommentBlock';
-import { inLTrimRange } from '../tools/inLTrimRange';
-import { getSwitchRange, inSwitchBlock } from './fmtTools/SwitchCase';
-import { hasDoubleSemicolon } from './fmtTools/hasDoubleSemicolon';
-import { thisLineDeep } from './fmtTools/thisLineDeep';
-import { getDeepKeywords } from './fmtTools/getDeepKeywords';
-import { getDeepLTrim } from './fmtTools/getDeepLTrim';
-import { isLabelOrHotStr } from './fmtTools/isLabelOrHotStr';
-//  TODO https://code.visualstudio.com/api/references/vscode-api#OnEnterRule
-//         https://code.visualstudio.com/api/references/vscode-api#LanguageConfiguration
+import { removeSpecialChar2, getSkipSign } from '../../tools/removeSpecialChar';
+import { inCommentBlock } from '../../tools/inCommentBlock';
+import { inLTrimRange } from '../../tools/inLTrimRange';
+import { getSwitchRange, inSwitchBlock } from './SwitchCase';
+import { hasDoubleSemicolon } from './hasDoubleSemicolon';
+import { thisLineDeep } from './thisLineDeep';
+import { getDeepKeywords } from './getDeepKeywords';
+import { getDeepLTrim } from './getDeepLTrim';
+import { isHotStr, isLabel } from './isLabelOrHotStr';
+import { getFormatConfig } from '../../configUI';
+import { RangeFormat } from '../FormatRange/RangeFormatProvider';
 
 function fullDocumentRange(document: vscode.TextDocument): vscode.Range {
     const endLine = document.lineCount - 1;
@@ -23,13 +26,13 @@ function Hashtag(textFix: string): '#if' | '#HotString' | '' {
     if (textFix === '') return '';
 
     // https://www.autohotkey.com/docs/commands/_If.htm#Basic_Operation
-    if ((/^#ifwin(?:not)?(?:active|exist)\b/).test(textFix)
-        || (/^#if\b/).test(textFix)) {
+    if ((/^#ifwin(?:not)?(?:active|exist)\b/i).test(textFix)
+        || (/^#if\b/i).test(textFix)) {
         return '#if';
     }
 
     // https://www.autohotkey.com/docs/commands/_Hotstring.htm
-    if ((/^#hotstring\b/).test(textFix)) return '#HotString';
+    if ((/^#hotstring\b/i).test(textFix)) return '#HotString';
 
     return '';
 }
@@ -41,10 +44,11 @@ function isReturn(tagDeep: number, deep: number, textRaw: string): boolean {
 function calcDeep(textFix: string): number {
     if (textFix === '') return 0;
     let block = 0;
-    // if (textFix.endsWith('{')) block += 1; // {$
-    // if (textFix.startsWith('}')) block -= 1; // ^}
-    block += ((/\{/).exec(textFix) || []).length;
-    block -= ((/\}/).exec(textFix) || []).length;
+    if (textFix.endsWith('{')) block++; // {$
+    if (textFix.startsWith('}')) block--; // ^}
+    //   block += ((/\{/).exec(textFix) || []).length;
+    // block += (textFix.match(/\{/g) || []).length;
+    // block -= (textFix.match(/\}/g) || []).length;
     return block;
 }
 
@@ -53,7 +57,7 @@ function fn_Warn_thisLineText_WARN(textFix: string, line: number, CommentBlock: 
     occ: number, deep: number, inLTrim: 0 | 1 | 2, textRaw: string,
     switchRangeArray: vscode.Range[], document: vscode.TextDocument, options: vscode.FormattingOptions): string {
     if (inLTrim === 1 && textRaw.trim().startsWith('(') === false) {
-        return `${document.lineAt(line).text}`;
+        return document.lineAt(line).text;
     }
 
     const WarnLineBodyWarn = document.lineAt(line).text.trimStart();
@@ -78,6 +82,7 @@ function fn_Warn_thisLineText_WARN(textFix: string, line: number, CommentBlock: 
     const DeepStr = TabSpaces.repeat(deepFix * TabSize);
     return `${DeepStr}${WarnLineBodyWarn}`;
 }
+
 export class FormatProvider implements vscode.DocumentFormattingEditProvider {
     // eslint-disable-next-line class-methods-use-this
     public provideDocumentFormattingEdits(document: vscode.TextDocument, options: vscode.FormattingOptions,
@@ -96,41 +101,41 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         // const curlyBrackets = [{ line: 0, deep: 0 }]; // {}
         // const nextLineDeep = [{ line: 0, deep: 0 }]; // if
         // const labeHashtag = [{ line: 0, deep: 0 }]; // ^#if #win
-        // const labels = [{ line: 0, deep: 0 }]; // labe:$
+        //   const labels = [{ line: 0, deep: 0 }]; // labe:$
         // const HotStr = [{ line: 0, deep: 0 }]; // ^::HotStr::
         const lineMax = document.lineCount;
-        for (let line = 0; line < lineMax; line += 1) {
+        for (let line = 0; line < lineMax; line++) {
             const textRaw = document.lineAt(line).text;
             CommentBlock = inCommentBlock(textRaw, CommentBlock);
             inLTrim = inLTrimRange(textRaw, inLTrim);
             const textFix = (CommentBlock || getSkipSign(textRaw) || inLTrim > 0)
                 ? ''
-                : removeSpecialChar2(textRaw).trim().toLowerCase();
+                : removeSpecialChar2(textRaw).trim();
 
             const hasHashtag = Hashtag(textFix);
-            const hasLabelOrHotStr = isLabelOrHotStr(textFix);
+            const HotStr = isHotStr(textFix);
+            const Label = isLabel(textFix);
             if (isReturn(tagDeep, deep, textRaw)// Return
                 || hasHashtag// #if #hotstring
-                || (tagDeep > 0 && tagDeep === deep && hasLabelOrHotStr) // `label:` or `::btw::\n`
+                || (tagDeep > 0 && tagDeep === deep && HotStr) // `::btw::\n`
+                || (tagDeep > 0 && tagDeep === deep && Label) //  `label:`
             ) {
                 deep -= 1;
             }
 
             if (deep < 0) deep = 0;
-            WarnFmtDocWarn += fn_Warn_thisLineText_WARN(textFix, line, CommentBlock, occ,
-                deep, inLTrim, textRaw, switchRangeArray, document, options);
-            WarnFmtDocWarn += '\n';
-            // after
+            WarnFmtDocWarn = `${WarnFmtDocWarn + fn_Warn_thisLineText_WARN(textFix, line, CommentBlock, occ,
+                deep, inLTrim, textRaw, switchRangeArray, document, options)}\n`;
 
             const switchRange = getSwitchRange(document, textFix, line, lineMax);
             if (switchRange) switchRangeArray.push(switchRange);
 
             if (hasHashtag) { // #IF  #hotstring
-                deep += 1;
+                deep++;
             }
 
-            if (hasLabelOrHotStr) { // label:
-                deep += 1;
+            if (HotStr || Label) { // label:
+                deep++;
                 tagDeep = deep;
             }
 
@@ -142,14 +147,16 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
                 ? occ
                 : getDeepKeywords(textFix, occ); // TODO fmt_a1
         }
-        vscode.window.showInformationMessage(`Format Document is Beta v0.472, ${Date.now() - timeStart}ms`);
+        vscode.window.showInformationMessage(`Format Document is Beta v0.48, ${Date.now() - timeStart}ms`);
 
         WarnFmtDocWarn = WarnFmtDocWarn.replace(/\n{2,}/g, '\n\n')
             .replace(/\n*$/, '\n');// doc finish just need one \n
 
-        return [
-            new vscode.TextEdit(fullDocumentRange(document), WarnFmtDocWarn),
-        ];
+        const fullRange = fullDocumentRange(document);
+
+        return getFormatConfig()
+            ? RangeFormat(document.getText(), WarnFmtDocWarn, document.uri.fsPath, fullRange)
+            : [new vscode.TextEdit(fullRange, WarnFmtDocWarn)];
     }
 }
 /*

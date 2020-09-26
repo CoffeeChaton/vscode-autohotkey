@@ -26,7 +26,6 @@ export function thisLineDeep(textFix: string): 1 | 0 {
     ];
     const iMax = CLL.length;
     for (let i = 0; i < iMax; i += 1) {
-        // if (textFix.search(CLL[i]) > -1) return 1;
         if (CLL[i].test(textFix)) return 1;
     }
     return 0;

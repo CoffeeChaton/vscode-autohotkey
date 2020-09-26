@@ -1,26 +1,31 @@
+/* eslint-disable @typescript-eslint/no-type-alias */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
 import * as vscode from 'vscode';
 import { removeSpecialChar2 } from './removeSpecialChar';
 
 type FuncDefData = {
     name: string;
-    searchLine: number;
+    searchLine: number; // Range: vscode.Range
+    // selectionRange: vscode.Range
 };
 
 export function getFuncDef(document: vscode.TextDocument, line: number): FuncDefData | false {
     const lineText = (searchLine: number): string => removeSpecialChar2(document.lineAt(searchLine).text).trim();
     const getFuncTail = (searchText: string, name: string, searchLine: number): FuncDefData | false => {
         const fnTail = /\)\s*\{$/;
-        const fnTail2 = ')';// /\)$/;
-        const fnTail3 = '{';// /^\{/;
         // i+1   ^, something , something ........ ) {$
-        if (searchText.search(fnTail) > -1) return { name, searchLine };
+        if (fnTail.test(searchText)) return { name, searchLine };
 
         if (searchLine + 1 === document.lineCount) return false;
+
         // i+1   ^, something , something ......)$
         // i+2   ^{
+        const fnTail2 = ')';// /\)$/;
+        const fnTail3 = '{';// /^\{/;
         if (searchText.endsWith(fnTail2)
-            && lineText(searchLine + 1).startsWith(fnTail3)) return { name, searchLine };
+            && lineText(searchLine + 1).startsWith(fnTail3)) {
+            return { name, searchLine };
+        }
 
         return false;
     };

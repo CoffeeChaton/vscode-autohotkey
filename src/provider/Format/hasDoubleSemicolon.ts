@@ -1,4 +1,3 @@
-
 export function hasDoubleSemicolon(textFix: string): boolean {
     return textFix.includes('::');
 }

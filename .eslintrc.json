@@ -171,7 +171,7 @@
         "implicit-arrow-linebreak": "error",
         "init-declarations": "error",
         "max-depth": ["error", 4],
-        "max-lines": ["error", 300],
+        "max-lines": ["error", 200],
         "max-nested-callbacks": ["error", 3],
         "max-params": ["error", 5],
         "max-statements": [1, 30],

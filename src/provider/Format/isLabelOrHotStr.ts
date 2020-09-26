@@ -1,6 +1,10 @@
-export function isLabelOrHotStr(textFix: string): boolean {
+export function isHotStr(textFix: string): boolean {
     if (textFix === '') return false;
-    return (textFix.endsWith('::') || (/^(?!case)\s\s*\w*\w:$/).test(textFix));
+    return textFix.endsWith('::');
+}
+export function isLabel(textFix: string): boolean {
+    if (textFix === '') return false;
+    return (/^(?!case)\s\s*\w*\w:$/i).test(textFix);
 }
 /*
 ```ahk

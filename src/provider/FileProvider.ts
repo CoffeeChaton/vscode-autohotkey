@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import * as vscode from 'vscode';
 
-export class FileProvider {
-    public static createEditorListenr(): vscode.Disposable {
-        return vscode.window.onDidChangeActiveTextEditor((e) => {
+export const FileProvider = {
+    createEditorListenr: (): vscode.Disposable => vscode.window.onDidChangeActiveTextEditor(
+        (e) => {
             if (e && e.document.languageId === 'ahk' && e.document.getText() === '') {
                 vscode.commands.executeCommand('editor.action.insertSnippet', { name: 'AhkTemplate' });
             }
-        });
-    }
-}
+        },
+    ),
+};

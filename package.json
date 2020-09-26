@@ -1,7 +1,7 @@
 {
-    "name": "vscode-autohotkey-outline",
-    "displayName": "AutoHotkey Outline",
-    "description": "AutoHotkey Outline of VSCode",
+    "name": "vscode-autohotkey-neko-help",
+    "displayName": "AutoHotkeyNekoHelp",
+    "description": "AutoHotkey help of VSCode",
     "version": "2.3.1",
     "publisher": "CoffeeChaton",
     "engines": {
@@ -39,42 +39,47 @@
         "commands": [
             {
                 "command": "ahk.bar.click",
-                "title": "TODO AhkOutline StatusBar Click"
+                "title": "AhkNekoHelp StatusBar Click clear cash"
             }
         ],
         "configuration": {
             "type": "object",
-            "title": "AhkOutline",
+            "title": "AhkNekoHelp",
             "properties": {
-                "AhkOutline.statusBar.showVersion": {
+                "AhkNekoHelp.statusBar.showVersion": {
                     "type": "boolean",
                     "default": false,
-                    "description": "show ahk outline version at status bar, default is false."
+                    "description": "show ahk NekoHelp version at status bar, default is false."
                 },
-                "AhkOutline.statusBar.showTime": {
+                "AhkNekoHelp.statusBar.showTime": {
                     "type": "boolean",
                     "default": true,
                     "description": "display resolution time as millisecond at status bar, default is true."
                 },
-                "AhkOutline.statusBar.showFileName": {
+                "AhkNekoHelp.statusBar.showFileName": {
                     "type": "boolean",
                     "default": false,
                     "description": "display your ahk file name at status bar, default is false."
                 },
-                "AhkOutline.statusBar.displayColor": {
+                "AhkNekoHelp.statusBar.displayColor": {
                     "type": "string",
                     "default": "#e783e1",
                     "description": "color of status bar, use '' to use theme color,or use HTML Color, exp: '#D382FF' or 'rgb(255,255,100)"
                 },
-                "AhkOutline.hover.showParm": {
+                "AhkNekoHelp.hover.showParm": {
                     "type": "boolean",
                     "default": true,
                     "description": "when hover a function to show this Parm."
                 },
-                "AhkOutline.hover.showComment": {
+                "AhkNekoHelp.hover.showComment": {
                     "type": "boolean",
                     "default": true,
                     "description": "when hover a function to show this Comment."
+                },
+                "AhkNekoHelp.format.textReplace": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "auto call textReplace & diff"
                 }
             }
         },
@@ -114,7 +119,6 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "@babel/plugin-proposal-do-expressions": "^7.10.4",
         "@types/glob": "^7.1.3",
         "@types/mocha": "^7.0.1",
         "@types/node": "^14.0.27",
@@ -137,8 +141,6 @@
         "eslint-plugin-security": "^1.4.0",
         "eslint-plugin-typescript": "^0.14.0",
         "generator-code": "^1.2.19",
-        "get-port": "^5.1.1",
-        "glob": "^7.1.6",
         "mocha": "^8.1.0",
         "prettier": "^2.0.5",
         "prettier-eslint": "^11.0.0",
@@ -147,10 +149,11 @@
         "typescript-eslint-parser": "^22.0.0",
         "vscode-debugadapter": "^1.41.1",
         "vscode-test": "^1.4.0",
-        "xml2js": "^0.4.23"
+        "@types/temp": "^0.8.34",
+        "vscode-oniguruma": "^1.3.1"
     },
     "dependencies": {
         "fs": "0.0.2",
-        "vscode-oniguruma": "^1.3.1"
+        "temp": "^0.9.1"
     }
 }

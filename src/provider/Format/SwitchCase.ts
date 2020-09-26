@@ -1,4 +1,3 @@
-
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
 import * as vscode from 'vscode';
 // import { removeSpecialChar2, getSkipSign } from '../../tools/removeSpecialChar';
@@ -7,7 +6,7 @@ import { getRange } from '../../tools/getRange';
 // Switch case
 
 export function getSwitchRange(document: vscode.TextDocument, textFix: string, line: number, RangeEnd: number): vscode.Range | false {
-    if ((/^switch\s/).test(textFix) === false) return false;
+    if ((/^\s*switch\s/i).test(textFix) === false) return false;
 
     const lineFix = textFix.endsWith('{') ? line : line + 1;
     const range = getRange(document, lineFix, lineFix, RangeEnd);
@@ -25,8 +24,8 @@ export function inSwitchBlock(textFix: string, line: number, switchRangeArray: v
         }
     }
 
-    if ((/^case\s/).test(textFix)
-        || (/^default\s/).test(textFix)) {
+    if ((/^\s*case\s/i).test(textFix)
+        || (/^\s*default[\s:]/i).test(textFix)) {
         switchDeep -= 1;
     }
     return switchDeep;

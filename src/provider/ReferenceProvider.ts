@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { userDef } from './DefProvider';
+import { userDef } from './Def/DefProvider';
 
 export class ReferenceProvider implements vscode.ReferenceProvider {
     //  Go to References search (via Shift+F12),

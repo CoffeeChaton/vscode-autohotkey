@@ -1,15 +1,16 @@
-# vscode-autohotkey-Outline
+# vscode-autohotkey-NekoHelp
 
 > Base of [cweijan /vscode-autohotkey](https://github.com/cweijan/vscode-autohotkey)
 
 AutoHotKey language support for VS Code
 
--   [vscode-autohotkey-Outline](#vscode-autohotkey-outline)
-    -   [CodeSymbol](#codesymbol)
-    -   [GotoDefinition](#gotodefinition)
-    -   [Hover](#hover)
-    -   [CodeFormat](#codeformat)
-    <!-- -   [IntelliSense](#IntelliSense) -->
+- [vscode-autohotkey-NekoHelp](#vscode-autohotkey-nekohelp)
+  - [MethodSymbol](#methodsymbol)
+  - [CodeSymbol](#codesymbol)
+  - [GotoDefinition](#gotodefinition)
+  - [Hover](#hover)
+  - [CodeFormat](#codeformat)
+        <!-- -   [IntelliSense](#IntelliSense) -->
 
 ## MethodSymbol
 
@@ -51,7 +52,7 @@ AutoHotKey language support for VS Code
 3. Peek Definition (via `Alt+F12`)
 4. List all references
    ![ListAllReferences](image/ListAllReferences.jpg)
-    <!-- 5. Go to References search (via Shift+F12) -->
+      <!-- 5. Go to References search (via Shift+F12) -->
 
 ## Hover
 

@@ -5,8 +5,8 @@ const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignmen
 statusBarItem.tooltip = 'this extensions by CoffeeChaton/vscode-ahk-outline';
 statusBarItem.command = 'ahk.bar.click';
 
-let configs = vscode.workspace.getConfiguration('AhkOutline');
-let config = Object.freeze({
+let configs = vscode.workspace.getConfiguration('AhkNekoHelp');
+let config = {
     statusBar: {
         showVersion: configs.get('statusBar.showVersion') as boolean,
         showTime: configs.get('statusBar.showTime') as boolean,
@@ -17,10 +17,13 @@ let config = Object.freeze({
         showParm: configs.get('hover.showParm') as boolean,
         showComment: configs.get('hover.showComment') as boolean,
     },
-});
+    format: {
+        textReplace: configs.get('format.textReplace') as boolean,
+    },
+};
 
 export function configChangEvent(): void {
-    configs = vscode.workspace.getConfiguration('AhkOutline');
+    configs = vscode.workspace.getConfiguration('AhkNekoHelp');
     config = {
         statusBar: {
             showVersion: configs.get('statusBar.showVersion') as boolean,
@@ -32,29 +35,35 @@ export function configChangEvent(): void {
             showParm: configs.get('hover.showParm') as boolean,
             showComment: configs.get('hover.showComment') as boolean,
         },
+        format: {
+            textReplace: configs.get('format.textReplace') as boolean,
+        },
     };
 }
 
 export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     const time = Date.now() - timeStart;
     const fsPathRaw = uri.fsPath;
-    const version = config.statusBar.showVersion ? 'v0.4b, ' : '';
+    const version = config.statusBar.showVersion ? 'v0.4c, ' : '';
     const timeSpend = config.statusBar.showTime ? `${time} ms` : '';
     const name = config.statusBar.showFileName
-        ? `, ${fsPathRaw.substr(fsPathRaw.lastIndexOf('\\') + 1)}`
+        ? `${fsPathRaw.substring(fsPathRaw.lastIndexOf('\\') + 1)}`
         : '';
-    const text = `$(heart) ${version}${timeSpend}${name}`;
+    const text = `$(heart) ${version}${timeSpend} of ${name}`;
     statusBarItem.text = text;
-    console.log(`${timeSpend}  ${name}`);
+    console.log(time, ` ms of ${name}`);
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
 }
 
-export function getHoverConfig(): { showParm: boolean; showComment: boolean } {
+export function getHoverConfig(): { showComment: boolean } {
     return config.hover;
 }
 
-// console.log(JSON.stringify(temp));
+export function getFormatConfig(): boolean {
+    return config.format.textReplace;
+}
+// console.log(JSON.stringify(val));
 // vscode.window.setStatusBarMessage(timeSpend);
 // vscode.window.showErrorMessage()
 // vscode.window.showInformationMessage()

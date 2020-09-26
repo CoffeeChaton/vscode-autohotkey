@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint max-classes-per-file: ["error", 3] */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
-
+/*
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { tryGetSymbol } from './DefProvider';
@@ -69,3 +69,4 @@ export class CompletionComma implements vscode.CompletionItemProvider {
     //     return new vscode.CompletionItem(label, kind);
     // }
 }
+*/
