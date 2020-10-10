@@ -10,18 +10,18 @@ export function thisLineDeep(textFix: string): 1 | 0 {
     }
     const CLL = [
         /^[,.?]/,
-        /^:[^:]/,
+        /^:[^:]/, // ? : Ternary operation -> ':' // if (hasDoubleSemicolon === true)  will not goto this line.
         /^\+[^+]/, // +
         /^-[^-]/, // -
-        /^and\b/,
-        /^or\b/,
-        /^\|\|/,
-        /^&&/,
-        /^[!~&/<>|^]/,
-        /^\*[^/]/, // *
+        /^\*[^/]/, // /^*/  but not */
         /^\//, // /
-        /^new\b\s/,
-        /^not\b\s/,
+        /^and\b/i,
+        /^or\b/i,
+        /^\|\|/i, // ||
+        /^&&/, // &&
+        /^[!~&/<>|^]/,
+        /^new\b/i,
+        /^not\b/i,
         // Don't do it /^%/, because ``` %i%Name := ... ```
     ];
     const iMax = CLL.length;

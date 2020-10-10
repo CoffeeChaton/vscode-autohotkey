@@ -5,7 +5,6 @@ import { DefProvider } from './provider/Def/DefProvider';
 import { FileProvider } from './provider/FileProvider';
 import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
-// import { RenameProvider } from './provider/RenameProvider';
 import { SymBolProvider } from './provider/SymbolProvider';
 import { HoverProvider } from './provider/HoverProvider';
 import { configChangEvent } from './configUI';
@@ -27,7 +26,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.workspace.onDidChangeConfiguration(() => configChangEvent()),
         vscode.workspace.onDidDeleteFiles((e) => Detecter.delMap(e)),
         vscode.workspace.onDidCreateFiles((e) => Detecter.createMap(e)),
-        vscode.workspace.onDidRenameFiles((e) => Detecter.renameMap(e)),
+        vscode.workspace.onDidRenameFiles((e) => Detecter.renameFileName(e)),
         vscode.commands.registerCommand('ahk.bar.click', () => { statusBarClick(); }),
     );
     const ahkRootPath = vscode.workspace.workspaceFolders;

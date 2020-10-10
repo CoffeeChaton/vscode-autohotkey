@@ -5,12 +5,13 @@
 import * as vscode from 'vscode';
 import { inCommentBlock } from '../../tools/inCommentBlock';
 import { inLTrimRange } from '../../tools/inLTrimRange';
-import { removeSpecialChar2, getSkipSign } from '../../tools/removeSpecialChar';
+import { getLStr, getSkipSign } from '../../tools/removeSpecialChar';
 import { callDiff, DiffType } from '../../tools/Diff';
+import { VERSION } from '../../globalEnum';
 
 function showWarn(timeStart: number): void {
     const time = Date.now() - timeStart;
-    vscode.window.showInformationMessage(`Format Selection is Beta 0.4,\nauto diff is v0.2, ${time}ms`);
+    vscode.window.showInformationMessage(`Format Selection is ${VERSION.formatRange}, ${time}ms`);
 }
 function textReplace(textElement: string): string {
     return textElement.replace(/ *, */g, ', ')
@@ -19,7 +20,7 @@ function textReplace(textElement: string): string {
         // .replace(/ *== */g, ' == ') test err
         // .replace(/ *>= */g, ' >= ') test err
         // .replace(/ *<= */g, ' <= ') test err
-        // TODO   .replace(/ *== */g, ' == ')
+        // TODO .replace(/ *== */g, ' == ')
         .replace(/ *\.= */g, ' .= ')
         .replace(/ *\+= */g, ' += ')
         .replace(/ *-= */g, ' -= ')
@@ -35,7 +36,7 @@ function textReplace(textElement: string): string {
         .replace(/ *\]/g, ']')
         .replace(/ *\{ */g, ' {')
         .replace(/ *\}/g, '}')
-        .replace(/\}  */g, '} ')
+        .replace(/\}  */g, '} ') // TODO WTF double \s ?
         .replace(/\)\s*\{ */g, ') {')
         .replace(/\bif\s*\(/g, 'if (')
         .replace(/\bIf\s*\(/g, 'If (')
@@ -98,7 +99,7 @@ export function RangeFormat(RangeTextRaw: string, RangeText: string, fsPath: str
     for (let line = 0; line < lineMax; line += 1) {
         const text = textLineGroup[line];
         CommentBlock = inCommentBlock(text, CommentBlock);
-        const textFix = removeSpecialChar2(text).trim();
+        const textFix = getLStr(text).trim();
         inLTrim = inLTrimRange(textFix, inLTrim);
 
         textNew += (CommentBlock || textFix === '' || inLTrim > 0 || getSkipSign(textFix) || textFix.startsWith(':') || textFix.includes('::'))

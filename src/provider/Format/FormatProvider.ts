@@ -5,7 +5,7 @@
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
 import * as vscode from 'vscode';
-import { removeSpecialChar2, getSkipSign } from '../../tools/removeSpecialChar';
+import { getLStr, getSkipSign } from '../../tools/removeSpecialChar';
 import { inCommentBlock } from '../../tools/inCommentBlock';
 import { inLTrimRange } from '../../tools/inLTrimRange';
 import { getSwitchRange, inSwitchBlock } from './SwitchCase';
@@ -16,11 +16,9 @@ import { getDeepLTrim } from './getDeepLTrim';
 import { isHotStr, isLabel } from './isLabelOrHotStr';
 import { getFormatConfig } from '../../configUI';
 import { RangeFormat } from '../FormatRange/RangeFormatProvider';
-
-function fullDocumentRange(document: vscode.TextDocument): vscode.Range {
-    const endLine = document.lineCount - 1;
-    return new vscode.Range(0, 0, endLine, document.lineAt(endLine).text.length);
-}
+import { Pretreatment } from '../../tools/Pretreatment';
+import { getFullDocumentRange } from '../../tools/getFullDocumentRange';
+import { VERSION } from '../../globalEnum';
 
 function Hashtag(textFix: string): '#if' | '#HotString' | '' {
     if (textFix === '') return '';
@@ -38,7 +36,7 @@ function Hashtag(textFix: string): '#if' | '#HotString' | '' {
 }
 
 function isReturn(tagDeep: number, deep: number, textRaw: string): boolean {
-    return (tagDeep === deep && textRaw.trim().toLowerCase() === 'return');
+    return (tagDeep === deep && (/^\s*return\s*$/i).test(textRaw));
 }
 
 function calcDeep(textFix: string): number {
@@ -89,6 +87,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
         const timeStart = Date.now();
+        const DocStrMap = Pretreatment(document.getText().split('\n'));
         let WarnFmtDocWarn = ''; // WARN TO USE THIS !!
         let deep = 0;
         let tagDeep = 0;
@@ -110,7 +109,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
             inLTrim = inLTrimRange(textRaw, inLTrim);
             const textFix = (CommentBlock || getSkipSign(textRaw) || inLTrim > 0)
                 ? ''
-                : removeSpecialChar2(textRaw).trim();
+                : getLStr(textRaw).trim();
 
             const hasHashtag = Hashtag(textFix);
             const HotStr = isHotStr(textFix);
@@ -120,14 +119,14 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
                 || (tagDeep > 0 && tagDeep === deep && HotStr) // `::btw::\n`
                 || (tagDeep > 0 && tagDeep === deep && Label) //  `label:`
             ) {
-                deep -= 1;
+                deep--;
             }
 
             if (deep < 0) deep = 0;
             WarnFmtDocWarn = `${WarnFmtDocWarn + fn_Warn_thisLineText_WARN(textFix, line, CommentBlock, occ,
                 deep, inLTrim, textRaw, switchRangeArray, document, options)}\n`;
 
-            const switchRange = getSwitchRange(document, textFix, line, lineMax);
+            const switchRange = getSwitchRange(document, DocStrMap, textFix, line, lineMax);
             if (switchRange) switchRangeArray.push(switchRange);
 
             if (hasHashtag) { // #IF  #hotstring
@@ -147,12 +146,12 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
                 ? occ
                 : getDeepKeywords(textFix, occ); // TODO fmt_a1
         }
-        vscode.window.showInformationMessage(`Format Document is Beta v0.48, ${Date.now() - timeStart}ms`);
+        vscode.window.showInformationMessage(`Format Document is Beta ${VERSION.format}, ${Date.now() - timeStart}ms`);
 
         WarnFmtDocWarn = WarnFmtDocWarn.replace(/\n{2,}/g, '\n\n')
             .replace(/\n*$/, '\n');// doc finish just need one \n
 
-        const fullRange = fullDocumentRange(document);
+        const fullRange = getFullDocumentRange(document);
 
         return getFormatConfig()
             ? RangeFormat(document.getText(), WarnFmtDocWarn, document.uri.fsPath, fullRange)

@@ -2,14 +2,15 @@
 import * as vscode from 'vscode';
 // import { removeSpecialChar2, getSkipSign } from '../../tools/removeSpecialChar';
 import { getRange } from '../../tools/getRange';
-
+import { TDocArr } from '../../globalEnum';
 // Switch case
 
-export function getSwitchRange(document: vscode.TextDocument, textFix: string, line: number, RangeEnd: number): vscode.Range | false {
+export function getSwitchRange(document: vscode.TextDocument, DocStrMap: TDocArr, textFix: string, line: number, RangeEnd: number)
+    : false | vscode.Range {
     if ((/^\s*switch\s/i).test(textFix) === false) return false;
 
     const lineFix = textFix.endsWith('{') ? line : line + 1;
-    const range = getRange(document, lineFix, lineFix, RangeEnd);
+    const range = getRange(DocStrMap, lineFix, lineFix, RangeEnd);
     const PosStart = new vscode.Position(range.start.line, document.lineAt(range.start.line + 1).range.end.character);
     const PosEnd = new vscode.Position(range.end.line - 1, document.lineAt(range.end.line - 1).range.end.character);
     return new vscode.Range(PosStart, PosEnd);

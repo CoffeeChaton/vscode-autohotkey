@@ -1,8 +1,8 @@
+/* eslint-disable security/detect-object-injection */
+/* eslint-disable no-plusplus */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
 import { thisLineDeep } from './thisLineDeep';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [P in keyof T]: DeepReadonly<T[P]> };
+import { DeepReadonly } from '../../globalEnum';
 
 export function getDeepKeywords(textFix: string, oneCommandCode: number): number {
     const occ = Math.max(oneCommandCode, 0);

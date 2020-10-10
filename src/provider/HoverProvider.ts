@@ -4,15 +4,12 @@
 
 import * as vscode from 'vscode';
 import { tryGetSymbol } from './Def/DefProvider';
-import { EMode } from '../globalEnum';
+import { EMode, MyDocSymbol } from '../globalEnum';
 import { setFuncHoverMD } from '../tools/setHoverMD';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [P in keyof T]: DeepReadonly<T[P]> };
+const wm: WeakMap<MyDocSymbol, vscode.Hover> = new WeakMap();
 
-const wm: WeakMap<DeepReadonly<vscode.DocumentSymbol>, vscode.Hover> = new WeakMap();
-
-async function HoverFunc(wordLower: string, textRaw: string): Promise<vscode.Hover | false> {
+async function HoverFunc(wordLower: string, textRaw: string): Promise<false | vscode.Hover> {
     const isFunc = new RegExp(`(?<!\\.)(${wordLower})\\(`, 'i'); // not search class.Method()
     if (isFunc.test(textRaw) === false) return false;
 
@@ -21,6 +18,7 @@ async function HoverFunc(wordLower: string, textRaw: string): Promise<vscode.Hov
     const cache = wm.get(hasSymbol.AhkSymbol);
     if (cache !== undefined) {
         //  console.log('WeakMap -> wordLower :', wordLower);
+        //  console.log('WeakMap -> AhkSymbol -> range :', hasSymbol.AhkSymbol.range);
         //  console.log('WeakMap -> fsPath :', hasSymbol.fsPath);
         return cache;
     }

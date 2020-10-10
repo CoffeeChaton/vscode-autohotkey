@@ -1,56 +1,83 @@
+/* eslint-disable no-console */
+/* eslint-disable security/detect-object-injection */
 /* eslint-disable @typescript-eslint/no-type-alias */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
 import * as vscode from 'vscode';
-import { removeSpecialChar2 } from './removeSpecialChar';
+import { TDocArr } from '../globalEnum';
 
-type FuncDefData = {
+export type FuncDefData = {
     name: string;
-    searchLine: number; // Range: vscode.Range
-    // selectionRange: vscode.Range
+    selectionRange: vscode.Range;
 };
 
-export function getFuncDef(document: vscode.TextDocument, line: number): FuncDefData | false {
-    const lineText = (searchLine: number): string => removeSpecialChar2(document.lineAt(searchLine).text).trim();
-    const getFuncTail = (searchText: string, name: string, searchLine: number): FuncDefData | false => {
-        const fnTail = /\)\s*\{$/;
-        // i+1   ^, something , something ........ ) {$
-        if (fnTail.test(searchText)) return { name, searchLine };
+function lineText(DocStrMap: TDocArr, searchLine: number): string {
+    return DocStrMap[searchLine].lStr;
+}
 
-        if (searchLine + 1 === document.lineCount) return false;
+type FuncTailType = { DocStrMap: TDocArr, searchText: string, name: string, searchLine: number, defLine: number };
 
-        // i+1   ^, something , something ......)$
-        // i+2   ^{
-        const fnTail2 = ')';// /\)$/;
-        const fnTail3 = '{';// /^\{/;
-        if (searchText.endsWith(fnTail2)
-            && lineText(searchLine + 1).startsWith(fnTail3)) {
-            return { name, searchLine };
-        }
+function getSelectionRange(DocStrMap: TDocArr, defLine: number, blockStartLine: number): vscode.Range {
+    // const argPos = Math.max(DocStrMap[defLine].lStr.indexOf('('), 0);
+    const blockEndPos = DocStrMap[blockStartLine].lStr.indexOf('{');
+    const endLen = blockEndPos === -1 ? DocStrMap[blockStartLine].lStr.length : blockEndPos;
+    return new vscode.Range(
+        new vscode.Position(defLine, 0),
+        new vscode.Position(blockStartLine, endLen + 1),
+    );
+}
 
-        return false;
-    };
-    const fnHeadMatch = /^(\w\w*)\(/;
-    const textFix = lineText(line);
+function getFuncTail({
+    DocStrMap, searchText, name, searchLine, defLine,
+}: FuncTailType): false | FuncDefData {
+    const fnTail = /\)\s*\{\s*$/;
+    // i+1   ^, something , something ........ ) {$
+    if (fnTail.test(searchText)) {
+        const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine);
+        return { name, selectionRange };
+    }
+    if (searchLine + 1 > DocStrMap.length) return false;
+
+    // i+1   ^, something , something ......)$
+    // i+2   ^{
+    if ((/\)\s*$/).test(searchText)
+        && lineText(DocStrMap, searchLine + 1).trimStart().startsWith('{')) {
+        const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine + 1);
+        return { name, selectionRange };
+    }
+
+    return false;
+}
+
+export function getFuncDef(DocStrMap: TDocArr, defLine: number): false | FuncDefData {
+    const fnHeadMatch = /^\s*(\w\w*)\(/; //  funcName(...
+    const textFix = lineText(DocStrMap, defLine);
     const fnHead = fnHeadMatch.exec(textFix);
     if (fnHead === null) return false;
-    const name = fnHead[1];
-    const nameLowerCase = name.toLowerCase();
-    if (nameLowerCase === 'if' || nameLowerCase === 'while') return false;
 
-    const funcData = getFuncTail(textFix, name, line);
+    const name = fnHead[1];
+    if ((/^\s*(if|while)\s*$/i).test(name)) return false;
+
+    const funcData = getFuncTail({
+        DocStrMap,
+        searchText: textFix,
+        name,
+        searchLine: defLine,
+        defLine,
+    });
     if (funcData) return funcData;
 
-    const firstLineText = lineText(line);
-    if (firstLineText.includes(')')) return false;// fn_Name( ... ) ...  ,this is not ahk function
+    if (lineText(DocStrMap, defLine).includes(')')) return false;// fn_Name( ... ) ...  ,this is not ahk function
 
-    const iMaxRule = 15;
-    const iMax = Math.min(line + iMaxRule, document.lineCount, 10000);
+    // eslint-disable-next-line no-magic-numbers
+    const iMax = defLine + 15;
+    for (let searchLine = defLine + 1; searchLine < iMax; searchLine += 1) {
+        const searchText = lineText(DocStrMap, searchLine);
 
-    for (let searchLine = line + 1; searchLine < iMax; searchLine += 1) {
-        const searchText = lineText(searchLine);
-        if (searchText.startsWith(',') === false) return false;
+        if ((/^\s*,/).test(searchText) === false) return false;
 
-        const funcData2 = getFuncTail(searchText, name, searchLine);
+        const funcData2 = getFuncTail({
+            DocStrMap, searchText, name, searchLine, defLine,
+        });
         if (funcData2) return funcData2;
     }
     return false;

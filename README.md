@@ -4,12 +4,12 @@
 
 AutoHotKey language support for VS Code
 
-- [vscode-autohotkey-NekoHelp](#vscode-autohotkey-nekohelp)
-  - [MethodSymbol](#methodsymbol)
-  - [CodeSymbol](#codesymbol)
-  - [GotoDefinition](#gotodefinition)
-  - [Hover](#hover)
-  - [CodeFormat](#codeformat)
+-   [vscode-autohotkey-NekoHelp](#vscode-autohotkey-nekohelp)
+    -   [MethodSymbol](#methodsymbol)
+    -   [CodeSymbol](#codesymbol)
+    -   [GotoDefinition](#gotodefinition)
+    -   [Hover](#hover)
+    -   [CodeFormat](#codeformat)
         <!-- -   [IntelliSense](#IntelliSense) -->
 
 ## MethodSymbol
@@ -50,7 +50,7 @@ AutoHotKey language support for VS Code
 1. Go to Definition (via `F12` or `Ctrl+Click`)
 2. open the definition to the side with ( via `Ctrl+Alt+Click` )
 3. Peek Definition (via `Alt+F12`)
-4. List all references
+4. List all references (via `shift+F12`)
    ![ListAllReferences](image/ListAllReferences.jpg)
       <!-- 5. Go to References search (via Shift+F12) -->
 
@@ -58,24 +58,23 @@ AutoHotKey language support for VS Code
 
 1. Hover function to show return value or comment
 
-    ![hover1](image/hover1.jpg)
     ![hover2](image/hover2.jpg)
 
 2. how to add comment of function ?
 
 ```ahk
-/*
-    @ in comment block.
-    @ and the line first character is '@'
-    @ can use partial grammar of markdown.
-    @ exp@email.com
-    @ [Markdown Rule](https://en.wikipedia.org/wiki/Markdown)
-    @ <https://en.wikipedia.org/wiki/Markdown>
-    @ ![Image](/D:/icon.png "icon")
-    @ ~~ABC~~
-    @ _ABC_ _ABC_
-    @ - - -
-    @  `monospace`
+/**
+    ; in /** block.
+    ; and the line first character is '@'
+    ; can use partial grammar of markdown.
+    ; exp@email.com
+    ; [Markdown Rule](https://en.wikipedia.org/wiki/Markdown)
+    ; <https://en.wikipedia.org/wiki/Markdown>
+    ; ![Image](/D:/icon.png "icon")
+    ; ~~ABC~~
+    ; _ABC_ _ABC_
+    ; - - -
+    ;  `monospace`
 */
 ```
 

@@ -1,5 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3] }] */
 import * as vscode from 'vscode';
+import { VERSION } from './globalEnum';
 
 const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
 statusBarItem.tooltip = 'this extensions by CoffeeChaton/vscode-ahk-outline';
@@ -44,7 +45,7 @@ export function configChangEvent(): void {
 export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     const time = Date.now() - timeStart;
     const fsPathRaw = uri.fsPath;
-    const version = config.statusBar.showVersion ? 'v0.4c, ' : '';
+    const version = config.statusBar.showVersion ? VERSION.Parser : '';
     const timeSpend = config.statusBar.showTime ? `${time} ms` : '';
     const name = config.statusBar.showFileName
         ? `${fsPathRaw.substring(fsPathRaw.lastIndexOf('\\') + 1)}`

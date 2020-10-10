@@ -5,25 +5,23 @@
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 import { Out } from '../common/out';
-import { Core, getChildren, LineClass } from './getChildren';
+import { getChildren } from './getChildren';
+import { ParserLine, ParserBlock } from './Parser';
 import { showTimeSpend } from '../configUI';
-import { EStr } from '../globalEnum';
-import { renameFn } from './renameFn';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [P in keyof T]: DeepReadonly<T[P]> };
+import { EStr, MyDocSymbolArr } from '../globalEnum';
+import { renameFn as renameFileNameFunc } from './renameFileNameFunc';
+import { Pretreatment } from '../tools/Pretreatment';
 
 export const Detecter = {
     // key : vscode.Uri.fsPath,
     // val : vscode.DocumentSymbol[]
-    DocMap: new Map() as Map<string, DeepReadonly<vscode.DocumentSymbol[]>>,
+    DocMap: new Map() as Map<string, MyDocSymbolArr>,
 
     getDocMapFile(): IterableIterator<string> {
         return Detecter.DocMap.keys();
     },
 
-    getDocMap(fsPath: string): DeepReadonly<vscode.DocumentSymbol[]> | undefined {
+    getDocMap(fsPath: string): undefined | MyDocSymbolArr {
         //  const Uri = vscode.Uri.file(fsPath);
         return Detecter.DocMap.get(fsPath);
     },
@@ -46,35 +44,38 @@ export const Detecter = {
         }
     },
 
-    renameMap(e: vscode.FileRenameEvent): void {
+    renameFileName(e: vscode.FileRenameEvent): void {
         for (const { oldUri, newUri } of e.files) {
             if (oldUri.fsPath.endsWith('.ahk') && newUri.fsPath.endsWith('.ahk')) {
                 const tempDoc = Detecter.DocMap.get(oldUri.fsPath) || [];
                 Detecter.DocMap.set(newUri.fsPath, tempDoc);
                 Detecter.DocMap.delete(oldUri.fsPath);
                 const fsPathList = Detecter.getDocMapFile();
-                renameFn(oldUri, newUri, [...fsPathList]);
+                renameFileNameFunc(oldUri, newUri, [...fsPathList]);
             }
         }
     },
 
-    async updateDocDef(fsPath: string): Promise<DeepReadonly<vscode.DocumentSymbol[]>> {
-        //    const Uri = vscode.Uri.file(fsPath);
-        const document = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
+    async updateDocDef(fsPath: string): Promise<vscode.DocumentSymbol[]> {
+        const Uri = vscode.Uri.file(fsPath);
+        const document = await vscode.workspace.openTextDocument(Uri);
         const timeStart = Date.now();
-        const result: DeepReadonly<vscode.DocumentSymbol[]> = getChildren({
-            document,
-            RangeStart: -1,
-            RangeEnd: Math.min(document.lineCount, 10000),
+        const DocStrMap = Pretreatment(document.getText().split('\n'));
+        const result = getChildren({
+            Uri,
+            DocStrMap,
+            RangeStartLine: 0,
+            RangeEndLine: DocStrMap.length,
             inClass: false,
-            fnList: [Core.getClass, Core.getFunc, Core.getComment, Core.getSwitchBlock, LineClass.getLine],
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            fnList: [ParserBlock.getClass, ParserBlock.getFunc, ParserBlock.getComment, ParserBlock.getSwitchBlock, ParserLine],
         });
 
         if (fsPath.includes(EStr.diff_name_prefix) === false) {
             showTimeSpend(document.uri, timeStart);
             Detecter.DocMap.set(fsPath, result);
         }
-        return result;
+        return result as vscode.DocumentSymbol[];
     },
 
     buildByPath(buildPath: string): void {

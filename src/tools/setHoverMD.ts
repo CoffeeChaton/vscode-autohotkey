@@ -6,16 +6,13 @@
 /* eslint max-params: ["error", 8] */
 
 import * as vscode from 'vscode';
-import { removeSpecialChar, getSkipSign } from './removeSpecialChar';
-import { EMode } from '../globalEnum';
+import { EMode, MyDocSymbol } from '../globalEnum';
 import { getHoverConfig } from '../configUI';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [P in keyof T]: DeepReadonly<T[P]> };
+import { Pretreatment } from './Pretreatment';
 
 function commentFix(commentText: string): string {
-    return commentText
-        ? `/*  \n  \n${commentText}  \n*/  \n`
+    return commentText !== ''
+        ? `/**  \n  \n${commentText}  \n*/  \n`
         : '  \n'; // '/* not comment */  \n';
 }
 
@@ -26,11 +23,11 @@ function getCommentText(textRaw: string): string {
         : '';
 }
 
-function getReturnText(textFixNot2: string): string {
-    const ReturnMatch = (/\breturn\b[\s,][\s,]*(.+)/i).exec(textFixNot2);
-    if (ReturnMatch === null) return '';
+function getReturnText(lStr: string, textRaw: string): string {
+    const col = lStr.search(/\breturn\b[\s,][\s,]*.+/i);
+    if (col === -1) return '';
 
-    let name = ReturnMatch[1].trim();
+    let name = textRaw.substring(col).trim();
     const Func = (/^(\w\w*)\(/).exec(name);
     if (Func) {
         name = `${Func[1]}(...)`;
@@ -38,46 +35,45 @@ function getReturnText(textFixNot2: string): string {
         const returnObj = (/^(\{\s*\w\w*\s*:)/).exec(name);
         if (returnObj) name = `obj ${returnObj[1]}`;
     }
-    return `    Return ${name.trim()}\n`;
+    return `${name.trim()}\n`;
 }
 
 export function inCommentBlock2(textRaw: string, CommentBlock: boolean): boolean {
-    // const textFix = textRaw.trimStart();
-    // if (textFix.startsWith('/**')) return true;
-    // if (textFix.startsWith('*/')) return false;
-    if ((/\s*\/\*\*/).test(textRaw)) return true;
-    if ((/\s*\*\//).test(textRaw)) return false;
+    if ((/\s*\/\*\*/).test(textRaw)) return true; // /**
+    if ((/\s*\*\//).test(textRaw)) return false; // */
     return CommentBlock;
 }
 
 export async function setFuncHoverMD(hasSymbol: {
-    AhkSymbol: DeepReadonly<vscode.DocumentSymbol>;
+    AhkSymbol: MyDocSymbol;
     fsPath: string;
 }): Promise<vscode.Hover> {
     const document = await vscode.workspace.openTextDocument(vscode.Uri.file(hasSymbol.fsPath));
     const { showComment } = getHoverConfig();
-    const starLine = hasSymbol.AhkSymbol.range.start.line;
-    const endLine = hasSymbol.AhkSymbol.range.end.line;
+
     // --set end---
 
     let commentBlock = false;
     let commentText = '';
     let returnList = '';
+    const DocStrMap = Pretreatment(document.getText(hasSymbol.AhkSymbol.range).split('\n'));
+    const starLine = 0;
+    const endLine = DocStrMap.length;
     for (let line = starLine; line < endLine; line += 1) {
-        const textRaw = document.lineAt(line).text;
-        commentBlock = inCommentBlock2(textRaw, commentBlock);
-        if (commentBlock) {
-            commentText += showComment ? getCommentText(textRaw) : '';
-            continue;
+        if (showComment) {
+            const textRawF = DocStrMap[line].textRaw;
+            commentBlock = inCommentBlock2(textRawF, commentBlock);
+            if (commentBlock) {
+                commentText += getCommentText(textRawF);
+                continue;
+            }
         }
-        returnList += getReturnText(textRaw);
+        returnList += getReturnText(DocStrMap[line].lStr, DocStrMap[line].textRaw);
     }
 
     const kindDetail = `(${EMode.ahkFunc}) ${hasSymbol.AhkSymbol.detail}\n`;
     const title = document.getText(hasSymbol.AhkSymbol.selectionRange);
-    console.log(': -------------------------------------------------------');
-    console.log('functiongetReturnText -> selectionRange', hasSymbol.AhkSymbol.selectionRange);
-    console.log(': -------------------------------------------------------');
+
     const commentText2 = showComment ? commentFix(commentText) : '';
     const md = new vscode.MarkdownString('', true)
         .appendCodeblock(kindDetail, 'ahk')
