@@ -1,5 +1,3 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
-
 export function getCaseDefaultName(textRaw: string, lStr: string): false | string {
     const isDefault = (/^\s*default\b\s*:/i).test(lStr);
     if (isDefault) return 'Default :';

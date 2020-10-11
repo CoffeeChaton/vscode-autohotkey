@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import * as vscode from 'vscode';
 
 export const FileProvider = {

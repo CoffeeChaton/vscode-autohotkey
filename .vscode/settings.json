@@ -1,11 +1,4 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-    "cSpell.words": [
-        "Codeblock",
-        "Ifmsgbox",
-        "bltrim",
-        "hotstring",
-        "ifwin"
-    ],
-    "python.pythonPath": "C:\\Users\\PC0608\\AppData\\Local\\Programs\\Python\\Python38-32\\python.exe"
+    "cSpell.words": ["Codeblock", "Ifmsgbox", "bltrim", "hotstring", "ifwin"]
 }

@@ -48,6 +48,10 @@
         }
     },
     "rules": {
+        "@typescript-eslint/no-floating-promises": "off",
+        "no-magic-numbers": ["error", { "ignore": [-1, 0, 1] }],
+        "security/detect-object-injection": "off",
+        "no-plusplus": "off",
         "promise/always-return": "error",
         "promise/no-return-wrap": "error",
         "promise/param-names": "error",
@@ -222,7 +226,6 @@
         "nonblock-statement-body-position": "warn",
         "operator-assignment": "warn",
         "prefer-template": "warn",
-        "no-magic-numbers": "error",
         "use-isnan": "error",
         "array-callback-return": "error",
         "prefer-destructuring": "error"

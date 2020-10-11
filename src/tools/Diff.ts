@@ -1,5 +1,4 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
 import * as vscode from 'vscode';
 import * as temp from 'temp';
 import { EStr } from '../globalEnum';

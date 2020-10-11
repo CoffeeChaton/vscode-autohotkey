@@ -1,10 +1,4 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable @typescript-eslint/no-type-alias */
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable security/detect-object-injection */
 /* eslint-disable security/detect-non-literal-regexp */
-/* eslint max-classes-per-file: ["error", 3] */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
 
 // Function     Description
 // FileExist    Checks for the existence of a file or folder and returns its attributes.

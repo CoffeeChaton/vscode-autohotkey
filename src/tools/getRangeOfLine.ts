@@ -1,8 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-plusplus */
-/* eslint-disable security/detect-object-injection */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
-
 import * as vscode from 'vscode';
 import { TDocArr } from '../globalEnum';
 

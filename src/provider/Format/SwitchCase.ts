@@ -1,9 +1,6 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
 import * as vscode from 'vscode';
-// import { removeSpecialChar2, getSkipSign } from '../../tools/removeSpecialChar';
 import { getRange } from '../../tools/getRange';
 import { TDocArr } from '../../globalEnum';
-// Switch case
 
 export function getSwitchRange(document: vscode.TextDocument, DocStrMap: TDocArr, textFix: string, line: number, RangeEnd: number)
     : false | vscode.Range {

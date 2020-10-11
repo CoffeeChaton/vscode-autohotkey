@@ -1,10 +1,5 @@
-/* eslint-disable no-plusplus */
 /* eslint-disable prefer-destructuring */
-/* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-type-alias */
-/* eslint-disable security/detect-object-injection */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 import * as vscode from 'vscode';
 import { TDocArr, DeepReadonly, MyDocSymbol } from '../globalEnum';
 // // import * as Oniguruma from 'vscode-oniguruma';

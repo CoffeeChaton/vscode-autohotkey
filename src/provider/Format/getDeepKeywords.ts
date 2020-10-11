@@ -1,6 +1,3 @@
-/* eslint-disable security/detect-object-injection */
-/* eslint-disable no-plusplus */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
 import { thisLineDeep } from './thisLineDeep';
 import { DeepReadonly } from '../../globalEnum';
 

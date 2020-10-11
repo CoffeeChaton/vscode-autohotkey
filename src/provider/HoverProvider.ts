@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-type-alias */
 /* eslint-disable security/detect-non-literal-regexp */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
 
 import * as vscode from 'vscode';
 import { tryGetSymbol } from './Def/DefProvider';

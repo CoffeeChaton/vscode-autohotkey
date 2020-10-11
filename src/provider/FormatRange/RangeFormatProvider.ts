@@ -1,6 +1,3 @@
-/* eslint-disable prefer-destructuring */
-/* eslint-disable security/detect-object-injection */
-/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
 import * as vscode from 'vscode';
 import { inCommentBlock } from '../../tools/inCommentBlock';
@@ -129,7 +126,6 @@ export class RangeFormatProvider implements vscode.DocumentRangeFormattingEditPr
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         options: vscode.FormattingOptions, token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
         const RangeText = document.getText(range);
-        const fsPath = document.uri.fsPath;
-        return RangeFormat(RangeText, RangeText, fsPath, range);
+        return RangeFormat(RangeText, RangeText, document.uri.fsPath, range);
     }
 }

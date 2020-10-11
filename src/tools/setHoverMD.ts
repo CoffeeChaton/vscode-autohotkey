@@ -1,10 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable max-lines */
-/* eslint-disable @typescript-eslint/no-type-alias */
-/* eslint-disable security/detect-object-injection */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000] }] */
-/* eslint max-params: ["error", 8] */
-
 import * as vscode from 'vscode';
 import { EMode, MyDocSymbol } from '../globalEnum';
 import { getHoverConfig } from '../configUI';

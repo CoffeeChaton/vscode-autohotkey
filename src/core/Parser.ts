@@ -1,10 +1,7 @@
-/* eslint-disable no-plusplus */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable max-lines */
-/* eslint-disable @typescript-eslint/no-type-alias */
-/* eslint-disable security/detect-object-injection */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,20] }] */
 import * as vscode from 'vscode';
 import { getFuncDef } from '../tools/getFuncDef';
 import { getRange } from '../tools/getRange';
@@ -33,7 +30,7 @@ function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
             const obj = (/^(\{\s*\w\w*\s*:)/).exec(name);
             if (obj) name = `ahkObject ${obj[1]}`;
         }
-        // eslint-disable-next-line no-magic-numbers
+
         if (name.length > 20) name = `${name.substring(0, 20)}...`;
     }
 

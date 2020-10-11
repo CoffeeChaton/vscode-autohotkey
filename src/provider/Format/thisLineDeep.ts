@@ -1,5 +1,3 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
-// import { removeSpecialChar2, getSkipSign } from '../../tools/removeSpecialChar';
 import { hasDoubleSemicolon } from './hasDoubleSemicolon';
 
 export function thisLineDeep(textFix: string): 1 | 0 {

@@ -1,5 +1,3 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
-
 export function getSkipSign(text: string): boolean {
     const skipList: RegExp[] = [
         //   /^\s*;/,
@@ -12,19 +10,17 @@ export function getSkipSign(text: string): boolean {
         //  /^\s*::/,
         //  /^menu[,\s]/i,
         //   /^s*loop[,\s][,\s]*parse,/,
-        /^\s*[\w%[][\w%[\]]*\s*=[^=]/, // TraditionAssignment
+        /^\s*[\w%[][\w%[\]]*\s*=[^=]/, // TODO TraditionAssignment
         // [^+\--:=><*!/\w~)"]=[^=]
     ];
     const iMax = skipList.length;
     for (let i = 0; i < iMax; i += 1) {
-        // eslint-disable-next-line security/detect-object-injection
         if (skipList[i].test(text)) return true;
     }
     return false;
 }
 
 function fnReplacer(match: string, p1: string): string {
-    // eslint-disable-next-line no-magic-numbers
     return '_'.repeat(p1.length);
 }
 

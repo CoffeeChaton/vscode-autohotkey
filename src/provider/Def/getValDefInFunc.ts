@@ -1,8 +1,5 @@
 /* eslint-disable security/detect-non-literal-regexp */
-/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable no-console */
-/* eslint-disable no-plusplus */
-/* eslint-disable security/detect-object-injection */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,5] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';

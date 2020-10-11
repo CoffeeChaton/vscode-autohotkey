@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-/* eslint no-magic-numbers: ["error", { "ignore": [0,1] }] */
 //   OK      #Include FileOrDirName
 //           #IncludeAgain FileOrDirName
 //           \*i\s

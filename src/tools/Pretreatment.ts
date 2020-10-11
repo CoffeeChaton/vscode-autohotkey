@@ -1,17 +1,9 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable no-console */
-/* eslint-disable max-statements */
-/* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable max-lines */
-/* eslint-disable @typescript-eslint/no-type-alias */
-/* eslint-disable security/detect-object-injection */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,10000,4,7] }] */
-import * as vscode from 'vscode';
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
+// import * as vscode from 'vscode';
 import { getSkipSign, getLStr } from './removeSpecialChar';
 import { inCommentBlock } from './inCommentBlock';
 import { inLTrimRange } from './inLTrimRange';
 import { TDocArr, TDocArrRaw } from '../globalEnum';
-// // import * as Oniguruma from 'vscode-oniguruma';
 
 export function Pretreatment(documentAll: readonly string[]): TDocArr {
     const result: TDocArrRaw = [];

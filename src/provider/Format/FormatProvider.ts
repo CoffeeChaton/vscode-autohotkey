@@ -1,6 +1,4 @@
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint no-continue: "error" */
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */

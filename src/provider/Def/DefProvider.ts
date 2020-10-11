@@ -1,16 +1,11 @@
-/* eslint-disable no-plusplus */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable @typescript-eslint/no-type-alias */
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable security/detect-object-injection */
 /* eslint-disable security/detect-non-literal-regexp */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { EMode, MyDocSymbol } from '../../globalEnum';
 import { ahkInclude } from './ahkInclude';
 import { kindCheck } from './kindCheck';
-import { Pretreatment } from '../../tools/Pretreatment';
 import { getValDefInFunc } from './getValDefInFunc';
 
 type DefObj = Readonly<{
@@ -42,15 +37,16 @@ export function tryGetSymbol(wordLower: string, mode: EMode): false | { fsPath: 
 
 async function getReference(usingReg: RegExp, timeStart: number, wordLower: string): Promise<vscode.Location[]> {
     const List: vscode.Location[] = [];
-    for (const fsPath of Detecter.getDocMapFile()) {
+    const fsPathList = Detecter.getDocMapFile();
+    for (const fsPath of fsPathList) {
         const document = await vscode.workspace.openTextDocument(fsPath);
-        const DocStrMap = Pretreatment(document.getText().split('\n'));
-        const lineCount = DocStrMap.length;
+        const textRawList = document.getText().split('\n');
+        const lineCount = textRawList.length;
         for (let line = 0; line < lineCount; line++) {
-            const lStr = DocStrMap[line].lStr.trim();
-            if (usingReg.test(lStr)) {
+            const textRaw = textRawList[line].trim();
+            if (usingReg.test(textRaw)) {
                 List.push(new vscode.Location(document.uri,
-                    new vscode.Position(line, DocStrMap[line].textRaw.search(usingReg))));
+                    new vscode.Position(line, textRawList[line].search(usingReg))));
             }
         }
     }

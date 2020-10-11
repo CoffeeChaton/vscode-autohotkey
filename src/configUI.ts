@@ -1,4 +1,3 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3] }] */
 import * as vscode from 'vscode';
 import { VERSION } from './globalEnum';
 

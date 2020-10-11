@@ -1,4 +1,3 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [0,1] }] */
 import * as vscode from 'vscode';
 
 export function getFullDocumentRange(document: vscode.TextDocument): vscode.Range {

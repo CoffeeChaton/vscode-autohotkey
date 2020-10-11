@@ -1,8 +1,4 @@
-/* eslint-disable security/detect-object-injection */
 /* eslint-disable no-await-in-loop */
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable security/detect-non-literal-fs-filename */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10000] }] */
 import * as vscode from 'vscode';
 import { getFileName } from '../tools/getFileName';
 import { Pretreatment } from '../tools/Pretreatment';
