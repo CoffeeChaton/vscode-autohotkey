@@ -150,7 +150,9 @@
         "vscode-debugadapter": "^1.41.1",
         "vscode-test": "^1.4.0",
         "@types/temp": "^0.8.34",
-        "vscode-oniguruma": "^1.3.1"
+        "vscode-oniguruma": "^1.3.1",
+        "benchmark": "^2.1.4",
+        "@types/benchmark": "^1.0.33"
     },
     "dependencies": {
         "fs": "0.0.2",

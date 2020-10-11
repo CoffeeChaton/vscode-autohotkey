@@ -1,16 +1,20 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,3] }] */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable no-console */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 
-function clearOutlineCache(): null {
-    const ahkRootPath = vscode.workspace.rootPath;
+async function clearOutlineCache(): Promise<null> {
+    const timeStart = Date.now();
+    const ahkRootPath = vscode.workspace.workspaceFolders;
     if (ahkRootPath === undefined) {
         vscode.window.showInformationMessage('vscode.workspace.rootPath is undefined');
         return null;
     }
     Detecter.DocMap.clear();
-    Detecter.buildByPath(ahkRootPath);
-    vscode.window.showInformationMessage('Update docFuncMap cash');
+    await Detecter.buildByPathAsync(ahkRootPath[0].uri.fsPath);
+    const timeEnd = Date.now() - timeStart;
+    vscode.window.showInformationMessage(`Update docFuncMap cash (${timeEnd}ms)`);
     return null;
 }
 async function listAhkInclude(): Promise<null> {
@@ -39,8 +43,12 @@ async function listAhkInclude(): Promise<null> {
     OutputChannel.show();
     return null;
 }
+
 export async function statusBarClick(): Promise<null> {
-    const items: string[] = ['1 -> clearOutlineCache', '2 -> list #Include'];
+    const items: string[] = [
+        '1 -> clearOutlineCache',
+        '2 -> list #Include',
+    ];
     const options = await vscode.window.showQuickPick(items);
     switch (options) {
         case '': return null;

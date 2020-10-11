@@ -97,4 +97,21 @@ export const Detecter = {
             Detecter.updateDocDef(vscode.Uri.file(buildPath).fsPath);
         }
     },
+
+    async buildByPathAsync(buildPath: string): Promise<void> {
+        if (fs.statSync(buildPath).isDirectory()) {
+            const files = fs.readdirSync(buildPath);
+            for (const file of files) {
+                if (file.startsWith('.') === false
+                    && (/^out$/i).test(file) === false
+                    && (/^target$/i).test(file) === false) {
+                    // TODO read back file
+                    await Detecter.buildByPathAsync(`${buildPath}/${file}`);
+                }
+            }
+        } else if (buildPath.endsWith('.ahk')) {
+            // const Uri = vscode.Uri.file(buildPath);
+            await Detecter.updateDocDef(vscode.Uri.file(buildPath).fsPath);
+        }
+    },
 };
