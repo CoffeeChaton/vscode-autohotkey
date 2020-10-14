@@ -21,14 +21,14 @@ function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
     const ReturnMatch = regex.exec(textRaw);
     if (ReturnMatch === null) return false;
 
-    let name = ReturnMatch[1].trim();
+    let name = ReturnMatch[1];
     {
-        const Func = (/^(\w\w*)\(/).exec(name);
+        const Func = (/^\s*(\w\w*)\(/).exec(name);
         if (Func) {
             name = `${Func[1]}(...)`;
         } else {
-            const obj = (/^(\{\s*\w\w*\s*:)/).exec(name);
-            if (obj) name = `ahkObject ${obj[1]}`;
+            const obj = (/^\s*(\{\s*\w\w*\s*:)/).exec(name);
+            if (obj) name = `Obj ${obj[1]}`;
         }
 
         if (name.length > 20) name = `${name.substring(0, 20)}...`;
@@ -110,7 +110,6 @@ const LineRuler = {
 } as const;
 
 export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
-    if (FuncInput.lStr.trim() === '') return false;
     const ReturnValue = getReturnByLine(FuncInput);
     if (ReturnValue) return ReturnValue;
 
@@ -131,14 +130,11 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
 
 export const ParserBlock = {
     getCaseDefaultBlock(FuncInput: FuncInputType): false | MyDocSymbol {
-        if (FuncInput.lStr.trim() === '') return false;
-
+        const caseName = getCaseDefaultName(FuncInput.DocStrMap[FuncInput.line].textRaw, FuncInput.lStr);
+        if (caseName === false) return false;
         const {
             Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
         } = FuncInput;
-
-        const caseName = getCaseDefaultName(FuncInput.DocStrMap[FuncInput.line].textRaw, lStr);
-        if (caseName === false) return false;
 
         const Range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
         const selectionRange = Range;
@@ -156,18 +152,15 @@ export const ParserBlock = {
     },
 
     getSwitchBlock(FuncInput: FuncInputType): false | MyDocSymbol {
-        if (FuncInput.lStr.trim() === '') return false;
-
         if ((/^\s*\bswitch\b/i).test(FuncInput.lStr) === false) return false;
 
         const {
-            Uri, DocStrMap, line, RangeEndLine, inClass,
+            Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
         } = FuncInput;
 
-        const textRaw = FuncInput.DocStrMap[FuncInput.line].textRaw;
         const Range = getRange(DocStrMap, line, line, RangeEndLine);
-        const selectionRange = new vscode.Range(new vscode.Position(line, 0), new vscode.Position(line, textRaw.length));
-        const SwitchBlock: MyDocSymbol = new vscode.DocumentSymbol(`Switch ${getSwitchName(textRaw)}`,
+        const selectionRange = getRangeOfLine(DocStrMap, line);
+        const SwitchBlock: MyDocSymbol = new vscode.DocumentSymbol(`Switch ${getSwitchName(lStr)}`,
             '', vscode.SymbolKind.Enum, Range, selectionRange);
         SwitchBlock.children = getChildren({
             Uri,
@@ -213,8 +206,9 @@ export const ParserBlock = {
     },
 
     getClass(FuncInput: FuncInputType): false | MyDocSymbol {
-        if (FuncInput.lStr.trim() === '') return false;
-        const classExec = (/^\s*class\b\s\s*(\w\w*)/i).exec(FuncInput.lStr);
+        if ((/^\s*\bclass\b/i).test(FuncInput.lStr) === false) return false;
+
+        const classExec = (/^\s*\bclass\b\s\s*(\w\w*)/i).exec(FuncInput.lStr);
         if (classExec === null) return false;
 
         const {
@@ -246,10 +240,8 @@ export const ParserBlock = {
         if (Comments) {
             const getName: string = ((): string => {
                 if (line - 1 >= 0) {
-                    const previousLine = textRaw.trim();
-                    const Exec: string[] = (/^(\w\w*)/).exec(previousLine) || [''];
-                    const nameKind = Exec[0];
-                    return nameKind;
+                    const nameKind: string[] = (/^\s*(\w\w*)/).exec(FuncInput.DocStrMap[FuncInput.line - 1].textRaw) || [''];
+                    return nameKind[0];
                 }
                 return '';
             })();

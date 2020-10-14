@@ -13,7 +13,7 @@ import * as vscode from 'vscode';
 
 export function ahkInclude(document: vscode.TextDocument, position: vscode.Position): false | vscode.Location {
     // at #include line
-    const includeExec = (/^#include(?:again)?\s*(?:\*i )?\s*(\S\S*\.ahk)$/i).exec(document.lineAt(position).text.trim());
+    const includeExec = (/^\s*#include(?:again)?\s*(?:\*i )?\s*(\S\S*\.ahk)\s*$/i).exec(document.lineAt(position).text);
     if (includeExec === null) return false;
 
     const length = Math.max(document.uri.path.lastIndexOf('/'), document.uri.path.lastIndexOf('\\'));

@@ -38,7 +38,7 @@ function getFuncTail({
     // i+1   ^, something , something ......)$
     // i+2   ^{
     if ((/\)\s*$/).test(searchText)
-        && lineText(DocStrMap, searchLine + 1).trimStart().startsWith('{')) {
+        && (/^\s*\{/).test(lineText(DocStrMap, searchLine + 1))) {
         const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine + 1);
         return { name, selectionRange };
     }
@@ -47,13 +47,14 @@ function getFuncTail({
 }
 
 export function getFuncDef(DocStrMap: TDocArr, defLine: number): false | FuncDefData {
-    const fnHeadMatch = /^\s*(\w\w*)\(/; //  funcName(...
     const textFix = lineText(DocStrMap, defLine);
-    const fnHead = fnHeadMatch.exec(textFix);
+    if ((/^\s*\b(?:if|while)\b/i).test(textFix) === false) return false;
+
+    const fnHead = (/^\s*(\w\w*)\(/).exec(textFix); //  funcName(...
     if (fnHead === null) return false;
 
     const name = fnHead[1];
-    if ((/^\s*(if|while)\s*$/i).test(name)) return false;
+    // if ((/^\s*\b(?:if|while)\b/i).test(name)) return false;
 
     const funcData = getFuncTail({
         DocStrMap,
