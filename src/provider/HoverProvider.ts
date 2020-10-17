@@ -1,11 +1,16 @@
 /* eslint-disable security/detect-non-literal-regexp */
-
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10,60,1000] }] */
 import * as vscode from 'vscode';
 import { tryGetSymbol } from './Def/DefProvider';
 import { EMode, MyDocSymbol } from '../globalEnum';
 import { setFuncHoverMD } from '../tools/setHoverMD';
 
-const wm: WeakMap<MyDocSymbol, vscode.Hover> = new WeakMap();
+let wm: WeakMap<MyDocSymbol, vscode.Hover> = new WeakMap();
+
+setInterval(() => {
+    wm = new WeakMap();
+    console.log('HoverFunc WeakMap clear 10 min');
+}, 10 * 60 * 1000); // 10 minute
 
 async function HoverFunc(wordLower: string, textRaw: string): Promise<false | vscode.Hover> {
     const isFunc = new RegExp(`(?<!\\.)(${wordLower})\\(`, 'i'); // not search class.Method()
