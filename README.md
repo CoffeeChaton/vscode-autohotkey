@@ -5,17 +5,19 @@
 AutoHotKey language support for VS Code
 
 -   [vscode-autohotkey-NekoHelp](#vscode-autohotkey-nekohelp)
-    -   [MethodSymbol](#methodsymbol)
+    -   [FunctionSymbol](#FunctionSymbol)
     -   [CodeSymbol](#codesymbol)
     -   [GotoDefinition](#gotodefinition)
     -   [Hover](#hover)
     -   [CodeFormat](#codeformat)
         <!-- -   [IntelliSense](#IntelliSense) -->
 
-## MethodSymbol
+## FunctionSymbol
 
-1. Detect source method as symbol
+1. Detect source Function as symbol
 2. Now you can see "Splitting a Long Line into a Series of Shorter Ones" at Outline.
+   https://www.autohotkey.com/docs/Scripts.htm#continuation
+   ![FunctionSymbol](image/FunctionSymbol.png)
 
 ## CodeSymbol
 
@@ -26,23 +28,17 @@ AutoHotKey language support for VS Code
 
 2. You can see Leveled outline
 
--   function
 -   class
--   switch
-<!-- -   for
--   loop -->
--   Static Var
+-   function
 -   Return
--   Case, Default
--   GoSub, GoTo
+-   switch, Case, Default
+-   Static Var
+-   Global Var
 -   Labels, like `this_is_a_label:`
--   New
 -   HotString, like `::ahk::`
 -   HotKeys, like `~F12::`
 -   directive, like `#Include` or `#Warn`
--   global
 -   Throw
--   Reload, Exit, ExitApp, Pasue
     ![codeSymbol3](image/codeSymbol3.jpg)
 
 ## GotoDefinition
@@ -50,9 +46,8 @@ AutoHotKey language support for VS Code
 1. Go to Definition (via `F12` or `Ctrl+Click`)
 2. open the definition to the side with ( via `Ctrl+Alt+Click` )
 3. Peek Definition (via `Alt+F12`)
-4. List all references (via `shift+F12`)
+4. Go to References (via `shift+F12`)
    ![ListAllReferences](image/ListAllReferences.jpg)
-      <!-- 5. Go to References search (via Shift+F12) -->
 
 ## Hover
 

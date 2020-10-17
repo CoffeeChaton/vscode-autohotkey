@@ -57,19 +57,19 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
             kind: vscode.SymbolKind.Event,
         },
         {
-            regex: /^\s*global[\s,][\s,]*(\w[^:=]*)/i, // global
+            regex: /^\s*\bglobal\b[\s,][\s,]*(\w[^:=]*)/i, // global
             name: '',
             detail: 'global',
             kind: vscode.SymbolKind.Variable,
         },
         {
-            regex: /^\s*static[\s,][\s,]*(\w[^:=]*)/i, // static
+            regex: /^\s*\bstatic\b[\s,][\s,]*(\w[^:=]*)/i, // static
             name: '',
             detail: 'static',
             kind: vscode.SymbolKind.Variable,
         },
         {
-            regex: /^\s*throw[\s,][\s,]*(.+)/i, // throw
+            regex: /^\s*\bthrow\b[\s,][\s,]*(.+)/i, // throw
             name: 'throw ',
             detail: 'throw',
             kind: vscode.SymbolKind.Event,

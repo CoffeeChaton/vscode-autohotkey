@@ -29,8 +29,8 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.workspace.onDidRenameFiles((e) => Detecter.renameFileName(e)),
         vscode.commands.registerCommand('ahk.bar.click', () => { statusBarClick(); }),
     );
-    //  const ahkRootPath = vscode.workspace.workspaceFolders;
-    // if (ahkRootPath) Detecter.buildByPath(false, ahkRootPath[0].uri.fsPath);
+    const ahkRootPath = vscode.workspace.workspaceFolders;
+    if (ahkRootPath) Detecter.buildByPath(false, ahkRootPath[0].uri.fsPath);
 }
 
 // TODO https://code.visualstudio.com/api/references/vscode-api#Diagnostic
