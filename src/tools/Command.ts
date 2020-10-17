@@ -1,22 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable no-console */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,200] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 
-async function clearOutlineCache(): Promise<null> {
+async function clearOutlineCache(isTest: boolean): Promise<null> {
     const timeStart = Date.now();
     const ahkRootPath = vscode.workspace.workspaceFolders;
     if (ahkRootPath === undefined) {
         vscode.window.showInformationMessage('vscode.workspace.rootPath is undefined');
         return null;
     }
-    Detecter.DocMap.clear();
-    await Detecter.buildByPathAsync(ahkRootPath[0].uri.fsPath);
-    const timeEnd = Date.now() - timeStart;
-    vscode.window.showInformationMessage(`Update docFuncMap cash (${timeEnd}ms)`);
+    if (!isTest) Detecter.DocMap.clear();
+    await Detecter.buildByPathAsync(isTest, ahkRootPath[0].uri.fsPath);
+    if (!isTest) {
+        const timeEnd = Date.now() - timeStart;
+        vscode.window.showInformationMessage(`Update docFuncMap cash (${timeEnd}ms)`);
+    }
     return null;
 }
+
 async function listAhkInclude(): Promise<null> {
     const fsPathList = Detecter.getDocMapFile();
     const RegexInclude = /^\s*#Include(?:Again)?\s\s*/i;
@@ -46,14 +48,20 @@ async function listAhkInclude(): Promise<null> {
 
 export async function statusBarClick(): Promise<null> {
     const items: string[] = [
-        '1 -> clearOutlineCache',
-        '2 -> list #Include',
+        '0 -> clearOutlineCache',
+        '1 -> list #Include',
+        '2 -> setInterval() ',
     ];
     const options = await vscode.window.showQuickPick(items);
     switch (options) {
         case '': return null;
-        case items[0]: return clearOutlineCache();
+        case items[0]: return clearOutlineCache(false);
         case items[1]: return listAhkInclude();
+        case items[2]:
+            setInterval(() => {
+                clearOutlineCache(true);
+            }, 200);
+            return null;
         default: return null;
     }
 }

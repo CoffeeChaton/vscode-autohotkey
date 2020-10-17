@@ -31,7 +31,7 @@ export type MyDocSymbolArr = DeepReadonly<vscode.DocumentSymbol[]>;
 
 export const enum VERSION {
     Parser = 'v0.6, ',
-    getValDefInFunc = '0.3beta',
+    getValDefInFunc = '0.4beta',
     format = 'v0.48',
     formatRange = ' v0.4a',
 }

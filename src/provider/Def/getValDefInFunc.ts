@@ -1,5 +1,4 @@
 /* eslint-disable security/detect-non-literal-regexp */
-/* eslint-disable no-console */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,5] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
@@ -22,15 +21,15 @@ function isForceLocalMode(docSymbol: MyDocSymbol, document: vscode.TextDocument)
 const enum EFuncPos {
     isFuncName = 1,
     isFuncArg = 2,
-    isLocal = 3,
-    isNotLocal = 0,
+    isInLocal = 3,
+    isNoLocal = 0,
 }
 
 function atFunPos(docSymbol: MyDocSymbol, document: vscode.TextDocument, position: vscode.Position): EFuncPos {
     if (docSymbol.selectionRange.contains(position)) return EFuncPos.isFuncArg;
     if (docSymbol.range.start.line === position.line) return EFuncPos.isFuncName;
-    if (isForceLocalMode(docSymbol, document)) return EFuncPos.isLocal;
-    return EFuncPos.isNotLocal;
+    if (isForceLocalMode(docSymbol, document)) return EFuncPos.isInLocal;
+    return EFuncPos.isNoLocal;
 }
 
 function searchValOfRange(document: vscode.TextDocument, searchRange: vscode.Range, regex: RegExp)
@@ -68,29 +67,35 @@ function wrapper(document: vscode.TextDocument, docSymbol: MyDocSymbol, wordLowe
     : vscode.Location[] {
     const regex = new RegExp(`\\b${wordLower}\\b`, 'i');
     if (listAllUsing) {
+        const debugStr = `list ${wordLower} all using,is ${VERSION.getValDefInFunc}`;
+        console.log(debugStr);
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        vscode.window.showInformationMessage(`list ${wordLower} all using,is ${VERSION.getValDefInFunc}`);
+        //    vscode.window.showInformationMessage(debugStr);
         return searchValOfRange(document, docSymbol.range, regex);
     }
 
     const argDef = searchValOfRange(document, docSymbol.selectionRange, regex);
+    if (argDef.length > 0) return argDef;
 
-    // local varName
-    const localRegex = new RegExp(`\\blocal\\b\\s\\s*\\b${wordLower}\\b`, 'i');
-    const localDeclarations = searchValOfRange(document, docSymbol.range, localRegex);
+    const regList = [
+        // TODO
+        new RegExp(`\\bstatic\\b[,\\s\\w]*\\b${wordLower}\\b`, 'i'),
+        new RegExp(`\\blocal\\b[,\\s\\w]*\\b${wordLower}\\b`, 'i'),
+        new RegExp(`\\bglobal\\b[,\\s\\w]*\\b${wordLower}\\b`, 'i'),
+        new RegExp(`\\b${wordLower}\\b\\s*:=[^=]`, 'i'),
+    ];
 
-    // global varName
-    const globalRegex = new RegExp(`\\bglobal\\b[,\\s\\w]*\\b${wordLower}\\b`, 'i');
-    const globalDeclarations = searchValOfRange(document, docSymbol.range, globalRegex);
-
-    // StoringVal := or =
-    const storingValRegex = new RegExp(`\\b${wordLower}\\b\\s*[^=]=[^=]`, 'i');
-    const storingVal = searchValOfRange(document, docSymbol.range, storingValRegex);
-
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    vscode.window.showInformationMessage(`list ${wordLower} definition ,is ${VERSION.getValDefInFunc}`);
-    const locArray = argDef.concat(localDeclarations).concat(globalDeclarations).concat(storingVal);
-    return locArray;
+    for (const reg of regList) {
+        const loc = searchValOfRange(document, docSymbol.range, reg);
+        if (loc.length > 0) {
+            const debugStr = `list ${wordLower} definition ,is ${VERSION.getValDefInFunc}`;
+            console.log(debugStr);
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            //     vscode.window.showInformationMessage(debugStr);
+            return loc;
+        }
+    }
+    return [];
 }
 export function getValDefInFunc(document: vscode.TextDocument, position: vscode.Position, wordLower: string, listAllUsing: boolean)
     : null | vscode.Location[] {
@@ -104,19 +109,16 @@ export function getValDefInFunc(document: vscode.TextDocument, position: vscode.
     for (const docSymbol of docSymbolList) {
         if (docSymbol.kind === vscode.SymbolKind.Function
             && docSymbol.range.contains(position)) {
-            const switchVal = atFunPos(docSymbol, document, position);
-            switch (switchVal) {
+            const funcPos = atFunPos(docSymbol, document, position);
+            switch (funcPos) {
                 case EFuncPos.isFuncArg: return wrapper(document, docSymbol, wordLower, true);
-                case EFuncPos.isLocal: return wrapper(document, docSymbol, wordLower, listAllUsing);
-                case EFuncPos.isNotLocal:
-                    vscode.window.showInformationMessage('this Val is not in "local" mode function (Force-local mode)');
-                    vscode.window.showInformationMessage('https://www.autohotkey.com/docs/Functions.htm#ForceLocal');
-                    return null;
+                case EFuncPos.isInLocal: return wrapper(document, docSymbol, wordLower, listAllUsing);
+                case EFuncPos.isNoLocal: return wrapper(document, docSymbol, wordLower, listAllUsing);
                 case EFuncPos.isFuncName:
                     console.log('EFuncPos.isFuncName');
                     return null;
                 default:
-                    vscode.window.showInformationMessage('enum err --getValDefInFunc--93--61--74--');
+                    console.log('internal error -> enum error ->--getValDefInFunc--93--61--74--');
                     return null;
             }
         }

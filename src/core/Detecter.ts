@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as vscode from 'vscode';
 import { Out } from '../common/out';
 import { getChildren } from './getChildren';
-import { ParserLine, ParserBlock } from './Parser';
+import { ParserLine, ParserBlock, getReturnByLine } from './Parser';
 import { showTimeSpend } from '../configUI';
 import { EStr, MyDocSymbolArr } from '../globalEnum';
 import { renameFn as renameFileNameFunc } from './renameFileNameFunc';
@@ -37,7 +37,7 @@ export const Detecter = {
         for (const Uri of e.files) {
             const { fsPath } = Uri;
             if (fsPath.endsWith('.ahk')) {
-                Detecter.updateDocDef(fsPath);
+                Detecter.updateDocDef(false, fsPath);
             }
         }
     },
@@ -54,7 +54,7 @@ export const Detecter = {
         }
     },
 
-    async updateDocDef(fsPath: string): Promise<vscode.DocumentSymbol[]> {
+    async updateDocDef(isTest: boolean, fsPath: string): Promise<vscode.DocumentSymbol[]> {
         const Uri = vscode.Uri.file(fsPath);
         const document = await vscode.workspace.openTextDocument(Uri);
         const timeStart = Date.now();
@@ -66,17 +66,17 @@ export const Detecter = {
             RangeEndLine: DocStrMap.length,
             inClass: false,
             // eslint-disable-next-line @typescript-eslint/unbound-method
-            fnList: [ParserBlock.getClass, ParserBlock.getFunc, ParserBlock.getComment, ParserBlock.getSwitchBlock, ParserLine],
+            fnList: [ParserBlock.getClass, ParserBlock.getFunc, ParserBlock.getComment, ParserBlock.getSwitchBlock, getReturnByLine, ParserLine],
         });
 
-        if (fsPath.includes(EStr.diff_name_prefix) === false) {
+        if (isTest === false && fsPath.includes(EStr.diff_name_prefix) === false) {
             showTimeSpend(document.uri, timeStart);
             Detecter.DocMap.set(fsPath, result);
         }
         return result as vscode.DocumentSymbol[];
     },
 
-    buildByPath(buildPath: string): void {
+    buildByPath(isTest: boolean, buildPath: string): void {
         if (fs.statSync(buildPath).isDirectory()) {
             fs.readdir(buildPath, (err, files) => {
                 if (err) {
@@ -88,17 +88,17 @@ export const Detecter = {
                         && (/^out$/i).test(file) === false
                         && (/^target$/i).test(file) === false) {
                         // TODO read back file
-                        Detecter.buildByPath(`${buildPath}/${file}`);
+                        Detecter.buildByPath(isTest, `${buildPath}/${file}`);
                     }
                 }
             });
         } else if (buildPath.endsWith('.ahk')) {
             // const Uri = vscode.Uri.file(buildPath);
-            Detecter.updateDocDef(vscode.Uri.file(buildPath).fsPath);
+            Detecter.updateDocDef(isTest, vscode.Uri.file(buildPath).fsPath);
         }
     },
 
-    async buildByPathAsync(buildPath: string): Promise<void> {
+    async buildByPathAsync(isTest: boolean, buildPath: string): Promise<void> {
         if (fs.statSync(buildPath).isDirectory()) {
             const files = fs.readdirSync(buildPath);
             for (const file of files) {
@@ -106,12 +106,12 @@ export const Detecter = {
                     && (/^out$/i).test(file) === false
                     && (/^target$/i).test(file) === false) {
                     // TODO read back file
-                    await Detecter.buildByPathAsync(`${buildPath}/${file}`);
+                    await Detecter.buildByPathAsync(isTest, `${buildPath}/${file}`);
                 }
             }
         } else if (buildPath.endsWith('.ahk')) {
             // const Uri = vscode.Uri.file(buildPath);
-            await Detecter.updateDocDef(vscode.Uri.file(buildPath).fsPath);
+            await Detecter.updateDocDef(isTest, vscode.Uri.file(buildPath).fsPath);
         }
     },
 };

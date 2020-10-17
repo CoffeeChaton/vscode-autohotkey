@@ -48,7 +48,7 @@ function getFuncTail({
 
 export function getFuncDef(DocStrMap: TDocArr, defLine: number): false | FuncDefData {
     const textFix = lineText(DocStrMap, defLine);
-    if ((/^\s*\b(?:if|while)\b/i).test(textFix) === false) return false;
+    if ((/^\s*\b(?:if|while)\b/i).test(textFix)) return false;
 
     const fnHead = (/^\s*(\w\w*)\(/).exec(textFix); //  funcName(...
     if (fnHead === null) return false;

@@ -5,15 +5,15 @@ import { inCommentBlock } from './inCommentBlock';
 import { inLTrimRange } from './inLTrimRange';
 import { TDocArr, TDocArrRaw } from '../globalEnum';
 
-export function Pretreatment(documentAll: readonly string[]): TDocArr {
+export function Pretreatment(strArray: readonly string[]): TDocArr {
     const result: TDocArrRaw = [];
     let CommentBlock = false;
     let inLTrim: 0 | 1 | 2 = 0;
-    const lineMax = documentAll.length;
+    const lineMax = strArray.length;
     let deep = 0;
     //  const timeStart = Date.now();
     for (let line = 0; line < lineMax; line++) {
-        const textRaw = documentAll[line];
+        const textRaw = strArray[line];
 
         CommentBlock = inCommentBlock(textRaw, CommentBlock);
         if (CommentBlock) {

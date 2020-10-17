@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import * as vscode from 'vscode';
 import { TDocArr } from '../globalEnum';
 

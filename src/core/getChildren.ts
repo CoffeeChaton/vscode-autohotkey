@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-type-alias */
 import * as vscode from 'vscode';
 import { TDocArr, DeepReadonly, MyDocSymbol } from '../globalEnum';
-// // import * as Oniguruma from 'vscode-oniguruma';
 
 export type FuncInputType = DeepReadonly<{
     lStr: string,

@@ -1,6 +1,6 @@
 export function getCaseDefaultName(textRaw: string, lStr: string): false | string {
-    const isDefault = (/^\s*default\b\s*:/i).test(lStr);
-    if (isDefault) return 'Default :';
+    //  isDefault
+    if ((/^\s*\bdefault\b\s*:/i).test(lStr)) return 'Default :';
 
     if ((/^\s*\bcase\b/i).test(lStr) === false) return false;
 
@@ -15,5 +15,5 @@ export function getCaseDefaultName(textRaw: string, lStr: string): false | strin
 }
 
 export function getSwitchName(textRaw: string): string {
-    return textRaw.replace(/^\s*switch\b\s*/i, '').replace(/\{\s*$/, '').trim();
+    return textRaw.replace(/^\s*\bswitch\b\s*/i, '').replace(/\{\s*$/, '').trim();
 }

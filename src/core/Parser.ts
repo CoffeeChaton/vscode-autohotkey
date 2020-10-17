@@ -6,13 +6,13 @@ import * as vscode from 'vscode';
 import { getFuncDef } from '../tools/getFuncDef';
 import { getRange } from '../tools/getRange';
 import { getRangeCaseBlock } from '../tools/getRangeCaseBlock';
-import { MyDocSymbol } from '../globalEnum';
+import { MyDocSymbol, DeepReadonly } from '../globalEnum';
 import { getCaseDefaultName, getSwitchName } from './getSwitchCaseName';
 import { getRangeOfLine } from '../tools/getRangeOfLine';
 import { getChildren, FuncInputType } from './getChildren';
 // // import * as Oniguruma from 'vscode-oniguruma';
 
-function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
+export function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
     const regex = (/\breturn\b\s\s*(.+)/i);
     if (regex.test(FuncInput.lStr) === false) return false;
 
@@ -38,91 +38,69 @@ function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
     return new vscode.DocumentSymbol(`Return ${name.trim()}`, '', vscode.SymbolKind.Variable, rangeRaw, rangeRaw);
 }
 
-const LineRuler = {
-    matchList: [
-        /^\s*static\s\s*(\w\w*)/i,
-        /^\s*GoSub[\s,][\s,]*(\w\w*)/i,
-        /^\s*GoTo[\s,][\s,]*(\w\w*)/i,
-        /^\s*(\w\w*:)$/, // Label:
-        /^\s*(\w\w*)\s*:=\s*\bnew\b/i, // objName := new className
-        /^\s*(:[^:]*?:[^:][^:]*::)/, // HotStr
-        /^\s*([^:][^:]*?::)/, // HotKeys
-        /^\s*#(\w\w*)/, // directive
-        /^\s*global[\s,][\s,]*(\w[^:]*)/i, // global , ...
-        /^\s*throw[\s,][\s,]*(.+)/i, // throw
-        /^\s*(exit\b[\s,][\s,]*.*)/i, // exit
-        /^\s*exitApp\b[\s,][\s,]*(.+)/i,
-        /^\s*pause\b[\s,][\s,]*(.+)/i,
-        /^\s*\b(reload)\b/i,
-    ] as const,
-
-    nameList: [
-        '',
-        'GoSub ',
-        'GoTo ',
-        '',
-        '', // new
-        '', // HotStr
-        '', // HotKeys
-        '#', // directive
-        '', // global
-        'Throw ',
-        'exit ',
-        'exitApp ',
-        'pause ',
-        '', // reload
-    ] as const,
-
-    detailList: [
-        'static',
-        '',
-        '',
-        'Label ',
-        'new obj', // new
-        'HotStr', // HotStr
-        'HotKeys', // HotKeys
-        'directive', // directive
-        'global', // global
-        'command',
-        'command',
-        'command',
-        'command',
-        'command', // reload
-    ] as const,
-
-    kindList: [
-        // https://code.visualstudio.com/api/references/vscode-api#SymbolKind
-        vscode.SymbolKind.Variable, // Static
-        vscode.SymbolKind.Variable, // GoSub
-        vscode.SymbolKind.Variable, // GoTo
-        vscode.SymbolKind.Package, // Label
-        vscode.SymbolKind.Object, //  Object
-        vscode.SymbolKind.Event, // HotStr
-        vscode.SymbolKind.Event, // HotKeys
-        vscode.SymbolKind.Event, // directive
-        vscode.SymbolKind.Variable, // global
-        vscode.SymbolKind.Event, // Throw
-        vscode.SymbolKind.Event, // exit
-        vscode.SymbolKind.Event, // exitApp
-        vscode.SymbolKind.Event, // pause
-        vscode.SymbolKind.Event, // reload
-    ] as const,
-} as const;
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type LineRulerType = DeepReadonly<{
+    detail: string,
+    name: string,
+    kind: vscode.SymbolKind,
+    regex: RegExp,
+}[]>;
 
 export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
-    const ReturnValue = getReturnByLine(FuncInput);
-    if (ReturnValue) return ReturnValue;
-
     const { DocStrMap, line, lStr } = FuncInput;
 
-    const iMax = LineRuler.matchList.length;
-    for (let i = 0; i < iMax; i++) {
-        const oneLineSymbol = LineRuler.matchList[i].exec(lStr);
+    const LineRuler: LineRulerType = [
+        {
+            regex: /^\s*#(\w\w*)/, // #
+            name: '#',
+            detail: 'directive',
+            kind: vscode.SymbolKind.Event,
+        },
+        {
+            regex: /^\s*global[\s,][\s,]*(\w[^:=]*)/i, // global
+            name: '',
+            detail: 'global',
+            kind: vscode.SymbolKind.Variable,
+        },
+        {
+            regex: /^\s*static[\s,][\s,]*(\w[^:=]*)/i, // static
+            name: '',
+            detail: 'static',
+            kind: vscode.SymbolKind.Variable,
+        },
+        {
+            regex: /^\s*throw[\s,][\s,]*(.+)/i, // throw
+            name: 'throw ',
+            detail: 'throw',
+            kind: vscode.SymbolKind.Event,
+        },
+        {
+            regex: /^\s*(\w\w*:)\s*$/, // Label:
+            name: '',
+            detail: 'label',
+            kind: vscode.SymbolKind.Package,
+        },
+        {
+            regex: /^\s*(:[^:]*?:[^:][^:]*::)/, // HotStr
+            name: '',
+            detail: 'HotStr',
+            kind: vscode.SymbolKind.Event,
+        },
+        {
+            regex: /^\s*([^:][^:]*?::)/, // HotKeys
+            name: '',
+            detail: 'HotKeys',
+            kind: vscode.SymbolKind.Event,
+        },
+    ];
+    const LineRulerLen = LineRuler.length;
+    for (let i = 0; i < LineRulerLen; i++) {
+        const oneLineSymbol = LineRuler[i].regex.exec(lStr); // TODO .test -> exec
         if (oneLineSymbol !== null) {
             const rangeRaw = getRangeOfLine(DocStrMap, line);
-            const name = `${LineRuler.nameList[i]}${oneLineSymbol[1].trim()}`;
+            const name = `${LineRuler[i].name}${oneLineSymbol[1].trim()}`;
             return new vscode.DocumentSymbol(name,
-                LineRuler.detailList[i], LineRuler.kindList[i], rangeRaw, rangeRaw);
+                LineRuler[i].detail, LineRuler[i].kind, rangeRaw, rangeRaw);
         }
     }
     return false;
@@ -146,7 +124,7 @@ export const ParserBlock = {
             RangeStartLine: Range.start.line + 1,
             RangeEndLine: Range.end.line,
             inClass,
-            fnList: [ParserBlock.getSwitchBlock, ParserBlock.getComment, ParserLine],
+            fnList: [ParserBlock.getSwitchBlock, ParserBlock.getComment, getReturnByLine, ParserLine],
         });
         return Block;
     },
@@ -200,7 +178,7 @@ export const ParserBlock = {
             RangeStartLine: Range.start.line + 1,
             RangeEndLine: Range.end.line,
             inClass,
-            fnList: [ParserBlock.getFunc, ParserBlock.getComment, ParserBlock.getSwitchBlock, ParserLine],
+            fnList: [ParserBlock.getFunc, ParserBlock.getComment, ParserBlock.getSwitchBlock, getReturnByLine, ParserLine],
         });
         return funcSymbol;
     },
@@ -224,7 +202,7 @@ export const ParserBlock = {
             RangeStartLine: Range.start.line + 1,
             RangeEndLine: Range.end.line,
             inClass: true,
-            fnList: [ParserBlock.getClass, ParserBlock.getFunc, ParserBlock.getComment, ParserBlock.getSwitchBlock, ParserLine],
+            fnList: [ParserBlock.getClass, ParserBlock.getFunc, ParserBlock.getComment, ParserBlock.getSwitchBlock, getReturnByLine, ParserLine],
         });
         return classSymbol;
     },
@@ -259,7 +237,7 @@ export const ParserBlock = {
                 RangeStartLine: Range.start.line + 1,
                 RangeEndLine: Range.end.line,
                 inClass,
-                fnList: [ParserBlock.getComment, ParserBlock.getSwitchBlock, ParserLine],
+                fnList: [ParserBlock.getComment, ParserBlock.getSwitchBlock, getReturnByLine, ParserLine],
             });
             return CommentBlock;
         }

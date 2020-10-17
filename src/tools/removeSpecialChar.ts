@@ -11,6 +11,7 @@ export function getSkipSign(text: string): boolean {
         //  /^menu[,\s]/i,
         //   /^s*loop[,\s][,\s]*parse,/,
         /^\s*[\w%[][\w%[\]]*\s*=[^=]/, // TODO TraditionAssignment
+        //  // FIXME TEST THIS [^:=+.><!|\w-]=[^=]
         // [^+\--:=><*!/\w~)"]=[^=]
     ];
     const iMax = skipList.length;

@@ -144,7 +144,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
                 ? occ
                 : getDeepKeywords(textFix, occ); // TODO fmt_a1
         }
-        vscode.window.showInformationMessage(`Format Document is Beta ${VERSION.format}, ${Date.now() - timeStart}ms`);
+        console.log(`Format Document is Beta ${VERSION.format}, ${Date.now() - timeStart}ms`);
 
         WarnFmtDocWarn = WarnFmtDocWarn.replace(/\n{2,}/g, '\n\n')
             .replace(/\n*$/, '\n');// doc finish just need one \n

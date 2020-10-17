@@ -48,6 +48,7 @@
         }
     },
     "rules": {
+        "no-console": "off",
         "@typescript-eslint/no-floating-promises": "off",
         "no-magic-numbers": ["error", { "ignore": [-1, 0, 1] }],
         "security/detect-object-injection": "off",
@@ -150,7 +151,6 @@
         ],
         "wrap-regex": 2,
         "no-bitwise": 2,
-        "no-console": 1,
         "no-eq-null": "error",
         "array-bracket-newline": 1,
         "array-bracket-spacing": 1,

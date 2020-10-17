@@ -50,8 +50,9 @@ async function getReference(usingReg: RegExp, timeStart: number, wordLower: stri
             }
         }
     }
-
-    vscode.window.showInformationMessage(`list all using of ${wordLower} (${Date.now() - timeStart} ms)`);
+    const debugStr = `list all using of ${wordLower} (${Date.now() - timeStart} ms)`;
+    console.log(debugStr);
+    // vscode.window.showInformationMessage(debugStr);
     return List;
 }
 
@@ -87,7 +88,9 @@ async function ahkDef(
     const searchUsing = (): false | vscode.Location[] => {
         if (textTrimLower.search(usingReg) === -1) return false;
         //      console.info(`goto Def of ${word} (${Date.now() - timeStart} ms)`);
-        vscode.window.showInformationMessage(`goto Def of ${wordLower} (${Date.now() - timeStart} ms)`);
+        const debugStr = `goto Def of ${wordLower} (${Date.now() - timeStart} ms)`;
+        console.log(debugStr);
+        // vscode.window.showInformationMessage(debugStr);
         const Uri = vscode.Uri.file(fsPath);
         return [new vscode.Location(Uri, new vscode.Position(AhkSymbol.range.start.line, 0))];
     };
