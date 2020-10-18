@@ -87,12 +87,11 @@ async function ahkDef(
     // searchUsing
     const searchUsing = (): false | vscode.Location[] => {
         if (textTrimLower.search(usingReg) === -1) return false;
-        //      console.info(`goto Def of ${word} (${Date.now() - timeStart} ms)`);
         const debugStr = `goto Def of ${wordLower} (${Date.now() - timeStart} ms)`;
         console.log(debugStr);
         // vscode.window.showInformationMessage(debugStr);
         const Uri = vscode.Uri.file(fsPath);
-        return [new vscode.Location(Uri, new vscode.Position(AhkSymbol.range.start.line, 0))];
+        return [new vscode.Location(Uri, AhkSymbol.range)];
     };
 
     const Def = searchDef();

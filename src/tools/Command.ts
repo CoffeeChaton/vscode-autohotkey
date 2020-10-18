@@ -46,22 +46,26 @@ async function listAhkInclude(): Promise<null> {
     return null;
 }
 
+function LoopOfClearOutlineCache(): null {
+    vscode.window.showInformationMessage('this is Dev function ,open profile-flame to get .cpuprofile');
+    setInterval(() => {
+        clearOutlineCache(true);
+    }, 200);
+    return null;
+}
+
 export async function statusBarClick(): Promise<null> {
     const items: string[] = [
         '0 -> clearOutlineCache',
         '1 -> list #Include',
-        '2 -> setInterval() ',
+        //   '2 -> setInterval() ',
     ];
     const options = await vscode.window.showQuickPick(items);
     switch (options) {
         case '': return null;
         case items[0]: return clearOutlineCache(false);
         case items[1]: return listAhkInclude();
-        case items[2]:
-            setInterval(() => {
-                clearOutlineCache(true);
-            }, 200);
-            return null;
+        case items[2]: return LoopOfClearOutlineCache();
         default: return null;
     }
 }

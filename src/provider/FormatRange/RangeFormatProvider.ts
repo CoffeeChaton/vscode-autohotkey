@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import { inCommentBlock } from '../../tools/inCommentBlock';
 import { inLTrimRange } from '../../tools/inLTrimRange';
-import { getLStr, getSkipSign } from '../../tools/removeSpecialChar';
+import { getLStr, getSkipSign, getSkipSign2 } from '../../tools/removeSpecialChar';
 import { callDiff, DiffType } from '../../tools/Diff';
 import { VERSION } from '../../globalEnum';
 
@@ -24,8 +24,8 @@ function textReplace(textElement: string): string {
         .replace(/ *\|\| */g, ' || ')
         .replace(/ *&& */g, ' && ')
         .replace(/ *<> */g, ' <> ')
-        .replace(/\breturn  */g, 'return ')
-        .replace(/\bReturn  */g, 'Return ')
+        .replace(/\breturn\s\s*/g, 'return ')
+        .replace(/\bReturn\s\s*/g, 'Return ')
         // .replace(/ *\? */g, ' ? ')
         .replace(/\( */g, '(')
         .replace(/ *\)/g, ')')
@@ -33,7 +33,7 @@ function textReplace(textElement: string): string {
         .replace(/ *\]/g, ']')
         .replace(/ *\{ */g, ' {')
         .replace(/ *\}/g, '}')
-        .replace(/\}  */g, '} ') // TODO WTF double \s ?
+        .replace(/\}\s\s*/g, '} ') // TODO WTF double \s ?
         .replace(/\)\s*\{ */g, ') {')
         .replace(/\bif\s*\(/g, 'if (')
         .replace(/\bIf\s*\(/g, 'If (')
@@ -99,7 +99,8 @@ export function RangeFormat(RangeTextRaw: string, RangeText: string, fsPath: str
         const textFix = getLStr(text).trim();
         inLTrim = inLTrimRange(textFix, inLTrim);
 
-        textNew += (CommentBlock || textFix === '' || inLTrim > 0 || getSkipSign(textFix) || textFix.startsWith(':') || textFix.includes('::'))
+        textNew += (CommentBlock || textFix === '' || inLTrim > 0 || getSkipSign(textFix)
+            || getSkipSign2(textFix) || textFix.startsWith(':') || textFix.includes('::'))
             ? text
             : fnStrGroup(text);
 

@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
-import { TDocArr } from '../globalEnum';
+import { TDocArr, DetailType } from '../globalEnum';
 
 function getSearchLineFix(DocStrMap: TDocArr, searchLine: number, RangeEnd: number): number {
     for (let line = searchLine; line < RangeEnd; line += 1) {
-        const textFix = DocStrMap[line].lStr.trim();
-        if (textFix.endsWith('{') || textFix.startsWith('{')) {
+        if (DocStrMap[line].detail.includes(DetailType.deepAdd)) {
             return line;
         }
     }

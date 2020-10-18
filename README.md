@@ -10,13 +10,13 @@ AutoHotKey language support for VS Code
     -   [GotoDefinition](#gotodefinition)
     -   [Hover](#hover)
     -   [CodeFormat](#codeformat)
-        <!-- -   [IntelliSense](#IntelliSense) -->
+    -   [Diagnostic](#Diagnostic)
+          <!-- -   [IntelliSense](#IntelliSense) -->
 
 ## FunctionSymbol
 
 1. Detect source Function as symbol
-2. Now you can see "Splitting a Long Line into a Series of Shorter Ones" at Outline.
-   https://www.autohotkey.com/docs/Scripts.htm#continuation
+2. support [continuation](https://www.autohotkey.com/docs/Scripts.htm#continuation) at Outline.
    ![FunctionSymbol](image/FunctionSymbol.png)
 
 ## CodeSymbol
@@ -24,7 +24,7 @@ AutoHotKey language support for VS Code
 1. You can add two semicolon `;;` to comment line
    or add `{ ;;` to comment code block.
 
-    ![codeSymbol](image/codeSymbol.png)
+    ![codeSymbol](image/codeSymbol4.png)
 
 2. You can see Leveled outline
 
@@ -60,7 +60,7 @@ AutoHotKey language support for VS Code
 ```ahk
 /**
     ; in /** block.
-    ; and the line first character is '@'
+    ; and the line first character is ';'
     ; can use partial grammar of markdown.
     ; exp@email.com
     ; [Markdown Rule](https://en.wikipedia.org/wiki/Markdown)
@@ -72,6 +72,8 @@ AutoHotKey language support for VS Code
     ;  `monospace`
 */
 ```
+
+![hover3](image/hover3.png)
 
 ## CodeFormat
 
@@ -86,3 +88,12 @@ AutoHotKey language support for VS Code
 <!-- ## IntelliSense
 
 ![IntelliSense For Class](image/IntelliSenseForClass.gif) -->
+
+## Diagnostic
+
+1. warning about use `=` not `:=` to assign.
+2. use `;@ahk-ignore [number] line.` to ignore, exp: `;@ahk-ignore 3 line.`
+3. TODO other Diagnostic.
+
+![Diagnostic2](image/Diagnostic2.png)
+![Diagnostic1](image/Diagnostic1.png)

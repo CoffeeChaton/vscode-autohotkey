@@ -9,11 +9,15 @@ import { showTimeSpend } from '../configUI';
 import { EStr, MyDocSymbolArr } from '../globalEnum';
 import { renameFn as renameFileNameFunc } from './renameFileNameFunc';
 import { Pretreatment } from '../tools/Pretreatment';
+import { Diagnostic } from '../provider/Diagnostic/Diagnostic';
 
 export const Detecter = {
     // key : vscode.Uri.fsPath,
     // val : vscode.DocumentSymbol[]
     DocMap: new Map() as Map<string, MyDocSymbolArr>,
+
+    // diagColl : vscode.DiagnosticCollection
+    diagColl: vscode.languages.createDiagnosticCollection('ahk-neko-help'),
 
     getDocMapFile(): IterableIterator<string> {
         return Detecter.DocMap.keys();
@@ -30,6 +34,7 @@ export const Detecter = {
             if (fsPath.endsWith('.ahk')) {
                 Detecter.DocMap.delete(fsPath);
             }
+            Detecter.diagColl.delete(Uri);
         }
     },
 
@@ -48,6 +53,9 @@ export const Detecter = {
                 const tempDoc = Detecter.DocMap.get(oldUri.fsPath) || [];
                 Detecter.DocMap.set(newUri.fsPath, tempDoc);
                 Detecter.DocMap.delete(oldUri.fsPath);
+                const tempDiag = Detecter.diagColl.get(oldUri);
+                Detecter.diagColl.set(newUri, tempDiag);
+                Detecter.diagColl.delete(oldUri);
                 const fsPathList = Detecter.getDocMapFile();
                 renameFileNameFunc(oldUri, newUri, [...fsPathList]);
             }
@@ -72,6 +80,7 @@ export const Detecter = {
         if (isTest === false && fsPath.includes(EStr.diff_name_prefix) === false) {
             showTimeSpend(document.uri, timeStart);
             Detecter.DocMap.set(fsPath, result);
+            Diagnostic(DocStrMap, Uri, Detecter.diagColl);
         }
         return result as vscode.DocumentSymbol[];
     },

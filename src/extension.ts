@@ -10,6 +10,7 @@ import { HoverProvider } from './provider/HoverProvider';
 import { configChangEvent } from './configUI';
 import { statusBarClick } from './tools/Command';
 import { ReferenceProvider } from './provider/ReferenceProvider';
+import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 
 export function activate(context: vscode.ExtensionContext): void {
     const language = { language: 'ahk' };
@@ -22,6 +23,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
         vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
         // vscode.languages.registerRenameProvider(language, new RenameProvider()),
+        vscode.languages.registerCodeActionsProvider(language, new CodeActionProvider()),
         FileProvider.createEditorListenr(),
         vscode.workspace.onDidChangeConfiguration(() => configChangEvent()),
         vscode.workspace.onDidDeleteFiles((e) => Detecter.delMap(e)),

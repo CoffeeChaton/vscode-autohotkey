@@ -48,6 +48,7 @@ type LineRulerType = DeepReadonly<{
 
 export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
     const { DocStrMap, line, lStr } = FuncInput;
+    if (lStr === '' || (/^\s*$/).test(lStr)) return false;
 
     const LineRuler: LineRulerType = [
         {
@@ -108,10 +109,13 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
 
 export const ParserBlock = {
     getCaseDefaultBlock(FuncInput: FuncInputType): false | MyDocSymbol {
+        const { lStr } = FuncInput;
+        if (lStr === '' || (/^\s*$/).test(lStr)) return false;
+
         const caseName = getCaseDefaultName(FuncInput.DocStrMap[FuncInput.line].textRaw, FuncInput.lStr);
         if (caseName === false) return false;
         const {
-            Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
+            Uri, DocStrMap, line, RangeEndLine, inClass,
         } = FuncInput;
 
         const Range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
@@ -153,8 +157,10 @@ export const ParserBlock = {
 
     getFunc(FuncInput: FuncInputType): false | MyDocSymbol {
         const {
-            Uri, DocStrMap, line, RangeEndLine, inClass,
+            Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
         } = FuncInput;
+
+        if (lStr === '' || (/^\s*$/).test(lStr)) return false;
         const isFunc = getFuncDef(DocStrMap, line);
         if (isFunc === false) return false;
 

@@ -3,7 +3,7 @@
 import { getSkipSign, getLStr } from './removeSpecialChar';
 import { inCommentBlock } from './inCommentBlock';
 import { inLTrimRange } from './inLTrimRange';
-import { TDocArr, TDocArrRaw } from '../globalEnum';
+import { TDocArr, TDocArrRaw, DetailType } from '../globalEnum';
 
 export function Pretreatment(strArray: readonly string[]): TDocArr {
     const result: TDocArrRaw = [];
@@ -18,15 +18,16 @@ export function Pretreatment(strArray: readonly string[]): TDocArr {
         CommentBlock = inCommentBlock(textRaw, CommentBlock);
         if (CommentBlock) {
             result.push({
-                lStr: '', deep, textRaw,
+                lStr: '', deep, textRaw, detail: [DetailType.inComment],
             });
             continue;
         }
 
         inLTrim = inLTrimRange(textRaw, inLTrim);
         if (inLTrim > 0) {
+            const inLTrimLevel = inLTrim === 1 ? DetailType.inLTrim1 : DetailType.inLTrim2;
             result.push({
-                lStr: '', deep, textRaw,
+                lStr: '', deep, textRaw, detail: [inLTrimLevel],
             });
             continue;
         }
@@ -34,21 +35,24 @@ export function Pretreatment(strArray: readonly string[]): TDocArr {
         const lStr = getLStr(textRaw);
         if (getSkipSign(lStr)) {
             result.push({
-                lStr: '', deep, textRaw,
+                lStr: '', deep, textRaw, detail: [DetailType.inSkipSign],
             });
             continue;
         }
 
+        const detail: DetailType[] = [];
         // {$                     || ^{
         if ((/\{\s*$/).test(lStr) || (/^\s*\{/).test(lStr)) {
+            detail.push(DetailType.deepAdd);
             deep++;
         }
         if ((/^\s*\}/).test(lStr)) {
+            detail.push(DetailType.deepSubtract);
             deep--; // ^}
         }
 
         result.push({
-            lStr, deep, textRaw,
+            lStr, deep, textRaw, detail,
         });
     }
     //  const g = Object.freeze(result);

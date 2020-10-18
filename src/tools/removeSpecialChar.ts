@@ -1,3 +1,7 @@
+export function getSkipSign2(text: string): boolean {
+    if ((/^\s*[\w%[][\w%[\]]*\s*=[^=]/).test(text)) return true;
+    return false;
+}
 export function getSkipSign(text: string): boolean {
     const skipList: RegExp[] = [
         //   /^\s*;/,
@@ -10,7 +14,7 @@ export function getSkipSign(text: string): boolean {
         //  /^\s*::/,
         //  /^menu[,\s]/i,
         //   /^s*loop[,\s][,\s]*parse,/,
-        /^\s*[\w%[][\w%[\]]*\s*=[^=]/, // TODO TraditionAssignment
+        //   /^\s*[\w%[][\w%[\]]*\s*=[^=]/, // TODO TraditionAssignment
         //  // FIXME TEST THIS [^:=+.><!|\w-]=[^=]
         // [^+\--:=><*!/\w~)"]=[^=]
     ];

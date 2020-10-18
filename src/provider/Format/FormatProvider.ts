@@ -3,8 +3,7 @@
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
 import * as vscode from 'vscode';
-import { getLStr, getSkipSign } from '../../tools/removeSpecialChar';
-import { inCommentBlock } from '../../tools/inCommentBlock';
+import { getLStr } from '../../tools/removeSpecialChar';
 import { inLTrimRange } from '../../tools/inLTrimRange';
 import { getSwitchRange, inSwitchBlock } from './SwitchCase';
 import { hasDoubleSemicolon } from './hasDoubleSemicolon';
@@ -16,7 +15,7 @@ import { getFormatConfig } from '../../configUI';
 import { RangeFormat } from '../FormatRange/RangeFormatProvider';
 import { Pretreatment } from '../../tools/Pretreatment';
 import { getFullDocumentRange } from '../../tools/getFullDocumentRange';
-import { VERSION } from '../../globalEnum';
+import { VERSION, DetailType } from '../../globalEnum';
 
 function Hashtag(textFix: string): '#if' | '#HotString' | '' {
     if (textFix === '') return '';
@@ -102,10 +101,11 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         // const HotStr = [{ line: 0, deep: 0 }]; // ^::HotStr::
         const lineMax = document.lineCount;
         for (let line = 0; line < lineMax; line++) {
-            const textRaw = document.lineAt(line).text;
-            CommentBlock = inCommentBlock(textRaw, CommentBlock);
+            // eslint-disable-next-line prefer-destructuring
+            const textRaw = DocStrMap[line].textRaw;
+            CommentBlock = DocStrMap[line].detail.includes(DetailType.inComment);
             inLTrim = inLTrimRange(textRaw, inLTrim);
-            const textFix = (CommentBlock || getSkipSign(textRaw) || inLTrim > 0)
+            const textFix = (CommentBlock || DocStrMap[line].detail.includes(DetailType.inSkipSign) || inLTrim > 0)
                 ? ''
                 : getLStr(textRaw).trim();
 
