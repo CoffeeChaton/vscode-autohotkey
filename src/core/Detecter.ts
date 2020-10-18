@@ -80,7 +80,7 @@ export const Detecter = {
         if (isTest === false && fsPath.includes(EStr.diff_name_prefix) === false) {
             showTimeSpend(document.uri, timeStart);
             Detecter.DocMap.set(fsPath, result);
-            Diagnostic(DocStrMap, Uri, Detecter.diagColl);
+            Diagnostic(DocStrMap, result, Uri, Detecter.diagColl);
         }
         return result as vscode.DocumentSymbol[];
     },

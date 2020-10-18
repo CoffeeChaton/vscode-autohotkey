@@ -52,4 +52,12 @@ export const enum EDiagnostic {
     Source = 'neko help',
     code107 = 107,
     code107assignWarning = 'assign warning',
+    code110 = 110,
+    code110swNotFindDefault = 'default : not find ',
+    code111 = 111,
+    code111swDefaultTooMuch = 'default : too much ',
+    code112 = 112,
+    code112swCaseTooMuch = 'Case : > 20',
+    code113 = 113,
+    code113swCaseIsZero = 'Case : not find ',
 }

@@ -111,12 +111,12 @@ export const ParserBlock = {
     getCaseDefaultBlock(FuncInput: FuncInputType): false | MyDocSymbol {
         const { lStr } = FuncInput;
         if (lStr === '' || (/^\s*$/).test(lStr)) return false;
-
-        const caseName = getCaseDefaultName(FuncInput.DocStrMap[FuncInput.line].textRaw, FuncInput.lStr);
-        if (caseName === false) return false;
         const {
-            Uri, DocStrMap, line, RangeEndLine, inClass,
+            Uri, RangeEndLine, inClass, line, DocStrMap,
         } = FuncInput;
+
+        const caseName = getCaseDefaultName(DocStrMap[line].textRaw, lStr);
+        if (caseName === false) return false;
 
         const Range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
         const selectionRange = Range;

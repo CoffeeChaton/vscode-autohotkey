@@ -4,7 +4,7 @@
 import * as vscode from 'vscode';
 import { EDiagnostic } from '../../globalEnum';
 
-function caseOf107(uri: vscode.Uri, diag: vscode.Diagnostic): vscode.CodeAction {
+function IgnoreThisLine(uri: vscode.Uri, diag: vscode.Diagnostic): vscode.CodeAction {
     // console.log('CodeActionProvider -> context', context);
     // diag
     //    code: 102
@@ -30,14 +30,15 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
         const { uri } = document;
         const CAList: vscode.CodeAction[] = [];
         for (const diag of context.diagnostics) {
-            switch (diag.code) {
-                case EDiagnostic.code107:
-                    CAList.push(caseOf107(uri, diag));
-                    break;
-                default:
-                    console.log('CodeActionProvider -> code is not in any case', diag.code);
-                    break;
-            }
+            // switch (diag.code) {
+            //     case EDiagnostic.code107:
+            //         CAList.push(IgnoreThisLine(uri, diag));
+            //         break;
+            //     default:
+            //         console.log('CodeActionProvider -> code is not in eum', diag.code);
+            //         break;
+            // }
+            CAList.push(IgnoreThisLine(uri, diag));
         }
 
         return CAList;

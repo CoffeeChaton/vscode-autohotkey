@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as vscode from 'vscode';
 import { getSkipSign2 } from '../../tools/removeSpecialChar';
-import { TDocArr, EDiagnostic } from '../../globalEnum';
+import { TDocArr, EDiagnostic, MyDocSymbol } from '../../globalEnum';
+import { getSwErr } from './getSwErr';
 
 function getIgnore(DocStrMap: TDocArr, line: number, IgnoreLine: number): number {
     // ;@ahk-ignore 30 line.
@@ -35,17 +36,26 @@ function assign(DocStrMap: TDocArr, line: number, uri: vscode.Uri): null | vscod
     //   diag1.relatedInformation = [new vscode.DiagnosticRelatedInformation(new vscode.Location(uri, pos), 'suggest to use := not =')];
     return diag1;
 }
-export function Diagnostic(DocStrMap: TDocArr, uri: vscode.Uri, collection: vscode.DiagnosticCollection): void {
+
+export function Diagnostic(DocStrMap: TDocArr, result: Readonly<MyDocSymbol[]>, uri: vscode.Uri, collection: vscode.DiagnosticCollection): void {
     const iMax = DocStrMap.length;
     let IgnoreLine = -1;
-    const diagList: vscode.Diagnostic[] = [];
+    const showErr: boolean[] = []; // 1 is mean can show Err
+    const diagS: vscode.Diagnostic[] = [];
     for (let line = 0; line < iMax; line++) {
         IgnoreLine = getIgnore(DocStrMap, line, IgnoreLine);
         if (line > IgnoreLine) {
             const assignEnd = assign(DocStrMap, line, uri);
-            if (assignEnd) diagList.push(assignEnd);
+            if (assignEnd) diagS.push(assignEnd);
+            showErr.push(true);
+        } else {
+            showErr.push(false);
         }
     }
 
-    collection.set(uri, diagList);
+    const filer = (e: vscode.Diagnostic): boolean => showErr[e.range.start.line];
+
+    getSwErr(result).filter(filer).forEach((e) => diagS.push(e));
+
+    collection.set(uri, diagS);
 }
