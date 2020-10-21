@@ -27,9 +27,8 @@ function getSelectionRange(DocStrMap: TDocArr, defLine: number, blockStartLine: 
 function getFuncTail({
     DocStrMap, searchText, name, searchLine, defLine,
 }: FuncTailType): false | FuncDefData {
-    const fnTail = /\)\s*\{\s*$/;
     // i+1   ^, something , something ........ ) {$
-    if (fnTail.test(searchText)) {
+    if ((/\)\s*\{\s*$/).test(searchText)) {
         const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine);
         return { name, selectionRange };
     }
