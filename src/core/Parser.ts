@@ -166,7 +166,7 @@ export const ParserBlock = {
 
         const getDetail = (): string => {
             if (line === 0) return '';
-            const PreviousLineText = DocStrMap[line - 1].lStr.trimStart();
+            const PreviousLineText = DocStrMap[line - 1].textRaw.trimStart();
             return PreviousLineText.startsWith(';@')
                 ? PreviousLineText.substring(2) // 2=== ';@'.len
                 : '';
