@@ -1,4 +1,11 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-    "cSpell.words": ["Codeblock", "Ifmsgbox", "bltrim", "hotstring", "ifwin"]
+    "cSpell.words": [
+        "Codeblock",
+        "Ifmsgbox",
+        "bltrim",
+        "hotstring",
+        "ifwin"
+    ],
+    "deepcode.uploadApproved": true
 }

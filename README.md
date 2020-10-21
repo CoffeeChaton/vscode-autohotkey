@@ -11,7 +11,7 @@ AutoHotKey language support for VS Code
     -   [Hover](#hover)
     -   [CodeFormat](#codeformat)
     -   [Diagnostic](#Diagnostic) **new!**
-          <!-- -   [IntelliSense](#IntelliSense) -->
+    -   [IntelliSense](#IntelliSense) **new**
 
 ## FunctionSymbol
 
@@ -103,3 +103,8 @@ AutoHotKey language support for VS Code
 
 ![Diagnostic1](image/Diagnostic1.png)
 ![Diagnostic2](image/Diagnostic2.png)
+
+## IntelliSense
+
+1. Snippets of your function.
+   ![IntelliSenseFunc](image/IntelliSenseFunc.gif)

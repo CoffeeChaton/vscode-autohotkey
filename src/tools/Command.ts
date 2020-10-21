@@ -62,10 +62,10 @@ export async function statusBarClick(): Promise<null> {
     ];
     const options = await vscode.window.showQuickPick(items);
     switch (options) {
-        case '': return null;
         case items[0]: return clearOutlineCache(false);
         case items[1]: return listAhkInclude();
         case items[2]: return LoopOfClearOutlineCache();
+        case '':
         default: return null;
     }
 }

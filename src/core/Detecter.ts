@@ -77,9 +77,11 @@ export const Detecter = {
             fnList: [ParserBlock.getClass, ParserBlock.getFunc, ParserBlock.getComment, ParserBlock.getSwitchBlock, getReturnByLine, ParserLine],
         });
 
-        if (isTest === false && fsPath.includes(EStr.diff_name_prefix) === false) {
-            showTimeSpend(document.uri, timeStart);
-            Detecter.DocMap.set(fsPath, result);
+        if (fsPath.includes(EStr.diff_name_prefix) === false) {
+            if (isTest === false) {
+                showTimeSpend(document.uri, timeStart);
+                Detecter.DocMap.set(fsPath, result);
+            }
             Diagnostic(DocStrMap, result, Uri, Detecter.diagColl);
         }
         return result as vscode.DocumentSymbol[];

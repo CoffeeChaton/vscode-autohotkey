@@ -21,8 +21,7 @@ export function getRangeCaseBlock(DocStrMap: TDocArr, defLine: number, searchLin
         if ((/^\s*\bswitch\b/i).test(lineLStr)) {
             const SwitchRange = getRange(DocStrMap, line, line, RangeEnd);
             Resolved = SwitchRange.end.line;
-            console.log('Resolved--8833--9911--66', Resolved);
-            //       console.log(line, `line, SwitchRange Resolved -> ${Resolved}`, Resolved);
+            //       console.log(line, `line, Nested SwitchRange -> ${Resolved}`, Resolved);
             continue;
         }
         if ((/^\s*\bcase\b\s*/i).test(lineLStr) || (/^\s*\bdefault\b\s*:/i).test(lineLStr)) {

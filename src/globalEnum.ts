@@ -47,17 +47,28 @@ export const enum VERSION {
     format = 'v0.48',
     formatRange = ' v0.4a',
 }
-export const enum EDiagnostic {
-    ParserIgnore = ';@ahk-ignore ', // ;@ahk-ignore 30 line.
-    Source = 'neko help',
+export const enum EDiagBase {
+    ignore = ';@ahk-ignore ', // ;@ahk-ignore 30 line.
+    source = 'neko help',
+}
+export const enum EDiagCode {
     code107 = 107,
-    code107assignWarning = 'assign warning',
     code110 = 110,
-    code110swNotFindDefault = 'default : not find ',
     code111 = 111,
-    code111swDefaultTooMuch = 'default : too much ',
     code112 = 112,
-    code112swCaseTooMuch = 'Case : > 20',
     code113 = 113,
-    code113swCaseIsZero = 'Case : not find ',
+}
+export const enum EDiagMsg {
+    code107 = 'assign warning',
+    code110 = 'default : not find ',
+    code111 = 'default : too much ',
+    code112 = 'Case : > 20',
+    code113 = 'Case : not find ',
+}
+export const enum EDiagFsPath {
+    code107 = 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
+    code110 = 'https://www.autohotkey.com/docs/commands/Switch.htm',
+    code111 = 'https://www.autohotkey.com/docs/commands/Switch.htm',
+    code112 = 'https://www.autohotkey.com/docs/commands/Switch.htm',
+    code113 = 'https://www.autohotkey.com/docs/commands/Switch.htm',
 }

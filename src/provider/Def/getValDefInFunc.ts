@@ -70,7 +70,7 @@ function wrapper(document: vscode.TextDocument, docSymbol: MyDocSymbol, wordLowe
         const debugStr = `list ${wordLower} all using,is ${VERSION.getValDefInFunc}`;
         console.log(debugStr);
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        //    vscode.window.showInformationMessage(debugStr);
+        // vscode.window.showInformationMessage(debugStr);
         return searchValOfRange(document, docSymbol.range, regex);
     }
 
@@ -112,8 +112,9 @@ export function getValDefInFunc(document: vscode.TextDocument, position: vscode.
             const funcPos = atFunPos(docSymbol, document, position);
             switch (funcPos) {
                 case EFuncPos.isFuncArg: return wrapper(document, docSymbol, wordLower, true);
-                case EFuncPos.isInLocal: return wrapper(document, docSymbol, wordLower, listAllUsing);
-                case EFuncPos.isNoLocal: return wrapper(document, docSymbol, wordLower, listAllUsing);
+                case EFuncPos.isInLocal:
+                case EFuncPos.isNoLocal:
+                    return wrapper(document, docSymbol, wordLower, listAllUsing);
                 case EFuncPos.isFuncName:
                     console.log('EFuncPos.isFuncName');
                     return null;

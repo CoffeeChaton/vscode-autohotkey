@@ -16,11 +16,11 @@ type FuncTailType = { DocStrMap: TDocArr, searchText: string, name: string, sear
 
 function getSelectionRange(DocStrMap: TDocArr, defLine: number, blockStartLine: number): vscode.Range {
     // const argPos = Math.max(DocStrMap[defLine].lStr.indexOf('('), 0);
-    const blockEndPos = DocStrMap[blockStartLine].lStr.indexOf('{');
-    const endLen = blockEndPos === -1 ? DocStrMap[blockStartLine].lStr.length : blockEndPos;
+    const col = DocStrMap[blockStartLine].lStr.lastIndexOf(')');
+    const colFix = col === -1 ? DocStrMap[blockStartLine].lStr.length : col;
     return new vscode.Range(
         new vscode.Position(defLine, 0),
-        new vscode.Position(blockStartLine, endLen + 1),
+        new vscode.Position(blockStartLine, colFix + 1),
     );
 }
 
@@ -39,7 +39,7 @@ function getFuncTail({
     // i+2   ^{
     if ((/\)\s*$/).test(searchText)
         && (/^\s*\{/).test(lineText(DocStrMap, searchLine + 1))) {
-        const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine + 1);
+        const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine);
         return { name, selectionRange };
     }
 

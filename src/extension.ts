@@ -11,12 +11,13 @@ import { configChangEvent } from './configUI';
 import { statusBarClick } from './tools/Command';
 import { ReferenceProvider } from './provider/ReferenceProvider';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
+import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 
 export function activate(context: vscode.ExtensionContext): void {
     const language = { language: 'ahk' };
     context.subscriptions.push(
         vscode.languages.registerHoverProvider(language, new HoverProvider()),
-        //   vscode.languages.registerCompletionItemProvider(language, new CompletionComma(), '.'),
+        vscode.languages.registerCompletionItemProvider(language, new CompletionItemProvider(), ''),
         vscode.languages.registerDefinitionProvider(language, new DefProvider()),
         vscode.languages.registerReferenceProvider(language, new ReferenceProvider()),
         vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),

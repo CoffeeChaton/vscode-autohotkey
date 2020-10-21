@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
-import { EDiagnostic, MyDocSymbol } from '../../globalEnum';
+import {
+    EDiagBase, EDiagMsg, EDiagCode, MyDocSymbol,
+} from '../../globalEnum';
 
 function getDefaultNumber(swChildren: Readonly<MyDocSymbol[]>): number {
     let iDefault = 0;
@@ -16,15 +18,15 @@ function getCaseNumber(swChildren: Readonly<MyDocSymbol[]>): number {
     return iCase;
 }
 function setErrDefaultNotFind(sw: MyDocSymbol): vscode.Diagnostic {
-    const diag1 = new vscode.Diagnostic(sw.range, EDiagnostic.code110swNotFindDefault, vscode.DiagnosticSeverity.Information);
-    diag1.source = EDiagnostic.Source;
-    diag1.code = EDiagnostic.code110;
+    const diag1 = new vscode.Diagnostic(sw.range, EDiagMsg.code110, vscode.DiagnosticSeverity.Information);
+    diag1.source = EDiagBase.source;
+    diag1.code = EDiagCode.code110;
     return diag1;
 }
 function setErrDefaultTooMuch(sw: MyDocSymbol): vscode.Diagnostic {
-    const diag1 = new vscode.Diagnostic(sw.range, EDiagnostic.code111swDefaultTooMuch, vscode.DiagnosticSeverity.Information);
-    diag1.source = EDiagnostic.Source;
-    diag1.code = EDiagnostic.code111;
+    const diag1 = new vscode.Diagnostic(sw.range, EDiagMsg.code111, vscode.DiagnosticSeverity.Information);
+    diag1.source = EDiagBase.source;
+    diag1.code = EDiagCode.code111;
     return diag1;
 }
 
@@ -40,24 +42,26 @@ function setErrCase(sw: MyDocSymbol, iCase: number): null | vscode.Diagnostic {
     if (iCase < 20 && iCase > 0) return null;
     // eslint-disable-next-line no-magic-numbers
     if (iCase >= 20) {
-        const caseTooMuch = new vscode.Diagnostic(sw.range, EDiagnostic.code112swCaseTooMuch, vscode.DiagnosticSeverity.Information);
-        caseTooMuch.source = EDiagnostic.Source;
-        caseTooMuch.code = EDiagnostic.code112;
+        const caseTooMuch = new vscode.Diagnostic(sw.range, EDiagMsg.code112, vscode.DiagnosticSeverity.Information);
+        caseTooMuch.source = EDiagBase.source;
+        caseTooMuch.code = EDiagCode.code112;
         return caseTooMuch;
     }
     if (iCase < 1) {
-        const caseZero = new vscode.Diagnostic(sw.range, EDiagnostic.code113swCaseIsZero, vscode.DiagnosticSeverity.Information);
-        caseZero.source = EDiagnostic.Source;
-        caseZero.code = EDiagnostic.code113;
+        const caseZero = new vscode.Diagnostic(sw.range, EDiagMsg.code113, vscode.DiagnosticSeverity.Information);
+        caseZero.source = EDiagBase.source;
+        caseZero.code = EDiagCode.code113;
         return caseZero;
     }
     return null;
 }
 
-export function getSwErr(children: Readonly<MyDocSymbol[]>): vscode.Diagnostic[] {
+export function getSwErr(children: Readonly<MyDocSymbol[]>, showErr: boolean[]): vscode.Diagnostic[] {
     const digS: vscode.Diagnostic[] = [];
     for (const sw of children) {
-        if (sw.kind === vscode.SymbolKind.Enum && sw.name.startsWith('Switch ')) {
+        if (sw.kind === vscode.SymbolKind.Enum
+            && showErr[sw.range.start.line]
+            && sw.name.startsWith('Switch ')) {
             const dn = getDefaultNumber(sw.children);
             const de = setErrDefault(sw, dn);
             if (de) digS.push(de);
@@ -66,7 +70,7 @@ export function getSwErr(children: Readonly<MyDocSymbol[]>): vscode.Diagnostic[]
             const ce = setErrCase(sw, cn);
             if (ce) digS.push(ce);
         } else {
-            getSwErr(sw.children).forEach((e) => digS.push(e));
+            getSwErr(sw.children, showErr).forEach((e) => digS.push(e));
         }
     }
     return digS;
