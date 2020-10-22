@@ -44,22 +44,3 @@ export function getLStr(textRaw: string): string {
             return textFix.substring(0, i);
     }
 }
-
-export function removeParentheses(textRaw: string): string {
-    let textFix = '';
-    let deep = 0;
-    for (const s of textRaw) {
-        switch (s) {
-            case '(':
-                deep++;
-                break;
-            case ')':
-                deep--;
-                break;
-            default:
-                textFix += deep === 0 ? s : ' ';
-                break;
-        }
-    }
-    return textFix;
-}

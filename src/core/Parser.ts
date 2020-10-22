@@ -10,7 +10,7 @@ import { MyDocSymbol, DeepReadonly } from '../globalEnum';
 import { getCaseDefaultName, getSwitchName } from './getSwitchCaseName';
 import { getRangeOfLine } from '../tools/getRangeOfLine';
 import { getChildren, FuncInputType } from './getChildren';
-import { removeParentheses } from '../tools/removeSpecialChar';
+import { removeParentheses } from "../tools/removeParentheses";
 // // import * as Oniguruma from 'vscode-oniguruma';
 
 export function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {

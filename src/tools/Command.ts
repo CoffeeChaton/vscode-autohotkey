@@ -2,6 +2,7 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,200] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
+import { removeParentheses } from './removeParentheses';
 
 async function clearOutlineCache(isTest: boolean): Promise<null> {
     const timeStart = Date.now();
@@ -53,19 +54,24 @@ function LoopOfClearOutlineCache(): null {
     }, 200);
     return null;
 }
-
+function removeParenthesesTest(): null {
+    const d = removeParentheses(listAhkInclude.toString());
+    console.log(d);
+    return null;
+}
 export async function statusBarClick(): Promise<null> {
     const items: string[] = [
         '0 -> clearOutlineCache',
         '1 -> list #Include',
-        //   '2 -> setInterval() ',
+        // '2 -> setInterval() ',
+        // '3 -> test removeParentheses',
     ];
     const options = await vscode.window.showQuickPick(items);
     switch (options) {
         case items[0]: return clearOutlineCache(false);
         case items[1]: return listAhkInclude();
         case items[2]: return LoopOfClearOutlineCache();
-        case '':
+        case items[3]: return removeParenthesesTest();
         default: return null;
     }
 }
