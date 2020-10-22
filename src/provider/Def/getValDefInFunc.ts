@@ -69,8 +69,6 @@ function wrapper(document: vscode.TextDocument, docSymbol: MyDocSymbol, wordLowe
     if (listAllUsing) {
         const debugStr = `list ${wordLower} all using,is ${VERSION.getValDefInFunc}`;
         console.log(debugStr);
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        // vscode.window.showInformationMessage(debugStr);
         return searchValOfRange(document, docSymbol.range, regex);
     }
 
@@ -78,10 +76,11 @@ function wrapper(document: vscode.TextDocument, docSymbol: MyDocSymbol, wordLowe
     if (argDef.length > 0) return argDef;
 
     const regList = [
-        // TODO
+        // TODO fix col of location
         new RegExp(`\\bstatic\\b[,\\s\\w]*\\b${wordLower}\\b`, 'i'),
         new RegExp(`\\blocal\\b[,\\s\\w]*\\b${wordLower}\\b`, 'i'),
         new RegExp(`\\bglobal\\b[,\\s\\w]*\\b${wordLower}\\b`, 'i'),
+        new RegExp(`\\bVarSetCapacity\\b\\(${wordLower}\\b`, 'i'),
         new RegExp(`\\b${wordLower}\\b\\s*:=[^=]`, 'i'),
     ];
 

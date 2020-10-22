@@ -26,9 +26,10 @@ async function HoverFunc(wordLower: string, textRaw: string): Promise<false | vs
         return cache;
     }
 
-    const Hover = await setFuncHoverMD(hasSymbol);
-    wm.set(hasSymbol.AhkSymbol, Hover);
-    return Hover;
+    const md = await setFuncHoverMD(hasSymbol);
+    const hover = new vscode.Hover(md);
+    wm.set(hasSymbol.AhkSymbol, hover);
+    return hover;
 }
 
 export class HoverProvider implements vscode.HoverProvider {

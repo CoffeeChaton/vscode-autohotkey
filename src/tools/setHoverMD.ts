@@ -40,7 +40,7 @@ export function inCommentBlock2(textRaw: string, CommentBlock: boolean): boolean
 export async function setFuncHoverMD(hasSymbol: {
     AhkSymbol: MyDocSymbol;
     fsPath: string;
-}): Promise<vscode.Hover> {
+}): Promise<vscode.MarkdownString> {
     const document = await vscode.workspace.openTextDocument(vscode.Uri.file(hasSymbol.fsPath));
     const { showComment } = getHoverConfig();
 
@@ -74,5 +74,5 @@ export async function setFuncHoverMD(hasSymbol: {
         .appendMarkdown(commentText2)
         .appendCodeblock(returnList, 'ahk')
         .appendCodeblock('}\n', 'ahk');
-    return new vscode.Hover(md);
+    return md;
 }

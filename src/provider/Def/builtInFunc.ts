@@ -12,3 +12,4 @@
 // SubStr       Retrieves one or more characters from the specified position in a string.
 // WinActive    Checks if the specified window exists and is currently active (foremost), and returns its Unique ID (HWND).
 // WinExist     Checks if a matching window exists and returns the Unique ID (HWND) of the first matching window.
+// TODO https://www.autohotkey.com/docs/commands/index.htm

@@ -14,13 +14,15 @@ function lineText(DocStrMap: TDocArr, searchLine: number): string {
 
 type FuncTailType = { DocStrMap: TDocArr, searchText: string, name: string, searchLine: number, defLine: number };
 
-function getSelectionRange(DocStrMap: TDocArr, defLine: number, blockStartLine: number): vscode.Range {
+function getSelectionRange(DocStrMap: TDocArr, defLine: number, searchLine: number): vscode.Range {
     // const argPos = Math.max(DocStrMap[defLine].lStr.indexOf('('), 0);
-    const col = DocStrMap[blockStartLine].lStr.lastIndexOf(')');
-    const colFix = col === -1 ? DocStrMap[blockStartLine].lStr.length : col;
+    const colS = Math.max(DocStrMap[defLine].lStr.search(/\S/) - 1, 0);
+
+    const colE = DocStrMap[searchLine].lStr.lastIndexOf(')');
+    const colFixE = colE === -1 ? DocStrMap[searchLine].lStr.length : colE;
     return new vscode.Range(
-        new vscode.Position(defLine, 0),
-        new vscode.Position(blockStartLine, colFix + 1),
+        defLine, colS,
+        searchLine, colFixE + 1,
     );
 }
 

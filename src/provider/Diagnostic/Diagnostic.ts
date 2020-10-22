@@ -43,8 +43,11 @@ function getCommandsErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): null
     // Loop, FilePattern -> Loop, Files, FilePattern   https://www.autohotkey.com/docs/commands/LoopFile.htm#old
     // change of ` https://www.autohotkey.com/docs/commands/_EscapeChar.htm
     // change of ; https://www.autohotkey.com/docs/commands/_CommentFlag.htm
+    // #DerefChar https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related
+    // #Delimiter https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related
     // SetFormat -> Format  https://www.autohotkey.com/docs/commands/SetFormat.htm
     // StringMid -> SubStr() https://www.autohotkey.com/docs/commands/StringMid.htm
+    // EscapeChar.htm
     return null;
 }
 export function Diagnostic(DocStrMap: TDocArr, result: Readonly<MyDocSymbol[]>, uri: vscode.Uri, collection: vscode.DiagnosticCollection): void {

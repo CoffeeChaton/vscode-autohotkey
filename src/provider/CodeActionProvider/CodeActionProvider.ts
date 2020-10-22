@@ -6,7 +6,7 @@ import * as vscode from 'vscode';
 import { EDiagBase, EDiagFsPath, EDiagCode } from '../../globalEnum';
 
 function consoleDefault(a: never, diag: vscode.Diagnostic): '' {
-    console.log('console.log Default -> a', a, ' --99 --66 -33 --44');
+    console.log('console.log Default -> a', a, ' --99--66-33--44');
     console.log('diag', diag);
     return '';
 }
@@ -24,7 +24,7 @@ function getFsPath(diag: vscode.Diagnostic): EDiagFsPath | '' {
     }
 }
 
-function IgnoreThisLine(uri: vscode.Uri, diag: vscode.Diagnostic): vscode.CodeAction {
+function IgnoreThisLine(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.CodeAction {
     // console.log('CodeActionProvider -> context', context);
     // diag
     //    code: 102
@@ -32,11 +32,13 @@ function IgnoreThisLine(uri: vscode.Uri, diag: vscode.Diagnostic): vscode.CodeAc
     //    range: (2)[{ … }, { … }]
     //    severity: "Information"
     //    source: "neko help"
+    const FsPath = getFsPath(diag);
+    if (FsPath === '') return null;
     const { line } = diag.range.start;
     const edit = new vscode.WorkspaceEdit();
     const position = new vscode.Position(line, 0);
     const Today = new Date();
-    const newText = `${EDiagBase.ignore} 1 line; at ${Today.toLocaleString()} ; ${getFsPath(diag)}\n`;
+    const newText = `${EDiagBase.ignore} 1 line; at ${Today.toLocaleString()} ; ${FsPath}\n`;
     edit.insert(uri, position, newText);
     const CA = new vscode.CodeAction(`ignore line ${line + 1}`);
     CA.edit = edit;
@@ -50,7 +52,8 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
         const { uri } = document;
         const CAList: vscode.CodeAction[] = [];
         for (const diag of context.diagnostics) {
-            CAList.push(IgnoreThisLine(uri, diag));
+            const CA = IgnoreThisLine(uri, diag);
+            if (CA) CAList.push(CA);
         }
 
         return CAList;
