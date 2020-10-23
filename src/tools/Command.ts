@@ -63,8 +63,8 @@ export async function statusBarClick(): Promise<null> {
     const items: string[] = [
         '0 -> clearOutlineCache',
         '1 -> list #Include',
-        // '2 -> setInterval() ',
-        // '3 -> test removeParentheses',
+        // '2 -> dev tools setInterval() ',
+        // '3 -> dev tools test removeParentheses',
     ];
     const options = await vscode.window.showQuickPick(items);
     switch (options) {

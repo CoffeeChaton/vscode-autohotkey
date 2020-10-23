@@ -30,7 +30,7 @@ function fnReplacer(match: string, p1: string): string {
 }
 
 // [textFix , '; comment text']
-export function getLStr(textRaw: string): string {
+export function getLStrOld(textRaw: string): string {
     if (textRaw[0] === ';') return '';
     if ((/^\s*;/).test(textRaw)) return '';
     const textFix = textRaw.replace(/`./g, '__').replace(/("[^"]*?")/g, fnReplacer);
@@ -43,4 +43,34 @@ export function getLStr(textRaw: string): string {
         default:
             return textFix.substring(0, i);
     }
+}
+export function getLStr(textRaw: string): string {
+    if (textRaw[0] === ';') return '';
+    if ((/^\s*;/).test(textRaw)) return '';
+
+    //  TODD QUICK
+    //  const text = textRaw.replace(/`./g, '__');
+    let textFix = '';
+    let tf = 1;
+    let comma = 0;
+    const sL = textRaw.length;
+    for (let i = 0; i < sL; i++) {
+        switch (textRaw[i]) {
+            case '"':
+                tf *= -1;
+                textFix += '_';
+                break;
+            case '`':
+                textFix += '_';
+                comma = 2;
+                break;
+            case ';':
+                return (/^\s*$/).test(textFix) ? '' : textFix;
+            default:
+                textFix += tf === 1 && comma === 0 ? textRaw[i] : '_';
+                comma -= comma === 0 ? 0 : 1;
+                break;
+        }
+    }
+    return (/^\s*$/).test(textFix) ? '' : textFix;
 }

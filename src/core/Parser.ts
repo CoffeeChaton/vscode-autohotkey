@@ -10,7 +10,7 @@ import { MyDocSymbol, DeepReadonly } from '../globalEnum';
 import { getCaseDefaultName, getSwitchName } from './getSwitchCaseName';
 import { getRangeOfLine } from '../tools/getRangeOfLine';
 import { getChildren, FuncInputType } from './getChildren';
-import { removeParentheses } from "../tools/removeParentheses";
+import { removeParentheses } from '../tools/removeParentheses';
 // // import * as Oniguruma from 'vscode-oniguruma';
 
 export function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
@@ -153,7 +153,7 @@ const LineRuler: LineRulerType = [
 ];
 export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
     const { DocStrMap, line, lStr } = FuncInput;
-    if (lStr === '' || (/^\s*$/).test(lStr)) return false;
+    if (lStr === '') return false;
 
     const LineRulerLen = LineRuler.length;
     for (let i = 0; i < LineRulerLen; i++) {
@@ -173,7 +173,7 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
 export const ParserBlock = {
     getCaseDefaultBlock(FuncInput: FuncInputType): false | MyDocSymbol {
         const { lStr } = FuncInput;
-        if (lStr === '' || (/^\s*$/).test(lStr)) return false;
+        if (lStr === '') return false;
         const {
             Uri, RangeEndLine, inClass, line, DocStrMap,
         } = FuncInput;
@@ -223,7 +223,7 @@ export const ParserBlock = {
             Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
         } = FuncInput;
 
-        if (lStr === '' || (/^\s*$/).test(lStr)) return false;
+        if (lStr === '') return false;
         const isFunc = getFuncDef(DocStrMap, line);
         if (isFunc === false) return false;
 

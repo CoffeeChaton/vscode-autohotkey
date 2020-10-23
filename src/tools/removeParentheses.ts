@@ -6,14 +6,14 @@ export function removeParentheses(textRaw: string): string {
         switch (textRaw[i]) {
             case '(':
                 deep++;
-                textFix += ' ';
+                textFix += '_';
                 break;
             case ')':
                 deep--;
-                textFix += ' ';
+                textFix += '_';
                 break;
             default:
-                textFix += deep === 0 ? textRaw[i] : ' ';
+                textFix += deep === 0 ? textRaw[i] : '_';
                 break;
         }
     }
