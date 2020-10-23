@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-type-alias */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint no-continue: "error" */
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
 import * as vscode from 'vscode';
-import { getLStr } from '../../tools/removeSpecialChar';
+// import { getLStr } from '../../tools/removeSpecialChar';
 import { inLTrimRange } from '../../tools/inLTrimRange';
 import { getSwitchRange, inSwitchBlock } from './SwitchCase';
 import { hasDoubleSemicolon } from './hasDoubleSemicolon';
@@ -47,10 +48,24 @@ function calcDeep(textFix: string): number {
     return block;
 }
 
+type WarnUseType = {
+    textFix: string;
+    line: number;
+    CommentBlock: boolean;
+    occ: number;
+    deep: number;
+    labDeep: 0 | 1;
+    inLTrim: 0 | 1 | 2;
+    textRaw: string;
+    switchRangeArray: vscode.Range[];
+    document: vscode.TextDocument;
+    options: vscode.FormattingOptions;
+};
+
 // eslint-disable-next-line max-params
-function fn_Warn_thisLineText_WARN(textFix: string, line: number, CommentBlock: boolean,
-    occ: number, deep: number, inLTrim: 0 | 1 | 2, textRaw: string,
-    switchRangeArray: vscode.Range[], document: vscode.TextDocument, options: vscode.FormattingOptions): string {
+function fn_Warn_thisLineText_WARN({
+    textFix, line, CommentBlock, occ, deep, labDeep, inLTrim, textRaw, switchRangeArray, document, options,
+}: WarnUseType): string {
     if (inLTrim === 1 && textRaw.trim().startsWith('(') === false) {
         return document.lineAt(line).text;
     }
@@ -67,7 +82,7 @@ function fn_Warn_thisLineText_WARN(textFix: string, line: number, CommentBlock: 
     const curlyBracketsChange: 0 | -1 = textFix.startsWith('}') || (occ > 0 && textFix.startsWith('{'))
         ? -1
         : 0;
-    const deepFix = Math.max(deep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(inLTrim, textRaw), 0);
+    const deepFix = Math.max(deep + labDeep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(inLTrim, textRaw), 0);
     const TabSpaces = options.insertSpaces
         ? ' '
         : '\t';
@@ -84,10 +99,12 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
         const timeStart = Date.now();
-        const DocStrMap = Pretreatment(document.getText().split('\n'));
+        const AllDoc = document.getText();
+        const DocStrMap = Pretreatment(AllDoc.split('\n'));
         let WarnFmtDocWarn = ''; // WARN TO USE THIS !!
         let deep = 0;
         let tagDeep = 0;
+        let labDeep: 0 | 1 = 0;
         let occ = 0;
         let CommentBlock = false;
         let inLTrim: 0 | 1 | 2 = 0; // ( LTrim
@@ -105,10 +122,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
             const textRaw = DocStrMap[line].textRaw;
             CommentBlock = DocStrMap[line].detail.includes(DetailType.inComment);
             inLTrim = inLTrimRange(textRaw, inLTrim);
-            const textFix = (CommentBlock || DocStrMap[line].detail.includes(DetailType.inSkipSign) || inLTrim > 0)
-                ? ''
-                : getLStr(textRaw).trim();
-
+            const textFix = DocStrMap[line].lStr.trim();
             const hasHashtag = Hashtag(textFix);
             const HotStr = isHotStr(textFix);
             const Label = isLabel(textFix);
@@ -117,12 +131,14 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
                 || (tagDeep > 0 && tagDeep === deep && HotStr) // `::btw::\n`
                 || (tagDeep > 0 && tagDeep === deep && Label) //  `label:`
             ) {
-                deep--;
+                labDeep = 0;
             }
 
-            if (deep < 0) deep = 0;
-            WarnFmtDocWarn = `${WarnFmtDocWarn + fn_Warn_thisLineText_WARN(textFix, line, CommentBlock, occ,
-                deep, inLTrim, textRaw, switchRangeArray, document, options)}\n`;
+            deep = deep < 0 ? 0 : deep;
+            labDeep = labDeep < 0 ? 0 : labDeep;
+            WarnFmtDocWarn = `${WarnFmtDocWarn + fn_Warn_thisLineText_WARN({
+                textFix, line, CommentBlock, occ, deep, labDeep, inLTrim, textRaw, switchRangeArray, document, options,
+            })}\n`;
 
             const switchRange = getSwitchRange(document, DocStrMap, textFix, line, lineMax);
             if (switchRange) switchRangeArray.push(switchRange);
@@ -132,7 +148,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
             }
 
             if (HotStr || Label) { // label:
-                deep++;
+                labDeep = 1;
                 tagDeep = deep;
             }
 
@@ -147,12 +163,12 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         console.log(`Format Document is Beta ${VERSION.format}, ${Date.now() - timeStart}ms`);
 
         WarnFmtDocWarn = WarnFmtDocWarn.replace(/\n{2,}/g, '\n\n')
-            .replace(/\n*$/, '\n');// doc finish just need one \n
+            .replace(/\n*$/, '\n');// doc finish only need one \n
 
         const fullRange = getFullDocumentRange(document);
 
         return getFormatConfig()
-            ? RangeFormat(document.getText(), WarnFmtDocWarn, document.uri.fsPath, fullRange)
+            ? RangeFormat(AllDoc, WarnFmtDocWarn, document.uri.fsPath, fullRange)
             : [new vscode.TextEdit(fullRange, WarnFmtDocWarn)];
     }
 }

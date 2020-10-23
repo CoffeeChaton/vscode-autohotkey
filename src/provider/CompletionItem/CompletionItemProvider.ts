@@ -72,16 +72,11 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
         token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<null | vscode.CompletionItem[]> {
         const Range = document.getWordRangeAtPosition(position);
         if (Range === undefined) return null;
-        const itemS: vscode.CompletionItem[] = [];
         //   const fsPathList = Detecter.getDocMapFile();
         const wordLower = document.getText(Range).toLowerCase();
         const funcNameList = await getItemSOfEMode(wordLower, EMode.ahkFunc);
-        funcNameList.forEach((v) => itemS.push(v));
         const classNameList = await getItemSOfEMode(wordLower, EMode.ahkClass);
-        classNameList.forEach((v) => itemS.push(v));
-        //  const textRaw = document.lineAt(position).text;
         const valInFuncList = getValInFunc(document, position, wordLower);
-        valInFuncList.forEach((v) => itemS.push(v));
-        return itemS;
+        return [...funcNameList, ...classNameList, ...valInFuncList];
     }
 }

@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,200] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,300] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { removeParentheses } from './removeParentheses';
@@ -11,7 +10,7 @@ async function clearOutlineCache(isTest: boolean): Promise<null> {
         vscode.window.showInformationMessage('vscode.workspace.rootPath is undefined');
         return null;
     }
-    if (!isTest) Detecter.DocMap.clear();
+    Detecter.DocMap.clear();
     await Detecter.buildByPathAsync(isTest, ahkRootPath[0].uri.fsPath);
     if (!isTest) {
         const timeEnd = Date.now() - timeStart;
@@ -51,7 +50,7 @@ function LoopOfClearOutlineCache(): null {
     vscode.window.showInformationMessage('this is Dev function ,open profile-flame to get .cpuprofile');
     setInterval(() => {
         clearOutlineCache(true);
-    }, 200);
+    }, 300);
     return null;
 }
 function removeParenthesesTest(): null {

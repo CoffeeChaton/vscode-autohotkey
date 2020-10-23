@@ -66,6 +66,10 @@ export const Detecter = {
         const Uri = vscode.Uri.file(fsPath);
         const document = await vscode.workspace.openTextDocument(Uri);
         const timeStart = Date.now();
+        // eslint-disable-next-line no-magic-numbers
+        // const size = Math.round(fs.statSync(fsPath).size / 1024);
+        // console.log(fsPath, `${size} KB`);
+
         const DocStrMap = Pretreatment(document.getText().split('\n'));
         const result = getChildren({
             Uri,

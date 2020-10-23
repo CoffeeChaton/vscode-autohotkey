@@ -1,6 +1,5 @@
 export function getSkipSign2(text: string): boolean {
-    if ((/^\s*[\w%[][\w%[\]]*\s*=[^=]/).test(text)) return true;
-    return false;
+    return (/^\s*[\w%[][\w%[\]]*\s*=[^=]/).test(text);
 }
 export function getSkipSign(text: string): boolean {
     const skipList: RegExp[] = [
@@ -11,11 +10,11 @@ export function getSkipSign(text: string): boolean {
         //  /^send(?:raw|input|play|event)?[,\s]/i,
         /^\s*sendRaw\b/i,
         /^\s*send\b\s*{Raw}/i,
+        // TODO /^\s\w\w*[\s,][\s,]*/  .eq. command
         //  /^\s*::/,
         //  /^menu[,\s]/i,
         //   /^s*loop[,\s][,\s]*parse,/,
         //   /^\s*[\w%[][\w%[\]]*\s*=[^=]/, // TODO TraditionAssignment
-        //  // FIXME TEST THIS [^:=+.><!|\w-]=[^=]
         // [^+\--:=><*!/\w~)"]=[^=]
     ];
     const iMax = skipList.length;
@@ -62,6 +61,7 @@ export function getLStr(textRaw: string): string {
                 break;
             case '`':
                 textFix += '_';
+                // eslint-disable-next-line no-magic-numbers
                 comma = 2;
                 break;
             case ';':
