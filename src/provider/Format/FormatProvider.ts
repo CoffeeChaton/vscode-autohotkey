@@ -33,8 +33,8 @@ function Hashtag(textFix: string): '#if' | '#HotString' | '' {
     return '';
 }
 
-function isReturn(tagDeep: number, deep: number, textRaw: string): boolean {
-    return (tagDeep === deep && (/^\s*return\s*$/i).test(textRaw));
+function isReturn(tagDeep: number, deep: number, textFix: string): boolean {
+    return (tagDeep === deep && (/^\s*return\s*$/i).test(textFix));
 }
 
 function calcDeep(textFix: string): number {
@@ -126,7 +126,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
             const hasHashtag = Hashtag(textFix);
             const HotStr = isHotStr(textFix);
             const Label = isLabel(textFix);
-            if (isReturn(tagDeep, deep, textRaw)// Return
+            if (isReturn(tagDeep, deep, textFix)// Return
                 || hasHashtag// #if #hotstring
                 || (tagDeep > 0 && tagDeep === deep && HotStr) // `::btw::\n`
                 || (tagDeep > 0 && tagDeep === deep && Label) //  `label:`
@@ -134,8 +134,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
                 labDeep = 0;
             }
 
-            deep = deep < 0 ? 0 : deep;
-            labDeep = labDeep < 0 ? 0 : labDeep;
+            if (deep < 0) deep = 0;
             WarnFmtDocWarn = `${WarnFmtDocWarn + fn_Warn_thisLineText_WARN({
                 textFix, line, CommentBlock, occ, deep, labDeep, inLTrim, textRaw, switchRangeArray, document, options,
             })}\n`;
@@ -144,7 +143,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
             if (switchRange) switchRangeArray.push(switchRange);
 
             if (hasHashtag) { // #IF  #hotstring
-                deep++;
+                labDeep = 1;
             }
 
             if (HotStr || Label) { // label:

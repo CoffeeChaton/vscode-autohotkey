@@ -30,6 +30,7 @@ export const enum DetailType {
     // eslint-disable-next-line no-magic-numbers
     inLTrim2 = 2,
     inSkipSign = 'Sk',
+    inSkipSign2 = 'Sk2',
     deepAdd = '+',
     deepSubtract = '-',
 }

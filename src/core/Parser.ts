@@ -42,7 +42,6 @@ export function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 type LineRulerType = DeepReadonly<{
     detail: string,
-    name: string,
     kind: vscode.SymbolKind,
     // regex?: RegExp,
     test: (str: string) => boolean,
@@ -51,11 +50,10 @@ type LineRulerType = DeepReadonly<{
 
 const LineRuler: LineRulerType = [
     {
-        name: '#',
         detail: 'directive',
         kind: vscode.SymbolKind.Event,
         getName(str: string): string | null {
-            const e = (/^\s*#(\w\w*)/).exec(str);
+            const e = (/^\s*(#\w\w*)/).exec(str);
             return e ? e[1] : null;
         },
 
@@ -64,13 +62,15 @@ const LineRuler: LineRulerType = [
         },
     },
     {
-        name: '',
         detail: 'global',
         kind: vscode.SymbolKind.Variable,
         getName(str: string): string | null {
-            const name = removeParentheses(str.replace(/\bbGlobal\b/i, ''))
+            const name = removeParentheses(str.replace(/\bglobal\b/i, ''))
                 .split(',')
-                .map((v) => v.replace(/:=.*/, '').trim())
+                .map((v) => {
+                    const col = v.indexOf(':=');
+                    return (col > 0) ? v.substring(0, col) : v;
+                })
                 .join(', ');
             return name;
         },
@@ -80,15 +80,17 @@ const LineRuler: LineRulerType = [
         },
     },
     {
-        name: '',
         detail: 'static',
         kind: vscode.SymbolKind.Variable,
         getName(str: string): string | null {
             //  static _SetBmpTrans := "", Ptr := "", PtrA := ""
             // -> _SetBmpTrans, Ptr, PtrA
-            const name = removeParentheses(str.replace(/\bbStatic\b/i, ''))
+            const name = removeParentheses(str.replace(/\bstatic\b/i, ''))
                 .split(',')
-                .map((v) => v.replace(/:=.*/, '').trim())
+                .map((v) => {
+                    const col = v.indexOf(':=');
+                    return (col > 0) ? v.substring(0, col) : v;
+                })
                 .join(', ');
             return name;
         },
@@ -98,12 +100,11 @@ const LineRuler: LineRulerType = [
         },
     },
     {
-        name: 'throw ',
         detail: 'throw',
         kind: vscode.SymbolKind.Event,
         getName(str: string): string | null {
             const e = (/^\s*\bthrow\b[\s,][\s,]*(.+)/i).exec(str);
-            return e ? e[1] : null;
+            return e ? `throw ${e[1]}` : null;
         },
 
         test(str: string): boolean {
@@ -111,7 +112,6 @@ const LineRuler: LineRulerType = [
         },
     },
     {
-        name: '',
         detail: 'label',
         kind: vscode.SymbolKind.Package,
         getName(str: string): string | null {
@@ -125,8 +125,7 @@ const LineRuler: LineRulerType = [
     },
     {
         // HotStr
-        name: '',
-        detail: 'HotStr',
+        detail: 'HotString',
         kind: vscode.SymbolKind.Event,
         getName(str: string): string | null {
             const e = (/^\s*(:[^:]*?:[^:][^:]*::)/).exec(str);
@@ -138,7 +137,6 @@ const LineRuler: LineRulerType = [
         },
     },
     {
-        name: '',
         detail: 'HotKeys',
         kind: vscode.SymbolKind.Event,
         getName(str: string): string | null {
@@ -158,10 +156,9 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
     const LineRulerLen = LineRuler.length;
     for (let i = 0; i < LineRulerLen; i++) {
         if (LineRuler[i].test(lStr)) {
-            const nameR = LineRuler[i].getName(lStr);
-            if (nameR) {
+            const name = LineRuler[i].getName(lStr);
+            if (name) {
                 const rangeRaw = getRangeOfLine(DocStrMap, line);
-                const name = `${LineRuler[i].name}${nameR.trim()}`;
                 return new vscode.DocumentSymbol(name,
                     LineRuler[i].detail, LineRuler[i].kind, rangeRaw, rangeRaw);
             }
@@ -205,8 +202,8 @@ export const ParserBlock = {
 
         const Range = getRange(DocStrMap, line, line, RangeEndLine);
         const selectionRange = getRangeOfLine(DocStrMap, line);
-        const SwitchBlock: MyDocSymbol = new vscode.DocumentSymbol(`Switch ${getSwitchName(lStr)}`,
-            '', vscode.SymbolKind.Enum, Range, selectionRange);
+        const SwitchBlock: MyDocSymbol = new vscode.DocumentSymbol(`${getSwitchName(lStr)}`,
+            'Switch', vscode.SymbolKind.Enum, Range, selectionRange);
         SwitchBlock.children = getChildren({
             Uri,
             DocStrMap,

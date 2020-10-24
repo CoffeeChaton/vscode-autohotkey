@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as vscode from 'vscode';
-import { getSkipSign2 } from '../../tools/removeSpecialChar';
 import {
-    TDocArr, EDiagBase, EDiagCode, EDiagMsg, MyDocSymbol,
+    TDocArr, EDiagBase, EDiagCode, EDiagMsg, MyDocSymbol, DetailType,
 } from '../../globalEnum';
-import { getSwErr } from './getSwErr';
+import { getTreeErr } from './getTreeErr';
 
 function getIgnore(DocStrMap: TDocArr, line: number, IgnoreLine: number): number {
     // ;@ahk-ignore 30 line.
@@ -26,11 +25,11 @@ function getIgnore(DocStrMap: TDocArr, line: number, IgnoreLine: number): number
 
 function assign(DocStrMap: TDocArr, line: number, uri: vscode.Uri): null | vscode.Diagnostic {
     // https://www.autohotkey.com/docs/commands/SetEnv.htm
-    if (!getSkipSign2(DocStrMap[line].lStr)) return null;
+    if (!DocStrMap[line].detail.includes(DetailType.inSkipSign2)) return null;
 
-    let col = DocStrMap[line].lStr.indexOf('=');
+    let col = DocStrMap[line].textRaw.indexOf('=');
     if (col === -1) col = 0;
-    const Range = new vscode.Range(line, col, line, DocStrMap[line].lStr.length);
+    const Range = new vscode.Range(line, col, line, DocStrMap[line].textRaw.length);
 
     const diag1 = new vscode.Diagnostic(Range, EDiagMsg.code107, vscode.DiagnosticSeverity.Information);
     diag1.source = EDiagBase.source;
@@ -53,20 +52,19 @@ function getCommandsErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): null
 export function Diagnostic(DocStrMap: TDocArr, result: Readonly<MyDocSymbol[]>, uri: vscode.Uri, collection: vscode.DiagnosticCollection): void {
     const iMax = DocStrMap.length;
     let IgnoreLine = -1;
-    const showErr: boolean[] = []; // 1 is mean can show Err
+    const displayErr: boolean[] = [];
     const diagS: vscode.Diagnostic[] = [];
     for (let line = 0; line < iMax; line++) {
         IgnoreLine = getIgnore(DocStrMap, line, IgnoreLine);
         if (line > IgnoreLine) {
             const assignEnd = assign(DocStrMap, line, uri);
             if (assignEnd) diagS.push(assignEnd);
-            showErr.push(true);
+            displayErr.push(true);
         } else {
-            showErr.push(false);
+            displayErr.push(false);
         }
     }
 
-    getSwErr(result, showErr).forEach((e) => diagS.push(e));
-
+    diagS.push(...getTreeErr(result, displayErr));
     collection.set(uri, diagS);
 }

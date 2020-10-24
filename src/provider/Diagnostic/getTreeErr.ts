@@ -30,14 +30,16 @@ function setErrDefaultTooMuch(sw: MyDocSymbol): vscode.Diagnostic {
     return diag1;
 }
 
-function setErrDefault(sw: MyDocSymbol, iDefault: number): null | vscode.Diagnostic {
+function setErrDefault(sw: MyDocSymbol): null | vscode.Diagnostic {
+    const iDefault = getDefaultNumber(sw.children);
     switch (iDefault) {
         case 0: return setErrDefaultNotFind(sw);
         case 1: return null;
         default: return setErrDefaultTooMuch(sw);
     }
 }
-function setErrCase(sw: MyDocSymbol, iCase: number): null | vscode.Diagnostic {
+function setErrCase(sw: MyDocSymbol): null | vscode.Diagnostic {
+    const iCase = getCaseNumber(sw.children);
     // eslint-disable-next-line no-magic-numbers
     if (iCase < 20 && iCase > 0) return null;
     // eslint-disable-next-line no-magic-numbers
@@ -56,22 +58,23 @@ function setErrCase(sw: MyDocSymbol, iCase: number): null | vscode.Diagnostic {
     return null;
 }
 
-export function getSwErr(children: Readonly<MyDocSymbol[]>, showErr: boolean[]): vscode.Diagnostic[] {
+function getSwErr(sw: Readonly<MyDocSymbol>, displayErr: readonly boolean[]): vscode.Diagnostic[] {
     const digS: vscode.Diagnostic[] = [];
-    for (const sw of children) {
-        if (sw.kind === vscode.SymbolKind.Enum
-            && showErr[sw.range.start.line]
-            && sw.name.startsWith('Switch ')) {
-            const dn = getDefaultNumber(sw.children);
-            const de = setErrDefault(sw, dn);
-            if (de) digS.push(de);
-
-            const cn = getCaseNumber(sw.children);
-            const ce = setErrCase(sw, cn);
-            if (ce) digS.push(ce);
-        } else {
-            getSwErr(sw.children, showErr).forEach((e) => digS.push(e));
-        }
+    if (sw.kind === vscode.SymbolKind.Enum
+        && displayErr[sw.range.start.line]
+        && sw.detail === 'Switch') {
+        const de = setErrDefault(sw);
+        if (de) digS.push(de);
+        const ce = setErrCase(sw);
+        if (ce) digS.push(ce);
+    }
+    return digS;
+}
+export function getTreeErr(children: Readonly<MyDocSymbol[]>, displayErr: readonly boolean[]): vscode.Diagnostic[] {
+    const digS: vscode.Diagnostic[] = [];
+    for (const ch of children) {
+        digS.push(...getSwErr(ch, displayErr));
+        digS.push(...getTreeErr(ch.children, displayErr));
     }
     return digS;
 }
