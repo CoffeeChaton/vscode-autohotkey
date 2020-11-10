@@ -32,24 +32,34 @@ function getReturnText(lStr: string, textRaw: string): string {
 }
 
 export function inCommentBlock2(textRaw: string, CommentBlock: boolean): boolean {
-    if ((/\s*\/\*\*/).test(textRaw)) return true; // /**
-    if ((/\s*\*\//).test(textRaw)) return false; // */
+    if (CommentBlock) {
+        if ((/^\s*\*\//).test(textRaw)) return false; // */
+    } else if ((/^\s*\/\*\*/).test(textRaw)) {
+        return true; // /**
+    }
+
     return CommentBlock;
 }
 
-export async function setFuncHoverMD(hasSymbol: {
+type TSymbol = {
     AhkSymbol: MyDocSymbol;
     fsPath: string;
-}): Promise<vscode.MarkdownString> {
-    const document = await vscode.workspace.openTextDocument(vscode.Uri.file(hasSymbol.fsPath));
+};
+export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.MarkdownString> {
+    const { AhkSymbol, fsPath } = mySymbol;
+    const document = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
     const { showComment } = getHoverConfig();
-
+    if (AhkSymbol.kind !== vscode.SymbolKind.Function) {
+        console.log('function setFuncHoverMD -> AhkSymbol', AhkSymbol);
+        console.log('TODO support other kind');
+        return new vscode.MarkdownString('', true);
+    }
     // --set end---
 
     let commentBlock = false;
     let commentText = '';
     let returnList = '';
-    const DocStrMap = Pretreatment(document.getText(hasSymbol.AhkSymbol.range).split('\n'));
+    const DocStrMap = Pretreatment(document.getText(AhkSymbol.range).split('\n'));
     const starLine = 0;
     const endLine = DocStrMap.length;
     for (let line = starLine; line < endLine; line += 1) {
@@ -64,8 +74,8 @@ export async function setFuncHoverMD(hasSymbol: {
         returnList += getReturnText(DocStrMap[line].lStr, DocStrMap[line].textRaw);
     }
 
-    const kindDetail = `(${EMode.ahkFunc}) ${hasSymbol.AhkSymbol.detail}\n`;
-    const title = document.getText(hasSymbol.AhkSymbol.selectionRange);
+    const kindDetail = `(${EMode.ahkFunc}) ${AhkSymbol.detail}\n`;
+    const title = document.getText(AhkSymbol.selectionRange);
 
     const commentText2 = showComment ? commentFix(commentText) : '';
     const md = new vscode.MarkdownString('', true)

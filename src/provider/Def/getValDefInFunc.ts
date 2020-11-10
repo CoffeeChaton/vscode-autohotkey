@@ -3,20 +3,6 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { MyDocSymbol, VERSION } from '../../globalEnum';
-import { Pretreatment } from '../../tools/Pretreatment';
-
-// is https://www.autohotkey.com/docs/Functions.htm#Local
-function isForceLocalMode(docSymbol: MyDocSymbol, document: vscode.TextDocument): boolean {
-    const newRange = new vscode.Range(docSymbol.selectionRange.end,
-        new vscode.Position(docSymbol.selectionRange.end.line + 5, 0));
-
-    const DocStrMap = Pretreatment(document.getText(newRange).split('\n'));
-    for (let i = 0; i < DocStrMap.length; i++) {
-        if ((/^\s*local\s*$/i).test(DocStrMap[i].lStr)) return true;
-    }
-
-    return false;
-}
 
 const enum EFuncPos {
     isFuncName = 1,
@@ -28,7 +14,7 @@ const enum EFuncPos {
 function atFunPos(docSymbol: MyDocSymbol, document: vscode.TextDocument, position: vscode.Position): EFuncPos {
     if (docSymbol.selectionRange.contains(position)) return EFuncPos.isFuncArg;
     if (docSymbol.range.start.line === position.line) return EFuncPos.isFuncName;
-    if (isForceLocalMode(docSymbol, document)) return EFuncPos.isInLocal;
+    // if (getFnMode(docSymbol, document) === EFnMode.local) return EFuncPos.isInLocal;
     return EFuncPos.isNoLocal;
 }
 
@@ -84,6 +70,7 @@ function wrapper(document: vscode.TextDocument, docSymbol: MyDocSymbol, wordLowe
         new RegExp(`\\b${wordLower}\\b\\s*:=[^=]`, 'i'),
     ];
 
+    const Location: vscode.Location[] = [];
     for (const reg of regList) {
         const loc = searchValOfRange(document, docSymbol.range, reg);
         if (loc.length > 0) {
@@ -91,10 +78,10 @@ function wrapper(document: vscode.TextDocument, docSymbol: MyDocSymbol, wordLowe
             console.log(debugStr);
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             //     vscode.window.showInformationMessage(debugStr);
-            return loc;
+            Location.push(...loc);
         }
     }
-    return [];
+    return Location;
 }
 export function getValDefInFunc(document: vscode.TextDocument, position: vscode.Position, wordLower: string, listAllUsing: boolean)
     : null | vscode.Location[] {

@@ -1,5 +1,5 @@
 export function getSkipSign2(text: string): boolean {
-    return (/^\s*[\w%[][\w%[\]]*\s*=[^=]/).test(text);
+    return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/).test(text);
 }
 export function getSkipSign(text: string): boolean {
     const skipList: RegExp[] = [
@@ -8,13 +8,12 @@ export function getSkipSign(text: string): boolean {
         /^\s*msgbox\b/i,
         //  /^gui\b/i,
         //  /^send(?:raw|input|play|event)?[,\s]/i,
-        /^\s*sendRaw\b/i,
-        /^\s*send\b\s*{Raw}/i,
+        /^\s*(?:control)?sendRaw\b/i,
+        /^\s*(?:control)?send\b.*{Raw}/i,
         // TODO /^\s\w\w*[\s,][\s,]*/  .eq. command
         //  /^\s*::/,
         //  /^menu[,\s]/i,
         //   /^s*loop[,\s][,\s]*parse,/,
-        //   /^\s*[\w%[][\w%[\]]*\s*=[^=]/, // TODO TraditionAssignment
         // [^+\--:=><*!/\w~)"]=[^=]
     ];
     const iMax = skipList.length;
@@ -44,33 +43,31 @@ export function getLStrOld(textRaw: string): string {
     }
 }
 export function getLStr(textRaw: string): string {
-    if (textRaw[0] === ';') return '';
-    if ((/^\s*;/).test(textRaw)) return '';
-
     //  TODD QUICK
-    //  const text = textRaw.replace(/`./g, '__');
+    const text = textRaw.replace(/`./g, '__');
     let textFix = '';
     let tf = 1;
-    let comma = 0;
-    const sL = textRaw.length;
+    const sL = text.length;
     for (let i = 0; i < sL; i++) {
-        switch (textRaw[i]) {
+        switch (text[i]) {
             case '"':
                 tf *= -1;
                 textFix += '_';
                 break;
-            case '`':
-                textFix += '_';
-                // eslint-disable-next-line no-magic-numbers
-                comma = 2;
-                break;
             case ';':
-                return (/^\s*$/).test(textFix) ? '' : textFix;
+                if (tf === 1) return (/^\s*$/).test(textFix) ? '' : textFix;
+                textFix += '_';
+                break;
             default:
-                textFix += tf === 1 && comma === 0 ? textRaw[i] : '_';
-                comma -= comma === 0 ? 0 : 1;
+                textFix += tf === 1 ? text[i] : '_';
                 break;
         }
     }
     return (/^\s*$/).test(textFix) ? '' : textFix;
 }
+/**
+```ahk
+test LStr()
+c := a . "123456789" . ff(";") . 2 * 851 * 33 / 2 - 33 . ";" . "`;---``" . "---" . dc ; 65486a"EO"
+```
+*/

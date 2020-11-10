@@ -1,0 +1,44 @@
+{
+    "TODO": [],
+
+    // FoundPos := RegExMatch()
+    "AhkMatch": {
+        // Match.Pos(N)
+        // Match.Len(N)
+        // Match.Value(N)
+        // Match.Name(N)
+        // Match.Count()
+        // Match.Mark()
+    },
+    // Throw , Expression
+    "AhkExpression": {
+        // Message: An error message or ErrorLevel value.
+        // What: The name of the command, function or label which was executing or about to execute when the error occurred.
+        // Extra: Additional information about the error, if available.
+        // File: Set automatically to the full path of the script file which contains the line at which the error occurred.
+        // Line: Set automatically to the line number at which the error occurred.
+    },
+    "RegRead": {
+        //  RegRead https://www.autohotkey.com/docs/commands/RegRead.htm
+        "HKEY_LOCAL_MACHINE": {
+            "prefix": "HKEY_LOCAL_MACHINE",
+            "body": "HKEY_LOCAL_MACHINE"
+        },
+        "HKEY_USERS": {
+            "prefix": "HKEY_USERS",
+            "body": "HKEY_USERS"
+        },
+        "HKEY_CURRENT_USER": {
+            "prefix": "HKEY_CURRENT_USER",
+            "body": "HKEY_CURRENT_USER"
+        },
+        "HKEY_CLASSES_ROOT": {
+            "prefix": "HKEY_CLASSES_ROOT",
+            "body": "HKEY_CLASSES_ROOT"
+        },
+        "HKEY_CURRENT_CONFIG": {
+            "prefix": "HKEY_CURRENT_CONFIG",
+            "body": "HKEY_CURRENT_CONFIG"
+        }
+    }
+}

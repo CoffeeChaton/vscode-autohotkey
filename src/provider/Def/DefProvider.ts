@@ -1,5 +1,4 @@
 /* eslint-disable no-await-in-loop */
-/* eslint-disable @typescript-eslint/no-type-alias */
 /* eslint-disable security/detect-non-literal-regexp */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
@@ -107,6 +106,7 @@ export async function userDef(document: vscode.TextDocument,
     position: vscode.Position, wordLower: string, listAllUsing: boolean): Promise<null | vscode.Location[]> {
     const timeStart = Date.now();
     // isDef: (textTrim: string) => boolean
+    // TODO get def of AST
     const defRefList: RegExp[] = [
         // class ClassName
         new RegExp(`class\\b\\s\\s*\\b(${wordLower})\\b`, 'i'),
@@ -118,10 +118,11 @@ export async function userDef(document: vscode.TextDocument,
 
     const usingRegList: RegExp[] = [
         // eslint-disable-next-line max-len
-        new RegExp(`\\b(${wordLower})\\b`, 'i'), // \b(${wordLower})\b
-        new RegExp(`\\.{0}\\b(${wordLower})\\b`, 'i'),
-        // .{0}funcName
-        new RegExp(`\\b(${wordLower})\\b`, 'i'),
+        new RegExp(`(?:^class\\b\\s\\s*\\b(${wordLower})\\b)|(?:\\bnew\\s\\s*\\b(${wordLower})\\b)|(?:(${wordLower})\\.)|(?:\\bextends\\b\\s\\s*(${wordLower}))|(?:\\bglobal\\b\\s\\s*\\b(${wordLower})\\b)|(?:\\{\\s*base:\\s*(${wordLower}))|(?:\\w\\w*\\.base\\s*:=\\s*(${wordLower}))`, 'i'),
+        // class ClassName | new className | className. | extends  className | global className |  {base: className | .base := baseObject
+        new RegExp(`(?:(?<!\\.)\\b(${wordLower})\\()|(?:(?<=\\bfunc\\()["']\\b(${wordLower})\\b["'])`, 'i'),
+        // funcName( | Func("funcName"
+        new RegExp(`global\\s\\s*(${wordLower})\\b`, 'i'),
         // global var_name
     ];
 

@@ -6,9 +6,10 @@ import { EMode, MyDocSymbol } from '../globalEnum';
 import { setFuncHoverMD } from '../tools/setHoverMD';
 
 let wm: WeakMap<MyDocSymbol, vscode.Hover> = new WeakMap();
-
+let wmSize = 0;
 setInterval(() => {
     wm = new WeakMap();
+    wmSize = 0;
     console.log('HoverFunc WeakMap clear 10 min');
 }, 10 * 60 * 1000); // 10 minute
 
@@ -29,6 +30,13 @@ async function HoverFunc(wordLower: string, textRaw: string): Promise<false | vs
     const md = await setFuncHoverMD(hasSymbol);
     const hover = new vscode.Hover(md);
     wm.set(hasSymbol.AhkSymbol, hover);
+    wmSize += 1;
+    // eslint-disable-next-line no-magic-numbers
+    if (wmSize > 30) {
+        wm = new WeakMap();
+        wmSize = 0;
+        console.log('HoverFunc WeakMap clear of wmSize > 200');
+    }
     return hover;
 }
 

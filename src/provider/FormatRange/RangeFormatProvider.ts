@@ -77,16 +77,25 @@ function fnStrGroup(text: string): string {
             : '';
 
         const strElement = strGroup[s];
-        newBody += ((s % 2) !== 0 || strElement.includes('`'))
+        newBody += ((s % 2) !== 0 || strElement.includes('`')) // TODO  strElement.includes('`')
             ? strElement
             : fnLR(strElement);
     }
     return head + newBody.trim();
 }
 
+type RangeFormatType = {
+    timeStart: number;
+    RangeTextRaw: string;
+    RangeText: string;
+    fsPath: string;
+    range: vscode.Range;
+};
+
 // eslint-disable-next-line max-len
-export function RangeFormat(RangeTextRaw: string, RangeText: string, fsPath: string, range: vscode.Range): vscode.ProviderResult<vscode.TextEdit[]> {
-    const timeStart = Date.now();
+export function RangeFormat({
+    timeStart, RangeTextRaw, RangeText, fsPath, range,
+}: RangeFormatType): vscode.ProviderResult<vscode.TextEdit[]> {
     let CommentBlock = false;
     let inLTrim: 0 | 1 | 2 = 0;
     let textNew = '';
@@ -127,6 +136,9 @@ export class RangeFormatProvider implements vscode.DocumentRangeFormattingEditPr
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         options: vscode.FormattingOptions, token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
         const RangeText = document.getText(range);
-        return RangeFormat(RangeText, RangeText, document.uri.fsPath, range);
+        const timeStart = Date.now();
+        return RangeFormat({
+            timeStart, RangeTextRaw: RangeText, RangeText, fsPath: document.uri.fsPath, range,
+        });
     }
 }

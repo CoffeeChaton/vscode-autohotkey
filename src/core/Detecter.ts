@@ -71,6 +71,10 @@ export const Detecter = {
         // console.log(fsPath, `${size} KB`);
 
         const DocStrMap = Pretreatment(document.getText().split('\n'));
+        // DocStrMap.forEach((e) => {
+        //     console.log('lStr', e.lStr);
+        //     console.log('tRaw', e.textRaw);
+        // });
         const result = getChildren({
             Uri,
             DocStrMap,
@@ -82,10 +86,8 @@ export const Detecter = {
         });
 
         if (fsPath.includes(EStr.diff_name_prefix) === false) {
-            if (isTest === false) {
-                showTimeSpend(document.uri, timeStart);
-                Detecter.DocMap.set(fsPath, result);
-            }
+            if (isTest === false) showTimeSpend(document.uri, timeStart);
+            Detecter.DocMap.set(fsPath, result);
             Diagnostic(DocStrMap, result, Uri, Detecter.diagColl);
         }
         return result as vscode.DocumentSymbol[];

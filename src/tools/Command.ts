@@ -1,7 +1,7 @@
+/* eslint-disable no-magic-numbers */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,300] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
-import { removeParentheses } from './removeParentheses';
 
 async function clearOutlineCache(isTest: boolean): Promise<null> {
     const timeStart = Date.now();
@@ -28,16 +28,15 @@ async function listAhkInclude(): Promise<null> {
         const document = await vscode.workspace.openTextDocument(fsPath);
         const docAllText = document.getText().split('\n');
         const lineCount = docAllText.length;
-        const InitialDescription = `${fsPath}\n`;
-        let thisFileDescription = InitialDescription;
+        let thisFileDescription = '';
         for (let line = 0; line < lineCount; line++) {
             if (RegexInclude.test(docAllText[line])) {
                 const lineToFix = (line + 1).toString().padStart(3, ' ');
                 thisFileDescription = `${thisFileDescription}${lineToFix} line    ${docAllText[line].trim()}\n`;
             }
         }
-        if (thisFileDescription !== InitialDescription) {
-            AllList = `${AllList}\n\n${thisFileDescription}`;
+        if (thisFileDescription !== '') {
+            AllList = `${AllList}\n\n${fsPath}\n${thisFileDescription}`;
         }
     }
     const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
@@ -46,31 +45,49 @@ async function listAhkInclude(): Promise<null> {
     return null;
 }
 
-function LoopOfClearOutlineCache(): null {
+// eslint-disable-next-line init-declarations
+let c0: NodeJS.Timeout;
+let c1: NodeJS.Timeout[] = [];
+async function LoopOfClearOutlineCache(): Promise<null> {
     vscode.window.showInformationMessage('this is Dev function ,open profile-flame to get .cpuprofile');
-    setInterval(() => {
-        clearOutlineCache(true);
-    }, 300);
-    return null;
-}
-function removeParenthesesTest(): null {
-    const d = removeParentheses(listAhkInclude.toString());
-    console.log(d);
-    return null;
+    clearInterval(c0);
+    c1.map((e) => clearInterval(e));
+    c1 = [];
+    const items: string[] = [
+        'just clear NodeJS.Timeout',
+        '0 -> Unlimited',
+        '5 min',
+    ];
+    const base = 300;
+    const maxTime = await vscode.window.showQuickPick(items);
+    switch (maxTime) {
+        case items[0]: return null;
+        case items[1]:
+            c0 = setInterval(() => {
+                clearOutlineCache(true);
+            }, base);
+            return null;
+        case items[2]:
+            for (let i = 1; i <= (5 * 60 * 1000) / base; i++) {
+                c1.push(setTimeout(() => {
+                    clearOutlineCache(true);
+                }, i * base));
+            }
+            return null;
+        default: return null;
+    }
 }
 export async function statusBarClick(): Promise<null> {
     const items: string[] = [
         '0 -> clearOutlineCache',
         '1 -> list #Include',
-        // '2 -> dev tools setInterval() ',
-        // '3 -> dev tools test removeParentheses',
+        '2 -> dev tools setInterval() ',
     ];
     const options = await vscode.window.showQuickPick(items);
     switch (options) {
         case items[0]: return clearOutlineCache(false);
         case items[1]: return listAhkInclude();
         case items[2]: return LoopOfClearOutlineCache();
-        case items[3]: return removeParenthesesTest();
         default: return null;
     }
 }

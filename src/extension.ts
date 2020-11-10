@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
 // import { CompletionComma } from './provider/CompletionItemProvider';
 import { Detecter } from './core/Detecter';
@@ -17,13 +18,14 @@ export function activate(context: vscode.ExtensionContext): void {
     const language = { language: 'ahk' };
     context.subscriptions.push(
         vscode.languages.registerHoverProvider(language, new HoverProvider()),
-        vscode.languages.registerCompletionItemProvider(language, new CompletionItemProvider(), ''),
+        vscode.languages.registerCompletionItemProvider(language, new CompletionItemProvider(), '', '.', '{'),
         vscode.languages.registerDefinitionProvider(language, new DefProvider()),
         vscode.languages.registerReferenceProvider(language, new ReferenceProvider()),
         vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
         vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
         vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
         // vscode.languages.registerRenameProvider(language, new RenameProvider()),
+        // vscode.languages.registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', ','),
         vscode.languages.registerCodeActionsProvider(language, new CodeActionProvider()),
         FileProvider.createEditorListenr(),
         vscode.workspace.onDidChangeConfiguration(() => configChangEvent()),
@@ -33,17 +35,11 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.commands.registerCommand('ahk.bar.click', () => { statusBarClick(); }),
     );
     const ahkRootPath = vscode.workspace.workspaceFolders;
-    if (ahkRootPath) Detecter.buildByPath(false, ahkRootPath[0].uri.fsPath);
+    if (ahkRootPath) Detecter.buildByPath(true, ahkRootPath[0].uri.fsPath);
 }
 
-// TODO https://code.visualstudio.com/api/references/vscode-api#Diagnostic
-// ParameterInformation
-// SignatureInformation
-// https://code.visualstudio.com/api/references/vscode-api#TextEditor
 // if ([^\x00-\x7F] not in "" block ) auto warn
 // TODO 😋 ؄. 體 体 ㅀ の Ａ Ββ Αα ❤♡ ∈ [^\x00-\x7F]
-// CustomDocument
-// CodeActionKind
 /*
 https://github.com/think2011/vscode-i18n-core/blob/10abc4b356cfb34f64d17a7dbdb73e58f6bd6274/editor/Annotation.ts
 

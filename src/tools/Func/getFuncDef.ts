@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-type-alias */
-
 import * as vscode from 'vscode';
-import { TDocArr } from '../globalEnum';
+import { TDocArr } from '../../globalEnum';
 
 export type FuncDefData = {
     name: string;
@@ -34,7 +32,7 @@ function getFuncTail({
         const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine);
         return { name, selectionRange };
     }
-    if (searchLine + 1 > DocStrMap.length) return false;
+    if (searchLine + 1 === DocStrMap.length) return false;
 
     // i+1   ^, something , something ......)$
     // i+2   ^{
@@ -48,6 +46,7 @@ function getFuncTail({
 }
 
 export function getFuncDef(DocStrMap: TDocArr, defLine: number): false | FuncDefData {
+    if (defLine + 1 === DocStrMap.length) return false;
     const textFix = lineText(DocStrMap, defLine);
     if ((/^\s*\b(?:if|while)\b/i).test(textFix)) return false;
 
@@ -55,7 +54,7 @@ export function getFuncDef(DocStrMap: TDocArr, defLine: number): false | FuncDef
     if (fnHead === null) return false;
 
     const name = fnHead[1];
-    // if ((/^\s*\b(?:if|while)\b/i).test(name)) return false;
+    // if ((/^(?:if|while)$/i).test(name)) return false;
 
     const funcData = getFuncTail({
         DocStrMap,
@@ -69,7 +68,7 @@ export function getFuncDef(DocStrMap: TDocArr, defLine: number): false | FuncDef
     if (lineText(DocStrMap, defLine).includes(')')) return false;// fn_Name( ... ) ...  ,this is not ahk function
 
     // eslint-disable-next-line no-magic-numbers
-    const iMax = defLine + 15;
+    const iMax = Math.min(defLine + 15, DocStrMap.length);
     for (let searchLine = defLine + 1; searchLine < iMax; searchLine += 1) {
         const searchText = lineText(DocStrMap, searchLine);
 

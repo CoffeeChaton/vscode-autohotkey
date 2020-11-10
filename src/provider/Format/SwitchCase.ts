@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { getRange } from '../../tools/getRange';
-import { TDocArr } from '../../globalEnum';
+import { TDocArr, DeepReadonly } from '../../globalEnum';
 
 export function getSwitchRange(document: vscode.TextDocument, DocStrMap: TDocArr, textFix: string, line: number, RangeEnd: number)
     : false | vscode.Range {
@@ -13,7 +13,7 @@ export function getSwitchRange(document: vscode.TextDocument, DocStrMap: TDocArr
     return new vscode.Range(PosStart, PosEnd);
 }
 
-export function inSwitchBlock(textFix: string, line: number, switchRangeArray: vscode.Range[]): number {
+export function inSwitchBlock(textFix: string, line: number, switchRangeArray: DeepReadonly<vscode.Range[]>): number {
     const Pos = new vscode.Position(line, 0);
     let switchDeep = 0;
     for (const switchRange of switchRangeArray) {

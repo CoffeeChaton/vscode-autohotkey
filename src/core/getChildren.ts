@@ -1,7 +1,8 @@
 /* eslint-disable prefer-destructuring */
-/* eslint-disable @typescript-eslint/no-type-alias */
 import * as vscode from 'vscode';
-import { TDocArr, DeepReadonly, MyDocSymbol } from '../globalEnum';
+import {
+    TDocArr, DeepReadonly, MyDocSymbol, MyDocSymbolArr,
+} from '../globalEnum';
 
 export type FuncInputType = DeepReadonly<{
     lStr: string,
@@ -23,7 +24,7 @@ type ChildType = DeepReadonly<{
     DocStrMap: TDocArr,
 }>;
 
-export function getChildren(child: ChildType): Readonly<MyDocSymbol[]> {
+export function getChildren(child: ChildType): MyDocSymbolArr {
     const {
         Uri, DocStrMap, RangeStartLine, RangeEndLine, inClass, fnList,
     } = child;

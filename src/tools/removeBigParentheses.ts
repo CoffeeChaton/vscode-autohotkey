@@ -1,14 +1,14 @@
-export function removeParentheses(lStr: string): string {
+export function removeBigParentheses(lStr: string): string {
     let textFix = '';
     let deep = 0;
     const sL = lStr.length;
     for (let i = 0; i < sL; i++) {
         switch (lStr[i]) {
-            case '(':
+            case '{':
                 deep++;
                 textFix += '_';
                 break;
-            case ')':
+            case '}':
                 deep--;
                 textFix += '_';
                 break;

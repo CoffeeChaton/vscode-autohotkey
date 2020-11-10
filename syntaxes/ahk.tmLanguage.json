@@ -3,6 +3,10 @@
     "name": "AutoHotkey",
     "patterns": [
         {
+            "match": "`[,%`;nrbtvaf:]",
+            "name": "constant.character.base.escape.ahk"
+        },
+        {
             "captures": {
                 "1": {
                     "name": "punctuation.definition.comment.ahk"
@@ -152,6 +156,10 @@
                 {
                     "match": "\"\"",
                     "name": "constant.character.escape.ahk"
+                },
+                {
+                    "match": "`[,%`;nrbtvaf:]",
+                    "name": "constant.character.string.escape.ahk"
                 }
             ]
         },

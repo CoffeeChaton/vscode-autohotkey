@@ -14,7 +14,6 @@ let config = {
         displayColor: configs.get('statusBar.displayColor') as string,
     },
     hover: {
-        showParm: configs.get('hover.showParm') as boolean,
         showComment: configs.get('hover.showComment') as boolean,
     },
     format: {
@@ -32,7 +31,6 @@ export function configChangEvent(): void {
             displayColor: configs.get('statusBar.displayColor') as string,
         },
         hover: {
-            showParm: configs.get('hover.showParm') as boolean,
             showComment: configs.get('hover.showComment') as boolean,
         },
         format: {
@@ -47,11 +45,11 @@ export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     const version = config.statusBar.showVersion ? VERSION.Parser : '';
     const timeSpend = config.statusBar.showTime ? `${time} ms` : '';
     const name = config.statusBar.showFileName
-        ? `${fsPathRaw.substring(fsPathRaw.lastIndexOf('\\') + 1)}`
+        ? ` of ${fsPathRaw.substring(fsPathRaw.lastIndexOf('\\') + 1)}`
         : '';
-    const text = `$(heart) ${version}${timeSpend} of ${name}`;
+    const text = `$(heart) ${version}${timeSpend}${name}`;
     statusBarItem.text = text;
-    console.log(time, ` ms of ${name}`);
+    console.log(time, ` ms of ${fsPathRaw.substring(fsPathRaw.lastIndexOf('\\') + 1)}`);
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
 }

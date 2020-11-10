@@ -20,6 +20,12 @@ function getFsPath(diag: vscode.Diagnostic): EDiagFsPath | '' {
         case EDiagCode.code111: return EDiagFsPath.code111;
         case EDiagCode.code112: return EDiagFsPath.code112;
         case EDiagCode.code113: return EDiagFsPath.code113;
+        case EDiagCode.code201: return EDiagFsPath.code201;
+        case EDiagCode.code801: return EDiagFsPath.code801;
+        case EDiagCode.code802: return EDiagFsPath.code802;
+        case EDiagCode.code901: return EDiagFsPath.code901;
+        case EDiagCode.code902: return EDiagFsPath.code902;
+        case EDiagCode.code903: return EDiagFsPath.code903;
         default: return consoleDefault(d, diag);
     }
 }
