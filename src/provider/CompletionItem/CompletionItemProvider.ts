@@ -98,11 +98,12 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<null | vscode.CompletionItem[]> {
         const t1 = Date.now();
-        const completions: vscode.CompletionItem[] = [];
+        const completions: vscode.CompletionItem[] = [
+            ...await wrapClass(document, position), // '.'
+            ...await wrapTriggerRegexW(document, position), // ''
+            ...ahkSend(document, position), // '{'
+        ];
 
-        completions.push(...await wrapClass(document, position));
-        completions.push(...await wrapTriggerRegexW(document, position));
-        completions.push(...ahkSend(document, position));
         // eslint-disable-next-line no-magic-numbers
         console.log('CompletionItemProvider -> timeFinish *1000', (Date.now() - t1) * 1000);
 
