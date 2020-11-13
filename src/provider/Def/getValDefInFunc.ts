@@ -33,7 +33,6 @@ function searchValOfRange(document: vscode.TextDocument, searchRange: vscode.Ran
 
     return List;
 }
-
 // TODO Continue Break to This Loop / For
 // TODO  break outer
 function searchClosestDef(document: vscode.TextDocument, searchRange: vscode.Range, regex: RegExp)

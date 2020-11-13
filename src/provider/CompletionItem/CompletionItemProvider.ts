@@ -7,6 +7,7 @@ import { setFuncHoverMD } from '../../tools/setHoverMD';
 import { getValOfFunc } from '../../tools/Func/getValOfFunc';
 import { wrapClass } from './wrapClass';
 import { ahkSend } from './ahkSend';
+import { insertTextWm } from './insertTextWm';
 
 async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
     const fsPaths = Detecter.getDocMapFile();
@@ -18,16 +19,14 @@ async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
             if (AhkSymbol.kind === vscode.SymbolKind.Class && reg.test(AhkSymbol.name)) {
                 const kind = vscode.CompletionItemKind.Class;
                 const item = new vscode.CompletionItem(AhkSymbol.name, kind);
-                const document = await vscode.workspace.openTextDocument(fsPath);
-                item.insertText = new vscode.SnippetString(document.getText(AhkSymbol.selectionRange));
+                item.insertText = await insertTextWm(AhkSymbol, fsPath);
                 item.detail = 'neko help';
                 item.documentation = 'user def class';
                 itemS.push(item);
             } else if (AhkSymbol.kind === vscode.SymbolKind.Function && reg.test(AhkSymbol.name)) {
                 const kind = vscode.CompletionItemKind.Function;
                 const item = new vscode.CompletionItem(AhkSymbol.name, kind);
-                const document = await vscode.workspace.openTextDocument(fsPath);
-                item.insertText = new vscode.SnippetString(document.getText(AhkSymbol.selectionRange));
+                item.insertText = await insertTextWm(AhkSymbol, fsPath);
                 item.detail = 'neko help';
                 item.documentation = await setFuncHoverMD({ fsPath, AhkSymbol });
                 itemS.push(item);
@@ -76,7 +75,7 @@ function wrapperOfValOFFuncList(document: vscode.TextDocument, position: vscode.
 async function triggerRegexW(document: vscode.TextDocument, position: vscode.Position, Range: vscode.Range): Promise<vscode.CompletionItem[]> {
     const wordLower = document.getText(Range).toLowerCase();
     // eslint-disable-next-line security/detect-non-literal-regexp
-    const wordStartReg = new RegExp(`/^${wordLower}/`, 'i');
+    const wordStartReg = new RegExp(`^${wordLower}`, 'i');
     const funcOrClassNameList = await getItemSOfEMode(wordStartReg);
     const valOFFuncList = wrapperOfValOFFuncList(document, position, wordLower);
     return [...funcOrClassNameList, ...valOFFuncList];
