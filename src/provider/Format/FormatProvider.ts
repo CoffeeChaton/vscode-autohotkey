@@ -111,8 +111,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
             const Label = isLabel(textFix);
             if (isReturn(tagDeep, deep, textFix)// Return
                 || hasHashtag// #if #hotstring
-                || (tagDeep > 0 && tagDeep === deep && HotStr) // `::btw::\n`
-                || (tagDeep > 0 && tagDeep === deep && Label) //  `label:`
+                || (tagDeep > 0 && tagDeep === deep && (HotStr || Label)) // `::btw::\n` //  `label:`
             ) {
                 labDeep = 0;
             }

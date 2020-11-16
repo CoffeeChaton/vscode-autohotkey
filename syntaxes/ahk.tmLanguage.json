@@ -46,7 +46,7 @@
                     "name": "punctuation.definition.equals.colon"
                 }
             },
-            "match": "^\\s*(.+)(::)",
+            "match": "^\\s*([^\"]+)(::)",
             "name": "hotkeyline.ahk"
         },
         {

@@ -55,7 +55,11 @@ export function getLStr(textRaw: string): string {
                 textFix += '_';
                 break;
             case ';':
-                if (tf === 1) return (/^\s*$/).test(textFix) ? '' : textFix;
+                if (tf === 1) {
+                    return (/^\s*$/).test(textFix)
+                        ? ''
+                        : textFix.replace(/(?:control)?sendRaw\b.*/i, '').replace(/(?:control)?send\b.*{Raw}.*/i, '');
+                }
                 textFix += '_';
                 break;
             default:
@@ -63,7 +67,9 @@ export function getLStr(textRaw: string): string {
                 break;
         }
     }
-    return (/^\s*$/).test(textFix) ? '' : textFix;
+    return (/^\s*$/).test(textFix)
+        ? ''
+        : textFix.replace(/(?:control)?sendRaw\b.*/i, '').replace(/(?:control)?send\b.*{Raw}.*/i, '');
 }
 /**
 ```ahk
