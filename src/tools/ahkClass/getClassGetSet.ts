@@ -1,7 +1,3 @@
-/* eslint-disable prefer-destructuring */
-/* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable max-lines */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,20] }] */
 import * as vscode from 'vscode';
 import { FuncInputType, getChildren } from '../../core/getChildren';
 import { MyDocSymbol } from '../../globalEnum';

@@ -1,26 +1,27 @@
-/* eslint-disable max-classes-per-file */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-/* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
 import { EDiagBase, EDiagFsPath, EDiagCode } from '../../globalEnum';
 
-function consoleDefault(a: never, diag: vscode.Diagnostic): '' {
-    console.log('console.log Default -> a', a, ' --99--66-33--44');
-    console.log('diag', diag);
-    return '';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function consoleDefault(a: never, diag: vscode.Diagnostic): null {
+    // console.log('console.log Default -> a', a, ' --99--66-33--44');
+    // console.log('diag', diag);
+    return null;
 }
 
-function getFsPath(diag: vscode.Diagnostic): EDiagFsPath | '' {
-    const d = diag.code as EDiagCode;
-    // console.log('function getFsPath -> diag', diag);
+function getFsPath(diag: vscode.Diagnostic): EDiagFsPath | null {
+    const code = diag.code;
+    if (code === undefined || typeof code === 'string' || typeof code === 'number') return null;
+
+    const d = code.value as EDiagCode;
     switch (d) {
         case EDiagCode.code107: return EDiagFsPath.code107;
         case EDiagCode.code110: return EDiagFsPath.code110;
         case EDiagCode.code111: return EDiagFsPath.code111;
         case EDiagCode.code112: return EDiagFsPath.code112;
         case EDiagCode.code113: return EDiagFsPath.code113;
+        case EDiagCode.code114: return EDiagFsPath.code114;
         case EDiagCode.code201: return EDiagFsPath.code201;
+        case EDiagCode.code700: return EDiagFsPath.code700;
         case EDiagCode.code801: return EDiagFsPath.code801;
         case EDiagCode.code802: return EDiagFsPath.code802;
         case EDiagCode.code901: return EDiagFsPath.code901;
@@ -30,7 +31,15 @@ function getFsPath(diag: vscode.Diagnostic): EDiagFsPath | '' {
     }
 }
 
-function IgnoreThisLine(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.CodeAction {
+function setEdit(uri: vscode.Uri, line: number, FsPath: EDiagFsPath): vscode.WorkspaceEdit {
+    const edit = new vscode.WorkspaceEdit();
+    const position = new vscode.Position(line, 0);
+    const Today = new Date();
+    const newText = `${EDiagBase.ignore} 1 line; at ${Today.toLocaleString()} ; ${FsPath}\n`;
+    edit.insert(uri, position, newText);
+    return edit;
+}
+function setIgnoreLine(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.CodeAction {
     // console.log('CodeActionProvider -> context', context);
     // diag
     //    code: 102
@@ -39,31 +48,25 @@ function IgnoreThisLine(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode
     //    severity: "Information"
     //    source: "neko help"
     const FsPath = getFsPath(diag);
-    if (FsPath === '') return null;
-    const { line } = diag.range.start;
-    const edit = new vscode.WorkspaceEdit();
-    const position = new vscode.Position(line, 0);
-    const Today = new Date();
-    const newText = `${EDiagBase.ignore} 1 line; at ${Today.toLocaleString()} ; ${FsPath}\n`;
-    edit.insert(uri, position, newText);
-    const CA = new vscode.CodeAction(`ignore line ${line + 1}`);
-    CA.edit = edit;
+    if (FsPath === null) return null;
+    const CA = new vscode.CodeAction('ignore line');
+    CA.edit = setEdit(uri, diag.range.start.line, FsPath);
+    //  CA.diagnostics = [diag];
     return CA;
 }
 export class CodeActionProvider implements vscode.CodeActionProvider {
     public provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         context: vscode.CodeActionContext, token: vscode.CancellationToken)
         : vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
         if (context.diagnostics.length === 0) return null;
         const { uri } = document;
         const CAList: vscode.CodeAction[] = [];
         for (const diag of context.diagnostics) {
-            const CA = IgnoreThisLine(uri, diag);
+            const CA = setIgnoreLine(uri, diag);
             if (CA) CAList.push(CA);
         }
 
         return CAList;
     }
-
-    //  resolveCodeAction?(codeAction: T, token: CancellationToken): ProviderResult<T>;
 }

@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { VERSION } from './globalEnum';
 
 const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
-statusBarItem.tooltip = 'this extensions by CoffeeChaton/vscode-ahk-outline';
+statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
 statusBarItem.command = 'ahk.bar.click';
 
 let configs = vscode.workspace.getConfiguration('AhkNekoHelp');

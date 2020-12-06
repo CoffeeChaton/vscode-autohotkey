@@ -29,19 +29,19 @@ async function HoverFunc(wordLower: string, textRaw: string): Promise<false | vs
 
     const md = await setFuncHoverMD(hasSymbol);
     const hover = new vscode.Hover(md);
-    wm.set(hasSymbol.AhkSymbol, hover);
-    wmSize += 1;
     // eslint-disable-next-line no-magic-numbers
     if (wmSize > 30) {
         wm = new WeakMap();
         wmSize = 0;
         console.log('HoverFunc WeakMap clear of wmSize > 200');
     }
+    wm.set(hasSymbol.AhkSymbol, hover);
+    wmSize += 1;
+
     return hover;
 }
 
 export class HoverProvider implements vscode.HoverProvider {
-    // eslint-disable-next-line class-methods-use-this
     public async provideHover(document: vscode.TextDocument, position: vscode.Position,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken): Promise<vscode.Hover | undefined> {
@@ -53,7 +53,7 @@ export class HoverProvider implements vscode.HoverProvider {
         if (isFunc !== false) return isFunc;
 
         // TODO https://www.autohotkey.com/docs/commands/index.htm
-        // const commands = this.getCommandsHover(document, position);
+        // const commands = getCommandsHover(document, position);
         // if (commands) return commands;
 
         return undefined;

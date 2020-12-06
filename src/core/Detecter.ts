@@ -30,7 +30,7 @@ export const Detecter = {
 
     delMap(e: vscode.FileDeleteEvent): void {
         for (const Uri of e.files) {
-            const { fsPath } = Uri;
+            const fsPath = Uri.fsPath;
             if (fsPath.endsWith('.ahk')) {
                 Detecter.DocMap.delete(fsPath);
             }
@@ -40,7 +40,7 @@ export const Detecter = {
 
     createMap(e: vscode.FileCreateEvent): void {
         for (const Uri of e.files) {
-            const { fsPath } = Uri;
+            const fsPath = Uri.fsPath;
             if (fsPath.endsWith('.ahk')) {
                 Detecter.updateDocDef(false, fsPath);
             }
@@ -50,12 +50,9 @@ export const Detecter = {
     renameFileName(e: vscode.FileRenameEvent): void {
         for (const { oldUri, newUri } of e.files) {
             if (oldUri.fsPath.endsWith('.ahk') && newUri.fsPath.endsWith('.ahk')) {
-                const tempDoc = Detecter.DocMap.get(oldUri.fsPath) || [];
-                Detecter.DocMap.set(newUri.fsPath, tempDoc);
                 Detecter.DocMap.delete(oldUri.fsPath);
-                const tempDiag = Detecter.diagColl.get(oldUri);
-                Detecter.diagColl.set(newUri, tempDiag);
                 Detecter.diagColl.delete(oldUri);
+                Detecter.updateDocDef(false, newUri.fsPath);
                 const fsPathList = Detecter.getDocMapFile();
                 renameFileNameFunc(oldUri, newUri, [...fsPathList]);
             }

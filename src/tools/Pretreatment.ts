@@ -36,19 +36,19 @@ export function Pretreatment(strArray: readonly string[]): TDocArr {
             continue;
         }
 
-        const lStr = getLStr(textRaw);
-        if (getSkipSign(lStr)) {
+        if (getSkipSign(textRaw)) {
             result.push({
                 lStr: '', deep, textRaw, detail: [DetailType.inSkipSign],
             });
             continue;
         }
-        if (getSkipSign2(lStr)) {
+        if (getSkipSign2(textRaw)) {
             result.push({
                 lStr: '', deep, textRaw, detail: [DetailType.inSkipSign2],
             });
             continue;
         }
+        const lStr = getLStr(textRaw);
 
         const detail: DetailType[] = [];
         if (!lStr.includes('::')) {

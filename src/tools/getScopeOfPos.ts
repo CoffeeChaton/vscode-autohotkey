@@ -56,7 +56,7 @@ export function getStack(document: vscode.TextDocument, position: vscode.Positio
 export function getScopeOfPos(document: vscode.TextDocument, position: vscode.Position): vscode.Range | null {
     const stackPro = getStack(document, position);
     if (stackPro === null) return null;
-    // eslint-disable-next-line prefer-destructuring
+
     const stack = stackPro.stack;
     if (stack.length === 0) return null;
     if (stack[0].ahkSymbol.kind === vscode.SymbolKind.Function) {

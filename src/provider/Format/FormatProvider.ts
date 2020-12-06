@@ -79,14 +79,13 @@ function fn_Warn_thisLineText_WARN({
 }
 
 export class FormatProvider implements vscode.DocumentFormattingEditProvider {
-    // eslint-disable-next-line class-methods-use-this
     public provideDocumentFormattingEdits(document: vscode.TextDocument, options: vscode.FormattingOptions,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
         const timeStart = Date.now();
         const AllDoc = document.getText();
         const DocStrMap = Pretreatment(AllDoc.split('\n'));
-        let WarnFmtDocWarn = ''; // WARN TO USE THIS !!
+        let WarnFmtDocWarn = ''; // WARN TO USE !!
         let deep = 0;
         let tagDeep = 0;
         let labDeep: 0 | 1 = 0;
@@ -102,7 +101,6 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         // const HotStr = [{ line: 0, deep: 0 }]; // ^::HotStr::
         const lineMax = document.lineCount;
         for (let line = 0; line < lineMax; line++) {
-            // eslint-disable-next-line prefer-destructuring
             const textRaw = DocStrMap[line].textRaw;
             inLTrim = inLTrimRange(textRaw, inLTrim);
             const textFix = DocStrMap[line].lStr.trim();

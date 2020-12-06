@@ -1,7 +1,3 @@
-/* eslint-disable prefer-destructuring */
-/* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable max-lines */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,20] }] */
 import * as vscode from 'vscode';
 import { FuncInputType } from '../../core/getChildren';
 import { MyDocSymbol } from '../../globalEnum';
@@ -11,7 +7,7 @@ export function getClassInstanceVar(FuncInput: FuncInputType): false | MyDocSymb
     const { line, lStr } = FuncInput;
 
     if (lStr.indexOf(':=') === -1) return false;
-    if ((/^\s*\bstatic\b/i).test(lStr) || (/^\s*\bglobal\b/i).test(lStr)) return false;
+    if ((/^\s*\b(?:static|global)\b/i).test(lStr)) return false;
 
     const name = removeParentheses(lStr)
         .split(',')

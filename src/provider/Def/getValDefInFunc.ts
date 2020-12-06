@@ -75,7 +75,6 @@ function wrapper(document: vscode.TextDocument, docSymbol: MyDocSymbol, wordLowe
         if (loc.length > 0) {
             const debugStr = `list ${wordLower} definition ,is ${VERSION.getValDefInFunc}`;
             console.log(debugStr);
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             //     vscode.window.showInformationMessage(debugStr);
             Location.push(...loc);
         }

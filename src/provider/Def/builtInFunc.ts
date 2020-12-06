@@ -1,5 +1,3 @@
-/* eslint-disable security/detect-non-literal-regexp */
-
 // Function     Description
 // FileExist    Checks for the existence of a file or folder and returns its attributes.
 // GetKeyState  Returns true (1) if the specified key is down and false (0) if it is up.

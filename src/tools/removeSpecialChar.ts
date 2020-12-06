@@ -2,24 +2,8 @@ export function getSkipSign2(text: string): boolean {
     return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/).test(text);
 }
 export function getSkipSign(text: string): boolean {
-    const skipList: RegExp[] = [
-        //   /^\s*;/,
-        // /^sleep\b/i,
-        /^\s*msgbox\b/i,
-        //  /^gui\b/i,
-        //  /^send(?:raw|input|play|event)?[,\s]/i,
-        /^\s*(?:control)?sendRaw\b/i,
-        /^\s*(?:control)?send\b.*{Raw}/i,
-        // TODO /^\s\w\w*[\s,][\s,]*/  .eq. command
-        //  /^\s*::/,
-        //  /^menu[,\s]/i,
-        //   /^s*loop[,\s][,\s]*parse,/,
-        // [^+\--:=><*!/\w~)"]=[^=]
-    ];
-    const iMax = skipList.length;
-    for (let i = 0; i < iMax; i += 1) {
-        if (skipList[i].test(text)) return true;
-    }
+    if ((/^\s*msgbox\b/i).test(text)) return true;
+    if ((/^\s*(?:control)?send(?:Raw\b|\b.*{Raw})/i).test(text)) return true;
     return false;
 }
 
@@ -42,8 +26,13 @@ export function getLStrOld(textRaw: string): string {
             return textFix.substring(0, i);
     }
 }
+function removeSenRaw(textFix: string): string {
+    const s0 = textFix.search(/\b(?:control)?send(?:Raw\b|\b.*{Raw})/i);
+    return s0 === -1 ? textFix : textFix.substring(0, s0);
+    // return textFix.replace(/\b(?:control)?sendRaw\b.*/i, '').replace(/\b(?:control)?send\b.*{Raw}.*/i, fnReplacer);
+}
 export function getLStr(textRaw: string): string {
-    //  TODD QUICK
+    // TODO QUICK
     const text = textRaw.replace(/`./g, '__');
     let textFix = '';
     let tf = 1;
@@ -58,7 +47,7 @@ export function getLStr(textRaw: string): string {
                 if (tf === 1) {
                     return (/^\s*$/).test(textFix)
                         ? ''
-                        : textFix.replace(/(?:control)?sendRaw\b.*/i, '').replace(/(?:control)?send\b.*{Raw}.*/i, '');
+                        : removeSenRaw(textFix);
                 }
                 textFix += '_';
                 break;
@@ -69,7 +58,7 @@ export function getLStr(textRaw: string): string {
     }
     return (/^\s*$/).test(textFix)
         ? ''
-        : textFix.replace(/(?:control)?sendRaw\b.*/i, '').replace(/(?:control)?send\b.*{Raw}.*/i, '');
+        : removeSenRaw(textFix);
 }
 /**
 ```ahk

@@ -21,8 +21,7 @@ export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionIte
     const lineBase = ahkSymbol.range.start.line;
     Pretreatment(document.getText(ahkSymbol.range).split('\n'))
         .forEach((v, index) => {
-            const { lStr } = v;
-            const matchAll = lStr.matchAll(/\bthis\.(\w\w+)\b/gi);
+            const matchAll = v.lStr.matchAll(/\bthis\.(\w\w+)\b/gi);
             for (const name of matchAll) {
                 // console.log('name', name);
                 // console.log('name', name[0].trim());
@@ -40,13 +39,14 @@ export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionIte
         itemS.push(item);
     });
 
-    wm.set(ahkSymbol, itemS);
-    wmSize += itemS.length;
     // eslint-disable-next-line no-magic-numbers
-    if (wmSize > 200) {
+    if (wmSize > 700) {
         wm = new WeakMap();
         wmSize = 0;
         // console.log('getThisItemOfWm WeakMap clear of wmSize > 200');
     }
+    wm.set(ahkSymbol, itemS);
+    wmSize += itemS.length;
+
     return itemS;
 }

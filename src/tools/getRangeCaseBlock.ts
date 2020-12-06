@@ -24,7 +24,8 @@ export function getRangeCaseBlock(DocStrMap: TDocArr, defLine: number, searchLin
             //       console.log(line, `line, Nested SwitchRange -> ${Resolved}`, Resolved);
             continue;
         }
-        if ((/^\s*\bcase\b\s*/i).test(lineLStr) || (/^\s*\bdefault\b\s*:/i).test(lineLStr)) {
+        if (lineLStr.indexOf(':') !== -1
+            && ((/^\s*\bcase\b\s*/i).test(lineLStr) || (/^\s*\bdefault\b\s*:/i).test(lineLStr))) {
             const col = DocStrMap[line - 1].lStr.length;
             return new vscode.Range(startPos, new vscode.Position(line - 1, col));
         }

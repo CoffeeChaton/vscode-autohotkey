@@ -55,7 +55,6 @@ async function getReference(usingReg: RegExp, timeStart: number, wordLower: stri
     return List;
 }
 
-// eslint-disable-next-line max-params
 async function ahkDef(
     {
         document,
@@ -153,7 +152,6 @@ export async function userDef(document: vscode.TextDocument,
 // open the definition to the side with ( via Ctrl+Alt+Click )
 // Peek Definition (via Alt+F12)
 export class DefProvider implements vscode.DefinitionProvider {
-    // eslint-disable-next-line class-methods-use-this
     public async provideDefinition(document: vscode.TextDocument, position: vscode.Position,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken): Promise<null | vscode.Location | vscode.Location[] | vscode.LocationLink[]> {

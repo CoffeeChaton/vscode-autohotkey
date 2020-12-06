@@ -1,32 +1,31 @@
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,20] }] */
 import * as vscode from 'vscode';
 import {
-    EDiagBase, EDiagMsg, EDiagCode, MyDocSymbol,
+    EDiagBase, EDiagMsg, EDiagCode, MyDocSymbol, EDiagFsPath,
 } from '../../globalEnum';
 
 function getDefaultNumber(swChildren: Readonly<MyDocSymbol[]>): number {
-    let iDefault = 0;
-    for (const caseOrDefault of swChildren) {
-        if (caseOrDefault.name === 'Default :') iDefault += 1;
-    }
-    return iDefault;
+    return swChildren.reduce((iDefault, element): number => (element.name === 'Default :' ? iDefault + 1 : iDefault), 0);
 }
 function getCaseNumber(swChildren: Readonly<MyDocSymbol[]>): number {
-    let iCase = 0;
-    for (const caseOrDefault of swChildren) {
-        if (caseOrDefault.name.startsWith('Case ')) iCase += 1;
-    }
-    return iCase;
+    return swChildren.reduce((iCase, element): number => (element.name.startsWith('Case ') ? iCase + 1 : iCase), 0);
 }
 function setErrDefaultNotFind(sw: MyDocSymbol): vscode.Diagnostic {
     const diag1 = new vscode.Diagnostic(sw.range, EDiagMsg.code110, vscode.DiagnosticSeverity.Information);
     diag1.source = EDiagBase.source;
-    diag1.code = EDiagCode.code110;
+    diag1.code = {
+        value: EDiagCode.code110,
+        target: vscode.Uri.parse(EDiagFsPath.code110),
+    };
     return diag1;
 }
 function setErrDefaultTooMuch(sw: MyDocSymbol): vscode.Diagnostic {
     const diag1 = new vscode.Diagnostic(sw.range, EDiagMsg.code111, vscode.DiagnosticSeverity.Information);
     diag1.source = EDiagBase.source;
-    diag1.code = EDiagCode.code111;
+    diag1.code = {
+        value: EDiagCode.code111,
+        target: vscode.Uri.parse(EDiagFsPath.code111),
+    };
     return diag1;
 }
 
@@ -38,35 +37,54 @@ function setErrDefault(sw: MyDocSymbol): null | vscode.Diagnostic {
         default: return setErrDefaultTooMuch(sw);
     }
 }
-function setErrCase(sw: MyDocSymbol): null | vscode.Diagnostic {
-    const iCase = getCaseNumber(sw.children);
-    // eslint-disable-next-line no-magic-numbers
-    if (iCase < 20 && iCase > 0) return null;
-    // eslint-disable-next-line no-magic-numbers
-    if (iCase >= 20) {
-        const caseTooMuch = new vscode.Diagnostic(sw.range, EDiagMsg.code112, vscode.DiagnosticSeverity.Information);
-        caseTooMuch.source = EDiagBase.source;
-        caseTooMuch.code = EDiagCode.code112;
-        return caseTooMuch;
-    }
-    if (iCase < 1) {
-        const caseZero = new vscode.Diagnostic(sw.range, EDiagMsg.code113, vscode.DiagnosticSeverity.Information);
-        caseZero.source = EDiagBase.source;
-        caseZero.code = EDiagCode.code113;
-        return caseZero;
-    }
-    return null;
+function setCaseTooMuch(sw: MyDocSymbol): vscode.Diagnostic {
+    const caseTooMuch = new vscode.Diagnostic(sw.range, EDiagMsg.code112, vscode.DiagnosticSeverity.Information);
+    caseTooMuch.source = EDiagBase.source;
+    caseTooMuch.code = {
+        value: EDiagCode.code112,
+        target: vscode.Uri.parse(EDiagFsPath.code112),
+    };
+    return caseTooMuch;
+}
+function setErrCaseZero(sw: MyDocSymbol): vscode.Diagnostic {
+    const caseZero = new vscode.Diagnostic(sw.range, EDiagMsg.code113, vscode.DiagnosticSeverity.Information);
+    caseZero.source = EDiagBase.source;
+    caseZero.code = {
+        value: EDiagCode.code113,
+        target: vscode.Uri.parse(EDiagFsPath.code113),
+    };
+    return caseZero;
 }
 
-function getSwErr(sw: Readonly<MyDocSymbol>, displayErr: readonly boolean[]): vscode.Diagnostic[] {
+function setErrCase(sw: MyDocSymbol): null | vscode.Diagnostic {
+    // TODO Duplicate case label.
+    const iCase = getCaseNumber(sw.children);
+    switch (true) {
+        case iCase < 20 && iCase > 0: return null;
+        case iCase >= 20: return setCaseTooMuch(sw);
+        case iCase < 1: return setErrCaseZero(sw);
+        default: return null;
+    }
+}
+function setErrSwNameNotFind(sw: MyDocSymbol): null | vscode.Diagnostic {
+    if (sw.name.startsWith('!!') === false) return null;
+    const swNameNotFind = new vscode.Diagnostic(sw.range, EDiagMsg.code114, vscode.DiagnosticSeverity.Error);
+    swNameNotFind.source = EDiagBase.source;
+    swNameNotFind.code = {
+        value: EDiagCode.code114,
+        target: vscode.Uri.parse(EDiagFsPath.code114),
+    };
+    return swNameNotFind;
+}
+function getSwErr(sw: MyDocSymbol, displayErr: readonly boolean[]): vscode.Diagnostic[] {
     const digS: vscode.Diagnostic[] = [];
     if (sw.kind === vscode.SymbolKind.Enum
         && displayErr[sw.range.start.line]
         && sw.detail === 'Switch') {
-        const de = setErrDefault(sw);
-        if (de) digS.push(de);
-        const ce = setErrCase(sw);
-        if (ce) digS.push(ce);
+        [setErrDefault, setErrCase, setErrSwNameNotFind].forEach((fn) => {
+            const err = fn(sw);
+            if (err) digS.push(err);
+        });
     }
     return digS;
 }

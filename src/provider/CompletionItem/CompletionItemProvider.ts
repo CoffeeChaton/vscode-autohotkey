@@ -1,5 +1,4 @@
 /* eslint-disable no-await-in-loop */
-/* eslint-disable class-methods-use-this */
 
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';

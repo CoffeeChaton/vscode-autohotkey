@@ -1,11 +1,10 @@
 /* eslint-disable max-len */
 /* eslint-disable max-lines */
-/* eslint-disable no-param-reassign */
 import * as vscode from 'vscode';
 // import * as vscLsp from 'vscode-languageserver';
 //  import { MarkupContent } from 'vscode-languageserver-protocol';
 //  import { CompletionItem, MarkupKind, CompletionItemKind } from 'vscode-languageserver-types';
-import { TAhkBaseObj } from './ahkBase';
+import { CAhkBaseObj } from './ahkBase';
 
 type TDescription = Readonly<{
     label: string,
@@ -404,7 +403,7 @@ const ItemOfFunc: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     return itemS;
 })();
 
-export function ahkBaseWrap(Obj: TAhkBaseObj): vscode.CompletionItem[] {
+export function ahkBaseWrap(Obj: CAhkBaseObj): vscode.CompletionItem[] {
     const itemS: vscode.CompletionItem[] = [];
     // if (Obj.ahkArray) itemS.push(...ItemOfAhkArray);
     if (Obj.ahkFileOpen) itemS.push(...ItemOfFileOpen);

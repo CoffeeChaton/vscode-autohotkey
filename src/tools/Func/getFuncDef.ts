@@ -17,10 +17,10 @@ function getSelectionRange(DocStrMap: TDocArr, defLine: number, searchLine: numb
     const colS = Math.max(DocStrMap[defLine].lStr.search(/\S/) - 1, 0);
 
     const colE = DocStrMap[searchLine].lStr.lastIndexOf(')');
-    const colFixE = colE === -1 ? DocStrMap[searchLine].lStr.length : colE;
+    //  const colFixE = colE === -1 ? DocStrMap[searchLine].lStr.length : colE;
     return new vscode.Range(
         defLine, colS,
-        searchLine, colFixE + 1,
+        searchLine, colE + 1,
     );
 }
 
@@ -48,13 +48,13 @@ function getFuncTail({
 export function getFuncDef(DocStrMap: TDocArr, defLine: number): false | FuncDefData {
     if (defLine + 1 === DocStrMap.length) return false;
     const textFix = lineText(DocStrMap, defLine);
-    if ((/^\s*\b(?:if|while)\b/i).test(textFix)) return false;
+    // if ((/^\s*\b(?:if|while)\b/i).test(textFix)) return false;
 
     const fnHead = (/^\s*(\w\w*)\(/).exec(textFix); //  funcName(...
     if (fnHead === null) return false;
 
     const name = fnHead[1];
-    // if ((/^(?:if|while)$/i).test(name)) return false;
+    if ((/^(?:if|while)$/i).test(name)) return false;
 
     const funcData = getFuncTail({
         DocStrMap,

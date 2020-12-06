@@ -1,4 +1,3 @@
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable max-lines */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,20] }] */
@@ -18,16 +17,13 @@ import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
 // // import * as Oniguruma from 'vscode-oniguruma';
 
 export function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
-    const regex = (/\breturn\b\s\s*(.+)/i);
-    if (regex.test(FuncInput.lStr) === false) return false;
+    if ((/\breturn\b/i).test(FuncInput.lStr) === false) return false;
 
     const line = FuncInput.line;
     const textRaw = FuncInput.DocStrMap[FuncInput.line].textRaw;
-    const ReturnMatch = regex.exec(textRaw);
-    if (ReturnMatch === null) return false;
-
-    let name = ReturnMatch[1];
-    {
+    const ReturnMatch = (/\breturn\b\s\s*(.+)/i).exec(textRaw);
+    let name = ReturnMatch ? ReturnMatch[1] : '""';
+    if (ReturnMatch) {
         const Func = (/^\s*(\w\w*)\(/).exec(name);
         if (Func) {
             name = `${Func[1]}(...)`;
@@ -43,7 +39,6 @@ export function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
     return new vscode.DocumentSymbol(`Return ${name.trim()}`, '', vscode.SymbolKind.Variable, rangeRaw, rangeRaw);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 type LineRulerType = DeepReadonly<{
     detail: string,
     kind: vscode.SymbolKind,
@@ -82,7 +77,6 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
                     .trim();
                 return name;
             },
-
             test(str: string): boolean {
                 return (/^\s*\bglobal\b/i).test(str);
             },
@@ -142,6 +136,7 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
             },
 
             test(str: string): boolean {
+                if (str.indexOf('::') === -1) return false;
                 return (/^\s*:[^:]*?:[^:][^:]*::/).test(str);
             },
         },
@@ -175,8 +170,8 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
 
 export const ParserBlock = {
     getCaseDefaultBlock(FuncInput: FuncInputType): false | MyDocSymbol {
-        const { lStr } = FuncInput;
-        if (lStr === '') return false;
+        const lStr = FuncInput.lStr;
+        if (lStr === '' || lStr.indexOf(':') === -1) return false;
         const {
             Uri, RangeEndLine, inClass, line, DocStrMap,
         } = FuncInput;
@@ -226,7 +221,7 @@ export const ParserBlock = {
             Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
         } = FuncInput;
 
-        if (lStr === '') return false;
+        if (lStr === '' || lStr.indexOf('(') === -1) return false;
         const isFunc = getFuncDef(DocStrMap, line);
         if (isFunc === false) return false;
         const { name, selectionRange } = isFunc;

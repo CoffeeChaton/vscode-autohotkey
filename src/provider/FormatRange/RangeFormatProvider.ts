@@ -81,7 +81,7 @@ function fnStrGroup(text: string): string {
             ? strElement
             : fnLR(strElement);
     }
-    return head + newBody.trim();
+    return head + newBody.trimStart();
 }
 
 type RangeFormatType = {
@@ -92,7 +92,6 @@ type RangeFormatType = {
     range: vscode.Range;
 };
 
-// eslint-disable-next-line max-len
 export function RangeFormat({
     timeStart, RangeTextRaw, RangeText, fsPath, range,
 }: RangeFormatType): vscode.ProviderResult<vscode.TextEdit[]> {
@@ -131,7 +130,6 @@ export function RangeFormat({
     ];
 }
 export class RangeFormatProvider implements vscode.DocumentRangeFormattingEditProvider {
-    // eslint-disable-next-line class-methods-use-this
     public provideDocumentRangeFormattingEdits(document: vscode.TextDocument, range: vscode.Range,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         options: vscode.FormattingOptions, token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {

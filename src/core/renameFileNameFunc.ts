@@ -14,7 +14,6 @@ export async function renameFn(oldUri: vscode.Uri, newUri: vscode.Uri, fsPathLis
         const DocStrMap = Pretreatment(document.getText().split('\n'));
         const lineCount = DocStrMap.length;
         for (let line = 0; line < lineCount; line += 1) {
-            // eslint-disable-next-line prefer-destructuring
             const textRaw = DocStrMap[line].textRaw;
             if (RegexInclude.test(textRaw)
                 && textRaw.includes(oldFileName)) { // TODO TEST

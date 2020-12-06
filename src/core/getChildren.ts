@@ -1,4 +1,3 @@
-/* eslint-disable prefer-destructuring */
 import * as vscode from 'vscode';
 import {
     TDocArr, DeepReadonly, MyDocSymbol, MyDocSymbolArr,

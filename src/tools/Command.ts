@@ -1,5 +1,4 @@
-/* eslint-disable no-magic-numbers */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,300] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,5,6,60,100,300,1000] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 
@@ -56,9 +55,11 @@ async function LoopOfClearOutlineCache(): Promise<null> {
     const items: string[] = [
         'just clear NodeJS.Timeout',
         '0 -> Unlimited',
+        '1 min',
         '5 min',
     ];
     const base = 300;
+    let iMax = 0;
     const maxTime = await vscode.window.showQuickPick(items);
     switch (maxTime) {
         case items[0]: return null;
@@ -68,14 +69,19 @@ async function LoopOfClearOutlineCache(): Promise<null> {
             }, base);
             return null;
         case items[2]:
-            for (let i = 1; i <= (5 * 60 * 1000) / base; i++) {
-                c1.push(setTimeout(() => {
-                    clearOutlineCache(true);
-                }, i * base));
-            }
-            return null;
+            iMax = (1 * 60 * 1000) / base;
+            break;
+        case items[3]:
+            iMax = (5 * 60 * 1000) / base;
+            break;
         default: return null;
     }
+    for (let i = 1; i <= iMax; i++) {
+        c1.push(setTimeout(() => {
+            clearOutlineCache(true);
+        }, i * base));
+    }
+    return null;
 }
 export async function statusBarClick(): Promise<null> {
     const items: string[] = [

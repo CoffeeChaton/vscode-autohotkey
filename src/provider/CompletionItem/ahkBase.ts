@@ -1,12 +1,22 @@
 /* eslint-disable no-param-reassign */
-export type TAhkBaseObj = {
-    ahkArray: boolean;
-    ahkFileOpen: boolean;
-    ahkFuncObject: boolean;
-    ahkBase: boolean;
-};
+export class CAhkBaseObj {
+    public ahkArray: boolean;
 
-export function ahkBase(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
+    public ahkFileOpen: boolean;
+
+    public ahkFuncObject: boolean;
+
+    public ahkBase: boolean;
+
+    public constructor() {
+        this.ahkArray = false;
+        this.ahkFileOpen = false;
+        this.ahkFuncObject = false;
+        this.ahkBase = false;
+    }
+}
+
+export function ahkBase(strPart: string, Obj: CAhkBaseObj): CAhkBaseObj {
     if (!Obj.ahkFileOpen && (/^FileOpen\(/i).test(strPart)) {
         Obj.ahkFileOpen = true;
         Obj.ahkBase = true;

@@ -1,6 +1,5 @@
 /* eslint-disable no-await-in-loop */
-/* eslint-disable class-methods-use-this */
-
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4] }] */
 import * as vscode from 'vscode';
 
 export const enum EChapterError {
@@ -25,9 +24,7 @@ export function getObjChapterArr(document: vscode.TextDocument, position: vscode
     const ChapterArr: string[] = [];
     let chapter = '';
 
-    // eslint-disable-next-line no-magic-numbers
     if (textLPart.length - 2 < 0) return null;
-    // eslint-disable-next-line no-magic-numbers
     for (let i = textLPart.length - 2; i > -1; i--) {
         if (textLPart[i] === ' ' || textLPart[i] === '=') {
             if (fnTest(chapter)) return null;

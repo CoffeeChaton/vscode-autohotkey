@@ -5,7 +5,7 @@ import { Detecter } from '../../core/Detecter';
 import { kindCheck } from '../Def/kindCheck';
 import { EMode, MyDocSymbol, TSymAndFsPath } from '../../globalEnum';
 import { Pretreatment } from '../../tools/Pretreatment';
-import { ahkBase, TAhkBaseObj } from './ahkBase';
+import { ahkBase, CAhkBaseObj } from './ahkBase';
 import { ahkBaseWrap } from './ahkBaseWrap';
 import { getWmThis } from './getWmThis';
 import { getScopeOfPos, getStack } from '../../tools/getScopeOfPos';
@@ -67,6 +67,28 @@ function wrapOfUserDefClass(userDefClass: MyDocSymbol, track: string, ChapterArr
     return itemS;
 }
 
+async function triggerClassTail(setUseDefClassNameStr: Set<string>, ChapterArrLen: number, ChapterArr: string[], ahkBaseObj: CAhkBaseObj)
+    : Promise<vscode.CompletionItem[]> {
+    const cList: Set<TSymAndFsPath> = new Set();
+    setUseDefClassNameStr.forEach((v) => {
+        // eslint-disable-next-line security/detect-non-literal-regexp
+        const testName = new RegExp(`^${v}$`, 'i');
+        const c0 = getUserDefClassSymbol(testName);
+        if (c0) cList.add(c0);
+    });
+
+    const itemS: vscode.CompletionItem[] = [];
+    for (const c0 of cList) {
+        // eslint-disable-next-line no-await-in-loop
+        const ahkThis = ChapterArrLen === 1 ? await getWmThis(c0) : [];
+        itemS.push(...ahkThis, ...wrapOfUserDefClass(c0.ahkSymbol, '', ChapterArr, 1));
+    }
+
+    if (ChapterArrLen === 1) itemS.push(...ahkBaseWrap(ahkBaseObj));
+
+    return itemS;
+}
+
 // eslint-disable-next-line max-statements
 async function triggerClass(document: vscode.TextDocument, position: vscode.Position, ChapterArr: string[]): Promise<vscode.CompletionItem[]> {
     /*
@@ -86,7 +108,6 @@ async function triggerClass(document: vscode.TextDocument, position: vscode.Posi
         const testName0 = new RegExp(`^${Head}$`, 'i');
         const c0 = getUserDefClassSymbol(testName0);
         if (c0) {
-            // eslint-disable-next-line no-await-in-loop
             const ahkThis = ChapterArrLen === 1 ? await getWmThis(c0) : [];
             return [...wrapOfUserDefClass(c0.ahkSymbol, '', ChapterArr, 1), ...ahkThis];
         }
@@ -98,17 +119,11 @@ async function triggerClass(document: vscode.TextDocument, position: vscode.Posi
     const DocStrMap = Pretreatment(document.getText(stackRange).split('\n'));
     const lineStart = stackRange.start.line + 0;
     const linePosMax = DocStrMap.length;
-    let ahkBaseObj: TAhkBaseObj = {
-        ahkArray: false,
-        ahkFileOpen: false,
-        ahkFuncObject: false,
-        ahkBase: false,
-    };
+    let ahkBaseObj: CAhkBaseObj = new CAhkBaseObj();
     const setUseDefClassNameStr: Set<string> = new Set(); // value name
     for (let linePos = 0; linePos < linePosMax; linePos++) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const line = lineStart + linePos;
-        // eslint-disable-next-line prefer-destructuring
         const lStr = DocStrMap[linePos].lStr;
         const col = lStr.search(reg);
         if (col === -1) continue;
@@ -117,7 +132,7 @@ async function triggerClass(document: vscode.TextDocument, position: vscode.Posi
         if ((/^new\s/i).test(strPart)) {
             // https://www.autohotkey.com/docs/Objects.htm#Objects_as_Functions
             const ahkNewClass = (/^\w\w+/).exec(strPart.replace(/^new\s*/i, ''));
-            if (ahkNewClass) {
+            if (ahkNewClass !== null) {
                 setUseDefClassNameStr.add(ahkNewClass[0]);
                 continue;
             }
@@ -127,24 +142,7 @@ async function triggerClass(document: vscode.TextDocument, position: vscode.Posi
         }
     }
 
-    const cList: Set<TSymAndFsPath> = new Set();
-    setUseDefClassNameStr.forEach((v) => {
-        // eslint-disable-next-line security/detect-non-literal-regexp
-        const testName = new RegExp(`^${v}$`, 'i');
-        const c0 = getUserDefClassSymbol(testName);
-        if (c0) cList.add(c0);
-    });
-
-    const itemS: vscode.CompletionItem[] = [];
-    for (const c0 of cList) {
-        // eslint-disable-next-line no-await-in-loop
-        const ahkThis = ChapterArrLen === 1 ? await getWmThis(c0) : [];
-        itemS.push(...ahkThis, ...wrapOfUserDefClass(c0.ahkSymbol, '', ChapterArr, 1));
-    }
-
-    if (ChapterArrLen === 1) itemS.push(...ahkBaseWrap(ahkBaseObj));
-
-    return itemS;
+    return triggerClassTail(setUseDefClassNameStr, ChapterArrLen, ChapterArr, ahkBaseObj);
 }
 
 export async function wrapClass(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.CompletionItem[]> {

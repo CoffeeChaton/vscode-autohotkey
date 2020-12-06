@@ -4,7 +4,6 @@ import { getValDefInFunc } from './Def/getValDefInFunc';
 
 export class ReferenceProvider implements vscode.ReferenceProvider {
     //  Go to References search (via Shift+F12),
-    // eslint-disable-next-line class-methods-use-this
     public async provideReferences(document: vscode.TextDocument, position: vscode.Position,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         context: vscode.ReferenceContext, token: vscode.CancellationToken): Promise<vscode.Location[] | null> {

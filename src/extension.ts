@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
 // import { CompletionComma } from './provider/CompletionItemProvider';
 import { Detecter } from './core/Detecter';
@@ -24,6 +23,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
         vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
         vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
+        // TODO vscode.languages.registerDocumentSemanticTokensProvider(language, new Dr(), e39),
         // vscode.languages.registerRenameProvider(language, new RenameProvider()),
         // vscode.languages.registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', ','),
         vscode.languages.registerCodeActionsProvider(language, new CodeActionProvider()),
@@ -32,6 +32,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.workspace.onDidDeleteFiles((e) => Detecter.delMap(e)),
         vscode.workspace.onDidCreateFiles((e) => Detecter.createMap(e)),
         vscode.workspace.onDidRenameFiles((e) => Detecter.renameFileName(e)),
+        // vscode.workspace.onDidChangeTextDocument((e) => d(e)),
         vscode.commands.registerCommand('ahk.bar.click', () => { statusBarClick(); }),
     );
     const ahkRootPath = vscode.workspace.workspaceFolders;
@@ -59,4 +60,8 @@ const decoration = {
         }
     }
 }
+TODO vscode.CommentRule
+vscode.Progress
+// createTextEditorDecorationType
+QuickInput
 */

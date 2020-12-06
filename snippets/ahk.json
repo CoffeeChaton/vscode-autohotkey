@@ -4190,5 +4190,22 @@
     "Parent": {
         "prefix": "Parent",
         "body": "Parent"
+    },
+    "Switch": {
+        "prefix": "Switch",
+        "body": [
+            "Switch ${1:key}{",
+            "Case ${2:val1}:",
+            "    ${5:...}",
+            "Case ${3:val2}, ${4:val3}:",
+            "    ${6:...}",
+            "Default :",
+            "    ${7:...}",
+            "}"
+        ],
+        "description": [
+            "Executes one case from a list of mutually exclusive candidates.",
+            "https://www.autohotkey.com/docs/commands/Switch.htm"
+        ]
     }
 }
