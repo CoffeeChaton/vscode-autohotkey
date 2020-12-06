@@ -17,7 +17,7 @@ export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionIte
     const { ahkSymbol, fsPath } = c0;
     const Uri = vscode.Uri.file(fsPath);
     const document = await vscode.workspace.openTextDocument(Uri);
-    const map = new Map() as Map<string, number>; // : Map<string, number>
+    const mapStrNumber = new Map() as Map<string, number>; // : Map<string, number>
     const lineBase = ahkSymbol.range.start.line;
     Pretreatment(document.getText(ahkSymbol.range).split('\n'))
         .forEach((v, index) => {
@@ -25,17 +25,17 @@ export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionIte
             for (const name of matchAll) {
                 // console.log('name', name);
                 // console.log('name', name[0].trim());
-                map.set(name[1], index + lineBase);
+                mapStrNumber.set(name[1], index + lineBase);
             }
         });
 
     const itemS: vscode.CompletionItem[] = [];
-    map.forEach((v, k) => {
-        const item = new vscode.CompletionItem(k, vscode.CompletionItemKind.Value);
+    mapStrNumber.forEach((value, key) => {
+        const item = new vscode.CompletionItem(key, vscode.CompletionItemKind.Value);
         item.detail = 'neko help : useDefClass';
         item.documentation = new vscode.MarkdownString(ahkSymbol.name, true)
-            .appendMarkdown(`this.${k}\n\n`)
-            .appendMarkdown(`of line ${v + 1}`);
+            .appendMarkdown(`\n\nthis.${key}\n\n`)
+            .appendMarkdown(`${fsPath}    line   ${value + 1}`);
         itemS.push(item);
     });
 
