@@ -13,7 +13,7 @@ export type TChapterArr = { err: EChapterError } | { chap: readonly string[] };
 
 const fnTest = (chapter: string): boolean => chapter === '' || (/^\d\d*$/).test(chapter);
 
-export function getObjChapterArr(document: vscode.TextDocument, position: vscode.Position): string[] | null {
+export function getObjChapterArr(document: vscode.TextDocument, position: vscode.Position): readonly string[] | null {
     /*
     a common trigger character is . to trigger member completions.
     */

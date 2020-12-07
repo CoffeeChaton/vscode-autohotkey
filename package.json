@@ -75,6 +75,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "auto call textReplace & diff"
+                },
+                "AhkNekoHelp.lint.funcSize": {
+                    "type": "number",
+                    "default": 100,
+                    "description": "lint of function/Method size (line)"
                 }
             }
         },

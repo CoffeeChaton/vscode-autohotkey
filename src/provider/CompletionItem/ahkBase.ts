@@ -1,5 +1,5 @@
-/* eslint-disable no-param-reassign */
-export class CAhkBaseObj {
+/* eslint-disable no-param-reassign */ // FIXME CAhkBaseObjBoom
+export class CAhkBaseObjBoom {
     public ahkArray: boolean;
 
     public ahkFileOpen: boolean;
@@ -16,7 +16,7 @@ export class CAhkBaseObj {
     }
 }
 
-export function ahkBase(strPart: string, Obj: CAhkBaseObj): CAhkBaseObj {
+export function ahkBase(strPart: string, Obj: CAhkBaseObjBoom): CAhkBaseObjBoom {
     if (!Obj.ahkFileOpen && (/^FileOpen\(/i).test(strPart)) {
         Obj.ahkFileOpen = true;
         Obj.ahkBase = true;

@@ -2,7 +2,6 @@
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
 import * as vscode from 'vscode';
-// import { getLStr } from '../../tools/removeSpecialChar';
 import { inLTrimRange } from '../../tools/inLTrimRange';
 import { getSwitchRange, inSwitchBlock } from './SwitchCase';
 import { thisLineDeep } from './thisLineDeep';
@@ -47,7 +46,6 @@ type WarnUseType = DeepReadonly<{
     options: vscode.FormattingOptions;
 }>;
 
-// eslint-disable-next-line max-params
 function fn_Warn_thisLineText_WARN({
     textFix, line, occ, deep, labDeep, inLTrim, textRaw, switchRangeArray, document, options,
 }: WarnUseType): string {

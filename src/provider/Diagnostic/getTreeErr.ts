@@ -88,11 +88,11 @@ function getSwErr(sw: MyDocSymbol, displayErr: readonly boolean[]): vscode.Diagn
     }
     return digS;
 }
-export function getTreeErr(children: Readonly<MyDocSymbol[]>, displayErr: readonly boolean[]): vscode.Diagnostic[] {
+
+export function getTreeErr(children: readonly MyDocSymbol[], displayErr: readonly boolean[]): vscode.Diagnostic[] {
     const digS: vscode.Diagnostic[] = [];
-    for (const ch of children) {
-        digS.push(...getSwErr(ch, displayErr));
-        digS.push(...getTreeErr(ch.children, displayErr));
-    }
+    children.forEach((ch) => {
+        digS.push(...getSwErr(ch, displayErr), ...getTreeErr(ch.children, displayErr));
+    });
     return digS;
 }

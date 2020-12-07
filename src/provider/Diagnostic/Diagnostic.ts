@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
+import { getLintConfig } from '../../configUI';
 import {
     TDocArr, EDiagBase, EDiagCode, EDiagMsg, MyDocSymbol, DetailType, EDiagFsPath,
 } from '../../globalEnum';
@@ -162,12 +163,12 @@ function getCommandErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 | 1
 }
 type TFnLineErr = (DocStrMap: TDocArr, line: number, uri: vscode.Uri) => 0 | 1 | vscode.Diagnostic;
 
-function wrapFnErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): null | vscode.Diagnostic {
+function getLineErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): null | vscode.Diagnostic {
     const fnList: TFnLineErr[] = [assign, getDirectivesErr, getCommandErr];
     for (const fn of fnList) {
         const err = fn(DocStrMap, line, uri);
         switch (err) {
-            case 0: break;
+            case 0: break; // break switch
             case 1: return null;
             default: return err;
         }
@@ -175,19 +176,47 @@ function wrapFnErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): null | vs
     return null;
 }
 
-function deepSymbol(chList: Readonly<MyDocSymbol[]>, h: Set<number>): void {
+function deepSymbol(chList: Readonly<MyDocSymbol[]>, h: readonly number[]): void {
     for (const ch of chList) {
-        h.add(ch.range.start.line);
+        h.push(ch.range.start.line); // i need this ts error.
         if (ch.children.length !== 0) {
             deepSymbol(ch.children, h);
         }
     }
 }
-function symbolList(result: Readonly<MyDocSymbol[]>): Set<number> {
-    const h: Set<number> = new Set();
+function symbolList(result: Readonly<MyDocSymbol[]>): readonly number[] {
+    const h: readonly number[] = [];
     deepSymbol(result, h);
-    // console.log('symbolList ~ h', h);
     return h;
+}
+function setFuncErr(func: MyDocSymbol): vscode.Diagnostic {
+    const fnSooBigErr = new vscode.Diagnostic(func.selectionRange, EDiagMsg.code301, vscode.DiagnosticSeverity.Warning);
+    fnSooBigErr.source = EDiagBase.source;
+    fnSooBigErr.code = {
+        value: EDiagCode.code301,
+        target: vscode.Uri.parse(EDiagFsPath.code301),
+    };
+    return fnSooBigErr;
+}
+function getFuncErr(funcS: Readonly<MyDocSymbol[]>, displayErr: readonly boolean[]): vscode.Diagnostic[] {
+    const digS: vscode.Diagnostic[] = [];
+    for (const func of funcS) {
+        switch (func.kind) {
+            case vscode.SymbolKind.Method:
+            case vscode.SymbolKind.Function:
+                if (displayErr[func.range.start.line]
+                    && (func.range.end.line - func.range.start.line > getLintConfig().funcSize)) {
+                    digS.push(setFuncErr(func));
+                }
+                break;
+            case vscode.SymbolKind.Class:
+                digS.push(...getFuncErr(func.children, displayErr));
+                break;
+            default:
+                break;
+        }
+    }
+    return digS;
 }
 export function Diagnostic(DocStrMap: TDocArr, result: Readonly<MyDocSymbol[]>, uri: vscode.Uri, collection: vscode.DiagnosticCollection): void {
     const lineMax = DocStrMap.length;
@@ -202,11 +231,11 @@ export function Diagnostic(DocStrMap: TDocArr, result: Readonly<MyDocSymbol[]>, 
             continue;
         }
         displayErr.push(true);
-        const err = wrapFnErr(DocStrMap, line, uri);
+        const err = getLineErr(DocStrMap, line, uri);
         if (err !== null) diagS.push(err);
     }
 
-    diagS.push(...getTreeErr(result, displayErr));
+    diagS.push(...getTreeErr(result, displayErr), ...getFuncErr(result, displayErr));
     collection.set(uri, diagS);
 }
 // TODO  vscode.languages.getDiagnostics()

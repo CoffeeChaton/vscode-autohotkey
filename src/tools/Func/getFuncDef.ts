@@ -14,8 +14,7 @@ type FuncTailType = { DocStrMap: TDocArr, searchText: string, name: string, sear
 
 function getSelectionRange(DocStrMap: TDocArr, defLine: number, searchLine: number): vscode.Range {
     // const argPos = Math.max(DocStrMap[defLine].lStr.indexOf('('), 0);
-    const colS = Math.max(DocStrMap[defLine].lStr.search(/\S/) - 1, 0);
-
+    const colS = DocStrMap[defLine].lStr.search(/\w/);
     const colE = DocStrMap[searchLine].lStr.lastIndexOf(')');
     //  const colFixE = colE === -1 ? DocStrMap[searchLine].lStr.length : colE;
     return new vscode.Range(

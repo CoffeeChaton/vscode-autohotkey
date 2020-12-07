@@ -71,7 +71,7 @@ function wrapperOfValOFFuncList(document: vscode.TextDocument, position: vscode.
     return itemS;
 }
 
-async function triggerRegexW(document: vscode.TextDocument, position: vscode.Position, Range: vscode.Range): Promise<vscode.CompletionItem[]> {
+async function listAllFuncClass(document: vscode.TextDocument, position: vscode.Position, Range: vscode.Range): Promise<vscode.CompletionItem[]> {
     const wordLower = document.getText(Range).toLowerCase();
     // eslint-disable-next-line security/detect-non-literal-regexp
     const wordStartReg = new RegExp(`^${wordLower}`, 'i');
@@ -80,16 +80,18 @@ async function triggerRegexW(document: vscode.TextDocument, position: vscode.Pos
     return [...funcOrClassNameList, ...valOFFuncList];
 }
 
-async function wrapTriggerRegexW(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.CompletionItem[]> {
+async function wrapListAllFuncClass(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.CompletionItem[]> {
     const Range = document.getWordRangeAtPosition(position);
-    if (Range === undefined) return [];
+    if (Range === undefined) return []; // exp: . / []
 
     if (Range.start.character - 1 > -1) {
         const newRange = new vscode.Range(Range.start.line, Range.start.character - 1, Range.start.line, Range.start.character);
-        const newStr = document.getText(newRange).trim();
-        if (newStr !== '.') return triggerRegexW(document, position, Range);
+        const newStr = document.getText(newRange);
+        return (newStr !== '.')
+            ? listAllFuncClass(document, position, Range)
+            : []; // exp className.d    -->  newStr === "."
     }
-    return triggerRegexW(document, position, Range);
+    return listAllFuncClass(document, position, Range); // at line start
 }
 export class CompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position,
@@ -98,12 +100,12 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
         const t1 = Date.now();
         const completions: vscode.CompletionItem[] = [
             ...await wrapClass(document, position), // '.'
-            ...await wrapTriggerRegexW(document, position), // ''
+            ...await wrapListAllFuncClass(document, position), // ''
             ...ahkSend(document, position), // '{'
         ];
 
         // eslint-disable-next-line no-magic-numbers
-        console.log('CompletionItemProvider -> timeFinish *1000', (Date.now() - t1) * 1000);
+        console.log('CompletionItemProvider -> time Cost *1000', (Date.now() - t1) * 1000);
 
         return completions;
     }

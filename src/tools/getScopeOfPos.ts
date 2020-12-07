@@ -3,31 +3,32 @@ import { Detecter } from '../core/Detecter';
 import { MyDocSymbol, MyDocSymbolArr } from '../globalEnum';
 
 type TStackNameSymbol = {
-    name: string,
-    ahkSymbol: MyDocSymbol,
+    readonly name: string,
+    readonly ahkSymbol: MyDocSymbol,
 };
-type TStackPro = {
-    stack: TStackNameSymbol[], isEnd: boolean, deep: number,
-};
-function dfs(fh: MyDocSymbolArr, position: vscode.Position, StackPro: TStackPro): TStackPro {
+type TStackPro = Readonly<{
+    readonly isEnd: boolean,
+    readonly deep: number,
+    readonly stack: readonly TStackNameSymbol[],
+}>;
+function dfs(father: MyDocSymbolArr, position: vscode.Position, StackPro: TStackPro): TStackPro {
     const { stack, isEnd, deep } = StackPro;
-    for (const s of fh) {
-        if (s.range.contains(position)) {
+    for (const ch of father) {
+        if (ch.range.contains(position)) {
             // console.log('s.name', s.name);
-            stack.push({
-                name: s.name,
-                ahkSymbol: s,
-            });
-            const d = dfs(s.children, position, {
-                stack,
-                isEnd,
+            const d = dfs(ch.children, position, {
+                stack: [...stack, {
+                    name: ch.name,
+                    ahkSymbol: ch,
+                }],
+                isEnd, // Don't assign
                 deep: deep + 1,
             });
 
             // if (d.isEnd) {
             //     console.log('s.name End', s.name);
             // }
-            return d;
+            return d; // No brother
         }
     }
     return {

@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 // import * as vscLsp from 'vscode-languageserver';
 //  import { MarkupContent } from 'vscode-languageserver-protocol';
 //  import { CompletionItem, MarkupKind, CompletionItemKind } from 'vscode-languageserver-types';
-import { CAhkBaseObj } from './ahkBase';
+import { CAhkBaseObjBoom } from './ahkBase';
 
 type TDescription = Readonly<{
     label: string,
@@ -403,7 +403,7 @@ const ItemOfFunc: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     return itemS;
 })();
 
-export function ahkBaseWrap(Obj: CAhkBaseObj): vscode.CompletionItem[] {
+export function ahkBaseWrap(Obj: CAhkBaseObjBoom): vscode.CompletionItem[] {
     const itemS: vscode.CompletionItem[] = [];
     // if (Obj.ahkArray) itemS.push(...ItemOfAhkArray);
     if (Obj.ahkFileOpen) itemS.push(...ItemOfFileOpen);

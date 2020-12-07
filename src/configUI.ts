@@ -19,6 +19,9 @@ let config = {
     format: {
         textReplace: configs.get('format.textReplace') as boolean,
     },
+    lint: {
+        funcSize: configs.get('lint.funcSize') as number,
+    },
 };
 
 export function configChangEvent(): void {
@@ -35,6 +38,9 @@ export function configChangEvent(): void {
         },
         format: {
             textReplace: configs.get('format.textReplace') as boolean,
+        },
+        lint: {
+            funcSize: configs.get('lint.funcSize') as number,
         },
     };
 }
@@ -57,7 +63,9 @@ export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
 export function getHoverConfig(): { showComment: boolean } {
     return config.hover;
 }
-
+export function getLintConfig(): { funcSize: number; } {
+    return config.lint;
+}
 export function getFormatConfig(): boolean {
     return config.format.textReplace;
 }
