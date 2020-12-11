@@ -58,6 +58,7 @@ function getLoopErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 | 1 | 
             value: EDiagCode.code801,
             target: vscode.Uri.parse(EDiagFsPath.code801),
         };
+        diag1.tags = [vscode.DiagnosticTag.Deprecated];
         return diag1;
     }
     if ((/^FilePattern$/i).test(SecondSection)) {
@@ -68,6 +69,7 @@ function getLoopErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 | 1 | 
             value: EDiagCode.code802,
             target: vscode.Uri.parse(EDiagFsPath.code802),
         };
+        diag1.tags = [vscode.DiagnosticTag.Deprecated];
         return diag1;
     }
 
@@ -124,7 +126,23 @@ function getDirectivesErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 
     }
     return 1;
 }
-
+function getCommandErrFnReplace(commandHead: string, lStr: string, line: number): null | vscode.Diagnostic {
+    if ((/^(?:File(Append|GetAttrib|Read)|GetKeyState|IfExist|IfInString|IfWin(Active|Exist))$/i).test(commandHead)
+        || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/i).test(commandHead)) {
+        const col = lStr.indexOf(commandHead);
+        const Range = new vscode.Range(line, col, line, col + commandHead.length);
+        // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
+        const diag1 = new vscode.Diagnostic(Range, EDiagMsg.code700, vscode.DiagnosticSeverity.Warning);
+        diag1.source = EDiagBase.source;
+        diag1.code = {
+            value: EDiagCode.code700,
+            target: vscode.Uri.parse(EDiagFsPath.code700),
+        };
+        diag1.tags = [vscode.DiagnosticTag.Deprecated];
+        return diag1;
+    }
+    return null;
+}
 function getCommandErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 | 1 | vscode.Diagnostic {
     // TODO result: Readonly<MyDocSymbol[]>
     // TODO search Deprecated
@@ -134,21 +152,10 @@ function getCommandErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 | 1
     const exec = (/^\s*(\w\w*)[\s,]/).exec(lStr);
     if (exec === null) return 0;
     const commandHead = exec[1];
-    const col = lStr.indexOf(commandHead);
-    const Range = new vscode.Range(line, col, line, col + commandHead.length);
-    // TODO
-    if ((/^(?:File(Append|GetAttrib|Read)|GetKeyState|IfExist|IfInString|IfWin(Active|Exist))$/i).test(commandHead)
-        || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/i).test(commandHead)) {
-        // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
-        const diag1 = new vscode.Diagnostic(Range, EDiagMsg.code700, vscode.DiagnosticSeverity.Warning);
-        diag1.source = EDiagBase.source;
-        diag1.code = {
-            value: EDiagCode.code700,
-            target: vscode.Uri.parse(EDiagFsPath.code700),
-        };
-        return diag1;
-    }
+    if ((/^switch|case|if|while|else|return|Break|for|sleep$/i).test(commandHead)) return 1;
 
+    const fnReplaceErr = getCommandErrFnReplace(commandHead, lStr, line);
+    if (fnReplaceErr) return fnReplaceErr;
     if ((/^Loop$/i).test(commandHead)) return getLoopErr(DocStrMap, line, uri);
 
     const temp = {

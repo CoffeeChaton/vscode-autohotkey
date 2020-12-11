@@ -68,7 +68,7 @@ export function getFuncDef(DocStrMap: TDocArr, defLine: number): false | FuncDef
 
     // eslint-disable-next-line no-magic-numbers
     const iMax = Math.min(defLine + 15, DocStrMap.length);
-    for (let searchLine = defLine + 1; searchLine < iMax; searchLine += 1) {
+    for (let searchLine = defLine + 1; searchLine < iMax; searchLine++) {
         const searchText = lineText(DocStrMap, searchLine);
 
         if ((/^\s*,/).test(searchText) === false) return false;

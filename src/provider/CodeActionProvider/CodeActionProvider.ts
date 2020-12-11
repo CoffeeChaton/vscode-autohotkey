@@ -52,6 +52,7 @@ function setIgnoreLine(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.
     if (FsPath === null) return null;
     const CA = new vscode.CodeAction('ignore line');
     CA.edit = setEdit(uri, diag.range.start.line, FsPath);
+    CA.kind = vscode.CodeActionKind.QuickFix;
     //  CA.diagnostics = [diag];
     return CA;
 }

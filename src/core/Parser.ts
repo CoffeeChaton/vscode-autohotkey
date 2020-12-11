@@ -15,28 +15,31 @@ import { removeBigParentheses } from '../tools/removeBigParentheses';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
 // // import * as Oniguruma from 'vscode-oniguruma';
-
-export function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
-    if ((/\breturn\b/i).test(FuncInput.lStr) === false) return false;
-
-    const line = FuncInput.line;
-    const textRaw = FuncInput.DocStrMap[FuncInput.line].textRaw;
+function getReturnName(textRaw: string): string {
     const ReturnMatch = (/\breturn\b\s\s*(.+)/i).exec(textRaw);
-    let name = ReturnMatch ? ReturnMatch[1] : '""';
+    if (ReturnMatch === null) return '""';
+
+    let name = ReturnMatch[1];
     if (ReturnMatch) {
         const Func = (/^\s*(\w\w*)\(/).exec(name);
         if (Func) {
             name = `${Func[1]}(...)`;
-        } else {
+        } else if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
             const obj = (/^\s*(\{\s*\w\w*\s*:)/).exec(name);
             if (obj) name = `Obj ${obj[1]}`;
         }
 
         if (name.length > 20) name = `${name.substring(0, 20)}...`;
     }
-
+    return name.trim();
+}
+export function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
+    if ((/\breturn\b/i).test(FuncInput.lStr) === false) return false;
+    const line = FuncInput.line;
+    const textRaw = FuncInput.DocStrMap[FuncInput.line].textRaw;
+    const name = getReturnName(textRaw);
     const rangeRaw = new vscode.Range(line, 0, line, textRaw.length);
-    return new vscode.DocumentSymbol(`Return ${name.trim()}`, '', vscode.SymbolKind.Variable, rangeRaw, rangeRaw);
+    return new vscode.DocumentSymbol(`Return ${name}`, '', vscode.SymbolKind.Variable, rangeRaw, rangeRaw);
 }
 
 type LineRulerType = DeepReadonly<{

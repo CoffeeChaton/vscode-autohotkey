@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
-// import * as vscLsp from 'vscode-languageserver';
 //  import { MarkupContent } from 'vscode-languageserver-protocol';
 //  import { CompletionItem, MarkupKind, CompletionItemKind } from 'vscode-languageserver-types';
 import { CAhkBaseObjBoom } from './ahkBase';

@@ -71,7 +71,7 @@ function fnStrGroup(text: string): string {
     const strGroup = body.split('"');
     const sMax = strGroup.length;
     let newBody = '';
-    for (let s = 0; s < sMax; s += 1) {
+    for (let s = 0; s < sMax; s++) {
         newBody += (s > 0 && s < sMax)
             ? '"'
             : '';

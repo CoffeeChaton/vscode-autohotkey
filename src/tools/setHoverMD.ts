@@ -62,7 +62,7 @@ export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.Markdown
     const DocStrMap = Pretreatment(document.getText(AhkSymbol.range).split('\n'));
     const starLine = 0;
     const endLine = DocStrMap.length;
-    for (let line = starLine; line < endLine; line += 1) {
+    for (let line = starLine; line < endLine; line++) {
         if (showComment) {
             const textRawF = DocStrMap[line].textRaw;
             commentBlock = inCommentBlock2(textRawF, commentBlock);
