@@ -4,45 +4,49 @@ import { VERSION } from './globalEnum';
 const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
 statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
 statusBarItem.command = 'ahk.bar.click';
-
-let configs = vscode.workspace.getConfiguration('AhkNekoHelp');
-let config = {
+let Configs = vscode.workspace.getConfiguration('AhkNekoHelp');
+type TConfigs = {
     statusBar: {
-        showVersion: configs.get('statusBar.showVersion') as boolean,
-        showTime: configs.get('statusBar.showTime') as boolean,
-        showFileName: configs.get('statusBar.showFileName') as boolean,
-        displayColor: configs.get('statusBar.displayColor') as string,
-    },
+        showVersion: boolean;
+        showTime: boolean;
+        showFileName: boolean;
+        displayColor: string;
+    };
     hover: {
-        showComment: configs.get('hover.showComment') as boolean,
-    },
+        showComment: boolean;
+    };
     format: {
-        textReplace: configs.get('format.textReplace') as boolean,
-    },
+        textReplace: boolean;
+    };
     lint: {
-        funcSize: configs.get('lint.funcSize') as number,
-    },
+        funcSize: number;
+    };
 };
-
-export function configChangEvent(): void {
-    configs = vscode.workspace.getConfiguration('AhkNekoHelp');
-    config = {
+function getConfig(): TConfigs {
+    return {
         statusBar: {
-            showVersion: configs.get('statusBar.showVersion') as boolean,
-            showTime: configs.get('statusBar.showTime') as boolean,
-            showFileName: configs.get('statusBar.showFileName') as boolean,
-            displayColor: configs.get('statusBar.displayColor') as string,
+            showVersion: Configs.get('statusBar.showVersion') as boolean,
+            showTime: Configs.get('statusBar.showTime') as boolean,
+            showFileName: Configs.get('statusBar.showFileName') as boolean,
+            displayColor: Configs.get('statusBar.displayColor') as string,
         },
         hover: {
-            showComment: configs.get('hover.showComment') as boolean,
+            showComment: Configs.get('hover.showComment') as boolean,
         },
         format: {
-            textReplace: configs.get('format.textReplace') as boolean,
+            textReplace: Configs.get('format.textReplace') as boolean,
         },
         lint: {
-            funcSize: configs.get('lint.funcSize') as number,
+            funcSize: Configs.get('lint.funcSize') as number,
         },
     };
+}
+
+let config = getConfig();
+
+export function configChangEvent(): void {
+    Configs = vscode.workspace.getConfiguration('AhkNekoHelp');
+    config = getConfig();
 }
 
 export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
@@ -53,8 +57,7 @@ export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     const name = config.statusBar.showFileName
         ? ` of ${fsPathRaw.substring(fsPathRaw.lastIndexOf('\\') + 1)}`
         : '';
-    const text = `$(heart) ${version}${timeSpend}${name}`;
-    statusBarItem.text = text;
+    statusBarItem.text = `$(heart) ${version}${timeSpend}${name}`;
     console.log(time, ` ms of ${fsPathRaw.substring(fsPathRaw.lastIndexOf('\\') + 1)}`);
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();

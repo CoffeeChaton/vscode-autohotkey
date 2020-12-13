@@ -34,8 +34,8 @@ export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionIte
         const item = new vscode.CompletionItem(key, vscode.CompletionItemKind.Value);
         item.detail = 'neko help : useDefClass';
         item.documentation = new vscode.MarkdownString(ahkSymbol.name, true)
-            .appendMarkdown(`\n\nthis.${key}\n\n`)
-            .appendMarkdown(`${fsPath}    line   ${value + 1}`);
+            .appendMarkdown(`\n\n    this.${key}\n\n`)
+            .appendMarkdown(`line   ${value + 1}  of  ${fsPath}`);
         itemS.push(item);
     });
 

@@ -23,9 +23,9 @@ export const Detecter = {
         return Detecter.DocMap.keys();
     },
 
-    getDocMap(fsPath: string): undefined | MyDocSymbolArr {
+    getDocMap(fsPath: string): null | MyDocSymbolArr {
         //  const Uri = vscode.Uri.file(fsPath);
-        return Detecter.DocMap.get(fsPath);
+        return Detecter.DocMap.get(fsPath) || null;
     },
 
     delMap(e: vscode.FileDeleteEvent): void {
@@ -60,6 +60,8 @@ export const Detecter = {
     },
 
     async updateDocDef(isTest: boolean, fsPath: string): Promise<vscode.DocumentSymbol[]> {
+        // FIXME -> event
+        // FIXME wm -> Map<fsPath,WeakMap<MyDocSymbol, T>>;
         const Uri = vscode.Uri.file(fsPath);
         const document = await vscode.workspace.openTextDocument(Uri);
         const timeStart = Date.now();
@@ -82,8 +84,8 @@ export const Detecter = {
             fnList: [ParserBlock.getClass, ParserBlock.getFunc, ParserBlock.getComment, ParserBlock.getSwitchBlock, getReturnByLine, ParserLine],
         });
 
-        if (fsPath.includes(EStr.diff_name_prefix) === false) {
-            if (isTest === false) showTimeSpend(document.uri, timeStart);
+        if (!fsPath.includes(EStr.diff_name_prefix)) {
+            if (!isTest) showTimeSpend(document.uri, timeStart);
             Detecter.DocMap.set(fsPath, result);
             Diagnostic(DocStrMap, result, Uri, Detecter.diagColl);
         }
@@ -98,9 +100,9 @@ export const Detecter = {
                     return;
                 }
                 for (const file of files) {
-                    if (file.startsWith('.') === false
-                        && (/^out$/i).test(file) === false
-                        && (/^target$/i).test(file) === false) {
+                    if (!file.startsWith('.')
+                        && !(/^out$/i).test(file)
+                        && !(/^target$/i).test(file)) {
                         // TODO read back file
                         Detecter.buildByPath(isTest, `${buildPath}/${file}`);
                     }
@@ -116,9 +118,9 @@ export const Detecter = {
         if (fs.statSync(buildPath).isDirectory()) {
             const files = fs.readdirSync(buildPath);
             for (const file of files) {
-                if (file.startsWith('.') === false
-                    && (/^out$/i).test(file) === false
-                    && (/^target$/i).test(file) === false) {
+                if (!file.startsWith('.')
+                    && !(/^out$/i).test(file)
+                    && !(/^target$/i).test(file)) {
                     // TODO read back file
                     await Detecter.buildByPathAsync(isTest, `${buildPath}/${file}`);
                 }

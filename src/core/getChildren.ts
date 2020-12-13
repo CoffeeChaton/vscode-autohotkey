@@ -46,7 +46,7 @@ export function getChildren(child: ChildType): MyDocSymbolArr {
             if (DocumentSymbol !== false) {
                 result.push(DocumentSymbol);
                 Resolved = DocumentSymbol.range.end.line;
-                continue;
+                break;
             }
         }
     }

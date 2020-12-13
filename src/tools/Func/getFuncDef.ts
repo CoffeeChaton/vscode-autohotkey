@@ -27,7 +27,7 @@ function getFuncTail({
     DocStrMap, searchText, name, searchLine, defLine,
 }: FuncTailType): false | FuncDefData {
     // i+1   ^, something , something ........ ) {$
-    if ((/\)\s*\{\s*$/).test(searchText)) {
+    if ((/\)\s*{\s*$/).test(searchText)) {
         const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine);
         return { name, selectionRange };
     }
@@ -36,7 +36,7 @@ function getFuncTail({
     // i+1   ^, something , something ......)$
     // i+2   ^{
     if ((/\)\s*$/).test(searchText)
-        && (/^\s*\{/).test(lineText(DocStrMap, searchLine + 1))) {
+        && (/^\s*{/).test(lineText(DocStrMap, searchLine + 1))) {
         const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine);
         return { name, selectionRange };
     }
@@ -71,7 +71,7 @@ export function getFuncDef(DocStrMap: TDocArr, defLine: number): false | FuncDef
     for (let searchLine = defLine + 1; searchLine < iMax; searchLine++) {
         const searchText = lineText(DocStrMap, searchLine);
 
-        if ((/^\s*,/).test(searchText) === false) return false;
+        if (!(/^\s*,/).test(searchText)) return false;
 
         const funcData2 = getFuncTail({
             DocStrMap, searchText, name, searchLine, defLine,

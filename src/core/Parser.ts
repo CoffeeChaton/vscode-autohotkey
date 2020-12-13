@@ -5,15 +5,16 @@ import * as vscode from 'vscode';
 import { getFuncDef } from '../tools/Func/getFuncDef';
 import { getRange } from '../tools/getRange';
 import { getRangeCaseBlock } from '../tools/getRangeCaseBlock';
-import { MyDocSymbol, DeepReadonly } from '../globalEnum';
+import { DeepReadonly, MyDocSymbol } from '../globalEnum';
 import { getCaseDefaultName, getSwitchName } from './getSwitchCaseName';
 import { getRangeOfLine } from '../tools/getRangeOfLine';
-import { getChildren, FuncInputType } from './getChildren';
+import { FuncInputType, getChildren } from './getChildren';
 import { removeParentheses } from '../tools/removeParentheses';
 import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { removeBigParentheses } from '../tools/removeBigParentheses';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
+
 // // import * as Oniguruma from 'vscode-oniguruma';
 function getReturnName(textRaw: string): string {
     const ReturnMatch = (/\breturn\b\s\s*(.+)/i).exec(textRaw);
@@ -25,7 +26,7 @@ function getReturnName(textRaw: string): string {
         if (Func) {
             name = `${Func[1]}(...)`;
         } else if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
-            const obj = (/^\s*(\{\s*\w\w*\s*:)/).exec(name);
+            const obj = (/^\s*({\s*\w\w*\s*:)/).exec(name);
             if (obj) name = `Obj ${obj[1]}`;
         }
 
@@ -34,7 +35,7 @@ function getReturnName(textRaw: string): string {
     return name.trim();
 }
 export function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
-    if ((/\breturn\b/i).test(FuncInput.lStr) === false) return false;
+    if (!(/\breturn\b/i).test(FuncInput.lStr)) return false;
     const line = FuncInput.line;
     const textRaw = FuncInput.DocStrMap[FuncInput.line].textRaw;
     const name = getReturnName(textRaw);
@@ -70,7 +71,7 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
             detail: 'global',
             kind: vscode.SymbolKind.Variable,
             getName(str: string): string | null {
-                const name = removeParentheses(removeBigParentheses(str.replace(/\bglobal\b/i, '')))
+                return removeParentheses(removeBigParentheses(str.replace(/\bglobal\b/i, '')))
                     .split(',')
                     .map((v) => {
                         const col = v.indexOf(':=');
@@ -78,7 +79,6 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
                     })
                     .join(', ')
                     .trim();
-                return name;
             },
             test(str: string): boolean {
                 return (/^\s*\bglobal\b/i).test(str);
@@ -90,7 +90,7 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
             getName(str: string): string | null {
                 //  static _SetBmpTrans := "", Ptr := "", PtrA := ""
                 // -> _SetBmpTrans, Ptr, PtrA
-                const name = removeParentheses(removeBigParentheses(str.replace(/\bstatic\b/i, '')))
+                return removeParentheses(removeBigParentheses(str.replace(/\bstatic\b/i, '')))
                     .split(',')
                     .map((v) => {
                         const col = v.indexOf(':=');
@@ -98,7 +98,6 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
                     })
                     .join(', ')
                     .trim();
-                return name;
             },
 
             test(str: string): boolean {
@@ -183,9 +182,8 @@ export const ParserBlock = {
         if (caseName === false) return false;
 
         const Range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
-        const selectionRange = Range;
         const Block: MyDocSymbol = new vscode.DocumentSymbol(caseName,
-            '', vscode.SymbolKind.EnumMember, Range, selectionRange);
+            '', vscode.SymbolKind.EnumMember, Range, Range);
         Block.children = getChildren({
             Uri,
             DocStrMap,
@@ -198,7 +196,7 @@ export const ParserBlock = {
     },
 
     getSwitchBlock(FuncInput: FuncInputType): false | MyDocSymbol {
-        if ((/^\s*\bswitch\b/i).test(FuncInput.lStr) === false) return false;
+        if (!(/^\s*\bswitch\b/i).test(FuncInput.lStr)) return false;
 
         const {
             Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
@@ -254,7 +252,7 @@ export const ParserBlock = {
     },
 
     getClass(FuncInput: FuncInputType): false | MyDocSymbol {
-        if ((/^\s*\bclass\b/i).test(FuncInput.lStr) === false) return false;
+        if (!(/^\s*\bclass\b/i).test(FuncInput.lStr)) return false;
 
         const classExec = (/^\s*\bclass\b\s\s*(\w\w*)/i).exec(FuncInput.lStr);
         if (classExec === null) return false;

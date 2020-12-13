@@ -24,11 +24,11 @@ function getReturnText(lStr: string, textRaw: string): string {
     const Func = (/^(\w\w*)\(/).exec(name);
     if (Func) {
         name = `${Func[1]}(...)`;
-    } else {
-        const returnObj = (/^(\{\s*\w\w*\s*:)/).exec(name);
+    } else if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
+        const returnObj = (/^({\s*\w\w*\s*:)/).exec(name);
         if (returnObj) name = `obj ${returnObj[1]}`;
     }
-    return `${name.trim()}\n`;
+    return `    ${name.trim()}\n`;
 }
 
 export function inCommentBlock2(textRaw: string, CommentBlock: boolean): boolean {
@@ -37,7 +37,6 @@ export function inCommentBlock2(textRaw: string, CommentBlock: boolean): boolean
     } else if ((/^\s*\/\*\*/).test(textRaw)) {
         return true; // /**
     }
-
     return CommentBlock;
 }
 
@@ -75,14 +74,13 @@ export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.Markdown
     }
 
     const kindDetail = `(${EMode.ahkFunc}) ${AhkSymbol.detail}\n`;
-    const title = document.getText(AhkSymbol.selectionRange);
+    const title = `${document.getText(AhkSymbol.selectionRange)}{\n`;
 
     const commentText2 = showComment ? commentFix(commentText) : '';
-    const md = new vscode.MarkdownString('', true)
+    return new vscode.MarkdownString('', true)
         .appendCodeblock(kindDetail, 'ahk')
         .appendCodeblock(title, 'ahk')
-        .appendMarkdown(commentText2)
         .appendCodeblock(returnList, 'ahk')
-        .appendCodeblock('}\n', 'ahk');
-    return md;
+        .appendCodeblock('}\n', 'ahk')
+        .appendMarkdown(commentText2);
 }

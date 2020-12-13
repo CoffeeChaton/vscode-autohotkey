@@ -88,8 +88,7 @@ export function getValDefInFunc(document: vscode.TextDocument, position: vscode.
 
     const Uri = document.uri;
     const docSymbolList = Detecter.getDocMap(Uri.fsPath);
-    if (docSymbolList === undefined) return null;
-
+    if (docSymbolList === null) return null;
     for (const docSymbol of docSymbolList) {
         if (docSymbol.kind === vscode.SymbolKind.Function
             && docSymbol.range.contains(position)) {

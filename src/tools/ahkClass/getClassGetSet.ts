@@ -24,7 +24,7 @@ export function getClassGetSet(FuncInput: FuncInputType): false | MyDocSymbol {
     } = FuncInput;
     if (lStr.indexOf('(') !== -1 || lStr.indexOf('=') !== -1) return false;
 
-    if ((/^\s*\w\w*(?:\[\\])?\s*\{?\s*$/).test(lStr) === false) return false;
+    if (!(/^\s*\w\w*(?:\[\\])?\s*{?\s*$/).test(lStr)) return false;
     const name = getName(FuncInput);
     if (name === false) return false;
 

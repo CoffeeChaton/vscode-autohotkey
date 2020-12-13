@@ -3,7 +3,7 @@ import { DeepReadonly } from '../../globalEnum';
 
 export function getDeepKeywords(textFix: string, oneCommandCode: number): number {
     const occ = Math.max(oneCommandCode, 0);
-    const textFixTwo = textFix.replace(/^\}\s*/, '');
+    const textFixTwo = textFix.replace(/^}\s*/, '');
     const commandRegexps: DeepReadonly<RegExp[]> = [
         /^if(?:msgbox)?\b/i,
         /^else\b/i,

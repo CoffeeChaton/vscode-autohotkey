@@ -13,7 +13,7 @@ async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
     const itemS: vscode.CompletionItem[] = [];
     for (const fsPath of fsPaths) {
         const AhkSymbolList = Detecter.getDocMap(fsPath);
-        if (AhkSymbolList === undefined) continue;
+        if (AhkSymbolList === null) continue;
         for (const AhkSymbol of AhkSymbolList) {
             if (AhkSymbol.kind === vscode.SymbolKind.Class && reg.test(AhkSymbol.name)) {
                 const kind = vscode.CompletionItemKind.Class;

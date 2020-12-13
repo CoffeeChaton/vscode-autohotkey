@@ -15,7 +15,7 @@ setInterval(() => {
 
 async function HoverFunc(wordLower: string, textRaw: string): Promise<false | vscode.Hover> {
     const isFunc = new RegExp(`(?<!\\.)(${wordLower})\\(`, 'i'); // not search class.Method()
-    if (isFunc.test(textRaw) === false) return false;
+    if (!isFunc.test(textRaw)) return false;
 
     const hasSymbol = tryGetSymbol(wordLower, EMode.ahkFunc);
     if (hasSymbol === false) return false;

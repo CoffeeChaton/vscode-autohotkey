@@ -22,10 +22,10 @@ export function tryGetSymbol(wordLower: string, mode: EMode): false | { fsPath: 
     const fsPaths = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
         const docSymbolList = Detecter.getDocMap(fsPath);
-        if (docSymbolList === undefined) continue;
+        if (docSymbolList === null) continue;
         const iMax = docSymbolList.length;
         for (let i = 0; i < iMax; i++) {
-            if (kindCheck(mode, docSymbolList[i].kind) === true
+            if (kindCheck(mode, docSymbolList[i].kind)
                 && docSymbolList[i].name.toLowerCase() === wordLower) {
                 return { AhkSymbol: docSymbolList[i], fsPath };
             }
@@ -74,7 +74,7 @@ async function ahkDef(
 
     // searchDef
     const searchDef = (): false | Promise<vscode.Location[]> => {
-        if (defReg.test(textTrimLower) === false) return false;
+        if (!defReg.test(textTrimLower)) return false;
         if (listAllUsing
             || (fsPath === document.uri.fsPath
                 && AhkSymbol.range.start.line === document.lineAt(position).lineNumber)) {
@@ -117,7 +117,7 @@ export async function userDef(document: vscode.TextDocument,
 
     const usingRegList: RegExp[] = [
         // eslint-disable-next-line max-len
-        new RegExp(`(?:^class\\b\\s\\s*\\b(${wordLower})\\b)|(?:\\bnew\\s\\s*\\b(${wordLower})\\b)|(?:(${wordLower})\\.)|(?:\\bextends\\b\\s\\s*(${wordLower}))|(?:\\bglobal\\b\\s\\s*\\b(${wordLower})\\b)|(?:\\{\\s*base:\\s*(${wordLower}))|(?:\\w\\w*\\.base\\s*:=\\s*(${wordLower}))`, 'i'),
+        new RegExp(`(?:^class\\b\\s\\s*\\b(${wordLower})\\b)|(?:\\bnew\\s\\s*\\b(${wordLower})\\b)|(?:(${wordLower})\\.)|(?:\\bextends\\b\\s\\s*(${wordLower}))|(?:\\bglobal\\b\\s\\s*\\b(${wordLower})\\b)|(?:{\\s*base:\\s*(${wordLower}))|(?:\\w\\w*\\.base\\s*:=\\s*(${wordLower}))`, 'i'),
         // class ClassName | new className | className. | extends  className | global className |  {base: className | .base := baseObject
         new RegExp(`(?:(?<!\\.)\\b(${wordLower})\\()|(?:(?<=\\bfunc\\()["']\\b(${wordLower})\\b["'])`, 'i'),
         // funcName( | Func("funcName"

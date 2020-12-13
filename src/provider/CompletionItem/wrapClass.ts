@@ -17,7 +17,7 @@ function getUserDefClassSymbol(testName: RegExp): TSymAndFsPath | null {
     const fsPaths = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
         const AhkSymbolList = Detecter.getDocMap(fsPath);
-        if (AhkSymbolList === undefined) continue;
+        if (AhkSymbolList === null) continue;
         for (const ahkSymbol of AhkSymbolList) {
             if (kindCheck(EMode.ahkClass, ahkSymbol.kind)
                 && testName.test(ahkSymbol.name)) {
@@ -45,12 +45,9 @@ async function wrapItem(ch: MyDocSymbol, track: string[], fsPath: string): Promi
         item.insertText = methodName;
     }
     item.detail = 'neko help';
-    const mdStr = track.join('   \n');
-    const md = new vscode.MarkdownString(mdStr, true);
-    if (ch.detail.trim()) {
-        md.appendMarkdown('\n\ndetail: ').appendMarkdown(ch.detail.trim());
-    }
-
+    const md = new vscode.MarkdownString('', true);
+    if (ch.detail.trim()) md.appendMarkdown('\n\ndetail: ').appendMarkdown(ch.detail.trim()).appendMarkdown('\n\n');
+    md.appendMarkdown([...track].reverse().join('   \n'));
     item.documentation = md;
     return item;
 }
@@ -163,7 +160,7 @@ async function triggerClass(document: vscode.TextDocument, position: vscode.Posi
     }
 
     const testName0 = new RegExp(`^${Head}$`, 'i');
-    const c0 = getUserDefClassSymbol(testName0);
+    const c0 = getUserDefClassSymbol(testName0); // static class / val / Method
     if (c0) {
         const fsPath = document.uri.fsPath;
         const ahkThis = ChapterArr.length === 1 ? await getWmThis(c0) : [];

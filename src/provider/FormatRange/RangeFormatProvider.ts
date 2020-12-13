@@ -30,11 +30,11 @@ function textReplace(textElement: string): string {
         .replace(/\( */g, '(')
         .replace(/ *\)/g, ')')
         .replace(/\[ */g, '[')
-        .replace(/ *\]/g, ']')
-        .replace(/ *\{ */g, ' {')
-        .replace(/ *\}/g, '}')
-        .replace(/\}\s\s*/g, '} ') // TODO WTF double \s ?
-        .replace(/\)\s*\{ */g, ') {')
+        .replace(/ *]/g, ']')
+        .replace(/ *{ */g, ' {')
+        .replace(/ *}/g, '}')
+        .replace(/}\s\s*/g, '} ') // TODO WTF double \s ?
+        .replace(/\)\s*{ */g, ') {')
         .replace(/\bif\s*\(/g, 'if (')
         .replace(/\bIf\s*\(/g, 'If (')
         .replace(/\bIF\s*\(/g, 'IF (')

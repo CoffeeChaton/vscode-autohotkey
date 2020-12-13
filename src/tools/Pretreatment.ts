@@ -53,12 +53,12 @@ export function Pretreatment(strArray: readonly string[]): TDocArr {
         const detail: DetailType[] = [];
         if (!lStr.includes('::')) {
             // {$                     || ^{
-            if ((/\{\s*$/).test(lStr) || (/^\s*\{/).test(lStr)) {
+            if ((/{\s*$/).test(lStr) || (/^\s*{/).test(lStr)) {
                 detail.push(DetailType.deepAdd);
                 deep++;
             }
             // ^}
-            if ((/^\s*\}/).test(lStr)) {
+            if ((/^\s*}/).test(lStr)) {
                 detail.push(DetailType.deepSubtract);
                 deep--;
             }

@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
+import * as log4js from 'log4js';
 // import { CompletionComma } from './provider/CompletionItemProvider';
 import { Detecter } from './core/Detecter';
 import { DefProvider } from './provider/Def/DefProvider';
-import { FileProvider } from './provider/FileProvider';
 import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
 import { SymBolProvider } from './provider/SymbolProvider';
@@ -13,6 +13,22 @@ import { ReferenceProvider } from './provider/ReferenceProvider';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 
+log4js.configure({
+    appenders: {
+        cheese: {
+            type: 'file',
+            filename: 'ahk-neko-help.log',
+            maxLogSize: 20000000, // 20 MB
+            backups: 10,
+            category: 'error',
+        },
+    },
+    categories: { default: { appenders: ['cheese'], level: 'error' } },
+});
+
+const logger = log4js.getLogger('neko');
+logger.warn('I will be logged both in console and log.txt');
+logger.debug('id');
 export function activate(context: vscode.ExtensionContext): void {
     const language = { language: 'ahk' };
     context.subscriptions.push(
@@ -27,7 +43,6 @@ export function activate(context: vscode.ExtensionContext): void {
         // vscode.languages.registerRenameProvider(language, new RenameProvider()),
         // vscode.languages.registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', ','),
         vscode.languages.registerCodeActionsProvider(language, new CodeActionProvider()),
-        FileProvider.createEditorListenr(),
         vscode.workspace.onDidChangeConfiguration(() => configChangEvent()),
         vscode.workspace.onDidDeleteFiles((e) => Detecter.delMap(e)),
         vscode.workspace.onDidCreateFiles((e) => Detecter.createMap(e)),

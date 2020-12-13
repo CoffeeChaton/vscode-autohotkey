@@ -50,7 +50,7 @@ let c1: NodeJS.Timeout[] = [];
 async function LoopOfClearOutlineCache(): Promise<null> {
     vscode.window.showInformationMessage('this is Dev function ,open profile-flame to get .cpuprofile');
     clearInterval(c0);
-    c1.map((e) => clearInterval(e));
+    c1.forEach((e) => clearInterval(e));
     c1 = [];
     const items: string[] = [
         'just clear NodeJS.Timeout',

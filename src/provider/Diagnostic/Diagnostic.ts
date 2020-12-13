@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
 import { getLintConfig } from '../../configUI';
@@ -24,7 +25,7 @@ function getIgnore(DocStrMap: TDocArr, line: number, IgnoreLine: number): number
     return numberOfIgnore + line;
 }
 
-function assign(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 | 1 | vscode.Diagnostic {
+function assign(DocStrMap: TDocArr, line: number): 0 | 1 | vscode.Diagnostic {
     // https://www.autohotkey.com/docs/commands/SetEnv.htm
     if (!DocStrMap[line].detail.includes(DetailType.inSkipSign2)) return 0;
 
@@ -39,7 +40,7 @@ function assign(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 | 1 | vsco
     //   diag1.relatedInformation = [new vscode.DiagnosticRelatedInformation(new vscode.Location(uri, pos), 'suggest to use := not =')];
     return diag1;
 }
-function getLoopErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 | 1 | vscode.Diagnostic {
+function getLoopErr(DocStrMap: TDocArr, line: number): 0 | 1 | vscode.Diagnostic {
     const lStr = DocStrMap[line].lStr;
     const exec = (/^\s*Loop\b[\s,][\s,]*(\w\w*)/i).exec(lStr);
     if (exec === null) return 0;
@@ -83,10 +84,10 @@ function getLoopErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 | 1 | 
     return diag1;
 }
 
-function getDirectivesErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 | 1 | vscode.Diagnostic {
+function getDirectivesErr(DocStrMap: TDocArr, line: number): 0 | 1 | vscode.Diagnostic {
     // err of #Directives
     if (DocStrMap[line].lStr.indexOf('#') === -1) return 0;
-    if ((/^\s*#/i).test(DocStrMap[line].lStr) === false) return 0;
+    if (!(/^\s*#/i).test(DocStrMap[line].lStr)) return 0;
 
     const lStr = DocStrMap[line].lStr;
     const exec = (/^\s*#(\w\w*)/).exec(lStr);
@@ -143,11 +144,11 @@ function getCommandErrFnReplace(commandHead: string, lStr: string, line: number)
     }
     return null;
 }
-function getCommandErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 | 1 | vscode.Diagnostic {
+function getCommandErr(DocStrMap: TDocArr, line: number): 0 | 1 | vscode.Diagnostic {
     // TODO result: Readonly<MyDocSymbol[]>
     // TODO search Deprecated
     // if (h.indexOf(line) !== -1) return 1;
-    if ((/^\s*\w\w*[\s,]/).test(DocStrMap[line].lStr) === false) return 0;
+    if (!(/^\s*\w\w*[\s,]/).test(DocStrMap[line].lStr)) return 0;
     const lStr = DocStrMap[line].lStr;
     const exec = (/^\s*(\w\w*)[\s,]/).exec(lStr);
     if (exec === null) return 0;
@@ -156,7 +157,7 @@ function getCommandErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): 0 | 1
 
     const fnReplaceErr = getCommandErrFnReplace(commandHead, lStr, line);
     if (fnReplaceErr) return fnReplaceErr;
-    if ((/^Loop$/i).test(commandHead)) return getLoopErr(DocStrMap, line, uri);
+    if ((/^Loop$/i).test(commandHead)) return getLoopErr(DocStrMap, line);
 
     const temp = {
         exec: /^EnvMult$/i, // TODO EnvDiv

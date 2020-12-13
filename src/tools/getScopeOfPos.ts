@@ -16,7 +16,7 @@ function dfs(father: MyDocSymbolArr, position: vscode.Position, StackPro: TStack
     for (const ch of father) {
         if (ch.range.contains(position)) {
             // console.log('s.name', s.name);
-            const d = dfs(ch.children, position, {
+            return dfs(ch.children, position, {
                 stack: [...stack, {
                     name: ch.name,
                     ahkSymbol: ch,
@@ -28,7 +28,7 @@ function dfs(father: MyDocSymbolArr, position: vscode.Position, StackPro: TStack
             // if (d.isEnd) {
             //     console.log('s.name End', s.name);
             // }
-            return d; // No brother
+            // return d; // No brother
         }
     }
     return {
@@ -39,7 +39,7 @@ function dfs(father: MyDocSymbolArr, position: vscode.Position, StackPro: TStack
 }
 export function getStack(document: vscode.TextDocument, position: vscode.Position): TStackPro | null {
     const ahkSymbolS = Detecter.getDocMap(document.uri.fsPath);
-    if (ahkSymbolS === undefined) return null;
+    if (ahkSymbolS === null) return null;
     const stackPro = dfs(ahkSymbolS, position, {
         stack: [],
         isEnd: false,

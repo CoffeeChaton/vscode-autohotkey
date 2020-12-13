@@ -2,9 +2,8 @@ export function getSkipSign2(text: string): boolean {
     return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/).test(text);
 }
 export function getSkipSign(text: string): boolean {
-    if ((/^\s*msgbox\b/i).test(text)) return true;
-    if ((/^\s*(?:control)?send(?:Raw\b|\b.*{Raw})/i).test(text)) return true;
-    return false;
+    return (/^\s*msgbox\b/i).test(text)
+        || (/^\s*(?:control)?send(?:Raw\b|\b.*{Raw})/i).test(text);
 }
 
 function fnReplacer(match: string, p1: string): string {

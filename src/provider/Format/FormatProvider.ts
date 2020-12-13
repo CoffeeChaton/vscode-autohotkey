@@ -49,7 +49,8 @@ type WarnUseType = DeepReadonly<{
 function fn_Warn_thisLineText_WARN({
     textFix, line, occ, deep, labDeep, inLTrim, textRaw, switchRangeArray, document, options,
 }: WarnUseType): string {
-    if (inLTrim === 1 && textRaw.trim().startsWith('(') === false) {
+    if (inLTrim === 1
+        && !(/^\s\(/i).test(textRaw)) {
         return document.lineAt(line).text;
     }
 
@@ -94,8 +95,8 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         // const squareBrackets = [{ line: 0, deep: 0 }]; // []
         // const curlyBrackets = [{ line: 0, deep: 0 }]; // {}
         // const nextLineDeep = [{ line: 0, deep: 0 }]; // if
-        // const labeHashtag = [{ line: 0, deep: 0 }]; // ^#if #win
-        //   const labels = [{ line: 0, deep: 0 }]; // labe:$
+        // const labelHashtag = [{ line: 0, deep: 0 }]; // ^#if #win
+        //   const labels = [{ line: 0, deep: 0 }]; // label:$
         // const HotStr = [{ line: 0, deep: 0 }]; // ^::HotStr::
         const lineMax = document.lineCount;
         for (let line = 0; line < lineMax; line++) {

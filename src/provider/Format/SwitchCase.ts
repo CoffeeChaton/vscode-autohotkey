@@ -4,7 +4,7 @@ import { TDocArr, DeepReadonly } from '../../globalEnum';
 
 export function getSwitchRange(document: vscode.TextDocument, DocStrMap: TDocArr, textFix: string, line: number, RangeEnd: number)
     : false | vscode.Range {
-    if ((/^\s*switch\s/i).test(textFix) === false) return false;
+    if (!(/^\s*switch\s/i).test(textFix)) return false;
 
     const lineFix = textFix.endsWith('{') ? line : line + 1;
     const range = getRange(DocStrMap, lineFix, lineFix, RangeEnd);

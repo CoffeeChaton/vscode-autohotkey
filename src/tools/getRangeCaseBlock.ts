@@ -4,7 +4,7 @@ import { TDocArr } from '../globalEnum';
 import { getRangeOfLine } from './getRangeOfLine';
 
 export function getRangeCaseBlock(DocStrMap: TDocArr, defLine: number, searchLine: number, RangeEnd: number, lStr: string): vscode.Range {
-    if ((/:\s*$/).test(lStr) === false) {
+    if (!(/:\s*$/).test(lStr)) {
         // exp : case "cat": return "cat";
         // exp : case 3: do something;
         return getRangeOfLine(DocStrMap, defLine);

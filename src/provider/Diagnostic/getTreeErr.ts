@@ -67,7 +67,7 @@ function setErrCase(sw: MyDocSymbol): null | vscode.Diagnostic {
     }
 }
 function setErrSwNameNotFind(sw: MyDocSymbol): null | vscode.Diagnostic {
-    if (sw.name.startsWith('!!') === false) return null;
+    if (!sw.name.startsWith('!!')) return null;
     const swNameNotFind = new vscode.Diagnostic(sw.range, EDiagMsg.code114, vscode.DiagnosticSeverity.Error);
     swNameNotFind.source = EDiagBase.source;
     swNameNotFind.code = {

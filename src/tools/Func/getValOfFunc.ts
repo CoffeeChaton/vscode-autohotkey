@@ -20,9 +20,9 @@ function getValAssignOfFunc(document: vscode.TextDocument, wordLower: string, ah
     for (let linePos = 0; linePos < iMax; linePos++) {
         const { textRaw, lStr } = DocStrMap[linePos];
         if (lStr.indexOf(':=') === -1
-            && (/^\s*static\s\s*\w/i).test(lStr) === false
-            && (/^\s*global\s\s*\w/i).test(lStr) === false
-            && (/^\s*local\s\s*\w/i).test(lStr) === false
+            && !(/^\s*static\s\s*\w/i).test(lStr)
+            && !(/^\s*global\s\s*\w/i).test(lStr)
+            && !(/^\s*local\s\s*\w/i).test(lStr)
         ) {
             continue;
         }
@@ -83,7 +83,7 @@ function getArgsOfFunc(document: vscode.TextDocument, wordLower: string, ahkSymb
 
 export function getFuncSymbolOfPos(document: vscode.TextDocument, position: vscode.Position): MyDocSymbol | null {
     const ahkSymbolS = Detecter.getDocMap(document.uri.fsPath);
-    if (ahkSymbolS === undefined) return null;
+    if (ahkSymbolS === null) return null;
 
     return ahkSymbolS.find((s) => (kindCheck(EMode.ahkFunc, s.kind) && s.range.contains(position))) || null;
 }
