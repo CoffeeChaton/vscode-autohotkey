@@ -20,7 +20,7 @@ function getName(FuncInput: FuncInputType): string | false {
 }
 export function getClassGetSet(FuncInput: FuncInputType): false | MyDocSymbol {
     const {
-        Uri, line, lStr, DocStrMap, RangeEndLine,
+        gValMapBySelf, Uri, line, lStr, DocStrMap, RangeEndLine,
     } = FuncInput;
     if (lStr.indexOf('(') !== -1 || lStr.indexOf('=') !== -1) return false;
 
@@ -36,6 +36,7 @@ export function getClassGetSet(FuncInput: FuncInputType): false | MyDocSymbol {
         range,
         selectionRange: range,
         children: getChildren({
+            gValMapBySelf,
             Uri,
             DocStrMap,
             RangeStartLine: range.start.line + 1,

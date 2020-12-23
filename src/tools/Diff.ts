@@ -2,15 +2,16 @@
 import * as vscode from 'vscode';
 import * as temp from 'temp';
 import { EStr } from '../globalEnum';
+import path = require('path');
 
 export type DiffType = {
     leftText: string,
-    rightTxt: string,
+    right: string | vscode.Uri,
     fsPath: string
 };
 
 export async function callDiff({
-    leftText, rightTxt, fsPath,
+    leftText, right: rightInput, fsPath,
 }: DiffType): Promise<void> {
     // const {
     //     leftText, rightTxt, fsPath,
@@ -29,18 +30,22 @@ export async function callDiff({
     if (typeof left.path !== 'string' || typeof right.path !== 'string') return;
     //   const decoration = (text: string): string => `;start line ${startLine + 1}\n\n${text}\n\n;end line ${endLine + 1}`;
     left.write(leftText);
-    right.write(rightTxt);
+    if (typeof rightInput === 'string') {
+        right.write(rightInput);
+    }
+    const rightUri: vscode.Uri = typeof rightInput === 'string' ? vscode.Uri.file(right.path) : rightInput;
 
-    const title = `${fsPath.substring(fsPath.lastIndexOf('/') + 1)} -> after Format`;
+    const title = `${path.basename(fsPath)} -> after Format`;
     const options: vscode.TextDocumentShowOptions = {
         //   viewColumn: ViewColumn,
         preserveFocus: true,
         //  preview: true,
         // selection: Range,
     };
+
     await vscode.commands.executeCommand('vscode.diff',
         vscode.Uri.file(left.path),
-        vscode.Uri.file(right.path),
+        rightUri,
         title,
         options);
 

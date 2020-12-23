@@ -12,6 +12,7 @@ import { statusBarClick } from './tools/Command';
 import { ReferenceProvider } from './provider/ReferenceProvider';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
+import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
 
 log4js.configure({
     appenders: {
@@ -42,6 +43,7 @@ export function activate(context: vscode.ExtensionContext): void {
         // TODO vscode.languages.registerDocumentSemanticTokensProvider(language, new Dr(), e39),
         // vscode.languages.registerRenameProvider(language, new RenameProvider()),
         // vscode.languages.registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', ','),
+        vscode.languages.registerOnTypeFormattingEditProvider(language, new OnTypeFormattingEditProvider(), '\n'),
         vscode.languages.registerCodeActionsProvider(language, new CodeActionProvider()),
         vscode.workspace.onDidChangeConfiguration(() => configChangEvent()),
         vscode.workspace.onDidDeleteFiles((e) => Detecter.delMap(e)),

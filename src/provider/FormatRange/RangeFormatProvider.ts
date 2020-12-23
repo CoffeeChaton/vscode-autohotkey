@@ -92,6 +92,12 @@ type RangeFormatType = {
     range: vscode.Range;
 };
 
+export function lineReplace(text: string, textFix: string, CommentBlock: boolean, inLTrim: 0 | 1 | 2): string {
+    return (CommentBlock || textFix === '' || inLTrim > 0 || getSkipSign(textFix)
+        || getSkipSign2(textFix) || textFix.startsWith(':') || textFix.includes('::'))
+        ? text
+        : fnStrGroup(text);
+}
 export function RangeFormat({
     timeStart, RangeTextRaw, RangeText, fsPath, range,
 }: RangeFormatType): vscode.ProviderResult<vscode.TextEdit[]> {
@@ -119,7 +125,7 @@ export function RangeFormat({
     showWarn(timeStart);
     const diffVar: DiffType = {
         leftText: RangeTextRaw,
-        rightTxt: textNew,
+        right: textNew,
         fsPath,
     };
     // eslint-disable-next-line @typescript-eslint/no-misused-promises

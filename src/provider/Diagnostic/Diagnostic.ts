@@ -184,19 +184,6 @@ function getLineErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): null | v
     return null;
 }
 
-function deepSymbol(chList: Readonly<MyDocSymbol[]>, h: readonly number[]): void {
-    for (const ch of chList) {
-        h.push(ch.range.start.line); // i need this ts error.
-        if (ch.children.length !== 0) {
-            deepSymbol(ch.children, h);
-        }
-    }
-}
-function symbolList(result: Readonly<MyDocSymbol[]>): readonly number[] {
-    const h: readonly number[] = [];
-    deepSymbol(result, h);
-    return h;
-}
 function setFuncErr(func: MyDocSymbol): vscode.Diagnostic {
     const fnSooBigErr = new vscode.Diagnostic(func.selectionRange, EDiagMsg.code301, vscode.DiagnosticSeverity.Warning);
     fnSooBigErr.source = EDiagBase.source;

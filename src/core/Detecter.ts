@@ -5,19 +5,28 @@ import * as vscode from 'vscode';
 import { Out } from '../common/out';
 import { getChildren } from './getChildren';
 import { ParserLine, ParserBlock, getReturnByLine } from './Parser';
-import { showTimeSpend } from '../configUI';
-import { EStr, MyDocSymbolArr } from '../globalEnum';
+import { getIgnoredFile, getIgnoredFolder, showTimeSpend } from '../configUI';
+import {
+    EStr, MyDocSymbolArr, TGValMap, TValArray, TValName,
+} from '../globalEnum';
 import { renameFn as renameFileNameFunc } from './renameFileNameFunc';
 import { Pretreatment } from '../tools/Pretreatment';
 import { Diagnostic } from '../provider/Diagnostic/Diagnostic';
 
 export const Detecter = {
     // key : vscode.Uri.fsPath,
-    // val : vscode.DocumentSymbol[]
-    DocMap: new Map() as Map<string, MyDocSymbolArr>,
+    // val : vscode.DocumentSymbol[] -> MyDocSymbolArr
+    DocMap: new Map<string, MyDocSymbolArr>(),
 
     // diagColl : vscode.DiagnosticCollection
     diagColl: vscode.languages.createDiagnosticCollection('ahk-neko-help'),
+
+    // key : vscode.Uri.fsPath,
+    // val : Map<
+    //          key: TValName
+    //          val : TVal
+    //          >
+    globalValMap: new Map<string, TGValMap>(),
 
     getDocMapFile(): IterableIterator<string> {
         return Detecter.DocMap.keys();
@@ -65,16 +74,11 @@ export const Detecter = {
         const Uri = vscode.Uri.file(fsPath);
         const document = await vscode.workspace.openTextDocument(Uri);
         const timeStart = Date.now();
-        // eslint-disable-next-line no-magic-numbers
-        // const size = Math.round(fs.statSync(fsPath).size / 1024);
-        // console.log(fsPath, `${size} KB`);
+        const gValMapBySelf: TGValMap = new Map<TValName, TValArray>();
 
         const DocStrMap = Pretreatment(document.getText().split('\n'));
-        // DocStrMap.forEach((e) => {
-        //     console.log('lStr', e.lStr);
-        //     console.log('tRaw', e.textRaw);
-        // });
         const result = getChildren({
+            gValMapBySelf,
             Uri,
             DocStrMap,
             RangeStartLine: 0,
@@ -87,6 +91,18 @@ export const Detecter = {
         if (!fsPath.includes(EStr.diff_name_prefix)) {
             if (!isTest) showTimeSpend(document.uri, timeStart);
             Detecter.DocMap.set(fsPath, result);
+            Detecter.globalValMap.set(fsPath, gValMapBySelf);
+            /*
+            Detecter.globalValMap.get(fsPath)?.forEach((v, k) => {
+                v.forEach((vv, kk) => {
+                    if (vv.rVal !== null) {
+                        console.log('k', k);
+                        console.log('kk', kk);
+                        console.log('vv', vv);
+                    }
+                });
+            });
+            */
             Diagnostic(DocStrMap, result, Uri, Detecter.diagColl);
         }
         return result as vscode.DocumentSymbol[];
@@ -100,15 +116,12 @@ export const Detecter = {
                     return;
                 }
                 for (const file of files) {
-                    if (!file.startsWith('.')
-                        && !(/^out$/i).test(file)
-                        && !(/^target$/i).test(file)) {
-                        // TODO read back file
+                    if (!getIgnoredFolder(file)) {
                         Detecter.buildByPath(isTest, `${buildPath}/${file}`);
                     }
                 }
             });
-        } else if (buildPath.endsWith('.ahk')) {
+        } else if (buildPath.endsWith('.ahk') && !getIgnoredFile(buildPath)) {
             // const Uri = vscode.Uri.file(buildPath);
             Detecter.updateDocDef(isTest, vscode.Uri.file(buildPath).fsPath);
         }
@@ -118,14 +131,11 @@ export const Detecter = {
         if (fs.statSync(buildPath).isDirectory()) {
             const files = fs.readdirSync(buildPath);
             for (const file of files) {
-                if (!file.startsWith('.')
-                    && !(/^out$/i).test(file)
-                    && !(/^target$/i).test(file)) {
-                    // TODO read back file
+                if (!getIgnoredFolder(file)) {
                     await Detecter.buildByPathAsync(isTest, `${buildPath}/${file}`);
                 }
             }
-        } else if (buildPath.endsWith('.ahk')) {
+        } else if (buildPath.endsWith('.ahk') && !getIgnoredFile(buildPath)) {
             // const Uri = vscode.Uri.file(buildPath);
             await Detecter.updateDocDef(isTest, vscode.Uri.file(buildPath).fsPath);
         }

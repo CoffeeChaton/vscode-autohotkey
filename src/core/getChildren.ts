@@ -1,31 +1,33 @@
 import * as vscode from 'vscode';
 import {
-    TDocArr, DeepReadonly, MyDocSymbol, MyDocSymbolArr,
+    TDocArr, MyDocSymbol, MyDocSymbolArr, TGValMap,
 } from '../globalEnum';
 
-export type FuncInputType = DeepReadonly<{
+export type FuncInputType = Readonly<{
     lStr: string,
     line: number,
     RangeEndLine: number,
     inClass: boolean,
     DocStrMap: TDocArr,
     Uri: vscode.Uri,
+    gValMapBySelf: TGValMap,
 }>;
 
 export type FuncLimit = (FuncInput: FuncInputType) => false | MyDocSymbol;
 
-type ChildType = DeepReadonly<{
+type ChildType = Readonly<{
     inClass: boolean,
     fnList: FuncLimit[],
     RangeStartLine: number,
     RangeEndLine: number,
     Uri: vscode.Uri,
     DocStrMap: TDocArr,
+    gValMapBySelf: TGValMap,
 }>;
 
 export function getChildren(child: ChildType): MyDocSymbolArr {
     const {
-        Uri, DocStrMap, RangeStartLine, RangeEndLine, inClass, fnList,
+        Uri, DocStrMap, RangeStartLine, RangeEndLine, inClass, fnList, gValMapBySelf,
     } = child;
 
     const result = [];
@@ -42,6 +44,7 @@ export function getChildren(child: ChildType): MyDocSymbolArr {
                 line,
                 RangeEndLine,
                 inClass,
+                gValMapBySelf,
             });
             if (DocumentSymbol !== false) {
                 result.push(DocumentSymbol);

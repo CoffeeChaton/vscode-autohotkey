@@ -36,6 +36,7 @@ const sendBigBlock: vscode.CompletionItem[] = [
 });
 
 export function ahkSend(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
+    if (position.character === 0) return [];
     const newRange = new vscode.Range(position.line, position.character - 1, position.line, position.character);
     const newStr = document.getText(newRange).trim();
     if (newStr !== '{') return []; // just support {}

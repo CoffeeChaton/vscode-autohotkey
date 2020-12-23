@@ -6,15 +6,15 @@ export function getSkipSign(text: string): boolean {
         || (/^\s*(?:control)?send(?:Raw\b|\b.*{Raw})/i).test(text);
 }
 
-function fnReplacer(match: string, p1: string): string {
-    return '_'.repeat(p1.length);
+function fnReplacer(match: string): string {
+    return '_'.repeat(match.length);
 }
 
 // [textFix , '; comment text']
-export function getLStrOld(textRaw: string): string {
+export function getLStr(textRaw: string): string {
     if (textRaw[0] === ';') return '';
     if ((/^\s*;/).test(textRaw)) return '';
-    const textFix = textRaw.replace(/`./g, '__').replace(/("[^"]*?")/g, fnReplacer);
+    const textFix = textRaw.replace(/`./g, '__').replace(/"[^"]*?"/g, fnReplacer);
     const i = textFix.indexOf(';');
     switch (i) {
         case -1:
@@ -28,10 +28,9 @@ export function getLStrOld(textRaw: string): string {
 function removeSenRaw(textFix: string): string {
     const s0 = textFix.search(/\b(?:control)?send(?:Raw\b|\b.*{Raw})/i);
     return s0 === -1 ? textFix : textFix.substring(0, s0);
-    // return textFix.replace(/\b(?:control)?sendRaw\b.*/i, '').replace(/\b(?:control)?send\b.*{Raw}.*/i, fnReplacer);
 }
-export function getLStr(textRaw: string): string {
-    // TODO QUICK
+export function getLStrErr(textRaw: string): string {
+    // TODO EDGE CASE 
     const text = textRaw.replace(/`./g, '__');
     let textFix = '';
     let tf = 1;

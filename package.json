@@ -46,30 +46,10 @@
             "type": "object",
             "title": "AhkNekoHelp",
             "properties": {
-                "AhkNekoHelp.statusBar.showVersion": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "show ahk NekoHelp version at status bar, default is false."
-                },
-                "AhkNekoHelp.statusBar.showTime": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "display resolution time as millisecond at status bar, default is true."
-                },
-                "AhkNekoHelp.statusBar.showFileName": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "display your ahk file name at status bar, default is false."
-                },
                 "AhkNekoHelp.statusBar.displayColor": {
                     "type": "string",
                     "default": "",
                     "description": "color of status bar, use '' to use theme color,or use HTML Color, exp: '#e783e1' or 'rgb(255,255,100)"
-                },
-                "AhkNekoHelp.hover.showComment": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "when hover a function to show this Comment."
                 },
                 "AhkNekoHelp.format.textReplace": {
                     "type": "boolean",
@@ -79,7 +59,31 @@
                 "AhkNekoHelp.lint.funcSize": {
                     "type": "number",
                     "default": 100,
+                    "minimum": 3,
+                    "maximum": 100000,
                     "description": "lint of function/Method size (line)"
+                },
+                "AhkNekoHelp.Ignored.folder.startsWith": {
+                    "type": "array",
+                    "default": [
+                        ".vscode"
+                    ],
+                    "description": "Do not scan while folder names startsWith this array"
+                },
+                "AhkNekoHelp.Ignored.folder.endsWith": {
+                    "type": "array",
+                    "default": [],
+                    "description": "Do not scan while folder names endsWith this array"
+                },
+                "AhkNekoHelp.Ignored.File.startsWith": {
+                    "type": "array",
+                    "default": [],
+                    "description": "Do not scan while File names startsWith this array"
+                },
+                "AhkNekoHelp.Ignored.File.endsWith": {
+                    "type": "array",
+                    "default": [],
+                    "description": "Do not scan while File names endsWith this array"
                 }
             }
         },

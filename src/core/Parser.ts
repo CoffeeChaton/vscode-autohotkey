@@ -10,10 +10,11 @@ import { getCaseDefaultName, getSwitchName } from './getSwitchCaseName';
 import { getRangeOfLine } from '../tools/getRangeOfLine';
 import { FuncInputType, getChildren } from './getChildren';
 import { removeParentheses } from '../tools/removeParentheses';
-import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { removeBigParentheses } from '../tools/removeBigParentheses';
+import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
+import { setGlobalVar } from './setGlobalVar';
 
 // // import * as Oniguruma from 'vscode-oniguruma';
 function getReturnName(textRaw: string): string {
@@ -52,7 +53,9 @@ type LineRulerType = DeepReadonly<{
 }[]>;
 
 export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
-    const { DocStrMap, line, lStr } = FuncInput;
+    const {
+        DocStrMap, line, lStr,
+    } = FuncInput;
     if (lStr === '') return false;
     const LineRuler: LineRulerType = [
         {
@@ -71,14 +74,15 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
             detail: 'global',
             kind: vscode.SymbolKind.Variable,
             getName(str: string): string | null {
-                return removeParentheses(removeBigParentheses(str.replace(/\bglobal\b/i, '')))
-                    .split(',')
-                    .map((v) => {
-                        const col = v.indexOf(':=');
-                        return (col > 0) ? v.substring(0, col).trim() : v;
-                    })
-                    .join(', ')
-                    .trim();
+                return (/^\s*\bglobal\b\s*$/i).test(str) ? null : setGlobalVar(FuncInput);
+                // return removeParentheses(removeBigParentheses(str.replace(/^\s*\bglobal\b/i, '')))
+                //     .split(',')
+                //     .map((v) => {
+                //         const col = v.indexOf(':=');
+                //         return (col > 0) ? v.substring(0, col).trim() : v;
+                //     })
+                //     .join(', ')
+                //     .trim();
             },
             test(str: string): boolean {
                 return (/^\s*\bglobal\b/i).test(str);
@@ -175,7 +179,7 @@ export const ParserBlock = {
         const lStr = FuncInput.lStr;
         if (lStr === '' || lStr.indexOf(':') === -1) return false;
         const {
-            Uri, RangeEndLine, inClass, line, DocStrMap,
+            gValMapBySelf, Uri, RangeEndLine, inClass, line, DocStrMap,
         } = FuncInput;
 
         const caseName = getCaseDefaultName(DocStrMap[line].textRaw, lStr);
@@ -185,6 +189,7 @@ export const ParserBlock = {
         const Block: MyDocSymbol = new vscode.DocumentSymbol(caseName,
             '', vscode.SymbolKind.EnumMember, Range, Range);
         Block.children = getChildren({
+            gValMapBySelf,
             Uri,
             DocStrMap,
             RangeStartLine: Range.start.line + 1,
@@ -199,7 +204,7 @@ export const ParserBlock = {
         if (!(/^\s*\bswitch\b/i).test(FuncInput.lStr)) return false;
 
         const {
-            Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
+            gValMapBySelf, Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
         } = FuncInput;
 
         const range = getRange(DocStrMap, line, line, RangeEndLine);
@@ -207,6 +212,7 @@ export const ParserBlock = {
         const SwitchBlock: MyDocSymbol = new vscode.DocumentSymbol(getSwitchName(lStr),
             'Switch', vscode.SymbolKind.Enum, range, selectionRange);
         SwitchBlock.children = getChildren({
+            gValMapBySelf,
             Uri,
             DocStrMap,
             RangeStartLine: range.start.line + 1,
@@ -219,7 +225,7 @@ export const ParserBlock = {
 
     getFunc(FuncInput: FuncInputType): false | MyDocSymbol {
         const {
-            Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
+            gValMapBySelf, Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
         } = FuncInput;
 
         if (lStr === '' || lStr.indexOf('(') === -1) return false;
@@ -241,6 +247,7 @@ export const ParserBlock = {
 
         const funcSymbol: MyDocSymbol = new vscode.DocumentSymbol(name, detail, kind, range, selectionRange);
         funcSymbol.children = getChildren({
+            gValMapBySelf,
             Uri,
             DocStrMap,
             RangeStartLine: range.start.line + 1,
@@ -258,7 +265,7 @@ export const ParserBlock = {
         if (classExec === null) return false;
 
         const {
-            Uri, DocStrMap, line, RangeEndLine, lStr,
+            gValMapBySelf, Uri, DocStrMap, line, RangeEndLine, lStr,
         } = FuncInput;
         const Range = getRange(DocStrMap, line, line, RangeEndLine);
 
@@ -271,6 +278,7 @@ export const ParserBlock = {
         const classSymbol: MyDocSymbol = new vscode.DocumentSymbol(name,
             detail, vscode.SymbolKind.Class, Range, selectionRange);
         classSymbol.children = getChildren({
+            gValMapBySelf,
             Uri,
             DocStrMap,
             RangeStartLine: Range.start.line + 1,
@@ -283,7 +291,7 @@ export const ParserBlock = {
 
     getComment(FuncInput: FuncInputType): false | MyDocSymbol {
         const {
-            Uri, DocStrMap, line, RangeEndLine, inClass,
+            gValMapBySelf, Uri, DocStrMap, line, RangeEndLine, inClass,
         } = FuncInput;
         const kind = vscode.SymbolKind.Package;
 
@@ -316,6 +324,7 @@ export const ParserBlock = {
         const selectionRange = new vscode.Range(line, 0, line, textRaw.length);
         const CommentBlock: MyDocSymbol = new vscode.DocumentSymbol(name, '', vscode.SymbolKind.Package, range, selectionRange);
         CommentBlock.children = getChildren({
+            gValMapBySelf,
             Uri,
             DocStrMap,
             RangeStartLine: range.start.line + 1,

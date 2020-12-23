@@ -3,10 +3,11 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { setFuncHoverMD } from '../../tools/setHoverMD';
-import { getValOfFunc } from '../../tools/Func/getValOfFunc';
 import { wrapClass } from './wrapClass';
-import { ahkSend } from './ahkSend';
 import { insertTextWm } from './insertTextWm';
+import { ahkSend } from './ahkSend';
+import { contextCompletionItem } from './contextCompletionItem';
+import { getValOfFunc } from '../../tools/Func/getValOfFunc';
 
 async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
     const fsPaths = Detecter.getDocMapFile();
@@ -102,6 +103,7 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
             ...await wrapClass(document, position), // '.'
             ...await wrapListAllFuncClass(document, position), // ''
             ...ahkSend(document, position), // '{'
+            ...contextCompletionItem(document, position),
         ];
 
         // eslint-disable-next-line no-magic-numbers

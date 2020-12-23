@@ -42,8 +42,14 @@ export type MyDocSymbol = DeepReadonly<vscode.DocumentSymbol>;
 export type MyDocSymbolArr = DeepReadonly<vscode.DocumentSymbol[]>;
 export type TSymAndFsPath = { ahkSymbol: MyDocSymbol; fsPath: string; };
 
+export type TValArray = {
+    lRange: vscode.Range, // left Range
+    rVal: string | null // Right value as textRaw
+}[];
+export type TValName = string;
+export type TGValMap = Map<TValName, TValArray>;
+
 export const enum VERSION {
-    Parser = 'v0.6, ',
     getValDefInFunc = '0.4beta',
     format = 'v0.48',
     formatRange = ' v0.4a',

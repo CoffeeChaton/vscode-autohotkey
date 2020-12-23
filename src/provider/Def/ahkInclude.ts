@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as vscode from 'vscode';
 //   OK      #Include FileOrDirName
 //           #IncludeAgain FileOrDirName
@@ -14,15 +15,18 @@ import * as vscode from 'vscode';
 export function ahkInclude(document: vscode.TextDocument, position: vscode.Position): false | vscode.Location {
     // at #include line
     const includeExec = (/^\s*#include(?:again)?\s*(?:\*i )?\s*(\S\S*\.ahk)\s*$/i).exec(document.lineAt(position).text);
-    if (includeExec === null) return false;
+    if (includeExec === null) return false; //               includeExec[1]
 
     const length = Math.max(document.uri.path.lastIndexOf('/'), document.uri.path.lastIndexOf('\\'));
     if (length <= 0) return false;
-    const parent = document.uri.path.substr(0, length);
-    const fsPath = includeExec[1].replace(/%A_Space%/, ' ').replace(/%A_Tab%/, '\t');
-    const fsPathFix = (/(%A_ScriptDir%)|(%A_WorkingDir%)|(%A_LineFile%)/).test(fsPath)
-        ? includeExec[1].replace(/(%A_ScriptDir%)|(%A_WorkingDir%)|(%A_LineFile%)/, parent)
-        : `${parent}\\${fsPath}`;
-    const uri = vscode.Uri.file(fsPathFix);
+    const lPath = path.dirname(document.uri.fsPath);
+    const rPath = includeExec[1].replace(/%A_Space%/g, ' ').replace(/%A_Tab%/g, '\t');
+    if ((/%A_\w\w*%/).test(rPath)) {
+        vscode.window.showInformationMessage('neko-help not support of %A_ScriptDir% or Similar syntax');
+        return false;
+    }
+    const pathFix = `${lPath}\\${rPath}`;
+    console.log('ahkInclude -> pathFix', pathFix);
+    const uri = vscode.Uri.file(pathFix);
     return new vscode.Location(uri, new vscode.Position(0, 0));
 }

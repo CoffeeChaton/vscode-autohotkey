@@ -17,7 +17,7 @@ export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionIte
     const { ahkSymbol, fsPath } = c0;
     const Uri = vscode.Uri.file(fsPath);
     const document = await vscode.workspace.openTextDocument(Uri);
-    const mapStrNumber = new Map() as Map<string, number>; // : Map<string, number>
+    const mapStrNumber = new Map<string, number>(); // : Map<string, number>
     const lineBase = ahkSymbol.range.start.line;
     Pretreatment(document.getText(ahkSymbol.range).split('\n'))
         .forEach((v, index) => {

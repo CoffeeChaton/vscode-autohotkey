@@ -1,5 +1,5 @@
+import * as path from 'path';
 import * as vscode from 'vscode';
-import { VERSION } from './globalEnum';
 
 const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
 statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
@@ -7,9 +7,6 @@ statusBarItem.command = 'ahk.bar.click';
 let Configs = vscode.workspace.getConfiguration('AhkNekoHelp');
 type TConfigs = {
     statusBar: {
-        showVersion: boolean;
-        showTime: boolean;
-        showFileName: boolean;
         displayColor: string;
     };
     hover: {
@@ -21,13 +18,21 @@ type TConfigs = {
     lint: {
         funcSize: number;
     };
+    Ignored: {
+        folder: {
+            startsWith: string[];
+            endsWith: string[];
+        }
+        File: {
+            startsWith: string[];
+            endsWith: string[];
+        }
+    }
 };
+
 function getConfig(): TConfigs {
     return {
         statusBar: {
-            showVersion: Configs.get('statusBar.showVersion') as boolean,
-            showTime: Configs.get('statusBar.showTime') as boolean,
-            showFileName: Configs.get('statusBar.showFileName') as boolean,
             displayColor: Configs.get('statusBar.displayColor') as string,
         },
         hover: {
@@ -38,6 +43,16 @@ function getConfig(): TConfigs {
         },
         lint: {
             funcSize: Configs.get('lint.funcSize') as number,
+        },
+        Ignored: {
+            folder: {
+                startsWith: Configs.get('Ignored.folder.startsWith') as string[],
+                endsWith: Configs.get('Ignored.folder.endsWith') as string[],
+            },
+            File: {
+                startsWith: Configs.get('Ignored.File.startsWith') as string[],
+                endsWith: Configs.get('Ignored.File.endsWith') as string[],
+            },
         },
     };
 }
@@ -51,14 +66,9 @@ export function configChangEvent(): void {
 
 export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     const time = Date.now() - timeStart;
-    const fsPathRaw = uri.fsPath;
-    const version = config.statusBar.showVersion ? VERSION.Parser : '';
-    const timeSpend = config.statusBar.showTime ? `${time} ms` : '';
-    const name = config.statusBar.showFileName
-        ? ` of ${fsPathRaw.substring(fsPathRaw.lastIndexOf('\\') + 1)}`
-        : '';
-    statusBarItem.text = `$(heart) ${version}${timeSpend}${name}`;
-    console.log(time, ` ms of ${fsPathRaw.substring(fsPathRaw.lastIndexOf('\\') + 1)}`);
+    const name = ` of ${path.basename(uri.fsPath)}`;
+    statusBarItem.text = `$(heart) ${time} ms${name}`;
+    console.log(time, 'ms', name);
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
 }
@@ -71,6 +81,29 @@ export function getLintConfig(): { funcSize: number; } {
 }
 export function getFormatConfig(): boolean {
     return config.format.textReplace;
+}
+export function getIgnoredFolder(file: string): boolean {
+    const startsWith = config.Ignored.folder.startsWith;
+    for (const e of startsWith) {
+        if (file.startsWith(e)) return true;
+    }
+    const endsWith = config.Ignored.folder.endsWith;
+    for (const e of endsWith) {
+        if (file.endsWith(e)) return true;
+    }
+    return false;
+}
+export function getIgnoredFile(buildPath: string): boolean {
+    const fileFix = path.basename(buildPath, '.ahk');
+    const startsWith = config.Ignored.File.startsWith;
+    for (const e of startsWith) {
+        if (fileFix.startsWith(e)) return true;
+    }
+    const endsWith = config.Ignored.File.endsWith;
+    for (const e of endsWith) {
+        if (fileFix.endsWith(e)) return true;
+    }
+    return false;
 }
 // console.log(JSON.stringify(val));
 // vscode.window.setStatusBarMessage(timeSpend);
