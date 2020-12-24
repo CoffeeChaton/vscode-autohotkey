@@ -107,7 +107,7 @@ export function RangeFormat({
 
     const textLineGroup = RangeText.split('\n');
     const lineMax = textLineGroup.length;
-    for (let line = 0; line < lineMax; line += 1) {
+    for (let line = 0; line < lineMax; line++) {
         const text = textLineGroup[line];
         CommentBlock = inCommentBlock(text, CommentBlock);
         const textFix = getLStr(text).trim();

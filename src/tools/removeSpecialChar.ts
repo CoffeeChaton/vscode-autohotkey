@@ -30,7 +30,7 @@ function removeSenRaw(textFix: string): string {
     return s0 === -1 ? textFix : textFix.substring(0, s0);
 }
 export function getLStrErr(textRaw: string): string {
-    // TODO EDGE CASE 
+    // TODO EDGE CASE
     const text = textRaw.replace(/`./g, '__');
     let textFix = '';
     let tf = 1;

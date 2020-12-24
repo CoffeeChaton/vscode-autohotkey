@@ -13,7 +13,7 @@ export function getRangeCaseBlock(DocStrMap: TDocArr, defLine: number, searchLin
     const startPos: vscode.Position = new vscode.Position(defLine, 0);
     const nextLine = searchLine + 1;
     let Resolved = -1;
-    for (let line = nextLine; line <= RangeEnd; line += 1) {
+    for (let line = nextLine; line <= RangeEnd; line++) {
         if (line < Resolved) continue;
 
         const lineLStr = DocStrMap[line].lStr;

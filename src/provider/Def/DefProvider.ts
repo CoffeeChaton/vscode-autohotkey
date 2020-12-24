@@ -49,9 +49,7 @@ async function getReference(usingReg: RegExp, timeStart: number, wordLower: stri
             }
         }
     }
-    const debugStr = `list all using of ${wordLower} (${Date.now() - timeStart} ms)`;
-    console.log(debugStr);
-    // vscode.window.showInformationMessage(debugStr);
+    console.log(`list all using of "${wordLower}"`, Date.now() - timeStart, ' ms');
     return List;
 }
 
@@ -85,9 +83,7 @@ async function ahkDef(
     // searchUsing
     const searchUsing = (): false | vscode.Location[] => {
         if (textTrimLower.search(usingReg) === -1) return false;
-        const debugStr = `goto Def of ${wordLower} (${Date.now() - timeStart} ms)`;
-        console.log(debugStr);
-        // vscode.window.showInformationMessage(debugStr);
+        console.log(`goto Def of ${wordLower} ()`, Date.now() - timeStart, 'ms)');
         const Uri = vscode.Uri.file(fsPath);
         return [new vscode.Location(Uri, AhkSymbol.range)];
     };
@@ -110,7 +106,8 @@ export async function userDef(document: vscode.TextDocument,
         // class ClassName
         new RegExp(`class\\b\\s\\s*\\b(${wordLower})\\b`, 'i'),
         // funcName( , not search class.Method()
-        new RegExp(`(?<!\\.)\\b(${wordLower})\\(`, 'i'),
+        //   new RegExp(`(?<!\\.)\\b(${wordLower})\\(`, 'i'),
+        new RegExp(`(?<!\\.|\`)\\b(${wordLower})\\(`, 'i'),
         // global var_name :=
         new RegExp(`global\\s\\s*(${wordLower})\\s\\s*:?=`, 'i'),
     ];
@@ -119,10 +116,10 @@ export async function userDef(document: vscode.TextDocument,
         // eslint-disable-next-line max-len
         new RegExp(`(?:^class\\b\\s\\s*\\b(${wordLower})\\b)|(?:\\bnew\\s\\s*\\b(${wordLower})\\b)|(?:(${wordLower})\\.)|(?:\\bextends\\b\\s\\s*(${wordLower}))|(?:\\bglobal\\b\\s\\s*\\b(${wordLower})\\b)|(?:{\\s*base:\\s*(${wordLower}))|(?:\\w\\w*\\.base\\s*:=\\s*(${wordLower}))`, 'i'),
         // class ClassName | new className | className. | extends  className | global className |  {base: className | .base := baseObject
-        new RegExp(`(?:(?<!\\.)\\b(${wordLower})\\()|(?:(?<=\\bfunc\\()["']\\b(${wordLower})\\b["'])`, 'i'),
+        new RegExp(`(?:(?<!\\.|\`)\\b(${wordLower})\\()|(?:(?<=\\bfunc\\()["']\\b(${wordLower})\\b["'])`, 'i'),
         // funcName( | Func("funcName"
-        new RegExp(`global\\s\\s*(${wordLower})\\b`, 'i'),
-        // global var_name
+        new RegExp(`(?<!\\.|\`)\\b(${wordLower})\\b`, 'i'),
+        // var_name
     ];
 
     const Modes: Readonly<EMode[]> = [
@@ -132,7 +129,7 @@ export async function userDef(document: vscode.TextDocument,
     ];
 
     const iMax = Modes.length;
-    for (let i = 0; i < iMax; i += 1) {
+    for (let i = 0; i < iMax; i++) {
         const Location = await ahkDef({
             document,
             position,

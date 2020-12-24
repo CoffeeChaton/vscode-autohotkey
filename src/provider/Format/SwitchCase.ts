@@ -18,7 +18,7 @@ export function inSwitchBlock(textFix: string, line: number, switchRangeArray: D
     let switchDeep = 0;
     for (const switchRange of switchRangeArray) {
         if (switchRange.contains(Pos)) {
-            switchDeep += 1;
+            switchDeep++;
         }
     }
 

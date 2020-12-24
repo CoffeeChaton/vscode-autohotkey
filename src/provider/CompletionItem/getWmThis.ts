@@ -1,19 +1,15 @@
 import * as vscode from 'vscode';
 import { MyDocSymbol, TSymAndFsPath } from '../../globalEnum';
 import { Pretreatment } from '../../tools/Pretreatment';
+import { ClassWm } from '../../tools/wm';
 
-let wm: WeakMap<MyDocSymbol, vscode.CompletionItem[]> = new WeakMap();
-let wmSize = 0;
-setInterval(() => {
-    wm = new WeakMap();
-    wmSize = 0;
-    console.log('getThisItemOfWm WeakMap clear 10 min');
-    // eslint-disable-next-line no-magic-numbers
-}, 10 * 60 * 1000); // 10 minute
+// eslint-disable-next-line no-magic-numbers
+const w = new ClassWm<MyDocSymbol, vscode.CompletionItem[]>(10 * 60 * 1000, 'getThisItemOfWm', 700);
 
 export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionItem[]> {
-    const maybe = wm.get(c0.ahkSymbol);
+    const maybe = w.getWm(c0.ahkSymbol);
     if (maybe) return maybe;
+
     const { ahkSymbol, fsPath } = c0;
     const Uri = vscode.Uri.file(fsPath);
     const document = await vscode.workspace.openTextDocument(Uri);
@@ -39,14 +35,5 @@ export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionIte
         itemS.push(item);
     });
 
-    // eslint-disable-next-line no-magic-numbers
-    if (wmSize > 700) {
-        wm = new WeakMap();
-        wmSize = 0;
-        // console.log('getThisItemOfWm WeakMap clear of wmSize > 200');
-    }
-    wm.set(ahkSymbol, itemS);
-    wmSize += itemS.length;
-
-    return itemS;
+    return w.setWm(ahkSymbol, itemS);
 }

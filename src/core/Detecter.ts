@@ -69,8 +69,6 @@ export const Detecter = {
     },
 
     async updateDocDef(isTest: boolean, fsPath: string): Promise<vscode.DocumentSymbol[]> {
-        // FIXME -> event
-        // FIXME wm -> Map<fsPath,WeakMap<MyDocSymbol, T>>;
         const Uri = vscode.Uri.file(fsPath);
         const document = await vscode.workspace.openTextDocument(Uri);
         const timeStart = Date.now();

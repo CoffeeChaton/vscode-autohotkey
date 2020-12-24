@@ -3,8 +3,8 @@ import { FuncInputType } from './getChildren';
 import { removeParentheses } from '../tools/removeParentheses';
 import { removeBigParentheses } from '../tools/removeBigParentheses';
 
-function fnReplacer(match: string, p1: string): string {
-    return '_'.repeat(match.length);
+function fnReplacer(match: string): string {
+    return ' '.repeat(match.length);
 }
 
 export function setGlobalVar(FuncInput: FuncInputType): string {

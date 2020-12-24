@@ -30,6 +30,7 @@ log4js.configure({
 const logger = log4js.getLogger('neko');
 logger.warn('I will be logged both in console and log.txt');
 logger.debug('id');
+
 export function activate(context: vscode.ExtensionContext): void {
     const language = { language: 'ahk' };
     context.subscriptions.push(
@@ -40,10 +41,10 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
         vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
         vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
+        vscode.languages.registerOnTypeFormattingEditProvider(language, new OnTypeFormattingEditProvider(), '\n'),
         // TODO vscode.languages.registerDocumentSemanticTokensProvider(language, new Dr(), e39),
         // vscode.languages.registerRenameProvider(language, new RenameProvider()),
         // vscode.languages.registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', ','),
-        vscode.languages.registerOnTypeFormattingEditProvider(language, new OnTypeFormattingEditProvider(), '\n'),
         vscode.languages.registerCodeActionsProvider(language, new CodeActionProvider()),
         vscode.workspace.onDidChangeConfiguration(() => configChangEvent()),
         vscode.workspace.onDidDeleteFiles((e) => Detecter.delMap(e)),

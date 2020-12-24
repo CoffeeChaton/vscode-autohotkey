@@ -1,14 +1,9 @@
 import { MyDocSymbol, TDocArr } from '../../globalEnum';
+import { ClassWm } from '../wm';
 import { EFnMode } from './ahkFucObj';
 
-let wm: WeakMap<MyDocSymbol, EFnMode> = new WeakMap();
-let wmSize = 0;
-setInterval(() => {
-    wm = new WeakMap();
-    wmSize = 0;
-    console.log('getThisItemOfWm WeakMap clear 10 min');
-    // eslint-disable-next-line no-magic-numbers
-}, 10 * 60 * 1000); // 10 minute
+// eslint-disable-next-line no-magic-numbers
+const w = new ClassWm<MyDocSymbol, EFnMode>(10 * 60 * 1000, 'getFnMode', 20000);
 
 // is https://www.autohotkey.com/docs/Functions.htm#Local
 function getFnMode(docSymbol: MyDocSymbol, DocStrMap: TDocArr): EFnMode {
@@ -25,18 +20,10 @@ function getFnMode(docSymbol: MyDocSymbol, DocStrMap: TDocArr): EFnMode {
 }
 
 export function getFnModeWM(docSymbol: MyDocSymbol, DocStrMap: TDocArr): EFnMode {
-    const maybe = wm.get(docSymbol);
+    const maybe = w.getWm(docSymbol);
     if (maybe) return maybe;
 
     const fnMode = getFnMode(docSymbol, DocStrMap);
 
-    // eslint-disable-next-line no-magic-numbers
-    if (wmSize > 20000) {
-        wm = new WeakMap();
-        wmSize = 0;
-    }
-    wm.set(docSymbol, fnMode);
-    wmSize++;
-
-    return fnMode;
+    return w.setWm(docSymbol, fnMode);
 }

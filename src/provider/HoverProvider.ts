@@ -4,58 +4,42 @@ import * as vscode from 'vscode';
 import { tryGetSymbol } from './Def/DefProvider';
 import { EMode, MyDocSymbol } from '../globalEnum';
 import { setFuncHoverMD } from '../tools/setHoverMD';
+import { ClassWm } from '../tools/wm';
 
-let wm: WeakMap<MyDocSymbol, vscode.Hover> = new WeakMap();
-let wmSize = 0;
-setInterval(() => {
-    wm = new WeakMap();
-    wmSize = 0;
-    console.log('HoverFunc WeakMap clear 10 min');
-}, 10 * 60 * 1000); // 10 minute
+const wm = new ClassWm<MyDocSymbol, vscode.Hover>(10 * 60 * 1000, 'HoverFunc', 60);
 
-async function HoverFunc(wordLower: string, textRaw: string): Promise<false | vscode.Hover> {
+async function HoverFunc(wordLower: string, textRaw: string): Promise<null | vscode.Hover> {
     const isFunc = new RegExp(`(?<!\\.)(${wordLower})\\(`, 'i'); // not search class.Method()
-    if (!isFunc.test(textRaw)) return false;
+    if (!isFunc.test(textRaw)) return null;
 
     const hasSymbol = tryGetSymbol(wordLower, EMode.ahkFunc);
-    if (hasSymbol === false) return false;
-    const cache = wm.get(hasSymbol.AhkSymbol);
-    if (cache !== undefined) {
-        //  console.log('WeakMap -> wordLower :', wordLower);
-        //  console.log('WeakMap -> AhkSymbol -> range :', hasSymbol.AhkSymbol.range);
-        //  console.log('WeakMap -> fsPath :', hasSymbol.fsPath);
-        return cache;
-    }
+    if (!hasSymbol) return null;
+
+    const t = hasSymbol.AhkSymbol;
+    const cache = wm.getWm(t);
+    if (cache) return cache;
 
     const md = await setFuncHoverMD(hasSymbol);
     const hover = new vscode.Hover(md);
-    // eslint-disable-next-line no-magic-numbers
-    if (wmSize > 30) {
-        wm = new WeakMap();
-        wmSize = 0;
-        console.log('HoverFunc WeakMap clear of wmSize > 200');
-    }
-    wm.set(hasSymbol.AhkSymbol, hover);
-    wmSize += 1;
 
-    return hover;
+    return wm.setWm(t, hover);
 }
 
 export class HoverProvider implements vscode.HoverProvider {
     public async provideHover(document: vscode.TextDocument, position: vscode.Position,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        token: vscode.CancellationToken): Promise<vscode.Hover | undefined> {
+        token: vscode.CancellationToken): Promise<vscode.Hover | null> {
         const Range = document.getWordRangeAtPosition(position);
-        if (Range === undefined) return undefined;
+        if (Range === undefined) return null;
         const wordLower = document.getText(Range).toLowerCase();
         const textRaw = document.lineAt(position).text;
         const isFunc = await HoverFunc(wordLower, textRaw);
-        if (isFunc !== false) return isFunc;
+        if (isFunc) return isFunc;
 
         // TODO https://www.autohotkey.com/docs/commands/index.htm
         // const commands = getCommandsHover(document, position);
         // if (commands) return commands;
 
-        return undefined;
+        return null;
     }
 }
