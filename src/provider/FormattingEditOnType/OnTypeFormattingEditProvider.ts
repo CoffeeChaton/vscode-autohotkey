@@ -5,7 +5,9 @@ async function chIsNextLine(document: vscode.TextDocument, position: vscode.Posi
     ch: string, options: vscode.FormattingOptions, token: vscode.CancellationToken)
     : Promise<vscode.TextEdit[]> {
     const array = await FormatCore(document, options, token, false);
-    return array ? [array[position.line - 1], array[position.line]] : [];
+    if (!array) return [];
+
+    return [array[position.line - 1]];
 }
 export class OnTypeFormattingEditProvider implements vscode.OnTypeFormattingEditProvider {
     public provideOnTypeFormattingEdits(document: vscode.TextDocument, position: vscode.Position,

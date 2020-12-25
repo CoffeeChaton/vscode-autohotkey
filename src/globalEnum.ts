@@ -41,7 +41,7 @@ export type TDocArr = DeepReadonly<TDocArrRaw>;
 export type MyDocSymbol = DeepReadonly<vscode.DocumentSymbol>;
 export type MyDocSymbolArr = DeepReadonly<vscode.DocumentSymbol[]>;
 export type TSymAndFsPath = { ahkSymbol: MyDocSymbol; fsPath: string; };
-
+// TODO c0 : fn -> weakMap -> fsPath
 export type TValArray = {
     lRange: vscode.Range, // left Range
     rVal: string | null // Right value as textRaw

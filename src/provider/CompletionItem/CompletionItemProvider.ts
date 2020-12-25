@@ -15,20 +15,20 @@ async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
     for (const fsPath of fsPaths) {
         const AhkSymbolList = Detecter.getDocMap(fsPath);
         if (AhkSymbolList === null) continue;
-        for (const AhkSymbol of AhkSymbolList) {
-            if (AhkSymbol.kind === vscode.SymbolKind.Class && reg.test(AhkSymbol.name)) {
+        for (const ahkSymbol of AhkSymbolList) {
+            if (ahkSymbol.kind === vscode.SymbolKind.Class && reg.test(ahkSymbol.name)) {
                 const kind = vscode.CompletionItemKind.Class;
-                const item = new vscode.CompletionItem(AhkSymbol.name, kind);
-                item.insertText = await insertTextWm(AhkSymbol, fsPath);
+                const item = new vscode.CompletionItem(ahkSymbol.name, kind);
+                item.insertText = await insertTextWm({ ahkSymbol, fsPath });
                 item.detail = 'neko help';
                 item.documentation = 'user def class';
                 itemS.push(item);
-            } else if (AhkSymbol.kind === vscode.SymbolKind.Function && reg.test(AhkSymbol.name)) {
+            } else if (ahkSymbol.kind === vscode.SymbolKind.Function && reg.test(ahkSymbol.name)) {
                 const kind = vscode.CompletionItemKind.Function;
-                const item = new vscode.CompletionItem(AhkSymbol.name, kind);
-                item.insertText = await insertTextWm(AhkSymbol, fsPath);
+                const item = new vscode.CompletionItem(ahkSymbol.name, kind);
+                item.insertText = await insertTextWm({ ahkSymbol, fsPath });
                 item.detail = 'neko help';
-                item.documentation = await setFuncHoverMD({ fsPath, AhkSymbol });
+                item.documentation = await setFuncHoverMD({ fsPath, AhkSymbol: ahkSymbol });
                 itemS.push(item);
             }
         }

@@ -9,7 +9,7 @@ function consoleDefault(a: never, diag: vscode.Diagnostic): null {
 }
 
 function getFsPath(diag: vscode.Diagnostic): EDiagFsPath | null {
-    const code = diag.code;
+    const code = diag?.code;
     if (code === undefined || typeof code === 'string' || typeof code === 'number') return null;
 
     const d = code.value as EDiagCode;

@@ -37,16 +37,16 @@ function getKindOfCh(ch: MyDocSymbol): vscode.CompletionItemKind {
     }
 }
 
-async function wrapItem(ch: MyDocSymbol, track: string[], fsPath: string): Promise<vscode.CompletionItem> {
-    const item = new vscode.CompletionItem(ch.name.trim(), getKindOfCh(ch));
-    if (ch.kind === vscode.SymbolKind.Method) {
-        const methodName = await insertTextWm(ch, fsPath);
+async function wrapItem(c0: TSymAndFsPath, track: string[]): Promise<vscode.CompletionItem> {
+    const item = new vscode.CompletionItem(c0.ahkSymbol.name.trim(), getKindOfCh(c0.ahkSymbol));
+    if (c0.ahkSymbol.kind === vscode.SymbolKind.Method) {
+        const methodName = await insertTextWm(c0);
         item.label = methodName.value;
         item.insertText = methodName;
     }
     item.detail = 'neko help';
     const md = new vscode.MarkdownString('', true);
-    if (ch.detail.trim()) md.appendMarkdown('\n\ndetail: ').appendMarkdown(ch.detail.trim()).appendMarkdown('\n\n');
+    if (c0.ahkSymbol.detail.trim()) md.appendMarkdown('\n\ndetail: ').appendMarkdown(c0.ahkSymbol.detail.trim()).appendMarkdown('\n\n');
     md.appendMarkdown([...track].reverse().join('   \n'));
     item.documentation = md;
     return item;
@@ -60,27 +60,28 @@ function getKind(kind: vscode.SymbolKind): string {
         default: return 'Unknown';
     }
 }
-async function parsingUserDefClassRecursive(userDefClass: MyDocSymbol,
-    track: readonly string[], ChapterArr: readonly string[], deep: number, fsPath: string)
-    : Promise<vscode.CompletionItem[]> {
+async function parsingUserDefClassRecursive(c0: TSymAndFsPath,
+    track: readonly string[], ChapterArr: readonly string[], deep: number): Promise<vscode.CompletionItem[]> {
+    const { fsPath, ahkSymbol } = c0;
     const fnStrEq = ChapterArr[deep] ? new RegExp(`^${ChapterArr[deep]}$`, 'i') : /^$/;
     const itemS: vscode.CompletionItem[] = [];
-    const strKind = getKind(userDefClass.kind);
-    const newTrack = [...track, `${strKind}  ${userDefClass.name}`];
-    for (const ch of userDefClass.children) {
-        if (ChapterArr.length === deep) itemS.push(await wrapItem(ch, newTrack, fsPath));
+    const strKind = getKind(ahkSymbol.kind);
+    const newTrack = [...track, `${strKind}  ${ahkSymbol.name}`];
+    for (const ch of ahkSymbol.children) {
+        const c1 = { ahkSymbol: ch, fsPath };
+        if (ChapterArr.length === deep) itemS.push(await wrapItem(c1, newTrack));
         if (ch.kind === vscode.SymbolKind.Class && fnStrEq.test(ch.name)) {
-            itemS.push(...await parsingUserDefClassRecursive(ch, newTrack, ChapterArr, deep + 1, fsPath)); // getCh
+            itemS.push(...await parsingUserDefClassRecursive(c1, newTrack, ChapterArr, deep + 1)); // getCh
         }
     }
 
-    if (userDefClass.kind === vscode.SymbolKind.Class) {
-        const ahkExtends = userDefClass.detail;
+    if (ahkSymbol.kind === vscode.SymbolKind.Class) {
+        const ahkExtends = ahkSymbol.detail;
         if (ahkExtends !== '') {
             const testName = new RegExp(`^${ahkExtends}$`, 'i');
-            const c0 = getUserDefClassSymbol(testName);
-            if (c0 && c0.ahkSymbol.kind === vscode.SymbolKind.Class) {
-                itemS.push(...await parsingUserDefClassRecursive(c0.ahkSymbol, newTrack, ChapterArr, deep, fsPath));
+            const c1 = getUserDefClassSymbol(testName);
+            if (c1 && c1.ahkSymbol.kind === vscode.SymbolKind.Class) {
+                itemS.push(...await parsingUserDefClassRecursive(c1, newTrack, ChapterArr, deep));
             }
         }
     }
@@ -112,7 +113,7 @@ function valTrack(document: vscode.TextDocument, position: vscode.Position, Chap
     const DocStrMap = Pretreatment(document.getText(stackRange).split('\n'));
     const lineStart = stackRange.start.line + 0;
     const linePosMax = DocStrMap.length;
-    const classNameList: string[] = []; // value name
+    const classNameList = new Set<string>(); // value name
     for (let linePos = 0; linePos < linePosMax; linePos++) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const line = lineStart + linePos;
@@ -121,9 +122,10 @@ function valTrack(document: vscode.TextDocument, position: vscode.Position, Chap
         if (col === -1) continue;
         const strPart = lStr.substring(col + Head.length, lStr.length).replace(/^\s*:=\s*/, ''); // TODO
         const name0 = matchClassName({ ChapterArr, strPart, ahkBaseObj });
-        if (name0) classNameList.push(name0);
+        if (name0) classNameList.add(name0);
     }
-    return classNameList;
+
+    return [...classNameList];
 }
 
 async function triggerClassCore(document: vscode.TextDocument, position: vscode.Position, ChapterArr: readonly string[])
@@ -137,7 +139,7 @@ async function triggerClassCore(document: vscode.TextDocument, position: vscode.
         const c0 = getUserDefClassSymbol(testName);
         if (c0) {
             const ahkThis = ChapterArr.length === 1 ? await getWmThis(c0) : [];
-            itemS.push(...ahkThis, ...await parsingUserDefClassRecursive(c0.ahkSymbol, [fsPath], ChapterArr, 1, fsPath));
+            itemS.push(...ahkThis, ...await parsingUserDefClassRecursive(c0, [fsPath], ChapterArr, 1));
         }
     }
 
@@ -164,7 +166,7 @@ async function triggerClass(document: vscode.TextDocument, position: vscode.Posi
     if (c0) {
         const fsPath = document.uri.fsPath;
         const ahkThis = ChapterArr.length === 1 ? await getWmThis(c0) : [];
-        return [...await parsingUserDefClassRecursive(c0.ahkSymbol, [fsPath], ChapterArr, 1, fsPath), ...ahkThis];
+        return [...await parsingUserDefClassRecursive(c0, [fsPath], ChapterArr, 1), ...ahkThis];
     }
 
     return triggerClassCore(document, position, ChapterArr);

@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import { MyDocSymbol, VERSION } from '../../globalEnum';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
+import { ClassWm } from '../../tools/wm';
 
 const enum EFuncPos {
     isFuncName = 1,
@@ -44,6 +45,7 @@ function wrapper(document: vscode.TextDocument, docSymbol: MyDocSymbol, wordLowe
     if (argDef.length > 0) return argDef;
 
     const Location: vscode.Location[] = [];
+
     [
         new RegExp(`\\bstatic\\b.*\\b${wordLower}\\b`, 'i'),
         new RegExp(`\\blocal\\b.*\\b${wordLower}\\b`, 'i'),
@@ -61,15 +63,14 @@ function wrapper(document: vscode.TextDocument, docSymbol: MyDocSymbol, wordLowe
     return Location;
 }
 function neverLog(funcPos: never): null {
-    console.log('enum error of getValDefInFunc--93--61--74--');
+    console.log('enum error of getValDefInFunc--93--61--74--', funcPos);
     return null;
 }
-export function getValDefInFunc(document: vscode.TextDocument, position: vscode.Position, wordLower: string, listAllUsing: boolean)
-    : null | vscode.Location[] {
-    const docSymbol = getFnOfPos(document, position);
-    if (!docSymbol) return null;
 
+function match(docSymbol: MyDocSymbol, document: vscode.TextDocument,
+    position: vscode.Position, wordLower: string, listAllUsing: boolean): null | vscode.Location[] {
     const funcPos = atFunPos(docSymbol, document, position);
+
     switch (funcPos) {
         case EFuncPos.isFuncArg: return wrapper(document, docSymbol, wordLower, true);
         case EFuncPos.isInBody: return wrapper(document, docSymbol, wordLower, listAllUsing);
@@ -78,4 +79,22 @@ export function getValDefInFunc(document: vscode.TextDocument, position: vscode.
             return null;
         default: return neverLog(funcPos);
     }
+}
+
+// eslint-disable-next-line no-magic-numbers
+const w = new ClassWm<MyDocSymbol, Map<string, vscode.Location[] | null>>(5 * 60 * 1000, 'getValDefInFunc', 500);
+
+export function getValDefInFunc(document: vscode.TextDocument, position: vscode.Position, wordLower: string, listAllUsing: boolean)
+    : null | vscode.Location[] {
+    const docSymbol = getFnOfPos(document, position);
+    if (!docSymbol) return null;
+
+    const cache = w.getWm(docSymbol)?.get(wordLower) || null;
+    if (cache) return cache;
+
+    const ed = match(docSymbol, document, position, wordLower, listAllUsing);
+
+    w.setWm(docSymbol, new Map<string, vscode.Location[] | null>().set(wordLower, ed));
+
+    return ed;
 }
