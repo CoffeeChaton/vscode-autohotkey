@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { getRange } from '../../tools/getRange';
-import { TDocArr, DeepReadonly } from '../../globalEnum';
+import { TTokenStream, DeepReadonly } from '../../globalEnum';
 
-export function getSwitchRange(document: vscode.TextDocument, DocStrMap: TDocArr, textFix: string, line: number, RangeEnd: number)
+export function getSwitchRange(document: vscode.TextDocument, DocStrMap: TTokenStream, textFix: string, line: number, RangeEnd: number)
     : false | vscode.Range {
     if (!(/^\s*switch\s/i).test(textFix)) return false;
 
@@ -16,15 +16,12 @@ export function getSwitchRange(document: vscode.TextDocument, DocStrMap: TDocArr
 export function inSwitchBlock(textFix: string, line: number, switchRangeArray: DeepReadonly<vscode.Range[]>): number {
     const Pos = new vscode.Position(line, 0);
     let switchDeep = 0;
-    for (const switchRange of switchRangeArray) {
-        if (switchRange.contains(Pos)) {
-            switchDeep++;
-        }
-    }
-
+    switchRangeArray.forEach((sw) => {
+        if (sw.contains(Pos)) switchDeep++;
+    });
     if ((/^\s*case\s/i).test(textFix)
         || (/^\s*default[\s:]/i).test(textFix)) {
-        switchDeep -= 1;
+        switchDeep--;
     }
     return switchDeep;
 }

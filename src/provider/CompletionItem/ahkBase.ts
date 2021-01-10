@@ -1,22 +1,14 @@
-/* eslint-disable no-param-reassign */ // FIXME CAhkBaseObjBoom
-export class CAhkBaseObjBoom {
-    public ahkArray: boolean;
+/* eslint-disable no-param-reassign */
+/* eslint-disable immutable/no-mutation */
 
-    public ahkFileOpen: boolean;
+export type TAhkBaseObj = {
+    ahkArray: boolean,
+    ahkFileOpen: boolean,
+    ahkFuncObject: boolean,
+    ahkBase: boolean,
+};
 
-    public ahkFuncObject: boolean;
-
-    public ahkBase: boolean;
-
-    public constructor() {
-        this.ahkArray = false;
-        this.ahkFileOpen = false;
-        this.ahkFuncObject = false;
-        this.ahkBase = false;
-    }
-}
-
-export function ahkBase(strPart: string, Obj: CAhkBaseObjBoom): CAhkBaseObjBoom {
+export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
     if (!Obj.ahkFileOpen && (/^FileOpen\(/i).test(strPart)) {
         Obj.ahkFileOpen = true;
         Obj.ahkBase = true;

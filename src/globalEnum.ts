@@ -34,14 +34,21 @@ export const enum DetailType {
     deepSubtract = '-',
 }
 
-// textRaw
-type Val = { lStr: string, textRaw: string, deep: number, detail: DetailType[] };
-export type TDocArrRaw = DeepReadonly<Val>[];
-export type TDocArr = DeepReadonly<TDocArrRaw>;
-export type MyDocSymbol = DeepReadonly<vscode.DocumentSymbol>;
-export type MyDocSymbolArr = DeepReadonly<vscode.DocumentSymbol[]>;
-export type TSymAndFsPath = { ahkSymbol: MyDocSymbol; fsPath: string; };
-// TODO c0 : fn -> weakMap -> fsPath
+export type TAhkToken = {
+    readonly lStr: string;
+    readonly textRaw: string;
+    readonly deep: number;
+    readonly detail: readonly DetailType[];
+    readonly line: number;
+    // i know this is not Complete and correct Token.
+}[];
+export type TTokenStream = DeepReadonly<TAhkToken>;
+export type TAhkSymbol = DeepReadonly<vscode.DocumentSymbol>;
+export type TAhkSymbolList = DeepReadonly<vscode.DocumentSymbol[]>;
+// export type TAhkSymbol = Readonly<vscode.DocumentSymbol>;
+// export type TAhkSymbolList = Readonly<Readonly<vscode.DocumentSymbol>[]>;
+export type TSymAndFsPath = { ahkSymbol: TAhkSymbol; fsPath: string; };
+export type TC1 = { ahkSymbol: TAhkSymbol; document: vscode.TextDocument };
 export type TValArray = {
     lRange: vscode.Range, // left Range
     rVal: string | null // Right value as textRaw
@@ -106,4 +113,54 @@ export const enum EDiagFsPath {
     code901 = 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm',
     code902 = 'https://www.autohotkey.com/docs/commands/_CommentFlag.htm',
     code903 = 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related',
+}
+export const enum EFnMode {
+    normal = 1,
+    local = 2,
+    global = 3,
+    Static = 4,
+}
+export const enum EValType {
+    normal = 1,
+    local = 2,
+    global = 3,
+    Static = 4,
+    args = 5,
+}
+export type TRunValType = Exclude<EValType, EValType.normal>;
+export type TRunValType2 = Exclude<TRunValType, EValType.args>;
+export type TAhkValType = EValType.local | EValType.global | EValType.Static;
+export type TGetDefType = { fnMode: EFnMode; DocStrMap: TTokenStream; regex: RegExp; ahkSymbol: TAhkSymbol; word: string };
+export type TGetTypeInput = { DocStrMap: TTokenStream; regex: RegExp; ahkSymbol: TAhkSymbol; };
+export type TMapLineType = Map<number, EValType.local | EValType.global | EValType.Static>; // Map<line,ahkType>
+export type TArgListVal = {
+    keyRawName: string;
+    defLoc: vscode.Location[];
+    refLoc: vscode.Location[];
+    commentList: string[];
+
+    isByRef: boolean;
+    isVariadic: boolean;
+};
+export type TArgList = Map<string, TArgListVal>;// k = valNameUP
+export type TValObj = {
+    keyRawName: string;
+    defLoc: vscode.Location[];
+    refLoc: vscode.Location[];
+    commentList: string[];
+
+    ahkValType: TAhkValType; // FIXME
+    // TODO refPos
+};
+export type TValList = Map<string, TValObj>; // k = valNameUP
+export type DeepAnalysisResult = {
+    argList: TArgList,
+    valList: TValList,
+};
+export const enum TAhkSymbolRange {
+    argsRange = 2,
+    fullRange = 1,
+
+    selectRange = 3,
+    bodyRange = 4,
 }

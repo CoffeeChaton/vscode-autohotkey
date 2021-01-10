@@ -1,11 +1,12 @@
-/* eslint-disable no-await-in-loop */
 /* eslint-disable security/detect-non-literal-regexp */
+/* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { EMode, MyDocSymbol } from '../../globalEnum';
+import { EMode, TAhkSymbol } from '../../globalEnum';
 import { ahkInclude } from './ahkInclude';
 import { kindCheck } from './kindCheck';
 import { getValDefInFunc } from './getValDefInFunc';
+import { isPosAtStr } from '../../tools/isPosAtStr';
 
 type DefObj = Readonly<{
     document: vscode.TextDocument,
@@ -18,7 +19,7 @@ type DefObj = Readonly<{
     listAllUsing: boolean
 }>;
 
-export function tryGetSymbol(wordLower: string, mode: EMode): false | { fsPath: string, AhkSymbol: MyDocSymbol } {
+export function tryGetSymbol(wordLower: string, mode: EMode): false | { fsPath: string, AhkSymbol: TAhkSymbol } {
     const fsPaths = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
         const docSymbolList = Detecter.getDocMap(fsPath);
@@ -107,7 +108,7 @@ export async function userDef(document: vscode.TextDocument,
         new RegExp(`class\\b\\s\\s*\\b(${wordLower})\\b`, 'i'),
         // funcName( , not search class.Method()
         //   new RegExp(`(?<!\\.)\\b(${wordLower})\\(`, 'i'),
-        new RegExp(`(?<!\\.|\`)\\b(${wordLower})\\(`, 'i'),
+        new RegExp(`(?<!\\.|\`|%)\\b(${wordLower})\\(`, 'i'),
         // global var_name :=
         new RegExp(`global\\s\\s*(${wordLower})\\s\\s*:?=`, 'i'),
     ];
@@ -116,9 +117,9 @@ export async function userDef(document: vscode.TextDocument,
         // eslint-disable-next-line max-len
         new RegExp(`(?:^class\\b\\s\\s*\\b(${wordLower})\\b)|(?:\\bnew\\s\\s*\\b(${wordLower})\\b)|(?:(${wordLower})\\.)|(?:\\bextends\\b\\s\\s*(${wordLower}))|(?:\\bglobal\\b\\s\\s*\\b(${wordLower})\\b)|(?:{\\s*base:\\s*(${wordLower}))|(?:\\w\\w*\\.base\\s*:=\\s*(${wordLower}))`, 'i'),
         // class ClassName | new className | className. | extends  className | global className |  {base: className | .base := baseObject
-        new RegExp(`(?:(?<!\\.|\`)\\b(${wordLower})\\()|(?:(?<=\\bfunc\\()["']\\b(${wordLower})\\b["'])`, 'i'),
+        new RegExp(`(?:(?<!\\.|\`|%)\\b(${wordLower})\\()|(?:(?<=\\bfunc\\()\\s*"\\b(${wordLower})\\b")`, 'i'),
         // funcName( | Func("funcName"
-        new RegExp(`(?<!\\.|\`)\\b(${wordLower})\\b`, 'i'),
+        new RegExp(`(?<!\\.|\`|%)\\b(${wordLower})\\b(?!%)`, 'i'),
         // var_name
     ];
 
@@ -152,7 +153,12 @@ export class DefProvider implements vscode.DefinitionProvider {
     public async provideDefinition(document: vscode.TextDocument, position: vscode.Position,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken): Promise<null | vscode.Location | vscode.Location[] | vscode.LocationLink[]> {
-        const wordLower = document.getText(document.getWordRangeAtPosition(position)).toLowerCase();
+        if (isPosAtStr(document, position)) return null;
+
+        // eslint-disable-next-line security/detect-unsafe-regex
+        const range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
+        if (!range) return null;
+        const wordLower = document.getText(range).toLowerCase();
         const fileLink = ahkInclude(document, position);
         if (fileLink) return fileLink;
 

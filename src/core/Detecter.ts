@@ -7,7 +7,7 @@ import { getChildren } from './getChildren';
 import { ParserLine, ParserBlock, getReturnByLine } from './Parser';
 import { getIgnoredFile, getIgnoredFolder, showTimeSpend } from '../configUI';
 import {
-    EStr, MyDocSymbolArr, TGValMap, TValArray, TValName,
+    EStr, TAhkSymbolList, TGValMap, TValArray, TValName,
 } from '../globalEnum';
 import { renameFn as renameFileNameFunc } from './renameFileNameFunc';
 import { Pretreatment } from '../tools/Pretreatment';
@@ -16,7 +16,7 @@ import { Diagnostic } from '../provider/Diagnostic/Diagnostic';
 export const Detecter = {
     // key : vscode.Uri.fsPath,
     // val : vscode.DocumentSymbol[] -> MyDocSymbolArr
-    DocMap: new Map<string, MyDocSymbolArr>(),
+    DocMap: new Map<string, TAhkSymbolList>(),
 
     // diagColl : vscode.DiagnosticCollection
     diagColl: vscode.languages.createDiagnosticCollection('ahk-neko-help'),
@@ -32,9 +32,9 @@ export const Detecter = {
         return Detecter.DocMap.keys();
     },
 
-    getDocMap(fsPath: string): null | MyDocSymbolArr {
+    getDocMap(fsPath: string): null | TAhkSymbolList {
         //  const Uri = vscode.Uri.file(fsPath);
-        return Detecter.DocMap.get(fsPath) || null;
+        return Detecter.DocMap.get(fsPath) ?? null;
     },
 
     delMap(e: vscode.FileDeleteEvent): void {
@@ -74,7 +74,7 @@ export const Detecter = {
         const timeStart = Date.now();
         const gValMapBySelf: TGValMap = new Map<TValName, TValArray>();
 
-        const DocStrMap = Pretreatment(document.getText().split('\n'));
+        const DocStrMap = Pretreatment(document.getText().split('\n'), 0);
         const result = getChildren({
             gValMapBySelf,
             Uri,
@@ -90,17 +90,6 @@ export const Detecter = {
             if (!isTest) showTimeSpend(document.uri, timeStart);
             Detecter.DocMap.set(fsPath, result);
             Detecter.globalValMap.set(fsPath, gValMapBySelf);
-            /*
-            Detecter.globalValMap.get(fsPath)?.forEach((v, k) => {
-                v.forEach((vv, kk) => {
-                    if (vv.rVal !== null) {
-                        console.log('k', k);
-                        console.log('kk', kk);
-                        console.log('vv', vv);
-                    }
-                });
-            });
-            */
             Diagnostic(DocStrMap, result, Uri, Detecter.diagColl);
         }
         return result as vscode.DocumentSymbol[];

@@ -11,7 +11,7 @@ export async function renameFn(oldUri: vscode.Uri, newUri: vscode.Uri, fsPathLis
     const uriList: vscode.Uri[] = [];
     for (const fsPath of fsPathList) {
         const document = await vscode.workspace.openTextDocument(fsPath);
-        const DocStrMap = Pretreatment(document.getText().split('\n'));
+        const DocStrMap = Pretreatment(document.getText().split('\n'), 0);
         const lineCount = DocStrMap.length;
         for (let line = 0; line < lineCount; line++) {
             const textRaw = DocStrMap[line].textRaw;

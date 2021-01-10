@@ -3,26 +3,28 @@
 import { getSkipSign, getLStr, getSkipSign2 } from './removeSpecialChar';
 import { inCommentBlock } from './inCommentBlock';
 import { inLTrimRange } from './inLTrimRange';
-import { TDocArr, TDocArrRaw, DetailType } from '../globalEnum';
+import { TTokenStream, TAhkToken, DetailType } from '../globalEnum';
 
+// LexicalAnalysisSimple
 // eslint-disable-next-line max-statements
-export function Pretreatment(strArray: readonly string[]): TDocArr {
-    const result: TDocArrRaw = [];
+export function Pretreatment(strArray: readonly string[], startLineBaseZero: number): TTokenStream {
+    const result: TAhkToken = [];
     let CommentBlock = false;
     let inLTrim: 0 | 1 | 2 = 0;
     const lineMax = strArray.length;
     let deep = 0;
     //  const timeStart = Date.now();
-    for (let line = 0; line < lineMax; line++) {
-        const textRaw = strArray[line];
+    for (let Offset = 0; Offset < lineMax; Offset++) {
+        const line = Offset + startLineBaseZero;
+        const textRaw = strArray[Offset];
         if (deep < 0) {
-            console.log(line, 'Pretreatment -> line , deep < 0 ');
+            console.log(Offset, 'Pretreatment -> line , deep < 0 ');
             deep = 0;
         }
         CommentBlock = inCommentBlock(textRaw, CommentBlock);
         if (CommentBlock) {
             result.push({
-                lStr: '', deep, textRaw, detail: [DetailType.inComment],
+                lStr: '', deep, textRaw, detail: [DetailType.inComment], line,
             });
             continue;
         }
@@ -31,20 +33,20 @@ export function Pretreatment(strArray: readonly string[]): TDocArr {
         if (inLTrim > 0) {
             const inLTrimLevel = inLTrim === 1 ? DetailType.inLTrim1 : DetailType.inLTrim2;
             result.push({
-                lStr: '', deep, textRaw, detail: [inLTrimLevel],
+                lStr: '', deep, textRaw, detail: [inLTrimLevel], line,
             });
             continue;
         }
 
         if (getSkipSign(textRaw)) {
             result.push({
-                lStr: '', deep, textRaw, detail: [DetailType.inSkipSign],
+                lStr: '', deep, textRaw, detail: [DetailType.inSkipSign], line,
             });
             continue;
         }
         if (getSkipSign2(textRaw)) {
             result.push({
-                lStr: '', deep, textRaw, detail: [DetailType.inSkipSign2],
+                lStr: '', deep, textRaw, detail: [DetailType.inSkipSign2], line,
             });
             continue;
         }
@@ -65,7 +67,7 @@ export function Pretreatment(strArray: readonly string[]): TDocArr {
         }
 
         result.push({
-            lStr, deep, textRaw, detail,
+            lStr, deep, textRaw, detail, line,
         });
     }
     //  const g = Object.freeze(result);

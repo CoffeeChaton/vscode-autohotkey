@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { TDocArr, DetailType } from '../globalEnum';
+import { TTokenStream, DetailType } from '../globalEnum';
 
-function getSearchLineFix(DocStrMap: TDocArr, searchLine: number, RangeEnd: number): number {
+function getSearchLineFix(DocStrMap: TTokenStream, searchLine: number, RangeEnd: number): number {
     for (let line = searchLine; line < RangeEnd; line++) {
         if (DocStrMap[line].detail.includes(DetailType.deepAdd)) {
             return line;
@@ -9,7 +9,7 @@ function getSearchLineFix(DocStrMap: TDocArr, searchLine: number, RangeEnd: numb
     }
     return RangeEnd;
 }
-export function getRange(DocStrMap: TDocArr, defLine: number, searchLine: number, RangeEnd: number): vscode.Range {
+export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: number, RangeEnd: number): vscode.Range {
     //  selectionRange must be contained in fullRange
     //  const startPos: vscode.Position = new vscode.Position(defLine, 0);
     // const lineMax = RangeEnd;// Math.min(RangeEnd, DocStrMap.length);

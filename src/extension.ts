@@ -58,7 +58,9 @@ export function activate(context: vscode.ExtensionContext): void {
 }
 
 // if ([^\x00-\x7F] not in "" block ) auto warn
-// TODO 😋 ؄. 體 体 ㅀ の Ａ Ββ Αα ❤♡ ∈ [^\x00-\x7F]
+// [^\x00-\x7F]
+// [^\x1F-\x7F]
+// TODO 😋 ؄. 體 体 ㅀ の Ａ Ββ Αα ❤♡ ∈ ال‎ ß Œ
 /*
 https://github.com/think2011/vscode-i18n-core/blob/10abc4b356cfb34f64d17a7dbdb73e58f6bd6274/editor/Annotation.ts
 

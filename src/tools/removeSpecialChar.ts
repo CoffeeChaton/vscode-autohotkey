@@ -2,19 +2,19 @@ export function getSkipSign2(text: string): boolean {
     return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/).test(text);
 }
 export function getSkipSign(text: string): boolean {
-    return (/^\s*msgbox\b/i).test(text)
+    return (/^\s*msgbox\b[\s,]/i).test(text)
         || (/^\s*(?:control)?send(?:Raw\b|\b.*{Raw})/i).test(text);
 }
 
-function fnReplacer(match: string): string {
-    return '_'.repeat(match.length);
-}
+export const replacerSpace = (match: string): string => ' '.repeat(match.length);
+
+const fnReplacerStr = (match: string): string => '_'.repeat(match.length);
 
 // [textFix , '; comment text']
 export function getLStr(textRaw: string): string {
     if (textRaw[0] === ';') return '';
     if ((/^\s*;/).test(textRaw)) return '';
-    const textFix = textRaw.replace(/`./g, '__').replace(/"[^"]*?"/g, fnReplacer);
+    const textFix = textRaw.replace(/`./g, '__').replace(/"[^"]*?"/g, fnReplacerStr);
     const i = textFix.indexOf(';');
     switch (i) {
         case -1:

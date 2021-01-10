@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import { FuncInputType } from '../../core/getChildren';
-import { MyDocSymbol } from '../../globalEnum';
+import { TAhkSymbol } from '../../globalEnum';
 import { removeParentheses } from '../removeParentheses';
 
-export function getClassInstanceVar(FuncInput: FuncInputType): false | MyDocSymbol {
+export function getClassInstanceVar(FuncInput: FuncInputType): false | TAhkSymbol {
     const { line, lStr } = FuncInput;
 
     if (lStr.indexOf(':=') === -1) return false;
@@ -16,8 +16,8 @@ export function getClassInstanceVar(FuncInput: FuncInputType): false | MyDocSymb
 
     const detail = 'Instance Var';
     const kind = vscode.SymbolKind.Variable;
-    const rangeRaw = new vscode.Range(line, 0, line + 1, 0);
+    const range = new vscode.Range(line, 0, line + 1, 0);
 
     return new vscode.DocumentSymbol(name,
-        detail, kind, rangeRaw, rangeRaw);
+        detail, kind, range, range);
 }

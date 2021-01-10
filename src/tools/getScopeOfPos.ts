@@ -1,17 +1,17 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
-import { MyDocSymbol, MyDocSymbolArr } from '../globalEnum';
+import { TAhkSymbol, TAhkSymbolList } from '../globalEnum';
 
 type TStackNameSymbol = {
     readonly name: string,
-    readonly ahkSymbol: MyDocSymbol,
+    readonly ahkSymbol: TAhkSymbol,
 };
 type TStackPro = Readonly<{
     readonly isEnd: boolean,
     readonly deep: number,
     readonly stack: readonly TStackNameSymbol[],
 }>;
-function dfs(father: MyDocSymbolArr, position: vscode.Position, StackPro: TStackPro): TStackPro {
+function dfs(father: TAhkSymbolList, position: vscode.Position, StackPro: TStackPro): TStackPro {
     const { stack, isEnd, deep } = StackPro;
     for (const ch of father) {
         if (ch.range.contains(position)) {
@@ -45,13 +45,6 @@ export function getStack(document: vscode.TextDocument, position: vscode.Positio
         isEnd: false,
         deep: 0,
     });
-    // stackPro.stack.forEach((e) => {
-    //     console.log('e.ahkSymbol.name', e.ahkSymbol.name);
-    //     console.log('e.ahkSymbol', e.ahkSymbol);
-    //     console.log('e.ahkSymbol.range', e.ahkSymbol.range);
-    // });
-
-    // console.log('stackPro.deep', stackPro.deep);
     return stackPro;
 }
 export function getScopeOfPos(document: vscode.TextDocument, position: vscode.Position): vscode.Range | null {
@@ -75,7 +68,7 @@ export function getScopeOfPos(document: vscode.TextDocument, position: vscode.Po
     return mayBeRange;
 }
 
-export function getFnOfPos(document: vscode.TextDocument, position: vscode.Position): MyDocSymbol | null {
+export function getFnOfPos(document: vscode.TextDocument, position: vscode.Position): TAhkSymbol | null {
     const stackPro = getStack(document, position);
     if (stackPro === null) return null;
 
@@ -85,13 +78,13 @@ export function getFnOfPos(document: vscode.TextDocument, position: vscode.Posit
         return stackPro.stack[0].ahkSymbol;
     }
 
-    let mayBeRange: MyDocSymbol | null = null;
+    let ed: TAhkSymbol | null = null;
     for (const { ahkSymbol } of stack) {
         if (ahkSymbol.kind === vscode.SymbolKind.Class || ahkSymbol.kind === vscode.SymbolKind.Method) {
-            mayBeRange = ahkSymbol;
+            ed = ahkSymbol;
         } else {
-            return ahkSymbol;
+            return ed;
         }
     }
-    return mayBeRange;
+    return ed;
 }

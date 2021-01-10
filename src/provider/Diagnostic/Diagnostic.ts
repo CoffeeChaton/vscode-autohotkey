@@ -3,11 +3,12 @@
 import * as vscode from 'vscode';
 import { getLintConfig } from '../../configUI';
 import {
-    TDocArr, EDiagBase, EDiagCode, EDiagMsg, MyDocSymbol, DetailType, EDiagFsPath,
+    TTokenStream, EDiagBase, EDiagCode, TAhkSymbol, DetailType,
 } from '../../globalEnum';
 import { getTreeErr } from './getTreeErr';
+import { setDiagnostic } from './setDiagnostic';
 
-function getIgnore(DocStrMap: TDocArr, line: number, IgnoreLine: number): number {
+function getIgnore(DocStrMap: TTokenStream, line: number, IgnoreLine: number): number {
     // ;@ahk-ignore 30 line.
     // textRaw
     if (DocStrMap[line].textRaw.indexOf(EDiagBase.ignore) === -1) return IgnoreLine;
@@ -25,22 +26,18 @@ function getIgnore(DocStrMap: TDocArr, line: number, IgnoreLine: number): number
     return numberOfIgnore + line;
 }
 
-function assign(DocStrMap: TDocArr, line: number): 0 | 1 | vscode.Diagnostic {
+function assign(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnostic {
     // https://www.autohotkey.com/docs/commands/SetEnv.htm
     if (!DocStrMap[line].detail.includes(DetailType.inSkipSign2)) return 0;
 
     const col = DocStrMap[line].textRaw.indexOf('=');
-    const Range = new vscode.Range(line, col, line, DocStrMap[line].textRaw.length);
-    const diag1 = new vscode.Diagnostic(Range, EDiagMsg.code107, vscode.DiagnosticSeverity.Information);
-    diag1.source = EDiagBase.source;
-    diag1.code = {
-        value: EDiagCode.code107,
-        target: vscode.Uri.parse(EDiagFsPath.code107),
-    };
     //   diag1.relatedInformation = [new vscode.DiagnosticRelatedInformation(new vscode.Location(uri, pos), 'suggest to use := not =')];
-    return diag1;
+
+    const range = new vscode.Range(line, col, line, DocStrMap[line].textRaw.length);
+    const value = EDiagCode.code107;
+    return setDiagnostic(value, range, vscode.DiagnosticSeverity.Information, []);
 }
-function getLoopErr(DocStrMap: TDocArr, line: number): 0 | 1 | vscode.Diagnostic {
+function getLoopErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnostic {
     const lStr = DocStrMap[line].lStr;
     const exec = (/^\s*Loop\b[\s,][\s,]*(\w\w*)/i).exec(lStr);
     if (exec === null) return 0;
@@ -50,41 +47,26 @@ function getLoopErr(DocStrMap: TDocArr, line: number): 0 | 1 | vscode.Diagnostic
     // eslint-disable-next-line no-magic-numbers
     const position = Math.max(0, lStr.search(/\bloop\b/i)) + 4;
     const col = Math.max(0, lStr.indexOf(SecondSection, position));
-    const Range = new vscode.Range(line, col, line, col + SecondSection.length);
+    const range = new vscode.Range(line, col, line, col + SecondSection.length);
     if ((/^RootKey$/i).test(SecondSection)) {
         // https://www.autohotkey.com/docs/commands/LoopReg.htm#old
-        const diag1 = new vscode.Diagnostic(Range, EDiagMsg.code801, vscode.DiagnosticSeverity.Warning);
-        diag1.source = EDiagBase.source;
-        diag1.code = {
-            value: EDiagCode.code801,
-            target: vscode.Uri.parse(EDiagFsPath.code801),
-        };
-        diag1.tags = [vscode.DiagnosticTag.Deprecated];
-        return diag1;
+        const value = EDiagCode.code801;
+        const tags = [vscode.DiagnosticTag.Deprecated];
+        return setDiagnostic(value, range, vscode.DiagnosticSeverity.Warning, tags);
     }
     if ((/^FilePattern$/i).test(SecondSection)) {
         // https://www.autohotkey.com/docs/commands/LoopFile.htm#old
-        const diag1 = new vscode.Diagnostic(Range, EDiagMsg.code802, vscode.DiagnosticSeverity.Warning);
-        diag1.source = EDiagBase.source;
-        diag1.code = {
-            value: EDiagCode.code802,
-            target: vscode.Uri.parse(EDiagFsPath.code802),
-        };
-        diag1.tags = [vscode.DiagnosticTag.Deprecated];
-        return diag1;
+        const value = EDiagCode.code802;
+        const tags = [vscode.DiagnosticTag.Deprecated];
+        return setDiagnostic(value, range, vscode.DiagnosticSeverity.Warning, tags);
     }
 
     // https://www.autohotkey.com/docs/commands/Loop.htm
-    const diag1 = new vscode.Diagnostic(Range, EDiagMsg.code201, vscode.DiagnosticSeverity.Error);
-    diag1.source = EDiagBase.source;
-    diag1.code = {
-        value: EDiagCode.code201,
-        target: vscode.Uri.parse(EDiagFsPath.code201),
-    };
-    return diag1;
+    const value = EDiagCode.code201;
+    return setDiagnostic(value, range, vscode.DiagnosticSeverity.Error, []);
 }
 
-function getDirectivesErr(DocStrMap: TDocArr, line: number): 0 | 1 | vscode.Diagnostic {
+function getDirectivesErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnostic {
     // err of #Directives
     if (DocStrMap[line].lStr.indexOf('#') === -1) return 0;
     if (!(/^\s*#/i).test(DocStrMap[line].lStr)) return 0;
@@ -94,36 +76,21 @@ function getDirectivesErr(DocStrMap: TDocArr, line: number): 0 | 1 | vscode.Diag
     if (exec === null) return 0;
     const Directives = exec[1];
     const col = Math.max(0, lStr.indexOf(Directives));
-    const Range = new vscode.Range(line, col, line, col + Directives.length);
+    const range = new vscode.Range(line, col, line, col + Directives.length);
     if ((/^EscapeChar$/i).test(Directives)) {
         // change of ` https://www.autohotkey.com/docs/commands/_EscapeChar.htm
-        const diag1 = new vscode.Diagnostic(Range, EDiagMsg.code901, vscode.DiagnosticSeverity.Error);
-        diag1.source = EDiagBase.source;
-        diag1.code = {
-            value: EDiagCode.code901,
-            target: vscode.Uri.parse(EDiagFsPath.code901),
-        };
-        return diag1;
+        const value = EDiagCode.code901;
+        return setDiagnostic(value, range, vscode.DiagnosticSeverity.Error, []);
     }
     if ((/^CommentFlag$/i).test(Directives)) {
         // change of ; https://www.autohotkey.com/docs/commands/_CommentFlag.htm
-        const diag1 = new vscode.Diagnostic(Range, EDiagMsg.code902, vscode.DiagnosticSeverity.Error);
-        diag1.source = EDiagBase.source;
-        diag1.code = {
-            value: EDiagCode.code902,
-            target: vscode.Uri.parse(EDiagFsPath.code902),
-        };
-        return diag1;
+        const value = EDiagCode.code902;
+        return setDiagnostic(value, range, vscode.DiagnosticSeverity.Error, []);
     }
     if ((/^(?:DerefChar|Delimiter)$/i).test(Directives)) {
         // change of % , #DerefChar https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related
-        const diag1 = new vscode.Diagnostic(Range, EDiagMsg.code903, vscode.DiagnosticSeverity.Error);
-        diag1.source = EDiagBase.source;
-        diag1.code = {
-            value: EDiagCode.code903,
-            target: vscode.Uri.parse(EDiagFsPath.code903),
-        };
-        return diag1;
+        const value = EDiagCode.code903;
+        return setDiagnostic(value, range, vscode.DiagnosticSeverity.Error, []);
     }
     return 1;
 }
@@ -131,20 +98,15 @@ function getCommandErrFnReplace(commandHead: string, lStr: string, line: number)
     if ((/^(?:File(Append|GetAttrib|Read)|GetKeyState|IfExist|IfInString|IfWin(Active|Exist))$/i).test(commandHead)
         || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/i).test(commandHead)) {
         const col = lStr.indexOf(commandHead);
-        const Range = new vscode.Range(line, col, line, col + commandHead.length);
+        const range = new vscode.Range(line, col, line, col + commandHead.length);
         // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
-        const diag1 = new vscode.Diagnostic(Range, EDiagMsg.code700, vscode.DiagnosticSeverity.Warning);
-        diag1.source = EDiagBase.source;
-        diag1.code = {
-            value: EDiagCode.code700,
-            target: vscode.Uri.parse(EDiagFsPath.code700),
-        };
-        diag1.tags = [vscode.DiagnosticTag.Deprecated];
-        return diag1;
+        const value = EDiagCode.code700;
+        const tags = [vscode.DiagnosticTag.Deprecated];
+        return setDiagnostic(value, range, vscode.DiagnosticSeverity.Warning, tags);
     }
     return null;
 }
-function getCommandErr(DocStrMap: TDocArr, line: number): 0 | 1 | vscode.Diagnostic {
+function getCommandErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnostic {
     // TODO result: Readonly<MyDocSymbol[]>
     // TODO search Deprecated
     // if (h.indexOf(line) !== -1) return 1;
@@ -169,9 +131,9 @@ function getCommandErr(DocStrMap: TDocArr, line: number): 0 | 1 | vscode.Diagnos
     // EscapeChar.htm
     return 1;
 }
-type TFnLineErr = (DocStrMap: TDocArr, line: number, uri: vscode.Uri) => 0 | 1 | vscode.Diagnostic;
+type TFnLineErr = (DocStrMap: TTokenStream, line: number, uri: vscode.Uri) => 0 | 1 | vscode.Diagnostic;
 
-function getLineErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): null | vscode.Diagnostic {
+function getLineErr(DocStrMap: TTokenStream, line: number, uri: vscode.Uri): null | vscode.Diagnostic {
     const fnList: TFnLineErr[] = [assign, getDirectivesErr, getCommandErr];
     for (const fn of fnList) {
         const err = fn(DocStrMap, line, uri);
@@ -184,28 +146,36 @@ function getLineErr(DocStrMap: TDocArr, line: number, uri: vscode.Uri): null | v
     return null;
 }
 
-function setFuncErr(func: MyDocSymbol): vscode.Diagnostic {
-    const fnSooBigErr = new vscode.Diagnostic(func.selectionRange, EDiagMsg.code301, vscode.DiagnosticSeverity.Warning);
-    fnSooBigErr.source = EDiagBase.source;
-    fnSooBigErr.code = {
-        value: EDiagCode.code301,
-        target: vscode.Uri.parse(EDiagFsPath.code301),
-    };
-    return fnSooBigErr;
+function setFuncErr(func: TAhkSymbol): vscode.Diagnostic {
+    const value = EDiagCode.code301;
+    const range = func.selectionRange;
+    return setDiagnostic(value, range, vscode.DiagnosticSeverity.Warning, []);
 }
-function getFuncErr(funcS: Readonly<MyDocSymbol[]>, displayErr: readonly boolean[]): vscode.Diagnostic[] {
+function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol): boolean {
+    const maxFnSize = getLintConfig().funcSize;
+    let fnSize = 0;
+    const st = func.selectionRange.end.line;
+    const ed = func.range.end.line;
+    if (ed - st < maxFnSize) return false;
+    for (let line = st; line < ed; line++) {
+        fnSize += DocStrMap[line].lStr === '' ? 0 : 1;
+        if (fnSize >= maxFnSize) return true;
+    }
+    return false;
+}
+function getFuncErr(DocStrMap: TTokenStream, funcS: Readonly<TAhkSymbol[]>, displayErr: readonly boolean[]): vscode.Diagnostic[] {
     const digS: vscode.Diagnostic[] = [];
     for (const func of funcS) {
         switch (func.kind) {
             case vscode.SymbolKind.Method:
             case vscode.SymbolKind.Function:
                 if (displayErr[func.range.start.line]
-                    && (func.range.end.line - func.range.start.line > getLintConfig().funcSize)) {
+                    && fnErrCheck(DocStrMap, func)) {
                     digS.push(setFuncErr(func));
                 }
                 break;
             case vscode.SymbolKind.Class:
-                digS.push(...getFuncErr(func.children, displayErr));
+                digS.push(...getFuncErr(DocStrMap, func.children, displayErr));
                 break;
             default:
                 break;
@@ -213,7 +183,7 @@ function getFuncErr(funcS: Readonly<MyDocSymbol[]>, displayErr: readonly boolean
     }
     return digS;
 }
-export function Diagnostic(DocStrMap: TDocArr, result: Readonly<MyDocSymbol[]>, uri: vscode.Uri, collection: vscode.DiagnosticCollection): void {
+export function Diagnostic(DocStrMap: TTokenStream, result: Readonly<TAhkSymbol[]>, uri: vscode.Uri, collection: vscode.DiagnosticCollection): void {
     const lineMax = DocStrMap.length;
     let IgnoreLine = -1;
     const displayErr: boolean[] = [];
@@ -230,7 +200,10 @@ export function Diagnostic(DocStrMap: TDocArr, result: Readonly<MyDocSymbol[]>, 
         if (err !== null) diagS.push(err);
     }
 
-    diagS.push(...getTreeErr(result, displayErr), ...getFuncErr(result, displayErr));
+    diagS.push(
+        ...getTreeErr(result, displayErr),
+        ...getFuncErr(DocStrMap, result, displayErr),
+    );
     collection.set(uri, diagS);
 }
 // TODO  vscode.languages.getDiagnostics()

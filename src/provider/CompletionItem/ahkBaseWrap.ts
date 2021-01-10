@@ -1,9 +1,10 @@
+/* eslint-disable immutable/no-mutation */
 /* eslint-disable max-len */
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
 //  import { MarkupContent } from 'vscode-languageserver-protocol';
 //  import { CompletionItem, MarkupKind, CompletionItemKind } from 'vscode-languageserver-types';
-import { CAhkBaseObjBoom } from './ahkBase';
+import { TAhkBaseObj } from './ahkBase';
 
 type TDescription = Readonly<{
     label: string,
@@ -402,7 +403,7 @@ const ItemOfFunc: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     return itemS;
 })();
 
-export function ahkBaseWrap(Obj: CAhkBaseObjBoom): vscode.CompletionItem[] {
+export function ahkBaseWrap(Obj: TAhkBaseObj): vscode.CompletionItem[] {
     const itemS: vscode.CompletionItem[] = [];
     // if (Obj.ahkArray) itemS.push(...ItemOfAhkArray);
     if (Obj.ahkFileOpen) itemS.push(...ItemOfFileOpen);

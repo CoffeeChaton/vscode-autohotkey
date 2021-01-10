@@ -4,7 +4,7 @@
     "patterns": [
         {
             "match": "`[,%`;nrbtvaf:]",
-            "name": "constant.character.base.escape.ahk"
+            "name": "constant.character.escape.ahk"
         },
         {
             "captures": {
@@ -159,7 +159,7 @@
                 },
                 {
                     "match": "`[,%`;nrbtvaf:]",
-                    "name": "constant.character.string.escape.ahk"
+                    "name": "constant.character.escape.ahk"
                 }
             ]
         },

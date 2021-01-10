@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { isPosAtStr } from '../tools/isPosAtStr';
 import { userDef } from './Def/DefProvider';
 import { getValDefInFunc } from './Def/getValDefInFunc';
 
@@ -7,7 +8,12 @@ export class ReferenceProvider implements vscode.ReferenceProvider {
     public async provideReferences(document: vscode.TextDocument, position: vscode.Position,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         context: vscode.ReferenceContext, token: vscode.CancellationToken): Promise<vscode.Location[] | null> {
-        const wordLower = document.getText(document.getWordRangeAtPosition(position)).toLowerCase();
+        if (isPosAtStr(document, position)) return null;
+
+        // eslint-disable-next-line security/detect-unsafe-regex
+        const range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
+        if (!range) return null;
+        const wordLower = document.getText(range).toLowerCase();
         // TODO class.Method, this.classVar,GoSub, GoTo, ahk Built-in func
 
         const listAllUsing = true;

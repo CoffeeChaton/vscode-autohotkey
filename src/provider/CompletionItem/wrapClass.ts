@@ -1,17 +1,18 @@
-/* eslint-disable no-await-in-loop */
 /* eslint-disable security/detect-non-literal-regexp */
-
+/* eslint-disable immutable/no-mutation */
+/* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { kindCheck } from '../Def/kindCheck';
-import { EMode, MyDocSymbol, TSymAndFsPath } from '../../globalEnum';
+import { EMode, TAhkSymbol, TSymAndFsPath } from '../../globalEnum';
 import { Pretreatment } from '../../tools/Pretreatment';
-import { ahkBase, CAhkBaseObjBoom } from './ahkBase';
+import { ahkBaseUp, TAhkBaseObj } from './ahkBase';
 import { ahkBaseWrap } from './ahkBaseWrap';
 import { getWmThis } from './getWmThis';
 import { getScopeOfPos, getStack } from '../../tools/getScopeOfPos';
 import { getObjChapterArr } from '../../tools/Obj/getObjChapterArr';
 import { insertTextWm } from './insertTextWm';
+import { ahkValDefRegex } from '../../tools/regexTools';
 
 function getUserDefClassSymbol(testName: RegExp): TSymAndFsPath | null {
     const fsPaths = Detecter.getDocMapFile();
@@ -28,7 +29,7 @@ function getUserDefClassSymbol(testName: RegExp): TSymAndFsPath | null {
     return null;
 }
 
-function getKindOfCh(ch: MyDocSymbol): vscode.CompletionItemKind {
+function getKindOfCh(ch: TAhkSymbol): vscode.CompletionItemKind {
     switch (ch.kind) {
         case vscode.SymbolKind.Class: return vscode.CompletionItemKind.Class;
         case vscode.SymbolKind.Method: return vscode.CompletionItemKind.Method;
@@ -88,7 +89,7 @@ async function parsingUserDefClassRecursive(c0: TSymAndFsPath,
     return itemS;
 }
 
-type TMathName = { ChapterArr: readonly string[]; strPart: string; ahkBaseObj: CAhkBaseObjBoom };
+type TMathName = { ChapterArr: readonly string[]; strPart: string; ahkBaseObj: TAhkBaseObj };
 
 function matchClassName({ ChapterArr, strPart, ahkBaseObj }: TMathName): string | null {
     // case 1: https://www.autohotkey.com/docs/Objects.htm#Objects_as_Functions
@@ -97,20 +98,21 @@ function matchClassName({ ChapterArr, strPart, ahkBaseObj }: TMathName): string 
         if (ahkNewClass !== null) return ahkNewClass[0];
     }
     // case 2:
-    if (ChapterArr.length === 1) ahkBase(strPart, ahkBaseObj);
+    if (ChapterArr.length === 1) ahkBaseUp(strPart, ahkBaseObj);
 
     // case 3:
 
     // case ...
     return null;
 }
-function valTrack(document: vscode.TextDocument, position: vscode.Position, ChapterArr: readonly string[], ahkBaseObj: CAhkBaseObjBoom): string[] {
+function valTrack(document: vscode.TextDocument, position: vscode.Position, ChapterArr: readonly string[], ahkBaseObj: TAhkBaseObj): string[] {
     const Head = ChapterArr[0];
     const stackRangeRaw = getScopeOfPos(document, position) || new vscode.Range(0, 0, position.line, position.character);
     const stackRange = new vscode.Range(stackRangeRaw.start.line, stackRangeRaw.start.character, position.line, position.character);
 
-    const reg = new RegExp(`\\b${Head}\\b\\s*:=`, 'i');
-    const DocStrMap = Pretreatment(document.getText(stackRange).split('\n'));
+    const reg = ahkValDefRegex(Head);
+    const startLineBaseZero = stackRange.start.line;
+    const DocStrMap = Pretreatment(document.getText(stackRange).split('\n'), startLineBaseZero);
     const lineStart = stackRange.start.line + 0;
     const linePosMax = DocStrMap.length;
     const classNameList = new Set<string>(); // value name
@@ -130,7 +132,12 @@ function valTrack(document: vscode.TextDocument, position: vscode.Position, Chap
 
 async function triggerClassCore(document: vscode.TextDocument, position: vscode.Position, ChapterArr: readonly string[])
     : Promise<vscode.CompletionItem[]> {
-    const ahkBaseObj: CAhkBaseObjBoom = new CAhkBaseObjBoom();
+    const ahkBaseObj: TAhkBaseObj = {
+        ahkArray: false,
+        ahkFileOpen: false,
+        ahkFuncObject: false,
+        ahkBase: false,
+    };
     const fsPath = document.uri.fsPath;
     const itemS: vscode.CompletionItem[] = [];
     const nameList = valTrack(document, position, ChapterArr, ahkBaseObj);
@@ -174,7 +181,7 @@ async function triggerClass(document: vscode.TextDocument, position: vscode.Posi
 
 export async function wrapClass(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.CompletionItem[]> {
     const ChapterArr = getObjChapterArr(document, position); // TODO [].
-    if (ChapterArr === null) return [];
+    if (ChapterArr === null || !ChapterArr) return [];
 
     const ahkClassItem = await triggerClass(document, position, ChapterArr);
     return ahkClassItem;

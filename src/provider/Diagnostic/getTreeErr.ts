@@ -1,35 +1,34 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,20] }] */
 import * as vscode from 'vscode';
-import {
-    EDiagBase, EDiagMsg, EDiagCode, MyDocSymbol, EDiagFsPath,
-} from '../../globalEnum';
+import { EDiagCode, TAhkSymbol } from '../../globalEnum';
+import { setDiagnostic } from './setDiagnostic';
 
-function getDefaultNumber(swChildren: Readonly<MyDocSymbol[]>): number {
-    return swChildren.reduce((iDefault, element): number => (element.name === 'Default :' ? iDefault + 1 : iDefault), 0);
+function getDefaultNumber(swChildren: Readonly<TAhkSymbol[]>): number {
+    let iDefault = 0;
+    swChildren.forEach((e) => {
+        if (e.name === 'Default :') iDefault++;
+    });
+    return iDefault;
 }
-function getCaseNumber(swChildren: Readonly<MyDocSymbol[]>): number {
-    return swChildren.reduce((iCase, element): number => (element.name.startsWith('Case ') ? iCase + 1 : iCase), 0);
+function getCaseNumber(swChildren: Readonly<TAhkSymbol[]>): number {
+    let iCase = 0;
+    swChildren.forEach((e) => {
+        if (e.name === 'Case ') iCase++;
+    });
+    return iCase;
 }
-function setErrDefaultNotFind(sw: MyDocSymbol): vscode.Diagnostic {
-    const diag1 = new vscode.Diagnostic(sw.range, EDiagMsg.code110, vscode.DiagnosticSeverity.Information);
-    diag1.source = EDiagBase.source;
-    diag1.code = {
-        value: EDiagCode.code110,
-        target: vscode.Uri.parse(EDiagFsPath.code110),
-    };
-    return diag1;
+function setErrDefaultNotFind(sw: TAhkSymbol): vscode.Diagnostic {
+    const value = EDiagCode.code110;
+    const range = sw.selectionRange;
+    return setDiagnostic(value, range, vscode.DiagnosticSeverity.Information, []);
 }
-function setErrDefaultTooMuch(sw: MyDocSymbol): vscode.Diagnostic {
-    const diag1 = new vscode.Diagnostic(sw.range, EDiagMsg.code111, vscode.DiagnosticSeverity.Information);
-    diag1.source = EDiagBase.source;
-    diag1.code = {
-        value: EDiagCode.code111,
-        target: vscode.Uri.parse(EDiagFsPath.code111),
-    };
-    return diag1;
+function setErrDefaultTooMuch(sw: TAhkSymbol): vscode.Diagnostic {
+    const value = EDiagCode.code111;
+    const range = sw.range;
+    return setDiagnostic(value, range, vscode.DiagnosticSeverity.Information, []);
 }
 
-function setErrDefault(sw: MyDocSymbol): null | vscode.Diagnostic {
+function setErrDefault(sw: TAhkSymbol): null | vscode.Diagnostic {
     const iDefault = getDefaultNumber(sw.children);
     switch (iDefault) {
         case 0: return setErrDefaultNotFind(sw);
@@ -37,26 +36,18 @@ function setErrDefault(sw: MyDocSymbol): null | vscode.Diagnostic {
         default: return setErrDefaultTooMuch(sw);
     }
 }
-function setCaseTooMuch(sw: MyDocSymbol): vscode.Diagnostic {
-    const caseTooMuch = new vscode.Diagnostic(sw.range, EDiagMsg.code112, vscode.DiagnosticSeverity.Information);
-    caseTooMuch.source = EDiagBase.source;
-    caseTooMuch.code = {
-        value: EDiagCode.code112,
-        target: vscode.Uri.parse(EDiagFsPath.code112),
-    };
-    return caseTooMuch;
+function setCaseTooMuch(sw: TAhkSymbol): vscode.Diagnostic {
+    const value = EDiagCode.code112;
+    const range = sw.range;
+    return setDiagnostic(value, range, vscode.DiagnosticSeverity.Information, []);
 }
-function setErrCaseZero(sw: MyDocSymbol): vscode.Diagnostic {
-    const caseZero = new vscode.Diagnostic(sw.range, EDiagMsg.code113, vscode.DiagnosticSeverity.Information);
-    caseZero.source = EDiagBase.source;
-    caseZero.code = {
-        value: EDiagCode.code113,
-        target: vscode.Uri.parse(EDiagFsPath.code113),
-    };
-    return caseZero;
+function setErrCaseZero(sw: TAhkSymbol): vscode.Diagnostic {
+    const value = EDiagCode.code113;
+    const range = sw.range;
+    return setDiagnostic(value, range, vscode.DiagnosticSeverity.Information, []);
 }
 
-function setErrCase(sw: MyDocSymbol): null | vscode.Diagnostic {
+function setErrCase(sw: TAhkSymbol): null | vscode.Diagnostic {
     // TODO Duplicate case label.
     const iCase = getCaseNumber(sw.children);
     switch (true) {
@@ -66,17 +57,13 @@ function setErrCase(sw: MyDocSymbol): null | vscode.Diagnostic {
         default: return null;
     }
 }
-function setErrSwNameNotFind(sw: MyDocSymbol): null | vscode.Diagnostic {
+function setErrSwNameNotFind(sw: TAhkSymbol): null | vscode.Diagnostic {
     if (!sw.name.startsWith('!!')) return null;
-    const swNameNotFind = new vscode.Diagnostic(sw.range, EDiagMsg.code114, vscode.DiagnosticSeverity.Error);
-    swNameNotFind.source = EDiagBase.source;
-    swNameNotFind.code = {
-        value: EDiagCode.code114,
-        target: vscode.Uri.parse(EDiagFsPath.code114),
-    };
-    return swNameNotFind;
+    const value = EDiagCode.code114;
+    const range = sw.range;
+    return setDiagnostic(value, range, vscode.DiagnosticSeverity.Error, []);
 }
-function getSwErr(sw: MyDocSymbol, displayErr: readonly boolean[]): vscode.Diagnostic[] {
+function getSwErr(sw: TAhkSymbol, displayErr: readonly boolean[]): vscode.Diagnostic[] {
     const digS: vscode.Diagnostic[] = [];
     if (sw.kind === vscode.SymbolKind.Enum
         && displayErr[sw.range.start.line]
@@ -89,7 +76,7 @@ function getSwErr(sw: MyDocSymbol, displayErr: readonly boolean[]): vscode.Diagn
     return digS;
 }
 
-export function getTreeErr(children: readonly MyDocSymbol[], displayErr: readonly boolean[]): vscode.Diagnostic[] {
+export function getTreeErr(children: readonly TAhkSymbol[], displayErr: readonly boolean[]): vscode.Diagnostic[] {
     const digS: vscode.Diagnostic[] = [];
     children.forEach((ch) => {
         digS.push(...getSwErr(ch, displayErr), ...getTreeErr(ch.children, displayErr));

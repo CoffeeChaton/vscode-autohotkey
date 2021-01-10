@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import {
-    TDocArr, MyDocSymbol, MyDocSymbolArr, TGValMap,
+    TTokenStream, TAhkSymbol, TAhkSymbolList, TGValMap,
 } from '../globalEnum';
 
 export type FuncInputType = Readonly<{
@@ -8,12 +8,12 @@ export type FuncInputType = Readonly<{
     line: number,
     RangeEndLine: number,
     inClass: boolean,
-    DocStrMap: TDocArr,
+    DocStrMap: TTokenStream,
     Uri: vscode.Uri,
     gValMapBySelf: TGValMap,
 }>;
 
-export type FuncLimit = (FuncInput: FuncInputType) => false | MyDocSymbol;
+export type FuncLimit = (FuncInput: FuncInputType) => false | TAhkSymbol;
 
 type ChildType = Readonly<{
     inClass: boolean,
@@ -21,11 +21,11 @@ type ChildType = Readonly<{
     RangeStartLine: number,
     RangeEndLine: number,
     Uri: vscode.Uri,
-    DocStrMap: TDocArr,
+    DocStrMap: TTokenStream,
     gValMapBySelf: TGValMap,
 }>;
 
-export function getChildren(child: ChildType): MyDocSymbolArr {
+export function getChildren(child: ChildType): TAhkSymbolList {
     const {
         Uri, DocStrMap, RangeStartLine, RangeEndLine, inClass, fnList, gValMapBySelf,
     } = child;
@@ -37,7 +37,7 @@ export function getChildren(child: ChildType): MyDocSymbolArr {
         if (line < Resolved) continue;
         const lStr = DocStrMap[line].lStr;
         for (let i = 0; i < iMax; i++) {
-            const DocumentSymbol: false | MyDocSymbol = fnList[i]({
+            const DocumentSymbol: false | TAhkSymbol = fnList[i]({
                 lStr,
                 Uri,
                 DocStrMap,

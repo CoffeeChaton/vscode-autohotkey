@@ -1,18 +1,14 @@
 import * as vscode from 'vscode';
-import { TDocArr } from '../../globalEnum';
+import { TTokenStream } from '../../globalEnum';
 
 export type FuncDefData = {
     name: string;
     selectionRange: vscode.Range;
 };
 
-function lineText(DocStrMap: TDocArr, searchLine: number): string {
-    return DocStrMap[searchLine].lStr;
-}
+type FuncTailType = { DocStrMap: TTokenStream, searchText: string, name: string, searchLine: number, defLine: number };
 
-type FuncTailType = { DocStrMap: TDocArr, searchText: string, name: string, searchLine: number, defLine: number };
-
-function getSelectionRange(DocStrMap: TDocArr, defLine: number, searchLine: number): vscode.Range {
+function getSelectionRange(DocStrMap: TTokenStream, defLine: number, searchLine: number): vscode.Range {
     // const argPos = Math.max(DocStrMap[defLine].lStr.indexOf('('), 0);
     const colS = DocStrMap[defLine].lStr.search(/\w/);
     const colE = DocStrMap[searchLine].lStr.lastIndexOf(')');
@@ -36,7 +32,7 @@ function getFuncTail({
     // i+1   ^, something , something ......)$
     // i+2   ^{
     if ((/\)\s*$/).test(searchText)
-        && (/^\s*{/).test(lineText(DocStrMap, searchLine + 1))) {
+        && (/^\s*{/).test(DocStrMap[searchLine + 1].lStr)) {
         const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine);
         return { name, selectionRange };
     }
@@ -44,9 +40,9 @@ function getFuncTail({
     return false;
 }
 
-export function getFuncDef(DocStrMap: TDocArr, defLine: number): false | FuncDefData {
+export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | FuncDefData {
     if (defLine + 1 === DocStrMap.length) return false;
-    const textFix = lineText(DocStrMap, defLine);
+    const textFix = DocStrMap[defLine].lStr;
     // if ((/^\s*\b(?:if|while)\b/i).test(textFix)) return false;
 
     const fnHead = (/^\s*(\w\w*)\(/).exec(textFix); //  funcName(...
@@ -64,12 +60,12 @@ export function getFuncDef(DocStrMap: TDocArr, defLine: number): false | FuncDef
     });
     if (funcData) return funcData;
 
-    if (lineText(DocStrMap, defLine).includes(')')) return false;// fn_Name( ... ) ...  ,this is not ahk function
+    if (DocStrMap[defLine].lStr.includes(')')) return false;// fn_Name( ... ) ...  ,this is not ahk function
 
     // eslint-disable-next-line no-magic-numbers
     const iMax = Math.min(defLine + 15, DocStrMap.length);
     for (let searchLine = defLine + 1; searchLine < iMax; searchLine++) {
-        const searchText = lineText(DocStrMap, searchLine);
+        const searchText = DocStrMap[searchLine].lStr;
 
         if (!(/^\s*,/).test(searchText)) return false;
 

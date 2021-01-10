@@ -1,3 +1,4 @@
+/* eslint-disable immutable/no-mutation */
 /* eslint-disable no-await-in-loop */
 
 import * as vscode from 'vscode';
@@ -6,8 +7,8 @@ import { setFuncHoverMD } from '../../tools/setHoverMD';
 import { wrapClass } from './wrapClass';
 import { insertTextWm } from './insertTextWm';
 import { ahkSend } from './ahkSend';
-import { contextCompletionItem } from './contextCompletionItem';
 import { getValOfFunc } from '../../tools/Func/getValOfFunc';
+import { DeepAnalysisToCompletionItem } from './DeepAnalysisToCompletionItem';
 
 async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
     const fsPaths = Detecter.getDocMapFile();
@@ -82,13 +83,14 @@ async function listAllFuncClass(document: vscode.TextDocument, position: vscode.
 }
 
 async function wrapListAllFuncClass(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.CompletionItem[]> {
-    const Range = document.getWordRangeAtPosition(position);
+    // eslint-disable-next-line security/detect-unsafe-regex
+    const Range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
     if (Range === undefined) return []; // exp: . / []
 
     if (Range.start.character - 1 > -1) {
         const newRange = new vscode.Range(Range.start.line, Range.start.character - 1, Range.start.line, Range.start.character);
         const newStr = document.getText(newRange);
-        return (newStr !== '.')
+        return (newStr !== '.' && newStr !== '`' && newStr !== '%')
             ? listAllFuncClass(document, position, Range)
             : []; // exp className.d    -->  newStr === "."
     }
@@ -103,11 +105,11 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
             ...await wrapClass(document, position), // '.'
             ...await wrapListAllFuncClass(document, position), // ''
             ...ahkSend(document, position), // '{'
-            ...contextCompletionItem(document, position),
+            ...DeepAnalysisToCompletionItem(document, position),
+            //       ...contextCompletionItem(document, position),
         ];
 
-        // eslint-disable-next-line no-magic-numbers
-        console.log('CompletionItemProvider -> time Cost *1000', (Date.now() - t1) * 1000);
+        console.log('CompletionItemProvider -> time Cost *1000', (Date.now() - t1));
 
         return completions;
     }

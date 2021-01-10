@@ -33,6 +33,8 @@
         }
     },
     "plugins": [
+        // "fp",
+        "immutable",
         "chai-expect",
         "@typescript-eslint",
         "promise",
@@ -48,6 +50,25 @@
         }
     },
     "rules": {
+        // "fp/no-arguments": "error",
+        // "fp/no-delete": "error",
+        // "fp/no-events": "error",
+        // "fp/no-get-set": "error",
+        // "fp/no-mutating-assign": "error",
+        // "fp/no-mutating-methods": "error",
+        // "fp/no-mutation": "error",
+        // //  "fp/no-nil": "error",
+        // "fp/no-proxy": "error",
+        // "fp/no-rest-parameters": "error",
+        // "fp/no-this": "error",
+        // "fp/no-throw": "error",
+        // //  "fp/no-unused-expression": "error",
+        // "fp/no-valueof-field": "error",
+
+        //
+        "immutable/no-let": 0,
+        "immutable/no-this": 2,
+        "immutable/no-mutation": 2,
         "class-methods-use-this": "off",
         "no-console": "off",
         "@typescript-eslint/no-floating-promises": "off",

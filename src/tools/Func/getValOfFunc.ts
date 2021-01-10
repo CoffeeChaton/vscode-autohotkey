@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { EMode, MyDocSymbol, DeepReadonly } from '../../globalEnum';
+import { EMode, TAhkSymbol, DeepReadonly } from '../../globalEnum';
 import { kindCheck } from '../../provider/Def/kindCheck';
 import { getCommentOfLine } from '../getCommentOfLine';
 import { Pretreatment } from '../Pretreatment';
@@ -11,9 +11,10 @@ import { removeParentheses } from '../removeParentheses';
 export type ValDefOfFunc = DeepReadonly<{ name: string, comment: string, line: number, textRaw: string, textRawFix: string }>;
 export type ValDefOfFuncArr = readonly ValDefOfFunc[];
 
-function getValAssignOfFunc(document: vscode.TextDocument, wordLower: string, ahkSymbol: MyDocSymbol): ValDefOfFuncArr {
+function getValAssignOfFunc(document: vscode.TextDocument, wordLower: string, ahkSymbol: TAhkSymbol): ValDefOfFuncArr {
     const bodyRange = new vscode.Range(ahkSymbol.selectionRange.end, ahkSymbol.range.end);
-    const DocStrMap = Pretreatment(document.getText(bodyRange).split('\n'));
+    const startLineBaseZero = bodyRange.start.line;
+    const DocStrMap = Pretreatment(document.getText(bodyRange).split('\n'), startLineBaseZero);
     const lineStart = bodyRange.start.line + 0;
     const iMax = DocStrMap.length;
     const arr: ValDefOfFunc[] = [];
@@ -28,7 +29,7 @@ function getValAssignOfFunc(document: vscode.TextDocument, wordLower: string, ah
         }
         const line = lineStart + linePos;
 
-        const comment = getCommentOfLine({ textRaw, lStr });
+        const comment = getCommentOfLine({ lStr, textRaw }) ?? '';
         const lStrFix = removeParentheses(lStr);
         lStrFix.replace(/^\s*static\b/i, '')
             .replace(/^\s*global\b/i, '')
@@ -53,16 +54,17 @@ function getValAssignOfFunc(document: vscode.TextDocument, wordLower: string, ah
     return arr;
 }
 
-function getArgsOfFunc(document: vscode.TextDocument, wordLower: string, ahkSymbol: MyDocSymbol): ValDefOfFuncArr {
+function getArgsOfFunc(document: vscode.TextDocument, wordLower: string, ahkSymbol: TAhkSymbol): ValDefOfFuncArr {
     const { selectionRange } = ahkSymbol;
-    const DocStrMap = Pretreatment(document.getText(selectionRange).split('\n'));
+    const startLineBaseZero = selectionRange.start.line;
+    const DocStrMap = Pretreatment(document.getText(selectionRange).split('\n'), startLineBaseZero);
     const lineStart = selectionRange.start.line + 0;
     const iMax = DocStrMap.length;
     const arr: ValDefOfFunc[] = [];
     for (let linePos = 0; linePos < iMax; linePos++) {
         const line = lineStart + linePos;
         const { textRaw, lStr } = DocStrMap[linePos];
-        const comment = getCommentOfLine({ textRaw, lStr });
+        const comment = getCommentOfLine({ lStr, textRaw }) ?? '';
         lStr.replace(/^\s*\w\w*\(\s*/, '').replace(/\)\s*$/, '').trim()
             .split(',')
             .map((v) => v.trim())
@@ -81,7 +83,7 @@ function getArgsOfFunc(document: vscode.TextDocument, wordLower: string, ahkSymb
     return arr;
 }
 
-export function getFuncSymbolOfPos(document: vscode.TextDocument, position: vscode.Position): MyDocSymbol | null {
+export function getFuncSymbolOfPos(document: vscode.TextDocument, position: vscode.Position): TAhkSymbol | null {
     const ahkSymbolS = Detecter.getDocMap(document.uri.fsPath);
     if (ahkSymbolS === null) return null;
 

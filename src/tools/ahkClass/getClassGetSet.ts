@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { FuncInputType, getChildren } from '../../core/getChildren';
-import { MyDocSymbol } from '../../globalEnum';
+import { TAhkSymbol } from '../../globalEnum';
 import { getRange } from '../getRange';
 
 function getName(FuncInput: FuncInputType): string | false {
@@ -18,7 +18,7 @@ function getName(FuncInput: FuncInputType): string | false {
     }
     return false;
 }
-export function getClassGetSet(FuncInput: FuncInputType): false | MyDocSymbol {
+export function getClassGetSet(FuncInput: FuncInputType): false | TAhkSymbol {
     const {
         gValMapBySelf, Uri, line, lStr, DocStrMap, RangeEndLine,
     } = FuncInput;
@@ -29,22 +29,21 @@ export function getClassGetSet(FuncInput: FuncInputType): false | MyDocSymbol {
     if (name === false) return false;
 
     const range = getRange(DocStrMap, line, line, RangeEndLine);
-    return {
-        name,
-        detail: '',
-        kind: vscode.SymbolKind.Property,
-        range,
-        selectionRange: range,
-        children: getChildren({
-            gValMapBySelf,
-            Uri,
-            DocStrMap,
-            RangeStartLine: range.start.line + 1,
-            RangeEndLine: range.end.line,
-            inClass: true,
-            fnList: [getClassGetSet],
-        }),
-    };
+    const detail = '';
+    const kind = vscode.SymbolKind.Property;
+    const selectionRange = range;
+    const classSymbol: TAhkSymbol = new vscode.DocumentSymbol(name, detail, kind, range, selectionRange);
+    // eslint-disable-next-line immutable/no-mutation
+    classSymbol.children = getChildren({
+        gValMapBySelf,
+        Uri,
+        DocStrMap,
+        RangeStartLine: range.start.line + 1,
+        RangeEndLine: range.end.line,
+        inClass: true,
+        fnList: [getClassGetSet],
+    });
+    return classSymbol;
 }
 //  https://www.autohotkey.com/docs/Objects.htm#Dynamic_Properties
 // class ClassName extends BaseClassName

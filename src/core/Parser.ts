@@ -1,3 +1,4 @@
+/* eslint-disable immutable/no-mutation */
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable max-lines */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,20] }] */
@@ -5,7 +6,7 @@ import * as vscode from 'vscode';
 import { getFuncDef } from '../tools/Func/getFuncDef';
 import { getRange } from '../tools/getRange';
 import { getRangeCaseBlock } from '../tools/getRangeCaseBlock';
-import { DeepReadonly, MyDocSymbol } from '../globalEnum';
+import { DeepReadonly, TAhkSymbol } from '../globalEnum';
 import { getCaseDefaultName, getSwitchName } from './getSwitchCaseName';
 import { getRangeOfLine } from '../tools/getRangeOfLine';
 import { FuncInputType, getChildren } from './getChildren';
@@ -35,8 +36,8 @@ function getReturnName(textRaw: string): string {
     }
     return name.trim();
 }
-export function getReturnByLine(FuncInput: FuncInputType): false | MyDocSymbol {
-    if (!(/\breturn\b/i).test(FuncInput.lStr)) return false;
+export function getReturnByLine(FuncInput: FuncInputType): false | TAhkSymbol {
+    if (!(/\sreturn\s/i).test(FuncInput.lStr)) return false;
     const line = FuncInput.line;
     const textRaw = FuncInput.DocStrMap[FuncInput.line].textRaw;
     const name = getReturnName(textRaw);
@@ -52,7 +53,7 @@ type LineRulerType = DeepReadonly<{
     getName: (str: string) => string | null,
 }[]>;
 
-export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
+export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
     const {
         DocStrMap, line, lStr,
     } = FuncInput;
@@ -75,14 +76,6 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
             kind: vscode.SymbolKind.Variable,
             getName(str: string): string | null {
                 return (/^\s*\bglobal\b\s*$/i).test(str) ? null : setGlobalVar(FuncInput);
-                // return removeParentheses(removeBigParentheses(str.replace(/^\s*\bglobal\b/i, '')))
-                //     .split(',')
-                //     .map((v) => {
-                //         const col = v.indexOf(':=');
-                //         return (col > 0) ? v.substring(0, col).trim() : v;
-                //     })
-                //     .join(', ')
-                //     .trim();
             },
             test(str: string): boolean {
                 return (/^\s*\bglobal\b/i).test(str);
@@ -92,9 +85,7 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
             detail: 'static',
             kind: vscode.SymbolKind.Variable,
             getName(str: string): string | null {
-                //  static _SetBmpTrans := "", Ptr := "", PtrA := ""
-                // -> _SetBmpTrans, Ptr, PtrA
-                return removeParentheses(removeBigParentheses(str.replace(/\bstatic\b/i, '')))
+                return removeParentheses(removeBigParentheses(str.replace(/^\s*\bstatic\b[\s,]/i, '')))
                     .split(',')
                     .map((v) => {
                         const col = v.indexOf(':=');
@@ -105,7 +96,7 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
             },
 
             test(str: string): boolean {
-                return (/^\s*\bstatic\b/i).test(str);
+                return (/^\s*\bstatic\b[\s,]/i).test(str);
             },
         },
         {
@@ -175,7 +166,7 @@ export function ParserLine(FuncInput: FuncInputType): false | MyDocSymbol {
 }
 
 export const ParserBlock = {
-    getCaseDefaultBlock(FuncInput: FuncInputType): false | MyDocSymbol {
+    getCaseDefaultBlock(FuncInput: FuncInputType): false | TAhkSymbol {
         const lStr = FuncInput.lStr;
         if (lStr === '' || lStr.indexOf(':') === -1) return false;
         const {
@@ -186,7 +177,7 @@ export const ParserBlock = {
         if (caseName === false) return false;
 
         const Range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
-        const Block: MyDocSymbol = new vscode.DocumentSymbol(caseName,
+        const Block: TAhkSymbol = new vscode.DocumentSymbol(caseName,
             '', vscode.SymbolKind.EnumMember, Range, Range);
         Block.children = getChildren({
             gValMapBySelf,
@@ -200,7 +191,7 @@ export const ParserBlock = {
         return Block;
     },
 
-    getSwitchBlock(FuncInput: FuncInputType): false | MyDocSymbol {
+    getSwitchBlock(FuncInput: FuncInputType): false | TAhkSymbol {
         if (!(/^\s*\bswitch\b/i).test(FuncInput.lStr)) return false;
 
         const {
@@ -209,7 +200,7 @@ export const ParserBlock = {
 
         const range = getRange(DocStrMap, line, line, RangeEndLine);
         const selectionRange = getRangeOfLine(DocStrMap, line);
-        const SwitchBlock: MyDocSymbol = new vscode.DocumentSymbol(getSwitchName(lStr),
+        const SwitchBlock: TAhkSymbol = new vscode.DocumentSymbol(getSwitchName(lStr),
             'Switch', vscode.SymbolKind.Enum, range, selectionRange);
         SwitchBlock.children = getChildren({
             gValMapBySelf,
@@ -223,7 +214,7 @@ export const ParserBlock = {
         return SwitchBlock;
     },
 
-    getFunc(FuncInput: FuncInputType): false | MyDocSymbol {
+    getFunc(FuncInput: FuncInputType): false | TAhkSymbol {
         const {
             gValMapBySelf, Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
         } = FuncInput;
@@ -245,7 +236,7 @@ export const ParserBlock = {
         const kind = inClass ? vscode.SymbolKind.Method : vscode.SymbolKind.Function;
         const detail = getDetail();
 
-        const funcSymbol: MyDocSymbol = new vscode.DocumentSymbol(name, detail, kind, range, selectionRange);
+        const funcSymbol: TAhkSymbol = new vscode.DocumentSymbol(name, detail, kind, range, selectionRange);
         funcSymbol.children = getChildren({
             gValMapBySelf,
             Uri,
@@ -258,7 +249,7 @@ export const ParserBlock = {
         return funcSymbol;
     },
 
-    getClass(FuncInput: FuncInputType): false | MyDocSymbol {
+    getClass(FuncInput: FuncInputType): false | TAhkSymbol {
         if (!(/^\s*\bclass\b/i).test(FuncInput.lStr)) return false;
 
         const classExec = (/^\s*\bclass\b\s\s*(\w\w*)/i).exec(FuncInput.lStr);
@@ -275,7 +266,7 @@ export const ParserBlock = {
         const colFix = col === -1 ? lStr.length : col;
         const selectionRange = new vscode.Range(line, colFix, line, colFix + name.length);
         const detail = getClassDetail(lStr, colFix, name);
-        const classSymbol: MyDocSymbol = new vscode.DocumentSymbol(name,
+        const classSymbol: TAhkSymbol = new vscode.DocumentSymbol(name,
             detail, vscode.SymbolKind.Class, Range, selectionRange);
         classSymbol.children = getChildren({
             gValMapBySelf,
@@ -289,7 +280,7 @@ export const ParserBlock = {
         return classSymbol;
     },
 
-    getComment(FuncInput: FuncInputType): false | MyDocSymbol {
+    getComment(FuncInput: FuncInputType): false | TAhkSymbol {
         const {
             gValMapBySelf, Uri, DocStrMap, line, RangeEndLine, inClass,
         } = FuncInput;
@@ -313,7 +304,7 @@ export const ParserBlock = {
 
         const getName = (): string => {
             if (line - 1 >= 0) {
-                const nameKind: string[] = (/^\s*(\w\w*)/).exec(FuncInput.DocStrMap[FuncInput.line - 1].textRaw) || [''];
+                const nameKind: string[] = (/^\s*(\w\w*)/).exec(FuncInput.DocStrMap[FuncInput.line - 1].textRaw) ?? [''];
                 return nameKind[0].trim();
             }
             return '';
@@ -322,7 +313,7 @@ export const ParserBlock = {
         const range = getRange(DocStrMap, line, line, RangeEndLine);
         const name = getName() + textRaw.substring(textRaw.indexOf(';;') + 2).trimEnd();
         const selectionRange = new vscode.Range(line, 0, line, textRaw.length);
-        const CommentBlock: MyDocSymbol = new vscode.DocumentSymbol(name, '', vscode.SymbolKind.Package, range, selectionRange);
+        const CommentBlock: TAhkSymbol = new vscode.DocumentSymbol(name, '', vscode.SymbolKind.Package, range, selectionRange);
         CommentBlock.children = getChildren({
             gValMapBySelf,
             Uri,

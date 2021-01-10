@@ -1,9 +1,12 @@
-/* eslint-disable security/detect-non-literal-regexp */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,5] }] */
 import * as vscode from 'vscode';
-import { MyDocSymbol, VERSION } from '../../globalEnum';
+import { TAhkSymbol, VERSION } from '../../globalEnum';
+import { enumErr } from '../../tools/enumErr';
+import { kindPick } from '../../tools/Func/kindPick';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
-import { ClassWm } from '../../tools/wm';
+import {
+    ahkGlobalValDefRegex, ahkLocalValDefRegex, ahkStaticValDefRegex, ahkValDefRegex, ahkValRegex, ahkVarSetCapacityDefRegex,
+} from '../../tools/regexTools';
 
 const enum EFuncPos {
     isFuncName = 1,
@@ -11,9 +14,9 @@ const enum EFuncPos {
     isInBody = 3,
 }
 
-function atFunPos(docSymbol: MyDocSymbol, document: vscode.TextDocument, position: vscode.Position): EFuncPos {
-    if (docSymbol.selectionRange.contains(position)) return EFuncPos.isFuncArg;
-    if (docSymbol.range.start.line === position.line) return EFuncPos.isFuncName;
+function atFunPos(ahkSymbol: TAhkSymbol, position: vscode.Position): EFuncPos {
+    if (ahkSymbol.selectionRange.contains(position)) return EFuncPos.isFuncArg;
+    if (ahkSymbol.range.start.line === position.line) return EFuncPos.isFuncName;
     return EFuncPos.isInBody;
 }
 
@@ -33,68 +36,59 @@ function searchValOfRange(document: vscode.TextDocument, searchRange: vscode.Ran
     return List;
 }
 
-function wrapper(document: vscode.TextDocument, docSymbol: MyDocSymbol, wordLower: string, listAllUsing: boolean)
+function wrapper(document: vscode.TextDocument, position: vscode.Position, ahkSymbol: TAhkSymbol, wordLower: string, listAllUsing: boolean)
     : vscode.Location[] {
-    const regex = new RegExp(`(?<!\\.|\`)\\b${wordLower}\\b`, 'i');
+    const regex = ahkValRegex(wordLower);
     if (listAllUsing) {
         console.log(`list ${wordLower} all using,is ${VERSION.getValDefInFunc}`);
-        return searchValOfRange(document, docSymbol.range, regex);
+        return searchValOfRange(document, ahkSymbol.range, regex);
     }
 
-    const argDef = searchValOfRange(document, docSymbol.selectionRange, regex);
+    const argDef = searchValOfRange(document, ahkSymbol.selectionRange, regex);
     if (argDef.length > 0) return argDef;
 
-    const Location: vscode.Location[] = [];
+    const defLocation: vscode.Location[] = [];
 
     [
-        new RegExp(`\\bstatic\\b.*\\b${wordLower}\\b`, 'i'),
-        new RegExp(`\\blocal\\b.*\\b${wordLower}\\b`, 'i'),
-        new RegExp(`\\bglobal\\b.*\\b${wordLower}\\b`, 'i'),
-        new RegExp(`\\bVarSetCapacity\\b\\(${wordLower}\\b`, 'i'),
-        new RegExp(`\\b${wordLower}\\b\\s*:=`, 'i'),
+        ahkStaticValDefRegex(wordLower),
+        ahkLocalValDefRegex(wordLower),
+        ahkGlobalValDefRegex(wordLower),
+        ahkVarSetCapacityDefRegex(wordLower),
+        ahkValDefRegex(wordLower),
     ].forEach((reg) => {
-        const loc = searchValOfRange(document, docSymbol.range, reg);
+        const loc = searchValOfRange(document, ahkSymbol.range, reg);
         if (loc.length > 0) {
             console.log(`list ${wordLower} definition ,is ${VERSION.getValDefInFunc}`);
-            Location.push(...loc);
+            defLocation.push(...loc);
         }
     });
+    if (defLocation.some((loc) => position.line === loc.range.start.line)) {
+        return searchValOfRange(document, ahkSymbol.range, regex);
+    }
 
-    return Location;
-}
-function neverLog(funcPos: never): null {
-    console.log('enum error of getValDefInFunc--93--61--74--', funcPos);
-    return null;
+    return defLocation;
 }
 
-function match(docSymbol: MyDocSymbol, document: vscode.TextDocument,
+function match(ahkSymbol: TAhkSymbol, document: vscode.TextDocument,
     position: vscode.Position, wordLower: string, listAllUsing: boolean): null | vscode.Location[] {
-    const funcPos = atFunPos(docSymbol, document, position);
+    const funcPos = atFunPos(ahkSymbol, position);
 
     switch (funcPos) {
-        case EFuncPos.isFuncArg: return wrapper(document, docSymbol, wordLower, true);
-        case EFuncPos.isInBody: return wrapper(document, docSymbol, wordLower, listAllUsing);
+        case EFuncPos.isFuncArg: return wrapper(document, position, ahkSymbol, wordLower, true);
+        case EFuncPos.isInBody: return wrapper(document, position, ahkSymbol, wordLower, listAllUsing);
         case EFuncPos.isFuncName:
             console.log('EFuncPos.isFuncName', wordLower, position); // is never now
             return null;
-        default: return neverLog(funcPos);
+        default: return enumErr(funcPos);
     }
 }
 
-// eslint-disable-next-line no-magic-numbers
-const w = new ClassWm<MyDocSymbol, Map<string, vscode.Location[] | null>>(5 * 60 * 1000, 'getValDefInFunc', 500);
-
 export function getValDefInFunc(document: vscode.TextDocument, position: vscode.Position, wordLower: string, listAllUsing: boolean)
     : null | vscode.Location[] {
-    const docSymbol = getFnOfPos(document, position);
-    if (!docSymbol) return null;
+    const ahkSymbol = getFnOfPos(document, position);
+    if (!ahkSymbol) return null;
+    if (!kindPick(ahkSymbol.kind)) return null;
 
-    const cache = w.getWm(docSymbol)?.get(wordLower) || null;
-    if (cache) return cache;
-
-    const ed = match(docSymbol, document, position, wordLower, listAllUsing);
-
-    w.setWm(docSymbol, new Map<string, vscode.Location[] | null>().set(wordLower, ed));
-
+    const ed = match(ahkSymbol, document, position, wordLower, listAllUsing);
     return ed;
 }

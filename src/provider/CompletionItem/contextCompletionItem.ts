@@ -3,7 +3,7 @@
 
 import * as vscode from 'vscode';
 
-export function contextCompletionItem(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
+function getAllValInFunc(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
     if (position.line === 0) return [];
     const textRaw = document.getText(new vscode.Range(new vscode.Position(position.line - 1, 0), new vscode.Position(position.line, 0)));
     if (textRaw.indexOf(':=') === -1) return [];

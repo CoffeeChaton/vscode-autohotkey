@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { EMode, MyDocSymbol } from '../globalEnum';
+import { EMode, TAhkSymbol } from '../globalEnum';
 import { getHoverConfig } from '../configUI';
 import { Pretreatment } from './Pretreatment';
 
@@ -11,7 +11,7 @@ function commentFix(commentText: string): string {
 
 function getCommentText(textRaw: string): string {
     const textFix = textRaw.trimStart();
-    return textFix.startsWith(';')
+    return textFix.trimStart().startsWith(';')
         ? `${textFix.substring(1)}  \n`
         : '';
 }
@@ -41,7 +41,7 @@ export function inCommentBlock2(textRaw: string, CommentBlock: boolean): boolean
 }
 
 type TSymbol = {
-    AhkSymbol: MyDocSymbol;
+    AhkSymbol: TAhkSymbol;
     fsPath: string;
 };
 export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.MarkdownString> {
@@ -58,7 +58,8 @@ export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.Markdown
     let commentBlock = false;
     let commentText = '';
     let returnList = '';
-    const DocStrMap = Pretreatment(document.getText(AhkSymbol.range).split('\n'));
+    const startLineBaseZero = AhkSymbol.range.start.line;
+    const DocStrMap = Pretreatment(document.getText(AhkSymbol.range).split('\n'), startLineBaseZero);
     const starLine = 0;
     const endLine = DocStrMap.length;
     for (let line = starLine; line < endLine; line++) {

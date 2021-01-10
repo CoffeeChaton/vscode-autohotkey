@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { FuncInputType } from './getChildren';
 import { removeParentheses } from '../tools/removeParentheses';
 import { removeBigParentheses } from '../tools/removeBigParentheses';
+import { ahkValRegex } from '../tools/regexTools';
 
 function fnReplacer(match: string): string {
     return ' '.repeat(match.length);
@@ -26,9 +27,8 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
     return lStrFix.split(',')
         .map((v) => {
             const col = v.indexOf(':=');
-            const lName = (col > 0) ? v.substring(0, col).trim() : v.trim();// rVal need to use textRaw
-            // eslint-disable-next-line security/detect-non-literal-regexp
-            const reg = new RegExp(`\\b${lName}\\b`);
+            const lName = (col > 0) ? v.substring(0, col).trim() : v.trim();// rVal need to use textRaw;
+            const reg = ahkValRegex(lName);
             const col2 = lStrFix.search(reg);
             if (col2 < 0) {
                 console.log('textRaw', textRaw);

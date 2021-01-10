@@ -2,15 +2,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4] }] */
 import * as vscode from 'vscode';
 
-export const enum EChapterError {
-    elementLen0 = 1,
-    number = 2,
-    notWordChar = 3,
-    arrLen0 = 4,
-}
-
-export type TChapterArr = { err: EChapterError } | { chap: readonly string[] };
-
 const fnTest = (chapter: string): boolean => chapter === '' || (/^\d\d*$/).test(chapter);
 
 export function getObjChapterArr(document: vscode.TextDocument, position: vscode.Position): readonly string[] | null {

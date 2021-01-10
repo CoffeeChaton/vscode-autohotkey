@@ -88,12 +88,14 @@ export async function statusBarClick(): Promise<null> {
         '0 -> clearOutlineCache',
         '1 -> list #Include',
         '2 -> dev tools setInterval() ',
+        //  '3 -> regTest',
     ];
     const options = await vscode.window.showQuickPick(items);
     switch (options) {
         case items[0]: return clearOutlineCache(false);
         case items[1]: return listAhkInclude();
         case items[2]: return LoopOfClearOutlineCache();
+        //  case items[3]: return regTest();
         default: return null;
     }
 }

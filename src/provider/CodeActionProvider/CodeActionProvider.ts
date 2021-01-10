@@ -1,3 +1,4 @@
+/* eslint-disable immutable/no-mutation */
 import * as vscode from 'vscode';
 import { EDiagBase, EDiagFsPath, EDiagCode } from '../../globalEnum';
 
@@ -33,10 +34,10 @@ function getFsPath(diag: vscode.Diagnostic): EDiagFsPath | null {
 }
 
 function setEdit(uri: vscode.Uri, line: number, FsPath: EDiagFsPath): vscode.WorkspaceEdit {
-    const edit = new vscode.WorkspaceEdit();
     const position = new vscode.Position(line, 0);
     const Today = new Date();
     const newText = `${EDiagBase.ignore} 1 line; at ${Today.toLocaleString()} ; ${FsPath}\n`;
+    const edit = new vscode.WorkspaceEdit();
     edit.insert(uri, position, newText);
     return edit;
 }
@@ -45,7 +46,7 @@ function setIgnoreLine(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.
     // diag
     //    code: 102
     //    message: "assign warning"
-    //    range: (2)[{ … }, { … }]
+    //    range: (2)[{...}, {...}]
     //    severity: "Information"
     //    source: "neko help"
     const FsPath = getFsPath(diag);

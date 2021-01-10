@@ -13,7 +13,7 @@ import { getFormatConfig } from '../../configUI';
 import { lineReplace } from '../FormatRange/RangeFormatProvider';
 import { Pretreatment } from '../../tools/Pretreatment';
 import {
-    VERSION, DeepReadonly, TDocArr, DetailType,
+    VERSION, DeepReadonly, TTokenStream, DetailType,
 } from '../../globalEnum';
 import { callDiff, DiffType } from '../../tools/Diff';
 
@@ -37,7 +37,7 @@ function isReturn(tagDeep: number, deep: number, textFix: string): boolean {
 }
 
 type WarnUseType = DeepReadonly<{
-    DocStrMap: TDocArr;
+    DocStrMap: TTokenStream;
     textFix: string;
     line: number;
     occ: number;
@@ -93,7 +93,7 @@ export function FormatCore(document: vscode.TextDocument, options: vscode.Format
     token: vscode.CancellationToken, diff: boolean): vscode.ProviderResult<vscode.TextEdit[]> {
     const timeStart = Date.now();
     const AllDoc = document.getText();
-    const DocStrMap = Pretreatment(AllDoc.split('\n'));
+    const DocStrMap = Pretreatment(AllDoc.split('\n'), 0);
     let deep = 0;
     let tagDeep = 0;
     let labDeep: 0 | 1 = 0;
@@ -140,7 +140,6 @@ export function FormatCore(document: vscode.TextDocument, options: vscode.Format
             : getDeepKeywords(textFix, occ); // TODO fmt_a1
     }
     console.log(`Format Document is Beta ${VERSION.format}, ${Date.now() - timeStart}ms`);
-
     if (diff) {
         const diffVar: DiffType = {
             leftText: AllDoc,

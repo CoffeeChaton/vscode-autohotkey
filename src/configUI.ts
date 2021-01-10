@@ -68,7 +68,7 @@ export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     const time = Date.now() - timeStart;
     const name = ` of ${path.basename(uri.fsPath)}`;
     statusBarItem.text = `$(heart) ${time} ms${name}`;
-    console.log('Outline provide', time, 'ms', name);
+    console.log('OutlineProvide', time, 'ms', name);
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
 }
