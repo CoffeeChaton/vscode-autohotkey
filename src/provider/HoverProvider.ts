@@ -1,3 +1,7 @@
+/* eslint-disable no-magic-numbers */
+/* eslint-disable security/detect-unsafe-regex */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable security/detect-non-literal-regexp */
 import * as vscode from 'vscode';
 import { tryGetSymbol } from './Def/DefProvider';
 import { EMode, TAhkSymbol } from '../globalEnum';
@@ -6,11 +10,9 @@ import { ClassWm } from '../tools/wm';
 import { isPosAtStr } from '../tools/isPosAtStr';
 import { DeepAnalysisHover } from './Hover/DeepAnalysisHover';
 
-// eslint-disable-next-line no-magic-numbers
 const wm = new ClassWm<TAhkSymbol, vscode.Hover>(10 * 60 * 1000, 'HoverFunc', 60);
 
 async function HoverFunc(wordLower: string, textRaw: string): Promise<null | vscode.Hover> {
-    // eslint-disable-next-line security/detect-non-literal-regexp
     const isFunc = new RegExp(`(?<!\\.|%|\`)(${wordLower})\\(`, 'i'); // not search class.Method()
     if (!isFunc.test(textRaw)) return null;
 
@@ -29,9 +31,7 @@ async function HoverFunc(wordLower: string, textRaw: string): Promise<null | vsc
 
 export class HoverProvider implements vscode.HoverProvider {
     public async provideHover(document: vscode.TextDocument, position: vscode.Position,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken): Promise<vscode.Hover | null> {
-        // eslint-disable-next-line security/detect-unsafe-regex
         const range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
         if (!range) {
             // const range2 = document.getWordRangeAtPosition(position, /(?:%)\b\w\w*\b(?:%)/);
@@ -41,10 +41,8 @@ export class HoverProvider implements vscode.HoverProvider {
             return null;
         }
 
-        if (isPosAtStr(document, position)) {
-            console.log('HoverProvider ~ isPosAtStr');
-            return null;
-        }
+        if (isPosAtStr(document, position)) return null;
+
         const word = document.getText(range);
         const wordLower = word.toLowerCase();
         const textRaw = document.lineAt(position).text;

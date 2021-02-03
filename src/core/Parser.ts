@@ -18,9 +18,9 @@ import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
 import { setGlobalVar } from './setGlobalVar';
 
 // // import * as Oniguruma from 'vscode-oniguruma';
-function getReturnName(textRaw: string): string {
+function getReturnName(textRaw: string): string | null {
     const ReturnMatch = (/\breturn\b\s\s*(.+)/i).exec(textRaw);
-    if (ReturnMatch === null) return '""';
+    if (ReturnMatch === null) return null;
 
     let name = ReturnMatch[1];
     if (ReturnMatch) {
@@ -36,11 +36,13 @@ function getReturnName(textRaw: string): string {
     }
     return name.trim();
 }
+
 export function getReturnByLine(FuncInput: FuncInputType): false | TAhkSymbol {
-    if (!(/\sreturn\s/i).test(FuncInput.lStr)) return false;
+    if (!(/\sreturn\s\s*\S/i).test(FuncInput.lStr)) return false;
     const line = FuncInput.line;
     const textRaw = FuncInput.DocStrMap[FuncInput.line].textRaw;
     const name = getReturnName(textRaw);
+    if (!name) return false;
     const rangeRaw = new vscode.Range(line, 0, line, textRaw.length);
     return new vscode.DocumentSymbol(`Return ${name}`, '', vscode.SymbolKind.Variable, rangeRaw, rangeRaw);
 }

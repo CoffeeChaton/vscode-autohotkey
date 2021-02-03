@@ -1,37 +1,19 @@
+/* eslint-disable immutable/no-mutation */
+import * as fs from 'fs';
 import * as path from 'path';
-import * as vscode from 'vscode';
 
+import * as vscode from 'vscode';
+import { TConfigs, TempConfigs } from './globalEnum';
+/*
+    ---set start---
+*/
 const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
 statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
 statusBarItem.command = 'ahk.bar.click';
 let Configs = vscode.workspace.getConfiguration('AhkNekoHelp');
-type TConfigs = {
-    statusBar: {
-        displayColor: string;
-    };
-    hover: {
-        showComment: boolean;
-    };
-    format: {
-        textReplace: boolean;
-    };
-    lint: {
-        funcSize: number;
-    };
-    Ignored: {
-        folder: {
-            startsWith: string[];
-            endsWith: string[];
-        }
-        File: {
-            startsWith: string[];
-            endsWith: string[];
-        }
-    }
-};
 
 function getConfig(): TConfigs {
-    return {
+    const ed: TempConfigs = {
         statusBar: {
             displayColor: Configs.get('statusBar.displayColor') as string,
         },
@@ -54,7 +36,21 @@ function getConfig(): TConfigs {
                 endsWith: Configs.get('Ignored.File.endsWith') as string[],
             },
         },
+        Debug: {
+            executePath: Configs.get('Debug.executePath') as string,
+        },
     };
+    const executePath = ed.Debug.executePath;
+
+    fs.access(executePath, (err) => {
+        if (err) {
+            const errCode = err.message ? ` <---> err.message ${err.message}` : '';
+            const msg = `setting AhkNekoHelp.Debug.executePath err : ${executePath}${errCode}`;
+            console.log('fs.access ~ msg', msg);
+            vscode.window.showErrorMessage(msg);
+        }
+    });
+    return ed;
 }
 
 let config = getConfig();
@@ -63,12 +59,15 @@ export function configChangEvent(): void {
     Configs = vscode.workspace.getConfiguration('AhkNekoHelp');
     config = getConfig();
 }
+/*
+    ---set end---
+*/
 
 export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     const time = Date.now() - timeStart;
     const name = ` of ${path.basename(uri.fsPath)}`;
     statusBarItem.text = `$(heart) ${time} ms${name}`;
-    console.log('OutlineProvide', time, 'ms', name);
+    // console.log('OutlineProvide', time, 'ms', name);
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
 }
@@ -104,6 +103,9 @@ export function getIgnoredFile(buildPath: string): boolean {
         if (fileFix.endsWith(e)) return true;
     }
     return false;
+}
+export function getDebugPath(): string {
+    return config.Debug.executePath;
 }
 // console.log(JSON.stringify(val));
 // vscode.window.setStatusBarMessage(timeSpend);

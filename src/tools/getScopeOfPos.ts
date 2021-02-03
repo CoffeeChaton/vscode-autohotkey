@@ -6,11 +6,13 @@ type TStackNameSymbol = {
     readonly name: string,
     readonly ahkSymbol: TAhkSymbol,
 };
+
 type TStackPro = Readonly<{
     readonly isEnd: boolean,
     readonly deep: number,
     readonly stack: readonly TStackNameSymbol[],
 }>;
+
 function dfs(father: TAhkSymbolList, position: vscode.Position, StackPro: TStackPro): TStackPro {
     const { stack, isEnd, deep } = StackPro;
     for (const ch of father) {
@@ -37,16 +39,17 @@ function dfs(father: TAhkSymbolList, position: vscode.Position, StackPro: TStack
         deep,
     };
 }
+
 export function getStack(document: vscode.TextDocument, position: vscode.Position): TStackPro | null {
     const ahkSymbolS = Detecter.getDocMap(document.uri.fsPath);
     if (ahkSymbolS === null) return null;
-    const stackPro = dfs(ahkSymbolS, position, {
+    return dfs(ahkSymbolS, position, {
         stack: [],
         isEnd: false,
         deep: 0,
     });
-    return stackPro;
 }
+
 export function getScopeOfPos(document: vscode.TextDocument, position: vscode.Position): vscode.Range | null {
     const stackPro = getStack(document, position);
     if (stackPro === null) return null;

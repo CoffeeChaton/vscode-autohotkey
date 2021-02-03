@@ -10,10 +10,10 @@ function getDefaultNumber(swChildren: Readonly<TAhkSymbol[]>): number {
     });
     return iDefault;
 }
-function getCaseNumber(swChildren: Readonly<TAhkSymbol[]>): number {
+function getCaseNumber(swCh: Readonly<TAhkSymbol[]>): number {
     let iCase = 0;
-    swChildren.forEach((e) => {
-        if (e.name === 'Case ') iCase++;
+    swCh.forEach((e) => {
+        if (e.name.startsWith('Case ')) iCase++;
     });
     return iCase;
 }

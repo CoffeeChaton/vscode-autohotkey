@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
 import * as vscode from 'vscode';
 import { inCommentBlock } from '../../tools/inCommentBlock';
@@ -8,7 +10,9 @@ import { VERSION } from '../../globalEnum';
 
 function showWarn(timeStart: number): void {
     const time = Date.now() - timeStart;
-    vscode.window.showInformationMessage(`Format Selection is ${VERSION.formatRange}, ${time}ms`);
+    const message = `Format Selection is ${VERSION.formatRange}, ${time}ms`;
+    console.log(message);
+    vscode.window.showInformationMessage(message);
 }
 function textReplace(textElement: string): string {
     return textElement.replace(/ *, */g, ', ')
@@ -128,7 +132,6 @@ export function RangeFormat({
         right: textNew,
         fsPath,
     };
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     setTimeout(callDiff, 100, diffVar);
 
     return [
@@ -137,7 +140,6 @@ export function RangeFormat({
 }
 export class RangeFormatProvider implements vscode.DocumentRangeFormattingEditProvider {
     public provideDocumentRangeFormattingEdits(document: vscode.TextDocument, range: vscode.Range,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         options: vscode.FormattingOptions, token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
         const RangeText = document.getText(range);
         const timeStart = Date.now();

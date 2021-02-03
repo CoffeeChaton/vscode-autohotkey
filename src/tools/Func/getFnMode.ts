@@ -1,8 +1,8 @@
+/* eslint-disable no-magic-numbers */
 import { TAhkSymbol, EFnMode, TTokenStream } from '../../globalEnum';
 import { ClassWm } from '../wm';
 import { kindPick } from './kindPick';
 
-// eslint-disable-next-line no-magic-numbers
 const w = new ClassWm<TAhkSymbol, EFnMode>(10 * 60 * 1000, 'getFnMode', 20000);
 
 // is https://www.autohotkey.com/docs/Functions.htm#Local
@@ -21,7 +21,7 @@ function getFnMode(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
 }
 
 export function getFnModeWM(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
-    if (!kindPick(ahkSymbol.kind)) throw new Error(`kind Error of getFnModeWM of ${ahkSymbol.name}`);
+    if (!kindPick(ahkSymbol.kind)) throw new Error(`kind Error of getFnModeWM of ${ahkSymbol.name}--35--11--66`);
 
     const cache = w.getWm(ahkSymbol);
     if (cache) return cache;

@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 export function getCaseDefaultName(textRaw: string, lStr: string): false | string {
     //  isDefault
     if ((/^\s*\bdefault\b\s*:/i).test(lStr)) return 'Default :';
@@ -10,7 +11,6 @@ export function getCaseDefaultName(textRaw: string, lStr: string): false | strin
     const caseE = lStr.indexOf(':');
     if (caseE === -1) return false;
 
-    // eslint-disable-next-line no-magic-numbers
     return `Case ${textRaw.substring(caseS + 4, caseE + 1).trim()}`;
 }
 

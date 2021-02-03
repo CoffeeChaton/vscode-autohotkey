@@ -1,3 +1,4 @@
+/* eslint-disable immutable/no-mutation */
 import * as vscode from 'vscode';
 import { FuncInputType, getChildren } from '../../core/getChildren';
 import { TAhkSymbol } from '../../globalEnum';
@@ -33,7 +34,6 @@ export function getClassGetSet(FuncInput: FuncInputType): false | TAhkSymbol {
     const kind = vscode.SymbolKind.Property;
     const selectionRange = range;
     const classSymbol: TAhkSymbol = new vscode.DocumentSymbol(name, detail, kind, range, selectionRange);
-    // eslint-disable-next-line immutable/no-mutation
     classSymbol.children = getChildren({
         gValMapBySelf,
         Uri,

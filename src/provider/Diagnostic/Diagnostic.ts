@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
@@ -5,6 +6,7 @@ import { getLintConfig } from '../../configUI';
 import {
     TTokenStream, EDiagBase, EDiagCode, TAhkSymbol, DetailType,
 } from '../../globalEnum';
+
 import { getTreeErr } from './getTreeErr';
 import { setDiagnostic } from './setDiagnostic';
 
@@ -14,15 +16,11 @@ function getIgnore(DocStrMap: TTokenStream, line: number, IgnoreLine: number): n
     if (DocStrMap[line].textRaw.indexOf(EDiagBase.ignore) === -1) return IgnoreLine;
     const ignoreExec = (/^\s*;@ahk-ignore\s\s*(\d\d*)\s/).exec(DocStrMap[line].textRaw);
     if (ignoreExec === null) {
-        console.log('function getIgnore -> ignoreExec', ignoreExec);
+        console.log('function getIgnore -> ignoreExec === null');
         console.log(line, ' line');
         return IgnoreLine;
     }
     const numberOfIgnore = Number(ignoreExec[1]);
-    if (Number.isNaN(numberOfIgnore)) {
-        vscode.window.showInformationMessage(`Parsing error of ${line} line about ;@ahk-ignore (number) line.`);
-        return -1;
-    }
     return numberOfIgnore + line;
 }
 
@@ -44,7 +42,6 @@ function getLoopErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagn
     const SecondSection = exec[1];
     if ((/^(?:\d\d*|Files|Parse|Read|Reg)$/i).test(SecondSection)) return 1;
 
-    // eslint-disable-next-line no-magic-numbers
     const position = Math.max(0, lStr.search(/\bloop\b/i)) + 4;
     const col = Math.max(0, lStr.indexOf(SecondSection, position));
     const range = new vscode.Range(line, col, line, col + SecondSection.length);

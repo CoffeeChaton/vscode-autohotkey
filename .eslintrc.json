@@ -145,14 +145,11 @@
         "@typescript-eslint/no-useless-constructor": "warn",
         "@typescript-eslint/no-var-requires": "warn",
         "@typescript-eslint/prefer-function-type": "warn",
-
         "@typescript-eslint/prefer-namespace-keyword": "warn",
         "@typescript-eslint/promise-function-async": "warn",
         "@typescript-eslint/require-array-sort-compare": "warn",
         "@typescript-eslint/restrict-plus-operands": "warn",
-
         "@typescript-eslint/await-thenable": "error",
-
         // --new
         "linebreak-style": ["error", "windows"],
         "no-restricted-syntax": 0,

@@ -1,6 +1,7 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,5] }] */
 import * as vscode from 'vscode';
 import { TAhkSymbol, VERSION } from '../../globalEnum';
+
 import { enumErr } from '../../tools/enumErr';
 import { kindPick } from '../../tools/Func/kindPick';
 import { getFnOfPos } from '../../tools/getScopeOfPos';

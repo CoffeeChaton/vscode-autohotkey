@@ -1,5 +1,3 @@
-import * as vscode from 'vscode';
-import { EValType } from '../globalEnum';
 import { removeBigParentheses } from './removeBigParentheses';
 import { removeParentheses } from './removeParentheses';
 /*

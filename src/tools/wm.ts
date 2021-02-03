@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 /* eslint-disable immutable/no-this */
 /* eslint-disable immutable/no-mutation */
 function calcSize<V>(v: V): number {
@@ -52,10 +53,9 @@ export class ClassWm<T extends Record<string, unknown>, V> {
         const cache = this.wm.get(t) ?? null;
         if (cache) {
             this.cacheHits++;
-            // eslint-disable-next-line no-magic-numbers
-            if (this.cacheHits > 3) {
-                console.log('wm.cacheHits > 3', this.fnName);
-            }
+            // if (this.cacheHits > 3) {
+            //     console.log('wm.cacheHits > 3', this.fnName);
+            // }
             // console.log('t', t);
             // console.log('cache', cache);
         }

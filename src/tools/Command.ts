@@ -1,3 +1,5 @@
+/* eslint-disable init-declarations */
+/* eslint-disable no-await-in-loop */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,5,6,60,100,300,1000] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
@@ -6,14 +8,15 @@ async function clearOutlineCache(isTest: boolean): Promise<null> {
     const timeStart = Date.now();
     const ahkRootPath = vscode.workspace.workspaceFolders;
     if (ahkRootPath === undefined) {
-        vscode.window.showInformationMessage('vscode.workspace.rootPath is undefined');
+        console.log('vscode.workspace.rootPath is undefined');
+
         return null;
     }
     Detecter.DocMap.clear();
     await Detecter.buildByPathAsync(isTest, ahkRootPath[0].uri.fsPath);
     if (!isTest) {
         const timeEnd = Date.now() - timeStart;
-        vscode.window.showInformationMessage(`Update docFuncMap cash (${timeEnd}ms)`);
+        console.log(`Update docFuncMap cash (${timeEnd}ms)`);
     }
     return null;
 }
@@ -23,7 +26,6 @@ async function listAhkInclude(): Promise<null> {
     const RegexInclude = /^\s*#Include(?:Again)?\s\s*/i;
     let AllList = '';
     for (const fsPath of fsPathList) {
-        // eslint-disable-next-line no-await-in-loop
         const document = await vscode.workspace.openTextDocument(fsPath);
         const docAllText = document.getText().split('\n');
         const lineCount = docAllText.length;
@@ -44,12 +46,11 @@ async function listAhkInclude(): Promise<null> {
     return null;
 }
 
-// eslint-disable-next-line init-declarations
 let c0: NodeJS.Timeout;
 let c1: NodeJS.Timeout[] = [];
 async function LoopOfClearOutlineCache(): Promise<null> {
     vscode.window.showInformationMessage('this is Dev function ,open profile-flame to get .cpuprofile');
-    clearInterval(c0);
+    if (c0) clearInterval(c0);
     c1.forEach((e) => clearInterval(e));
     c1 = [];
     const items: string[] = [

@@ -8,7 +8,8 @@
         "vscode": "^1.45.0"
     },
     "activationEvents": [
-        "onLanguage:ahk"
+        "onLanguage:ahk",
+        "onDebug"
     ],
     "main": "./out/extension",
     "homepage": "https://github.com/CoffeeChaton/vscode-ahk-outline/blob/master/README.md",
@@ -34,6 +35,81 @@
         "breakpoints": [
             {
                 "language": "ahk"
+            }
+        ],
+        "debuggers": [
+            {
+                "type": "ahk",
+                "label": "AutoHotkey",
+                "program": "./out/debugEntrance.js",
+                "runtime": "\"C:\\Program Files\\AutoHotkey\\AutoHotkeyU64.exe\"",
+                "configurationAttributes": {
+                    "launch": {
+                        "required": [
+                            "program"
+                        ],
+                        "properties": {
+                            "program": {
+                                "type": "string",
+                                "description": "Absolute path to a text file.",
+                                "default": "${file}"
+                            },
+                            "runtime": {
+                                "type": "string",
+                                "description": "Absolute path to a AutoHotkey.exe file.",
+                                "default": "C:\\Program Files\\AutoHotkey\\AutoHotkeyU64.exe"
+                            },
+                            "stopOnEntry": {
+                                "type": "boolean",
+                                "description": "Automatically stop after launch.",
+                                "default": true
+                            },
+                            "trace": {
+                                "type": "boolean",
+                                "description": "Enable logging of the Debug Adapter Protocol.",
+                                "default": true
+                            },
+                            "dbgpSettings": {
+                                "type": "object",
+                                "properties": {
+                                    "max_children": {
+                                        "type": "integer",
+                                        "description": "max number of array or object children to initially retrieve",
+                                        "default": 300
+                                    },
+                                    "max_data": {
+                                        "type": "integer",
+                                        "description": "max amount of variable data to initially retrieve.",
+                                        "default": 131072
+                                    }
+                                },
+                                "description": "Dbgp settings. See https://xdebug.org/docs-dbgp.php#feature-names",
+                                "default": {}
+                            }
+                        }
+                    }
+                },
+                "initialConfigurations": [
+                    {
+                        "type": "ahk",
+                        "request": "launch",
+                        "name": "AutoHotkey Debugger",
+                        "program": "${file}",
+                        "stopOnEntry": true
+                    }
+                ],
+                "configurationSnippets": [
+                    {
+                        "label": "AutoHotkey Debug: Launch",
+                        "body": {
+                            "type": "ahk",
+                            "request": "launch",
+                            "name": "AutoHotkey Debugger",
+                            "program": "${file}",
+                            "stopOnEntry": true
+                        }
+                    }
+                ]
             }
         ],
         "commands": [
@@ -84,6 +160,11 @@
                     "type": "array",
                     "default": [],
                     "description": "Do not scan while File names endsWith this array"
+                },
+                "AhkNekoHelp.Debug.executePath": {
+                    "type": "string",
+                    "default": "C:/Program Files/AutoHotkey/AutoHotkeyU64.exe",
+                    "description": "Execute path of autohotkey."
                 }
             }
         },
@@ -126,12 +207,12 @@
         "@types/benchmark": "^1.0.33",
         "@types/glob": "^7.1.3",
         "@types/mocha": "^7.0.1",
-        "@types/node": "^14.14.12",
+        "@types/node": "^14.14.21",
         "@types/temp": "^0.8.34",
-        "@types/vscode": "^1.51.0",
+        "@types/vscode": "^1.52.0",
         "@typescript-eslint/eslint-plugin": "^3.10.1",
         "@typescript-eslint/parser": "^3.10.1",
-        "eslint": "^7.16.0",
+        "eslint": "^7.18.0",
         "eslint-config-airbnb": "^18.2.1",
         "eslint-config-airbnb-base": "^14.2.1",
         "eslint-config-airbnb-typescript": "^8.0.2",
@@ -143,9 +224,10 @@
         "eslint-plugin-jsx-a11y": "^6.4.1",
         "eslint-plugin-no-setter-return": "^0.1.2",
         "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-prettier": "^3.2.0",
+        "eslint-plugin-prettier": "^3.3.1",
         "eslint-plugin-promise": "^4.2.1",
-        "eslint-plugin-react": "^7.21.5",
+        "eslint-plugin-react": "^7.22.0",
+        "eslint-plugin-react-hooks": "^4.2.0",
         "eslint-plugin-security": "^1.4.0",
         "eslint-plugin-typescript": "^0.14.0",
         "generator-code": "^1.3.9",
@@ -158,18 +240,22 @@
         "typescript-eslint-parser": "^22.0.0",
         "vscode-jsonrpc": "^5.0.1",
         "vscode-languageserver": "^6.1.1",
-        "vscode-languageserver-protocol": "^3.15.3",
+        "vscode-languageserver-protocol": "^3.16.0",
         "vscode-languageserver-textdocument": "^1.0.1",
-        "vscode-languageserver-types": "^3.15.1",
+        "vscode-languageserver-types": "^3.16.0",
         "vscode-oniguruma": "^1.4.0",
         "vscode-test": "^1.4.1"
     },
     "dependencies": {
+        "@types/xml2js": "^0.4.7",
         "benchmark": "^2.1.4",
         "fs": "0.0.2",
+        "get-port": "^5.1.1",
         "log4js": "^6.3.0",
         "temp": "^0.9.4",
+        "ts-running": "^0.2.3",
+        "vscode-debugadapter": "^1.43.0",
         "vscode-debugprotocol": "^1.43.0",
-        "vscode-debugadapter": "^1.43.0"
+        "xml2js": "^0.4.23"
     }
 }

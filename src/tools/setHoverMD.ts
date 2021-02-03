@@ -3,6 +3,7 @@ import { EMode, TAhkSymbol } from '../globalEnum';
 import { getHoverConfig } from '../configUI';
 import { Pretreatment } from './Pretreatment';
 
+
 function commentFix(commentText: string): string {
     return commentText !== ''
         ? `/**  \n  \n${commentText}  \n*/  \n`

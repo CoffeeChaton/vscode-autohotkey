@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
+
 //   OK      #Include FileOrDirName
 //           #IncludeAgain FileOrDirName
 //           \*i\s
@@ -22,11 +23,11 @@ export function ahkInclude(document: vscode.TextDocument, position: vscode.Posit
     const lPath = path.dirname(document.uri.fsPath);
     const rPath = includeExec[1].replace(/%A_Space%/g, ' ').replace(/%A_Tab%/g, '\t');
     if ((/%A_\w\w*%/).test(rPath)) {
-        vscode.window.showInformationMessage('neko-help not support of %A_ScriptDir% or Similar syntax');
+        console.log('ahkInclude ~ neko-help not support of %A_ScriptDir% or Similar syntax');
         return false;
     }
     const pathFix = `${lPath}\\${rPath}`;
-    console.log('ahkInclude -> pathFix', pathFix);
+    // console.log('ahkInclude -> pathFix', pathFix);
     const uri = vscode.Uri.file(pathFix);
     return new vscode.Location(uri, new vscode.Position(0, 0));
 }

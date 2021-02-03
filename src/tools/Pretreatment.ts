@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 // import * as vscode from 'vscode';
 import { getSkipSign, getLStr, getSkipSign2 } from './removeSpecialChar';
@@ -6,7 +7,7 @@ import { inLTrimRange } from './inLTrimRange';
 import { TTokenStream, TAhkToken, DetailType } from '../globalEnum';
 
 // LexicalAnalysisSimple
-// eslint-disable-next-line max-statements
+
 export function Pretreatment(strArray: readonly string[], startLineBaseZero: number): TTokenStream {
     const result: TAhkToken = [];
     let CommentBlock = false;

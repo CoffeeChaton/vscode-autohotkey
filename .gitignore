@@ -8,3 +8,4 @@ package-lock.json
 *.cpuprofile
 SignatureHelp/
 getSelectionRangeTextRaw.ts
+.idea/

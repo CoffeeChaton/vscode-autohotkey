@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable max-lines */
 /* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
 
@@ -20,7 +22,6 @@ export const enum EMode {
 export const enum EStr {
     diff_name_prefix = '_diff_temp_'
 }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [P in keyof T]: DeepReadonly<T[P]> };
 
 export const enum DetailType {
@@ -164,3 +165,35 @@ export const enum TAhkSymbolRange {
     selectRange = 3,
     bodyRange = 4,
 }
+
+export type TempConfigs = {
+    statusBar: {
+        displayColor: string;
+    };
+    hover: {
+        showComment: boolean;
+    };
+    format: {
+        textReplace: boolean;
+    };
+    lint: {
+        funcSize: number;
+    };
+    Ignored: {
+        folder: {
+            startsWith: string[];
+            endsWith: string[];
+        };
+        File: {
+            startsWith: string[];
+            endsWith: string[];
+        };
+    };
+    Debug: {
+        executePath: string;
+    };
+};
+
+export type TConfigs = DeepReadonly<TempConfigs>;
+
+// foo<T>(a: NonNullable<T>)

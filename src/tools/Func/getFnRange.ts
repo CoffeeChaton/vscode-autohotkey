@@ -19,7 +19,7 @@ function getBodyRange(ahkSymbol: TAhkSymbol): vscode.Range {
     return bodyRange;
 }
 
-export function getFnRange(document: vscode.TextDocument, ahkSymbol: TAhkSymbol, Options: TAhkSymbolRange): vscode.Range {
+function getFnRange(document: vscode.TextDocument, ahkSymbol: TAhkSymbol, Options: TAhkSymbolRange): vscode.Range {
     switch (Options) {
         case TAhkSymbolRange.argsRange: return getArgsRange(document, ahkSymbol);
         case TAhkSymbolRange.bodyRange: return getBodyRange(ahkSymbol);

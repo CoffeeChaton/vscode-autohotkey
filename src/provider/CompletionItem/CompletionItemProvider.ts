@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable security/detect-unsafe-regex */
+/* eslint-disable security/detect-non-literal-regexp */
 /* eslint-disable immutable/no-mutation */
 /* eslint-disable no-await-in-loop */
 
@@ -75,7 +78,6 @@ function wrapperOfValOFFuncList(document: vscode.TextDocument, position: vscode.
 
 async function listAllFuncClass(document: vscode.TextDocument, position: vscode.Position, Range: vscode.Range): Promise<vscode.CompletionItem[]> {
     const wordLower = document.getText(Range).toLowerCase();
-    // eslint-disable-next-line security/detect-non-literal-regexp
     const wordStartReg = new RegExp(`^${wordLower}`, 'i');
     const funcOrClassNameList = await getItemSOfEMode(wordStartReg);
     const valOFFuncList = wrapperOfValOFFuncList(document, position, wordLower);
@@ -83,7 +85,6 @@ async function listAllFuncClass(document: vscode.TextDocument, position: vscode.
 }
 
 async function wrapListAllFuncClass(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.CompletionItem[]> {
-    // eslint-disable-next-line security/detect-unsafe-regex
     const Range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
     if (Range === undefined) return []; // exp: . / []
 
@@ -98,7 +99,6 @@ async function wrapListAllFuncClass(document: vscode.TextDocument, position: vsc
 }
 export class CompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<null | vscode.CompletionItem[]> {
         const t1 = Date.now();
         const completions: vscode.CompletionItem[] = [

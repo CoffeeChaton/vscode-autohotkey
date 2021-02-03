@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as vscode from 'vscode';
 import { FuncInputType } from './getChildren';
 import { removeParentheses } from '../tools/removeParentheses';
@@ -13,17 +14,8 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
         DocStrMap, line, lStr, gValMapBySelf,
     } = FuncInput;
     const textRaw = DocStrMap[line].textRaw;
-    const e = lStr.replace(/^\s*\bglobal\b/i, fnReplacer);
-    if (e.length !== lStr.length) {
-        console.log('setGlobalVar ~ lStr', lStr);
-        console.log('setGlobalVar ~ e', e);
-    }
+    const lStrFix = removeParentheses(removeBigParentheses(lStr.replace(/^\s*\bglobal\b/i, fnReplacer)));
 
-    const lStrFix = removeParentheses(removeBigParentheses(e));
-    if (lStrFix.length !== lStr.length) {
-        console.log('setGlobalVar ~ lStr', lStr);
-        console.log('setGlobalVar ~ lStrFix', lStrFix);
-    }
     return lStrFix.split(',')
         .map((v) => {
             const col = v.indexOf(':=');
@@ -35,22 +27,19 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
                 console.log('col2 ', col2);
                 console.log('lStrFix ', lStrFix);
                 console.log('lName ', lName);
-            } else {
-                const rVal: string | null = (col > 0)
-                    ? DocStrMap[line].textRaw.substring(col2 + lName.length, v.length).replace(/\s*:=/, '')
-                    : null;
-                const newValue = {
-                    lRange: new vscode.Range(line, col2, line, col2 + lName.length), //  vscode.Range, // left Range
-                    rVal, // string // Right value as textRaw
-                };
-                const oldVale = gValMapBySelf.get(lName);
-                if (oldVale) {
-                    const tempV = [...oldVale, newValue];
-                    gValMapBySelf.set(lName, tempV);
-                } else {
-                    gValMapBySelf.set(lName, [newValue]);
-                }
+                return lName;
             }
+            const rVal: string | null = (col > 0)
+                ? DocStrMap[line].textRaw.substring(col2 + lName.length, v.length).replace(/\s*:=/, '')
+                : null;
+            const newValue = {
+                lRange: new vscode.Range(line, col2, line, col2 + lName.length), //  vscode.Range, // left Range
+                rVal, // string // Right value as textRaw
+            };
+            const oldVale = gValMapBySelf.get(lName);
+            const dummy = (oldVale)
+                ? gValMapBySelf.set(lName, [...oldVale, newValue])
+                : gValMapBySelf.set(lName, [newValue]);
             return lName;
         })
         .join(', ')

@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable security/detect-non-literal-fs-filename */
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { Out } from '../common/out';
+import { OutputChannel } from '../tools/OutputChannel';
 import { getChildren } from './getChildren';
 import { ParserLine, ParserBlock, getReturnByLine } from './Parser';
 import { getIgnoredFile, getIgnoredFolder, showTimeSpend } from '../configUI';
@@ -82,7 +83,6 @@ export const Detecter = {
             RangeStartLine: 0,
             RangeEndLine: DocStrMap.length,
             inClass: false,
-            // eslint-disable-next-line @typescript-eslint/unbound-method
             fnList: [ParserBlock.getClass, ParserBlock.getFunc, ParserBlock.getComment, ParserBlock.getSwitchBlock, getReturnByLine, ParserLine],
         });
 
@@ -99,7 +99,7 @@ export const Detecter = {
         if (fs.statSync(buildPath).isDirectory()) {
             fs.readdir(buildPath, (err, files) => {
                 if (err) {
-                    Out.log(err);
+                    OutputChannel.err('fs.readdir err--85--44--33--', err);
                     return;
                 }
                 for (const file of files) {

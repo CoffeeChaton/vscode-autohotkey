@@ -1,4 +1,10 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+
 export function enumErr(params: never): never {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    throw new Error(`enum err${params}`);
+    throw new Error(`enum err${params}--03--91--34`);
+}
+
+export function enumLog(params: never): null {
+    console.log('enumLog ~ params', params);
+    return null;
 }

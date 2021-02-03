@@ -1,4 +1,4 @@
-/* eslint-disable immutable/no-mutation */
+/* eslint-disable security/detect-unsafe-regex */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10,60,200,1000] }] */
 import * as vscode from 'vscode';
 import { getGlobalValDef } from '../../core/getGlobalValDef';
@@ -14,7 +14,7 @@ import { kindPick } from '../Func/kindPick';
 import { getCommentOfLine } from '../getCommentOfLine';
 import { Pretreatment } from '../Pretreatment';
 import { ahkValRegex } from '../regexTools';
-import { replacerSpace } from '../removeSpecialChar';
+
 import { ClassWm } from '../wm';
 import { setArgList } from './fnArgs';
 
@@ -32,52 +32,82 @@ function getLineType(lStr: string, fnMode: EFnMode)
     }
     return fnModeToValType(fnMode);
 }
+
+type TGetValue = {
+    keyRawName: string,
+    line: number,
+    character: number,
+    valMap: TValList,
+    textRaw: string,
+    lStr: string,
+    lineType: TAhkValType,
+    uri: vscode.Uri
+};
+
+function getValue({
+    keyRawName,
+    line,
+    character,
+    valMap,
+    textRaw,
+    lStr,
+    lineType,
+    uri,
+}: TGetValue): TValObj {
+    const pos = new vscode.Position(line, character);
+    const defLoc = new vscode.Location(uri, pos);
+    const comment = getCommentOfLine({ textRaw, lStr }) ?? '';
+    const oldVal: TValObj | undefined = valMap.get(keyRawName);
+    if (oldVal) {
+        return {
+            keyRawName,
+            defLoc: [defLoc, ...oldVal.defLoc],
+            commentList: [comment, ...oldVal.commentList],
+            refLoc: [],
+            ahkValType: oldVal.ahkValType,
+        };
+    }
+
+    const ahkValType = getGlobalValDef(ahkValRegex(keyRawName))
+        ? EValType.global
+        : lineType;
+    return {
+        keyRawName,
+        defLoc: [defLoc],
+        commentList: [comment],
+        refLoc: [],
+        ahkValType,
+    };
+}
+
 function setValListDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgList): TValList {
     const fnMode = getFnModeWM(ahkSymbol, DocStrMap);
     const valMap: TValList = new Map<string, TValObj>();
+
     const startLine = ahkSymbol.selectionRange.end.line;
     for (const { lStr, textRaw, line } of DocStrMap) {
         if (line < startLine) continue;
         const lineType: TAhkValType = getLineType(lStr, fnMode);
-        const valNameS: string[] = [
-            // eslint-disable-next-line security/detect-unsafe-regex
-            ...lStr.matchAll(/(?<!\.|`|%)\b(\w\w*)\s*:?=/g),
-        ]
-            .map((arr) => arr[1]) // ahkValName = arr[1]
-            .filter((valName) => !argList.has(valName));
 
-        const lStrFix = lStr.replace(/:=\s*_+/g, replacerSpace);
-        valNameS.forEach((valName) => {
-            const character = lStrFix.search(ahkValRegex(valName));
-            const pos = new vscode.Position(line, character);
-            const defLoc = new vscode.Location(uri, pos);
-            const comment = getCommentOfLine({ textRaw, lStr }) ?? '';
-            const oldVal: TValObj | undefined = valMap.get(valName);
-            // eslint-disable-next-line init-declarations
-            let value: TValObj;
-            if (oldVal) {
-                value = {
-                    keyRawName: valName,
-                    defLoc: [defLoc, ...oldVal.defLoc],
-                    commentList: [comment, ...oldVal.commentList],
-                    ahkValType: oldVal.ahkValType,
-                    refLoc: [],
-                };
-            } else {
-                const ahkValType = getGlobalValDef(ahkValRegex(valName))
-                    ? EValType.global
-                    : lineType;
-                value = {
-                    keyRawName: valName,
-                    defLoc: [defLoc],
-                    commentList: [comment],
-                    refLoc: [],
-                    ahkValType,
-                };
-            }
+        [...lStr.matchAll(/(?<!\.|`|%)\b(\w\w*)\s*:?=/g)]
+            .forEach((v: RegExpMatchArray) => {
+                const character = v.index;
+                if (character === undefined) return;
+                const keyRawName = v[1];
+                if (argList.has(keyRawName)) return;
 
-            valMap.set(valName, value);
-        });
+                const value: TValObj = getValue({
+                    keyRawName,
+                    line,
+                    character,
+                    valMap,
+                    textRaw,
+                    lStr,
+                    lineType,
+                    uri,
+                });
+                valMap.set(keyRawName, value);
+            });
     }
 
     return valMap;

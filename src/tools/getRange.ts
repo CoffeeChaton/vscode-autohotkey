@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { TTokenStream, DetailType } from '../globalEnum';
 
+
 function getSearchLineFix(DocStrMap: TTokenStream, searchLine: number, RangeEnd: number): number {
     for (let line = searchLine; line < RangeEnd; line++) {
         if (DocStrMap[line].detail.includes(DetailType.deepAdd)) {
@@ -22,14 +23,7 @@ export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: n
             return new vscode.Range(defLine, 0, line, col);
         }
     }
-    //     const fsPathRaw = document.uri.fsPath;
-    //     console.log(': ----getRange---ERROR----------------');
-    //     console.log('fsPath', fsPathRaw);
-    //     console.log('defLine', defLine);
-    //     console.log('searchLine', searchLine);
-    //     console.log('lineCount', RangeEnd);
-    //     console.log(': ----getRange---ERROR---------------');
-    //     return document.lineAt(searchLine).range;
+
     console.log('get Range ERROR at --904--321--33', RangeEnd);
     return new vscode.Range(defLine, 0, RangeEnd - 1, 0);
 }

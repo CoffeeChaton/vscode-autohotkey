@@ -1,10 +1,10 @@
+/* eslint-disable no-magic-numbers */
 /* eslint-disable immutable/no-mutation */
 import * as vscode from 'vscode';
 import { TAhkSymbol, TSymAndFsPath } from '../../globalEnum';
 import { Pretreatment } from '../../tools/Pretreatment';
 import { ClassWm } from '../../tools/wm';
 
-// eslint-disable-next-line no-magic-numbers
 const w = new ClassWm<TAhkSymbol, vscode.CompletionItem[]>(10 * 60 * 1000, 'getThisItemOfWm', 700);
 
 async function getWmThisCore({ ahkSymbol, fsPath }: TSymAndFsPath): Promise<vscode.CompletionItem[]> {
@@ -13,11 +13,10 @@ async function getWmThisCore({ ahkSymbol, fsPath }: TSymAndFsPath): Promise<vsco
     const lineBase = ahkSymbol.range.start.line;
     Pretreatment(document.getText(ahkSymbol.range).split('\n'), lineBase)
         .forEach((v, index) => {
-            [...v.lStr.matchAll(/\bthis\.(\w\w+)\b/gi)].forEach((name) => {
-                // console.log('name', name);
-                // console.log('name', name[0].trim());
-                if (!mapStrNumber.has(name[1])) mapStrNumber.set(name[1], index + lineBase);
-            });
+            [...v.lStr.matchAll(/\bthis\.(\w\w+)\b/gi)]
+                .forEach((name) => {
+                    if (!mapStrNumber.has(name[1])) mapStrNumber.set(name[1], index + lineBase);
+                });
         });
 
     const itemS: vscode.CompletionItem[] = [];

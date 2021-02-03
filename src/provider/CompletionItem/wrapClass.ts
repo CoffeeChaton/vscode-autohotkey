@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable security/detect-non-literal-regexp */
 /* eslint-disable immutable/no-mutation */
 /* eslint-disable no-await-in-loop */
@@ -105,6 +106,7 @@ function matchClassName({ ChapterArr, strPart, ahkBaseObj }: TMathName): string 
     // case ...
     return null;
 }
+
 function valTrack(document: vscode.TextDocument, position: vscode.Position, ChapterArr: readonly string[], ahkBaseObj: TAhkBaseObj): string[] {
     const Head = ChapterArr[0];
     const stackRangeRaw = getScopeOfPos(document, position) || new vscode.Range(0, 0, position.line, position.character);
@@ -117,7 +119,6 @@ function valTrack(document: vscode.TextDocument, position: vscode.Position, Chap
     const linePosMax = DocStrMap.length;
     const classNameList = new Set<string>(); // value name
     for (let linePos = 0; linePos < linePosMax; linePos++) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const line = lineStart + linePos;
         const lStr = DocStrMap[linePos].lStr;
         const col = lStr.search(reg);

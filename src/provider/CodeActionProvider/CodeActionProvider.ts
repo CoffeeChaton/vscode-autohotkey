@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable immutable/no-mutation */
 import * as vscode from 'vscode';
 import { EDiagBase, EDiagFsPath, EDiagCode } from '../../globalEnum';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function consoleDefault(a: never, diag: vscode.Diagnostic): null {
-    // console.log('console.log Default -> a', a, ' --99--66-33--44');
+function consoleDefault(d: never, diag: vscode.Diagnostic): null {
+    console.log('--99--66-33--44 Default -> a', d);
     // console.log('diag', diag);
     return null;
 }
@@ -41,8 +41,8 @@ function setEdit(uri: vscode.Uri, line: number, FsPath: EDiagFsPath): vscode.Wor
     edit.insert(uri, position, newText);
     return edit;
 }
+
 function setIgnoreLine(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.CodeAction {
-    // console.log('CodeActionProvider -> context', context);
     // diag
     //    code: 102
     //    message: "assign warning"
@@ -59,7 +59,6 @@ function setIgnoreLine(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.
 }
 export class CodeActionProvider implements vscode.CodeActionProvider {
     public provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         context: vscode.CodeActionContext, token: vscode.CancellationToken)
         : vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
         if (context.diagnostics.length === 0) return null;

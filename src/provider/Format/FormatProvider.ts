@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-statements */
@@ -89,7 +90,6 @@ function fn_Warn_thisLineText_WARN({
 }
 
 export function FormatCore(document: vscode.TextDocument, options: vscode.FormattingOptions,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     token: vscode.CancellationToken, diff: boolean): vscode.ProviderResult<vscode.TextEdit[]> {
     const timeStart = Date.now();
     const AllDoc = document.getText();
@@ -146,7 +146,6 @@ export function FormatCore(document: vscode.TextDocument, options: vscode.Format
             right: document.uri,
             fsPath: document.uri.fsPath,
         };
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         setTimeout(callDiff, 100, diffVar);
     }
 
@@ -177,7 +176,6 @@ for k,v in Monitors
 
 export class FormatProvider implements vscode.DocumentFormattingEditProvider {
     public provideDocumentFormattingEdits(document: vscode.TextDocument, options: vscode.FormattingOptions,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
         return FormatCore(document, options, token, true);
     }

@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import * as log4js from 'log4js';
 // import { CompletionComma } from './provider/CompletionItemProvider';
 import { Detecter } from './core/Detecter';
 import { DefProvider } from './provider/Def/DefProvider';
@@ -13,26 +12,10 @@ import { ReferenceProvider } from './provider/ReferenceProvider';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
-
-log4js.configure({
-    appenders: {
-        cheese: {
-            type: 'file',
-            filename: 'ahk-neko-help.log',
-            maxLogSize: 20000000, // 20 MB
-            backups: 10,
-            category: 'error',
-        },
-    },
-    categories: { default: { appenders: ['cheese'], level: 'error' } },
-});
-
-const logger = log4js.getLogger('neko');
-logger.warn('I will be logged both in console and log.txt');
-logger.debug('id');
+import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
 
 export function activate(context: vscode.ExtensionContext): void {
-    const language = { language: 'ahk' };
+    const language: vscode.DocumentSelector = { language: 'ahk' };
     context.subscriptions.push(
         vscode.languages.registerHoverProvider(language, new HoverProvider()),
         vscode.languages.registerCompletionItemProvider(language, new CompletionItemProvider(), '', '.', '{'),
@@ -52,6 +35,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.workspace.onDidRenameFiles((e) => Detecter.renameFileName(e)),
         // vscode.workspace.onDidChangeTextDocument((e) => d(e)),
         vscode.commands.registerCommand('ahk.bar.click', () => { statusBarClick(); }),
+        vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
     );
     const ahkRootPath = vscode.workspace.workspaceFolders;
     if (ahkRootPath) Detecter.buildByPath(true, ahkRootPath[0].uri.fsPath);
@@ -74,7 +58,7 @@ const decoration = {
     renderOptions: {
         after: {
             color: 'rgba(150, 150, 150, 0.7)',
-            contentText: mainText ? `›${mainText}` : '',
+            contentText: mainText ? `${mainText}` : '',
             fontWeight: 'normal',
             fontStyle: 'normal'
         }

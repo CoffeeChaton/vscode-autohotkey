@@ -1,3 +1,6 @@
+/* eslint-disable security/detect-unsafe-regex */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable max-len */
 /* eslint-disable security/detect-non-literal-regexp */
 /* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
@@ -114,7 +117,6 @@ export async function userDef(document: vscode.TextDocument,
     ];
 
     const usingRegList: RegExp[] = [
-        // eslint-disable-next-line max-len
         new RegExp(`(?:^class\\b\\s\\s*\\b(${wordLower})\\b)|(?:\\bnew\\s\\s*\\b(${wordLower})\\b)|(?:(${wordLower})\\.)|(?:\\bextends\\b\\s\\s*(${wordLower}))|(?:\\bglobal\\b\\s\\s*\\b(${wordLower})\\b)|(?:{\\s*base:\\s*(${wordLower}))|(?:\\w\\w*\\.base\\s*:=\\s*(${wordLower}))`, 'i'),
         // class ClassName | new className | className. | extends  className | global className |  {base: className | .base := baseObject
         new RegExp(`(?:(?<!\\.|\`|%)\\b(${wordLower})\\()|(?:(?<=\\bfunc\\()\\s*"\\b(${wordLower})\\b")`, 'i'),
@@ -151,11 +153,9 @@ export async function userDef(document: vscode.TextDocument,
 // Peek Definition (via Alt+F12)
 export class DefProvider implements vscode.DefinitionProvider {
     public async provideDefinition(document: vscode.TextDocument, position: vscode.Position,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         token: vscode.CancellationToken): Promise<null | vscode.Location | vscode.Location[] | vscode.LocationLink[]> {
         if (isPosAtStr(document, position)) return null;
 
-        // eslint-disable-next-line security/detect-unsafe-regex
         const range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
         if (!range) return null;
         const wordLower = document.getText(range).toLowerCase();
