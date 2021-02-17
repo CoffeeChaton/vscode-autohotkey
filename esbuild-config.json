@@ -1,0 +1,13 @@
+{
+    "entry": "./index.js",
+    "bundle": true,
+    "outfile": "./bundle.js",
+    "external": [
+        "vsocde"
+    ],
+    "loader": {
+        ".png": "base64",
+        ".jpg": "base64"
+    },
+    "minify": true
+}
