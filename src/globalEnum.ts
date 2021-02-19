@@ -170,9 +170,6 @@ export type TempConfigs = {
     statusBar: {
         displayColor: string;
     };
-    hover: {
-        showComment: boolean;
-    };
     format: {
         textReplace: boolean;
     };

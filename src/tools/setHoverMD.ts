@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
 import { EMode, TAhkSymbol } from '../globalEnum';
-import { getHoverConfig } from '../configUI';
 import { Pretreatment } from './Pretreatment';
-
 
 function commentFix(commentText: string): string {
     return commentText !== ''
@@ -32,27 +30,25 @@ function getReturnText(lStr: string, textRaw: string): string {
     return `    ${name.trim()}\n`;
 }
 
-export function inCommentBlock2(textRaw: string, CommentBlock: boolean): boolean {
-    if (CommentBlock) {
+export function inCommentBlock2(textRaw: string, commentBlock: boolean): boolean {
+    if (commentBlock) {
         if ((/^\s*\*\//).test(textRaw)) return false; // */
     } else if ((/^\s*\/\*\*/).test(textRaw)) {
         return true; // /**
     }
-    return CommentBlock;
+    return commentBlock;
 }
 
 type TSymbol = {
     AhkSymbol: TAhkSymbol;
     fsPath: string;
 };
+
 export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.MarkdownString> {
     const { AhkSymbol, fsPath } = mySymbol;
     const document = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
-    const { showComment } = getHoverConfig();
-    if (AhkSymbol.kind !== vscode.SymbolKind.Function) {
-        console.log('function setFuncHoverMD -> AhkSymbol', AhkSymbol);
-        console.log('TODO support other kind');
-        return new vscode.MarkdownString('', true);
+    if (AhkSymbol.kind !== vscode.SymbolKind.Function && AhkSymbol.kind !== vscode.SymbolKind.Method) {
+        return new vscode.MarkdownString('just support Function/Method hover now', true);
     }
     // --set end---
 
@@ -64,13 +60,11 @@ export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.Markdown
     const starLine = 0;
     const endLine = DocStrMap.length;
     for (let line = starLine; line < endLine; line++) {
-        if (showComment) {
-            const textRawF = DocStrMap[line].textRaw;
-            commentBlock = inCommentBlock2(textRawF, commentBlock);
-            if (commentBlock) {
-                commentText += getCommentText(textRawF);
-                continue;
-            }
+        const textRaw = DocStrMap[line].textRaw;
+        commentBlock = inCommentBlock2(textRaw, commentBlock);
+        if (commentBlock) {
+            commentText += getCommentText(textRaw);
+            continue;
         }
         returnList += getReturnText(DocStrMap[line].lStr, DocStrMap[line].textRaw);
     }
@@ -78,7 +72,7 @@ export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.Markdown
     const kindDetail = `(${EMode.ahkFunc}) ${AhkSymbol.detail}\n`;
     const title = `${document.getText(AhkSymbol.selectionRange)}{\n`;
 
-    const commentText2 = showComment ? commentFix(commentText) : '';
+    const commentText2 = commentFix(commentText);
     return new vscode.MarkdownString('', true)
         .appendCodeblock(kindDetail, 'ahk')
         .appendCodeblock(title, 'ahk')

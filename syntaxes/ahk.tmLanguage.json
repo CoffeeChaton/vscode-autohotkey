@@ -119,11 +119,11 @@
             "name": "keyword.operator.arithmetic.ahk"
         },
         {
-            "match": ":=|\\.=|=|::",
+            "match": ":=|\\.=|::",
             "name": "keyword.operator.assignment.ahk"
         },
         {
-            "match": "<|>|<>|[<>=]=|!=",
+            "match": "<=|>=|<>|==|>|<|!=",
             "name": "keyword.operator.comparison.ahk"
         },
         {

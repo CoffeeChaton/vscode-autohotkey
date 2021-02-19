@@ -214,7 +214,7 @@
         "@types/xml2js": "^0.4.8",
         "@typescript-eslint/eslint-plugin": "^3.10.1",
         "@typescript-eslint/parser": "^3.10.1",
-        "esbuild": "^0.8.46",
+        "esbuild": "^0.8.48",
         "esbuild-config": "^0.2.0",
         "eslint": "^7.20.0",
         "eslint-config-airbnb": "^18.2.1",
@@ -249,7 +249,7 @@
         "vscode-languageserver-textdocument": "^1.0.1",
         "vscode-languageserver-types": "^3.16.0",
         "vscode-oniguruma": "^1.4.0",
-        "vscode-test": "^1.5.0"
+        "vscode-test": "^1.5.1"
     },
     "dependencies": {
         "get-port": "^5.1.1",

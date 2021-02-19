@@ -97,6 +97,8 @@ async function wrapListAllFuncClass(document: vscode.TextDocument, position: vsc
     }
     return listAllFuncClass(document, position, Range); // at line start
 }
+
+// icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
 export class CompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position,
         token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<null | vscode.CompletionItem[]> {

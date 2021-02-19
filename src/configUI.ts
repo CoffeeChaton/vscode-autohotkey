@@ -17,9 +17,6 @@ function getConfig(): TConfigs {
         statusBar: {
             displayColor: Configs.get('statusBar.displayColor') as string,
         },
-        hover: {
-            showComment: Configs.get('hover.showComment') as boolean,
-        },
         format: {
             textReplace: Configs.get('format.textReplace') as boolean,
         },
@@ -72,10 +69,7 @@ export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     statusBarItem.show();
 }
 
-export function getHoverConfig(): { showComment: boolean } {
-    return config.hover;
-}
-export function getLintConfig(): { funcSize: number; } {
+export function getLintConfig(): { funcSize: number } {
     return config.lint;
 }
 export function getFormatConfig(): boolean {
