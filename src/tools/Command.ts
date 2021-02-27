@@ -75,7 +75,8 @@ async function LoopOfClearOutlineCache(): Promise<null> {
         case items[3]:
             iMax = (5 * 60 * 1000) / base;
             break;
-        default: return null;
+        default:
+            return null;
     }
     for (let i = 1; i <= iMax; i++) {
         c1.push(setTimeout(() => {

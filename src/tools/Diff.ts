@@ -5,9 +5,9 @@ import * as path from 'path';
 import { EStr } from '../globalEnum';
 
 export type DiffType = {
-    leftText: string,
-    right: string | vscode.Uri,
-    fsPath: string
+    leftText: string;
+    right: string | vscode.Uri;
+    fsPath: string;
 };
 
 export async function callDiff({

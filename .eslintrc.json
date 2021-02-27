@@ -45,7 +45,12 @@
     "settings": {
         "import/resolver": {
             "node": {
-                "extensions": [".js", ".jsx", ".ts", ".tsx"]
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ]
             }
         }
     },
@@ -64,7 +69,6 @@
         // "fp/no-throw": "error",
         // //  "fp/no-unused-expression": "error",
         // "fp/no-valueof-field": "error",
-
         //
         "immutable/no-let": 0,
         "immutable/no-this": 2,
@@ -72,7 +76,16 @@
         "class-methods-use-this": "off",
         "no-console": "off",
         "@typescript-eslint/no-floating-promises": "off",
-        "no-magic-numbers": ["error", { "ignore": [-1, 0, 1] }],
+        "no-magic-numbers": [
+            "error",
+            {
+                "ignore": [
+                    -1,
+                    0,
+                    1
+                ]
+            }
+        ],
         "security/detect-object-injection": "off",
         "no-plusplus": "off",
         "promise/always-return": "error",
@@ -112,7 +125,13 @@
         "import/named": 2,
         //  eslint7  "no-setter-return/rule-name": 2,
         // "indent": ["error", 4, { "SwitchCase": 1 }],
-        "@typescript-eslint/indent": ["error", 4, { "SwitchCase": 1 }],
+        "@typescript-eslint/indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",
         //  eslint7 "@typescript-eslint/ban-ts-ignore": "warn",
@@ -151,11 +170,20 @@
         "@typescript-eslint/restrict-plus-operands": "warn",
         "@typescript-eslint/await-thenable": "error",
         // --new
-        "linebreak-style": ["error", "windows"],
+        "linebreak-style": [
+            "error",
+            "windows"
+        ],
         "no-restricted-syntax": 0,
         "no-continue": 0,
         "import/prefer-default-export": 0,
-        "max-len": ["error", { "code": 150, "tabWidth": 4 }],
+        "max-len": [
+            "error",
+            {
+                "code": 150,
+                "tabWidth": 4
+            }
+        ],
         "import/no-unresolved": 0,
         //--------
         "import/extensions": [
@@ -193,11 +221,26 @@
         "func-names": 1,
         "implicit-arrow-linebreak": "error",
         "init-declarations": "error",
-        "max-depth": ["error", 4],
-        "max-lines": ["error", 200],
-        "max-nested-callbacks": ["error", 3],
-        "max-params": ["error", 5],
-        "max-statements": [1, 30],
+        "max-depth": [
+            "error",
+            4
+        ],
+        "max-lines": [
+            "error",
+            200
+        ],
+        "max-nested-callbacks": [
+            "error",
+            3
+        ],
+        "max-params": [
+            "error",
+            5
+        ],
+        "max-statements": [
+            1,
+            30
+        ],
         "max-statements-per-line": "error",
         "no-class-assign": "warn",
         "no-compare-neg-zero": "warn",

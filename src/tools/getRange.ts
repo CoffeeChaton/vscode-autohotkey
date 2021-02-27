@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { TTokenStream, DetailType } from '../globalEnum';
 
-
 function getSearchLineFix(DocStrMap: TTokenStream, searchLine: number, RangeEnd: number): number {
     for (let line = searchLine; line < RangeEnd; line++) {
         if (DocStrMap[line].detail.includes(DetailType.deepAdd)) {

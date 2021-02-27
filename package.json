@@ -146,21 +146,33 @@
                         ".history",
                         "node_modules"
                     ],
+                    "items": {
+                        "type": "string"
+                    },
                     "description": "Do not scan while folder names startsWith this array"
                 },
                 "AhkNekoHelp.Ignored.folder.endsWith": {
                     "type": "array",
                     "default": [],
+                    "items": {
+                        "type": "string"
+                    },
                     "description": "Do not scan while folder names endsWith this array"
                 },
                 "AhkNekoHelp.Ignored.File.startsWith": {
                     "type": "array",
                     "default": [],
+                    "items": {
+                        "type": "string"
+                    },
                     "description": "Do not scan while File names startsWith this array"
                 },
                 "AhkNekoHelp.Ignored.File.endsWith": {
                     "type": "array",
                     "default": [],
+                    "items": {
+                        "type": "string"
+                    },
                     "description": "Do not scan while File names endsWith this array"
                 },
                 "AhkNekoHelp.Debug.executePath": {

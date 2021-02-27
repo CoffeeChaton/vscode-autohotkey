@@ -1,6 +1,11 @@
 export function getSkipSign2(text: string): boolean {
-    return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/).test(text);
+    const col0 = text.indexOf('=');
+    if (col0 === -1) return false;
+
+    return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/).test(text)
+        && text.indexOf('.=') === -1;
 }
+
 export function getSkipSign(text: string): boolean {
     return (/^\s*msgbox\b[\s,]/i).test(text)
         || (/^\s*(?:control)?send(?:Raw\b|\b.*{Raw})/i).test(text);
@@ -25,10 +30,12 @@ export function getLStr(textRaw: string): string {
             return textFix.substring(0, i);
     }
 }
+
 function removeSenRaw(textFix: string): string {
     const s0 = textFix.search(/\b(?:control)?send(?:Raw\b|\b.*{Raw})/i);
     return s0 === -1 ? textFix : textFix.substring(0, s0);
 }
+
 export function getLStrErr(textRaw: string): string {
     // TODO EDGE CASE
     const text = textRaw.replace(/`./g, '__');

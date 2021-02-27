@@ -8,7 +8,7 @@ import { getCommentOfLine } from '../getCommentOfLine';
 import { Pretreatment } from '../Pretreatment';
 import { removeParentheses } from '../removeParentheses';
 
-export type ValDefOfFunc = DeepReadonly<{ name: string, comment: string, line: number, textRaw: string, textRawFix: string }>;
+export type ValDefOfFunc = DeepReadonly<{ name: string, comment: string, line: number, textRaw: string, textRawFix: string; }>;
 export type ValDefOfFuncArr = readonly ValDefOfFunc[];
 
 function getValAssignOfFunc(document: vscode.TextDocument, wordLower: string, ahkSymbol: TAhkSymbol): ValDefOfFuncArr {

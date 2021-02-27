@@ -49,10 +49,10 @@ export type TAhkSymbolList = DeepReadonly<vscode.DocumentSymbol[]>;
 // export type TAhkSymbol = Readonly<vscode.DocumentSymbol>;
 // export type TAhkSymbolList = Readonly<Readonly<vscode.DocumentSymbol>[]>;
 export type TSymAndFsPath = { ahkSymbol: TAhkSymbol; fsPath: string; };
-export type TC1 = { ahkSymbol: TAhkSymbol; document: vscode.TextDocument };
+
 export type TValArray = {
     lRange: vscode.Range, // left Range
-    rVal: string | null // Right value as textRaw
+    rVal: string | null; // Right value as textRaw
 }[];
 export type TValName = string;
 export type TGValMap = Map<TValName, TValArray>;
@@ -131,7 +131,7 @@ export const enum EValType {
 export type TRunValType = Exclude<EValType, EValType.normal>;
 export type TRunValType2 = Exclude<TRunValType, EValType.args>;
 export type TAhkValType = EValType.local | EValType.global | EValType.Static;
-export type TGetDefType = { fnMode: EFnMode; DocStrMap: TTokenStream; regex: RegExp; ahkSymbol: TAhkSymbol; word: string };
+export type TGetDefType = { fnMode: EFnMode; DocStrMap: TTokenStream; regex: RegExp; ahkSymbol: TAhkSymbol; word: string; };
 export type TGetTypeInput = { DocStrMap: TTokenStream; regex: RegExp; ahkSymbol: TAhkSymbol; };
 export type TMapLineType = Map<number, EValType.local | EValType.global | EValType.Static>; // Map<line,ahkType>
 export type TArgListVal = {
@@ -143,7 +143,7 @@ export type TArgListVal = {
     isByRef: boolean;
     isVariadic: boolean;
 };
-export type TArgList = Map<string, TArgListVal>;// k = valNameUP
+export type TArgList = Map<string, TArgListVal>; // k = valNameUP
 export type TValObj = {
     keyRawName: string;
     defLoc: vscode.Location[];
@@ -155,8 +155,8 @@ export type TValObj = {
 };
 export type TValList = Map<string, TValObj>; // k = valNameUP
 export type DeepAnalysisResult = {
-    argList: TArgList,
-    valList: TValList,
+    argList: TArgList;
+    valList: TValList;
 };
 export const enum TAhkSymbolRange {
     argsRange = 2,

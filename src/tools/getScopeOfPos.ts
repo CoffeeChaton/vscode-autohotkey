@@ -19,10 +19,13 @@ function dfs(father: TAhkSymbolList, position: vscode.Position, StackPro: TStack
         if (ch.range.contains(position)) {
             // console.log('s.name', s.name);
             return dfs(ch.children, position, {
-                stack: [...stack, {
-                    name: ch.name,
-                    ahkSymbol: ch,
-                }],
+                stack: [
+                    ...stack,
+                    {
+                        name: ch.name,
+                        ahkSymbol: ch,
+                    },
+                ],
                 isEnd, // Don't assign
                 deep: deep + 1,
             });

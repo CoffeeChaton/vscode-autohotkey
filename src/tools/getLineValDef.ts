@@ -22,6 +22,8 @@ export function getLineValDef(lStr: string): string[] {
         .split(',')
         .map((str) => {
             const col = str.indexOf(':='); // just support :=
-            return (col > 0) ? str.substring(0, col).trim() : str;
+            return col > 0
+                ? str.substring(0, col).trim()
+                : str;
         });
 }
