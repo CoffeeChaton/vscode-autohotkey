@@ -95,25 +95,6 @@ export const Detecter = {
         return result as vscode.DocumentSymbol[];
     },
 
-    buildByPath(isTest: boolean, buildPath: string): void {
-        if (fs.statSync(buildPath).isDirectory()) {
-            fs.readdir(buildPath, (err, files) => {
-                if (err) {
-                    OutputChannel.err('fs.readdir err--85--44--33--', err);
-                    return;
-                }
-                for (const file of files) {
-                    if (!getIgnoredFolder(file)) {
-                        Detecter.buildByPath(isTest, `${buildPath}/${file}`);
-                    }
-                }
-            });
-        } else if (buildPath.endsWith('.ahk') && !getIgnoredFile(buildPath)) {
-            // const Uri = vscode.Uri.file(buildPath);
-            Detecter.updateDocDef(isTest, vscode.Uri.file(buildPath).fsPath);
-        }
-    },
-
     async buildByPathAsync(isTest: boolean, buildPath: string): Promise<void> {
         if (fs.statSync(buildPath).isDirectory()) {
             const files = fs.readdirSync(buildPath);

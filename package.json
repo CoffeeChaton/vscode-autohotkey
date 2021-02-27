@@ -153,7 +153,10 @@
                 },
                 "AhkNekoHelp.Ignored.folder.endsWith": {
                     "type": "array",
-                    "default": [],
+                    "default": [
+                        "TEST",
+                        "Test"
+                    ],
                     "items": {
                         "type": "string"
                     },

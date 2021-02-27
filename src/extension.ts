@@ -38,7 +38,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
     );
     const ahkRootPath = vscode.workspace.workspaceFolders;
-    if (ahkRootPath) Detecter.buildByPath(true, ahkRootPath[0].uri.fsPath);
+    if (ahkRootPath) Detecter.buildByPathAsync(true, ahkRootPath[0].uri.fsPath);
 }
 
 // if ([^\x00-\x7F] not in "" block ) auto warn

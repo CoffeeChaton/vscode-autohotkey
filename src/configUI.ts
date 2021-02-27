@@ -69,12 +69,14 @@ export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     statusBarItem.show();
 }
 
-export function getLintConfig(): { funcSize: number } {
+export function getLintConfig(): { funcSize: number; } {
     return config.lint;
 }
+
 export function getFormatConfig(): boolean {
     return config.format.textReplace;
 }
+
 export function getIgnoredFolder(file: string): boolean {
     const startsWith = config.Ignored.folder.startsWith;
     for (const e of startsWith) {
@@ -86,6 +88,7 @@ export function getIgnoredFolder(file: string): boolean {
     }
     return false;
 }
+
 export function getIgnoredFile(buildPath: string): boolean {
     const fileFix = path.basename(buildPath, '.ahk');
     const startsWith = config.Ignored.File.startsWith;
