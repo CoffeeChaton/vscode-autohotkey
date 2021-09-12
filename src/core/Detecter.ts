@@ -3,7 +3,6 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { OutputChannel } from '../tools/OutputChannel';
 import { getChildren } from './getChildren';
 import { ParserLine, ParserBlock, getReturnByLine } from './Parser';
 import { getIgnoredFile, getIgnoredFolder, showTimeSpend } from '../configUI';

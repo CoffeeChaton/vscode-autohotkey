@@ -160,7 +160,6 @@ export class DebugDispather extends EventEmitter {
      */
     public async listVariables(args: DebugProtocol.VariablesArguments): Promise<Variable[]> {
         if (args.filter === 'named') {
-            console.log('DebugDispather ~ listVariables ~ args', args);
             return [];
         }
         if (args.filter === 'indexed') {
@@ -174,7 +173,7 @@ export class DebugDispather extends EventEmitter {
 
         const propertyName = this.variableHandler.getVarByRef(args.variablesReference)?.name;
         if (propertyName) {
-            const ed2 = await this.getVariable(frameId, scope, propertyName);
+            const ed2 = await this.getVariable(frameId, scope, propertyName); // TODO address
             return ed2;
         }
 
@@ -196,7 +195,7 @@ export class DebugDispather extends EventEmitter {
         }
 
         const frameId: number = this.variableHandler.getFrameId();
-        if (variableName === 'file') {
+        if (variableName === 'File') {
             console.log('DebugDispather ~ getVariableByEval ~ args', args);
         }
 
@@ -309,6 +308,7 @@ export class DebugDispather extends EventEmitter {
 
     private async getVariable(frameId: number, scope: EVarScope, variableName: string): Promise<Variable[]> {
         const response = await this.sendComand(`property_get -d ${frameId} -c ${scope} -n ${variableName}`);
+        // FIXME -p  : the port that the IDE listens for debugging on. The address is retrieved from the connection information.
         const ed = this.variableHandler.parsePropertyget(response, scope);
         return ed;
     }

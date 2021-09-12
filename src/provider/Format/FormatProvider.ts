@@ -153,6 +153,13 @@ export function FormatCore(document: vscode.TextDocument, options: vscode.Format
 }
 /*
 
+    if (ggc()
+        && bbc()
+        && dd()
+        || fff() and feg()) {
+
+    }
+
 ```ahk
 TEST OK
 for k,v in Monitors

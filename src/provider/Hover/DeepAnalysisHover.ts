@@ -26,8 +26,8 @@ export function DeepAnalysisHover(document: vscode.TextDocument, position: vscod
     if (arg) {
         const md = new vscode.MarkdownString('', true);
         md.appendMarkdown('is args');
-        if (arg.isByRef) md.appendMarkdown('args : isByRef');
-        if (arg.isVariadic) md.appendMarkdown('args : isVariadic');
+        if (arg.isByRef) md.appendMarkdown('(ByRef)');
+        if (arg.isVariadic) md.appendMarkdown('(Variadic)');
         arg.commentList.forEach((v) => md.appendMarkdown(v));
         return md;
     }

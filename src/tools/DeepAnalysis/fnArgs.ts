@@ -17,35 +17,36 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
         if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w\w*\(/, '');
         if (endLine === line) lStrFix = lStrFix.replace(/\)\s*\{?\s*$/, '');
 
-        lStrFix
+        const e5 = lStrFix
             .replace(/:?=\s*[_\d.]+/g, replacerSpace)
             .split(',')
-            .map((v) => v.trim())
-            .forEach((argName) => {
-                const isByRef = (/^ByRef\s\s*/i).test(argName);
-                const key0 = isByRef ? argName.replace(/^ByRef\s\s*/i, '') : argName;
-                if (key0 === '') return;
-                const isVariadic = (/^\w\w*\*$/).test(argName);
-                const keyRawName = isVariadic ? key0.replace(/\*$/, '') : key0;
-                if (!(/^\w\w*$/).test(keyRawName)) {
-                    const message = `DeepAnalysis NekoHelp Unknown Syntax of ${ahkSymbol.name} args Error ${keyRawName}--99--37--21--`;
-                    console.log('.forEach ~ message', message);
-                    vscode.window.showInformationMessage(message);
-                    throw new Error(message);
-                }
-                const character = lStrFix.search(ahkValRegex(argName));
-                const pos = new vscode.Position(line, character);
-                const value: TArgListVal = {
-                    keyRawName,
-                    defLoc: [new vscode.Location(uri, pos)],
-                    refLoc: [],
-                    commentList: [getCommentOfLine({ lStr, textRaw }) ?? ''],
-                    isByRef,
-                    isVariadic,
-                };
-                const key = keyRawName.toUpperCase();
-                argList.set(key, value);
-            });
+            .map((v) => v.trim());
+
+        for (const argName of e5) {
+            const isByRef = (/^ByRef\s\s*/i).test(argName);
+            const key0 = isByRef ? argName.replace(/^ByRef\s\s*/i, '') : argName;
+            if (key0 === '') continue;
+            const isVariadic = (/^\w\w*\*$/).test(argName); // https://ahkde.github.io/docs/Functions.htm#Variadic
+            const keyRawName = isVariadic ? key0.replace(/\*$/, '') : key0;
+            if (!(/^\w\w*$/).test(keyRawName)) {
+                const message = `DeepAnalysis NekoHelp Unknown Syntax of ${ahkSymbol.name} args Error ${keyRawName}--99--37--21--`;
+                console.log('.forEach ~ message', message);
+                vscode.window.showInformationMessage(message);
+                throw new Error(message);
+            }
+            const character = lStrFix.search(ahkValRegex(argName));
+            const pos = new vscode.Position(line, character);
+            const value: TArgListVal = {
+                keyRawName,
+                defLoc: [new vscode.Location(uri, pos)],
+                refLoc: [],
+                commentList: [getCommentOfLine({ lStr, textRaw }) ?? ''],
+                isByRef,
+                isVariadic,
+            };
+            // const key = keyRawName.toUpperCase();
+            argList.set(keyRawName, value);
+        }
     }
 
     return argList;

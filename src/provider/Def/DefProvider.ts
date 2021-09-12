@@ -19,10 +19,10 @@ type DefObj = Readonly<{
     defReg: RegExp,
     usingReg: RegExp,
     timeStart: number,
-    listAllUsing: boolean
+    listAllUsing: boolean;
 }>;
 
-export function tryGetSymbol(wordLower: string, mode: EMode): false | { fsPath: string, AhkSymbol: TAhkSymbol } {
+export function tryGetSymbol(wordLower: string, mode: EMode): false | { fsPath: string, AhkSymbol: TAhkSymbol; } {
     const fsPaths = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
         const docSymbolList = Detecter.getDocMap(fsPath);

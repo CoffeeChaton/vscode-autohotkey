@@ -69,7 +69,7 @@ type TDbgpResponseStack = {
         lineno: string,
         type: string,
         where: string,
-    }
+    };
 };
 
 export type TDbgpResponse = {
@@ -84,7 +84,7 @@ export type TDbgpResponse = {
         id: number;
         /** run state */
         status: string;
-    }
+    };
     // children: {
     stack: TDbgpResponseStack | TDbgpResponseStack[],
     property: TDbgpProperty | TDbgpProperty[],
@@ -96,6 +96,24 @@ export type TDbgpResponse = {
     // },
 };
 
+/** 
+//  <property>
+//     name="short_name"
+//     fullname="long_name"
+//      type="data_type"
+//     classname="name_of_object_class"
+//     constant="0|1"
+//     children="0|1"
+//     size="{NUM}"
+//     page="{NUM}"
+//     pagesize="{NUM}"
+//     address="{NUM}"
+//     key="language_dependent_key"
+//      encoding="base64|none"
+//      numchildren="{NUM}">
+//     ...encoded Value Data...
+//  </property>
+*/
 export type TDbgpPropertyAttr = {
     // type 1
     name?: string;
@@ -106,11 +124,10 @@ export type TDbgpPropertyAttr = {
     /**
      * 'Func' | 'File' | 'BoundFunc' | 'ObjectBase' | 'EnumBase' |
      * 'Property' | 'MetaObject' | 'ComObject' | 'ComEvent' | 'ComEnum' | 'ComArrayEnum' | 'WebBrowser'
-     *  'Object'
+     *  'Object' ... userDefObj
      */
     classname?: string;
     address?: string;
-
     /**
      *  "number"
      */
@@ -138,7 +155,7 @@ export type TDbgpPropertyAttr = {
 export type TDbgpProperty = {
     attr?: TDbgpPropertyAttr;
     content?: string;
-    property?: TDbgpProperty | TDbgpProperty[]
+    property?: TDbgpProperty | TDbgpProperty[];
 };
 
 export type TAhkVariable = {

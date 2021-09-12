@@ -29,7 +29,7 @@ export class CommandHandler {
     public async sendComand(command: string, data?: string): Promise<TDbgpResponse> {
         this.transId++;
         const commandRun = setCommandRun(this.transId, command, data);
-        console.log('🚀 ~ CommandHandler ~ sendComand ~ commandRun', commandRun);
+        // console.log('🚀 ~89~ CommandHandler ~ sendComand ~ commandRun', commandRun);
         this.debugServer.write(commandRun);
 
         return new Promise<TDbgpResponse>((resolve): void => {

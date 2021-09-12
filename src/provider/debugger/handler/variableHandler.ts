@@ -71,8 +71,11 @@ function formatPropertyValue({
             break;
     }
 
-    if (classname === undefined) return 'classname undefined-1';
-    if (classname === 'undefined') return 'classname undefined-2';
+    if (classname === undefined) return 'undefined of Not defined';
+    if (classname === 'undefined') {
+        console.log('🚀 ~ classname', classname);
+        return 'undefined-2(neko-help-88)';
+    }
     return `${classname}`;
 }
 
@@ -194,6 +197,7 @@ export class VariableHandler {
         return ed;
     }
 
+    // eslint-disable-next-line max-statements
     public parse(response: TDbgpProperty, scope: number): Variable[] {
         const classname = response.attr?.classname;
         if (classname) {
@@ -205,56 +209,71 @@ export class VariableHandler {
             const attr = response.attr;
 
             if (!attr) return [];
-            if (attr.type === 'undefined' && !classname) {
+            const { type, fullname } = attr;
+            if (type === 'undefined' || !type || !classname || !fullname) {
                 console.log('--83--55--44attr.type === undefined', response);
                 return [];
             }
-
-            const message = 'VariableHandler ~ parse ~ attr === [] ---94--53--75, response';
+            //    const  attr_new = {
+            //         name: "myFile",
+            //         fullname: "myFile",
+            //         type: "object",
+            //         facet: "",
+            //         classname: "File",
+            //         address: "9346224",
+            //         size: "0",
+            //         page: "0",
+            //         pagesize: "300",
+            //         children: "0",
+            //         numchildren: "0",
+            //     };
+            const message = '🚀 ~BH49~ VariableHandler ~ parse ~ attr === [] ---94--53--75, response';
             console.log(message, response);
             return [];
         }
 
         const parseEd: Variable[] = [];
-        toArray(temp)
-            .forEach((property) => {
-                if (!property) return;
+        const tempArr = toArray(temp);
+        for (const property of tempArr) {
+            if (!property) continue;
 
-                const { attr, content } = property;
-                if (!attr) return;
+            const { attr, content } = property;
+            if (!attr) continue;
 
-                const { fullname, name, type: typeAttr } = attr;
+            const { fullname, name, type: typeAttr } = attr;
 
-                if (typeAttr === undefined) {
-                    console.error('ERROR--65--31--45 response', response);
-                    const message = 'ERROR--91--37--55 --some undefined of typeAttr';
-                    console.error(message, property);
-                    return;
-                }
+            if (typeAttr === undefined) {
+                console.error('ERROR--65--31--45 response', response);
+                const message = 'ERROR--91--37--55 --some undefined of typeAttr';
+                console.error(message, property);
+                continue;
+            }
 
-                if (!fullname || !name || !typeAttr) {
-                    const message = '--91--34--55 --some undefined of element of property.attr';
-                    console.log(message, property);
-                    return;
-                }
+            if (!fullname || !name || !typeAttr) {
+                const message = '--91--34--55 --some undefined of element of property.attr';
+                console.error(message, property);
+                continue;
+            }
 
-                const ahkVar = {
-                    scope,
-                    frameId: scope === EVarScope.GLOBAL ? -1 : this.frameId,
-                    name: fullname,
-                    value: content ? buildVariableValue(property, attr, content) : '',
-                };
-                this.variableMap.set(fullname, ahkVar);
-                const ref = typeAttr !== 'object' ? 0 : this.variableHandles.create(ahkVar);
-                if (name === 'Name' || classname === 'Func') {
-                    console.log('VariableHandler ~ .forEach ~ response', response);
-                }
-
-                const ed = parseTail({
-                    property, attr, classname, name, fullname, ref,
-                });
-                parseEd.push(ed);
+            const ahkVar = {
+                scope,
+                frameId: scope === EVarScope.GLOBAL ? -1 : this.frameId,
+                name: fullname,
+                value: content ? buildVariableValue(property, attr, content) : '', // TODO : '' address:'49519792'
+            };
+            this.variableMap.set(fullname, ahkVar);
+            const ref = typeAttr !== 'object' ? 0 : this.variableHandles.create(ahkVar);
+            if (name === 'Name' || classname === 'Func') {
+                console.log('🚀 ~267~ VariableHandler ~ .forEach ~ response', response);
+            }
+            if (attr.classname === 'File' || fullname === 'myFile') {
+                console.log('🚀 ~104~ File obj', fullname);
+            }
+            const ed = parseTail({
+                property, attr, classname, name, fullname, ref,
             });
+            parseEd.push(ed);
+        }
         return parseEd;
     }
 }
