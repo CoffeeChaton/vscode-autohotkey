@@ -11,7 +11,7 @@ import { removeParentheses } from '../removeParentheses';
 export type ValDefOfFunc = DeepReadonly<{ name: string, comment: string, line: number, textRaw: string, textRawFix: string; }>;
 export type ValDefOfFuncArr = readonly ValDefOfFunc[];
 
-function getValAssignOfFunc(document: vscode.TextDocument, wordLower: string, ahkSymbol: TAhkSymbol): ValDefOfFuncArr {
+function getValAssignOfFunc(document: vscode.TextDocument, wordUp: string, ahkSymbol: TAhkSymbol): ValDefOfFuncArr {
     const bodyRange = new vscode.Range(ahkSymbol.selectionRange.end, ahkSymbol.range.end);
     const startLineBaseZero = bodyRange.start.line;
     const DocStrMap = Pretreatment(document.getText(bodyRange).split('\n'), startLineBaseZero);
@@ -37,7 +37,7 @@ function getValAssignOfFunc(document: vscode.TextDocument, wordLower: string, ah
             .trim()
             .split(',')
             .map((str) => str.trim())
-            .filter((str) => str.toLowerCase().startsWith(wordLower))
+            .filter((str) => str.toUpperCase().startsWith(wordUp))
             .map((str) => str.replace(/:=.*/, '').trim())
             .filter((v) => !(/[%.[\]]/).test(v))
             .forEach((name) => {
@@ -54,7 +54,7 @@ function getValAssignOfFunc(document: vscode.TextDocument, wordLower: string, ah
     return arr;
 }
 
-function getArgsOfFunc(document: vscode.TextDocument, wordLower: string, ahkSymbol: TAhkSymbol): ValDefOfFuncArr {
+function getArgsOfFunc(document: vscode.TextDocument, wordUp: string, ahkSymbol: TAhkSymbol): ValDefOfFuncArr {
     const { selectionRange } = ahkSymbol;
     const startLineBaseZero = selectionRange.start.line;
     const DocStrMap = Pretreatment(document.getText(selectionRange).split('\n'), startLineBaseZero);
@@ -65,10 +65,11 @@ function getArgsOfFunc(document: vscode.TextDocument, wordLower: string, ahkSymb
         const line = lineStart + linePos;
         const { textRaw, lStr } = DocStrMap[linePos];
         const comment = getCommentOfLine({ lStr, textRaw }) ?? '';
-        lStr.replace(/^\s*\w\w*\(\s*/, '').replace(/\)\s*$/, '').trim()
+        lStr.replace(/^\s*\w\w*\(\s*/, '')
+            .replace(/\)\s*$/, '').trim()
             .split(',')
             .map((v) => v.trim())
-            .filter((v) => v.toLowerCase().startsWith(wordLower)) // TODO FIX startsWith OR ===
+            .filter((v) => v.toUpperCase().startsWith(wordUp)) // TODO FIX startsWith OR ===
             .forEach((v) => {
                 const name = v.replace(/:=.*/, '').trim();
                 arr.push({
@@ -90,14 +91,14 @@ export function getFuncSymbolOfPos(document: vscode.TextDocument, position: vsco
     return ahkSymbolS.find((s) => (kindCheck(EMode.ahkFunc, s.kind) && s.range.contains(position))) || null;
 }
 
-export function getValOfFunc(document: vscode.TextDocument, position: vscode.Position, wordLower: string): {
+export function getValOfFunc(document: vscode.TextDocument, position: vscode.Position, wordUp: string): {
     readonly argItemS: ValDefOfFuncArr;
     readonly valAssignItemS: ValDefOfFuncArr;
 } | null {
     const ahkSymbol = getFuncSymbolOfPos(document, position);
     if (ahkSymbol === null) return null;
 
-    const argItemS = getArgsOfFunc(document, wordLower, ahkSymbol);
-    const valAssignItemS = getValAssignOfFunc(document, wordLower, ahkSymbol);
+    const argItemS = getArgsOfFunc(document, wordUp, ahkSymbol);
+    const valAssignItemS = getValAssignOfFunc(document, wordUp, ahkSymbol);
     return { argItemS, valAssignItemS } as const;
 }

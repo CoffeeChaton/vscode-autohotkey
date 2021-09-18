@@ -5,7 +5,7 @@ import { getGlobalValDef } from '../../core/getGlobalValDef';
 import {
     TArgList,
     DeepAnalysisResult,
-    EValType, TAhkSymbol, TAhkValType, TRunValType2, TTokenStream, TValList, TValObj, EFnMode,
+    EValType, TAhkSymbol, TAhkValType, TRunValType2, TTokenStream, TValMap, TValObj, EFnMode,
 } from '../../globalEnum';
 import { fnModeToValType } from '../Func/fnModeToValType';
 
@@ -16,9 +16,10 @@ import { Pretreatment } from '../Pretreatment';
 import { ahkValRegex } from '../regexTools';
 
 import { ClassWm } from '../wm';
-import { setArgList } from './fnArgs';
+import { setArgMap } from './fnArgs';
+import { setValMapRef } from './setValMapRef';
 
-function getLineType(lStr: string, fnMode: EFnMode)
+export function getLineType(lStr: string, fnMode: EFnMode)
     : EValType.local | EValType.global | EValType.Static {
     const fnTypeList: ([RegExp, TRunValType2])[] = [
         [/^\s*local\s/i, EValType.local],
@@ -37,11 +38,12 @@ type TGetValue = {
     keyRawName: string,
     line: number,
     character: number,
-    valMap: TValList,
+    valMap: TValMap,
     textRaw: string,
     lStr: string,
     lineType: TAhkValType,
-    uri: vscode.Uri
+    uri: vscode.Uri;
+    argList: TArgList;
 };
 
 function getValue({
@@ -53,11 +55,24 @@ function getValue({
     lStr,
     lineType,
     uri,
+    argList,
 }: TGetValue): TValObj {
-    const pos = new vscode.Position(line, character);
-    const defLoc = new vscode.Location(uri, pos);
+    const range = new vscode.Range(new vscode.Position(line, character),
+        new vscode.Position(line, character + keyRawName.length));
+    const defLoc = new vscode.Location(uri, range);
     const comment = getCommentOfLine({ textRaw, lStr }) ?? '';
-    const oldVal: TValObj | undefined = valMap.get(keyRawName);
+    // const arg = argList.get(keyRawName.toUpperCase());
+    // if (arg) {
+    //     return {
+    //         keyRawName,
+    //         defLoc: [defLoc, ...arg.defLoc],
+    //         commentList: [comment, ...arg.commentList],
+    //         refLoc: [],
+    //         ahkValType: arg.ahkValType,
+    //     };
+    // } // FIXME
+
+    const oldVal: TValObj | undefined = valMap.get(keyRawName.toUpperCase());
     if (oldVal) {
         return {
             keyRawName,
@@ -68,7 +83,7 @@ function getValue({
         };
     }
 
-    const ahkValType = getGlobalValDef(ahkValRegex(keyRawName))
+    const ahkValType = getGlobalValDef(ahkValRegex(keyRawName.toUpperCase()))
         ? EValType.global
         : lineType;
     return {
@@ -80,42 +95,40 @@ function getValue({
     };
 }
 
-function setValListDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgList): TValList {
+function setValMapDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgList): TValMap {
     const fnMode = getFnModeWM(ahkSymbol, DocStrMap);
-    const valMap: TValList = new Map<string, TValObj>();
+    const valMap: TValMap = new Map<string, TValObj>();
 
     const startLine = ahkSymbol.selectionRange.end.line;
     for (const { lStr, textRaw, line } of DocStrMap) {
-        if (line < startLine) continue;
+        if (line <= startLine) continue;
         const lineType: TAhkValType = getLineType(lStr, fnMode);
-
-        [...lStr.matchAll(/(?<!\.|`|%)\b(\w\w*)\s*:?=/g)]
-            .forEach((v: RegExpMatchArray) => {
-                const character = v.index;
-                if (character === undefined) return;
-                const keyRawName = v[1];
-                if (argList.has(keyRawName)) return;
-
-                const value: TValObj = getValue({
-                    keyRawName,
-                    line,
-                    character,
-                    valMap,
-                    textRaw,
-                    lStr,
-                    lineType,
-                    uri,
-                });
-                valMap.set(keyRawName, value);
+        for (const v of lStr.matchAll(/(?<!\.|`|%)\b(\w\w*)\b\s*:?=/g)) {
+            const character = v.index;
+            if (character === undefined) continue;
+            const keyRawName = v[1];
+            const value: TValObj = getValue({
+                keyRawName,
+                line,
+                character,
+                valMap,
+                textRaw,
+                lStr,
+                lineType,
+                uri,
+                argList,
             });
+            valMap.set(keyRawName.toUpperCase(), value);
+        }
     }
 
     return valMap;
 }
-function setValList(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgList): TValList {
-    const valMap: TValList = setValListDef(uri, ahkSymbol, DocStrMap, argList);
 
-    return valMap;
+function setValList(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgList): TValMap {
+    const valMap: TValMap = setValMapDef(uri, ahkSymbol, DocStrMap, argList);
+    const valMap2: TValMap = setValMapRef(uri, ahkSymbol, DocStrMap, valMap);
+    return valMap2;
 }
 
 const w = new ClassWm<TAhkSymbol, DeepAnalysisResult>(10 * 60 * 1000, 'DeepAnalysis', 200);
@@ -129,11 +142,11 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
 
     const DocStrMap = Pretreatment(document.getText(ahkSymbol.range).split('\n'),
         ahkSymbol.range.start.line);
-    const argList: TArgList = setArgList(document.uri, ahkSymbol, DocStrMap);
+    const argList: TArgList = setArgMap(document.uri, ahkSymbol, DocStrMap);
     const valList = setValList(document.uri, ahkSymbol, DocStrMap, argList);
     const v: DeepAnalysisResult = {
-        argList,
-        valList,
+        argMap: argList,
+        valMap: valList,
     };
     return w.setWm(ahkSymbol, v);
 }

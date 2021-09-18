@@ -120,7 +120,7 @@ function getCommandErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Di
 
     const temp = {
         exec: /^EnvMult$/i, // TODO EnvDiv
-        EDiagCode: EDiagCode.code903, // TODO
+        EDiagCode: EDiagCode.code903,
     };
     // TODO ifEq https://wyagd001.github.io/zh-cn/docs/commands/IfEqual.htm
     // SetFormat -> Format  https://www.autohotkey.com/docs/commands/SetFormat.htm

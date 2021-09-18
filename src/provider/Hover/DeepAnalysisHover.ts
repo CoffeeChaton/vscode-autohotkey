@@ -14,6 +14,9 @@ function getAhkTypeName(e: EValType): 'Static' | 'args' | 'global' | 'local' | '
         default: return enumErr(e);
     }
 }
+/**
+ * @param word  word.toUpperCase()
+ */
 export function DeepAnalysisHover(document: vscode.TextDocument, position: vscode.Position, word: string)
     : vscode.MarkdownString | null {
     const ahkSymbol = getFnOfPos(document, position);
@@ -22,7 +25,7 @@ export function DeepAnalysisHover(document: vscode.TextDocument, position: vscod
     const ed: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
     if (!ed) return null;
 
-    const arg = ed.argList.get(word);
+    const arg = ed.argMap.get(word);
     if (arg) {
         const md = new vscode.MarkdownString('', true);
         md.appendMarkdown('is args');
@@ -32,7 +35,7 @@ export function DeepAnalysisHover(document: vscode.TextDocument, position: vscod
         return md;
     }
 
-    const value = ed.valList.get(word);
+    const value = ed.valMap.get(word);
     if (value) {
         const md = new vscode.MarkdownString(
             `is ${getAhkTypeName(value.ahkValType)} val of this func`,

@@ -48,7 +48,6 @@ function setErrCaseZero(sw: TAhkSymbol): vscode.Diagnostic {
 }
 
 function setErrCase(sw: TAhkSymbol): null | vscode.Diagnostic {
-    // TODO Duplicate case label.
     const iCase = getCaseNumber(sw.children);
     switch (true) {
         case iCase < 20 && iCase > 0: return null;

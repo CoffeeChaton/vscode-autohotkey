@@ -96,7 +96,7 @@ export type TDbgpResponse = {
     // },
 };
 
-/** 
+/**
 //  <property>
 //     name="short_name"
 //     fullname="long_name"

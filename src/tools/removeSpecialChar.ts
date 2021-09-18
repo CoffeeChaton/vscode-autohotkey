@@ -31,40 +31,39 @@ export function getLStr(textRaw: string): string {
     }
 }
 
-function removeSenRaw(textFix: string): string {
-    const s0 = textFix.search(/\b(?:control)?send(?:Raw\b|\b.*{Raw})/i);
-    return s0 === -1 ? textFix : textFix.substring(0, s0);
-}
+// function removeSenRaw(textFix: string): string {
+//     const s0 = textFix.search(/\b(?:control)?send(?:Raw\b|\b.*{Raw})/i);
+//     return s0 === -1 ? textFix : textFix.substring(0, s0);
+// }
 
-export function getLStrErr(textRaw: string): string {
-    // TODO EDGE CASE
-    const text = textRaw.replace(/`./g, '__');
-    let textFix = '';
-    let tf = 1;
-    const sL = text.length;
-    for (let i = 0; i < sL; i++) {
-        switch (text[i]) {
-            case '"':
-                tf *= -1;
-                textFix += '_';
-                break;
-            case ';':
-                if (tf === 1) {
-                    return (/^\s*$/).test(textFix)
-                        ? ''
-                        : removeSenRaw(textFix);
-                }
-                textFix += '_';
-                break;
-            default:
-                textFix += tf === 1 ? text[i] : '_';
-                break;
-        }
-    }
-    return (/^\s*$/).test(textFix)
-        ? ''
-        : removeSenRaw(textFix);
-}
+// export function getLStrErr(textRaw: string): string {
+//     const text = textRaw.replace(/`./g, '__');
+//     let textFix = '';
+//     let tf = 1;
+//     const sL = text.length;
+//     for (let i = 0; i < sL; i++) {
+//         switch (text[i]) {
+//             case '"':
+//                 tf *= -1;
+//                 textFix += '_';
+//                 break;
+//             case ';':
+//                 if (tf === 1) {
+//                     return (/^\s*$/).test(textFix)
+//                         ? ''
+//                         : removeSenRaw(textFix);
+//                 }
+//                 textFix += '_';
+//                 break;
+//             default:
+//                 textFix += tf === 1 ? text[i] : '_';
+//                 break;
+//         }
+//     }
+//     return (/^\s*$/).test(textFix)
+//         ? ''
+//         : removeSenRaw(textFix);
+// }
 /**
 ```ahk
 test LStr()

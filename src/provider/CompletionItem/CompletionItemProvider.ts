@@ -39,8 +39,8 @@ async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
     }
     return itemS;
 }
-function wrapperOfValOFFuncList(document: vscode.TextDocument, position: vscode.Position, wordLower: string): vscode.CompletionItem[] {
-    const valOfFunc = getValOfFunc(document, position, wordLower);
+function wrapperOfValOFFuncList(document: vscode.TextDocument, position: vscode.Position, wordUp: string): vscode.CompletionItem[] {
+    const valOfFunc = getValOfFunc(document, position, wordUp);
     if (valOfFunc === null) return [];
     const { argItemS, valAssignItemS } = valOfFunc;
     const itemS: vscode.CompletionItem[] = [];
@@ -77,10 +77,10 @@ function wrapperOfValOFFuncList(document: vscode.TextDocument, position: vscode.
 }
 
 async function listAllFuncClass(document: vscode.TextDocument, position: vscode.Position, Range: vscode.Range): Promise<vscode.CompletionItem[]> {
-    const wordLower = document.getText(Range).toLowerCase();
-    const wordStartReg = new RegExp(`^${wordLower}`, 'i');
+    const wordUp = document.getText(Range).toUpperCase();
+    const wordStartReg = new RegExp(`${wordUp}`, 'i');
     const funcOrClassNameList = await getItemSOfEMode(wordStartReg);
-    const valOFFuncList = wrapperOfValOFFuncList(document, position, wordLower);
+    const valOFFuncList = wrapperOfValOFFuncList(document, position, wordUp);
     return [...funcOrClassNameList, ...valOFFuncList];
 }
 

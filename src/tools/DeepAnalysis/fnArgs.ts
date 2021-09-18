@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
 import {
-    TArgList, TArgListVal, TAhkSymbol, TTokenStream,
+    TArgList as TArgMap, TArgListVal, TAhkSymbol, TTokenStream,
 } from '../../globalEnum';
 
 import { getCommentOfLine } from '../getCommentOfLine';
 import { ahkValRegex } from '../regexTools';
 import { replacerSpace } from '../removeSpecialChar';
 
-function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TArgList {
-    const argList: TArgList = new Map<string, TArgListVal>();
+function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TArgMap {
+    const argMap: TArgMap = new Map<string, TArgListVal>();
     const startLine = ahkSymbol.selectionRange.start.line;
     const endLine = ahkSymbol.selectionRange.end.line;
     for (const { lStr, textRaw, line } of DocStrMap) {
@@ -34,37 +34,43 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
                 vscode.window.showInformationMessage(message);
                 throw new Error(message);
             }
-            const character = lStrFix.search(ahkValRegex(argName));
-            const pos = new vscode.Position(line, character);
+            const character = lStr.search(ahkValRegex(argName));
+            const range = new vscode.Range(new vscode.Position(line, character),
+                new vscode.Position(line, character + keyRawName.length));
             const value: TArgListVal = {
                 keyRawName,
-                defLoc: [new vscode.Location(uri, pos)],
+                defLoc: [new vscode.Location(uri, range)],
                 refLoc: [],
                 commentList: [getCommentOfLine({ lStr, textRaw }) ?? ''],
                 isByRef,
                 isVariadic,
             };
-            // const key = keyRawName.toUpperCase();
-            argList.set(keyRawName, value);
+            const key = keyRawName.toUpperCase();
+            argMap.set(key, value);
         }
     }
 
-    return argList;
+    return argMap;
 }
 
-export function setArgList(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TArgList {
-    const argList: TArgList = setArgDef(uri, ahkSymbol, DocStrMap);
-    argList.forEach((v, argName) => {
-        DocStrMap.forEach(({ lStr, textRaw, line }) => {
-            const character = textRaw.search(ahkValRegex(argName));
+export function setArgMap(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TArgMap {
+    const argMap: TArgMap = setArgDef(uri, ahkSymbol, DocStrMap);
+    argMap.forEach((v, argName) => {
+        const startLine = ahkSymbol.selectionRange.end.line;
+        for (const { lStr, textRaw, line } of DocStrMap) {
+            if (line <= startLine) continue;
+            const character = lStr.search(ahkValRegex(argName));
             if (character !== -1) {
-                const pos = new vscode.Position(line, character);
-                const loc = new vscode.Location(uri, pos);
+                const range = new vscode.Range(new vscode.Position(line, character),
+                    new vscode.Position(line, character + argName.length));
+                const loc = new vscode.Location(uri, range);
                 v.refLoc.push(loc);
                 const comment = getCommentOfLine({ textRaw, lStr });
-                if (comment) v.commentList.push();
+                if (comment) {
+                    v.commentList.push(comment);
+                }
             }
-        });
+        }
     });
-    return argList;
+    return argMap;
 }

@@ -149,14 +149,12 @@ export type TValObj = {
     defLoc: vscode.Location[];
     refLoc: vscode.Location[];
     commentList: string[];
-
-    ahkValType: TAhkValType; // FIXME
-    // TODO refPos
+    ahkValType: TAhkValType;
 };
-export type TValList = Map<string, TValObj>; // k = valNameUP
+export type TValMap = Map<string, TValObj>; // k = valNameUP
 export type DeepAnalysisResult = {
-    argList: TArgList;
-    valList: TValList;
+    argMap: TArgList;
+    valMap: TValMap;
 };
 export const enum TAhkSymbolRange {
     argsRange = 2,

@@ -13,14 +13,14 @@ export class ReferenceProvider implements vscode.ReferenceProvider {
 
         const range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
         if (!range) return null;
-        const wordLower = document.getText(range).toLowerCase();
+        const wordUp = document.getText(range).toUpperCase();
         // TODO class.Method, this.classVar,GoSub, GoTo, ahk Built-in func
 
         const listAllUsing = true;
-        const userDefLink = await userDef(document, position, wordLower, listAllUsing);
+        const userDefLink = await userDef(document, position, wordUp, listAllUsing);
         if (userDefLink) return userDefLink;
 
-        const valInFunc = getValDefInFunc(document, position, wordLower, listAllUsing);
+        const valInFunc = getValDefInFunc(document, position, wordUp, listAllUsing);
         if (valInFunc) return valInFunc;
         return null;
     }

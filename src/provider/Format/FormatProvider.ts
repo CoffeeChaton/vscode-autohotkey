@@ -151,35 +151,6 @@ export function FormatCore(document: vscode.TextDocument, options: vscode.Format
 
     return newTextList;
 }
-/*
-
-    if (ggc()
-        && bbc()
-        && dd()
-        || fff() and feg()) {
-
-    }
-
-```ahk
-TEST OK
-for k,v in Monitors
-    if (v.Num = MonitorNum)
-        return v
-
-TEST NOT good
-TODO fmt_a1
-for k,v in Monitors
-    for k,v in Monitors
-        for k,v in Monitors
-            if gg(){
-                dddddd:=gggggg
-                for k,v in Monitors
-                    for k,v in Monitors
-                        if dd()
-                            bbb :=ddd()
-            }
-```
-*/
 
 export class FormatProvider implements vscode.DocumentFormattingEditProvider {
     public provideDocumentFormattingEdits(document: vscode.TextDocument, options: vscode.FormattingOptions,
@@ -194,6 +165,14 @@ TEST OK
 for k,v in Monitors
     if (v.Num = MonitorNum)
         return v
+
+TEST NOT good
+if (ggc()
+    && bbc()
+    && dd()
+    || fff() and feg()) {
+
+}
 
 TEST NOT good
 TODO fmt_a1

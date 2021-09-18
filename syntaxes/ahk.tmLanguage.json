@@ -1,5 +1,7 @@
 {
-    "fileTypes": ["ahk"],
+    "fileTypes": [
+        "ahk"
+    ],
     "name": "AutoHotkey",
     "patterns": [
         {
@@ -87,10 +89,6 @@
             "name": "support.function.ahk"
         },
         {
-            "match": "\\b(?!MsgBox)([\\w]+)(?=\\()",
-            "name": "support.function.ahk"
-        },
-        {
             "match": "^MsgBox",
             "name": "support.function.msgbox.ahk"
         },
@@ -139,6 +137,54 @@
             "name": "punctuation.definition.variable.percent.ahk"
         },
         {
+            "include": "#stringQuotedDouble"
+        },
+        {
+            "captures": {
+                "1": {
+                    "name": "entity.name.function.ahk"
+                },
+                "2": {
+                    "name": "variable.parameter.function.ahk",
+                    "begin": "\\(",
+                    "end": "\\)",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.paren.open"
+                        }
+                    },
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.paren.close"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#stringQuotedDouble"
+                        },
+                        {
+                            "match": "\\*|,",
+                            "name": "keyword.operator.arithmetic.ahk"
+                        },
+                        {
+                            "match": ":=|=",
+                            "name": "keyword.operator.assignment.ahk"
+                        }
+                    ]
+                },
+                "3": {
+                    "name": "punctuation.bracket.curly.ahk"
+                },
+                "4": {
+                    "name": "comment.line.semicolon.functionline.ahk"
+                }
+            },
+            "match": "^(\\s*\\w+)(\\(.*\\))\\s*({)\\s*(;?.*)$",
+            "name": "functionline.ahk"
+        }
+    ],
+    "repository": {
+        "stringQuotedDouble": {
             "begin": "(\")",
             "beginCaptures": {
                 "1": {
@@ -162,32 +208,8 @@
                     "name": "constant.character.escape.ahk"
                 }
             ]
-        },
-        {
-            "captures": {
-                "1": {
-                    "name": "entity.name.function.ahk"
-                },
-                "2": {
-                    "name": "punctuation.bracket.parenthesis.ahk"
-                },
-                "3": {
-                    "name": "string.function.arguments.ahk"
-                },
-                "4": {
-                    "name": "punctuation.bracket.parenthesis.ahk"
-                },
-                "5": {
-                    "name": "punctuation.bracket.curly.ahk"
-                },
-                "6": {
-                    "name": "comment.line.semicolon.functionline.ahk"
-                }
-            },
-            "match": "^(\\s*\\w+)(\\()(.*)(\\))\\s*({)\\s*(;?.*)$",
-            "name": "functionline.ahk"
         }
-    ],
+    },
     "scopeName": "source.ahk",
     "uuid": "77AC23B6-8A90-11D9-BAA4-000A9584EC8D"
 }

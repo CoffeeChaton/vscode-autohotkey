@@ -13,6 +13,7 @@ import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProv
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
+import { RenameProvider } from './provider/Rename/RenameProvider';
 
 export function activate(context: vscode.ExtensionContext): void {
     const language: vscode.DocumentSelector = { language: 'ahk' };
@@ -25,8 +26,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
         vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
         vscode.languages.registerOnTypeFormattingEditProvider(language, new OnTypeFormattingEditProvider(), '\n'),
-        // TODO vscode.languages.registerDocumentSemanticTokensProvider(language, new Dr(), e39),
-        // vscode.languages.registerRenameProvider(language, new RenameProvider()),
+        vscode.languages.registerRenameProvider(language, new RenameProvider()),
         // vscode.languages.registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', ','),
         vscode.languages.registerCodeActionsProvider(language, new CodeActionProvider()),
         vscode.workspace.onDidChangeConfiguration(() => configChangEvent()),
@@ -44,7 +44,7 @@ export function activate(context: vscode.ExtensionContext): void {
 // if ([^\x00-\x7F] not in "" block ) auto warn
 // [^\x00-\x7F]
 // [^\x1F-\x7F]
-// TODO 😋 ؄. 體 体 ㅀ の Ａ Ββ Αα ❤♡ ∈ ال‎ ß Œ
+// 😋 ؄. 體 体 ㅀ の Ａ Ββ Αα ❤♡ ∈ ال‎ ß Œ
 /*
 https://github.com/think2011/vscode-i18n-core/blob/10abc4b356cfb34f64d17a7dbdb73e58f6bd6274/editor/Annotation.ts
 
@@ -64,7 +64,6 @@ const decoration = {
         }
     }
 }
-TODO vscode.CommentRule
 vscode.Progress
 // createTextEditorDecorationType
 QuickInput

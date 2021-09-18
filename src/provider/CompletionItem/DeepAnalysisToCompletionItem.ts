@@ -18,9 +18,9 @@ export function DeepAnalysisToCompletionItem(document: vscode.TextDocument, posi
     const ed = DeepAnalysis(document, ahkSymbol);
     if (!ed) return [];
 
-    const { argList, valList } = ed;
+    const { argMap, valMap } = ed;
     const need: vscode.CompletionItem[] = [];
-    argList.forEach((v, label) => {
+    argMap.forEach((v, label) => {
         const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Variable);
         item.insertText = label;
         item.detail = `arg of this ${kindStr} func (neko-help-DeepAnalysis)`;
@@ -33,7 +33,7 @@ export function DeepAnalysisToCompletionItem(document: vscode.TextDocument, posi
         item.documentation = md;
         need.push(item);
     });
-    valList.forEach((v, label) => {
+    valMap.forEach((v, label) => {
         const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Variable);
         item.insertText = label;
         item.detail = `val this ${kindStr} (neko-help-DeepAnalysis)`;

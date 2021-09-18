@@ -128,13 +128,17 @@ export class NekoDebugSession extends LoggingDebugSession {
             response.body = await this.dispather.setVariable(args);
             this.sendResponse(response);
         } catch (error) {
-            const error2 = error as string;
-            const format = error.message as string;
-            console.log('-105--33--99- NekoDebugSession ~ setVariableRequest ~ error', error);
-            this.sendErrorResponse(response, {
-                id: args.variablesReference,
-                format,
-            });
+            if (error instanceof Error) {
+                console.error(error.message);
+                const format = error.message;
+                this.sendErrorResponse(response, {
+                    id: args.variablesReference,
+                    format,
+                });
+            } else {
+                console.error('🚀 ~err85~ NekoDebugSession ~ setVariableRequest ~ error', error);
+                throw new Error(error as string && '--140--120--setVariableRequest');
+            }
         }
     }
 

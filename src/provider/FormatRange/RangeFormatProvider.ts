@@ -37,7 +37,7 @@ function textReplace(textElement: string): string {
         .replace(/ *]/g, ']')
         .replace(/ *{ */g, ' {')
         .replace(/ *}/g, '}')
-        .replace(/}\s\s*/g, '} ') // TODO WTF double \s ?
+        .replace(/}\s\s*/g, '} ')
         .replace(/\)\s*{ */g, ') {')
         .replace(/\bif\s*\(/g, 'if (')
         .replace(/\bIf\s*\(/g, 'If (')
@@ -45,7 +45,7 @@ function textReplace(textElement: string): string {
         .replace(/\bwhile\s*\(/g, 'while (')
         .replace(/\bWhile\s*\(/g, 'While (')
         .replace(/\bWHILE\s*\(/g, 'WHILE (')
-        .replace(/ *;/g, ' ;');// TODO options of ";"
+        .replace(/ *;/g, ' ;');
     // \s === [ \f\n\r\t\v]
     // TODO more TEST & options
 }
@@ -81,7 +81,7 @@ function fnStrGroup(text: string): string {
             : '';
 
         const strElement = strGroup[s];
-        newBody += ((s % 2) !== 0 || strElement.includes('`')) // TODO  strElement.includes('`')
+        newBody += ((s % 2) !== 0 || strElement.includes('`'))
             ? strElement
             : fnLR(strElement);
     }

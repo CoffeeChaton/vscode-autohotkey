@@ -4,5 +4,4 @@ export function getClassDetail(lStr: string, colFix: number, name: string): stri
         .trim()
         .replace('{', '')
         .trim();
-    // TODO ahkExtends
 }

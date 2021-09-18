@@ -15,14 +15,14 @@ type DefObj = Readonly<{
     document: vscode.TextDocument,
     position: vscode.Position,
     Mode: EMode,
-    wordLower: string,
+    wordUp: string,
     defReg: RegExp,
     usingReg: RegExp,
     timeStart: number,
     listAllUsing: boolean;
 }>;
 
-export function tryGetSymbol(wordLower: string, mode: EMode): false | { fsPath: string, AhkSymbol: TAhkSymbol; } {
+export function tryGetSymbol(wordUP: string, mode: EMode): false | { fsPath: string, AhkSymbol: TAhkSymbol; } {
     const fsPaths = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
         const docSymbolList = Detecter.getDocMap(fsPath);
@@ -30,7 +30,7 @@ export function tryGetSymbol(wordLower: string, mode: EMode): false | { fsPath: 
         const iMax = docSymbolList.length;
         for (let i = 0; i < iMax; i++) {
             if (kindCheck(mode, docSymbolList[i].kind)
-                && docSymbolList[i].name.toLowerCase() === wordLower) {
+                && docSymbolList[i].name.toUpperCase() === wordUP) {
                 return { AhkSymbol: docSymbolList[i], fsPath };
             }
         }
@@ -38,7 +38,7 @@ export function tryGetSymbol(wordLower: string, mode: EMode): false | { fsPath: 
     return false;
 }
 
-async function getReference(usingReg: RegExp, timeStart: number, wordLower: string): Promise<vscode.Location[]> {
+async function getReference(usingReg: RegExp, timeStart: number, wordUp: string): Promise<vscode.Location[]> {
     const List: vscode.Location[] = [];
     const fsPathList = Detecter.getDocMapFile();
     for (const fsPath of fsPathList) {
@@ -53,7 +53,7 @@ async function getReference(usingReg: RegExp, timeStart: number, wordLower: stri
             }
         }
     }
-    console.log(`list all using of "${wordLower}"`, Date.now() - timeStart, ' ms');
+    console.log(`list all using of "${wordUp}"`, Date.now() - timeStart, ' ms');
     return List;
 }
 
@@ -62,32 +62,32 @@ async function ahkDef(
         document,
         position,
         Mode,
-        wordLower,
+        wordUp,
         defReg,
         usingReg,
         timeStart,
         listAllUsing,
     }: DefObj,
 ): Promise<false | vscode.Location[]> {
-    const textTrimLower = document.lineAt(position).text.trim().toLowerCase();
-    const EModeSymbol = tryGetSymbol(wordLower, Mode);
+    const textTrimUp = document.lineAt(position).text.trim().toUpperCase();
+    const EModeSymbol = tryGetSymbol(wordUp, Mode);
     if (EModeSymbol === false) return false;
     const { AhkSymbol, fsPath } = EModeSymbol;
 
     // searchDef
     const searchDef = (): false | Promise<vscode.Location[]> => {
-        if (!defReg.test(textTrimLower)) return false;
+        if (!defReg.test(textTrimUp)) return false;
         if (listAllUsing
             || (fsPath === document.uri.fsPath
                 && AhkSymbol.range.start.line === document.lineAt(position).lineNumber)) {
-            return getReference(usingReg, timeStart, wordLower);
+            return getReference(usingReg, timeStart, wordUp);
         }
         return false;
     };
     // searchUsing
     const searchUsing = (): false | vscode.Location[] => {
-        if (textTrimLower.search(usingReg) === -1) return false;
-        console.log(`goto Def of ${wordLower} ()`, Date.now() - timeStart, 'ms)');
+        if (textTrimUp.search(usingReg) === -1) return false;
+        console.log(`goto Def of ${wordUp} ()`, Date.now() - timeStart, 'ms)');
         const Uri = vscode.Uri.file(fsPath);
         return [new vscode.Location(Uri, AhkSymbol.range)];
     };
@@ -101,27 +101,30 @@ async function ahkDef(
     return false;
 }
 
+/**
+ * @param wordUp word.toUpperCase();
+ */
 export async function userDef(document: vscode.TextDocument,
-    position: vscode.Position, wordLower: string, listAllUsing: boolean): Promise<null | vscode.Location[]> {
+    position: vscode.Position, wordUp: string, listAllUsing: boolean): Promise<null | vscode.Location[]> {
     const timeStart = Date.now();
     // isDef: (textTrim: string) => boolean
     // TODO get def of AST
     const defRefList: RegExp[] = [
         // class ClassName
-        new RegExp(`class\\b\\s\\s*\\b(${wordLower})\\b`, 'i'),
+        new RegExp(`class\\b\\s\\s*\\b(${wordUp})\\b`, 'i'),
         // funcName( , not search class.Method()
-        //   new RegExp(`(?<!\\.)\\b(${wordLower})\\(`, 'i'),
-        new RegExp(`(?<!\\.|\`|%)\\b(${wordLower})\\(`, 'i'),
+        //   new RegExp(`(?<!\\.)\\b(${wordUp})\\(`, 'i'),
+        new RegExp(`(?<!\\.|\`|%)\\b(${wordUp})\\(`, 'i'),
         // global var_name :=
-        new RegExp(`global\\s\\s*(${wordLower})\\s\\s*:?=`, 'i'),
+        new RegExp(`global\\s\\s*(${wordUp})\\s\\s*:?=`, 'i'),
     ];
 
     const usingRegList: RegExp[] = [
-        new RegExp(`(?:^class\\b\\s\\s*\\b(${wordLower})\\b)|(?:\\bnew\\s\\s*\\b(${wordLower})\\b)|(?:(${wordLower})\\.)|(?:\\bextends\\b\\s\\s*(${wordLower}))|(?:\\bglobal\\b\\s\\s*\\b(${wordLower})\\b)|(?:{\\s*base:\\s*(${wordLower}))|(?:\\w\\w*\\.base\\s*:=\\s*(${wordLower}))`, 'i'),
+        new RegExp(`(?:^class\\b\\s\\s*\\b(${wordUp})\\b)|(?:\\bnew\\s\\s*\\b(${wordUp})\\b)|(?:(${wordUp})\\.)|(?:\\bextends\\b\\s\\s*(${wordUp}))|(?:\\bglobal\\b\\s\\s*\\b(${wordUp})\\b)|(?:{\\s*base:\\s*(${wordUp}))|(?:\\w\\w*\\.base\\s*:=\\s*(${wordUp}))`, 'i'),
         // class ClassName | new className | className. | extends  className | global className |  {base: className | .base := baseObject
-        new RegExp(`(?:(?<!\\.|\`|%)\\b(${wordLower})\\()|(?:(?<=\\bfunc\\()\\s*"\\b(${wordLower})\\b")`, 'i'),
+        new RegExp(`(?:(?<!\\.|\`|%)\\b(${wordUp})\\()|(?:(?<=\\bfunc\\()\\s*"\\b(${wordUp})\\b")`, 'i'),
         // funcName( | Func("funcName"
-        new RegExp(`(?<!\\.|\`|%)\\b(${wordLower})\\b(?!%)`, 'i'),
+        new RegExp(`(?<!\\.|\`|%)\\b(${wordUp})\\b(?!%)`, 'i'),
         // var_name
     ];
 
@@ -137,7 +140,7 @@ export async function userDef(document: vscode.TextDocument,
             document,
             position,
             Mode: Modes[i],
-            wordLower,
+            wordUp,
             defReg: defRefList[i],
             usingReg: usingRegList[i],
             timeStart,
@@ -158,15 +161,15 @@ export class DefProvider implements vscode.DefinitionProvider {
 
         const range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
         if (!range) return null;
-        const wordLower = document.getText(range).toLowerCase();
+        const wordUp = document.getText(range).toUpperCase();
         const fileLink = ahkInclude(document, position);
         if (fileLink) return fileLink;
 
         const listAllUsing = false;
-        const userDefLink = await userDef(document, position, wordLower, listAllUsing);
+        const userDefLink = await userDef(document, position, wordUp, listAllUsing);
         if (userDefLink) return userDefLink;
 
-        const valInFunc = getValDefInFunc(document, position, wordLower, listAllUsing);
+        const valInFunc = getValDefInFunc(document, position, wordUp, listAllUsing);
         if (valInFunc) return valInFunc;
 
         return null;

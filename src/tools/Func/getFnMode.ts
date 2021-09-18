@@ -10,7 +10,7 @@ function getFnMode(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
     const startLine = ahkSymbol.range.start.line;
     const endLine = ahkSymbol.range.end.line;
     for (const { lStr, line } of DocStrMap) {
-        if (line < startLine) continue;
+        if (line <= startLine) continue;
         if (line > endLine) break;
         if ((/^\s*local\s*$/i).test(lStr)) return EFnMode.local;
         if ((/^\s*global\s*$/i).test(lStr)) return EFnMode.global;

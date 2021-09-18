@@ -12,11 +12,11 @@ import { DeepAnalysisHover } from './Hover/DeepAnalysisHover';
 
 const wm = new ClassWm<TAhkSymbol, vscode.Hover>(10 * 60 * 1000, 'HoverFunc', 60);
 
-async function HoverFunc(wordLower: string, textRaw: string): Promise<null | vscode.Hover> {
-    const isFunc = new RegExp(`(?<!\\.|%|\`)(${wordLower})\\(`, 'i'); // not search class.Method()
+async function HoverFunc(wordUp: string, textRaw: string): Promise<null | vscode.Hover> {
+    const isFunc = new RegExp(`(?<!\\.|%|\`)(${wordUp})\\(`, 'i'); // not search class.Method()
     if (!isFunc.test(textRaw)) return null;
 
-    const ahkSymbol = tryGetSymbol(wordLower, EMode.ahkFunc);
+    const ahkSymbol = tryGetSymbol(wordUp, EMode.ahkFunc);
     if (!ahkSymbol) return null;
 
     const t = ahkSymbol.AhkSymbol;
@@ -44,16 +44,16 @@ export class HoverProvider implements vscode.HoverProvider {
         if (isPosAtStr(document, position)) return null;
 
         const word = document.getText(range);
-        const wordLower = word.toLowerCase();
+        const wordUp = word.toUpperCase();
         const textRaw = document.lineAt(position).text;
-        const isFunc = await HoverFunc(wordLower, textRaw);
+        const isFunc = await HoverFunc(wordUp, textRaw);
         if (isFunc) return isFunc;
 
         // TODO https://www.autohotkey.com/docs/commands/index.htm
         // const commands = getCommandsHover(document, position);
         // if (commands) return commands;
 
-        const md = DeepAnalysisHover(document, position, word);
+        const md = DeepAnalysisHover(document, position, word.toUpperCase());
         if (md) return new vscode.Hover(md);
         return null;
     }

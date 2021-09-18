@@ -24,9 +24,7 @@ export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
         Obj.ahkBase = true;
         return Obj;
     }
-    //   strPart.startsWith('{ base:') // TODO { base: xxx
     if (!Obj.ahkArray && (strPart.startsWith('{') || (/^Object\(/i).test(strPart))) {
-        // TODO ClassName := { __Get: Func("MyGet"), __Set: Func("MySet"), __Call: Func("MyCall") }
         Obj.ahkBase = true;
         return Obj;
     }
