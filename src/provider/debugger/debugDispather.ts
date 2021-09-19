@@ -21,7 +21,9 @@ import { CommandHandler } from './handler/commandHandler';
 import { StackHandler } from './handler/StackHandler';
 import { VariableHandler } from './handler/variableHandler';
 import { fnObtainValueSet } from './handler/fnObtainValueSet';
-import { EVarScope, TDbgpResponse, TLaunchRequestArguments } from './DebugTypeEnum';
+import {
+    EVarScope, EVarScopeStr, TDbgpResponse, TLaunchRequestArguments,
+} from './DebugTypeEnum';
 import { mapToStr } from '../../tools/mapToStr';
 import { OutputChannel } from '../../tools/OutputChannel';
 
@@ -171,9 +173,10 @@ export class DebugDispather extends EventEmitter {
         const scope: number = this.variableHandler.getScopeByRef(args.variablesReference);
         const frameId: number = this.variableHandler.getFrameId();
 
-        const propertyName = this.variableHandler.getVarByRef(args.variablesReference)?.name;
-        if (propertyName) {
-            const ed2 = await this.getVariable(frameId, scope, propertyName); // TODO address
+        const property = this.variableHandler.getVarByRef(args.variablesReference);
+        if (property !== EVarScopeStr.Local
+            && property !== EVarScopeStr.Global) {
+            const ed2 = await this.getVariable(frameId, scope, property.name); // TODO address
             return ed2;
         }
 
@@ -250,10 +253,11 @@ export class DebugDispather extends EventEmitter {
         }
 
         let fullname: string = args.name;
-        const parentFullName: string | undefined = this.variableHandler.getVarByRef(args.variablesReference)?.name;
-        if (parentFullName) {
+        const parentFullName = this.variableHandler.getVarByRef(args.variablesReference);
+        if (parentFullName !== EVarScopeStr.Local
+            && parentFullName !== EVarScopeStr.Global) {
             const isIndex: boolean = fullname.includes('[') && fullname.includes(']');
-            fullname = isIndex === true ? `${parentFullName}${fullname}` : `${parentFullName}.${fullname}`;
+            fullname = isIndex === true ? `${parentFullName.name}${fullname}` : `${parentFullName.name}.${fullname}`;
             console.log('DebugDispather ~ fnObtainValue ~ fullname', fullname);
         }
 

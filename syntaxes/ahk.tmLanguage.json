@@ -179,8 +179,12 @@
                     "name": "comment.line.semicolon.functionline.ahk"
                 }
             },
-            "match": "^(\\s*\\w+)(\\(.*\\))\\s*({)\\s*(;?.*)$",
+            "match": "^\\s*(\\w\\w*)(\\(.*\\))\\s*({)\\s*(;?.*)$",
             "name": "functionline.ahk"
+        },
+        {           
+            "match": "\\w\\w*\\(",
+            "name": "entity.name.function.ahk"
         }
     ],
     "repository": {

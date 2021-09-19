@@ -134,13 +134,12 @@ export class VariableHandler {
         }
     }
 
-    public getVarByRef(ref: number): TAhkVariable {
+    public getVarByRef(ref: number): TAhkVariable | EVarScopeStr {
         const ed: TAhkVariable | EVarScopeStr = this.variableHandles.get(ref);
         switch (ed) {
             case EVarScopeStr.Local:
             case EVarScopeStr.Global:
-                console.error('--81--55--VariableHandler ~ getVarByRef ~ ref', ref);
-                throw new Error('--84--93--55using ERR');
+                return ed;
             default: return ed;
         }
     }
@@ -150,9 +149,9 @@ export class VariableHandler {
     }
 
     public getArrayValue(ref: number, start: number, count: number): Variable[] | PromiseLike<Variable[]> {
-        const ahkVar = this.getVarByRef(ref);
+        const ahkVar: EVarScopeStr | TAhkVariable = this.getVarByRef(ref);
         const message = 'VariableHandler ~ getArrayValue ~ ahkVar';
-        console.log(message, ahkVar);
+        console.error(message, ahkVar);
         throw new Error(message);
         // const aValue = ahkVar.value;
         // const message = 'VariableHandler ~ getArrayValue ~ aValue';
@@ -181,7 +180,7 @@ export class VariableHandler {
 
         const temp = response.property;
         if (!temp) {
-            console.log('Error --86--11--34-- !response.property', response);
+            console.error('Error --86--11--34-- !response.property', response);
             throw new Error('--86--74--35--, !response.property');
         }
 
@@ -189,7 +188,7 @@ export class VariableHandler {
         const responseFix2 = tf ? response : temp;
 
         if (Array.isArray(responseFix2)) {
-            console.log('VariableHandler ~ parsePropertyget ~ response', response);
+            console.error('VariableHandler ~ parsePropertyget ~ response', response);
             throw new Error('--85--31--69--Array.isArray(responseFix2)');
         }
 

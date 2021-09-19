@@ -22,7 +22,7 @@ export function FileManagerRecord(fileName: string, content: string, model: EFil
 
     if (!storagePath) {
         const message = 'Please open program to debug --96--47--21--by neko-help';
-        console.log(message);
+        console.error(message);
         throw new Error(message);
     }
 
