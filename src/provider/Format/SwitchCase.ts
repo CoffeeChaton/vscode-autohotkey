@@ -4,7 +4,7 @@ import { TTokenStream, DeepReadonly } from '../../globalEnum';
 
 export function getSwitchRange(document: vscode.TextDocument, DocStrMap: TTokenStream, textFix: string, line: number, RangeEnd: number)
     : false | vscode.Range {
-    if (!(/^\s*switch\s/i).test(textFix)) return false;
+    if (!(/^\s*switch[\s,]/i).test(textFix)) return false;
 
     const lineFix = textFix.endsWith('{') ? line : line + 1;
     const range = getRange(DocStrMap, lineFix, lineFix, RangeEnd);
@@ -19,7 +19,7 @@ export function inSwitchBlock(textFix: string, line: number, switchRangeArray: D
     switchRangeArray.forEach((sw) => {
         if (sw.contains(Pos)) switchDeep++;
     });
-    if ((/^\s*case\s/i).test(textFix)
+    if ((/^\s*case[\s,]/i).test(textFix)
         || (/^\s*default[\s:]/i).test(textFix)) {
         switchDeep--;
     }
