@@ -1,6 +1,6 @@
 {
     "env": {
-        "browser": true,
+        "browser": false,
         "es6": true
     },
     "extends": [
@@ -33,7 +33,7 @@
         }
     },
     "plugins": [
-        // "fp",
+        "fp",
         "immutable",
         "chai-expect",
         "@typescript-eslint",
@@ -46,8 +46,6 @@
         "import/resolver": {
             "node": {
                 "extensions": [
-                    ".js",
-                    ".jsx",
                     ".ts",
                     ".tsx"
                 ]
@@ -55,21 +53,22 @@
         }
     },
     "rules": {
-        // "fp/no-arguments": "error",
-        // "fp/no-delete": "error",
-        // "fp/no-events": "error",
-        // "fp/no-get-set": "error",
-        // "fp/no-mutating-assign": "error",
+        "fp/no-arguments": "error",
+        "fp/no-delete": "error",
+        "fp/no-events": "error",
+        "fp/no-get-set": "error",
+        "fp/no-mutating-assign": "error",
         // "fp/no-mutating-methods": "error",
         // "fp/no-mutation": "error",
-        // //  "fp/no-nil": "error",
-        // "fp/no-proxy": "error",
+        // "fp/no-nil": "error",
+        "fp/no-proxy": "error",
         // "fp/no-rest-parameters": "error",
         // "fp/no-this": "error",
         // "fp/no-throw": "error",
-        // //  "fp/no-unused-expression": "error",
-        // "fp/no-valueof-field": "error",
-        //
+        // "fp/no-unused-expression": "error",
+        "fp/no-valueof-field": "error",
+
+        "react/jsx-filename-extension": 0,
         "immutable/no-let": 0,
         "immutable/no-this": 2,
         "immutable/no-mutation": 2,
@@ -159,7 +158,7 @@
         "@typescript-eslint/no-type-alias": "off",
         "@typescript-eslint/no-unnecessary-qualifier": "warn",
         "@typescript-eslint/no-unnecessary-type-assertion": "warn",
-        "@typescript-eslint/no-unused-vars": "warn",
+        "@typescript-eslint/no-unused-vars": ["warn",{ "argsIgnorePattern": "^_" }],
         "@typescript-eslint/no-use-before-define": "warn",
         "@typescript-eslint/no-useless-constructor": "warn",
         "@typescript-eslint/no-var-requires": "warn",
@@ -169,6 +168,7 @@
         "@typescript-eslint/require-array-sort-compare": "warn",
         "@typescript-eslint/restrict-plus-operands": "warn",
         "@typescript-eslint/await-thenable": "error",
+        "no-unused-vars": "off",
         // --new
         "linebreak-style": [
             "error",
@@ -267,14 +267,8 @@
         "no-return-assign": "error",
         "no-self-compare": "error",
         "no-sequences": "error",
-        "no-shadow": [
-            "error",
-            {
-                "builtinGlobals": false,
-                "hoist": "functions",
-                "allow": []
-            }
-        ],
+        "no-shadow" : "off" , 
+        "@typescript-eslint/no-shadow" : [ "error" ] ,
         "no-shadow-restricted-names": "error",
         "no-sparse-arrays": "error",
         "no-undef-init": "error",

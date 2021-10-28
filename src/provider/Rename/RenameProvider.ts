@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// TODO RenameProvider
 import * as vscode from 'vscode';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
@@ -17,16 +15,12 @@ function DeepAnalysisRename(document: vscode.TextDocument, position: vscode.Posi
 
     const argLoc = ed.argMap.get(word);
     if (argLoc) {
-        console.log('🚀 ~ argLoc.defLoc', argLoc.defLoc);
-        console.log('🚀 ~ argLoc.refLoc', argLoc.refLoc);
         loc.push(...argLoc.defLoc, ...argLoc.refLoc);
     }
 
     const locList = ed.valMap.get(word);
 
     if (locList) {
-        console.log('🚀 ~ locList.defLoc', ...locList.defLoc);
-        console.log('🚀 ~ locList.refLoc', ...locList.refLoc);
         loc.push(...locList.defLoc, ...locList.refLoc);
     }
 
@@ -34,12 +28,8 @@ function DeepAnalysisRename(document: vscode.TextDocument, position: vscode.Posi
 }
 
 export class RenameProvider implements vscode.RenameProvider {
-    // public prepareRename(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken)
-    //     : vscode.ProviderResult<vscode.Range | { placeholder: string, range: vscode.Range; }> {
-    // }
-
-    public provideRenameEdits(document: vscode.TextDocument, position: vscode.Position, newName: string, token: vscode.CancellationToken)
-        : vscode.ProviderResult<vscode.WorkspaceEdit> {
+    public provideRenameEdits(document: vscode.TextDocument, position: vscode.Position, newName: string,
+        _token: vscode.CancellationToken): vscode.ProviderResult<vscode.WorkspaceEdit> {
         // eslint-disable-next-line security/detect-unsafe-regex
         const wordRange = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
         if (!wordRange) return null;
@@ -48,10 +38,7 @@ export class RenameProvider implements vscode.RenameProvider {
         const edit = new vscode.WorkspaceEdit();
         const locList = DeepAnalysisRename(document, position, word.toUpperCase());
         for (const loc of locList) {
-            const { uri, range } = loc;
-            // console.log('🚀 ~ RenameProvider ~ range', range);
-            // const replaceRange = new vscode.Range();
-            edit.replace(uri, range, newName);
+            edit.replace(loc.uri, loc.range, newName);
         }
         return edit;
     }

@@ -9,7 +9,7 @@ export const enum EMode {
     ahkClass = 'Class',
     ahkMethod = 'Method',
     ahkAll = 'ahkAll',
-    ahkGlobal = 'global'
+    ahkGlobal = 'global',
 }
 // vscode.SymbolKind
 // enum SymbolKind {
@@ -20,7 +20,7 @@ export const enum EMode {
 // }
 
 export const enum EStr {
-    diff_name_prefix = '_diff_temp_'
+    diff_name_prefix = '_diff_temp_',
 }
 export type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [P in keyof T]: DeepReadonly<T[P]> };
 
