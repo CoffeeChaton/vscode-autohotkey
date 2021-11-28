@@ -91,7 +91,7 @@ export class DebugDispather extends EventEmitter {
                 this.sendComand('run');
             })
             .on('stream', (stream) => {
-                this.emit('output', Buffer.from(stream.content, 'base64').toString());
+                this.emit('output', Buffer.from(stream.content as string, 'base64').toString());
             })
             .on('response', (response: TDbgpResponse) => {
                 if (response.attr.command) {

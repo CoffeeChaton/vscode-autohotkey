@@ -16,8 +16,8 @@ function getIgnore(DocStrMap: TTokenStream, line: number, IgnoreLine: number): n
     if (DocStrMap[line].textRaw.indexOf(EDiagBase.ignore) === -1) return IgnoreLine;
     const ignoreExec = (/^\s*;@ahk-ignore\s\s*(\d\d*)\s/).exec(DocStrMap[line].textRaw);
     if (ignoreExec === null) {
-        console.log('function getIgnore -> ignoreExec === null');
-        console.log(line, ' line');
+        // console.log('function getIgnore -> ignoreExec === null');
+        // console.log(line, ' line');
         return IgnoreLine;
     }
     const numberOfIgnore = Number(ignoreExec[1]);

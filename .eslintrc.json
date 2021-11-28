@@ -53,9 +53,10 @@
         }
     },
     "rules": {
+        "@typescript-eslint/no-unsafe-assignment": "off",
         "fp/no-arguments": "error",
         "fp/no-delete": "error",
-        "fp/no-events": "error",
+        // "fp/no-events": "error",
         "fp/no-get-set": "error",
         "fp/no-mutating-assign": "error",
         // "fp/no-mutating-methods": "error",

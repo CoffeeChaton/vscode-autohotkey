@@ -189,6 +189,4 @@ export type TempConfigs = {
     };
 };
 
-export type TConfigs = DeepReadonly<TempConfigs>;
-
 // foo<T>(a: NonNullable<T>)

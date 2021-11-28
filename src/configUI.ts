@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as vscode from 'vscode';
-import { TConfigs, TempConfigs } from './globalEnum';
+import { TempConfigs, DeepReadonly } from './globalEnum';
 /*
     ---set start---
 */
@@ -12,7 +12,7 @@ statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
 statusBarItem.command = 'ahk.bar.click';
 let Configs = vscode.workspace.getConfiguration('AhkNekoHelp');
 
-function getConfig(): TConfigs {
+function getConfig(): DeepReadonly<TempConfigs> {
     const ed: TempConfigs = {
         statusBar: {
             displayColor: Configs.get('statusBar.displayColor') as string,
