@@ -21,7 +21,8 @@ function DeepAnalysisRename(document: vscode.TextDocument, position: vscode.Posi
     const locList = ed.valMap.get(word);
 
     if (locList) {
-        loc.push(...locList.defLoc, ...locList.refLoc);
+        console.log('🚀 ~ locList', locList); //bug
+        // loc.push(...locList.defLoc, ...locList.refLoc);
     }
 
     return loc;
@@ -40,6 +41,7 @@ export class RenameProvider implements vscode.RenameProvider {
         for (const loc of locList) {
             edit.replace(loc.uri, loc.range, newName);
         }
+        // const fnRenameList = fnRename()
         return edit;
     }
 }
