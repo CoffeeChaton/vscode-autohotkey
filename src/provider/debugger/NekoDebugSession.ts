@@ -7,8 +7,8 @@
 import { commands } from 'vscode';
 import {
     BreakpointEvent, InitializedEvent, LoggingDebugSession, OutputEvent, StoppedEvent, TerminatedEvent, Thread,
-} from 'vscode-debugadapter';
-import { DebugProtocol } from 'vscode-debugprotocol';
+} from '@vscode/debugadapter';
+import { DebugProtocol } from '@vscode/debugprotocol';
 import { basename } from 'path';
 import { EContinue, EVscodeScope, TLaunchRequestArguments } from './DebugTypeEnum';
 import { DebugDispather } from './debugDispather';

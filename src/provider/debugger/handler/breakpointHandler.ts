@@ -3,8 +3,8 @@
 /* eslint-disable no-underscore-dangle */
 
 import { basename } from 'path';
-import { DebugProtocol } from 'vscode-debugprotocol';
-import { Breakpoint, Source } from 'vscode-debugadapter';
+import { DebugProtocol } from '@vscode/debugprotocol';
+import { Breakpoint, Source } from '@vscode/debugadapter';
 import { readFileSync } from 'fs';
 
 type TCallback = (breakPoint: DebugProtocol.Breakpoint) => void;

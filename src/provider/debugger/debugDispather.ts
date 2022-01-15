@@ -6,8 +6,8 @@
 /* eslint-disable max-lines */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100,300,131072] }] */
 import { EventEmitter } from 'events';
-import { Scope, StackFrame, Variable } from 'vscode-debugadapter';
-import { DebugProtocol } from 'vscode-debugprotocol';
+import { Scope, StackFrame, Variable } from '@vscode/debugadapter';
+import { DebugProtocol } from '@vscode/debugprotocol';
 import { spawn } from 'child_process';
 import { resolve } from 'path';
 import { existsSync } from 'fs';

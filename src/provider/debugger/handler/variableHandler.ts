@@ -4,7 +4,7 @@
 /* eslint-disable immutable/no-mutation */
 /* eslint-disable immutable/no-this */
 
-import { Handles, Scope, Variable } from 'vscode-debugadapter';
+import { Handles, Scope, Variable } from '@vscode/debugadapter';
 import {
     EVarScope, EVarScopeStr, TAhkVariable, TDbgpProperty, TDbgpPropertyAttr,
 } from '../DebugTypeEnum';
