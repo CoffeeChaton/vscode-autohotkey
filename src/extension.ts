@@ -14,6 +14,7 @@ import { CompletionItemProvider } from './provider/CompletionItem/CompletionItem
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
 import { RenameProvider } from './provider/Rename/RenameProvider';
+import { TAhkSymbolList } from './globalEnum';
 
 export function activate(context: vscode.ExtensionContext): void {
     const language: vscode.DocumentSelector = { language: 'ahk' };
@@ -41,6 +42,10 @@ export function activate(context: vscode.ExtensionContext): void {
     if (ahkRootPath) Detecter.buildByPathAsync(true, ahkRootPath[0].uri.fsPath);
 }
 
+export function deactive(): void {
+    Detecter.DocMap.clear();
+    Detecter.diagColl.clear();
+}
 // if ([^\x00-\x7F] not in "" block ) auto warn
 // [^\x00-\x7F]
 // [^\x1F-\x7F]
