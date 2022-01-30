@@ -11,7 +11,7 @@ import { DebugProtocol } from '@vscode/debugprotocol';
 import { spawn } from 'child_process';
 import { resolve } from 'path';
 import { existsSync } from 'fs';
-import getPort from 'get-port';
+// import getPort from 'get-port';
 import * as vscode from 'vscode';
 
 import { startDebugger } from '../Service/Service';
@@ -75,7 +75,7 @@ export class DebugDispather extends EventEmitter {
             throw new Error(message);
         }
 
-        const port = await getPort({ port: getPort.makeRange(9000, 9100) });
+        const port = 9001; //await getPort({ port: getPort.makeRange(9000, 9100) });
         this.debugServer = new DebugServer(port);
         this.commandHandler = new CommandHandler(this.debugServer);
         this.debugServer

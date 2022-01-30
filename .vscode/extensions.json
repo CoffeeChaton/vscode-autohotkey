@@ -1,7 +1,13 @@
 {
-	// See http://go.microsoft.com/fwlink/?LinkId=827846
+	// See https://code.visualstudio.com/docs/editor/extension-marketplace#_workspace-recommended-extensions
 	// for the documentation about the extensions.json format
 	"recommendations": [
-		"dbaeumer.vscode-eslint"
+		"dbaeumer.vscode-eslint",
+		"igorsbitnev.error-gutters",
+		"christian-kohler.path-intellisense",
+		"gruntfuggly.todo-tree",
+		"ms-vscode.vscode-js-profile-flame",
+		"dbaeumer.vscode-eslint",
+		"ipatalas.vscode-postfix-ts"
 	]
 }

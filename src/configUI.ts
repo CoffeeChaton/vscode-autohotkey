@@ -64,7 +64,6 @@ export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     const time = Date.now() - timeStart;
     const name = ` of ${path.basename(uri.fsPath)}`;
     statusBarItem.text = `$(heart) ${time} ms${name}`;
-    // console.log('OutlineProvide', time, 'ms', name);
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
 }
@@ -104,7 +103,6 @@ export function getIgnoredFile(buildPath: string): boolean {
 export function getDebugPath(): string {
     return config.Debug.executePath;
 }
-// console.log(JSON.stringify(val));
 // vscode.window.setStatusBarMessage(timeSpend);
 // vscode.window.showErrorMessage()
 // vscode.window.showInformationMessage()

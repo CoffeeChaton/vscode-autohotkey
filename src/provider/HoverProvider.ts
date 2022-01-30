@@ -30,8 +30,11 @@ async function HoverFunc(wordUp: string, textRaw: string): Promise<null | vscode
 }
 
 export class HoverProvider implements vscode.HoverProvider {
-    public async provideHover(document: vscode.TextDocument, position: vscode.Position,
-        token: vscode.CancellationToken): Promise<vscode.Hover | null> {
+    public async provideHover(
+        document: vscode.TextDocument,
+        position: vscode.Position,
+        token: vscode.CancellationToken,
+    ): Promise<vscode.Hover | null> {
         const range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
         if (!range) {
             // const range2 = document.getWordRangeAtPosition(position, /(?:%)\b\w\w*\b(?:%)/);

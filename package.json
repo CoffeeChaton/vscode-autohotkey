@@ -5,7 +5,7 @@
     "version": "2.3.1",
     "publisher": "CoffeeChaton",
     "engines": {
-        "vscode": "^1.45.0"
+        "vscode": "^1.63.1"
     },
     "activationEvents": [
         "onLanguage:ahk",
@@ -198,7 +198,7 @@
                     ".ahk",
                     ".ext"
                 ],
-                "configuration": "./ahk.configuration.json"
+                "configuration": "./config/ahk.configuration.json"
             }
         ],
         "grammars": [
@@ -211,12 +211,12 @@
         "snippets": [
             {
                 "language": "ahk",
-                "path": "./snippets/ahk.json"
+                "path": "./snippets/ahk.snippets.json"
             }
         ]
     },
     "scripts": {
-        "vscode:prepublish": "pnpm run compile",
+        "vscode:prepublish" : "node esbuild.config.js",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "test": "pnpm run compile && node ./node_modules/vscode/bin/test"
@@ -227,13 +227,16 @@
         "@types/temp": "^0.9.1",
         "@types/vscode": "^1.63.1",
         "@types/xml2js": "^0.4.9",
-        "@typescript-eslint/eslint-plugin": "^5.9.1",
-        "@typescript-eslint/parser": "^5.9.1",
-        "eslint": "^8.6.0",
+        "@typescript-eslint/eslint-plugin": "^5.10.1",
+        "@typescript-eslint/parser": "^5.10.1",
+        "@vscode/debugadapter": "^1.51.1",
+        "@vscode/debugprotocol": "^1.51.0",
+        "esbuild": "^0.14.14",
+        "esbuild-copy-static-files": "^0.1.0",
+        "eslint": "^8.8.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-airbnb-typescript": "^16.1.0",
-        "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-chai-expect": "^3.0.0",
         "eslint-plugin-fp": "^2.3.0",
         "eslint-plugin-immutable": "^1.0.0",
@@ -241,32 +244,21 @@
         "eslint-plugin-jsx-a11y": "^6.5.1",
         "eslint-plugin-no-setter-return": "^0.1.2",
         "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-prettier": "^4.0.0",
         "eslint-plugin-promise": "^6.0.0",
         "eslint-plugin-react": "^7.28.0",
         "eslint-plugin-react-hooks": "^4.3.0",
         "eslint-plugin-security": "^1.4.0",
         "fs": "0.0.1-security",
-        "generator-code": "^1.6.6",
-        "madge": "^5.0.1",
-        "prettier": "^2.5.1",
-        "prettier-eslint": "^13.0.0",
-        "prettier-eslint-cli": "^5.0.1",
-        "ts-loader": "^9.2.6",
-        "typescript": "^4.5.4",
+        "typescript": "^4.5.5",
         "vscode-jsonrpc": "^6.0.0",
         "vscode-languageserver": "^7.0.0",
         "vscode-languageserver-protocol": "^3.16.0",
         "vscode-languageserver-textdocument": "^1.0.3",
         "vscode-languageserver-types": "^3.16.0",
         "vscode-oniguruma": "^1.6.1",
-        "vscode-test": "^1.6.1",
-        "webpack": "^5.66.0"
+        "vscode-test": "^1.6.1"
     },
     "dependencies": {
-        "@vscode/debugadapter": "^1.51.1",
-        "@vscode/debugprotocol": "^1.51.0",
-        "get-port": "5.1.1",
         "temp": "^0.9.4",
         "xml2js": "^0.4.23"
     }
