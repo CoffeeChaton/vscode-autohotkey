@@ -11,7 +11,7 @@
         "onLanguage:ahk",
         "onDebug"
     ],
-    "main": "./out/extension",
+    "main": "./dict/extension",
     "homepage": "https://github.com/CoffeeChaton/vscode-ahk-outline/blob/master/README.md",
     "bugs": {
         "url": "https://github.com/CoffeeChaton/vscode-ahk-outline/issues"
@@ -216,7 +216,7 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish" : "node esbuild.config.js",
+        "vscode:prepublish": "node esbuild.config.js",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "test": "pnpm run compile && node ./node_modules/vscode/bin/test"

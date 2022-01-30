@@ -9,3 +9,4 @@ package-lock.json
 SignatureHelp/
 getSelectionRangeTextRaw.ts
 .idea/
+dict

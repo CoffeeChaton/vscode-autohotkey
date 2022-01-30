@@ -57,6 +57,8 @@
         "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
         "esModuleInterop": false
     },
-     "exclude": ["node_modules"],
+    "exclude": [
+        "node_modules"
+    ],
     // "typeRoots": ["node_modules/@types"]
 }

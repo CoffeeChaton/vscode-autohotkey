@@ -1,25 +1,29 @@
-
-// esbuild-base
-// const esbuildConfig = () => require('esbuild').buildSync({
-//     entryPoints: ['./src/extension.ts'],
-//     bundle: true,
-//     outfile: 'out/main.js',
-//     external: ['vscode'],
-//     format: 'cjs',
-//     platform:'node',
-// });
-
-
 const esbuild = require('esbuild');
+const copyStaticFiles = require('esbuild-copy-static-files')
 
 const config = {
-    entryPoints: ['./src/extension.ts','./src/debugEntrance.ts'],
+    entryPoints: ['./src/extension.ts', './src/debugEntrance.ts'],
     bundle: true,
-    outdir: 'out',
+    outdir: 'dict',
     external: ['vscode'],
     format: 'cjs',
     platform: 'node',
-    sourcemap: false    
+    sourcemap: false,
+    watch: false,
+    logLevel: 'info',
+    // define:DEBUG=false
+    plugins: [
+        copyStaticFiles({
+            src: './',
+            dest: 'C:/Users/=====/.vscode/extensions/===',
+            filter: (src, dest) => {
+                if (src.endsWith('node_modules')) {
+                    return false;
+                }
+                return true;
+            },
+            preserveTimestamps: true
+        })
+    ],
 };
-esbuild.build(config)
-    .then(() => {  process.stdout.write('OK')})
+esbuild.build(config);

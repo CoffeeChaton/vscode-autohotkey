@@ -14,7 +14,6 @@ import { CompletionItemProvider } from './provider/CompletionItem/CompletionItem
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
 import { RenameProvider } from './provider/Rename/RenameProvider';
-import { TAhkSymbolList } from './globalEnum';
 
 export function activate(context: vscode.ExtensionContext): void {
     const language: vscode.DocumentSelector = { language: 'ahk' };
