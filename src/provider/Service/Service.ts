@@ -10,7 +10,7 @@ import { FileManagerRecord, EFileModel } from './fileManager';
 import { Process } from './Process';
 
 function createTemplate(content: string): string {
-    const fileName = `temp-${getNowDate()}.ahk`;
+    const fileName = `temp-${getNowDate(new Date())}.ahk`;
     const ed: string = FileManagerRecord(fileName, content, EFileModel.WRITE);
     return ed;
 }

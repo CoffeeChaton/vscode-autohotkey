@@ -1,7 +1,9 @@
 {
     "env": {
+        "node": true,
         "browser": false,
-        "es6": true
+        "es6": true,
+        "jest": true
     },
     "extends": [
         "plugin:chai-expect/recommended",
@@ -16,8 +18,6 @@
         "plugin:import/errors",
         "plugin:import/warnings",
         "plugin:import/typescript"
-        //  "prettier/@typescript-eslint"
-        // "plugin:jsx-a11y/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -42,33 +42,14 @@
         "no-setter-return",
         "import"
     ],
-    "settings": {
-        "import/resolver": {
-            "node": {
-                "extensions": [
-                    ".ts",
-                    ".tsx"
-                ]
-            }
-        }
-    },
     "rules": {
         "@typescript-eslint/no-unsafe-assignment": "off",
         "fp/no-arguments": "error",
         "fp/no-delete": "error",
-        // "fp/no-events": "error",
         "fp/no-get-set": "error",
         "fp/no-mutating-assign": "error",
-        // "fp/no-mutating-methods": "error",
-        // "fp/no-mutation": "error",
-        // "fp/no-nil": "error",
         "fp/no-proxy": "error",
-        // "fp/no-rest-parameters": "error",
-        // "fp/no-this": "error",
-        // "fp/no-throw": "error",
-        // "fp/no-unused-expression": "error",
         "fp/no-valueof-field": "error",
-
         "react/jsx-filename-extension": 0,
         "immutable/no-let": 0,
         "immutable/no-this": 2,
@@ -116,15 +97,12 @@
         "chai-expect/no-inner-compare": 2,
         "chai-expect/no-inner-literal": 2,
         "chai-expect/missing-assertion": 2,
-        //  eslint7  "@typescript-eslint/rule-name": "error",
         "no-useless-backreference": "error",
         "default-case-last": 2,
         "import/export": 2,
         "import/default": 2,
         "import/namespace": 2,
         "import/named": 2,
-        //  eslint7  "no-setter-return/rule-name": 2,
-        // "indent": ["error", 4, { "SwitchCase": 1 }],
         "@typescript-eslint/indent": [
             "error",
             4,
@@ -134,15 +112,9 @@
         ],
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",
-        //  eslint7 "@typescript-eslint/ban-ts-ignore": "warn",
         "@typescript-eslint/ban-types": "warn",
-        //  eslint7 "@typescript-eslint/camelcase": "warn",
-        // eslint7  "@typescript-eslint/class-name-casing": "warn",
         "@typescript-eslint/explicit-function-return-type": "warn",
         "@typescript-eslint/explicit-member-accessibility": "warn",
-        //  eslint7   "@typescript-eslint/generic-type-naming": "warn",
-        //  eslint7 "@typescript-eslint/interface-name-prefix": "warn",
-        //  eslint7   "@typescript-eslint/member-naming": "warn",
         "@typescript-eslint/member-ordering": "warn",
         "@typescript-eslint/no-array-constructor": "warn",
         "@typescript-eslint/no-empty-interface": "warn",
@@ -159,7 +131,12 @@
         "@typescript-eslint/no-type-alias": "off",
         "@typescript-eslint/no-unnecessary-qualifier": "warn",
         "@typescript-eslint/no-unnecessary-type-assertion": "warn",
-        "@typescript-eslint/no-unused-vars": ["warn",{ "argsIgnorePattern": "^_" }],
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                "argsIgnorePattern": "^_"
+            }
+        ],
         "@typescript-eslint/no-use-before-define": "warn",
         "@typescript-eslint/no-useless-constructor": "warn",
         "@typescript-eslint/no-var-requires": "warn",
@@ -170,7 +147,6 @@
         "@typescript-eslint/restrict-plus-operands": "warn",
         "@typescript-eslint/await-thenable": "error",
         "no-unused-vars": "off",
-        // --new
         "linebreak-style": [
             "error",
             "windows"
@@ -186,7 +162,6 @@
             }
         ],
         "import/no-unresolved": 0,
-        //--------
         "import/extensions": [
             "error",
             "ignorePackages",
@@ -268,8 +243,10 @@
         "no-return-assign": "error",
         "no-self-compare": "error",
         "no-sequences": "error",
-        "no-shadow" : "off" , 
-        "@typescript-eslint/no-shadow" : [ "error" ] ,
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": [
+            "error"
+        ],
         "no-shadow-restricted-names": "error",
         "no-sparse-arrays": "error",
         "no-undef-init": "error",
@@ -286,5 +263,14 @@
         "use-isnan": "error",
         "array-callback-return": "error",
         "prefer-destructuring": "off"
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".ts"
+                ]
+            }
+        }
     }
 }

@@ -58,7 +58,8 @@
         "esModuleInterop": false
     },
     "exclude": [
-        "node_modules"
+        "node_modules",
+        ".vscode-test"
     ],
     // "typeRoots": ["node_modules/@types"]
 }
