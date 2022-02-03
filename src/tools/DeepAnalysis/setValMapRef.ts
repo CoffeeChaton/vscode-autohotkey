@@ -12,8 +12,14 @@ function getValRegMap(valMap: TValMap): Map<string, RegExp> {
 }
 
 // eslint-disable-next-line max-params
-function setValUse(valMap: TValMap, valMap2: TValMap, o: RegExpMatchArray, valName: string,
-    uri: vscode.Uri, line: number): TValObj | null {
+function setValUse(
+    valMap: TValMap,
+    valMap2: TValMap,
+    o: RegExpMatchArray,
+    valName: string,
+    uri: vscode.Uri,
+    line: number,
+): TValObj | null {
     // o === ['bgColor', 'bgColor', index: 18, input: '        Case ___: bgColor := 0xFF0000
     // ', groups: undefined]
     const defVal = valMap.get(valName.toUpperCase());
@@ -44,9 +50,13 @@ function setValUse(valMap: TValMap, valMap2: TValMap, o: RegExpMatchArray, valNa
     function setRefLoc(ch: number): vscode.Location[] {
         const useVal = valMap2.get(valName.toUpperCase());
         const oldRefLocS: vscode.Location[] = useVal?.refLoc || [];
-        const newRefLoc: vscode.Location = new vscode.Location(uri,
-            new vscode.Range(new vscode.Position(line, ch),
-                new vscode.Position(line, ch + valName.length)));
+        const newRefLoc: vscode.Location = new vscode.Location(
+            uri,
+            new vscode.Range(
+                new vscode.Position(line, ch),
+                new vscode.Position(line, ch + valName.length),
+            ),
+        );
 
         for (const { range } of defLoc) {
             if (newRefLoc.range.contains(range)) {
@@ -57,8 +67,12 @@ function setValUse(valMap: TValMap, valMap2: TValMap, o: RegExpMatchArray, valNa
     }
 }
 
-export function setValMapRef(uri: vscode.Uri, ahkSymbol: TAhkSymbol,
-    DocStrMap: TTokenStream, valMap: TValMap): TValMap {
+export function setValMapRef(
+    uri: vscode.Uri,
+    ahkSymbol: TAhkSymbol,
+    DocStrMap: TTokenStream,
+    valMap: TValMap,
+): TValMap {
     const regMap = getValRegMap(valMap);
 
     const valMap2: TValMap = new Map<string, TValObj>();

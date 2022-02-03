@@ -106,11 +106,13 @@ function parseTail({
         ? 1
         : undefined;
 
-    const ed = new Variable(fullname,
+    const ed = new Variable(
+        fullname,
         value,
         ref,
         indexedVariables,
-        namedVariables);
+        namedVariables,
+    );
     //  ed.type = typeAttr;
     return ed;
 }

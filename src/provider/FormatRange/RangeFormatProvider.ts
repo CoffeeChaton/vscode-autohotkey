@@ -139,8 +139,12 @@ export function RangeFormat({
     ];
 }
 export class RangeFormatProvider implements vscode.DocumentRangeFormattingEditProvider {
-    public provideDocumentRangeFormattingEdits(document: vscode.TextDocument, range: vscode.Range,
-        options: vscode.FormattingOptions, token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
+    public provideDocumentRangeFormattingEdits(
+        document: vscode.TextDocument,
+        range: vscode.Range,
+        options: vscode.FormattingOptions,
+        token: vscode.CancellationToken,
+    ): vscode.ProviderResult<vscode.TextEdit[]> {
         const RangeText = document.getText(range);
         const timeStart = Date.now();
         return RangeFormat({

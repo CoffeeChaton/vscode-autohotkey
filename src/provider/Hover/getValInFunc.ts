@@ -29,8 +29,10 @@ function wrapToHoverMd(inPut: [EValType.local | EValType.global | EValType.Stati
 
 function getValInFuncCore(ahkSymbol: TAhkSymbol, document: vscode.TextDocument, word: string)
     : null | vscode.MarkdownString {
-    const DocStrMapSelection = Pretreatment(document.getText(ahkSymbol.selectionRange).split('\n'),
-        ahkSymbol.selectionRange.start.line);
+    const DocStrMapSelection = Pretreatment(
+        document.getText(ahkSymbol.selectionRange).split('\n'),
+        ahkSymbol.selectionRange.start.line,
+    );
     const regex = ahkValRegex(word);
     for (const { lStr, textRaw } of DocStrMapSelection) {
         if (lStr.search(regex) > -1) {

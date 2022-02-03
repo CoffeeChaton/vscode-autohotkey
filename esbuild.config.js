@@ -16,7 +16,7 @@ const config = {
     entryPoints: ['./src/extension.ts', './src/debugEntrance.ts'],
     bundle: true,
     outdir: 'dict',
-    external: ['vscode'], // not bundle 'vscode'
+    external: ['vscode', "@vscode/debugprotocol",], // not bundle 'vscode'
     format: 'cjs',
     platform: 'node',
     sourcemap: false,

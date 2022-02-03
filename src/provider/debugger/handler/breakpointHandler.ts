@@ -33,10 +33,12 @@ export class BreakPointHandler {
         const bps = sourceBreakpoints
             .map((sourceBreakpoint) => {
                 const source = new Source(basename(path), path);
-                const breakPoint = new Breakpoint(false,
+                const breakPoint = new Breakpoint(
+                    false,
                     sourceBreakpoint.line,
                     sourceBreakpoint.column,
-                    source);
+                    source,
+                );
                 const lineText = sourceLines[sourceBreakpoint.line];
                 if (lineText && lineText.trim().charAt(0) !== ';') {
                     breakPoint.verified = true;

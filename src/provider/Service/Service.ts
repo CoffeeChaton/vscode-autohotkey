@@ -75,14 +75,16 @@ export function startDebugger(script: string): void {
         throw new Error(msg);
     }
 
-    vscode.debug.startDebugging(vscode.workspace.getWorkspaceFolder(cwd),
+    vscode.debug.startDebugging(
+        vscode.workspace.getWorkspaceFolder(cwd),
         {
             type: 'ahk',
             request: 'launch',
             name: 'Autohotkey Debugger',
             runtime: getDebugPath(),
             program: script || getPathByActive(),
-        });
+        },
+    );
 }
 
 /**

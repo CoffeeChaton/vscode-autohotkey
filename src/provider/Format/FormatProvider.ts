@@ -89,8 +89,12 @@ function fn_Warn_thisLineText_WARN({
     return wrap(`${DeepStr}${WarnLineBodyWarn}`);
 }
 
-export function FormatCore(document: vscode.TextDocument, options: vscode.FormattingOptions,
-    token: vscode.CancellationToken, diff: boolean): vscode.ProviderResult<vscode.TextEdit[]> {
+export function FormatCore(
+    document: vscode.TextDocument,
+    options: vscode.FormattingOptions,
+    token: vscode.CancellationToken,
+    diff: boolean,
+): vscode.ProviderResult<vscode.TextEdit[]> {
     const timeStart = Date.now();
     const AllDoc = document.getText();
     const DocStrMap = Pretreatment(AllDoc.split('\n'), 0);
@@ -153,8 +157,11 @@ export function FormatCore(document: vscode.TextDocument, options: vscode.Format
 }
 
 export class FormatProvider implements vscode.DocumentFormattingEditProvider {
-    public provideDocumentFormattingEdits(document: vscode.TextDocument, options: vscode.FormattingOptions,
-        token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
+    public provideDocumentFormattingEdits(
+        document: vscode.TextDocument,
+        options: vscode.FormattingOptions,
+        token: vscode.CancellationToken,
+    ): vscode.ProviderResult<vscode.TextEdit[]> {
         return FormatCore(document, options, token, true);
     }
 }

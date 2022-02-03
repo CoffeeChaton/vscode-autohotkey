@@ -39,11 +39,13 @@ export async function callDiff({
         // selection: Range,
     };
 
-    await vscode.commands.executeCommand('vscode.diff',
+    await vscode.commands.executeCommand(
+        'vscode.diff',
         vscode.Uri.file(left.path),
         rightUri,
         title,
-        options);
+        options,
+    );
 
     right.end();
     left.end();

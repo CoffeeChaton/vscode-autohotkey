@@ -35,8 +35,10 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
                 throw new Error(message);
             }
             const character = lStr.search(ahkValRegex(argName));
-            const range = new vscode.Range(new vscode.Position(line, character),
-                new vscode.Position(line, character + keyRawName.length));
+            const range = new vscode.Range(
+                new vscode.Position(line, character),
+                new vscode.Position(line, character + keyRawName.length),
+            );
             const value: TArgListVal = {
                 keyRawName,
                 defLoc: [new vscode.Location(uri, range)],
@@ -61,8 +63,10 @@ export function setArgMap(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTo
             if (line <= startLine) continue;
             const character = lStr.search(ahkValRegex(argName));
             if (character !== -1) {
-                const range = new vscode.Range(new vscode.Position(line, character),
-                    new vscode.Position(line, character + argName.length));
+                const range = new vscode.Range(
+                    new vscode.Position(line, character),
+                    new vscode.Position(line, character + argName.length),
+                );
                 const loc = new vscode.Location(uri, range);
                 v.refLoc.push(loc);
                 const comment = getCommentOfLine({ textRaw, lStr });

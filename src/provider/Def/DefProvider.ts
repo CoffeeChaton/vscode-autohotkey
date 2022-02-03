@@ -48,8 +48,10 @@ async function getReference(usingReg: RegExp, timeStart: number, wordUp: string)
         for (let line = 0; line < lineCount; line++) {
             const textRaw = textRawList[line].trim();
             if (usingReg.test(textRaw)) {
-                List.push(new vscode.Location(document.uri,
-                    new vscode.Position(line, textRawList[line].search(usingReg))));
+                List.push(new vscode.Location(
+                    document.uri,
+                    new vscode.Position(line, textRawList[line].search(usingReg)),
+                ));
             }
         }
     }
@@ -104,8 +106,12 @@ async function ahkDef(
 /**
  * @param wordUp word.toUpperCase();
  */
-export async function userDef(document: vscode.TextDocument,
-    position: vscode.Position, wordUp: string, listAllUsing: boolean): Promise<null | vscode.Location[]> {
+export async function userDef(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    wordUp: string,
+    listAllUsing: boolean,
+): Promise<null | vscode.Location[]> {
     const timeStart = Date.now();
     // isDef: (textTrim: string) => boolean
     // TODO get def of AST
@@ -155,8 +161,11 @@ export async function userDef(document: vscode.TextDocument,
 // open the definition to the side with ( via Ctrl+Alt+Click )
 // Peek Definition (via Alt+F12)
 export class DefProvider implements vscode.DefinitionProvider {
-    public async provideDefinition(document: vscode.TextDocument, position: vscode.Position,
-        token: vscode.CancellationToken): Promise<null | vscode.Location | vscode.Location[] | vscode.LocationLink[]> {
+    public async provideDefinition(
+        document: vscode.TextDocument,
+        position: vscode.Position,
+        token: vscode.CancellationToken,
+    ): Promise<null | vscode.Location | vscode.Location[] | vscode.LocationLink[]> {
         if (isPosAtStr(document, position)) return null;
 
         const range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);

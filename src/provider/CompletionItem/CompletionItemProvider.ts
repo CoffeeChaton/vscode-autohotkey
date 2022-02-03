@@ -100,8 +100,12 @@ async function wrapListAllFuncClass(document: vscode.TextDocument, position: vsc
 
 // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
 export class CompletionItemProvider implements vscode.CompletionItemProvider {
-    public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position,
-        token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<null | vscode.CompletionItem[]> {
+    public async provideCompletionItems(
+        document: vscode.TextDocument,
+        position: vscode.Position,
+        token: vscode.CancellationToken,
+        context: vscode.CompletionContext,
+    ): Promise<null | vscode.CompletionItem[]> {
         const t1 = Date.now();
         const completions: vscode.CompletionItem[] = [
             ...await wrapClass(document, position), // '.'

@@ -21,7 +21,7 @@ function DeepAnalysisRename(document: vscode.TextDocument, position: vscode.Posi
     const locList = ed.valMap.get(word);
 
     if (locList) {
-        console.log('🚀 ~ locList', locList); //bug
+        console.log('🚀 ~ locList', locList); // bug
         // loc.push(...locList.defLoc, ...locList.refLoc);
     }
 
@@ -29,8 +29,12 @@ function DeepAnalysisRename(document: vscode.TextDocument, position: vscode.Posi
 }
 
 export class RenameProvider implements vscode.RenameProvider {
-    public provideRenameEdits(document: vscode.TextDocument, position: vscode.Position, newName: string,
-        _token: vscode.CancellationToken): vscode.ProviderResult<vscode.WorkspaceEdit> {
+    public provideRenameEdits(
+        document: vscode.TextDocument,
+        position: vscode.Position,
+        newName: string,
+        _token: vscode.CancellationToken,
+    ): vscode.ProviderResult<vscode.WorkspaceEdit> {
         // eslint-disable-next-line security/detect-unsafe-regex
         const wordRange = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
         if (!wordRange) return null;

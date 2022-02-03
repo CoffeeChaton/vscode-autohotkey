@@ -18,6 +18,11 @@ export function getClassInstanceVar(FuncInput: FuncInputType): false | TAhkSymbo
     const kind = vscode.SymbolKind.Variable;
     const range = new vscode.Range(line, 0, line + 1, 0);
 
-    return new vscode.DocumentSymbol(name,
-        detail, kind, range, range);
+    return new vscode.DocumentSymbol(
+        name,
+        detail,
+        kind,
+        range,
+        range,
+    );
 }

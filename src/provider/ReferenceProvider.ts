@@ -7,8 +7,12 @@ import { getValDefInFunc } from './Def/getValDefInFunc';
 
 export class ReferenceProvider implements vscode.ReferenceProvider {
     //  Go to References search (via Shift+F12),
-    public async provideReferences(document: vscode.TextDocument, position: vscode.Position,
-        context: vscode.ReferenceContext, token: vscode.CancellationToken): Promise<vscode.Location[] | null> {
+    public async provideReferences(
+        document: vscode.TextDocument,
+        position: vscode.Position,
+        context: vscode.ReferenceContext,
+        token: vscode.CancellationToken,
+    ): Promise<vscode.Location[] | null> {
         if (isPosAtStr(document, position)) return null;
 
         const range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);

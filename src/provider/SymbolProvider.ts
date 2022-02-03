@@ -3,8 +3,10 @@ import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 
 export class SymBolProvider implements vscode.DocumentSymbolProvider {
-    public provideDocumentSymbols(document: vscode.TextDocument,
-        token: vscode.CancellationToken): vscode.ProviderResult<vscode.DocumentSymbol[]> {
+    public provideDocumentSymbols(
+        document: vscode.TextDocument,
+        token: vscode.CancellationToken,
+    ): vscode.ProviderResult<vscode.DocumentSymbol[]> {
         return Detecter.updateDocDef(false, document.uri.fsPath);
     }
     // May 08 2020, vscode.SymbolInformation  -> vscode.DocumentSymbol[]

@@ -62,8 +62,12 @@ function getKind(kind: vscode.SymbolKind): string {
         default: return 'Unknown';
     }
 }
-async function parsingUserDefClassRecursive(c0: TSymAndFsPath,
-    track: readonly string[], ChapterArr: readonly string[], deep: number): Promise<vscode.CompletionItem[]> {
+async function parsingUserDefClassRecursive(
+    c0: TSymAndFsPath,
+    track: readonly string[],
+    ChapterArr: readonly string[],
+    deep: number,
+): Promise<vscode.CompletionItem[]> {
     const { fsPath, ahkSymbol } = c0;
     const fnStrEq = ChapterArr[deep] ? new RegExp(`^${ChapterArr[deep]}$`, 'i') : /^$/;
     const itemS: vscode.CompletionItem[] = [];
@@ -90,7 +94,7 @@ async function parsingUserDefClassRecursive(c0: TSymAndFsPath,
     return itemS;
 }
 
-type TMathName = { ChapterArr: readonly string[]; strPart: string; ahkBaseObj: TAhkBaseObj };
+type TMathName = { ChapterArr: readonly string[]; strPart: string; ahkBaseObj: TAhkBaseObj; };
 
 function matchClassName({ ChapterArr, strPart, ahkBaseObj }: TMathName): string | null {
     // case 1: https://www.autohotkey.com/docs/Objects.htm#Objects_as_Functions

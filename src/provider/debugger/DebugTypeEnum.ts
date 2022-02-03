@@ -37,17 +37,17 @@ export type TLaunchRequestArguments = DeepReadonly<{
 
 export const enum EVarScope {
     LOCAL = 0,
-    GLOBAL = 1
+    GLOBAL = 1,
 }
 
 export const enum EVarScopeStr {
     Local = 'Local--88',
-    Global = 'Global'
+    Global = 'Global',
 }
 
 export const enum EVscodeScope {
     LOCAL = 1000,
-    GLOBAL = 1001
+    GLOBAL = 1001,
 }
 
 /**
@@ -59,7 +59,7 @@ export const enum EContinue {
     RUN = 'run',
     STEP_OVER = 'step_over',
     STEP_OUT = 'step_out',
-    STEP_INTO = 'step_into'
+    STEP_INTO = 'step_into',
 }
 
 type TDbgpResponseStack = {

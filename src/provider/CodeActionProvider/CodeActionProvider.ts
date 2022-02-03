@@ -58,8 +58,12 @@ function setIgnoreLine(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.
     return CA;
 }
 export class CodeActionProvider implements vscode.CodeActionProvider {
-    public provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection,
-        context: vscode.CodeActionContext, token: vscode.CancellationToken)
+    public provideCodeActions(
+        document: vscode.TextDocument,
+        range: vscode.Range | vscode.Selection,
+        context: vscode.CodeActionContext,
+        token: vscode.CancellationToken,
+    )
         : vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
         if (context.diagnostics.length === 0) return null;
         const { uri } = document;

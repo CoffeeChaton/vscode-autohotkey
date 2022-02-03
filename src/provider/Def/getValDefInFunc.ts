@@ -70,8 +70,13 @@ function wrapper(document: vscode.TextDocument, position: vscode.Position, ahkSy
     return defLocation;
 }
 
-function match(ahkSymbol: TAhkSymbol, document: vscode.TextDocument,
-    position: vscode.Position, wordUp: string, listAllUsing: boolean): null | vscode.Location[] {
+function match(
+    ahkSymbol: TAhkSymbol,
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    wordUp: string,
+    listAllUsing: boolean,
+): null | vscode.Location[] {
     const funcPos = atFunPos(ahkSymbol, position);
 
     switch (funcPos) {

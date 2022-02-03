@@ -57,8 +57,10 @@ function getValue({
     uri,
     argList,
 }: TGetValue): TValObj {
-    const range = new vscode.Range(new vscode.Position(line, character),
-        new vscode.Position(line, character + keyRawName.length));
+    const range = new vscode.Range(
+        new vscode.Position(line, character),
+        new vscode.Position(line, character + keyRawName.length),
+    );
     const defLoc = new vscode.Location(uri, range);
     const comment = getCommentOfLine({ textRaw, lStr }) ?? '';
     // const arg = argList.get(keyRawName.toUpperCase());
@@ -140,8 +142,10 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
     const cache = w.getWm(ahkSymbol);
     if (cache) return cache;
 
-    const DocStrMap = Pretreatment(document.getText(ahkSymbol.range).split('\n'),
-        ahkSymbol.range.start.line);
+    const DocStrMap = Pretreatment(
+        document.getText(ahkSymbol.range).split('\n'),
+        ahkSymbol.range.start.line,
+    );
     const argList: TArgList = setArgMap(document.uri, ahkSymbol, DocStrMap);
     const valList = setValList(document.uri, ahkSymbol, DocStrMap, argList);
     const v: DeepAnalysisResult = {

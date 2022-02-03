@@ -7,7 +7,7 @@ export type FuncDefData = {
     selectionRange: vscode.Range;
 };
 
-type FuncTailType = { DocStrMap: TTokenStream, searchText: string, name: string, searchLine: number, defLine: number };
+type FuncTailType = { DocStrMap: TTokenStream, searchText: string, name: string, searchLine: number, defLine: number; };
 
 function getSelectionRange(DocStrMap: TTokenStream, defLine: number, searchLine: number): vscode.Range {
     // const argPos = Math.max(DocStrMap[defLine].lStr.indexOf('('), 0);
@@ -15,8 +15,10 @@ function getSelectionRange(DocStrMap: TTokenStream, defLine: number, searchLine:
     const colE = DocStrMap[searchLine].lStr.lastIndexOf(')');
     //  const colFixE = colE === -1 ? DocStrMap[searchLine].lStr.length : colE;
     return new vscode.Range(
-        defLine, colS,
-        searchLine, colE + 1,
+        defLine,
+        colS,
+        searchLine,
+        colE + 1,
     );
 }
 
