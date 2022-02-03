@@ -2,7 +2,7 @@ const esbuild = require('esbuild');
 const copyStaticFiles = require('esbuild-copy-static-files')
 
 const filter = (src, dest) => {
-    const filterRuler = ['node_modules', 'coverage', 'out', 'src', '.history', '.idea', '.git'];
+    const filterRuler = ['node_modules', 'coverage', 'out', 'src', '.history', '.idea', '.git', '.cpuprofile'];
     for (const ed of filterRuler) {
         if (src.endsWith(ed)) {
             return false;
@@ -26,7 +26,7 @@ const config = {
     plugins: [
         copyStaticFiles({
             src: './',
-            dest: 'C:/Users/====/.vscode/extensions/====',
+            dest: 'C:/Users/antec0217/.vscode/extensions/cz00',
             filter,
             preserveTimestamps: true
         })

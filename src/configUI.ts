@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as vscode from 'vscode';
-import { TempConfigs, DeepReadonly } from './globalEnum';
+import { TConfigs } from './globalEnum';
 /*
     ---set start---
 */
@@ -12,8 +12,8 @@ statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
 statusBarItem.command = 'ahk.bar.click';
 let Configs = vscode.workspace.getConfiguration('AhkNekoHelp');
 
-function getConfig(): DeepReadonly<TempConfigs> {
-    const ed: TempConfigs = {
+function getConfig(): TConfigs {
+    const ed: TConfigs = {
         statusBar: {
             displayColor: Configs.get('statusBar.displayColor') as string,
         },
@@ -36,15 +36,17 @@ function getConfig(): DeepReadonly<TempConfigs> {
         Debug: {
             executePath: Configs.get('Debug.executePath') as string,
         },
-    };
+    } as const;
     const executePath = ed.Debug.executePath;
 
-    fs.access(executePath, (err) => {
+    fs.access(executePath, (err: NodeJS.ErrnoException | null): void => {
         if (err) {
             const errCode = err.message ? ` <---> err.message ${err.message}` : '';
-            const msg = `setting AhkNekoHelp.Debug.executePath err : ${executePath}${errCode}`;
+            const msg = `setting AhkNekoHelp.Debug.executePath err : "${executePath}"${errCode}`;
             console.log('fs.access ~ msg', msg);
             vscode.window.showErrorMessage(msg);
+            const msg2 = `can't find the file at "${executePath}"`;
+            vscode.window.showErrorMessage(msg2);
         }
     });
     return ed;

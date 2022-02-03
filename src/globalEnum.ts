@@ -164,7 +164,7 @@ export const enum TAhkSymbolRange {
     bodyRange = 4,
 }
 
-export type TempConfigs = {
+type TempConfigs = {
     statusBar: {
         displayColor: string;
     };
@@ -188,5 +188,5 @@ export type TempConfigs = {
         executePath: string;
     };
 };
-
+export type TConfigs = DeepReadonly<TempConfigs>;
 // foo<T>(a: NonNullable<T>)

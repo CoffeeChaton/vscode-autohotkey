@@ -38,6 +38,7 @@ function getReturnName(textRaw: string): string | null {
 }
 
 export function getReturnByLine(FuncInput: FuncInputType): false | TAhkSymbol {
+    if (!(/\breturn\b/i).test(FuncInput.lStr)) return false;
     if (!(/\sreturn\s\s*\S/i).test(FuncInput.lStr)) return false;
     const line = FuncInput.line;
     const textRaw = FuncInput.DocStrMap[FuncInput.line].textRaw;
@@ -159,8 +160,13 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             const name = LineRuler[i].getName(lStr);
             if (name) {
                 const rangeRaw = getRangeOfLine(DocStrMap, line);
-                return new vscode.DocumentSymbol(name,
-                    LineRuler[i].detail, LineRuler[i].kind, rangeRaw, rangeRaw);
+                return new vscode.DocumentSymbol(
+                    name,
+                    LineRuler[i].detail,
+                    LineRuler[i].kind,
+                    rangeRaw,
+                    rangeRaw,
+                );
             }
         }
     }
@@ -179,8 +185,13 @@ export const ParserBlock = {
         if (caseName === false) return false;
 
         const Range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
-        const Block: TAhkSymbol = new vscode.DocumentSymbol(caseName,
-            '', vscode.SymbolKind.EnumMember, Range, Range);
+        const Block: TAhkSymbol = new vscode.DocumentSymbol(
+            caseName,
+            '',
+            vscode.SymbolKind.EnumMember,
+            Range,
+            Range,
+        );
         Block.children = getChildren({
             gValMapBySelf,
             Uri,
@@ -202,8 +213,13 @@ export const ParserBlock = {
 
         const range = getRange(DocStrMap, line, line, RangeEndLine);
         const selectionRange = getRangeOfLine(DocStrMap, line);
-        const SwitchBlock: TAhkSymbol = new vscode.DocumentSymbol(getSwitchName(lStr),
-            'Switch', vscode.SymbolKind.Enum, range, selectionRange);
+        const SwitchBlock: TAhkSymbol = new vscode.DocumentSymbol(
+            getSwitchName(lStr),
+            'Switch',
+            vscode.SymbolKind.Enum,
+            range,
+            selectionRange,
+        );
         SwitchBlock.children = getChildren({
             gValMapBySelf,
             Uri,
@@ -268,8 +284,13 @@ export const ParserBlock = {
         const colFix = col === -1 ? lStr.length : col;
         const selectionRange = new vscode.Range(line, colFix, line, colFix + name.length);
         const detail = getClassDetail(lStr, colFix, name);
-        const classSymbol: TAhkSymbol = new vscode.DocumentSymbol(name,
-            detail, vscode.SymbolKind.Class, Range, selectionRange);
+        const classSymbol: TAhkSymbol = new vscode.DocumentSymbol(
+            name,
+            detail,
+            vscode.SymbolKind.Class,
+            Range,
+            selectionRange,
+        );
         classSymbol.children = getChildren({
             gValMapBySelf,
             Uri,
@@ -283,14 +304,12 @@ export const ParserBlock = {
     },
 
     getComment(FuncInput: FuncInputType): false | TAhkSymbol {
+        const textRaw = FuncInput.DocStrMap[FuncInput.line].textRaw;
+        if (textRaw.indexOf(';;') === -1) return false;
+        const kind = vscode.SymbolKind.Package;
         const {
             gValMapBySelf, Uri, DocStrMap, line, RangeEndLine, inClass,
         } = FuncInput;
-        const kind = vscode.SymbolKind.Package;
-
-        const textRaw = FuncInput.DocStrMap[FuncInput.line].textRaw;
-        if (textRaw.indexOf(';;') === -1) return false;
-
         // ;;
         const CommentLine = textRaw.search(/^\s*;;/);
         if (CommentLine > -1) {

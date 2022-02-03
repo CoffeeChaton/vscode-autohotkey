@@ -7,7 +7,9 @@
 		"christian-kohler.path-intellisense",
 		"gruntfuggly.todo-tree",
 		"ms-vscode.vscode-js-profile-flame",
-		"dbaeumer.vscode-eslint",
-		"ipatalas.vscode-postfix-ts"
+		"ipatalas.vscode-postfix-ts",
+		"github.copilot",
+		"alefragnani.project-manager",
+		"chakrounanas.turbo-console-log"
 	]
 }

@@ -16,7 +16,9 @@ async function clearOutlineCache(isTest: boolean): Promise<null> {
     await Detecter.buildByPathAsync(isTest, ahkRootPath[0].uri.fsPath);
     if (!isTest) {
         const timeEnd = Date.now() - timeStart;
-        console.log(`Update docFuncMap cash (${timeEnd}ms)`);
+        const msg = `Update docFuncMap cash (${timeEnd}ms)`;
+        console.log(msg);
+        vscode.window.showInformationMessage(msg);
     }
     return null;
 }

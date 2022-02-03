@@ -29,12 +29,12 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.languages.registerRenameProvider(language, new RenameProvider()),
         // vscode.languages.registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', ','),
         vscode.languages.registerCodeActionsProvider(language, new CodeActionProvider()),
-        vscode.workspace.onDidChangeConfiguration(() => configChangEvent()),
-        vscode.workspace.onDidDeleteFiles((e) => Detecter.delMap(e)),
-        vscode.workspace.onDidCreateFiles((e) => Detecter.createMap(e)),
-        vscode.workspace.onDidRenameFiles((e) => Detecter.renameFileName(e)),
+        vscode.workspace.onDidChangeConfiguration((): void => configChangEvent()),
+        vscode.workspace.onDidDeleteFiles((e): void => Detecter.delMap(e)),
+        vscode.workspace.onDidCreateFiles((e): void => Detecter.createMap(e)),
+        vscode.workspace.onDidRenameFiles((e): void => Detecter.renameFileName(e)),
         // vscode.workspace.onDidChangeTextDocument((e) => d(e)),
-        vscode.commands.registerCommand('ahk.bar.click', () => { statusBarClick(); }),
+        vscode.commands.registerCommand('ahk.bar.click', (): void => { statusBarClick(); }),
         vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
     );
     const ahkRootPath = vscode.workspace.workspaceFolders;
