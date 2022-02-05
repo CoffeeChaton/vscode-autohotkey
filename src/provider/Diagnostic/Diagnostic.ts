@@ -155,7 +155,9 @@ function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol): boolean {
     const ed = func.range.end.line;
     if (ed - st < maxFnSize) return false;
     for (let line = st; line < ed; line++) {
-        fnSize += DocStrMap[line].lStr === '' ? 0 : 1;
+        fnSize += DocStrMap[line].lStr === ''
+            ? 0
+            : 1;
         if (fnSize >= maxFnSize) return true;
     }
     return false;

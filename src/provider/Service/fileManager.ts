@@ -18,7 +18,9 @@ export function checkAndMkdir(pathA: string): void {
 
 export function FileManagerRecord(fileName: string, content: string, model: EFileModel): string {
     const ahkRootPath = vscode.workspace.workspaceFolders;
-    const storagePath: string | null = ahkRootPath ? ahkRootPath[0].uri.fsPath : null;
+    const storagePath: string | null = ahkRootPath
+        ? ahkRootPath[0].uri.fsPath
+        : null;
 
     if (!storagePath) {
         const message = 'Please open program to debug --96--47--21--by neko-help';

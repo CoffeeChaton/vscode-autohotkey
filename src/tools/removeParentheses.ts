@@ -13,7 +13,9 @@ export function removeParentheses(lStr: string): string {
                 textFix += '_';
                 break;
             default:
-                textFix += deep === 0 ? lStr[i] : '_';
+                textFix += deep === 0
+                    ? lStr[i]
+                    : '_';
                 break;
         }
     }

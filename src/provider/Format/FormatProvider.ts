@@ -57,7 +57,9 @@ function fn_Warn_thisLineText_WARN({
 }: WarnUseType): vscode.TextEdit {
     const wrap = (text: string): vscode.TextEdit => {
         const CommentBlock = DocStrMap[line].detail.includes(DetailType.inComment);
-        const newText = getFormatConfig() ? lineReplace(text, textFix, CommentBlock, inLTrim) : text;
+        const newText = getFormatConfig()
+            ? lineReplace(text, textFix, CommentBlock, inLTrim)
+            : text;
         const endCharacter = Math.max(newText.length, textRaw.length);
         const range = new vscode.Range(line, 0, line, endCharacter);
         return new vscode.TextEdit(range, newText);

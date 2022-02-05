@@ -41,7 +41,9 @@ function buildVariableValueObj(attr: TDbgpPropertyAttr, property: TDbgpProperty)
         const key = child?.attr?.name;
         if (key === undefined) return;
         const chContent = getContent(child);
-        const value = chContent ? base64ToStr(chContent) : 'undefined--71-53';
+        const value = chContent
+            ? base64ToStr(chContent)
+            : 'undefined--71-53';
         mapA.set(key, value);
     });
     return mapToStr(mapA);

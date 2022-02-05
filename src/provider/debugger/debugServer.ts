@@ -39,7 +39,9 @@ export class DebugServer extends EventEmitter {
             .on('connection', (socket: Net.Socket) => {
                 this.proxyConnection = socket;
                 socket.on('data', (chunk) => {
-                    tempData = tempData ? Buffer.concat([tempData, chunk]) : chunk;
+                    tempData = tempData
+                        ? Buffer.concat([tempData, chunk])
+                        : chunk;
                     if (tempData[tempData.length - 1] === Enum.END) {
                         this.process(tempData.toString());
                         tempData = null;

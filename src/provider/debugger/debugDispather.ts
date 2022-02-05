@@ -264,14 +264,18 @@ export class DebugDispather extends EventEmitter {
         if (parentFullName !== EVarScopeStr.Local
             && parentFullName !== EVarScopeStr.Global) {
             const isIndex: boolean = fullname.includes('[') && fullname.includes(']');
-            fullname = isIndex === true ? `${parentFullName.name}${fullname}` : `${parentFullName.name}.${fullname}`;
+            fullname = isIndex === true
+                ? `${parentFullName.name}${fullname}`
+                : `${parentFullName.name}.${fullname}`;
             console.log('DebugDispather ~ fnObtainValue ~ fullname', fullname);
         }
 
         const response: TDbgpResponse = await this.sendComand(`property_set -d ${frameId} -c ${scope} -n ${fullname} -t ${type}`, value);
         if (response.attr.success === '1') throw new Error(`"${fullname}" cannot be written. Probably read-only.--044--33--66`);
 
-        const displayValue = type === 'string' ? `"${value}"` : value;
+        const displayValue = type === 'string'
+            ? `"${value}"`
+            : value;
         const PRIMITIVE = 0;
         return {
             name: args.name,

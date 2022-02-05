@@ -7,7 +7,9 @@ export function StackHandler(args: DebugProtocol.StackTraceArguments, response: 
     if (!response) return [];
 
     const tempStack = response.stack;
-    const stackList = Array.isArray(tempStack) ? tempStack : Array.of(tempStack);
+    const stackList = Array.isArray(tempStack)
+        ? tempStack
+        : Array.of(tempStack);
 
     return stackList.map((stack, i: number) => {
         const nm: string = stack.attr.where;

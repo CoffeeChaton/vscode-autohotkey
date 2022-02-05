@@ -19,7 +19,9 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
     return lStrFix.split(',')
         .map((v) => {
             const col = v.indexOf(':=');
-            const lName = (col > 0) ? v.substring(0, col).trim() : v.trim();// rVal need to use textRaw;
+            const lName = (col > 0)
+                ? v.substring(0, col).trim()
+                : v.trim();// rVal need to use textRaw;
             const reg = ahkValRegex(lName);
             const col2 = lStrFix.search(reg);
             if (col2 < 0) {

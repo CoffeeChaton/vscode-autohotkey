@@ -24,10 +24,14 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
 
         for (const argName of e5) {
             const isByRef = (/^ByRef\s\s*/i).test(argName);
-            const key0 = isByRef ? argName.replace(/^ByRef\s\s*/i, '') : argName;
+            const key0 = isByRef
+                ? argName.replace(/^ByRef\s\s*/i, '')
+                : argName;
             if (key0 === '') continue;
             const isVariadic = (/^\w\w*\*$/).test(argName); // https://ahkde.github.io/docs/Functions.htm#Variadic
-            const keyRawName = isVariadic ? key0.replace(/\*$/, '') : key0;
+            const keyRawName = isVariadic
+                ? key0.replace(/\*$/, '')
+                : key0;
             if (!(/^\w\w*$/).test(keyRawName)) {
                 const message = `DeepAnalysis NekoHelp Unknown Syntax of ${ahkSymbol.name} args Error ${keyRawName}--99--37--21--`;
                 console.log('.forEach ~ message', message);

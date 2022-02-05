@@ -67,7 +67,9 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
                 const e = (/^\s*(#\w\w*)/).exec(str);
-                return e ? e[1] : null;
+                return e
+                    ? e[1]
+                    : null;
             },
 
             test(str: string): boolean {
@@ -78,7 +80,9 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             detail: 'global',
             kind: vscode.SymbolKind.Variable,
             getName(str: string): string | null {
-                return (/^\s*\bglobal\b\s*$/i).test(str) ? null : setGlobalVar(FuncInput);
+                return (/^\s*\bglobal\b\s*$/i).test(str)
+                    ? null
+                    : setGlobalVar(FuncInput);
             },
             test(str: string): boolean {
                 return (/^\s*\bglobal\b/i).test(str);
@@ -92,7 +96,9 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
                     .split(',')
                     .map((v) => {
                         const col = v.indexOf(':=');
-                        return (col > 0) ? v.substring(0, col).trim() : v;
+                        return (col > 0)
+                            ? v.substring(0, col).trim()
+                            : v;
                     })
                     .join(', ')
                     .trim();
@@ -107,7 +113,9 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
                 const e = (/^\s*\bthrow\b[\s,][\s,]*(.+)/i).exec(str);
-                return e ? `throw ${e[1]}` : null;
+                return e
+                    ? `throw ${e[1]}`
+                    : null;
             },
 
             test(str: string): boolean {
@@ -119,7 +127,9 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             kind: vscode.SymbolKind.Package,
             getName(str: string): string | null {
                 const e = (/^\s*(\w\w*:)\s*$/).exec(str);
-                return e ? e[1] : null;
+                return e
+                    ? e[1]
+                    : null;
             },
 
             test(str: string): boolean {
@@ -132,7 +142,9 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
                 const e = (/^\s*(:[^:]*?:[^:][^:]*::)/).exec(str);
-                return e ? e[1] : null;
+                return e
+                    ? e[1]
+                    : null;
             },
 
             test(str: string): boolean {
@@ -145,7 +157,9 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
                 const e = (/^\s*([^:][^:]*?::)/).exec(str);
-                return e ? e[1] : null;
+                return e
+                    ? e[1]
+                    : null;
             },
 
             test(str: string): boolean {
@@ -250,7 +264,9 @@ export const ParserBlock = {
 
         const searchLine = selectionRange.end.line;
         const range = getRange(DocStrMap, line, searchLine, RangeEndLine);
-        const kind = inClass ? vscode.SymbolKind.Method : vscode.SymbolKind.Function;
+        const kind = inClass
+            ? vscode.SymbolKind.Method
+            : vscode.SymbolKind.Function;
         const detail = getDetail();
 
         const funcSymbol: TAhkSymbol = new vscode.DocumentSymbol(name, detail, kind, range, selectionRange);
@@ -280,7 +296,9 @@ export const ParserBlock = {
         const name = classExec[1];
 
         const col = lStr.indexOf(name);
-        const colFix = col === -1 ? lStr.length : col;
+        const colFix = col === -1
+            ? lStr.length
+            : col;
         const selectionRange = new vscode.Range(line, colFix, line, colFix + name.length);
         const detail = getClassDetail(lStr, colFix, name);
         const classSymbol: TAhkSymbol = new vscode.DocumentSymbol(

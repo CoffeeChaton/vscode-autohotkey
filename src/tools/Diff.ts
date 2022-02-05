@@ -29,7 +29,9 @@ export async function callDiff({
     if (typeof rightInput === 'string') {
         right.write(rightInput);
     }
-    const rightUri: vscode.Uri = typeof rightInput === 'string' ? vscode.Uri.file(right.path) : rightInput;
+    const rightUri: vscode.Uri = typeof rightInput === 'string'
+        ? vscode.Uri.file(right.path)
+        : rightInput;
 
     const title = `${path.basename(fsPath)} -> after Format`;
     const options: vscode.TextDocumentShowOptions = {

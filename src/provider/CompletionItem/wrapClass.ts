@@ -69,7 +69,9 @@ async function parsingUserDefClassRecursive(
     deep: number,
 ): Promise<vscode.CompletionItem[]> {
     const { fsPath, ahkSymbol } = c0;
-    const fnStrEq = ChapterArr[deep] ? new RegExp(`^${ChapterArr[deep]}$`, 'i') : /^$/;
+    const fnStrEq = ChapterArr[deep]
+        ? new RegExp(`^${ChapterArr[deep]}$`, 'i')
+        : /^$/;
     const itemS: vscode.CompletionItem[] = [];
     const strKind = getKind(ahkSymbol.kind);
     const newTrack = [...track, `${strKind}  ${ahkSymbol.name}`];
@@ -150,7 +152,9 @@ async function triggerClassCore(document: vscode.TextDocument, position: vscode.
         const testName = new RegExp(`^${name}$`, 'i');
         const c0 = getUserDefClassSymbol(testName);
         if (c0) {
-            const ahkThis = ChapterArr.length === 1 ? await getWmThis(c0) : [];
+            const ahkThis = ChapterArr.length === 1
+                ? await getWmThis(c0)
+                : [];
             itemS.push(...ahkThis, ...await parsingUserDefClassRecursive(c0, [fsPath], ChapterArr, 1));
         }
     }
@@ -177,7 +181,9 @@ async function triggerClass(document: vscode.TextDocument, position: vscode.Posi
     const c0 = getUserDefClassSymbol(testName0); // static class / val / Method
     if (c0) {
         const { fsPath } = document.uri;
-        const ahkThis = ChapterArr.length === 1 ? await getWmThis(c0) : [];
+        const ahkThis = ChapterArr.length === 1
+            ? await getWmThis(c0)
+            : [];
         return [...await parsingUserDefClassRecursive(c0, [fsPath], ChapterArr, 1), ...ahkThis];
     }
 

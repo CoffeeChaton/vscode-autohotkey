@@ -24,7 +24,9 @@ export function fnObtainValueSet(value: string): {
     if (bool !== undefined) {
         return {
             type: 'string',
-            value: (/true/i).test(bool) ? '1' : '0',
+            value: (/true/i).test(bool)
+                ? '1'
+                : '0',
             isVariable: false,
         };
     }

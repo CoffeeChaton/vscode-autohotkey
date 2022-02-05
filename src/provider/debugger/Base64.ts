@@ -1,5 +1,7 @@
 export function toArray<T>(arr: T | T[]): T[] {
-    return Array.isArray(arr) ? arr : [arr];
+    return Array.isArray(arr)
+        ? arr
+        : [arr];
 }
 /**
   * base64 to string

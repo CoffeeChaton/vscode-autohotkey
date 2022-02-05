@@ -260,6 +260,11 @@
                 ]
             }
         ],
+        "multiline-ternary": [
+            "error",
+            "always"
+        ],
+        "operator-linebreak": "warn",
         "no-mixed-operators": "warn",
         "no-multi-assign": "warn",
         "no-nested-ternary": "error",

@@ -187,7 +187,9 @@ export class VariableHandler {
         }
 
         const tf = (!Array.isArray(temp) && temp.content);
-        const responseFix2 = tf ? response : temp;
+        const responseFix2 = tf
+            ? response
+            : temp;
 
         if (Array.isArray(responseFix2)) {
             console.error('VariableHandler ~ parsePropertyget ~ response', response);
@@ -258,12 +260,18 @@ export class VariableHandler {
 
             const ahkVar = {
                 scope,
-                frameId: scope === EVarScope.GLOBAL ? -1 : this.frameId,
+                frameId: scope === EVarScope.GLOBAL
+                    ? -1
+                    : this.frameId,
                 name: fullname,
-                value: content ? buildVariableValue(property, attr, content) : '', // TODO : '' address:'49519792'
+                value: content
+                    ? buildVariableValue(property, attr, content)
+                    : '', // TODO : '' address:'49519792'
             };
             this.variableMap.set(fullname, ahkVar);
-            const ref = typeAttr !== 'object' ? 0 : this.variableHandles.create(ahkVar);
+            const ref = typeAttr !== 'object'
+                ? 0
+                : this.variableHandles.create(ahkVar);
             if (name === 'Name' || classname === 'Func') {
                 console.log('🚀 ~267~ VariableHandler ~ .forEach ~ response', response);
             }

@@ -98,7 +98,9 @@ async function compile(): Promise<void> {
     }
     checkAndSaveActive();
     const pos = currentPath.lastIndexOf('.');
-    const compilePathB = `${currentPath.substr(0, pos < 0 ? currentPath.length : pos)}.exe`;
+    const compilePathB = `${currentPath.substr(0, pos < 0
+        ? currentPath.length
+        : pos)}.exe`;
 
     const compilePathA = vscode.workspace.getConfiguration('neko-help').get<string>('compilePath') ?? '';
     const command = `"${compilePathA}" /in "${currentPath}" /out "${compilePathB}"`;

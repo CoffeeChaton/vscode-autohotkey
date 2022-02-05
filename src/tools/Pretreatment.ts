@@ -32,7 +32,9 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
 
         inLTrim = inLTrimRange(textRaw, inLTrim);
         if (inLTrim > 0) {
-            const inLTrimLevel = inLTrim === 1 ? DetailType.inLTrim1 : DetailType.inLTrim2;
+            const inLTrimLevel = inLTrim === 1
+                ? DetailType.inLTrim1
+                : DetailType.inLTrim2;
             result.push({
                 lStr: '', deep, textRaw, detail: [inLTrimLevel], line,
             });

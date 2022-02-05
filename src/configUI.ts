@@ -41,7 +41,9 @@ function getConfig(): TConfigs {
 
     fs.access(executePath, (err: NodeJS.ErrnoException | null): void => {
         if (err) {
-            const errCode = err.message ? ` <---> err.message ${err.message}` : '';
+            const errCode = err.message
+                ? ` <---> err.message ${err.message}`
+                : '';
             const msg = `setting err of "AhkNekoHelp.Debug.executePath" : "${executePath}"${errCode}`;
             console.log('fs.access ~ msg', msg);
             vscode.window.showErrorMessage(msg);
