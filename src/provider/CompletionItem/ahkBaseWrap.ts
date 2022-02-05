@@ -396,7 +396,9 @@ const ItemOfFunc: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
         .forEach((v) => {
             const item = new vscode.CompletionItem(`${v})`, vscode.CompletionItemKind.Method);
             item.detail = 'neko help : Func() Methods';
-            item.insertText = new vscode.SnippetString(v).appendTabstop().appendText(')');// SnippetString;
+            item.insertText = new vscode.SnippetString(v)
+                .appendTabstop()
+                .appendText(')');// SnippetString;
             itemS.push(item);
         });
 

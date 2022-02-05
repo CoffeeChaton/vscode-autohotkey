@@ -27,7 +27,9 @@ export class BreakPointHandler {
     }
 
     public buildBreakPoint(path: string, sourceBreakpoints: DebugProtocol.SourceBreakpoint[], fnCallback: TCallback): TBps {
-        const sourceLines = readFileSync(path).toString().split('\n');
+        const sourceLines = readFileSync(path)
+            .toString()
+            .split('\n');
         const bps = sourceBreakpoints
             .map((sourceBreakpoint): Breakpoint => {
                 const name = basename(path);

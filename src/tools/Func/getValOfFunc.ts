@@ -65,8 +65,10 @@ function getArgsOfFunc(document: vscode.TextDocument, wordUp: string, ahkSymbol:
         const line = lineStart + linePos;
         const { textRaw, lStr } = DocStrMap[linePos];
         const comment = getCommentOfLine({ lStr, textRaw }) ?? '';
-        lStr.replace(/^\s*\w\w*\(\s*/, '')
-            .replace(/\)\s*$/, '').trim()
+        lStr
+            .replace(/^\s*\w\w*\(\s*/, '')
+            .replace(/\)\s*$/, '')
+            .trim()
             .split(',')
             .map((v) => v.trim())
             .filter((v) => v.toUpperCase().startsWith(wordUp)) // TODO FIX startsWith OR ===

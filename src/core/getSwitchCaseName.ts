@@ -15,5 +15,7 @@ export function getCaseDefaultName(textRaw: string, lStr: string): false | strin
 }
 
 export function getSwitchName(textRaw: string): string {
-    return textRaw.replace(/^\s*\bswitch\b\s*/i, '').replace(/{\s*$/, '').trim() || '!!not find Switch Name';
+    return textRaw.replace(/^\s*\bswitch\b\s*/i, '')
+        .replace(/{\s*$/, '')
+        .trim() || '!!not find Switch Name';
 }

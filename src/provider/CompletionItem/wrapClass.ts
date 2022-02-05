@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable security/detect-non-literal-regexp */
 /* eslint-disable immutable/no-mutation */
@@ -48,7 +49,11 @@ async function wrapItem(c0: TSymAndFsPath, track: string[]): Promise<vscode.Comp
     }
     item.detail = 'neko help';
     const md = new vscode.MarkdownString('', true);
-    if (c0.ahkSymbol.detail.trim()) md.appendMarkdown('\n\ndetail: ').appendMarkdown(c0.ahkSymbol.detail.trim()).appendMarkdown('\n\n');
+    if (c0.ahkSymbol.detail.trim()) {
+        md.appendMarkdown('\n\ndetail: ')
+            .appendMarkdown(c0.ahkSymbol.detail.trim())
+            .appendMarkdown('\n\n');
+    }
     md.appendMarkdown([...track].reverse().join('   \n'));
     item.documentation = md;
     return item;

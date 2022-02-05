@@ -264,6 +264,12 @@
             "error",
             "always"
         ],
+        "newline-per-chained-call": [
+            "error",
+            {
+                "ignoreChainWithDepth": 2
+            }
+        ],
         "operator-linebreak": "warn",
         "no-mixed-operators": "warn",
         "no-multi-assign": "warn",
