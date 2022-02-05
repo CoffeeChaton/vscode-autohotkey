@@ -1,15 +1,15 @@
 {
-	// See https://code.visualstudio.com/docs/editor/extension-marketplace#_workspace-recommended-extensions
-	// for the documentation about the extensions.json format
-	"recommendations": [
-		"dbaeumer.vscode-eslint",
-		"igorsbitnev.error-gutters",
-		"christian-kohler.path-intellisense",
-		"gruntfuggly.todo-tree",
-		"ms-vscode.vscode-js-profile-flame",
-		"ipatalas.vscode-postfix-ts",
-		"github.copilot",
-		"alefragnani.project-manager",
-		"chakrounanas.turbo-console-log"
-	]
+    // See https://code.visualstudio.com/docs/editor/extension-marketplace#_workspace-recommended-extensions
+    // for the documentation about the extensions.json format
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "igorsbitnev.error-gutters",
+        "christian-kohler.path-intellisense",
+        "gruntfuggly.todo-tree",
+        "ms-vscode.vscode-js-profile-flame",
+        "ipatalas.vscode-postfix-ts",
+        "github.copilot",
+        "alefragnani.project-manager",
+        "chakrounanas.turbo-console-log"
+    ]
 }

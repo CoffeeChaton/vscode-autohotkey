@@ -1,10 +1,10 @@
 {
     "env": {
-        "node": true,
         "browser": false,
         "es6": true,
         "jest": true,
-        "jest/globals": true
+        "jest/globals": true,
+        "node": true
     },
     "extends": [
         "airbnb-typescript",
@@ -29,16 +29,16 @@
             "env": {
                 "jest/globals": true
             },
-            "plugins": [
-                "jest"
-            ],
-            "files": [
-                "**/*.test.ts"
-            ],
             "extends": [
                 "plugin:jest/recommended",
                 "plugin:jest/all",
                 "plugin:jest-formatting/strict"
+            ],
+            "files": [
+                "**/*.test.ts"
+            ],
+            "plugins": [
+                "jest"
             ],
             "rules": {
                 "jest-formatting/padding-around-describe-blocks": "error",
@@ -48,15 +48,15 @@
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 2020,
-        "sourceType": "script",
-        "project": "tsconfig.json",
         "ecmaFeatures": {
             "impliedStrict": true
         },
+        "ecmaVersion": 2020,
+        "project": "tsconfig.json",
         "projectFolderIgnoreList": [
             "**/__test__/**"
-        ]
+        ],
+        "sourceType": "script"
     },
     "plugins": [
         "fp",

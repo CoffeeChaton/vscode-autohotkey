@@ -227,7 +227,7 @@
     },
     "devDependencies": {
         "@eslint/create-config": "^0.1.2",
-        "@jest/globals": "^27.4.6",
+        "@jest/globals": "^27.5.0",
         "@types/assert": "^1.5.6",
         "@types/benchmark": "^2.1.1",
         "@types/chai": "^4.3.0",
@@ -262,7 +262,7 @@
         "eslint-plugin-react-hooks": "^4.3.0",
         "eslint-plugin-security": "^1.4.0",
         "fs": "0.0.1-security",
-        "jest": "^27.4.7",
+        "jest": "^27.5.0",
         "jest-puppeteer": "^6.1.0",
         "nodemon": "^2.0.15",
         "puppeteer": "^13.1.3",

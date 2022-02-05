@@ -182,7 +182,7 @@
             "match": "^\\s*(\\w\\w*)(\\(.*\\))\\s*({)\\s*(;?.*)$",
             "name": "functionline.ahk"
         },
-        {           
+        {
             "match": "\\w\\w*\\(",
             "name": "entity.name.function.ahk"
         }
