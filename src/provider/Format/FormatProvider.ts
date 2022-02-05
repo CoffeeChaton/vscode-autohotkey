@@ -51,6 +51,7 @@ type WarnUseType = DeepReadonly<{
     options: vscode.FormattingOptions;
 }>;
 
+// eslint-disable-next-line camelcase
 function fn_Warn_thisLineText_WARN({
     DocStrMap, textFix, line, occ, deep, labDeep, inLTrim, textRaw, switchRangeArray, document, options,
 }: WarnUseType): vscode.TextEdit {
@@ -108,7 +109,7 @@ export function FormatCore(
     const newTextList: vscode.TextEdit[] = [];
     const lineMax = document.lineCount;
     for (let line = 0; line < lineMax; line++) {
-        const textRaw = DocStrMap[line].textRaw;
+        const { textRaw } = DocStrMap[line];
         inLTrim = inLTrimRange(textRaw, inLTrim);
         const textFix = DocStrMap[line].lStr.trim();
         const hasHashtag = Hashtag(textFix);

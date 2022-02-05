@@ -39,7 +39,7 @@ export const Detecter = {
 
     delMap(e: vscode.FileDeleteEvent): void {
         for (const Uri of e.files) {
-            const fsPath = Uri.fsPath;
+            const { fsPath } = Uri;
             if (fsPath.endsWith('.ahk')) {
                 Detecter.DocMap.delete(fsPath);
             }
@@ -49,7 +49,7 @@ export const Detecter = {
 
     createMap(e: vscode.FileCreateEvent): void {
         for (const Uri of e.files) {
-            const fsPath = Uri.fsPath;
+            const { fsPath } = Uri;
             if (fsPath.endsWith('.ahk')) {
                 Detecter.updateDocDef(false, fsPath);
             }

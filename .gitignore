@@ -1,12 +1,12 @@
 *.cpuprofile
 .cpuprofile
 .dccache
+.eslintcache
 .history/
 .idea/
 .vscode-test/
 __test__
-coverage
-dict
-node_modules
-out
-package-lock.json
+coverage/
+dict/
+node_modules/
+out/

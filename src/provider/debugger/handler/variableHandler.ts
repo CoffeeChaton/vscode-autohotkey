@@ -46,7 +46,7 @@ function formatPropertyValue({
         console.log('--77--51--aType', aType);
     }
     const str: WithImplicitCoercion<string> = content ?? '';
-    const encoding: BufferEncoding | undefined = attr.encoding;
+    const { encoding } = attr;
     const primitive = Buffer.from(str, encoding).toString();
     switch (aType) {
         case 'integer': return primitive;
@@ -94,7 +94,7 @@ function parseTail({
     const isLikeArray = likeArray(property, name);
     const length = getLikeArrayLength(property);
 
-    const content = property.content;
+    const { content } = property;
     const value = formatPropertyValue({
         attr, content, faClassname: classname, isLikeArray, length,
     });
@@ -207,7 +207,7 @@ export class VariableHandler {
 
         const temp: TDbgpProperty | TDbgpProperty[] | undefined = response.property;
         if (temp === undefined) {
-            const attr = response.attr;
+            const { attr } = response;
 
             if (!attr) return [];
             const { type, fullname } = attr;

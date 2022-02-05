@@ -55,7 +55,6 @@ function getValue({
     lStr,
     lineType,
     uri,
-    argList,
 }: TGetValue): TValObj {
     const range = new vscode.Range(
         new vscode.Position(line, character),
@@ -141,7 +140,6 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
 
     const cache = w.getWm(ahkSymbol);
     if (cache) return cache;
-
     const DocStrMap = Pretreatment(
         document.getText(ahkSymbol.range).split('\n'),
         ahkSymbol.range.start.line,

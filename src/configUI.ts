@@ -37,12 +37,12 @@ function getConfig(): TConfigs {
             executePath: Configs.get('Debug.executePath') as string,
         },
     } as const;
-    const executePath = ed.Debug.executePath;
+    const { executePath } = ed.Debug;
 
     fs.access(executePath, (err: NodeJS.ErrnoException | null): void => {
         if (err) {
             const errCode = err.message ? ` <---> err.message ${err.message}` : '';
-            const msg = `setting AhkNekoHelp.Debug.executePath err : "${executePath}"${errCode}`;
+            const msg = `setting err of "AhkNekoHelp.Debug.executePath" : "${executePath}"${errCode}`;
             console.log('fs.access ~ msg', msg);
             vscode.window.showErrorMessage(msg);
             const msg2 = `can't find the file at "${executePath}"`;
@@ -64,8 +64,7 @@ export function configChangEvent(): void {
 
 export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     const time = Date.now() - timeStart;
-    const name = ` of ${path.basename(uri.fsPath)}`;
-    statusBarItem.text = `$(heart) ${time} ms${name}`;
+    statusBarItem.text = `$(heart) ${time} ms of${path.basename(uri.fsPath)}`;
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
 }
@@ -79,11 +78,11 @@ export function getFormatConfig(): boolean {
 }
 
 export function getIgnoredFolder(file: string): boolean {
-    const startsWith = config.Ignored.folder.startsWith;
+    const { startsWith } = config.Ignored.folder;
     for (const e of startsWith) {
         if (file.startsWith(e)) return true;
     }
-    const endsWith = config.Ignored.folder.endsWith;
+    const { endsWith } = config.Ignored.folder;
     for (const e of endsWith) {
         if (file.endsWith(e)) return true;
     }
@@ -92,11 +91,11 @@ export function getIgnoredFolder(file: string): boolean {
 
 export function getIgnoredFile(buildPath: string): boolean {
     const fileFix = path.basename(buildPath, '.ahk');
-    const startsWith = config.Ignored.File.startsWith;
+    const { startsWith } = config.Ignored.File;
     for (const e of startsWith) {
         if (fileFix.startsWith(e)) return true;
     }
-    const endsWith = config.Ignored.File.endsWith;
+    const { endsWith } = config.Ignored.File;
     for (const e of endsWith) {
         if (fileFix.endsWith(e)) return true;
     }

@@ -62,8 +62,8 @@ export function getDefType({
 }: TGetDefType): [TRunValType2, string[]] | null {
     const typeList = getTypeList({ DocStrMap, regex, ahkSymbol });
     for (const [Offset, mode] of typeList) {
-        const lStr = DocStrMap[Offset].lStr;
-        const textRaw = DocStrMap[Offset].textRaw;
+        const { lStr } = DocStrMap[Offset];
+        const { textRaw } = DocStrMap[Offset];
         if (regex.test(getLineValDef(lStr).join(', '))) {
             const commentList = getCommentOfLine({ lStr, textRaw }) ?? '';
             return [mode, [commentList]];

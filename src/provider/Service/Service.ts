@@ -57,7 +57,7 @@ function runSelection(): void {
         throw new Error(msg);
     }
 
-    const selection = editor.selection;
+    const { selection } = editor;
     const text = editor.document.getText(selection);
     runAhk(createTemplate(text));
 }

@@ -52,7 +52,7 @@ export type TSymAndFsPath = { ahkSymbol: TAhkSymbol; fsPath: string; };
 
 export type TValArray = {
     lRange: vscode.Range, // left Range
-    rVal: string | null; // Right value as textRaw
+    rVal: string | null; // Right value is textRaw
 }[];
 export type TValName = string;
 export type TGValMap = Map<TValName, TValArray>;

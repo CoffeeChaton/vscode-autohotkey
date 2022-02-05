@@ -1,5 +1,3 @@
-/* eslint-disable immutable/no-mutation */
-/* eslint-disable immutable/no-this */
 /* eslint-disable no-underscore-dangle */
 
 import { basename } from 'path';
@@ -14,8 +12,8 @@ export class BreakPointHandler {
     private _breakPoints = new Map<string, TBps>();
 
     /**
-     * set breakpoint to the script actual.
-     */
+       * set breakpoint to the script actual.
+       */
     public loopPoints(fnCallback: TCallback): void {
         this._breakPoints.forEach((bps) => {
             bps.forEach((bp) => {
@@ -31,9 +29,10 @@ export class BreakPointHandler {
     public buildBreakPoint(path: string, sourceBreakpoints: DebugProtocol.SourceBreakpoint[], fnCallback: TCallback): TBps {
         const sourceLines = readFileSync(path).toString().split('\n');
         const bps = sourceBreakpoints
-            .map((sourceBreakpoint) => {
-                const source = new Source(basename(path), path);
-                const breakPoint = new Breakpoint(
+            .map((sourceBreakpoint): Breakpoint => {
+                const name = basename(path);
+                const source: Source = new Source(name, path);
+                const breakPoint: Breakpoint = new Breakpoint(
                     false,
                     sourceBreakpoint.line,
                     sourceBreakpoint.column,

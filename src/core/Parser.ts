@@ -40,8 +40,8 @@ function getReturnName(textRaw: string): string | null {
 export function getReturnByLine(FuncInput: FuncInputType): false | TAhkSymbol {
     if (!(/\breturn\b/i).test(FuncInput.lStr)) return false;
     if (!(/\sreturn\s\s*\S/i).test(FuncInput.lStr)) return false;
-    const line = FuncInput.line;
-    const textRaw = FuncInput.DocStrMap[FuncInput.line].textRaw;
+    const { line } = FuncInput;
+    const { textRaw } = FuncInput.DocStrMap[FuncInput.line];
     const name = getReturnName(textRaw);
     if (!name) return false;
     const rangeRaw = new vscode.Range(line, 0, line, textRaw.length);
@@ -154,16 +154,15 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             },
         },
     ];
-    const LineRulerLen = LineRuler.length;
-    for (let i = 0; i < LineRulerLen; i++) {
-        if (LineRuler[i].test(lStr)) {
-            const name = LineRuler[i].getName(lStr);
+    for (const ruler of LineRuler) {
+        if (ruler.test(lStr)) {
+            const name = ruler.getName(lStr);
             if (name) {
                 const rangeRaw = getRangeOfLine(DocStrMap, line);
                 return new vscode.DocumentSymbol(
                     name,
-                    LineRuler[i].detail,
-                    LineRuler[i].kind,
+                    ruler.detail,
+                    ruler.kind,
                     rangeRaw,
                     rangeRaw,
                 );
@@ -175,7 +174,7 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
 
 export const ParserBlock = {
     getCaseDefaultBlock(FuncInput: FuncInputType): false | TAhkSymbol {
-        const lStr = FuncInput.lStr;
+        const { lStr } = FuncInput;
         if (lStr === '' || lStr.indexOf(':') === -1) return false;
         const {
             gValMapBySelf, Uri, RangeEndLine, inClass, line, DocStrMap,
@@ -304,7 +303,7 @@ export const ParserBlock = {
     },
 
     getComment(FuncInput: FuncInputType): false | TAhkSymbol {
-        const textRaw = FuncInput.DocStrMap[FuncInput.line].textRaw;
+        const { textRaw } = FuncInput.DocStrMap[FuncInput.line];
         if (textRaw.indexOf(';;') === -1) return false;
         const kind = vscode.SymbolKind.Package;
         const {

@@ -54,6 +54,7 @@
         "Deref",
         "Dispather",
         "esbuild",
+        "eslintcache",
         "esmodule",
         "espree",
         "estree",
@@ -84,6 +85,7 @@
         "nnnik",
         "numchildren",
         "numpy",
+        "Onig",
         "plusplus",
         "Pnnn",
         "pnpify",
@@ -107,5 +109,17 @@
         "vsocde",
         "YYYYMMDDHH"
     ],
-    "deepcode.uploadApproved": true
+    "eslint.enable": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+    "eslint.options": {
+        "extensions": [
+            ".ts",
+        ]
+    },
+    "eslint.packageManager": "pnpm",
+    "eslint.probe": [
+        "typescript"
+    ]
 }

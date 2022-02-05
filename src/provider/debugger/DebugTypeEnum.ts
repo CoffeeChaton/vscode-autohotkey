@@ -72,30 +72,6 @@ type TDbgpResponseStack = {
     };
 };
 
-export type TDbgpResponse = {
-    attr: {
-        /** only one stack */
-        stack: TDbgpResponseStack,
-        command: string;
-        context: string;
-        transaction_id: string;
-        success: '0' | '1';
-        /** Breakpoint id */
-        id: number;
-        /** run state */
-        status: string;
-    };
-    // children: {
-    stack: TDbgpResponseStack | TDbgpResponseStack[],
-    property: TDbgpProperty | TDbgpProperty[],
-    error?: {
-        attr: {
-            code: number;
-        },
-    },
-    // },
-};
-
 /**
 //  <property>
 //     name="short_name"
@@ -163,4 +139,27 @@ export type TAhkVariable = {
     frameId: number;
     scope: EVarScope;
     value: string | Map<string, string>;
+};
+export type TDbgpResponse = {
+    attr: {
+        /** only one stack */
+        stack: TDbgpResponseStack,
+        command: string;
+        context: string;
+        transaction_id: string;
+        success: '0' | '1';
+        /** Breakpoint id */
+        id: number;
+        /** run state */
+        status: string;
+    };
+    // children: {
+    stack: TDbgpResponseStack | TDbgpResponseStack[],
+    property: TDbgpProperty | TDbgpProperty[],
+    error?: {
+        attr: {
+            code: number;
+        },
+    },
+    // },
 };

@@ -60,7 +60,7 @@ export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.Markdown
     const starLine = 0;
     const endLine = DocStrMap.length;
     for (let line = starLine; line < endLine; line++) {
-        const textRaw = DocStrMap[line].textRaw;
+        const { textRaw } = DocStrMap[line];
         commentBlock = inCommentBlock2(textRaw, commentBlock);
         if (commentBlock) {
             commentText += getCommentText(textRaw);

@@ -13,7 +13,7 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
     const {
         DocStrMap, line, lStr, gValMapBySelf,
     } = FuncInput;
-    const textRaw = DocStrMap[line].textRaw;
+    const { textRaw } = DocStrMap[line];
     const lStrFix = removeParentheses(removeBigParentheses(lStr.replace(/^\s*\bglobal\b/i, fnReplacer)));
 
     return lStrFix.split(',')
@@ -34,7 +34,7 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
                 : null;
             const newValue = {
                 lRange: new vscode.Range(line, col2, line, col2 + lName.length), //  vscode.Range, // left Range
-                rVal, // string // Right value as textRaw
+                rVal, // string // Right value is textRaw
             };
             const oldVale = gValMapBySelf.get(lName);
             const dummy = (oldVale)

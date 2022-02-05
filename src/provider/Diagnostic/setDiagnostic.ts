@@ -57,8 +57,12 @@ function valueMapToDigs(value: EDiagCode): TDigs {
     };
 }
 
-export function setDiagnostic(value: EDiagCode, range: vscode.Range,
-    severity: vscode.DiagnosticSeverity, tags: vscode.DiagnosticTag[]): vscode.Diagnostic {
+export function setDiagnostic(
+    value: EDiagCode,
+    range: vscode.Range,
+    severity: vscode.DiagnosticSeverity,
+    tags: vscode.DiagnosticTag[],
+): vscode.Diagnostic {
     const { message, target } = valueMapToDigs(value);
     const diag1 = new vscode.Diagnostic(range, message, severity);
     diag1.source = EDiagBase.source;

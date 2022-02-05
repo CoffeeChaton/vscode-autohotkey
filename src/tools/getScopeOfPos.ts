@@ -57,7 +57,7 @@ export function getScopeOfPos(document: vscode.TextDocument, position: vscode.Po
     const stackPro = getStack(document, position);
     if (stackPro === null) return null;
 
-    const stack = stackPro.stack;
+    const { stack } = stackPro;
     if (stack.length === 0) return null;
     if (stack[0].ahkSymbol.kind === vscode.SymbolKind.Function) {
         return stackPro.stack[0].ahkSymbol.range;
@@ -78,7 +78,7 @@ export function getFnOfPos(document: vscode.TextDocument, position: vscode.Posit
     const stackPro = getStack(document, position);
     if (stackPro === null) return null;
 
-    const stack = stackPro.stack;
+    const { stack } = stackPro;
     if (stack.length === 0) return null;
     if (stack[0].ahkSymbol.kind === vscode.SymbolKind.Function) {
         return stackPro.stack[0].ahkSymbol;

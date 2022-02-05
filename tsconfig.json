@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "module": "CommonJS",
-        "target": "ES2018",
+        "target": "ES2020",
         "outDir": "out",
         "lib": [
             "ES5",
@@ -55,11 +55,16 @@
         //  "noUncheckedIndexedAccess": true
         "moduleResolution": "node",
         "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
-        "esModuleInterop": false
+        "esModuleInterop": false,
+        "types": [
+            "@types/node",
+            "jest"
+        ],
     },
     "exclude": [
         "node_modules",
-        ".vscode-test"
+        ".vscode-test",
+        "out"
     ],
-    // "typeRoots": ["node_modules/@types"]
+    "diagnostics": true
 }

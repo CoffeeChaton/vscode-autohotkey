@@ -4,14 +4,14 @@
 
 AutoHotKey language support for VS Code
 
--   [vscode-autohotkey-NekoHelp](#vscode-autohotkey-nekohelp)
-    -   [FunctionSymbol](#FunctionSymbol)
-    -   [CodeSymbol](#codesymbol)
-    -   [GotoDefinition](#gotodefinition)
-    -   [Hover](#hover)
-    -   [CodeFormat](#codeformat)
-    -   [Diagnostic](#Diagnostic) **new!**
-    -   [IntelliSense](#IntelliSense) **new**
+- [vscode-autohotkey-NekoHelp](#vscode-autohotkey-nekohelp)
+  - [FunctionSymbol](#functionsymbol)
+  - [CodeSymbol](#codesymbol)
+  - [GotoDefinition](#gotodefinition)
+  - [Hover](#hover)
+  - [CodeFormat](#codeformat)
+  - [Diagnostic](#diagnostic)
+  - [IntelliSense](#intellisense)
 
 ## FunctionSymbol
 
@@ -28,17 +28,17 @@ AutoHotKey language support for VS Code
 
 2. You can see Leveled outline
 
--   class
--   function
--   Return
--   switch, Case, Default
--   Static Var
--   Global Var
--   Labels, like `this_is_a_label:`
--   HotString, like `::ahk::`
--   HotKeys, like `~F12::`
--   directive, like `#Include` or `#Warn`
--   Throw
+- class
+- function
+- Return
+- switch, Case, Default
+- Static Var
+- Global Var
+- Labels, like `this_is_a_label:`
+- HotString, like `::ahk::`
+- HotKeys, like `~F12::`
+- directive, like `#Include` or `#Warn`
+- Throw
     ![codeSymbol3](image/codeSymbol3.jpg)
 
 ## GotoDefinition
@@ -81,7 +81,7 @@ AutoHotKey language support for VS Code
 2. or `alt` + `shift` + `f`
 3. add switch case format
 
--   **beta test now.**
+- **beta test now.**
 
 ![fmt](image/fmt.png)
 
@@ -93,10 +93,10 @@ AutoHotKey language support for VS Code
 
 1. warning about use `=` not `:=` to assign.
 2. warning of Switch  
-   `default : not find `  
+   `default : not find`  
    `default : too much`  
    `Case : > 20`  
-   `Case : not find `
+   `Case : not find`
 3. use `;@ahk-ignore [number] line.` to ignore,  
    exp: `;@ahk-ignore 3 line.`
 

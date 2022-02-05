@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable immutable/no-mutation */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable immutable/no-this */
 /* eslint-disable max-lines */
 /* eslint-disable max-len */
 import { commands } from 'vscode';
@@ -31,7 +28,7 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.setDebuggerColumnsStartAt1(false);
 
         this.dispather
-            .on('break', (reason: string) => this.sendEvent(new StoppedEvent(reason, Enum.THREAD_ID)))
+            .on('break', (reason: string): void => { this.sendEvent(new StoppedEvent(reason, Enum.THREAD_ID)); })
             .on('breakpointValidated', (bp: DebugProtocol.Breakpoint) => {
                 const breakpoint: DebugProtocol.Breakpoint = { verified: bp.verified, id: bp.id };
                 this.sendEvent(new BreakpointEvent('changed', breakpoint));
@@ -41,7 +38,7 @@ export class NekoDebugSession extends LoggingDebugSession {
                 this.sendEvent(new OutputEvent(`${text2}\n`));
                 commands.executeCommand('workbench.debug.action.focusRepl');
             })
-            .on('end', () => this.sendEvent(new TerminatedEvent()));
+            .on('end', (): void => { this.sendEvent(new TerminatedEvent()); });
     }
 
     protected initializeRequest(response: DebugProtocol.InitializeResponse, args: DebugProtocol.InitializeRequestArguments): void {
@@ -96,11 +93,11 @@ export class NekoDebugSession extends LoggingDebugSession {
     }
 
     protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
-        const path = args?.source.path || null;
-
+        // const path = args?.source.path;
+        const path: string | undefined = args?.source.path;
         if (!path) throw new Error('setBreakPointsRequest path error --48--33--44--');
         if (!basename(path).endsWith('.ahk')) throw new Error('just support .ahk file debug --48--33--61');
-        const sourceBreakpoints = args.breakpoints;
+        const sourceBreakpoints: DebugProtocol.SourceBreakpoint[] | undefined = args.breakpoints;
         if (!sourceBreakpoints) throw new Error('setBreakPointsRequest sourceBreakpoints error--88--55--170-63');
 
         response.body = { breakpoints: this.dispather.buildBreakPoint(path, sourceBreakpoints) };
@@ -113,7 +110,8 @@ export class NekoDebugSession extends LoggingDebugSession {
     }
 
     protected scopesRequest(response: DebugProtocol.ScopesResponse, args: DebugProtocol.ScopesArguments): void {
-        response.body = { scopes: this.dispather.scopes(args.frameId) };
+        const ID: number = args.frameId;
+        response.body = { scopes: this.dispather.scopes(ID) };
         this.sendResponse(response);
     }
 
@@ -188,7 +186,8 @@ export class NekoDebugSession extends LoggingDebugSession {
     }
 
     protected async evaluateRequest(response: DebugProtocol.EvaluateResponse, args: DebugProtocol.EvaluateArguments): Promise<void> {
-        const exp = args.expression.split('=');
+        const str: string = args.expression;
+        const exp = str.split('=');
         if (exp.length !== 1) {
             console.log('NekoDebugSession ~ evaluateRequest ~ response', response);
             this.dispather.setVariable({ name: exp[0], value: exp[1], variablesReference: EVscodeScope.LOCAL });
@@ -196,7 +195,7 @@ export class NekoDebugSession extends LoggingDebugSession {
 
         const result: string = exp.length === 1
             ? await this.dispather.getVariableByEval(args)
-            : `execute: ${args.expression}`;
+            : `execute: ${str}`;
 
         response.body = {
             result: result || 'null--191',

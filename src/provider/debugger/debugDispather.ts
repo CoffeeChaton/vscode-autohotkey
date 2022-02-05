@@ -11,7 +11,7 @@ import { DebugProtocol } from '@vscode/debugprotocol';
 import { spawn } from 'child_process';
 import { resolve } from 'path';
 import { existsSync } from 'fs';
-// import getPort from 'get-port';
+import { getPort } from 'get-port-please';
 import * as vscode from 'vscode';
 
 import { startDebugger } from '../Service/Service';
@@ -26,6 +26,9 @@ import {
 } from './DebugTypeEnum';
 import { mapToStr } from '../../tools/mapToStr';
 import { OutputChannel } from '../../tools/OutputChannel';
+
+const ports: number[] = [];
+for (let i = 4000; i < 5000; i++) ports.push(i);
 
 /**
  * A Ahk runtime debugger.
@@ -42,15 +45,15 @@ export class DebugDispather extends EventEmitter {
 
     private readonly variableHandler: VariableHandler = new VariableHandler();
 
-    public constructor() {
-        super();
-    }
+    // public constructor() {
+    //     super({ captureRejections: true });
+    // }
 
     /**
      * Start executing the given program.
      */
     public async start(args: TLaunchRequestArguments): Promise<void> {
-        const runtime = args.runtime;
+        const { runtime } = args;
         if (!existsSync(runtime)) {
             const message = `Autohotkey Execute Bin Not Found : ${runtime} --112--883--963--by neko-help`;
             console.log(message, runtime);
@@ -75,7 +78,11 @@ export class DebugDispather extends EventEmitter {
             throw new Error(message);
         }
 
-        const port = 9001; //await getPort({ port: getPort.makeRange(9000, 9100) });
+        const port = await getPort({
+            name: 'neko-ahk-debug',
+            ports,
+        });
+        console.log('🚀 ~ DebugDispather ~ start ~ port', port);
         this.debugServer = new DebugServer(port);
         this.commandHandler = new CommandHandler(this.debugServer);
         this.debugServer
@@ -234,15 +241,15 @@ export class DebugDispather extends EventEmitter {
             variablesReference: number;
         }> {
         const a = fnObtainValueSet(args.value);
-        let value: string = a.value;
-        let type: string = a.type;
+        let { value } = a;
+        let { type } = a;
         if (type === 'undefined') {
             console.log('DebugDispather ~ args', args);
         }
 
         const frameId: number = this.variableHandler.getFrameId();
         const scope: number = this.variableHandler.getScopeByRef(args.variablesReference);
-        const isVariable: boolean = a.isVariable;
+        const { isVariable } = a;
         if (isVariable) {
             const ahkVar = (await this.getVariable(frameId, scope, value))[0];
             value = ahkVar.value;

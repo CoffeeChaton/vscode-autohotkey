@@ -124,7 +124,7 @@ function valTrack(document: vscode.TextDocument, position: vscode.Position, Chap
     const classNameList = new Set<string>(); // value name
     for (let linePos = 0; linePos < linePosMax; linePos++) {
         const line = lineStart + linePos;
-        const lStr = DocStrMap[linePos].lStr;
+        const { lStr } = DocStrMap[linePos];
         const col = lStr.search(reg);
         if (col === -1) continue;
         const strPart = lStr.substring(col + Head.length, lStr.length).replace(/^\s*:=\s*/, ''); // TODO
@@ -143,7 +143,7 @@ async function triggerClassCore(document: vscode.TextDocument, position: vscode.
         ahkFuncObject: false,
         ahkBase: false,
     };
-    const fsPath = document.uri.fsPath;
+    const { fsPath } = document.uri;
     const itemS: vscode.CompletionItem[] = [];
     const nameList = valTrack(document, position, ChapterArr, ahkBaseObj);
     for (const name of nameList) {
@@ -176,7 +176,7 @@ async function triggerClass(document: vscode.TextDocument, position: vscode.Posi
     const testName0 = new RegExp(`^${Head}$`, 'i');
     const c0 = getUserDefClassSymbol(testName0); // static class / val / Method
     if (c0) {
-        const fsPath = document.uri.fsPath;
+        const { fsPath } = document.uri;
         const ahkThis = ChapterArr.length === 1 ? await getWmThis(c0) : [];
         return [...await parsingUserDefClassRecursive(c0, [fsPath], ChapterArr, 1), ...ahkThis];
     }

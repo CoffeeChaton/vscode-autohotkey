@@ -3,18 +3,19 @@
         "node": true,
         "browser": false,
         "es6": true,
-        "jest": true
+        "jest": true,
+        "jest/globals": true
     },
     "extends": [
-        "plugin:chai-expect/recommended",
+        "airbnb-typescript",
         "airbnb-base",
         "eslint:recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:chai-expect/recommended",
+        // "plugin:@typescript-eslint/recommended-requiring-type-checking", // any any And any
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:promise/recommended",
         "plugin:security/recommended",
-        "airbnb-typescript",
         "plugin:import/errors",
         "plugin:import/warnings",
         "plugin:import/typescript"
@@ -23,86 +24,60 @@
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
+    "overrides": [
+        {
+            "env": {
+                "jest/globals": true
+            },
+            "plugins": [
+                "jest"
+            ],
+            "files": [
+                "**/*.test.ts"
+            ],
+            "extends": [
+                "plugin:jest/recommended",
+                "plugin:jest/all",
+                "plugin:jest-formatting/strict"
+            ],
+            "rules": {
+                "jest-formatting/padding-around-describe-blocks": "error",
+                "jest-formatting/padding-around-test-blocks": "error"
+            }
+        }
+    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 2020,
-        "sourceType": "module",
+        "sourceType": "script",
         "project": "tsconfig.json",
         "ecmaFeatures": {
             "impliedStrict": true
-        }
+        },
+        "projectFolderIgnoreList": [
+            "**/__test__/**"
+        ]
     },
     "plugins": [
         "fp",
         "immutable",
         "chai-expect",
+        "@typescript-eslint/eslint-plugin",
         "@typescript-eslint",
         "promise",
         "security",
         "no-setter-return",
-        "import"
+        "import",
+        "jest",
+        "jest-formatting"
     ],
     "rules": {
-        "@typescript-eslint/no-unsafe-assignment": "off",
-        "fp/no-arguments": "error",
-        "fp/no-delete": "error",
-        "fp/no-get-set": "error",
-        "fp/no-mutating-assign": "error",
-        "fp/no-proxy": "error",
-        "fp/no-valueof-field": "error",
-        "react/jsx-filename-extension": 0,
-        "immutable/no-let": 0,
-        "immutable/no-this": 2,
-        "immutable/no-mutation": 2,
-        "class-methods-use-this": "off",
-        "no-console": "off",
-        "@typescript-eslint/no-floating-promises": "off",
-        "no-magic-numbers": [
-            "error",
-            {
-                "ignore": [
-                    -1,
-                    0,
-                    1
-                ]
-            }
-        ],
-        "security/detect-object-injection": "off",
-        "no-plusplus": "off",
-        "promise/always-return": "error",
-        "promise/no-return-wrap": "error",
-        "promise/param-names": "error",
-        "promise/catch-or-return": "error",
-        "promise/no-native": "off",
-        "promise/no-nesting": "warn",
-        "promise/no-promise-in-callback": "warn",
-        "promise/no-callback-in-promise": "warn",
-        "promise/avoid-new": "warn",
-        "promise/no-new-statics": "error",
-        "promise/no-return-in-finally": "warn",
-        "promise/valid-params": "warn",
-        "chai-expect/terminating-properties": [
-            "error",
-            {
-                "properties": [
-                    "headers",
-                    "html",
-                    "ip",
-                    "json",
-                    "redirect",
-                    "test"
-                ]
-            }
-        ],
-        "chai-expect/no-inner-compare": 2,
-        "chai-expect/no-inner-literal": 2,
-        "chai-expect/missing-assertion": 2,
-        "no-useless-backreference": "error",
-        "default-case-last": 2,
-        "import/export": 2,
-        "import/default": 2,
-        "import/namespace": 2,
-        "import/named": 2,
+        "@typescript-eslint/adjacent-overload-signatures": "warn",
+        "@typescript-eslint/array-type": "warn",
+        "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/ban-types": "warn",
+        "@typescript-eslint/explicit-function-return-type": "warn",
+        "@typescript-eslint/explicit-member-accessibility": "warn",
         "@typescript-eslint/indent": [
             "error",
             4,
@@ -110,16 +85,12 @@
                 "SwitchCase": 1
             }
         ],
-        "@typescript-eslint/adjacent-overload-signatures": "warn",
-        "@typescript-eslint/array-type": "warn",
-        "@typescript-eslint/ban-types": "warn",
-        "@typescript-eslint/explicit-function-return-type": "warn",
-        "@typescript-eslint/explicit-member-accessibility": "warn",
         "@typescript-eslint/member-ordering": "warn",
         "@typescript-eslint/no-array-constructor": "warn",
         "@typescript-eslint/no-empty-interface": "warn",
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/no-extraneous-class": "warn",
+        "@typescript-eslint/no-floating-promises": "off",
         "@typescript-eslint/no-for-in-array": "warn",
         "@typescript-eslint/no-inferrable-types": "warn",
         "@typescript-eslint/no-misused-new": "warn",
@@ -127,10 +98,17 @@
         "@typescript-eslint/no-non-null-assertion": "warn",
         "@typescript-eslint/no-parameter-properties": "warn",
         "@typescript-eslint/no-require-imports": "warn",
+        "@typescript-eslint/no-shadow": [
+            "error"
+        ],
         "@typescript-eslint/no-this-alias": "warn",
         "@typescript-eslint/no-type-alias": "off",
         "@typescript-eslint/no-unnecessary-qualifier": "warn",
         "@typescript-eslint/no-unnecessary-type-assertion": "warn",
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-call": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "@typescript-eslint/no-unsafe-return": "off",
         "@typescript-eslint/no-unused-vars": [
             "warn",
             {
@@ -145,23 +123,56 @@
         "@typescript-eslint/promise-function-async": "warn",
         "@typescript-eslint/require-array-sort-compare": "warn",
         "@typescript-eslint/restrict-plus-operands": "warn",
-        "@typescript-eslint/await-thenable": "error",
-        "no-unused-vars": "off",
-        "linebreak-style": [
-            "error",
-            "windows"
-        ],
-        "no-restricted-syntax": 0,
-        "no-continue": 0,
-        "import/prefer-default-export": 0,
-        "max-len": [
+        "array-bracket-newline": "warn",
+        "array-bracket-spacing": "warn",
+        "array-callback-return": "error",
+        "arrow-parens": "warn",
+        "arrow-spacing": "warn",
+        "block-scoped-var": "warn",
+        "block-spacing": "warn",
+        "brace-style": "warn",
+        "capitalized-comments": "warn",
+        "chai-expect/missing-assertion": "error",
+        "chai-expect/no-inner-compare": "error",
+        "chai-expect/no-inner-literal": "error",
+        "chai-expect/terminating-properties": [
             "error",
             {
-                "code": 150,
-                "tabWidth": 4
+                "properties": [
+                    "headers",
+                    "html",
+                    "ip",
+                    "json",
+                    "redirect",
+                    "test"
+                ]
             }
         ],
-        "import/no-unresolved": 0,
+        "class-methods-use-this": "off",
+        "comma-spacing": "warn",
+        "complexity": [
+            "error",
+            {
+                "max": 30
+            }
+        ],
+        "default-case": "warn",
+        "default-case-last": "error",
+        "dot-notation": "warn",
+        "for-direction": "warn",
+        "fp/no-arguments": "error",
+        "fp/no-delete": "error",
+        "fp/no-get-set": "error",
+        "fp/no-mutating-assign": "error",
+        "fp/no-proxy": "error",
+        "fp/no-valueof-field": "error",
+        "func-names": "warn",
+        "immutable/no-let": "off",
+        "immutable/no-mutation": "off",
+        "immutable/no-this": "off",
+        "implicit-arrow-linebreak": "error",
+        "import/default": "error",
+        "import/export": "error",
         "import/extensions": [
             "error",
             "ignorePackages",
@@ -172,34 +183,34 @@
                 "tsx": "never"
             }
         ],
-        "wrap-regex": 2,
-        "no-bitwise": 2,
-        "no-eq-null": "error",
-        "array-bracket-newline": 1,
-        "array-bracket-spacing": 1,
-        "arrow-parens": 1,
-        "arrow-spacing": 1,
-        "block-scoped-var": "warn",
-        "block-spacing": 1,
-        "brace-style": 1,
-        "capitalized-comments": 1,
-        "comma-spacing": 1,
-        "complexity": [
+        "import/named": "error",
+        "import/namespace": "error",
+        "import/no-extraneous-dependencies": [
             "error",
             {
-                "max": 30
+                "devDependencies": [
+                    "**/*.test.ts"
+                ]
             }
         ],
-        "default-case": 1,
-        "no-fallthrough": 2,
-        "dot-notation": 1,
-        "for-direction": 1,
-        "func-names": 1,
-        "implicit-arrow-linebreak": "error",
+        "import/no-unresolved": "off",
+        "import/prefer-default-export": "off",
+        "indent": "off",
         "init-declarations": "error",
+        "linebreak-style": [
+            "error",
+            "windows"
+        ],
         "max-depth": [
             "error",
             4
+        ],
+        "max-len": [
+            "error",
+            {
+                "code": 150,
+                "tabWidth": 4
+            }
         ],
         "max-lines": [
             "error",
@@ -218,14 +229,19 @@
             30
         ],
         "max-statements-per-line": "error",
+        "no-bitwise": "error",
         "no-class-assign": "warn",
         "no-compare-neg-zero": "warn",
         "no-cond-assign": "error",
         "no-confusing-arrow": "error",
+        "no-console": "off",
         "no-constant-condition": "error",
+        "no-continue": "off",
         "no-else-return": "error",
         "no-empty-function": "error",
+        "no-eq-null": "error",
         "no-extra-boolean-cast": "error",
+        "no-fallthrough": "error",
         "no-floating-decimal": "error",
         "no-func-assign": "error",
         "no-global-assign": "error",
@@ -234,35 +250,60 @@
         "no-inner-declarations": "warn",
         "no-invalid-this": "warn",
         "no-loop-func": "error",
+        "no-magic-numbers": [
+            "error",
+            {
+                "ignore": [
+                    -1,
+                    0,
+                    1
+                ]
+            }
+        ],
         "no-mixed-operators": "warn",
         "no-multi-assign": "warn",
         "no-nested-ternary": "error",
         "no-new-func": "error",
         "no-new-object": "error",
         "no-param-reassign": "error",
+        "no-plusplus": "off",
+        "no-restricted-syntax": "off",
         "no-return-assign": "error",
         "no-self-compare": "error",
         "no-sequences": "error",
         "no-shadow": "off",
-        "@typescript-eslint/no-shadow": [
-            "error"
-        ],
         "no-shadow-restricted-names": "error",
         "no-sparse-arrays": "error",
         "no-undef-init": "error",
         "no-unmodified-loop-condition": "error",
         "no-unneeded-ternary": "error",
         "no-unused-expressions": "error",
+        "no-unused-vars": "off",
+        "no-useless-backreference": "error",
         "no-useless-concat": "warn",
         "no-useless-return": "error",
         "no-var": "warn",
         "no-whitespace-before-property": "warn",
         "nonblock-statement-body-position": "warn",
         "operator-assignment": "warn",
+        "prefer-destructuring": "warn",
         "prefer-template": "warn",
+        "promise/always-return": "error",
+        "promise/avoid-new": "warn",
+        "promise/catch-or-return": "error",
+        "promise/no-callback-in-promise": "warn",
+        "promise/no-native": 0,
+        "promise/no-nesting": "warn",
+        "promise/no-new-statics": "error",
+        "promise/no-promise-in-callback": "warn",
+        "promise/no-return-in-finally": "warn",
+        "promise/no-return-wrap": "error",
+        "promise/param-names": "error",
+        "promise/valid-params": "warn",
+        "react/jsx-filename-extension": "off",
+        "security/detect-object-injection": "off",
         "use-isnan": "error",
-        "array-callback-return": "error",
-        "prefer-destructuring": "off"
+        "wrap-regex": "error"
     },
     "settings": {
         "import/resolver": {

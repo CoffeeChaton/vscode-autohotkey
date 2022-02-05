@@ -24,7 +24,7 @@ function setErrDefaultNotFind(sw: TAhkSymbol): vscode.Diagnostic {
 }
 function setErrDefaultTooMuch(sw: TAhkSymbol): vscode.Diagnostic {
     const value = EDiagCode.code111;
-    const range = sw.range;
+    const { range } = sw;
     return setDiagnostic(value, range, vscode.DiagnosticSeverity.Information, []);
 }
 
@@ -38,12 +38,12 @@ function setErrDefault(sw: TAhkSymbol): null | vscode.Diagnostic {
 }
 function setCaseTooMuch(sw: TAhkSymbol): vscode.Diagnostic {
     const value = EDiagCode.code112;
-    const range = sw.range;
+    const { range } = sw;
     return setDiagnostic(value, range, vscode.DiagnosticSeverity.Information, []);
 }
 function setErrCaseZero(sw: TAhkSymbol): vscode.Diagnostic {
     const value = EDiagCode.code113;
-    const range = sw.range;
+    const { range } = sw;
     return setDiagnostic(value, range, vscode.DiagnosticSeverity.Information, []);
 }
 
@@ -59,7 +59,7 @@ function setErrCase(sw: TAhkSymbol): null | vscode.Diagnostic {
 function setErrSwNameNotFind(sw: TAhkSymbol): null | vscode.Diagnostic {
     if (!sw.name.startsWith('!!')) return null;
     const value = EDiagCode.code114;
-    const range = sw.range;
+    const { range } = sw;
     return setDiagnostic(value, range, vscode.DiagnosticSeverity.Error, []);
 }
 function getSwErr(sw: TAhkSymbol, displayErr: readonly boolean[]): vscode.Diagnostic[] {

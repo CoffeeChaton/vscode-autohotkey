@@ -7,7 +7,7 @@ function getValRegMap(valMap: TValMap): Map<string, RegExp> {
     const regMap: Map<string, RegExp> = new Map<string, RegExp>();
 
     // eslint-disable-next-line security/detect-non-literal-regexp
-    valMap.forEach((v, valName) => regMap.set(valName, new RegExp(`(?<!\\.|\`|%)\\b(${valName})\\b(?!%)`, 'ig')));
+    valMap.forEach((v, valName): Map<string, RegExp> => regMap.set(valName, new RegExp(`(?<!\\.|\`|%)\\b(${valName})\\b(?!%)`, 'ig')));
     return regMap;
 }
 
@@ -36,16 +36,6 @@ function setValUse(
     const {
         keyRawName, defLoc, commentList, ahkValType,
     } = defVal;
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    const refLoc: vscode.Location[] = setRefLoc(character);
-    const value: TValObj = {
-        keyRawName,
-        defLoc,
-        commentList,
-        refLoc,
-        ahkValType,
-    };
-    return value;
 
     function setRefLoc(ch: number): vscode.Location[] {
         const useVal = valMap2.get(valName.toUpperCase());
@@ -65,6 +55,16 @@ function setValUse(
         }
         return [...oldRefLocS, newRefLoc];
     }
+
+    const refLoc: vscode.Location[] = setRefLoc(character);
+    const value: TValObj = {
+        keyRawName,
+        defLoc,
+        commentList,
+        refLoc,
+        ahkValType,
+    };
+    return value;
 }
 
 export function setValMapRef(

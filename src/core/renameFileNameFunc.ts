@@ -14,7 +14,7 @@ export async function renameFn(oldUri: vscode.Uri, newUri: vscode.Uri, fsPathLis
         const DocStrMap = Pretreatment(document.getText().split('\n'), 0);
         const lineCount = DocStrMap.length;
         for (let line = 0; line < lineCount; line++) {
-            const textRaw = DocStrMap[line].textRaw;
+            const { textRaw } = DocStrMap[line];
             if (RegexInclude.test(textRaw)
                 && textRaw.includes(oldFileName)) { // TODO TEST
                 const Today = new Date();

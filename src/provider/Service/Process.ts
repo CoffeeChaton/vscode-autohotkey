@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable promise/avoid-new */
 import * as child_process from 'child_process';
 

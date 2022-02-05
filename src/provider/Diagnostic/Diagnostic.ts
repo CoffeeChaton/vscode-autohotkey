@@ -36,7 +36,7 @@ function assign(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnosti
     return setDiagnostic(value, range, vscode.DiagnosticSeverity.Information, []);
 }
 function getLoopErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnostic {
-    const lStr = DocStrMap[line].lStr;
+    const { lStr } = DocStrMap[line];
     const exec = (/^\s*Loop\b[\s,][\s,]*(\w\w*)/i).exec(lStr);
     if (exec === null) return 0;
     const SecondSection = exec[1];
@@ -68,7 +68,7 @@ function getDirectivesErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode
     if (DocStrMap[line].lStr.indexOf('#') === -1) return 0;
     if (!(/^\s*#/i).test(DocStrMap[line].lStr)) return 0;
 
-    const lStr = DocStrMap[line].lStr;
+    const { lStr } = DocStrMap[line];
     const exec = (/^\s*#(\w\w*)/).exec(lStr);
     if (exec === null) return 0;
     const Directives = exec[1];
@@ -108,7 +108,7 @@ function getCommandErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Di
     // TODO search Deprecated
     // if (h.indexOf(line) !== -1) return 1;
     if (!(/^\s*\w\w*[\s,]/).test(DocStrMap[line].lStr)) return 0;
-    const lStr = DocStrMap[line].lStr;
+    const { lStr } = DocStrMap[line];
     const exec = (/^\s*(\w\w*)[\s,]/).exec(lStr);
     if (exec === null) return 0;
     const commandHead = exec[1];
