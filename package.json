@@ -217,12 +217,10 @@
     },
     "scripts": {
         "vscode:prepublish": "node esbuild.config.js",
-        "dprint": "dprint fmt",
-        "eslint": "eslint --fix src --cache --ignore-pattern *.test.ts",
+        "fmt": "dprint fmt",
+        "lint": "eslint --fix src --cache",
         "compile": "tsc -p ./ -diagnostics",
         "watch": "tsc -watch -p ./",
-        "start": "ts-node src/main.ts",
-        "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/main.ts",
         "test": "jest",
         "test_vsc": "pnpm run compile && node ./node_modules/vscode/bin/test"
     },
@@ -244,7 +242,7 @@
         "@typescript-eslint/eslint-plugin": "^5.10.2",
         "@typescript-eslint/parser": "^5.10.2",
         "dprint": "^0.22.0",
-        "esbuild": "^0.14.18",
+        "esbuild": "^0.14.19",
         "esbuild-copy-static-files": "^0.1.0",
         "eslint": "^8.8.0",
         "eslint-config-airbnb": "^19.0.4",
