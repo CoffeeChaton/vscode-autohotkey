@@ -71,7 +71,7 @@ export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     statusBarItem.show();
 }
 
-export function getLintConfig(): { funcSize: number; } {
+export function getLintConfig(): { funcSize: number } {
     return config.lint;
 }
 

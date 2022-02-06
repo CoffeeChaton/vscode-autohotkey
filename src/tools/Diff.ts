@@ -1,7 +1,7 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
-import * as vscode from 'vscode';
-import * as temp from 'temp';
 import * as path from 'path';
+import * as temp from 'temp';
+import * as vscode from 'vscode';
 import { EStr } from '../globalEnum';
 
 export type DiffType = {
@@ -10,16 +10,13 @@ export type DiffType = {
     fsPath: string;
 };
 
-export async function callDiff({
-    leftText, right: rightInput, fsPath,
-}: DiffType): Promise<void> {
+export async function callDiff({ leftText, right: rightInput, fsPath }: DiffType): Promise<void> {
     temp.track();
     const affixes: temp.AffixOptions = {
         prefix: EStr.diff_name_prefix,
         suffix: '.ahk',
         // dir?: string,
     };
-
     const left = temp.createWriteStream(affixes);
     const right = temp.createWriteStream(affixes);
 

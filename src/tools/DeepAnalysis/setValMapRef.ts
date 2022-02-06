@@ -1,13 +1,18 @@
 import * as vscode from 'vscode';
 import {
-    TAhkSymbol, TTokenStream, TValMap, TValObj,
+    TAhkSymbol,
+    TTokenStream,
+    TValMap,
+    TValObj,
 } from '../../globalEnum';
 
 function getValRegMap(valMap: TValMap): Map<string, RegExp> {
     const regMap: Map<string, RegExp> = new Map<string, RegExp>();
 
-    // eslint-disable-next-line security/detect-non-literal-regexp
-    valMap.forEach((v, valName): Map<string, RegExp> => regMap.set(valName, new RegExp(`(?<!\\.|\`|%)\\b(${valName})\\b(?!%)`, 'ig')));
+    for (const [valName] of valMap) {
+        // eslint-disable-next-line security/detect-non-literal-regexp
+        regMap.set(valName, new RegExp(`(?<!\\.|\`|%)\\b(${valName})\\b(?!%)`, 'ig'));
+    }
     return regMap;
 }
 
@@ -34,7 +39,10 @@ function setValUse(
     }
 
     const {
-        keyRawName, defLoc, commentList, ahkValType,
+        keyRawName,
+        defLoc,
+        commentList,
+        ahkValType,
     } = defVal;
 
     function setRefLoc(ch: number): vscode.Location[] {

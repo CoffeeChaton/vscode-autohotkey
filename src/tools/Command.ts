@@ -65,7 +65,8 @@ async function LoopOfClearOutlineCache(): Promise<null> {
     let iMax = 0;
     const maxTime = await vscode.window.showQuickPick(items);
     switch (maxTime) {
-        case items[0]: return null;
+        case items[0]:
+            return null;
         case items[1]:
             c0 = setInterval(() => {
                 clearOutlineCache(true);
@@ -95,6 +96,7 @@ export async function statusBarClick(): Promise<null> {
         //  '3 -> regTest',
     ];
     const options = await vscode.window.showQuickPick(items);
+    // dprint-ignore
     switch (options) {
         case items[0]: return clearOutlineCache(false);
         case items[1]: return listAhkInclude();

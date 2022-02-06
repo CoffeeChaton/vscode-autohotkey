@@ -7,7 +7,7 @@ export type FuncDefData = {
     selectionRange: vscode.Range;
 };
 
-type FuncTailType = { DocStrMap: TTokenStream, searchText: string, name: string, searchLine: number, defLine: number; };
+type FuncTailType = { DocStrMap: TTokenStream; searchText: string; name: string; searchLine: number; defLine: number };
 
 function getSelectionRange(DocStrMap: TTokenStream, defLine: number, searchLine: number): vscode.Range {
     // const argPos = Math.max(DocStrMap[defLine].lStr.indexOf('('), 0);
@@ -23,7 +23,11 @@ function getSelectionRange(DocStrMap: TTokenStream, defLine: number, searchLine:
 }
 
 function getFuncTail({
-    DocStrMap, searchText, name, searchLine, defLine,
+    DocStrMap,
+    searchText,
+    name,
+    searchLine,
+    defLine,
 }: FuncTailType): false | FuncDefData {
     // i+1   ^, something , something ........ ) {$
     if ((/\)\s*{\s*$/).test(searchText)) {
@@ -34,8 +38,10 @@ function getFuncTail({
 
     // i+1   ^, something , something ......)$
     // i+2   ^{
-    if ((/\)\s*$/).test(searchText)
-        && (/^\s*{/).test(DocStrMap[searchLine + 1].lStr)) {
+    if (
+        (/\)\s*$/).test(searchText)
+        && (/^\s*{/).test(DocStrMap[searchLine + 1].lStr)
+    ) {
         const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine);
         return { name, selectionRange };
     }
@@ -63,7 +69,7 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | Fu
     });
     if (funcData) return funcData;
 
-    if (DocStrMap[defLine].lStr.includes(')')) return false;// fn_Name( ... ) ...  ,this is not ahk function
+    if (DocStrMap[defLine].lStr.includes(')')) return false; // fn_Name( ... ) ...  ,this is not ahk function
 
     const iMax = Math.min(defLine + 15, DocStrMap.length);
     for (let searchLine = defLine + 1; searchLine < iMax; searchLine++) {
@@ -72,7 +78,11 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | Fu
         if (!(/^\s*,/).test(searchText)) return false;
 
         const funcData2 = getFuncTail({
-            DocStrMap, searchText, name, searchLine, defLine,
+            DocStrMap,
+            searchText,
+            name,
+            searchLine,
+            defLine,
         });
         if (funcData2) return funcData2;
     }

@@ -5,8 +5,10 @@ import { kindPick } from '../../tools/Func/kindPick';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 
-export function DeepAnalysisToCompletionItem(document: vscode.TextDocument, position: vscode.Position)
-    : vscode.CompletionItem[] {
+export function DeepAnalysisToCompletionItem(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+): vscode.CompletionItem[] {
     if (isPosAtStr(document, position)) return [];
 
     const ahkSymbol = getFnOfPos(document, position);
@@ -28,7 +30,9 @@ export function DeepAnalysisToCompletionItem(document: vscode.TextDocument, posi
         const md: vscode.MarkdownString = new vscode.MarkdownString('', true);
         md.appendCodeblock(`arg of this func (${ahkSymbol.name}()) `);
         md.appendMarkdown(v.commentList.join('\n'));
-        v.refLoc.forEach((e) => md.appendCodeblock(`ref Pos Ln ${e.range.start.line + 1}, Col ${e.range.start.character + 1}`));
+        v.refLoc.forEach((e) => {
+            md.appendCodeblock(`ref Pos Ln ${e.range.start.line + 1}, Col ${e.range.start.character + 1}`);
+        });
 
         item.documentation = md;
         need.push(item);

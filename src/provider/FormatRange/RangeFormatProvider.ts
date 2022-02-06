@@ -2,11 +2,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
 import * as vscode from 'vscode';
+import { VERSION } from '../../globalEnum';
+import { callDiff, DiffType } from '../../tools/Diff';
 import { inCommentBlock } from '../../tools/inCommentBlock';
 import { inLTrimRange } from '../../tools/inLTrimRange';
 import { getLStr, getSkipSign, getSkipSign2 } from '../../tools/removeSpecialChar';
-import { callDiff, DiffType } from '../../tools/Diff';
-import { VERSION } from '../../globalEnum';
 
 function showWarn(timeStart: number): void {
     const time = Date.now() - timeStart;
@@ -98,12 +98,16 @@ type RangeFormatType = {
 
 export function lineReplace(text: string, textFix: string, CommentBlock: boolean, inLTrim: 0 | 1 | 2): string {
     return (CommentBlock || textFix === '' || inLTrim > 0 || getSkipSign(textFix)
-        || getSkipSign2(textFix) || textFix.startsWith(':') || textFix.includes('::'))
+            || getSkipSign2(textFix) || textFix.startsWith(':') || textFix.includes('::'))
         ? text
         : fnStrGroup(text);
 }
 export function RangeFormat({
-    timeStart, RangeTextRaw, RangeText, fsPath, range,
+    timeStart,
+    RangeTextRaw,
+    RangeText,
+    fsPath,
+    range,
 }: RangeFormatType): vscode.ProviderResult<vscode.TextEdit[]> {
     let CommentBlock = false;
     let inLTrim: 0 | 1 | 2 = 0;
@@ -117,8 +121,10 @@ export function RangeFormat({
         const textFix = getLStr(text).trim();
         inLTrim = inLTrimRange(textFix, inLTrim);
 
-        textNew += (CommentBlock || textFix === '' || inLTrim > 0 || getSkipSign(textFix)
-            || getSkipSign2(textFix) || textFix.startsWith(':') || textFix.includes('::'))
+        const textNewBoolean: boolean = (CommentBlock || textFix === '' || inLTrim > 0 || getSkipSign(textFix)
+            || getSkipSign2(textFix) || textFix.startsWith(':') || textFix.includes('::'));
+
+        textNew += textNewBoolean
             ? text
             : fnStrGroup(text);
 
@@ -148,7 +154,11 @@ export class RangeFormatProvider implements vscode.DocumentRangeFormattingEditPr
         const RangeText = document.getText(range);
         const timeStart = Date.now();
         return RangeFormat({
-            timeStart, RangeTextRaw: RangeText, RangeText, fsPath: document.uri.fsPath, range,
+            timeStart,
+            RangeTextRaw: RangeText,
+            RangeText,
+            fsPath: document.uri.fsPath,
+            range,
         });
     }
 }

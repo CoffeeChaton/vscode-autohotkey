@@ -6,31 +6,33 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { EMode, TAhkSymbol } from '../../globalEnum';
-import { ahkInclude } from './ahkInclude';
-import { kindCheck } from './kindCheck';
-import { getValDefInFunc } from './getValDefInFunc';
 import { isPosAtStr } from '../../tools/isPosAtStr';
+import { ahkInclude } from './ahkInclude';
+import { getValDefInFunc } from './getValDefInFunc';
+import { kindCheck } from './kindCheck';
 
 type DefObj = Readonly<{
-    document: vscode.TextDocument,
-    position: vscode.Position,
-    Mode: EMode,
-    wordUp: string,
-    defReg: RegExp,
-    usingReg: RegExp,
-    timeStart: number,
+    document: vscode.TextDocument;
+    position: vscode.Position;
+    Mode: EMode;
+    wordUp: string;
+    defReg: RegExp;
+    usingReg: RegExp;
+    timeStart: number;
     listAllUsing: boolean;
 }>;
 
-export function tryGetSymbol(wordUP: string, mode: EMode): false | { fsPath: string, AhkSymbol: TAhkSymbol; } {
+export function tryGetSymbol(wordUP: string, mode: EMode): false | { fsPath: string; AhkSymbol: TAhkSymbol } {
     const fsPaths = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
         const docSymbolList = Detecter.getDocMap(fsPath);
         if (docSymbolList === null) continue;
         const iMax = docSymbolList.length;
         for (let i = 0; i < iMax; i++) {
-            if (kindCheck(mode, docSymbolList[i].kind)
-                && docSymbolList[i].name.toUpperCase() === wordUP) {
+            if (
+                kindCheck(mode, docSymbolList[i].kind)
+                && docSymbolList[i].name.toUpperCase() === wordUP
+            ) {
                 return { AhkSymbol: docSymbolList[i], fsPath };
             }
         }
@@ -48,10 +50,11 @@ async function getReference(usingReg: RegExp, timeStart: number, wordUp: string)
         for (let line = 0; line < lineCount; line++) {
             const textRaw = textRawList[line].trim();
             if (usingReg.test(textRaw)) {
-                List.push(new vscode.Location(
+                const Location = new vscode.Location(
                     document.uri,
                     new vscode.Position(line, textRawList[line].search(usingReg)),
-                ));
+                );
+                List.push(Location);
             }
         }
     }
@@ -79,9 +82,11 @@ async function ahkDef(
     // searchDef
     const searchDef = (): false | Promise<vscode.Location[]> => {
         if (!defReg.test(textTrimUp)) return false;
-        if (listAllUsing
+        if (
+            listAllUsing
             || (fsPath === document.uri.fsPath
-                && AhkSymbol.range.start.line === document.lineAt(position).lineNumber)) {
+                && AhkSymbol.range.start.line === document.lineAt(position).lineNumber)
+        ) {
             return getReference(usingReg, timeStart, wordUp);
         }
         return false;
@@ -126,7 +131,10 @@ export async function userDef(
     ];
 
     const usingRegList: RegExp[] = [
-        new RegExp(`(?:^class\\b\\s\\s*\\b(${wordUp})\\b)|(?:\\bnew\\s\\s*\\b(${wordUp})\\b)|(?:(${wordUp})\\.)|(?:\\bextends\\b\\s\\s*(${wordUp}))|(?:\\bglobal\\b\\s\\s*\\b(${wordUp})\\b)|(?:{\\s*base:\\s*(${wordUp}))|(?:\\w\\w*\\.base\\s*:=\\s*(${wordUp}))`, 'i'),
+        new RegExp(
+            `(?:^class\\b\\s\\s*\\b(${wordUp})\\b)|(?:\\bnew\\s\\s*\\b(${wordUp})\\b)|(?:(${wordUp})\\.)|(?:\\bextends\\b\\s\\s*(${wordUp}))|(?:\\bglobal\\b\\s\\s*\\b(${wordUp})\\b)|(?:{\\s*base:\\s*(${wordUp}))|(?:\\w\\w*\\.base\\s*:=\\s*(${wordUp}))`,
+            'i',
+        ),
         // class ClassName | new className | className. | extends  className | global className |  {base: className | .base := baseObject
         new RegExp(`(?:(?<!\\.|\`|%)\\b(${wordUp})\\()|(?:(?<=\\bfunc\\()\\s*"\\b(${wordUp})\\b")`, 'i'),
         // funcName( | Func("funcName"

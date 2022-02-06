@@ -7,9 +7,8 @@ import * as vscode from 'vscode';
 import { TAhkBaseObj } from './ahkBase';
 
 type TDescription = Readonly<{
-    label: string,
-    documentation: string[
-    ],
+    label: string;
+    documentation: string[];
 }>;
 
 const ItemOfAhkObj: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
@@ -96,7 +95,7 @@ const ItemOfAhkObj: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
         {
             label: 'Length()',
             documentation: [
-                '*Returns* the length of a linear array beginning at position 1; that is, the highest positive integer key contained by the object, or 0 if there aren\'t any.',
+                "*Returns* the length of a linear array beginning at position 1; that is, the highest positive integer key contained by the object, or 0 if there aren't any.",
                 'https://www.autohotkey.com/docs/objects/Object.htm#Length',
             ],
         },
@@ -121,7 +120,7 @@ const ItemOfAhkObj: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
             documentation: [
                 'Adjusts the capacity of an object or one of its fields.',
                 '*Key*: Any valid key.',
-                '*ByteSize*: The new size in bytes of the field\'s string buffer, excluding the null-terminator. If the field does not exist, it is created. If ByteSize is zero, the buffer is freed but the empty field is not removed. If ByteSize is less than the current size, excess data is truncated; otherwise all existing data is preserved.',
+                "*ByteSize*: The new size in bytes of the field's string buffer, excluding the null-terminator. If the field does not exist, it is created. If ByteSize is zero, the buffer is freed but the empty field is not removed. If ByteSize is less than the current size, excess data is truncated; otherwise all existing data is preserved.",
                 '*Returns*: The new capacity if successful, otherwise an empty string.',
                 'https://www.autohotkey.com/docs/objects/Object.htm#SetCapacity',
             ],
@@ -137,7 +136,7 @@ const ItemOfAhkObj: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
         {
             label: 'GetAddress(Key)',
             documentation: [
-                '*Returns* the current address of the field\'s string buffer, if it has one.',
+                "*Returns* the current address of the field's string buffer, if it has one.",
                 'https://www.autohotkey.com/docs/objects/Object.htm#GetAddress',
             ],
         },
@@ -145,7 +144,7 @@ const ItemOfAhkObj: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
             label: '_NewEnum()',
 
             documentation: [
-                '*Returns* a new enumerator to enumerate this object\'s key-value pairs. This method is usually not called directly, but by the for-loop.',
+                "*Returns* a new enumerator to enumerate this object's key-value pairs. This method is usually not called directly, but by the for-loop.",
                 'https://www.autohotkey.com/docs/objects/Object.htm#NewEnum',
             ],
         },
@@ -175,15 +174,18 @@ const ItemOfAhkObj: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
 
     const BaseItem = new vscode.CompletionItem('Base', vscode.CompletionItemKind.Property);
     BaseItem.detail = 'neko help : AhkObj  Property';
-    BaseItem.documentation = new vscode.MarkdownString([
-        '*Returns* a shallow copy of the object.',
-        '> BaseObject := Object.Base',
-        '> Object.Base := BaseObject',
-        'BaseObject must be an object or an empty string.',
+    BaseItem.documentation = new vscode.MarkdownString(
+        [
+            '*Returns* a shallow copy of the object.',
+            '> BaseObject := Object.Base',
+            '> Object.Base := BaseObject',
+            'BaseObject must be an object or an empty string.',
 
-        'Properties and methods defined by a base object are accessible only while that base object is in use. Therefore, changing Object\'s base also changes the set of available properties and methods.',
-        'https://www.autohotkey.com/docs/objects/Object.htm#Base',
-    ].join('\n\n'), true);
+            "Properties and methods defined by a base object are accessible only while that base object is in use. Therefore, changing Object's base also changes the set of available properties and methods.",
+            'https://www.autohotkey.com/docs/objects/Object.htm#Base',
+        ].join('\n\n'),
+        true,
+    );
     itemS.push(BaseItem);
     return itemS;
 })();
@@ -306,7 +308,7 @@ const ItemOfFileOpen: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => 
                 '> FileSize := File.Length',
                 '> File.Length := NewSize',
                 '*FileSize* and *NewSize* is the size of the file, in bytes.',
-                'This property should be used only with an actual file. If the File object was created from a handle to a pipe, it may return the amount of data currently available in the pipe\'s internal buffer, but this behaviour is not guaranteed.',
+                "This property should be used only with an actual file. If the File object was created from a handle to a pipe, it may return the amount of data currently available in the pipe's internal buffer, but this behaviour is not guaranteed.",
                 'https://www.autohotkey.com/docs/objects/File.htm#Length',
             ],
         },
@@ -339,7 +341,7 @@ const ItemOfFileOpen: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => 
             documentation: [
                 '*Returns* a system file ```handle```, intended for use with ```DllCall()```. See [CreateFile](https://docs.microsoft.com/zh-tw/windows/win32/api/fileapi/nf-fileapi-createfilea?redirectedfrom=MSDN).',
                 '> File.__Handle',
-                'File objects internally buffer reads or writes. If data has been written into the object\'s internal buffer, it is committed to disk before the handle is returned. If the buffer contains data read from file, it is discarded and the actual file pointer is reset to the logical position indicated by ```File.Pos```.',
+                "File objects internally buffer reads or writes. If data has been written into the object's internal buffer, it is committed to disk before the handle is returned. If the buffer contains data read from file, it is discarded and the actual file pointer is reset to the logical position indicated by ```File.Pos```.",
             ],
         },
     ];
@@ -351,7 +353,17 @@ const ItemOfFileOpen: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => 
         itemS.push(item);
     });
 
-    ['ReadUInt()', 'ReadInt()', 'ReadInt64()', 'ReadShort()', 'ReadUShort()', 'ReadChar()', 'ReadUChar()', 'ReadDouble()', 'ReadFloat()']
+    [
+        'ReadUInt()',
+        'ReadInt()',
+        'ReadInt64()',
+        'ReadShort()',
+        'ReadUShort()',
+        'ReadChar()',
+        'ReadUChar()',
+        'ReadDouble()',
+        'ReadFloat()',
+    ]
         .forEach((v) => {
             const documentation: string[] = [
                 'Reads a number from the file and advances the file pointer.',
@@ -366,7 +378,17 @@ const ItemOfFileOpen: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => 
             itemS.push(item);
         });
 
-    ['WriteUInt(Num)', 'WriteInt(Num)', 'WriteInt64(Num)', 'WriteShort(Num)', 'WriteUShort(Num)', 'WriteChar(Num)', 'WriteUChar(Num)', 'WriteDouble(Num)', 'WriteFloat(Num)']
+    [
+        'WriteUInt(Num)',
+        'WriteInt(Num)',
+        'WriteInt64(Num)',
+        'WriteShort(Num)',
+        'WriteUShort(Num)',
+        'WriteChar(Num)',
+        'WriteUChar(Num)',
+        'WriteDouble(Num)',
+        'WriteFloat(Num)',
+    ]
         .forEach((v) => {
             const documentation: string[] = [
                 'Writes a number to the file and advances the file pointer.',
@@ -398,7 +420,7 @@ const ItemOfFunc: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
             item.detail = 'neko help : Func() Methods';
             item.insertText = new vscode.SnippetString(v)
                 .appendTabstop()
-                .appendText(')');// SnippetString;
+                .appendText(')'); // SnippetString;
             itemS.push(item);
         });
 

@@ -4,26 +4,31 @@
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
 import * as vscode from 'vscode';
+import { getFormatConfig } from '../../configUI';
+import {
+    DeepReadonly,
+    DetailType,
+    TTokenStream,
+    VERSION,
+} from '../../globalEnum';
+import { callDiff, DiffType } from '../../tools/Diff';
 import { inLTrimRange } from '../../tools/inLTrimRange';
-import { getSwitchRange, inSwitchBlock } from './SwitchCase';
-import { thisLineDeep } from './thisLineDeep';
+import { Pretreatment } from '../../tools/Pretreatment';
+import { lineReplace } from '../FormatRange/RangeFormatProvider';
 import { getDeepKeywords } from './getDeepKeywords';
 import { getDeepLTrim } from './getDeepLTrim';
 import { isHotStr, isLabel } from './isLabelOrHotStr';
-import { getFormatConfig } from '../../configUI';
-import { lineReplace } from '../FormatRange/RangeFormatProvider';
-import { Pretreatment } from '../../tools/Pretreatment';
-import {
-    VERSION, DeepReadonly, TTokenStream, DetailType,
-} from '../../globalEnum';
-import { callDiff, DiffType } from '../../tools/Diff';
+import { getSwitchRange, inSwitchBlock } from './SwitchCase';
+import { thisLineDeep } from './thisLineDeep';
 
 function Hashtag(textFix: string): '#if' | '#HotString' | '' {
     if (textFix === '') return '';
 
     // https://www.autohotkey.com/docs/commands/_If.htm#Basic_Operation
-    if ((/^#ifwin(?:not)?(?:active|exist)\b/i).test(textFix)
-        || (/^#if\b/i).test(textFix)) {
+    if (
+        (/^#ifwin(?:not)?(?:active|exist)\b/i).test(textFix)
+        || (/^#if\b/i).test(textFix)
+    ) {
         return '#if';
     }
 
@@ -53,7 +58,17 @@ type WarnUseType = DeepReadonly<{
 
 // eslint-disable-next-line camelcase
 function fn_Warn_thisLineText_WARN({
-    DocStrMap, textFix, line, occ, deep, labDeep, inLTrim, textRaw, switchRangeArray, document, options,
+    DocStrMap,
+    textFix,
+    line,
+    occ,
+    deep,
+    labDeep,
+    inLTrim,
+    textRaw,
+    switchRangeArray,
+    document,
+    options,
 }: WarnUseType): vscode.TextEdit {
     const wrap = (text: string): vscode.TextEdit => {
         const CommentBlock = DocStrMap[line].detail.includes(DetailType.inComment);
@@ -64,8 +79,10 @@ function fn_Warn_thisLineText_WARN({
         const range = new vscode.Range(line, 0, line, endCharacter);
         return new vscode.TextEdit(range, newText);
     };
-    if (inLTrim === 1
-        && !(/^\s\(/i).test(textRaw)) {
+    if (
+        inLTrim === 1
+        && !(/^\s\(/i).test(textRaw)
+    ) {
         return wrap(document.lineAt(line).text);
     }
 
@@ -81,7 +98,10 @@ function fn_Warn_thisLineText_WARN({
     const curlyBracketsChange: 0 | -1 = textFix.startsWith('}') || (occ > 0 && textFix.startsWith('{'))
         ? -1
         : 0;
-    const deepFix = Math.max(0, deep + labDeep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(inLTrim, textRaw));
+    const deepFix = Math.max(
+        0,
+        deep + labDeep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(inLTrim, textRaw),
+    );
     const TabSpaces = options.insertSpaces
         ? ' '
         : '\t';
@@ -117,15 +137,28 @@ export function FormatCore(
         const hasHashtag = Hashtag(textFix);
         const HotStr = isHotStr(textFix);
         const Label = isLabel(textFix);
-        if (isReturn(tagDeep, deep, textFix)// Return
-            || hasHashtag// #if #hotstring
+        if (
+            isReturn(tagDeep, deep, textFix)
+            // Return
+            || hasHashtag
+            // #if #hotstring
             || (tagDeep > 0 && tagDeep === deep && (HotStr || Label)) // `::btw::\n` //  `label:`
         ) {
             labDeep = 0;
         }
 
         newTextList.push(fn_Warn_thisLineText_WARN({
-            DocStrMap, textFix, line, occ, deep, labDeep, inLTrim, textRaw, switchRangeArray, document, options,
+            DocStrMap,
+            textFix,
+            line,
+            occ,
+            deep,
+            labDeep,
+            inLTrim,
+            textRaw,
+            switchRangeArray,
+            document,
+            options,
         }));
 
         const switchRange = getSwitchRange(document, DocStrMap, textFix, line, lineMax);

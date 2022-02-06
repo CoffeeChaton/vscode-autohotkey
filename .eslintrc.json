@@ -229,6 +229,16 @@
             30
         ],
         "max-statements-per-line": "error",
+        "multiline-ternary": [
+            "error",
+            "always"
+        ],
+        "newline-per-chained-call": [
+            "error",
+            {
+                "ignoreChainWithDepth": 2
+            }
+        ],
         "no-bitwise": "error",
         "no-class-assign": "warn",
         "no-compare-neg-zero": "warn",
@@ -260,17 +270,6 @@
                 ]
             }
         ],
-        "multiline-ternary": [
-            "error",
-            "always"
-        ],
-        "newline-per-chained-call": [
-            "error",
-            {
-                "ignoreChainWithDepth": 2
-            }
-        ],
-        "operator-linebreak": "warn",
         "no-mixed-operators": "warn",
         "no-multi-assign": "warn",
         "no-nested-ternary": "error",
@@ -297,6 +296,7 @@
         "no-whitespace-before-property": "warn",
         "nonblock-statement-body-position": "warn",
         "operator-assignment": "warn",
+        "operator-linebreak": "warn",
         "prefer-destructuring": "warn",
         "prefer-template": "warn",
         "promise/always-return": "error",

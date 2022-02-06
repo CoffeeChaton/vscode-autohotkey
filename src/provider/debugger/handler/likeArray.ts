@@ -1,5 +1,5 @@
-import { TDbgpProperty } from '../DebugTypeEnum';
 import { toArray } from '../Base64';
+import { TDbgpProperty } from '../DebugTypeEnum';
 
 export function likeArray(property: TDbgpProperty, name: string | undefined): boolean {
     if (name && (/^\[\d\d*\]$/).test(name)) return true;

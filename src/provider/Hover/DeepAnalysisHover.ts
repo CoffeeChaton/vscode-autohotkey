@@ -5,6 +5,7 @@ import { enumErr } from '../../tools/enumErr';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
 
 function getAhkTypeName(e: EValType): 'Static' | 'args' | 'global' | 'local' | 'normal' {
+    // dprint-ignore
     switch (e) {
         case EValType.Static: return 'Static';
         case EValType.args: return 'args';
@@ -17,8 +18,11 @@ function getAhkTypeName(e: EValType): 'Static' | 'args' | 'global' | 'local' | '
 /**
  * @param word  word.toUpperCase()
  */
-export function DeepAnalysisHover(document: vscode.TextDocument, position: vscode.Position, word: string)
-    : vscode.MarkdownString | null {
+export function DeepAnalysisHover(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    word: string,
+): vscode.MarkdownString | null {
     const ahkSymbol = getFnOfPos(document, position);
     if (!ahkSymbol) return null;
 

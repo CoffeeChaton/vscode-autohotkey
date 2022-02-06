@@ -6,12 +6,12 @@
 
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { setFuncHoverMD } from '../../tools/setHoverMD';
-import { wrapClass } from './wrapClass';
-import { insertTextWm } from './insertTextWm';
-import { ahkSend } from './ahkSend';
 import { getValOfFunc } from '../../tools/Func/getValOfFunc';
+import { setFuncHoverMD } from '../../tools/setHoverMD';
+import { ahkSend } from './ahkSend';
 import { DeepAnalysisToCompletionItem } from './DeepAnalysisToCompletionItem';
+import { insertTextWm } from './insertTextWm';
+import { wrapClass } from './wrapClass';
 
 async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
     const fsPaths = Detecter.getDocMapFile();
@@ -39,7 +39,11 @@ async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
     }
     return itemS;
 }
-function wrapperOfValOFFuncList(document: vscode.TextDocument, position: vscode.Position, wordUp: string): vscode.CompletionItem[] {
+function wrapperOfValOFFuncList(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    wordUp: string,
+): vscode.CompletionItem[] {
     const valOfFunc = getValOfFunc(document, position, wordUp);
     if (valOfFunc === null) return [];
     const { argItemS, valAssignItemS } = valOfFunc;
@@ -61,7 +65,10 @@ function wrapperOfValOFFuncList(document: vscode.TextDocument, position: vscode.
     const valLen = valAssignItemS.length;
     for (let i = 0; i < valLen; i++) {
         const {
-            name, comment, line, textRawFix,
+            name,
+            comment,
+            line,
+            textRawFix,
         } = valAssignItemS[i];
         const item = new vscode.CompletionItem(name, vscode.CompletionItemKind.Variable);
         item.detail = 'neko help';
@@ -76,7 +83,11 @@ function wrapperOfValOFFuncList(document: vscode.TextDocument, position: vscode.
     return itemS;
 }
 
-async function listAllFuncClass(document: vscode.TextDocument, position: vscode.Position, Range: vscode.Range): Promise<vscode.CompletionItem[]> {
+async function listAllFuncClass(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    Range: vscode.Range,
+): Promise<vscode.CompletionItem[]> {
     const wordUp = document.getText(Range).toUpperCase();
     const wordStartReg = new RegExp(`${wordUp}`, 'i');
     const funcOrClassNameList = await getItemSOfEMode(wordStartReg);
@@ -84,12 +95,20 @@ async function listAllFuncClass(document: vscode.TextDocument, position: vscode.
     return [...funcOrClassNameList, ...valOFFuncList];
 }
 
-async function wrapListAllFuncClass(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.CompletionItem[]> {
+async function wrapListAllFuncClass(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+): Promise<vscode.CompletionItem[]> {
     const Range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
     if (Range === undefined) return []; // exp: . / []
 
     if (Range.start.character - 1 > -1) {
-        const newRange = new vscode.Range(Range.start.line, Range.start.character - 1, Range.start.line, Range.start.character);
+        const newRange = new vscode.Range(
+            Range.start.line,
+            Range.start.character - 1,
+            Range.start.line,
+            Range.start.character,
+        );
         const newStr = document.getText(newRange);
         return (newStr !== '.' && newStr !== '`' && newStr !== '%')
             ? listAllFuncClass(document, position, Range)
@@ -115,7 +134,7 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
             //       ...contextCompletionItem(document, position),
         ];
 
-        console.log('CompletionItemProvider -> time Cost *1000', (Date.now() - t1));
+        console.log('CompletionItemProvider -> time Cost *1000', Date.now() - t1);
 
         return completions;
     }

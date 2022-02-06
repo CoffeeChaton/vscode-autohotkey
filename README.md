@@ -24,7 +24,7 @@ AutoHotKey language support for VS Code
 1. You can add two semicolon `;;` to comment line
    or add `{ ;;` to comment code block.
 
-    ![codeSymbol](image/codeSymbol4.png)
+   ![codeSymbol](image/codeSymbol4.png)
 
 2. You can see Leveled outline
 
@@ -39,7 +39,7 @@ AutoHotKey language support for VS Code
 - HotKeys, like `~F12::`
 - directive, like `#Include` or `#Warn`
 - Throw
-    ![codeSymbol3](image/codeSymbol3.jpg)
+  ![codeSymbol3](image/codeSymbol3.jpg)
 
 ## GotoDefinition
 
@@ -53,7 +53,7 @@ AutoHotKey language support for VS Code
 
 1. Hover function to show return value or comment
 
-    ![hover2](image/hover2.jpg)
+   ![hover2](image/hover2.jpg)
 
 2. how to add comment of function ?
 
@@ -92,12 +92,12 @@ AutoHotKey language support for VS Code
 ## Diagnostic
 
 1. warning about use `=` not `:=` to assign.
-2. warning of Switch  
-   `default : not find`  
-   `default : too much`  
-   `Case : > 20`  
+2. warning of Switch\
+   `default : not find`\
+   `default : too much`\
+   `Case : > 20`\
    `Case : not find`
-3. use `;@ahk-ignore [number] line.` to ignore,  
+3. use `;@ahk-ignore [number] line.` to ignore,\
    exp: `;@ahk-ignore 3 line.`
 
 ![Diagnostic1](image/Diagnostic1.png)

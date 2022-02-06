@@ -6,7 +6,7 @@ import * as vscode from 'vscode';
 import { getDebugPath } from '../../configUI';
 
 import { getNowDate } from '../../tools/timeTools';
-import { FileManagerRecord, EFileModel } from './fileManager';
+import { EFileModel, FileManagerRecord } from './fileManager';
 import { Process } from './Process';
 
 function createTemplate(content: string): string {
@@ -85,26 +85,4 @@ export function startDebugger(script: string): void {
             program: script || getPathByActive(),
         },
     );
-}
-
-/**
- * compile current script
- */
-async function compile(): Promise<void> {
-    const currentPath = vscode.window?.activeTextEditor?.document.uri.fsPath;
-    if (!currentPath) {
-        vscode.window.showErrorMessage('UnSupport compile template scripts.');
-        return;
-    }
-    checkAndSaveActive();
-    const pos = currentPath.lastIndexOf('.');
-    const compilePathB = `${currentPath.substr(0, pos < 0
-        ? currentPath.length
-        : pos)}.exe`;
-
-    const compilePathA = vscode.workspace.getConfiguration('neko-help').get<string>('compilePath') ?? '';
-    const command = `"${compilePathA}" /in "${currentPath}" /out "${compilePathB}"`;
-    const opt = { cwd: `${resolve(currentPath, '..')}` };
-    const ed = await Process(command, opt);
-    if (ed) console.log('compile success!');
 }

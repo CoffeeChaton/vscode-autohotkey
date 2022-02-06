@@ -6,7 +6,10 @@ import { getRange } from '../getRange';
 
 function getName(FuncInput: FuncInputType): string | false {
     const {
-        line, lStr, DocStrMap, RangeEndLine,
+        line,
+        lStr,
+        DocStrMap,
+        RangeEndLine,
     } = FuncInput;
     const lStrTrim = lStr.trim();
     const exec = (/\w\w*/).exec(lStrTrim);
@@ -21,7 +24,12 @@ function getName(FuncInput: FuncInputType): string | false {
 }
 export function getClassGetSet(FuncInput: FuncInputType): false | TAhkSymbol {
     const {
-        gValMapBySelf, Uri, line, lStr, DocStrMap, RangeEndLine,
+        gValMapBySelf,
+        Uri,
+        line,
+        lStr,
+        DocStrMap,
+        RangeEndLine,
     } = FuncInput;
     if (lStr.indexOf('(') !== -1 || lStr.indexOf('=') !== -1) return false;
 

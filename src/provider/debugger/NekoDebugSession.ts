@@ -1,16 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-lines */
 /* eslint-disable max-len */
-import { commands } from 'vscode';
 import {
-    BreakpointEvent, InitializedEvent, LoggingDebugSession, OutputEvent, StoppedEvent, TerminatedEvent, Thread,
+    BreakpointEvent,
+    InitializedEvent,
+    LoggingDebugSession,
+    OutputEvent,
+    StoppedEvent,
+    TerminatedEvent,
+    Thread,
 } from '@vscode/debugadapter';
 import { DebugProtocol } from '@vscode/debugprotocol';
 import { basename } from 'path';
-import { EContinue, EVscodeScope, TLaunchRequestArguments } from './DebugTypeEnum';
-import { DebugDispather } from './debugDispather';
+import { commands } from 'vscode';
 import { getDebugPath } from '../../configUI';
 import { getPathByActive } from '../Service/Service';
+import { DebugDispather } from './debugDispather';
+import { EContinue, EVscodeScope, TLaunchRequestArguments } from './DebugTypeEnum';
 
 const enum Enum {
     THREAD_ID = 1,
@@ -28,7 +34,9 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.setDebuggerColumnsStartAt1(false);
 
         this.dispather
-            .on('break', (reason: string): void => { this.sendEvent(new StoppedEvent(reason, Enum.THREAD_ID)); })
+            .on('break', (reason: string): void => {
+                this.sendEvent(new StoppedEvent(reason, Enum.THREAD_ID));
+            })
             .on('breakpointValidated', (bp: DebugProtocol.Breakpoint) => {
                 const breakpoint: DebugProtocol.Breakpoint = { verified: bp.verified, id: bp.id };
                 this.sendEvent(new BreakpointEvent('changed', breakpoint));
@@ -38,10 +46,15 @@ export class NekoDebugSession extends LoggingDebugSession {
                 this.sendEvent(new OutputEvent(`${text2}\n`));
                 commands.executeCommand('workbench.debug.action.focusRepl');
             })
-            .on('end', (): void => { this.sendEvent(new TerminatedEvent()); });
+            .on('end', (): void => {
+                this.sendEvent(new TerminatedEvent());
+            });
     }
 
-    protected initializeRequest(response: DebugProtocol.InitializeResponse, args: DebugProtocol.InitializeRequestArguments): void {
+    protected initializeRequest(
+        response: DebugProtocol.InitializeResponse,
+        args: DebugProtocol.InitializeRequestArguments,
+    ): void {
         response.body = {
             ...response.body,
             completionTriggerCharacters: ['.', '['],
@@ -60,7 +73,11 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendEvent(new InitializedEvent());
     }
 
-    protected restartRequest(response: DebugProtocol.RestartResponse, args: DebugProtocol.RestartArguments, request?: DebugProtocol.Request): void {
+    protected restartRequest(
+        response: DebugProtocol.RestartResponse,
+        args: DebugProtocol.RestartArguments,
+        request?: DebugProtocol.Request,
+    ): void {
         this.dispather.restart();
         this.sendResponse(response);
     }
@@ -87,12 +104,19 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected disconnectRequest(response: DebugProtocol.DisconnectResponse, args: DebugProtocol.DisconnectArguments, request?: DebugProtocol.Request): void {
+    protected disconnectRequest(
+        response: DebugProtocol.DisconnectResponse,
+        args: DebugProtocol.DisconnectArguments,
+        request?: DebugProtocol.Request,
+    ): void {
         this.dispather.stop();
         this.sendResponse(response);
     }
 
-    protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
+    protected setBreakPointsRequest(
+        response: DebugProtocol.SetBreakpointsResponse,
+        args: DebugProtocol.SetBreakpointsArguments,
+    ): void {
         // const path = args?.source.path;
         const path: string | undefined = args?.source.path;
         if (!path) throw new Error('setBreakPointsRequest path error --48--33--44--');
@@ -104,7 +128,10 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected async stackTraceRequest(response: DebugProtocol.StackTraceResponse, args: DebugProtocol.StackTraceArguments): Promise<void> {
+    protected async stackTraceRequest(
+        response: DebugProtocol.StackTraceResponse,
+        args: DebugProtocol.StackTraceArguments,
+    ): Promise<void> {
         response.body = { stackFrames: await this.dispather.stack(args) };
         this.sendResponse(response);
     }
@@ -115,12 +142,20 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected async variablesRequest(response: DebugProtocol.VariablesResponse, args: DebugProtocol.VariablesArguments, request?: DebugProtocol.Request): Promise<void> {
+    protected async variablesRequest(
+        response: DebugProtocol.VariablesResponse,
+        args: DebugProtocol.VariablesArguments,
+        request?: DebugProtocol.Request,
+    ): Promise<void> {
         response.body = { variables: await this.dispather.listVariables(args) };
         this.sendResponse(response);
     }
 
-    protected async setVariableRequest(response: DebugProtocol.SetVariableResponse, args: DebugProtocol.SetVariableArguments, request?: DebugProtocol.Request): Promise<void> {
+    protected async setVariableRequest(
+        response: DebugProtocol.SetVariableResponse,
+        args: DebugProtocol.SetVariableArguments,
+        request?: DebugProtocol.Request,
+    ): Promise<void> {
         try {
             console.log('NekoDebugSession ~ setVariableRequest ~ args', args);
             response.body = await this.dispather.setVariable(args);
@@ -140,7 +175,11 @@ export class NekoDebugSession extends LoggingDebugSession {
         }
     }
 
-    protected pauseRequest(response: DebugProtocol.PauseResponse, args: DebugProtocol.PauseArguments, request?: DebugProtocol.Request): void {
+    protected pauseRequest(
+        response: DebugProtocol.PauseResponse,
+        args: DebugProtocol.PauseArguments,
+        request?: DebugProtocol.Request,
+    ): void {
         this.dispather.sendComand(EContinue.BREAK);
         this.sendResponse(response);
     }
@@ -155,12 +194,20 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected stepInRequest(response: DebugProtocol.StepInResponse, args: DebugProtocol.StepInArguments, request?: DebugProtocol.Request): void {
+    protected stepInRequest(
+        response: DebugProtocol.StepInResponse,
+        args: DebugProtocol.StepInArguments,
+        request?: DebugProtocol.Request,
+    ): void {
         this.dispather.sendComand(EContinue.STEP_INTO);
         this.sendResponse(response);
     }
 
-    protected stepOutRequest(response: DebugProtocol.StepOutResponse, args: DebugProtocol.StepOutArguments, request?: DebugProtocol.Request): void {
+    protected stepOutRequest(
+        response: DebugProtocol.StepOutResponse,
+        args: DebugProtocol.StepOutArguments,
+        request?: DebugProtocol.Request,
+    ): void {
         this.dispather.sendComand(EContinue.STEP_OUT);
         this.sendResponse(response);
     }
@@ -170,7 +217,10 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected async completionsRequest(response: DebugProtocol.CompletionsResponse, args: DebugProtocol.CompletionsArguments): Promise<void> {
+    protected async completionsRequest(
+        response: DebugProtocol.CompletionsResponse,
+        args: DebugProtocol.CompletionsArguments,
+    ): Promise<void> {
         response.body = {
             targets: [
                 ...(await this.dispather.listVariables({ variablesReference: EVscodeScope.LOCAL })),
@@ -185,7 +235,10 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected async evaluateRequest(response: DebugProtocol.EvaluateResponse, args: DebugProtocol.EvaluateArguments): Promise<void> {
+    protected async evaluateRequest(
+        response: DebugProtocol.EvaluateResponse,
+        args: DebugProtocol.EvaluateArguments,
+    ): Promise<void> {
         const str: string = args.expression;
         const exp = str.split('=');
         if (exp.length !== 1) {

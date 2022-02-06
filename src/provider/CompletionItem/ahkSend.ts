@@ -42,9 +42,11 @@ export function ahkSend(document: vscode.TextDocument, position: vscode.Position
     if (newStr !== '{') return []; // just support {}
 
     const textRaw = document.lineAt(position).text;
-    if (!(/\b(?:Control)?Send(?:Input|Play|Event)?\b/i).test(textRaw)
+    if (
+        !(/\b(?:Control)?Send(?:Input|Play|Event)?\b/i).test(textRaw)
         || textRaw.indexOf('::') === -1
-        || !(/InputHook\(/i).test(textRaw)) {
+        || !(/InputHook\(/i).test(textRaw)
+    ) {
         return [];
     }
     if ((/{Raw}/i).test(textRaw)) return [];

@@ -1,18 +1,26 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10,60,1000] }] */
 import { getGlobalValDef } from '../../core/getGlobalValDef';
 import {
-    EValType, TAhkSymbol, TTokenStream, TRunValType2, TMapLineType, TGetTypeInput, TGetDefType,
+    EValType,
+    TAhkSymbol,
+    TGetDefType,
+    TGetTypeInput,
+    TMapLineType,
+    TRunValType2,
+    TTokenStream,
 } from '../../globalEnum';
-import { getLineValDef } from '../../tools/getLineValDef';
-import { ClassWm } from '../../tools/wm';
-import { getCommentOfLine } from '../../tools/getCommentOfLine';
-import { ahkValDefRegex } from '../../tools/regexTools';
 import { fnModeToValType } from '../../tools/Func/fnModeToValType';
+import { getCommentOfLine } from '../../tools/getCommentOfLine';
+import { getLineValDef } from '../../tools/getLineValDef';
+import { ahkValDefRegex } from '../../tools/regexTools';
+import { ClassWm } from '../../tools/wm';
 
 const wm = new ClassWm<TAhkSymbol, TMapLineType>(10 * 60 * 1000, 'getTypeList', 60);
 
 function getTypeList({
-    DocStrMap, regex, ahkSymbol,
+    DocStrMap,
+    regex,
+    ahkSymbol,
 }: TGetTypeInput): TMapLineType {
     const oldMap = wm.getWm(ahkSymbol);
     if (oldMap) return oldMap;
@@ -58,7 +66,11 @@ function hasAssignment(DocStrMap: TTokenStream, word: string): [boolean, string[
 }
 
 export function getDefType({
-    fnMode, DocStrMap, regex, ahkSymbol, word,
+    fnMode,
+    DocStrMap,
+    regex,
+    ahkSymbol,
+    word,
 }: TGetDefType): [TRunValType2, string[]] | null {
     const typeList = getTypeList({ DocStrMap, regex, ahkSymbol });
     for (const [Offset, mode] of typeList) {

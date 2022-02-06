@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
-import { getFnOfPos } from '../../tools/getScopeOfPos';
-import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import { DeepAnalysisResult } from '../../globalEnum';
+import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
+import { getFnOfPos } from '../../tools/getScopeOfPos';
 
-function DeepAnalysisRename(document: vscode.TextDocument, position: vscode.Position, word: string)
-    : vscode.Location[] {
+function DeepAnalysisRename(document: vscode.TextDocument, position: vscode.Position, word: string): vscode.Location[] {
     const ahkSymbol = getFnOfPos(document, position);
     if (!ahkSymbol) return [];
 

@@ -19,6 +19,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.10.2
   '@vscode/debugadapter': ^1.53.0
   '@vscode/debugprotocol': ^1.53.0
+  dprint: ^0.22.0
   esbuild: ^0.14.18
   esbuild-copy-static-files: ^0.1.0
   eslint: ^8.8.0
@@ -84,6 +85,7 @@ devDependencies:
   '@types/xml2js': 0.4.9
   '@typescript-eslint/eslint-plugin': 5.10.2_2595c2126aec4d4b6e944b931dabb4c2
   '@typescript-eslint/parser': 5.10.2_eslint@8.8.0+typescript@4.5.5
+  dprint: 0.22.0
   esbuild: 0.14.18
   esbuild-copy-static-files: 0.1.0
   eslint: 8.8.0
@@ -666,7 +668,7 @@ packages:
       istanbul-lib-instrument: 5.1.0
       istanbul-lib-report: 3.0.0
       istanbul-lib-source-maps: 4.0.1
-      istanbul-reports: 3.1.3
+      istanbul-reports: 3.1.4
       jest-haste-map: 27.5.0
       jest-resolve: 27.5.0
       jest-util: 27.5.0
@@ -1183,7 +1185,7 @@ packages:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
     engines: {node: '>= 6.0.0'}
     dependencies:
-      debug: 4.3.3
+      debug: 4.3.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1921,6 +1923,12 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       is-obj: 2.0.0
+    dev: true
+
+  /dprint/0.22.0:
+    resolution: {integrity: sha512-9cfntFKKJW6ulR79SBJ3aXjtRKH4UCKBYNJjPkrkA1vzCpaPU9HLLsStgiPnvItmac5TzNFetG6gGJWMZEZNcA==}
+    hasBin: true
+    requiresBuild: true
     dev: true
 
   /duplexer2/0.1.4:
@@ -3100,7 +3108,7 @@ packages:
     engines: {node: '>= 6'}
     dependencies:
       agent-base: 6.0.2
-      debug: 4.3.3
+      debug: 4.3.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3418,8 +3426,8 @@ packages:
       - supports-color
     dev: true
 
-  /istanbul-reports/3.1.3:
-    resolution: {integrity: sha512-x9LtDVtfm/t1GFiLl3NffC7hz+I1ragvgX1P/Lg1NlIagifZDKUkuuaAxH/qpwj2IuEfD8G2Bs/UKp+sZ/pKkg==}
+  /istanbul-reports/3.1.4:
+    resolution: {integrity: sha512-r1/DshN4KSE7xWEknZLLLLDn5CJybV3nw01VTkp6D5jzLuELlcbudfj/eSQFvrKsJuTVCGnePO7ho82Nw9zzfw==}
     engines: {node: '>=8'}
     dependencies:
       html-escaper: 2.0.2

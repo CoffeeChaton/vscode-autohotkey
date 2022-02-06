@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as vscode from 'vscode';
-import { FuncInputType } from './getChildren';
-import { removeParentheses } from '../tools/removeParentheses';
-import { removeBigParentheses } from '../tools/removeBigParentheses';
 import { ahkValRegex } from '../tools/regexTools';
+import { removeBigParentheses } from '../tools/removeBigParentheses';
+import { removeParentheses } from '../tools/removeParentheses';
+import { FuncInputType } from './getChildren';
 
 function fnReplacer(match: string): string {
     return ' '.repeat(match.length);
@@ -11,7 +11,10 @@ function fnReplacer(match: string): string {
 
 export function setGlobalVar(FuncInput: FuncInputType): string {
     const {
-        DocStrMap, line, lStr, gValMapBySelf,
+        DocStrMap,
+        line,
+        lStr,
+        gValMapBySelf,
     } = FuncInput;
     const { textRaw } = DocStrMap[line];
     const lStrFix = removeParentheses(removeBigParentheses(lStr.replace(/^\s*\bglobal\b/i, fnReplacer)));
@@ -21,7 +24,7 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
             const col = v.indexOf(':=');
             const lName = (col > 0)
                 ? v.substring(0, col).trim()
-                : v.trim();// rVal need to use textRaw;
+                : v.trim(); // rVal need to use textRaw;
             const reg = ahkValRegex(lName);
             const col2 = lStrFix.search(reg);
             if (col2 < 0) {

@@ -2,13 +2,19 @@
 
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { EMode, TAhkSymbol, DeepReadonly } from '../../globalEnum';
+import { DeepReadonly, EMode, TAhkSymbol } from '../../globalEnum';
 import { kindCheck } from '../../provider/Def/kindCheck';
 import { getCommentOfLine } from '../getCommentOfLine';
 import { Pretreatment } from '../Pretreatment';
 import { removeParentheses } from '../removeParentheses';
 
-export type ValDefOfFunc = DeepReadonly<{ name: string, comment: string, line: number, textRaw: string, textRawFix: string; }>;
+export type ValDefOfFunc = DeepReadonly<{
+    name: string;
+    comment: string;
+    line: number;
+    textRaw: string;
+    textRawFix: string;
+}>;
 export type ValDefOfFuncArr = readonly ValDefOfFunc[];
 
 function getValAssignOfFunc(document: vscode.TextDocument, wordUp: string, ahkSymbol: TAhkSymbol): ValDefOfFuncArr {
@@ -20,7 +26,8 @@ function getValAssignOfFunc(document: vscode.TextDocument, wordUp: string, ahkSy
     const arr: ValDefOfFunc[] = [];
     for (let linePos = 0; linePos < iMax; linePos++) {
         const { textRaw, lStr } = DocStrMap[linePos];
-        if (lStr.indexOf(':=') === -1
+        if (
+            lStr.indexOf(':=') === -1
             && !(/^\s*static\s\s*\w/i).test(lStr)
             && !(/^\s*global\s\s*\w/i).test(lStr)
             && !(/^\s*local\s\s*\w/i).test(lStr)

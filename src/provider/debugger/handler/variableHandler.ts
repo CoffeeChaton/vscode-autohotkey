@@ -5,13 +5,17 @@
 /* eslint-disable immutable/no-this */
 
 import { Handles, Scope, Variable } from '@vscode/debugadapter';
-import {
-    EVarScope, EVarScopeStr, TAhkVariable, TDbgpProperty, TDbgpPropertyAttr,
-} from '../DebugTypeEnum';
-import { toArray } from '../Base64';
-import { likeArray } from './likeArray';
-import { buildVariableValue } from './buildVariableValue';
 import { enumLog } from '../../../tools/enumErr';
+import { toArray } from '../Base64';
+import {
+    EVarScope,
+    EVarScopeStr,
+    TAhkVariable,
+    TDbgpProperty,
+    TDbgpPropertyAttr,
+} from '../DebugTypeEnum';
+import { buildVariableValue } from './buildVariableValue';
+import { likeArray } from './likeArray';
 
 function getLikeArrayLength(property: TDbgpProperty): number {
     if (!property.property) return 0;
@@ -38,7 +42,11 @@ const TESTAttrClassname: (TDbgpPropertyAttr['classname'])[] = ['Object', 'Func',
 
 /** formats a dbgp property value for VS Code */
 function formatPropertyValue({
-    attr, content, faClassname: classname, isLikeArray, length,
+    attr,
+    content,
+    faClassname: classname,
+    isLikeArray,
+    length,
 }: TFormatPropertyValue): string {
     const aType = attr.type;
     if (!TESTAttrTypeList.includes(aType)) {
@@ -48,6 +56,7 @@ function formatPropertyValue({
     const str: WithImplicitCoercion<string> = content ?? '';
     const { encoding } = attr;
     const primitive = Buffer.from(str, encoding).toString();
+    // dprint-ignore
     switch (aType) {
         case 'integer': return primitive;
         case 'float': return primitive;
@@ -89,14 +98,23 @@ type TParseTail = {
 };
 
 function parseTail({
-    property, attr, classname, fullname, ref, name,
+    property,
+    attr,
+    classname,
+    fullname,
+    ref,
+    name,
 }: TParseTail): Variable {
     const isLikeArray = likeArray(property, name);
     const length = getLikeArrayLength(property);
 
     const { content } = property;
     const value = formatPropertyValue({
-        attr, content, faClassname: classname, isLikeArray, length,
+        attr,
+        content,
+        faClassname: classname,
+        isLikeArray,
+        length,
     });
 
     const indexedVariables = (isLikeArray && length > 100)
@@ -129,6 +147,7 @@ export class VariableHandler {
 
     public getScopeByRef(ref: number): number {
         const scopeOrVar: TAhkVariable | EVarScopeStr = this.variableHandles.get(ref);
+        // dprint-ignore
         switch (scopeOrVar) {
             case EVarScopeStr.Local: return EVarScope.LOCAL;
             case EVarScopeStr.Global: return EVarScope.GLOBAL;
@@ -142,7 +161,8 @@ export class VariableHandler {
             case EVarScopeStr.Local:
             case EVarScopeStr.Global:
                 return ed;
-            default: return ed;
+            default:
+                return ed;
         }
     }
 
@@ -279,7 +299,12 @@ export class VariableHandler {
                 console.log('🚀 ~104~ File obj', fullname);
             }
             const ed = parseTail({
-                property, attr, classname, name, fullname, ref,
+                property,
+                attr,
+                classname,
+                name,
+                fullname,
+                ref,
             });
             parseEd.push(ed);
         }

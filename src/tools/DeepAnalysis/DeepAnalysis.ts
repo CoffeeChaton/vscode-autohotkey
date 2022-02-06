@@ -3,9 +3,16 @@
 import * as vscode from 'vscode';
 import { getGlobalValDef } from '../../core/getGlobalValDef';
 import {
-    TArgList,
     DeepAnalysisResult,
-    EValType, TAhkSymbol, TAhkValType, TRunValType2, TTokenStream, TValMap, TValObj, EFnMode,
+    EFnMode,
+    EValType,
+    TAhkSymbol,
+    TAhkValType,
+    TArgList,
+    TRunValType2,
+    TTokenStream,
+    TValMap,
+    TValObj,
 } from '../../globalEnum';
 import { fnModeToValType } from '../Func/fnModeToValType';
 
@@ -19,8 +26,7 @@ import { ClassWm } from '../wm';
 import { setArgMap } from './fnArgs';
 import { setValMapRef } from './setValMapRef';
 
-export function getLineType(lStr: string, fnMode: EFnMode)
-    : EValType.local | EValType.global | EValType.Static {
+export function getLineType(lStr: string, fnMode: EFnMode): EValType.local | EValType.global | EValType.Static {
     const fnTypeList: ([RegExp, TRunValType2])[] = [
         [/^\s*local\s/i, EValType.local],
         [/^\s*global\s/i, EValType.global],
@@ -35,13 +41,13 @@ export function getLineType(lStr: string, fnMode: EFnMode)
 }
 
 type TGetValue = {
-    keyRawName: string,
-    line: number,
-    character: number,
-    valMap: TValMap,
-    textRaw: string,
-    lStr: string,
-    lineType: TAhkValType,
+    keyRawName: string;
+    line: number;
+    character: number;
+    valMap: TValMap;
+    textRaw: string;
+    lStr: string;
+    lineType: TAhkValType;
     uri: vscode.Uri;
     argList: TArgList;
 };

@@ -2,10 +2,10 @@
 /* eslint-disable immutable/no-mutation */
 
 export type TAhkBaseObj = {
-    ahkArray: boolean,
-    ahkFileOpen: boolean,
-    ahkFuncObject: boolean,
-    ahkBase: boolean,
+    ahkArray: boolean;
+    ahkFileOpen: boolean;
+    ahkFuncObject: boolean;
+    ahkBase: boolean;
 };
 
 export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {

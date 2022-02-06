@@ -11,6 +11,7 @@ export const enum EMode {
     ahkAll = 'ahkAll',
     ahkGlobal = 'global',
 }
+
 // vscode.SymbolKind
 // enum SymbolKind {
 //     Class = 4,
@@ -48,10 +49,13 @@ export type TAhkSymbol = DeepReadonly<vscode.DocumentSymbol>;
 export type TAhkSymbolList = DeepReadonly<vscode.DocumentSymbol[]>;
 // export type TAhkSymbol = Readonly<vscode.DocumentSymbol>;
 // export type TAhkSymbolList = Readonly<Readonly<vscode.DocumentSymbol>[]>;
-export type TSymAndFsPath = { ahkSymbol: TAhkSymbol; fsPath: string; };
+export type TSymAndFsPath = {
+    ahkSymbol: TAhkSymbol;
+    fsPath: string;
+};
 
 export type TValArray = {
-    lRange: vscode.Range, // left Range
+    lRange: vscode.Range; // left Range
     rVal: string | null; // Right value is textRaw
 }[];
 export type TValName = string;
@@ -131,8 +135,18 @@ export const enum EValType {
 export type TRunValType = Exclude<EValType, EValType.normal>;
 export type TRunValType2 = Exclude<TRunValType, EValType.args>;
 export type TAhkValType = EValType.local | EValType.global | EValType.Static;
-export type TGetDefType = { fnMode: EFnMode; DocStrMap: TTokenStream; regex: RegExp; ahkSymbol: TAhkSymbol; word: string; };
-export type TGetTypeInput = { DocStrMap: TTokenStream; regex: RegExp; ahkSymbol: TAhkSymbol; };
+export type TGetDefType = {
+    fnMode: EFnMode;
+    DocStrMap: TTokenStream;
+    regex: RegExp;
+    ahkSymbol: TAhkSymbol;
+    word: string;
+};
+export type TGetTypeInput = {
+    DocStrMap: TTokenStream;
+    regex: RegExp;
+    ahkSymbol: TAhkSymbol;
+};
 export type TMapLineType = Map<number, EValType.local | EValType.global | EValType.Static>; // Map<line,ahkType>
 export type TArgListVal = {
     keyRawName: string;

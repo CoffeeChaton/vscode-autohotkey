@@ -1,5 +1,5 @@
-import { thisLineDeep } from './thisLineDeep';
 import { DeepReadonly } from '../../globalEnum';
+import { thisLineDeep } from './thisLineDeep';
 
 export function getDeepKeywords(textFix: string, oneCommandCode: number): number {
     const occ = Math.max(oneCommandCode, 0);

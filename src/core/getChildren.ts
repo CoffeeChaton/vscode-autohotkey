@@ -1,33 +1,42 @@
 import * as vscode from 'vscode';
 import {
-    TTokenStream, TAhkSymbol, TAhkSymbolList, TGValMap,
+    TAhkSymbol,
+    TAhkSymbolList,
+    TGValMap,
+    TTokenStream,
 } from '../globalEnum';
 
 export type FuncInputType = Readonly<{
-    lStr: string,
-    line: number,
-    RangeEndLine: number,
-    inClass: boolean,
-    DocStrMap: TTokenStream,
-    Uri: vscode.Uri,
-    gValMapBySelf: TGValMap,
+    lStr: string;
+    line: number;
+    RangeEndLine: number;
+    inClass: boolean;
+    DocStrMap: TTokenStream;
+    Uri: vscode.Uri;
+    gValMapBySelf: TGValMap;
 }>;
 
 export type FuncLimit = (FuncInput: FuncInputType) => false | TAhkSymbol;
 
 type ChildType = Readonly<{
-    inClass: boolean,
-    fnList: FuncLimit[],
-    RangeStartLine: number,
-    RangeEndLine: number,
-    Uri: vscode.Uri,
-    DocStrMap: TTokenStream,
-    gValMapBySelf: TGValMap,
+    inClass: boolean;
+    fnList: FuncLimit[];
+    RangeStartLine: number;
+    RangeEndLine: number;
+    Uri: vscode.Uri;
+    DocStrMap: TTokenStream;
+    gValMapBySelf: TGValMap;
 }>;
 
 export function getChildren(child: ChildType): TAhkSymbolList {
     const {
-        Uri, DocStrMap, RangeStartLine, RangeEndLine, inClass, fnList, gValMapBySelf,
+        Uri,
+        DocStrMap,
+        RangeStartLine,
+        RangeEndLine,
+        inClass,
+        fnList,
+        gValMapBySelf,
     } = child;
 
     const result = [];

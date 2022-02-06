@@ -2,6 +2,7 @@ import { EFnMode, EValType } from '../../globalEnum';
 import { enumErr } from '../enumErr';
 
 export function fnModeToValType(fnMode: EFnMode): EValType.local | EValType.global | EValType.Static {
+    // dprint-ignore
     switch (fnMode) {
         case EFnMode.normal:
         case EFnMode.local: return EValType.local;

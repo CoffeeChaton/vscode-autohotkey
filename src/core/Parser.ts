@@ -3,18 +3,18 @@
 /* eslint-disable max-lines */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,20] }] */
 import * as vscode from 'vscode';
-import { getFuncDef } from '../tools/Func/getFuncDef';
-import { getRange } from '../tools/getRange';
-import { getRangeCaseBlock } from '../tools/getRangeCaseBlock';
 import { DeepReadonly, TAhkSymbol } from '../globalEnum';
-import { getCaseDefaultName, getSwitchName } from './getSwitchCaseName';
-import { getRangeOfLine } from '../tools/getRangeOfLine';
-import { FuncInputType, getChildren } from './getChildren';
-import { removeParentheses } from '../tools/removeParentheses';
-import { removeBigParentheses } from '../tools/removeBigParentheses';
 import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
+import { getFuncDef } from '../tools/Func/getFuncDef';
+import { getRange } from '../tools/getRange';
+import { getRangeCaseBlock } from '../tools/getRangeCaseBlock';
+import { getRangeOfLine } from '../tools/getRangeOfLine';
+import { removeBigParentheses } from '../tools/removeBigParentheses';
+import { removeParentheses } from '../tools/removeParentheses';
+import { FuncInputType, getChildren } from './getChildren';
+import { getCaseDefaultName, getSwitchName } from './getSwitchCaseName';
 import { setGlobalVar } from './setGlobalVar';
 
 // // import * as Oniguruma from 'vscode-oniguruma';
@@ -49,16 +49,18 @@ export function getReturnByLine(FuncInput: FuncInputType): false | TAhkSymbol {
 }
 
 type LineRulerType = DeepReadonly<{
-    detail: string,
-    kind: vscode.SymbolKind,
+    detail: string;
+    kind: vscode.SymbolKind;
     // regex?: RegExp,
-    test: (str: string) => boolean,
-    getName: (str: string) => string | null,
+    test: (str: string) => boolean;
+    getName: (str: string) => string | null;
 }[]>;
 
 export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
     const {
-        DocStrMap, line, lStr,
+        DocStrMap,
+        line,
+        lStr,
     } = FuncInput;
     if (lStr === '') return false;
     const LineRuler: LineRulerType = [
@@ -191,7 +193,12 @@ export const ParserBlock = {
         const { lStr } = FuncInput;
         if (lStr === '' || lStr.indexOf(':') === -1) return false;
         const {
-            gValMapBySelf, Uri, RangeEndLine, inClass, line, DocStrMap,
+            gValMapBySelf,
+            Uri,
+            RangeEndLine,
+            inClass,
+            line,
+            DocStrMap,
         } = FuncInput;
 
         const caseName = getCaseDefaultName(DocStrMap[line].textRaw, lStr);
@@ -221,7 +228,13 @@ export const ParserBlock = {
         if (!(/^\s*\bswitch\b/i).test(FuncInput.lStr)) return false;
 
         const {
-            gValMapBySelf, Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
+            gValMapBySelf,
+            Uri,
+            DocStrMap,
+            line,
+            RangeEndLine,
+            inClass,
+            lStr,
         } = FuncInput;
 
         const range = getRange(DocStrMap, line, line, RangeEndLine);
@@ -247,7 +260,13 @@ export const ParserBlock = {
 
     getFunc(FuncInput: FuncInputType): false | TAhkSymbol {
         const {
-            gValMapBySelf, Uri, DocStrMap, line, RangeEndLine, inClass, lStr,
+            gValMapBySelf,
+            Uri,
+            DocStrMap,
+            line,
+            RangeEndLine,
+            inClass,
+            lStr,
         } = FuncInput;
 
         if (lStr === '' || lStr.indexOf('(') === -1) return false;
@@ -277,7 +296,13 @@ export const ParserBlock = {
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
             inClass,
-            fnList: [ParserBlock.getFunc, ParserBlock.getComment, ParserBlock.getSwitchBlock, getReturnByLine, ParserLine],
+            fnList: [
+                ParserBlock.getFunc,
+                ParserBlock.getComment,
+                ParserBlock.getSwitchBlock,
+                getReturnByLine,
+                ParserLine,
+            ],
         });
         return funcSymbol;
     },
@@ -289,7 +314,12 @@ export const ParserBlock = {
         if (classExec === null) return false;
 
         const {
-            gValMapBySelf, Uri, DocStrMap, line, RangeEndLine, lStr,
+            gValMapBySelf,
+            Uri,
+            DocStrMap,
+            line,
+            RangeEndLine,
+            lStr,
         } = FuncInput;
         const Range = getRange(DocStrMap, line, line, RangeEndLine);
 
@@ -325,7 +355,12 @@ export const ParserBlock = {
         if (textRaw.indexOf(';;') === -1) return false;
         const kind = vscode.SymbolKind.Package;
         const {
-            gValMapBySelf, Uri, DocStrMap, line, RangeEndLine, inClass,
+            gValMapBySelf,
+            Uri,
+            DocStrMap,
+            line,
+            RangeEndLine,
+            inClass,
         } = FuncInput;
         // ;;
         const CommentLine = textRaw.search(/^\s*;;/);
@@ -342,7 +377,8 @@ export const ParserBlock = {
 
         const getName = (): string => {
             if (line - 1 >= 0) {
-                const nameKind: string[] = (/^\s*(\w\w*)/).exec(FuncInput.DocStrMap[FuncInput.line - 1].textRaw) ?? [''];
+                const nameKind: string[] = (/^\s*(\w\w*)/)
+                    .exec(FuncInput.DocStrMap[FuncInput.line - 1].textRaw) ?? [''];
                 return nameKind[0].trim();
             }
             return '';
@@ -351,7 +387,13 @@ export const ParserBlock = {
         const range = getRange(DocStrMap, line, line, RangeEndLine);
         const name = getName() + textRaw.substring(textRaw.indexOf(';;') + 2).trimEnd();
         const selectionRange = new vscode.Range(line, 0, line, textRaw.length);
-        const CommentBlock: TAhkSymbol = new vscode.DocumentSymbol(name, '', vscode.SymbolKind.Package, range, selectionRange);
+        const CommentBlock: TAhkSymbol = new vscode.DocumentSymbol(
+            name,
+            '',
+            vscode.SymbolKind.Package,
+            range,
+            selectionRange,
+        );
         CommentBlock.children = getChildren({
             gValMapBySelf,
             Uri,

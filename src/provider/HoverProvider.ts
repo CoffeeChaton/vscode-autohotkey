@@ -3,11 +3,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable security/detect-non-literal-regexp */
 import * as vscode from 'vscode';
-import { tryGetSymbol } from './Def/DefProvider';
 import { EMode, TAhkSymbol } from '../globalEnum';
+import { isPosAtStr } from '../tools/isPosAtStr';
 import { setFuncHoverMD } from '../tools/setHoverMD';
 import { ClassWm } from '../tools/wm';
-import { isPosAtStr } from '../tools/isPosAtStr';
+import { tryGetSymbol } from './Def/DefProvider';
 import { DeepAnalysisHover } from './Hover/DeepAnalysisHover';
 
 const wm = new ClassWm<TAhkSymbol, vscode.Hover>(10 * 60 * 1000, 'HoverFunc', 60);

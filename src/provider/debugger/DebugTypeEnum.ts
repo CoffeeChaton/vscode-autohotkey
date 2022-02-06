@@ -32,7 +32,7 @@ export type TLaunchRequestArguments = DeepReadonly<{
     };
     stopOnEntry: boolean;
     __configurationTarget: number;
-    __sessionId: string;// "8c4fd54f-50ae-47aa-a1e9-d102a902686b",
+    __sessionId: string; // "8c4fd54f-50ae-47aa-a1e9-d102a902686b",
 }>;
 
 export const enum EVarScope {
@@ -64,11 +64,11 @@ export const enum EContinue {
 
 type TDbgpResponseStack = {
     attr: {
-        filename: string,
-        level: string,
-        lineno: string,
-        type: string,
-        where: string,
+        filename: string;
+        level: string;
+        lineno: string;
+        type: string;
+        where: string;
     };
 };
 
@@ -124,8 +124,8 @@ export type TDbgpPropertyAttr = {
     encoding?: BufferEncoding;
 
     // type 2
-    command?: string,
-    transaction_id?: string,
+    command?: string;
+    transaction_id?: string;
 };
 
 export type TDbgpProperty = {
@@ -143,7 +143,7 @@ export type TAhkVariable = {
 export type TDbgpResponse = {
     attr: {
         /** only one stack */
-        stack: TDbgpResponseStack,
+        stack: TDbgpResponseStack;
         command: string;
         context: string;
         transaction_id: string;
@@ -154,12 +154,12 @@ export type TDbgpResponse = {
         status: string;
     };
     // children: {
-    stack: TDbgpResponseStack | TDbgpResponseStack[],
-    property: TDbgpProperty | TDbgpProperty[],
+    stack: TDbgpResponseStack | TDbgpResponseStack[];
+    property: TDbgpProperty | TDbgpProperty[];
     error?: {
         attr: {
             code: number;
-        },
-    },
+        };
+    };
     // },
 };

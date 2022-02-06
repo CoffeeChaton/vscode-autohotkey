@@ -1,10 +1,10 @@
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 // import * as vscode from 'vscode';
-import { getSkipSign, getLStr, getSkipSign2 } from './removeSpecialChar';
+import { DetailType, TAhkToken, TTokenStream } from '../globalEnum';
 import { inCommentBlock } from './inCommentBlock';
 import { inLTrimRange } from './inLTrimRange';
-import { TTokenStream, TAhkToken, DetailType } from '../globalEnum';
+import { getLStr, getSkipSign, getSkipSign2 } from './removeSpecialChar';
 
 // LexicalAnalysisSimple
 
@@ -25,7 +25,11 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
         CommentBlock = inCommentBlock(textRaw, CommentBlock);
         if (CommentBlock) {
             result.push({
-                lStr: '', deep, textRaw, detail: [DetailType.inComment], line,
+                lStr: '',
+                deep,
+                textRaw,
+                detail: [DetailType.inComment],
+                line,
             });
             continue;
         }
@@ -36,20 +40,32 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
                 ? DetailType.inLTrim1
                 : DetailType.inLTrim2;
             result.push({
-                lStr: '', deep, textRaw, detail: [inLTrimLevel], line,
+                lStr: '',
+                deep,
+                textRaw,
+                detail: [inLTrimLevel],
+                line,
             });
             continue;
         }
 
         if (getSkipSign(textRaw)) {
             result.push({
-                lStr: '', deep, textRaw, detail: [DetailType.inSkipSign], line,
+                lStr: '',
+                deep,
+                textRaw,
+                detail: [DetailType.inSkipSign],
+                line,
             });
             continue;
         }
         if (getSkipSign2(textRaw)) {
             result.push({
-                lStr: '', deep, textRaw, detail: [DetailType.inSkipSign2], line,
+                lStr: '',
+                deep,
+                textRaw,
+                detail: [DetailType.inSkipSign2],
+                line,
             });
             continue;
         }
@@ -70,7 +86,11 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
         }
 
         result.push({
-            lStr, deep, textRaw, detail, line,
+            lStr,
+            deep,
+            textRaw,
+            detail,
+            line,
         });
     }
     //  const g = Object.freeze(result);

@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import { TAhkSymbol, EFnMode, TTokenStream } from '../../globalEnum';
+import { EFnMode, TAhkSymbol, TTokenStream } from '../../globalEnum';
 import { ClassWm } from '../wm';
 import { kindPick } from './kindPick';
 

@@ -1,19 +1,19 @@
 import * as vscode from 'vscode';
 // import { CompletionComma } from './provider/CompletionItemProvider';
+import { configChangEvent } from './configUI';
 import { Detecter } from './core/Detecter';
+import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
+import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
+import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
 import { DefProvider } from './provider/Def/DefProvider';
 import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
-import { SymBolProvider } from './provider/SymbolProvider';
-import { HoverProvider } from './provider/HoverProvider';
-import { configChangEvent } from './configUI';
-import { statusBarClick } from './tools/Command';
-import { ReferenceProvider } from './provider/ReferenceProvider';
-import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
-import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
-import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
+import { HoverProvider } from './provider/HoverProvider';
+import { ReferenceProvider } from './provider/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
+import { SymBolProvider } from './provider/SymbolProvider';
+import { statusBarClick } from './tools/Command';
 
 export function activate(context: vscode.ExtensionContext): void {
     const language: vscode.DocumentSelector = { language: 'ahk' };
@@ -34,7 +34,9 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.workspace.onDidCreateFiles((e): void => Detecter.createMap(e)),
         vscode.workspace.onDidRenameFiles((e): void => Detecter.renameFileName(e)),
         // vscode.workspace.onDidChangeTextDocument((e) => d(e)),
-        vscode.commands.registerCommand('ahk.bar.click', (): void => { statusBarClick(); }),
+        vscode.commands.registerCommand('ahk.bar.click', (): void => {
+            statusBarClick();
+        }),
         vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
     );
     const ahkRootPath = vscode.workspace.workspaceFolders;

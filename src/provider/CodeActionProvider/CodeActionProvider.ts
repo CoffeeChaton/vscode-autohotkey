@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable immutable/no-mutation */
 import * as vscode from 'vscode';
-import { EDiagBase, EDiagFsPath, EDiagCode } from '../../globalEnum';
+import { EDiagBase, EDiagCode, EDiagFsPath } from '../../globalEnum';
 
 function consoleDefault(d: never, diag: vscode.Diagnostic): null {
     console.log('--99--66-33--44 Default -> a', d);
@@ -14,6 +14,7 @@ function getFsPath(diag: vscode.Diagnostic): EDiagFsPath | null {
     if (code === undefined || typeof code === 'string' || typeof code === 'number') return null;
 
     const d = code.value as EDiagCode;
+    // dprint-ignore
     switch (d) {
         case EDiagCode.code107: return EDiagFsPath.code107;
         case EDiagCode.code110: return EDiagFsPath.code110;
@@ -63,8 +64,7 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
         range: vscode.Range | vscode.Selection,
         context: vscode.CodeActionContext,
         token: vscode.CancellationToken,
-    )
-        : vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
+    ): vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
         if (context.diagnostics.length === 0) return null;
         const { uri } = document;
         const CAList: vscode.CodeAction[] = [];

@@ -6,8 +6,7 @@ async function chIsNextLine(
     position: vscode.Position,
     options: vscode.FormattingOptions,
     token: vscode.CancellationToken,
-)
-    : Promise<vscode.TextEdit[]> {
+): Promise<vscode.TextEdit[]> {
     const array = await FormatCore(document, options, token, false);
     if (!array) return [];
 
@@ -20,8 +19,7 @@ export class OnTypeFormattingEditProvider implements vscode.OnTypeFormattingEdit
         ch: string,
         options: vscode.FormattingOptions,
         token: vscode.CancellationToken,
-    )
-        : vscode.ProviderResult<vscode.TextEdit[]> {
+    ): vscode.ProviderResult<vscode.TextEdit[]> {
         if (ch === '\n') {
             return chIsNextLine(document, position, options, token);
         }

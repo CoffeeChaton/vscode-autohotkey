@@ -217,7 +217,8 @@
     },
     "scripts": {
         "vscode:prepublish": "node esbuild.config.js",
-        "lint": "eslint --fix src --cache --ignore-pattern *.test.ts",
+        "dprint": "dprint fmt",
+        "eslint": "eslint --fix src --cache --ignore-pattern *.test.ts",
         "compile": "tsc -p ./ -diagnostics",
         "watch": "tsc -watch -p ./",
         "start": "ts-node src/main.ts",
@@ -242,6 +243,7 @@
         "@types/xml2js": "^0.4.9",
         "@typescript-eslint/eslint-plugin": "^5.10.2",
         "@typescript-eslint/parser": "^5.10.2",
+        "dprint": "^0.22.0",
         "esbuild": "^0.14.18",
         "esbuild-copy-static-files": "^0.1.0",
         "eslint": "^8.8.0",

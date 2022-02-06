@@ -1,10 +1,8 @@
-import {
-    TDbgpProperty, TDbgpPropertyAttr,
-} from '../DebugTypeEnum';
-import { base64ToStr, toArray } from '../Base64';
-import { mapToStr } from '../../../tools/mapToStr';
-import { likeArray } from './likeArray';
 import { enumLog } from '../../../tools/enumErr';
+import { mapToStr } from '../../../tools/mapToStr';
+import { base64ToStr, toArray } from '../Base64';
+import { TDbgpProperty, TDbgpPropertyAttr } from '../DebugTypeEnum';
+import { likeArray } from './likeArray';
 
 function getContent(child: TDbgpProperty): string | null {
     const { content, property } = child;
@@ -58,6 +56,7 @@ export function buildVariableValue(property: TDbgpProperty, attr: TDbgpPropertyA
         console.log('--77--51--aType2 ', aType);
     }
     const primitive = base64ToStr(content);
+    // dprint-ignore
     switch (aType) {
         case 'integer': return primitive;
         case 'float': return primitive;

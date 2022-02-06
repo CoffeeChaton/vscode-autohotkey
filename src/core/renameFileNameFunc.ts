@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
-import * as vscode from 'vscode';
 import * as path from 'path';
+import * as vscode from 'vscode';
 import { Pretreatment } from '../tools/Pretreatment';
 
 export async function renameFn(oldUri: vscode.Uri, newUri: vscode.Uri, fsPathList: string[]): Promise<void> {
@@ -15,8 +15,10 @@ export async function renameFn(oldUri: vscode.Uri, newUri: vscode.Uri, fsPathLis
         const lineCount = DocStrMap.length;
         for (let line = 0; line < lineCount; line++) {
             const { textRaw } = DocStrMap[line];
-            if (RegexInclude.test(textRaw)
-                && textRaw.includes(oldFileName)) { // TODO TEST
+            if (
+                RegexInclude.test(textRaw)
+                && textRaw.includes(oldFileName)
+            ) { // TODO TEST
                 const Today = new Date();
                 const Remarks = `\n;;${oldFileName} -> ${newFileName} ; at ${Today.toLocaleString()}`;
                 const newText = textRaw.replace(oldFileName, newFileName) + Remarks;

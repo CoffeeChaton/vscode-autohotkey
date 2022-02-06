@@ -6,7 +6,12 @@ import { enumErr } from '../../tools/enumErr';
 import { kindPick } from '../../tools/Func/kindPick';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
 import {
-    ahkGlobalValDefRegex, ahkLocalValDefRegex, ahkStaticValDefRegex, ahkValDefRegex, ahkValRegex, ahkVarSetCapacityDefRegex,
+    ahkGlobalValDefRegex,
+    ahkLocalValDefRegex,
+    ahkStaticValDefRegex,
+    ahkValDefRegex,
+    ahkValRegex,
+    ahkVarSetCapacityDefRegex,
 } from '../../tools/regexTools';
 
 const enum EFuncPos {
@@ -21,8 +26,7 @@ function atFunPos(ahkSymbol: TAhkSymbol, position: vscode.Position): EFuncPos {
     return EFuncPos.isInBody;
 }
 
-function searchValOfRange(document: vscode.TextDocument, searchRange: vscode.Range, regex: RegExp)
-    : vscode.Location[] {
+function searchValOfRange(document: vscode.TextDocument, searchRange: vscode.Range, regex: RegExp): vscode.Location[] {
     const TextRawList = document.getText(searchRange).split('\n');
     const startLine = searchRange.start.line;
     const List: vscode.Location[] = [];
@@ -37,8 +41,13 @@ function searchValOfRange(document: vscode.TextDocument, searchRange: vscode.Ran
     return List;
 }
 
-function wrapper(document: vscode.TextDocument, position: vscode.Position, ahkSymbol: TAhkSymbol, wordUp: string, listAllUsing: boolean)
-    : vscode.Location[] {
+function wrapper(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    ahkSymbol: TAhkSymbol,
+    wordUp: string,
+    listAllUsing: boolean,
+): vscode.Location[] {
     const regex = ahkValRegex(wordUp);
     if (listAllUsing) {
         console.log(`list ${wordUp} all using,is ${VERSION.getValDefInFunc}`);
@@ -78,19 +87,24 @@ function match(
     listAllUsing: boolean,
 ): null | vscode.Location[] {
     const funcPos = atFunPos(ahkSymbol, position);
-
+    // dprint-ignore
     switch (funcPos) {
         case EFuncPos.isFuncArg: return wrapper(document, position, ahkSymbol, wordUp, true);
         case EFuncPos.isInBody: return wrapper(document, position, ahkSymbol, wordUp, listAllUsing);
         case EFuncPos.isFuncName:
             console.log('EFuncPos.isFuncName', wordUp, position); // is never now
             return null;
-        default: return enumErr(funcPos);
+        default:
+            return enumErr(funcPos);
     }
 }
 
-export function getValDefInFunc(document: vscode.TextDocument, position: vscode.Position, wordUp: string, listAllUsing: boolean)
-    : null | vscode.Location[] {
+export function getValDefInFunc(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    wordUp: string,
+    listAllUsing: boolean,
+): null | vscode.Location[] {
     const ahkSymbol = getFnOfPos(document, position);
     if (!ahkSymbol) return null;
     if (!kindPick(ahkSymbol.kind)) return null;

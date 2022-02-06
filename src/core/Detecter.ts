@@ -3,15 +3,19 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { getChildren } from './getChildren';
-import { ParserLine, ParserBlock, getReturnByLine } from './Parser';
 import { getIgnoredFile, getIgnoredFolder, showTimeSpend } from '../configUI';
 import {
-    EStr, TAhkSymbolList, TGValMap, TValArray, TValName,
+    EStr,
+    TAhkSymbolList,
+    TGValMap,
+    TValArray,
+    TValName,
 } from '../globalEnum';
-import { renameFn as renameFileNameFunc } from './renameFileNameFunc';
-import { Pretreatment } from '../tools/Pretreatment';
 import { Diagnostic } from '../provider/Diagnostic/Diagnostic';
+import { Pretreatment } from '../tools/Pretreatment';
+import { getChildren } from './getChildren';
+import { getReturnByLine, ParserBlock, ParserLine } from './Parser';
+import { renameFn as renameFileNameFunc } from './renameFileNameFunc';
 
 export const Detecter = {
     // key : vscode.Uri.fsPath,
@@ -82,7 +86,14 @@ export const Detecter = {
             RangeStartLine: 0,
             RangeEndLine: DocStrMap.length,
             inClass: false,
-            fnList: [ParserBlock.getClass, ParserBlock.getFunc, ParserBlock.getComment, ParserBlock.getSwitchBlock, getReturnByLine, ParserLine],
+            fnList: [
+                ParserBlock.getClass,
+                ParserBlock.getFunc,
+                ParserBlock.getComment,
+                ParserBlock.getSwitchBlock,
+                getReturnByLine,
+                ParserLine,
+            ],
         });
 
         if (!fsPath.includes(EStr.diff_name_prefix)) {

@@ -1,5 +1,5 @@
+import { Source, StackFrame } from '@vscode/debugadapter';
 import { DebugProtocol } from '@vscode/debugprotocol';
-import { StackFrame, Source } from '@vscode/debugadapter';
 import { basename } from 'path';
 import { TDbgpResponse } from '../DebugTypeEnum';
 

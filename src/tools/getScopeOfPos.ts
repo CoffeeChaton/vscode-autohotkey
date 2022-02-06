@@ -3,14 +3,14 @@ import { Detecter } from '../core/Detecter';
 import { TAhkSymbol, TAhkSymbolList } from '../globalEnum';
 
 type TStackNameSymbol = {
-    readonly name: string,
-    readonly ahkSymbol: TAhkSymbol,
+    readonly name: string;
+    readonly ahkSymbol: TAhkSymbol;
 };
 
 type TStackPro = Readonly<{
-    readonly isEnd: boolean,
-    readonly deep: number,
-    readonly stack: readonly TStackNameSymbol[],
+    readonly isEnd: boolean;
+    readonly deep: number;
+    readonly stack: readonly TStackNameSymbol[];
 }>;
 
 function dfs(father: TAhkSymbolList, position: vscode.Position, StackPro: TStackPro): TStackPro {

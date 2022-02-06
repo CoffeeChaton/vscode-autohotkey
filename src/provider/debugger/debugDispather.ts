@@ -5,27 +5,30 @@
 /* eslint-disable immutable/no-mutation */
 /* eslint-disable max-lines */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100,300,131072] }] */
-import { EventEmitter } from 'events';
 import { Scope, StackFrame, Variable } from '@vscode/debugadapter';
 import { DebugProtocol } from '@vscode/debugprotocol';
 import { spawn } from 'child_process';
-import { resolve } from 'path';
+import { EventEmitter } from 'events';
 import { existsSync } from 'fs';
 import { getPort } from 'get-port-please';
+import { resolve } from 'path';
 import * as vscode from 'vscode';
 
-import { startDebugger } from '../Service/Service';
-import { DebugServer } from './debugServer';
-import { BreakPointHandler } from './handler/breakpointHandler';
-import { CommandHandler } from './handler/commandHandler';
-import { StackHandler } from './handler/StackHandler';
-import { VariableHandler } from './handler/variableHandler';
-import { fnObtainValueSet } from './handler/fnObtainValueSet';
-import {
-    EVarScope, EVarScopeStr, TDbgpResponse, TLaunchRequestArguments,
-} from './DebugTypeEnum';
 import { mapToStr } from '../../tools/mapToStr';
 import { OutputChannel } from '../../tools/OutputChannel';
+import { startDebugger } from '../Service/Service';
+import { DebugServer } from './debugServer';
+import {
+    EVarScope,
+    EVarScopeStr,
+    TDbgpResponse,
+    TLaunchRequestArguments,
+} from './DebugTypeEnum';
+import { BreakPointHandler } from './handler/breakpointHandler';
+import { CommandHandler } from './handler/commandHandler';
+import { fnObtainValueSet } from './handler/fnObtainValueSet';
+import { StackHandler } from './handler/StackHandler';
+import { VariableHandler } from './handler/variableHandler';
 
 const ports: number[] = [];
 for (let i = 4000; i < 5000; i++) ports.push(i);
@@ -119,7 +122,8 @@ export class DebugDispather extends EventEmitter {
                 }
             });
 
-        const ahkProcess = spawn(runtime, ['/ErrorStdOut', `/debug=localhost:${port}`, args.program], { cwd: `${resolve(args.program, '..')}` });
+        const cwd = { cwd: `${resolve(args.program, '..')}` };
+        const ahkProcess = spawn(runtime, ['/ErrorStdOut', `/debug=localhost:${port}`, args.program], cwd);
         ahkProcess.stderr.on('data', (err) => {
             const err2 = err as Buffer; // just has .toString('utf8') not mean as Buffer
             this.emit('output', err2.toString('utf8'));
@@ -181,8 +185,10 @@ export class DebugDispather extends EventEmitter {
         const frameId: number = this.variableHandler.getFrameId();
 
         const property = this.variableHandler.getVarByRef(args.variablesReference);
-        if (property !== EVarScopeStr.Local
-            && property !== EVarScopeStr.Global) {
+        if (
+            property !== EVarScopeStr.Local
+            && property !== EVarScopeStr.Global
+        ) {
             const ed2 = await this.getVariable(frameId, scope, property.name); // TODO address
             return ed2;
         }
@@ -211,8 +217,10 @@ export class DebugDispather extends EventEmitter {
 
         const varLocal = await this.getVariable(frameId, EVarScope.LOCAL, variableName);
         switch (varLocal.length) {
-            case 0: break;
-            case 1: return varLocal[0].value;
+            case 0:
+                break;
+            case 1:
+                return varLocal[0].value;
             default: {
                 const ed = this.getVariableByEvalDefault(varLocal, variableName);
                 if (ed) return ed;
@@ -222,8 +230,10 @@ export class DebugDispather extends EventEmitter {
 
         const varGlobal = await this.getVariable(frameId, EVarScope.GLOBAL, variableName);
         switch (varGlobal.length) {
-            case 0: return 'undefined value of Variable';
-            case 1: return varGlobal[0].value;
+            case 0:
+                return 'undefined value of Variable';
+            case 1:
+                return varGlobal[0].value;
             default: {
                 const ed = this.getVariableByEvalDefault(varGlobal, variableName);
                 if (ed) return ed;
@@ -233,13 +243,12 @@ export class DebugDispather extends EventEmitter {
         return 'neko-err--85--44--99--';
     }
 
-    public async setVariable(args: DebugProtocol.SetVariableArguments)
-        : Promise<{
-            name: string;
-            value: string;
-            type: string;
-            variablesReference: number;
-        }> {
+    public async setVariable(args: DebugProtocol.SetVariableArguments): Promise<{
+        name: string;
+        value: string;
+        type: string;
+        variablesReference: number;
+    }> {
         const a = fnObtainValueSet(args.value);
         let { value } = a;
         let { type } = a;
@@ -261,8 +270,10 @@ export class DebugDispather extends EventEmitter {
 
         let fullname: string = args.name;
         const parentFullName = this.variableHandler.getVarByRef(args.variablesReference);
-        if (parentFullName !== EVarScopeStr.Local
-            && parentFullName !== EVarScopeStr.Global) {
+        if (
+            parentFullName !== EVarScopeStr.Local
+            && parentFullName !== EVarScopeStr.Global
+        ) {
             const isIndex: boolean = fullname.includes('[') && fullname.includes(']');
             fullname = isIndex === true
                 ? `${parentFullName.name}${fullname}`
@@ -270,8 +281,13 @@ export class DebugDispather extends EventEmitter {
             console.log('DebugDispather ~ fnObtainValue ~ fullname', fullname);
         }
 
-        const response: TDbgpResponse = await this.sendComand(`property_set -d ${frameId} -c ${scope} -n ${fullname} -t ${type}`, value);
-        if (response.attr.success === '1') throw new Error(`"${fullname}" cannot be written. Probably read-only.--044--33--66`);
+        const response: TDbgpResponse = await this.sendComand(
+            `property_set -d ${frameId} -c ${scope} -n ${fullname} -t ${type}`,
+            value,
+        );
+        if (response.attr.success === '1') {
+            throw new Error(`"${fullname}" cannot be written. Probably read-only.--044--33--66`);
+        }
 
         const displayValue = type === 'string'
             ? `"${value}"`
@@ -290,8 +306,10 @@ export class DebugDispather extends EventEmitter {
         return StackHandler(args, response);
     }
 
-    public buildBreakPoint(path: string, sourceBreakpoints: DebugProtocol.SourceBreakpoint[])
-        : DebugProtocol.Breakpoint[] {
+    public buildBreakPoint(
+        path: string,
+        sourceBreakpoints: DebugProtocol.SourceBreakpoint[],
+    ): DebugProtocol.Breakpoint[] {
         this.clearBreakpoints(path);
         return this.breakPointHandler.buildBreakPoint(path, sourceBreakpoints, (bp) => {
             this.setBreakPonit(bp);
@@ -330,7 +348,9 @@ export class DebugDispather extends EventEmitter {
 
     private async setBreakPonit(bp: DebugProtocol.Breakpoint): Promise<void> {
         if (this.debugServer && bp.verified) {
-            const res = await this.sendComand(`breakpoint_set -t line -f ${bp.source?.path ?? ''} -n ${bp?.line ?? ''}`);
+            const res = await this.sendComand(
+                `breakpoint_set -t line -f ${bp.source?.path ?? ''} -n ${bp?.line ?? ''}`,
+            );
             bp.id = res.attr.id;
         }
     }

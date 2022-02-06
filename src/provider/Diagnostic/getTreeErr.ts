@@ -30,6 +30,7 @@ function setErrDefaultTooMuch(sw: TAhkSymbol): vscode.Diagnostic {
 
 function setErrDefault(sw: TAhkSymbol): null | vscode.Diagnostic {
     const iDefault = getDefaultNumber(sw.children);
+    // dprint-ignore
     switch (iDefault) {
         case 0: return setErrDefaultNotFind(sw);
         case 1: return null;
@@ -49,6 +50,7 @@ function setErrCaseZero(sw: TAhkSymbol): vscode.Diagnostic {
 
 function setErrCase(sw: TAhkSymbol): null | vscode.Diagnostic {
     const iCase = getCaseNumber(sw.children);
+    // dprint-ignore
     switch (true) {
         case iCase < 20 && iCase > 0: return null;
         case iCase >= 20: return setCaseTooMuch(sw);
@@ -64,9 +66,11 @@ function setErrSwNameNotFind(sw: TAhkSymbol): null | vscode.Diagnostic {
 }
 function getSwErr(sw: TAhkSymbol, displayErr: readonly boolean[]): vscode.Diagnostic[] {
     const digS: vscode.Diagnostic[] = [];
-    if (sw.kind === vscode.SymbolKind.Enum
+    if (
+        sw.kind === vscode.SymbolKind.Enum
         && displayErr[sw.range.start.line]
-        && sw.detail === 'Switch') {
+        && sw.detail === 'Switch'
+    ) {
         [setErrDefault, setErrCase, setErrSwNameNotFind].forEach((fn) => {
             const err = fn(sw);
             if (err) digS.push(err);

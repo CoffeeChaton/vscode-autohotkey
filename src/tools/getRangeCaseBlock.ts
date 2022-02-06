@@ -1,9 +1,15 @@
 import * as vscode from 'vscode';
-import { getRange } from './getRange';
 import { TTokenStream } from '../globalEnum';
+import { getRange } from './getRange';
 import { getRangeOfLine } from './getRangeOfLine';
 
-export function getRangeCaseBlock(DocStrMap: TTokenStream, defLine: number, searchLine: number, RangeEnd: number, lStr: string): vscode.Range {
+export function getRangeCaseBlock(
+    DocStrMap: TTokenStream,
+    defLine: number,
+    searchLine: number,
+    RangeEnd: number,
+    lStr: string,
+): vscode.Range {
     if (!(/:\s*$/).test(lStr)) {
         // exp : case "cat": return "cat";
         // exp : case 3: do something;

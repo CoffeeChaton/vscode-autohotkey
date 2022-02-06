@@ -4,7 +4,11 @@
 import * as vscode from 'vscode';
 import { getLintConfig } from '../../configUI';
 import {
-    TTokenStream, EDiagBase, EDiagCode, TAhkSymbol, DetailType,
+    DetailType,
+    EDiagBase,
+    EDiagCode,
+    TAhkSymbol,
+    TTokenStream,
 } from '../../globalEnum';
 
 import { getTreeErr } from './getTreeErr';
@@ -92,8 +96,10 @@ function getDirectivesErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode
     return 1;
 }
 function getCommandErrFnReplace(commandHead: string, lStr: string, line: number): null | vscode.Diagnostic {
-    if ((/^(?:File(Append|GetAttrib|Read)|GetKeyState|IfExist|IfInString|IfWin(Active|Exist))$/i).test(commandHead)
-        || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/i).test(commandHead)) {
+    if (
+        (/^(?:File(Append|GetAttrib|Read)|GetKeyState|IfExist|IfInString|IfWin(Active|Exist))$/i).test(commandHead)
+        || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/i).test(commandHead)
+    ) {
         const col = lStr.indexOf(commandHead);
         const range = new vscode.Range(line, col, line, col + commandHead.length);
         // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
@@ -134,6 +140,7 @@ function getLineErr(DocStrMap: TTokenStream, line: number, uri: vscode.Uri): nul
     const fnList: TFnLineErr[] = [assign, getDirectivesErr, getCommandErr];
     for (const fn of fnList) {
         const err = fn(DocStrMap, line, uri);
+        // dprint-ignore
         switch (err) {
             case 0: break; // break switch
             case 1: return null;
@@ -162,14 +169,20 @@ function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol): boolean {
     }
     return false;
 }
-function getFuncErr(DocStrMap: TTokenStream, funcS: Readonly<TAhkSymbol[]>, displayErr: readonly boolean[]): vscode.Diagnostic[] {
+function getFuncErr(
+    DocStrMap: TTokenStream,
+    funcS: Readonly<TAhkSymbol[]>,
+    displayErr: readonly boolean[],
+): vscode.Diagnostic[] {
     const digS: vscode.Diagnostic[] = [];
     for (const func of funcS) {
         switch (func.kind) {
             case vscode.SymbolKind.Method:
             case vscode.SymbolKind.Function:
-                if (displayErr[func.range.start.line]
-                    && fnErrCheck(DocStrMap, func)) {
+                if (
+                    displayErr[func.range.start.line]
+                    && fnErrCheck(DocStrMap, func)
+                ) {
                     digS.push(setFuncErr(func));
                 }
                 break;
@@ -182,7 +195,12 @@ function getFuncErr(DocStrMap: TTokenStream, funcS: Readonly<TAhkSymbol[]>, disp
     }
     return digS;
 }
-export function Diagnostic(DocStrMap: TTokenStream, result: Readonly<TAhkSymbol[]>, uri: vscode.Uri, collection: vscode.DiagnosticCollection): void {
+export function Diagnostic(
+    DocStrMap: TTokenStream,
+    result: Readonly<TAhkSymbol[]>,
+    uri: vscode.Uri,
+    collection: vscode.DiagnosticCollection,
+): void {
     const lineMax = DocStrMap.length;
     let IgnoreLine = -1;
     const displayErr: boolean[] = [];

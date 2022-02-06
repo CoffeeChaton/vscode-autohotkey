@@ -1,9 +1,32 @@
 const esbuild = require('esbuild');
 const copyStaticFiles = require('esbuild-copy-static-files');
 
-const filter = (src, dest) => {
-    const filterRuler = ['node_modules', 'coverage', 'out', 'src', '.history', '.idea', '.git', '.cpuprofile', 'image', '.eslintcache'];
-    for (const ed of filterRuler) {
+const filter = (src, _dest) => {
+    const folder = [
+        '.git',
+        '.history',
+        '.idea',
+        '.vscode',
+        'coverage',
+        'image',
+        'node_modules',
+        'out',
+        'src',
+    ];
+    const file = [
+        '.cpuprofile',
+        '.editorconfig',
+        '.eslintcache',
+        '.eslintrc.json',
+        '.gitignore',
+        'dprint.json',
+        'esbuild.config.js',
+        'jest.config.js',
+        'pnpm-lock.yaml',
+        'tsconfig.json',
+    ];
+    const List = [...folder, ...file];
+    for (const ed of List) {
         if (src.endsWith(ed)) {
             return false;
         }

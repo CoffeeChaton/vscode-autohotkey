@@ -1,6 +1,9 @@
 import * as vscode from 'vscode';
 import {
-    TArgList as TArgMap, TArgListVal, TAhkSymbol, TTokenStream,
+    TAhkSymbol,
+    TArgList as TArgMap,
+    TArgListVal,
+    TTokenStream,
 } from '../../globalEnum';
 
 import { getCommentOfLine } from '../getCommentOfLine';
@@ -33,7 +36,9 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
                 ? key0.replace(/\*$/, '')
                 : key0;
             if (!(/^\w\w*$/).test(keyRawName)) {
-                const message = `DeepAnalysis NekoHelp Unknown Syntax of ${ahkSymbol.name} args Error ${keyRawName}--99--37--21--`;
+                const errCode = '--99--37--21--';
+                const errMsg = 'DeepAnalysis NekoHelp Unknown Syntax of ';
+                const message = `${errMsg} ${ahkSymbol.name} args Error ${keyRawName}${errCode}`;
                 console.log('.forEach ~ message', message);
                 vscode.window.showInformationMessage(message);
                 throw new Error(message);

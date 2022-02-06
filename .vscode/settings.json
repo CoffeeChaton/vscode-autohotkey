@@ -120,5 +120,28 @@
     "eslint.packageManager": "pnpm",
     "eslint.probe": [
         "typescript"
-    ]
+    ],
+    "editor.defaultFormatter": "dprint.dprint",
+    // or specify per language
+    "[javascript]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[toml]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[rust]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    }
 }

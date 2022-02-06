@@ -1,7 +1,10 @@
 /* eslint-disable immutable/no-mutation */
 import * as vscode from 'vscode';
 import {
-    EDiagBase, EDiagCode, EDiagFsPath, EDiagMsg,
+    EDiagBase,
+    EDiagCode,
+    EDiagFsPath,
+    EDiagMsg,
 } from '../../globalEnum';
 import { enumErr } from '../../tools/enumErr';
 
@@ -11,6 +14,7 @@ type TDigs = {
 };
 
 function setMsg(value: EDiagCode): EDiagMsg {
+    // dprint-ignore
     switch (value) {
         case EDiagCode.code107: return EDiagMsg.code107;
         case EDiagCode.code110: return EDiagMsg.code110;
@@ -31,6 +35,7 @@ function setMsg(value: EDiagCode): EDiagMsg {
 }
 
 function setTargetRaw(value: EDiagCode): EDiagFsPath {
+    // dprint-ignore
     switch (value) {
         case EDiagCode.code107: return EDiagFsPath.code107;
         case EDiagCode.code110: return EDiagFsPath.code110;
