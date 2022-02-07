@@ -5,7 +5,7 @@
     "version": "2.3.1",
     "publisher": "CoffeeChaton",
     "engines": {
-        "vscode": "^1.63.1"
+        "vscode": "^1.64.0"
     },
     "activationEvents": [
         "onLanguage:ahk",
@@ -206,6 +206,11 @@
                 "language": "ahk",
                 "scopeName": "source.ahk",
                 "path": "./syntaxes/ahk.tmLanguage.json"
+            },
+            {
+                "language": "Log",
+                "scopeName": "source.ahk",
+                "path": "./syntaxes/ahk.tmLanguage.json"
             }
         ],
         "snippets": [
@@ -218,7 +223,7 @@
     "scripts": {
         "vscode:prepublish": "node esbuild.config.js",
         "fmt": "dprint fmt",
-        "lint": "eslint --fix src --cache",
+        "lint": "eslint --fix src",
         "compile": "tsc -p ./ -diagnostics",
         "watch": "tsc -watch -p ./",
         "test": "jest",
@@ -252,7 +257,7 @@
         "eslint-plugin-fp": "^2.3.0",
         "eslint-plugin-immutable": "^1.0.0",
         "eslint-plugin-import": "^2.25.4",
-        "eslint-plugin-jest": "^26.0.0",
+        "eslint-plugin-jest": "^26.1.0",
         "eslint-plugin-jest-formatting": "^3.1.0",
         "eslint-plugin-jsx-a11y": "^6.5.1",
         "eslint-plugin-no-setter-return": "^0.1.2",
@@ -265,10 +270,10 @@
         "jest": "^27.5.0",
         "jest-puppeteer": "^6.1.0",
         "nodemon": "^2.0.15",
-        "puppeteer": "^13.1.3",
+        "puppeteer": "^13.2.0",
         "should": "^13.2.3",
         "ts-jest": "^27.1.3",
-        "ts-node": "^10.4.0",
+        "ts-node": "^10.5.0",
         "typescript": "^4.5.5",
         "vscode-jsonrpc": "^6.0.0",
         "vscode-languageserver": "^7.0.0",

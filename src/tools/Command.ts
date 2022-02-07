@@ -1,8 +1,9 @@
 /* eslint-disable init-declarations */
 /* eslint-disable no-await-in-loop */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,5,6,60,100,300,1000] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,5,6,7,60,100,300,1000] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
+import { CommandListAllFunc, CommandListAllFuncSort } from './CommandListAllFunc';
 
 async function clearOutlineCache(isTest: boolean): Promise<null> {
     const timeStart = Date.now();
@@ -93,7 +94,11 @@ export async function statusBarClick(): Promise<null> {
         '0 -> clearOutlineCache',
         '1 -> list #Include',
         '2 -> dev tools setInterval() ',
-        //  '3 -> regTest',
+        '3 -> list all Function()',
+        '4 -> list all Function(args)',
+        '5 -> list all Function() ; link',
+        '6 -> list all Function() sort by name a -> z',
+        '7 -> list all Function() sort by name z -> a',
     ];
     const options = await vscode.window.showQuickPick(items);
     // dprint-ignore
@@ -101,7 +106,11 @@ export async function statusBarClick(): Promise<null> {
         case items[0]: return clearOutlineCache(false);
         case items[1]: return listAhkInclude();
         case items[2]: return LoopOfClearOutlineCache();
-        //  case items[3]: return regTest();
+        case items[3]: return CommandListAllFunc(false, false);
+        case items[4]: return CommandListAllFunc(true, false);
+        case items[5]: return CommandListAllFunc(false, true);
+        case items[6]: return CommandListAllFuncSort(false);
+        case items[7]: return CommandListAllFuncSort(true);
         default: return null;
     }
 }

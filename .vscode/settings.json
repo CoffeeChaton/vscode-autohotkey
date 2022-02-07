@@ -108,10 +108,12 @@
         "vsocde",
         "YYYYMMDDHH"
     ],
-    "eslint.enable": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll": true
+        "addMissingImports": true,
+        "source.fixAll": true,
+        "source.organizeImports": true
     },
+    "eslint.enable": true,
     "eslint.options": {
         "extensions": [
             ".ts"
@@ -122,7 +124,6 @@
         "typescript"
     ],
     "editor.defaultFormatter": "dprint.dprint",
-    // or specify per language
     "[javascript]": {
         "editor.defaultFormatter": "dprint.dprint"
     },
@@ -143,5 +144,8 @@
     },
     "[rust]": {
         "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[shellscript]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
     }
 }
