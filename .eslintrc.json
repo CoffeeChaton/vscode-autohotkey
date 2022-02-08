@@ -316,6 +316,7 @@
         "promise/param-names": "error",
         "promise/valid-params": "warn",
         "react/jsx-filename-extension": "off",
+        "require-await": "error",
         "security/detect-object-injection": "off",
         "use-isnan": "error",
         "wrap-regex": "error"

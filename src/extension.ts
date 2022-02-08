@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { statusBarClick } from './command/Command';
 // import { CompletionComma } from './provider/CompletionItemProvider';
 import { configChangEvent } from './configUI';
 import { Detecter } from './core/Detecter';
@@ -13,7 +14,6 @@ import { HoverProvider } from './provider/HoverProvider';
 import { ReferenceProvider } from './provider/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
 import { SymBolProvider } from './provider/SymbolProvider';
-import { statusBarClick } from './tools/Command';
 
 export function activate(context: vscode.ExtensionContext): void {
     const language: vscode.DocumentSelector = { language: 'ahk' };

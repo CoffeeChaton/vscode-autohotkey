@@ -65,6 +65,34 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
     if (lStr === '') return false;
     const LineRuler: LineRulerType = [
         {
+            detail: '#IncludeAgain',
+            kind: vscode.SymbolKind.Event,
+            getName(str: string): string | null {
+                const e = (/^\s*#IncludeAgain\s+(\S+)[\s|$]/).exec(str);
+                return e
+                    ? `#IncludeAgain ${e[1]}`
+                    : null;
+            },
+
+            test(str: string): boolean {
+                return (/^\s*#IncludeAgain\b/i).test(str);
+            },
+        },
+        {
+            detail: '#Include',
+            kind: vscode.SymbolKind.Event,
+            getName(str: string): string | null {
+                const e = (/^\s*#Include\s+(\S+)[\s|$]/i).exec(str);
+                return e
+                    ? `#Include ${e[1]}`
+                    : null;
+            },
+
+            test(str: string): boolean {
+                return (/^\s*#Include\b/i).test(str);
+            },
+        },
+        {
             detail: 'directive',
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {

@@ -3,26 +3,20 @@ import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { TAhkSymbolList } from '../globalEnum';
 
-export async function CommandListAllFunc(showArgs: boolean, showLink: boolean): Promise<null> {
+export function ListAllFunc(showLink: boolean): null {
+    const t1 = Date.now();
     const allFsPath = Detecter.getDocMapFile();
 
-    const AllList: string[] = ['[neko-help] List All Function'];
+    const AllList: string[] = ['[neko-help] List All Function()'];
     for (const fsPath of allFsPath) {
         const AhkSymbolList: TAhkSymbolList | null = Detecter.getDocMap(fsPath);
-        if (AhkSymbolList === null) {
-            continue;
-        }
+        if (AhkSymbolList === null) continue;
 
         AllList.push(fsPath);
 
-        // eslint-disable-next-line no-await-in-loop
-        const document = await vscode.workspace.openTextDocument(fsPath);
-
         for (const DocumentSymbol of AhkSymbolList) {
             if (DocumentSymbol.kind === vscode.SymbolKind.Function) {
-                const text = showArgs
-                    ? document.getText(DocumentSymbol.selectionRange).replaceAll(/\n\s*/g, '')
-                    : `${DocumentSymbol.name}()`;
+                const text = `${DocumentSymbol.name}()`;
                 if (showLink) {
                     const line = DocumentSymbol.selectionRange.start.line + 1;
                     const column = DocumentSymbol.selectionRange.start.character + 1;
@@ -37,11 +31,14 @@ export async function CommandListAllFunc(showArgs: boolean, showLink: boolean): 
 
     const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
     OutputChannel.append(AllList.join('\n'));
+    OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();
 
     return null;
 }
-export async function CommandListAllFuncSort(reverse: boolean): Promise<null> {
+
+export function ListAllFuncSort(reverse: boolean): null {
+    const t1 = Date.now();
     const allFsPath = Detecter.getDocMapFile();
 
     const AllList: string[] = [];
@@ -64,14 +61,15 @@ export async function CommandListAllFuncSort(reverse: boolean): Promise<null> {
 
     const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
 
-    OutputChannel.appendLine('[neko-help] List All Function');
+    OutputChannel.appendLine('[neko-help] List All Function()');
 
     const appendText: string = reverse
         ? AllList.sort()
             .reverse()
             .join('\n')
         : AllList.sort().join('\n');
-    OutputChannel.append(appendText);
+    OutputChannel.appendLine(appendText);
+    OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();
 
     return null;
