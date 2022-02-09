@@ -10,7 +10,6 @@
         "airbnb-typescript",
         "airbnb-base",
         "eslint:recommended",
-        "plugin:chai-expect/recommended",
         // "plugin:@typescript-eslint/recommended-requiring-type-checking", // any any And any
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
@@ -66,7 +65,6 @@
     "plugins": [
         "fp",
         "immutable",
-        "chai-expect",
         "@typescript-eslint/eslint-plugin",
         "@typescript-eslint",
         "promise",
@@ -138,22 +136,6 @@
         "block-spacing": "warn",
         "brace-style": "warn",
         "capitalized-comments": "warn",
-        "chai-expect/missing-assertion": "error",
-        "chai-expect/no-inner-compare": "error",
-        "chai-expect/no-inner-literal": "error",
-        "chai-expect/terminating-properties": [
-            "error",
-            {
-                "properties": [
-                    "headers",
-                    "html",
-                    "ip",
-                    "json",
-                    "redirect",
-                    "test"
-                ]
-            }
-        ],
         "class-methods-use-this": "off",
         "comma-spacing": "warn",
         "complexity": [
