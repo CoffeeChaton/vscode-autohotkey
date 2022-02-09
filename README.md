@@ -12,6 +12,7 @@ AutoHotKey language support for VS Code
   - [CodeFormat](#codeformat)
   - [Diagnostic](#diagnostic)
   - [IntelliSense](#intellisense)
+  - [ListAllFunctions](#listallfunctions)
 
 ## FunctionSymbol
 
@@ -47,7 +48,7 @@ AutoHotKey language support for VS Code
 2. open the definition to the side with ( via `Ctrl+Alt+Click` )
 3. Peek Definition (via `Alt+F12`)
 4. Go to References (via `shift+F12`)
-   ![ListAllReferences](image/ListAllReferences.jpg)
+   ![ListAllReferences](image/ListAllReferences.gif)
 
 ## Hover
 
@@ -107,3 +108,7 @@ AutoHotKey language support for VS Code
 
 1. Snippets of your function.
    ![IntelliSenseFunc](image/IntelliSenseFunc.gif)
+
+## ListAllFunctions
+
+![ListAllFunctions](image/ListAllFunctions.gif)

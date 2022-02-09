@@ -1,13 +1,14 @@
 /* eslint-disable immutable/no-mutation */
 import * as fs from 'fs';
 import * as path from 'path';
-
 import * as vscode from 'vscode';
 import { TConfigs } from './globalEnum';
+
 /*
     ---set start---
 */
-const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
+const id = 'ahk-neko-help';
+const statusBarItem = vscode.window.createStatusBarItem(id, vscode.StatusBarAlignment.Left, 0);
 statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
 statusBarItem.command = 'ahk.bar.click';
 let Configs = vscode.workspace.getConfiguration('AhkNekoHelp');

@@ -224,14 +224,14 @@
         "vscode:prepublish": "node esbuild.config.js",
         "fmt": "dprint fmt",
         "lint": "eslint --fix src",
-        "compile": "tsc -p ./ -diagnostics",
+        "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "test": "jest",
         "test_vsc": "pnpm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
         "@eslint/create-config": "^0.1.2",
-        "@jest/globals": "^27.5.0",
+        "@jest/globals": "^27.5.1",
         "@types/assert": "^1.5.6",
         "@types/benchmark": "^2.1.1",
         "@types/chai": "^4.3.0",
@@ -248,7 +248,7 @@
         "@typescript-eslint/parser": "^5.11.0",
         "@vscode/test-electron": "^2.1.2",
         "dprint": "^0.22.0",
-        "esbuild": "^0.14.20",
+        "esbuild": "^0.14.21",
         "esbuild-copy-static-files": "^0.1.0",
         "eslint": "^8.8.0",
         "eslint-config-airbnb": "^19.0.4",
@@ -268,7 +268,7 @@
         "eslint-plugin-react-hooks": "^4.3.0",
         "eslint-plugin-security": "^1.4.0",
         "fs": "0.0.1-security",
-        "jest": "^27.5.0",
+        "jest": "^27.5.1",
         "jest-puppeteer": "^6.1.0",
         "nodemon": "^2.0.15",
         "puppeteer": "^13.2.0",
@@ -280,8 +280,7 @@
         "vscode-languageserver": "^7.0.0",
         "vscode-languageserver-protocol": "^3.16.0",
         "vscode-languageserver-textdocument": "^1.0.4",
-        "vscode-languageserver-types": "^3.16.0",
-        "vscode-oniguruma": "^1.6.1"
+        "vscode-languageserver-types": "^3.16.0"
     },
     "dependencies": {
         "@vscode/debugadapter": "^1.53.0",
@@ -289,6 +288,7 @@
         "get-available-port": "^1.0.0",
         "get-port-please": "^2.2.0",
         "temp": "^0.9.4",
+        "vscode-oniguruma": "^1.6.1",
         "xml2js": "^0.4.23"
     }
 }

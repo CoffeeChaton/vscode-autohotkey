@@ -1,5 +1,6 @@
 /* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
+import { OnigScanner, OnigString } from 'vscode-oniguruma';
 import { TTokenStream } from '../../globalEnum';
 
 export type FuncDefData = {
@@ -53,6 +54,17 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | Fu
     if (defLine + 1 === DocStrMap.length) return false;
     const textFix = DocStrMap[defLine].lStr;
     // if ((/^\s*\b(?:if|while)\b/i).test(textFix)) return false;
+
+    if (textFix.indexOf('0Oネコ猫貓고양이 (') > -1) { // test onig
+        const scanner = new OnigScanner(['^\\s*(\\w+)\\(']);
+        const str = new OnigString(DocStrMap[defLine].textRaw);
+
+        const ed = scanner.findNextMatchSync(str, 0);
+        if (ed) {
+            const { start } = ed.captureIndices[1];
+            console.log('🚀 ~ getFuncDef ~ ed start', start);
+        }
+    }
 
     const fnHead = (/^\s*(\w\w*)\(/).exec(textFix); //  funcName(...
     if (fnHead === null) return false;
