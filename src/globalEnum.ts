@@ -42,7 +42,7 @@ export type TAhkToken = {
     readonly deep: number;
     readonly detail: readonly DetailType[];
     readonly line: number;
-    // i know this is not Complete and correct Token.
+    // I know this is not Complete and correct Token.
 }[];
 export type TTokenStream = DeepReadonly<TAhkToken>;
 export type TAhkSymbol = DeepReadonly<vscode.DocumentSymbol>;
@@ -63,8 +63,8 @@ export type TGValMap = Map<TValName, TValArray>;
 
 export const enum VERSION {
     getValDefInFunc = '0.4beta',
-    format = 'v0.48',
-    formatRange = ' v0.4a',
+    format = 'v0.5',
+    formatRange = ' v0.4b',
 }
 export const enum EDiagBase {
     ignore = ';@ahk-ignore ', // ;@ahk-ignore 30 line.
@@ -157,7 +157,7 @@ export type TArgListVal = {
     isByRef: boolean;
     isVariadic: boolean;
 };
-export type TArgList = Map<string, TArgListVal>; // k = valNameUP
+export type TArgMap = Map<string, TArgListVal>; // k = valNameUP
 export type TValObj = {
     keyRawName: string;
     defLoc: vscode.Location[];
@@ -167,7 +167,7 @@ export type TValObj = {
 };
 export type TValMap = Map<string, TValObj>; // k = valNameUP
 export type DeepAnalysisResult = {
-    argMap: TArgList;
+    argMap: TArgMap;
     valMap: TValMap;
 };
 export const enum TAhkSymbolRange {
@@ -203,4 +203,12 @@ type TempConfigs = {
     };
 };
 export type TConfigs = DeepReadonly<TempConfigs>;
+
 // foo<T>(a: NonNullable<T>)
+
+export const enum TFormatChannel {
+    byFormatAllFile = 'Format File',
+    byFormatRange = 'Format Range',
+    byFormatOnType = 'Format OnType',
+    byDev = 'wait for dev',
+}

@@ -16,15 +16,15 @@ function getCommentText(textRaw: string): string {
 }
 
 function getReturnText(lStr: string, textRaw: string): string {
-    const col = lStr.search(/\breturn\b[\s,][\s,]*.+/i);
+    const col = lStr.search(/\breturn\b[\s,]+.+/i);
     if (col === -1) return '';
 
     let name = textRaw.substring(col).trim();
-    const Func = (/^(\w\w*)\(/).exec(name);
+    const Func = (/^(\w+)\(/).exec(name);
     if (Func) {
         name = `${Func[1]}(...)`;
     } else if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
-        const returnObj = (/^({\s*\w\w*\s*:)/).exec(name);
+        const returnObj = (/^({\s*\w+\s*:)/).exec(name);
         if (returnObj) name = `obj ${returnObj[1]}`;
     }
     return `    ${name.trim()}\n`;

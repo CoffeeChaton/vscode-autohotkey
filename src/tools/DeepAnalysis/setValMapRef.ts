@@ -11,19 +11,28 @@ function getValRegMap(valMap: TValMap): Map<string, RegExp> {
 
     for (const [valName] of valMap) {
         // eslint-disable-next-line security/detect-non-literal-regexp
-        regMap.set(valName, new RegExp(`(?<!\\.|\`|%)\\b(${valName})\\b(?!%)`, 'ig'));
+        regMap.set(valName, new RegExp(`(?<![.\`%])\\b(${valName})\\b(?!%)`, 'ig'));
     }
     return regMap;
 }
+type TNeed = {
+    valMap: TValMap;
+    valMap2: TValMap;
+    o: RegExpMatchArray;
+    valName: string;
+    uri: vscode.Uri;
+    line: number;
+};
 
-// eslint-disable-next-line max-params
 function setValUse(
-    valMap: TValMap,
-    valMap2: TValMap,
-    o: RegExpMatchArray,
-    valName: string,
-    uri: vscode.Uri,
-    line: number,
+    {
+        valMap,
+        valMap2,
+        o,
+        valName,
+        uri,
+        line,
+    }: TNeed,
 ): TValObj | null {
     // o === ['bgColor', 'bgColor', index: 18, input: '        Case ___: bgColor := 0xFF0000
     // ', groups: undefined]
@@ -45,14 +54,14 @@ function setValUse(
         ahkValType,
     } = defVal;
 
-    function setRefLoc(ch: number): vscode.Location[] {
+    const refLoc: vscode.Location[] = ((): vscode.Location[] => {
         const useVal = valMap2.get(valName.toUpperCase());
         const oldRefLocS: vscode.Location[] = useVal?.refLoc || [];
         const newRefLoc: vscode.Location = new vscode.Location(
             uri,
             new vscode.Range(
-                new vscode.Position(line, ch),
-                new vscode.Position(line, ch + valName.length),
+                new vscode.Position(line, character),
+                new vscode.Position(line, character + valName.length),
             ),
         );
 
@@ -62,17 +71,15 @@ function setValUse(
             }
         }
         return [...oldRefLocS, newRefLoc];
-    }
+    })();
 
-    const refLoc: vscode.Location[] = setRefLoc(character);
-    const value: TValObj = {
+    return {
         keyRawName,
         defLoc,
         commentList,
         refLoc,
         ahkValType,
     };
-    return value;
 }
 
 export function setValMapRef(
@@ -92,7 +99,14 @@ export function setValMapRef(
         regMap.forEach((reg, valName) => {
             const matches = lStr.matchAll(reg);
             for (const o of matches) {
-                const newVal: TValObj | null = setValUse(valMap, valMap2, o, valName.toUpperCase(), uri, line);
+                const newVal: TValObj | null = setValUse({
+                    valMap,
+                    valMap2,
+                    o,
+                    valName: valName.toUpperCase(),
+                    uri,
+                    line,
+                });
                 if (newVal) {
                     valMap2.set(valName.toUpperCase(), newVal);
                 }

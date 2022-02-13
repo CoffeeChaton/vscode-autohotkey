@@ -22,13 +22,15 @@ export function DeepAnalysisToCompletionItem(
 
     const { argMap, valMap } = ed;
     const need: vscode.CompletionItem[] = [];
-    argMap.forEach((v, label) => {
-        const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Variable);
-        item.insertText = label;
-        item.detail = `arg of this ${kindStr} func (neko-help-DeepAnalysis)`;
+    argMap.forEach((v) => {
+        // const item = new vscode.CompletionItem(`(^・ω・^ ) ${v.keyRawName}`);
+        const item = new vscode.CompletionItem(v.keyRawName);
+        item.kind = vscode.CompletionItemKind.Variable;
+        item.insertText = v.keyRawName;
+        item.detail = `arg of ${kindStr} (neko-help-DeepAnalysis)`;
 
         const md: vscode.MarkdownString = new vscode.MarkdownString('', true);
-        md.appendCodeblock(`arg of this func (${ahkSymbol.name}()) `);
+        md.appendCodeblock(`arg of ${ahkSymbol.name}()`);
         md.appendMarkdown(v.commentList.join('\n'));
         v.refLoc.forEach((e) => {
             md.appendCodeblock(`ref Pos Ln ${e.range.start.line + 1}, Col ${e.range.start.character + 1}`);
@@ -37,9 +39,9 @@ export function DeepAnalysisToCompletionItem(
         item.documentation = md;
         need.push(item);
     });
-    valMap.forEach((v, label) => {
-        const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Variable);
-        item.insertText = label;
+    valMap.forEach((v) => {
+        const item = new vscode.CompletionItem(v.keyRawName, vscode.CompletionItemKind.Variable);
+        item.insertText = v.keyRawName;
         item.detail = `val this ${kindStr} (neko-help-DeepAnalysis)`;
         item.documentation = new vscode.MarkdownString(v.commentList.join('\n'));
         need.push(item);

@@ -8,13 +8,15 @@ import { getFormatConfig } from '../../configUI';
 import {
     DeepReadonly,
     DetailType,
+    TFormatChannel,
     TTokenStream,
     VERSION,
 } from '../../globalEnum';
 import { callDiff, DiffType } from '../../tools/Diff';
 import { inLTrimRange } from '../../tools/inLTrimRange';
 import { Pretreatment } from '../../tools/Pretreatment';
-import { lineReplace } from '../FormatRange/RangeFormatProvider';
+import { lineReplace } from './fmtReplace';
+import { fmtReplaceWarn } from './fmtReplaceWarn';
 import { getDeepKeywords } from './getDeepKeywords';
 import { getDeepLTrim } from './getDeepLTrim';
 import { isHotStr, isLabel } from './isLabelOrHotStr';
@@ -42,19 +44,23 @@ function isReturn(tagDeep: number, deep: number, textFix: string): boolean {
     return (tagDeep === deep && (/^\s*return\s*$/i).test(textFix));
 }
 
-type WarnUseType = DeepReadonly<{
-    DocStrMap: TTokenStream;
-    textFix: string;
-    line: number;
-    occ: number;
-    deep: number;
-    labDeep: 0 | 1;
-    inLTrim: 0 | 1 | 2;
-    textRaw: string;
-    switchRangeArray: vscode.Range[];
-    document: vscode.TextDocument;
-    options: vscode.FormattingOptions;
-}>;
+type WarnUseType =
+    & DeepReadonly<{
+        DocStrMap: TTokenStream;
+        textFix: string;
+        line: number;
+        occ: number;
+        deep: number;
+        labDeep: 0 | 1;
+        inLTrim: 0 | 1 | 2;
+        textRaw: string;
+        switchRangeArray: vscode.Range[];
+        document: vscode.TextDocument;
+        options: vscode.FormattingOptions;
+    }>
+    & {
+        hasDiff: [boolean];
+    };
 
 // eslint-disable-next-line camelcase
 function fn_Warn_thisLineText_WARN({
@@ -69,16 +75,21 @@ function fn_Warn_thisLineText_WARN({
     switchRangeArray,
     document,
     options,
+    hasDiff,
 }: WarnUseType): vscode.TextEdit {
     const wrap = (text: string): vscode.TextEdit => {
         const CommentBlock = DocStrMap[line].detail.includes(DetailType.inComment);
         const newText = getFormatConfig()
             ? lineReplace(text, textFix, CommentBlock, inLTrim)
             : text;
+        // eslint-disable-next-line no-param-reassign
+        if (newText !== text) hasDiff[0] = true;
+
         const endCharacter = Math.max(newText.length, textRaw.length);
         const range = new vscode.Range(line, 0, line, endCharacter);
         return new vscode.TextEdit(range, newText);
     };
+
     if (
         inLTrim === 1
         && !(/^\s\(/i).test(textRaw)
@@ -112,11 +123,23 @@ function fn_Warn_thisLineText_WARN({
     return wrap(`${DeepStr}${WarnLineBodyWarn}`);
 }
 
+type TFmtArgs = {
+    document: vscode.TextDocument;
+    options: vscode.FormattingOptions;
+    token: vscode.CancellationToken;
+    fmtStart: number;
+    fmtEnd: number;
+    from: TFormatChannel;
+};
+
 export function FormatCore(
-    document: vscode.TextDocument,
-    options: vscode.FormattingOptions,
-    token: vscode.CancellationToken,
-    diff: boolean,
+    {
+        document,
+        options,
+        fmtStart,
+        fmtEnd,
+        from,
+    }: TFmtArgs,
 ): vscode.ProviderResult<vscode.TextEdit[]> {
     const timeStart = Date.now();
     const AllDoc = document.getText();
@@ -130,6 +153,7 @@ export function FormatCore(
     const switchRangeArray: vscode.Range[] = [];
     const newTextList: vscode.TextEdit[] = [];
     const lineMax = document.lineCount;
+    const hasDiff: [boolean] = [false];
     for (let line = 0; line < lineMax; line++) {
         const { textRaw } = DocStrMap[line];
         inLTrim = inLTrimRange(textRaw, inLTrim);
@@ -147,19 +171,24 @@ export function FormatCore(
             labDeep = 0;
         }
 
-        newTextList.push(fn_Warn_thisLineText_WARN({
-            DocStrMap,
-            textFix,
-            line,
-            occ,
-            deep,
-            labDeep,
-            inLTrim,
-            textRaw,
-            switchRangeArray,
-            document,
-            options,
-        }));
+        if (line >= fmtStart && line <= fmtEnd) {
+            newTextList.push(fn_Warn_thisLineText_WARN({
+                DocStrMap,
+                textFix,
+                line,
+                occ,
+                deep,
+                labDeep,
+                inLTrim,
+                textRaw,
+                switchRangeArray,
+                document,
+                options,
+                hasDiff,
+            }));
+        } else if (line > fmtEnd) {
+            break;
+        }
 
         const switchRange = getSwitchRange(document, DocStrMap, textFix, line, lineMax);
         if (switchRange) switchRangeArray.push(switchRange);
@@ -179,14 +208,19 @@ export function FormatCore(
             ? occ
             : getDeepKeywords(textFix, occ); // TODO fmt_a1
     }
+
     console.log(`Format Document is Beta ${VERSION.format}, ${Date.now() - timeStart}ms`);
-    if (diff) {
-        const diffVar: DiffType = {
-            leftText: AllDoc,
-            right: document.uri,
-            fsPath: document.uri.fsPath,
-        };
-        setTimeout(callDiff, 100, diffVar);
+
+    if (getFormatConfig()) {
+        fmtReplaceWarn(timeStart, from);
+        if (hasDiff[0]) {
+            const diffVar: DiffType = {
+                leftText: AllDoc,
+                right: document.uri,
+                fsPath: document.uri.fsPath,
+            };
+            setTimeout(callDiff, 100, diffVar);
+        }
     }
 
     return newTextList;
@@ -198,7 +232,14 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         options: vscode.FormattingOptions,
         token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.TextEdit[]> {
-        return FormatCore(document, options, token, true);
+        return FormatCore({
+            document,
+            options,
+            fmtStart: 0,
+            fmtEnd: document.lineCount - 1,
+            token,
+            from: TFormatChannel.byFormatAllFile,
+        });
     }
 }
 /*

@@ -99,7 +99,7 @@ async function ahkDef(
         return [new vscode.Location(Uri, AhkSymbol.range)];
     };
 
-    const Def = searchDef();
+    const Def = await searchDef();
     if (Def !== false) return Def;
 
     const Using = searchUsing();

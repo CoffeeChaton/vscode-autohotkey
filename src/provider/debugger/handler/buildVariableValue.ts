@@ -69,6 +69,5 @@ export function buildVariableValue(property: TDbgpProperty, attr: TDbgpPropertyA
             break;
     }
 
-    const classname = attr.classname ?? 'attr?.classname';
-    return classname;
+    return attr.classname ?? 'attr?.classname';
 }

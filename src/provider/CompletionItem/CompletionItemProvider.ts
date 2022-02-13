@@ -99,7 +99,7 @@ async function wrapListAllFuncClass(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): Promise<vscode.CompletionItem[]> {
-    const Range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
+    const Range = document.getWordRangeAtPosition(position, /(?<![.`%])\b\w+\b(?!%)/);
     if (Range === undefined) return []; // exp: . / []
 
     if (Range.start.character - 1 > -1) {
@@ -114,7 +114,8 @@ async function wrapListAllFuncClass(
             ? listAllFuncClass(document, position, Range)
             : []; // exp className.d    -->  newStr === "."
     }
-    return listAllFuncClass(document, position, Range); // at line start
+    const ed2 = await listAllFuncClass(document, position, Range); // at line start
+    return ed2;
 }
 
 // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions

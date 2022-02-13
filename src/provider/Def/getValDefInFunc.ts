@@ -1,7 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,5] }] */
 import * as vscode from 'vscode';
 import { TAhkSymbol, VERSION } from '../../globalEnum';
-
 import { enumErr } from '../../tools/enumErr';
 import { kindPick } from '../../tools/Func/kindPick';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
@@ -109,6 +108,6 @@ export function getValDefInFunc(
     if (!ahkSymbol) return null;
     if (!kindPick(ahkSymbol.kind)) return null;
 
-    const ed = match(ahkSymbol, document, position, wordUp, listAllUsing);
+    const ed: null | vscode.Location[] = match(ahkSymbol, document, position, wordUp, listAllUsing);
     return ed;
 }

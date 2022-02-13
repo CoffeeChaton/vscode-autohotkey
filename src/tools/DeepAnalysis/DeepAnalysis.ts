@@ -1,5 +1,5 @@
 /* eslint-disable security/detect-unsafe-regex */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,10,60,200,1000] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,10,60,1000,200] }] */
 import * as vscode from 'vscode';
 import { getGlobalValDef } from '../../core/getGlobalValDef';
 import {
@@ -8,20 +8,18 @@ import {
     EValType,
     TAhkSymbol,
     TAhkValType,
-    TArgList,
+    TArgMap,
     TRunValType2,
     TTokenStream,
     TValMap,
     TValObj,
 } from '../../globalEnum';
 import { fnModeToValType } from '../Func/fnModeToValType';
-
 import { getFnModeWM } from '../Func/getFnMode';
 import { kindPick } from '../Func/kindPick';
 import { getCommentOfLine } from '../getCommentOfLine';
 import { Pretreatment } from '../Pretreatment';
 import { ahkValRegex } from '../regexTools';
-
 import { ClassWm } from '../wm';
 import { setArgMap } from './fnArgs';
 import { setValMapRef } from './setValMapRef';
@@ -49,7 +47,7 @@ type TGetValue = {
     lStr: string;
     lineType: TAhkValType;
     uri: vscode.Uri;
-    argList: TArgList;
+    argList: TArgMap;
 };
 
 function getValue({
@@ -102,15 +100,17 @@ function getValue({
     };
 }
 
-function setValMapDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgList): TValMap {
+function setValMapDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgMap): TValMap {
     const fnMode = getFnModeWM(ahkSymbol, DocStrMap);
     const valMap: TValMap = new Map<string, TValObj>();
 
     const startLine = ahkSymbol.selectionRange.end.line;
     for (const { lStr, textRaw, line } of DocStrMap) {
-        if (line <= startLine) continue;
+        if (line <= startLine) continue; // in arg Range
+        if (lStr.trim().length < 2) continue; // a=b need length >=3
+
         const lineType: TAhkValType = getLineType(lStr, fnMode);
-        for (const v of lStr.matchAll(/(?<!\.|`|%)\b(\w\w*)\b\s*:?=/g)) {
+        for (const v of lStr.matchAll(/(?<![.`%])\b(\w+)\b\s*:?=/g)) {
             const character = v.index;
             if (character === undefined) continue;
             const keyRawName = v[1];
@@ -132,7 +132,7 @@ function setValMapDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenS
     return valMap;
 }
 
-function setValList(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgList): TValMap {
+function setValList(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgMap): TValMap {
     const valMap: TValMap = setValMapDef(uri, ahkSymbol, DocStrMap, argList);
     const valMap2: TValMap = setValMapRef(uri, ahkSymbol, DocStrMap, valMap);
     return valMap2;
@@ -150,11 +150,11 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
         document.getText(ahkSymbol.range).split('\n'),
         ahkSymbol.range.start.line,
     );
-    const argList: TArgList = setArgMap(document.uri, ahkSymbol, DocStrMap);
-    const valList = setValList(document.uri, ahkSymbol, DocStrMap, argList);
+    const argMap: TArgMap = setArgMap(document.uri, ahkSymbol, DocStrMap);
+    const valMap: TValMap = setValList(document.uri, ahkSymbol, DocStrMap, argMap);
     const v: DeepAnalysisResult = {
-        argMap: argList,
-        valMap: valList,
+        argMap,
+        valMap,
     };
     return w.setWm(ahkSymbol, v);
 }

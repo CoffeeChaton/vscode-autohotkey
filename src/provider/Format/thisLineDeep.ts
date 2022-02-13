@@ -11,7 +11,7 @@ export function thisLineDeep(textFix: string): 1 | 0 {
         /^:[^:]/, // ? : Ternary operation -> ':' // if (hasDoubleSemicolon === true)  will not goto this line.
         /^\+[^+]/, // +
         /^-[^-]/, // -
-        /^\*[^/]/, // /^*/  but not */
+        /^\*[^/]/, // /^*  but not */
         /^\//, // /
         /^and\b/i,
         /^or\b/i,

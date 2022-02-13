@@ -13,7 +13,7 @@ import { DeepAnalysisHover } from './Hover/DeepAnalysisHover';
 const wm = new ClassWm<TAhkSymbol, vscode.Hover>(10 * 60 * 1000, 'HoverFunc', 60);
 
 async function HoverFunc(wordUp: string, textRaw: string): Promise<null | vscode.Hover> {
-    const isFunc = new RegExp(`(?<!\\.|%|\`)(${wordUp})\\(`, 'i'); // not search class.Method()
+    const isFunc = new RegExp(`(?<![.%\`])(${wordUp})\\(`, 'i'); // not search class.Method()
     if (!isFunc.test(textRaw)) return null;
 
     const ahkSymbol = tryGetSymbol(wordUp, EMode.ahkFunc);
@@ -35,7 +35,7 @@ export class HoverProvider implements vscode.HoverProvider {
         position: vscode.Position,
         token: vscode.CancellationToken,
     ): Promise<vscode.Hover | null> {
-        const range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
+        const range = document.getWordRangeAtPosition(position, /(?<![.`%])\b\w+\b(?!%)/);
         if (!range) {
             // const range2 = document.getWordRangeAtPosition(position, /(?:%)\b\w\w*\b(?:%)/);
             // const word2 = document.getText(range2);

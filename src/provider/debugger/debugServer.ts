@@ -64,7 +64,7 @@ export class DebugServer extends EventEmitter {
     }
 
     public process(data: string): void {
-        const data1 = data.substr(data.indexOf('<?xml'));
+        const data1 = data.substring(data.indexOf('<?xml'));
         const data2 = (data1.indexOf(Enum.HEADER) === -1)
             ? Enum.HEADER + data1
             : data1;

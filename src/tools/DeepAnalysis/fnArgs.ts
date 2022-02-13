@@ -1,11 +1,10 @@
 import * as vscode from 'vscode';
 import {
     TAhkSymbol,
-    TArgList as TArgMap,
     TArgListVal,
+    TArgMap,
     TTokenStream,
 } from '../../globalEnum';
-
 import { getCommentOfLine } from '../getCommentOfLine';
 import { ahkValRegex } from '../regexTools';
 import { replacerSpace } from '../removeSpecialChar';
@@ -17,7 +16,7 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
     for (const { lStr, textRaw, line } of DocStrMap) {
         if (line > endLine) break;
         let lStrFix = lStr;
-        if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w\w*\(/, '');
+        if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w+\(/, '');
         if (endLine === line) lStrFix = lStrFix.replace(/\)\s*\{?\s*$/, '');
 
         const e5 = lStrFix
@@ -26,16 +25,16 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
             .map((v) => v.trim());
 
         for (const argName of e5) {
-            const isByRef = (/^ByRef\s\s*/i).test(argName);
+            const isByRef = (/^ByRef\s+/i).test(argName);
             const key0 = isByRef
-                ? argName.replace(/^ByRef\s\s*/i, '')
+                ? argName.replace(/^ByRef\s+/i, '')
                 : argName;
             if (key0 === '') continue;
-            const isVariadic = (/^\w\w*\*$/).test(argName); // https://ahkde.github.io/docs/Functions.htm#Variadic
+            const isVariadic = (/^\w+\*$/).test(argName); // https://ahkde.github.io/docs/Functions.htm#Variadic
             const keyRawName = isVariadic
                 ? key0.replace(/\*$/, '')
                 : key0;
-            if (!(/^\w\w*$/).test(keyRawName)) {
+            if (!(/^\w+$/).test(keyRawName)) {
                 const errCode = '--99--37--21--';
                 const errMsg = 'DeepAnalysis NekoHelp Unknown Syntax of ';
                 const message = `${errMsg} ${ahkSymbol.name} args Error ${keyRawName}${errCode}`;

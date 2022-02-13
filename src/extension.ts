@@ -3,7 +3,6 @@ import { statusBarClick } from './command/Command';
 // import { CompletionComma } from './provider/CompletionItemProvider';
 import { configChangEvent } from './configUI';
 import { Detecter } from './core/Detecter';
-import { loadPromise } from './onig';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
@@ -16,9 +15,8 @@ import { ReferenceProvider } from './provider/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
 import { SymBolProvider } from './provider/SymbolProvider';
 
-export async function activate(context: vscode.ExtensionContext): Promise<void> {
+export function activate(context: vscode.ExtensionContext): void {
     const language: vscode.DocumentSelector = { language: 'ahk' };
-    await loadPromise;
     context.subscriptions.push(
         vscode.languages.registerHoverProvider(language, new HoverProvider()),
         vscode.languages.registerCompletionItemProvider(language, new CompletionItemProvider(), '', '.', '{'),

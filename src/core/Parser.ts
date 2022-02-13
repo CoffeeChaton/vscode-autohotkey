@@ -19,16 +19,16 @@ import { setGlobalVar } from './setGlobalVar';
 
 // // import * as Oniguruma from 'vscode-oniguruma';
 function getReturnName(textRaw: string): string | null {
-    const ReturnMatch = (/\breturn\b\s\s*(.+)/i).exec(textRaw);
+    const ReturnMatch = (/\breturn\b\s+(.+)/i).exec(textRaw);
     if (ReturnMatch === null) return null;
 
     let name = ReturnMatch[1];
     if (ReturnMatch) {
-        const Func = (/^\s*(\w\w*)\(/).exec(name);
+        const Func = (/^\s*(\w+)\(/).exec(name);
         if (Func) {
             name = `${Func[1]}(...)`;
         } else if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
-            const obj = (/^\s*({\s*\w\w*\s*:)/).exec(name);
+            const obj = (/^\s*({\s*\w+\s*:)/).exec(name);
             if (obj) name = `Obj ${obj[1]}`;
         }
 
@@ -39,7 +39,7 @@ function getReturnName(textRaw: string): string | null {
 
 export function getReturnByLine(FuncInput: FuncInputType): false | TAhkSymbol {
     if (!(/\breturn\b/i).test(FuncInput.lStr)) return false;
-    if (!(/\sreturn\s\s*\S/i).test(FuncInput.lStr)) return false;
+    if (!(/\sreturn\s+\S/i).test(FuncInput.lStr)) return false;
     const { line } = FuncInput;
     const { textRaw } = FuncInput.DocStrMap[FuncInput.line];
     const name = getReturnName(textRaw);
@@ -96,7 +96,7 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             detail: 'directive',
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
-                const e = (/^\s*(#\w\w*)/).exec(str);
+                const e = (/^\s*(#\w+)/).exec(str);
                 return e
                     ? e[1]
                     : null;
@@ -142,7 +142,7 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             detail: 'throw',
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
-                const e = (/^\s*\bthrow\b[\s,][\s,]*(.+)/i).exec(str);
+                const e = (/^\s*\bthrow\b[\s,]+(.+)/i).exec(str);
                 return e
                     ? `throw ${e[1]}`
                     : null;
@@ -156,14 +156,14 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             detail: 'label',
             kind: vscode.SymbolKind.Package,
             getName(str: string): string | null {
-                const e = (/^\s*(\w\w*:)\s*$/).exec(str);
+                const e = (/^\s*(\w+:)\s*$/).exec(str);
                 return e
                     ? e[1]
                     : null;
             },
 
             test(str: string): boolean {
-                return (/^\s*\w\w*:\s*$/).test(str);
+                return (/^\s*\w+:\s*$/).test(str);
             },
         },
         {
@@ -171,7 +171,7 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             detail: 'HotString',
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
-                const e = (/^\s*(:[^:]*?:[^:][^:]*::)/).exec(str);
+                const e = (/^\s*(:[^:]*?:[^:]+::)/).exec(str);
                 return e
                     ? e[1]
                     : null;
@@ -179,14 +179,14 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
 
             test(str: string): boolean {
                 if (str.indexOf('::') === -1) return false;
-                return (/^\s*:[^:]*?:[^:][^:]*::/).test(str);
+                return (/^\s*:[^:]*?:[^:]+::/).test(str);
             },
         },
         {
             detail: 'HotKeys',
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
-                const e = (/^\s*([^:][^:]*?::)/).exec(str);
+                const e = (/^\s*([^:]+::)/).exec(str);
                 return e
                     ? e[1]
                     : null;
@@ -194,7 +194,7 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
 
             test(str: string): boolean {
                 if (str.indexOf('::') === -1) return false;
-                return (/^\s*[^:][^:]*?::/).test(str);
+                return (/^\s*[^:]+::/).test(str);
             },
         },
     ];
@@ -297,7 +297,7 @@ export const ParserBlock = {
             lStr,
         } = FuncInput;
 
-        if (lStr === '' || lStr.indexOf('(') === -1) return false;
+        if (lStr.length < 1 || lStr.indexOf('(') === -1) return false;
         const isFunc = getFuncDef(DocStrMap, line);
         if (isFunc === false) return false;
         const { name, selectionRange } = isFunc;
@@ -338,7 +338,7 @@ export const ParserBlock = {
     getClass(FuncInput: FuncInputType): false | TAhkSymbol {
         if (!(/^\s*\bclass\b/i).test(FuncInput.lStr)) return false;
 
-        const classExec = (/^\s*\bclass\b\s\s*(\w\w*)/i).exec(FuncInput.lStr);
+        const classExec = (/^\s*\bclass\b\s+(\w+)/i).exec(FuncInput.lStr);
         if (classExec === null) return false;
 
         const {
@@ -405,7 +405,7 @@ export const ParserBlock = {
 
         const getName = (): string => {
             if (line - 1 >= 0) {
-                const nameKind: string[] = (/^\s*(\w\w*)/)
+                const nameKind: string[] = (/^\s*(\w+)/)
                     .exec(FuncInput.DocStrMap[FuncInput.line - 1].textRaw) ?? [''];
                 return nameKind[0].trim();
             }

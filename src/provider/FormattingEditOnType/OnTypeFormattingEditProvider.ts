@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { TFormatChannel } from '../../globalEnum';
 import { FormatCore } from '../Format/FormatProvider';
 
 async function chIsNextLine(
@@ -7,7 +8,14 @@ async function chIsNextLine(
     options: vscode.FormattingOptions,
     token: vscode.CancellationToken,
 ): Promise<vscode.TextEdit[]> {
-    const array = await FormatCore(document, options, token, false);
+    const array = await FormatCore({
+        document,
+        options,
+        token,
+        fmtStart: 0,
+        fmtEnd: position.line - 1,
+        from: TFormatChannel.byFormatOnType,
+    });
     if (!array) return [];
 
     return [array[position.line - 1]];

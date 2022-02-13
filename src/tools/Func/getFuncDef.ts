@@ -1,6 +1,5 @@
 /* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
-import { OnigScanner, OnigString } from 'vscode-oniguruma';
 import { TTokenStream } from '../../globalEnum';
 
 export type FuncDefData = {
@@ -8,7 +7,13 @@ export type FuncDefData = {
     selectionRange: vscode.Range;
 };
 
-type FuncTailType = { DocStrMap: TTokenStream; searchText: string; name: string; searchLine: number; defLine: number };
+type FuncTailType = {
+    DocStrMap: TTokenStream;
+    searchText: string;
+    name: string;
+    searchLine: number;
+    defLine: number;
+};
 
 function getSelectionRange(DocStrMap: TTokenStream, defLine: number, searchLine: number): vscode.Range {
     // const argPos = Math.max(DocStrMap[defLine].lStr.indexOf('('), 0);
@@ -53,20 +58,8 @@ function getFuncTail({
 export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | FuncDefData {
     if (defLine + 1 === DocStrMap.length) return false;
     const textFix = DocStrMap[defLine].lStr;
-    // if ((/^\s*\b(?:if|while)\b/i).test(textFix)) return false;
 
-    if (textFix.indexOf('0Oネコ猫貓고양이 (') > -1) { // test onig
-        const scanner = new OnigScanner(['^\\s*(\\w+)\\(']);
-        const str = new OnigString(DocStrMap[defLine].textRaw);
-
-        const ed = scanner.findNextMatchSync(str, 0);
-        if (ed) {
-            const { start } = ed.captureIndices[1];
-            console.log('🚀 ~ getFuncDef ~ ed start', start);
-        }
-    }
-
-    const fnHead = (/^\s*(\w\w*)\(/).exec(textFix); //  funcName(...
+    const fnHead = (/^\s*(\w+)\(/).exec(textFix); //  funcName(...
     if (fnHead === null) return false;
 
     const name = fnHead[1];
@@ -83,6 +76,7 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | Fu
 
     if (DocStrMap[defLine].lStr.includes(')')) return false; // fn_Name( ... ) ...  ,this is not ahk function
 
+    // I don't think the definition of the function will exceed 15 lines.
     const iMax = Math.min(defLine + 15, DocStrMap.length);
     for (let searchLine = defLine + 1; searchLine < iMax; searchLine++) {
         const searchText = DocStrMap[searchLine].lStr;

@@ -2,7 +2,7 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4] }] */
 import * as vscode from 'vscode';
 
-const fnTest = (chapter: string): boolean => chapter === '' || (/^\d\d*$/).test(chapter);
+const fnTest = (chapter: string): boolean => chapter === '' || (/^\d+$/).test(chapter);
 
 export function getObjChapterArr(document: vscode.TextDocument, position: vscode.Position): readonly string[] | null {
     /*

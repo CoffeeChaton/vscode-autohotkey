@@ -129,8 +129,8 @@
                 },
                 "AhkNekoHelp.format.textReplace": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "auto call textReplace & diff"
+                    "default": false,
+                    "description": "test options: call textReplace & diff"
                 },
                 "AhkNekoHelp.lint.funcSize": {
                     "type": "number",
@@ -235,17 +235,17 @@
         "@types/benchmark": "^2.1.1",
         "@types/glob": "^7.2.0",
         "@types/jest": "^27.4.0",
-        "@types/node": "^17.0.16",
+        "@types/node": "^17.0.17",
         "@types/temp": "^0.9.1",
         "@types/vscode": "^1.64.0",
         "@types/xml2js": "^0.4.9",
         "@typescript-eslint/eslint-plugin": "^5.11.0",
         "@typescript-eslint/parser": "^5.11.0",
         "@vscode/test-electron": "^2.1.2",
-        "dprint": "^0.22.0",
+        "dprint": "^0.22.2",
         "esbuild": "^0.14.21",
         "esbuild-copy-static-files": "^0.1.0",
-        "eslint": "^8.8.0",
+        "eslint": "^8.9.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-airbnb-typescript": "^16.1.0",
@@ -269,14 +269,14 @@
         "vscode-languageserver": "^7.0.0",
         "vscode-languageserver-protocol": "^3.16.0",
         "vscode-languageserver-textdocument": "^1.0.4",
-        "vscode-languageserver-types": "^3.16.0"
+        "vscode-languageserver-types": "^3.16.0",
+        "vscode-oniguruma": "^1.6.1"
     },
     "dependencies": {
         "@vscode/debugadapter": "^1.53.0",
         "@vscode/debugprotocol": "^1.53.0",
-        "get-port-please": "^2.2.0",
+        "get-port-please": "^2.3.0",
         "temp": "^0.9.4",
-        "vscode-oniguruma": "^1.6.1",
         "xml2js": "^0.4.23"
     }
 }

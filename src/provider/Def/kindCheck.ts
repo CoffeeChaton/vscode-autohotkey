@@ -13,16 +13,12 @@ import { EMode } from '../../globalEnum';
 //     Variable = 12,
 // }
 export function kindCheck(mode: EMode, kind: vscode.SymbolKind): boolean {
+    // dprint-ignore
     switch (mode) {
-        case 'Class':
-            return kind === 4;
-        case 'Method':
-            return kind === 5;
-        case 'Function':
-            return kind === 11;
-        case 'global':
-            return kind === 12;
-        default:
-            return false;
+        case 'Class': return kind === 4;
+        case 'Method': return kind === 5;
+        case 'Function': return kind === 11;
+        case 'global': return kind === 12;
+        default: return false;
     }
 }

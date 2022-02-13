@@ -45,6 +45,7 @@ const config = {
     sourcemap: true,
     watch: false,
     logLevel: 'info',
+    // minify: true, //
     // define:DEBUG=false
     plugins: [
         copyStaticFiles({

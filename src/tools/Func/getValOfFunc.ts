@@ -28,9 +28,9 @@ function getValAssignOfFunc(document: vscode.TextDocument, wordUp: string, ahkSy
         const { textRaw, lStr } = DocStrMap[linePos];
         if (
             lStr.indexOf(':=') === -1
-            && !(/^\s*static\s\s*\w/i).test(lStr)
-            && !(/^\s*global\s\s*\w/i).test(lStr)
-            && !(/^\s*local\s\s*\w/i).test(lStr)
+            && !(/^\s*static\s+\w/i).test(lStr)
+            && !(/^\s*global\s+\w/i).test(lStr)
+            && !(/^\s*local\s+\w/i).test(lStr)
         ) {
             continue;
         }
@@ -73,7 +73,7 @@ function getArgsOfFunc(document: vscode.TextDocument, wordUp: string, ahkSymbol:
         const { textRaw, lStr } = DocStrMap[linePos];
         const comment = getCommentOfLine({ lStr, textRaw }) ?? '';
         lStr
-            .replace(/^\s*\w\w*\(\s*/, '')
+            .replace(/^\s*\w+\(\s*/, '')
             .replace(/\)\s*$/, '')
             .trim()
             .split(',')

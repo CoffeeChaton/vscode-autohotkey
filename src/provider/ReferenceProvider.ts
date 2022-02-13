@@ -15,7 +15,7 @@ export class ReferenceProvider implements vscode.ReferenceProvider {
     ): Promise<vscode.Location[] | null> {
         if (isPosAtStr(document, position)) return null;
 
-        const range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
+        const range = document.getWordRangeAtPosition(position, /(?<![.`%])\b\w+\b(?!%)/);
         if (!range) return null;
         const wordUp = document.getText(range).toUpperCase();
         // TODO class.Method, this.classVar,GoSub, GoTo, ahk Built-in func

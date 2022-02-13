@@ -13,6 +13,7 @@ AutoHotKey language support for VS Code
   - [Diagnostic](#diagnostic)
   - [IntelliSense](#intellisense)
   - [ListAllFunctions](#listallfunctions)
+  - [Credits](#credits)
 
 ## FunctionSymbol
 
@@ -112,3 +113,10 @@ AutoHotKey language support for VS Code
 ## ListAllFunctions
 
 ![ListAllFunctions](image/ListAllFunctions.gif)
+
+## Credits
+
+Previous extensions:
+
+- [AutoHotkey Plus by cweijan](https://github.com/cweijan/vscode-autohotkey)
+- [AutoHotkey by stef-levesque](https://github.com/stef-levesque/vscode-autohotkey)

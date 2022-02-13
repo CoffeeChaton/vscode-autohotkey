@@ -3,7 +3,7 @@ export function fnObtainValueSet(value: string): {
     value: string;
     isVariable: boolean;
 } {
-    const exec = (/^(?:()|"(.*)"|(true|false)|([+-]?\d+)|([+-]?\d+\.[+-]?\d+)|([\w\d]+))$/si).exec(value);
+    const exec = (/^(?:"(.*)"|(true|false)|([+-]?\d+)|([+-]?\d+\.[+-]?\d+)|([\w\d]+))$/si).exec(value);
     if (!exec) throw new Error(`"${value}" is invalid value.--775--33-16--`);
 
     const [, blank, str, bool, int, float, varName] = exec;

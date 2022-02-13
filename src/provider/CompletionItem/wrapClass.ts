@@ -141,11 +141,11 @@ function valTrack(
     const reg = ahkValDefRegex(Head);
     const startLineBaseZero = stackRange.start.line;
     const DocStrMap = Pretreatment(document.getText(stackRange).split('\n'), startLineBaseZero);
-    const lineStart = stackRange.start.line + 0;
+    // const lineStart = stackRange.start.line + 0;
     const linePosMax = DocStrMap.length;
     const classNameList = new Set<string>(); // value name
     for (let linePos = 0; linePos < linePosMax; linePos++) {
-        const line = lineStart + linePos;
+        // const line = lineStart + linePos;
         const { lStr } = DocStrMap[linePos];
         const col = lStr.search(reg);
         if (col === -1) continue;

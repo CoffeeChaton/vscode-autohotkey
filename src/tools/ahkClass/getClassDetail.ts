@@ -1,5 +1,5 @@
 export function getClassDetail(lStr: string, colFix: number, name: string): string {
-    return lStr.substr(colFix + name.length, lStr.length)
+    return lStr.substring(colFix + name.length, lStr.length + colFix + name.length)
         .replace(/\bextends\b/i, '')
         .trim()
         .replace('{', '')

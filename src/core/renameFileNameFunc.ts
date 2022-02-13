@@ -6,7 +6,7 @@ import { Pretreatment } from '../tools/Pretreatment';
 export async function renameFn(oldUri: vscode.Uri, newUri: vscode.Uri, fsPathList: string[]): Promise<void> {
     const oldFileName = path.basename(oldUri.fsPath, '.ahk');
     const newFileName = path.basename(newUri.fsPath, '.ahk');
-    const RegexInclude = /^\s*#Include(?:Again)?\s\s*/i;
+    const RegexInclude = /^\s*#Include(?:Again)?\s+/i;
     const edit = new vscode.WorkspaceEdit();
     const uriList: vscode.Uri[] = [];
     for (const fsPath of fsPathList) {

@@ -18,7 +18,7 @@ function getIgnore(DocStrMap: TTokenStream, line: number, IgnoreLine: number): n
     // ;@ahk-ignore 30 line.
     // textRaw
     if (DocStrMap[line].textRaw.indexOf(EDiagBase.ignore) === -1) return IgnoreLine;
-    const ignoreExec = (/^\s*;@ahk-ignore\s\s*(\d\d*)\s/).exec(DocStrMap[line].textRaw);
+    const ignoreExec = (/^\s*;@ahk-ignore\s+(\d+)\s/).exec(DocStrMap[line].textRaw);
     if (ignoreExec === null) {
         // console.log('function getIgnore -> ignoreExec === null');
         // console.log(line, ' line');
@@ -41,10 +41,10 @@ function assign(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnosti
 }
 function getLoopErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnostic {
     const { lStr } = DocStrMap[line];
-    const exec = (/^\s*Loop\b[\s,][\s,]*(\w\w*)/i).exec(lStr);
+    const exec = (/^\s*Loop\b[\s,]+(\w+)/i).exec(lStr);
     if (exec === null) return 0;
     const SecondSection = exec[1];
-    if ((/^(?:\d\d*|Files|Parse|Read|Reg)$/i).test(SecondSection)) return 1;
+    if ((/^(?:\d+|Files|Parse|Read|Reg)$/i).test(SecondSection)) return 1;
 
     const position = Math.max(0, lStr.search(/\bloop\b/i)) + 4;
     const col = Math.max(0, lStr.indexOf(SecondSection, position));
@@ -73,7 +73,7 @@ function getDirectivesErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode
     if (!(/^\s*#/i).test(DocStrMap[line].lStr)) return 0;
 
     const { lStr } = DocStrMap[line];
-    const exec = (/^\s*#(\w\w*)/).exec(lStr);
+    const exec = (/^\s*#(\w+)/).exec(lStr);
     if (exec === null) return 0;
     const Directives = exec[1];
     const col = Math.max(0, lStr.indexOf(Directives));
@@ -113,9 +113,9 @@ function getCommandErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Di
     // TODO result: Readonly<MyDocSymbol[]>
     // TODO search Deprecated
     // if (h.indexOf(line) !== -1) return 1;
-    if (!(/^\s*\w\w*[\s,]/).test(DocStrMap[line].lStr)) return 0;
+    if (!(/^\s*\w+[\s,]/).test(DocStrMap[line].lStr)) return 0;
     const { lStr } = DocStrMap[line];
-    const exec = (/^\s*(\w\w*)[\s,]/).exec(lStr);
+    const exec = (/^\s*(\w+)[\s,]/).exec(lStr);
     if (exec === null) return 0;
     const commandHead = exec[1];
     if ((/^switch|case|if|while|else|return|Break|for|sleep$/i).test(commandHead)) return 1;

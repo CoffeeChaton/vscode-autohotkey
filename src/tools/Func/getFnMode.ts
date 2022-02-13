@@ -3,8 +3,6 @@ import { EFnMode, TAhkSymbol, TTokenStream } from '../../globalEnum';
 import { ClassWm } from '../wm';
 import { kindPick } from './kindPick';
 
-const w = new ClassWm<TAhkSymbol, EFnMode>(10 * 60 * 1000, 'getFnMode', 20000);
-
 // is https://www.autohotkey.com/docs/Functions.htm#Local
 function getFnMode(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
     const startLine = ahkSymbol.range.start.line;
@@ -19,6 +17,8 @@ function getFnMode(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
 
     return EFnMode.normal;
 }
+
+const w = new ClassWm<TAhkSymbol, EFnMode>(10 * 60 * 1000, 'getFnMode', 20000);
 
 export function getFnModeWM(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
     if (!kindPick(ahkSymbol.kind)) throw new Error(`kind Error of getFnModeWM of ${ahkSymbol.name}--35--11--66`);
