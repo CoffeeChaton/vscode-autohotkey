@@ -79,6 +79,7 @@ export const enum EDiagCode {
     code114 = 114,
     code201 = 201, // 200~299 is not expression // need use %
     code301 = 301, // 300~399 is func err
+    code501 = 501, // 501~599 Analysis Func or Method
     code700 = 700, // 700 is Command -> func
     // code701 = 701, // 701~799 is Command error
     code801 = 801, // 800~899 is Deprecated / Old Syntax
@@ -96,6 +97,7 @@ export const enum EDiagMsg {
     code114 = 'switch name not find',
     code201 = 'Count cannot be an expression, use %',
     code301 = 'function or Method is so big',
+    code501 = 'args is assigned but never used.',
     code700 = 'try to use function replace Command(obsolete code)',
     code801 = 'Old Syntax(obsolete code)',
     code802 = 'Old Syntax(obsolete code)',
@@ -112,6 +114,7 @@ export const enum EDiagFsPath {
     code114 = 'https://www.autohotkey.com/docs/commands/Switch.htm',
     code201 = 'https://www.autohotkey.com/docs/commands/Loop.htm',
     code301 = 'function or Method is so big',
+    code501 = 'args is assigned but never used.',
     code700 = 'https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
     code801 = 'https://www.autohotkey.com/docs/commands/LoopReg.htm#old',
     code802 = 'https://www.autohotkey.com/docs/commands/LoopFile.htm#old',

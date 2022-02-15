@@ -10,7 +10,6 @@ import {
     TAhkSymbol,
     TTokenStream,
 } from '../../globalEnum';
-
 import { getTreeErr } from './getTreeErr';
 import { setDiagnostic } from './setDiagnostic';
 
@@ -195,6 +194,7 @@ function getFuncErr(
     }
     return digS;
 }
+
 export function Diagnostic(
     DocStrMap: TTokenStream,
     result: Readonly<TAhkSymbol[]>,

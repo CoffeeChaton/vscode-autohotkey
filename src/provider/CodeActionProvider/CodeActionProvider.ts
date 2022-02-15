@@ -24,6 +24,7 @@ function getFsPath(diag: vscode.Diagnostic): EDiagFsPath | null {
         case EDiagCode.code114: return EDiagFsPath.code114;
         case EDiagCode.code201: return EDiagFsPath.code201;
         case EDiagCode.code301: return EDiagFsPath.code301;
+        case EDiagCode.code501: return EDiagFsPath.code501;
         case EDiagCode.code700: return EDiagFsPath.code700;
         case EDiagCode.code801: return EDiagFsPath.code801;
         case EDiagCode.code802: return EDiagFsPath.code802;

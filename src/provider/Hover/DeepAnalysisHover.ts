@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
 import { DeepAnalysisResult, EValType } from '../../globalEnum';
-import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import { enumErr } from '../../tools/enumErr';
-import { getFnOfPos } from '../../tools/getScopeOfPos';
 
 function getAhkTypeName(e: EValType): 'Static' | 'args' | 'global' | 'local' | 'normal' {
     // dprint-ignore
@@ -19,16 +17,9 @@ function getAhkTypeName(e: EValType): 'Static' | 'args' | 'global' | 'local' | '
  * @param word  word.toUpperCase()
  */
 export function DeepAnalysisHover(
-    document: vscode.TextDocument,
-    position: vscode.Position,
+    ed: DeepAnalysisResult,
     word: string,
 ): vscode.MarkdownString | null {
-    const ahkSymbol = getFnOfPos(document, position);
-    if (!ahkSymbol) return null;
-
-    const ed: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
-    if (!ed) return null;
-
     const arg = ed.argMap.get(word);
     if (arg) {
         const md = new vscode.MarkdownString('', true);

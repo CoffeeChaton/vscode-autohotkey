@@ -24,6 +24,7 @@ function setMsg(value: EDiagCode): EDiagMsg {
         case EDiagCode.code114: return EDiagMsg.code114;
         case EDiagCode.code201: return EDiagMsg.code201;
         case EDiagCode.code301: return EDiagMsg.code301;
+        case EDiagCode.code501: return EDiagMsg.code501;
         case EDiagCode.code700: return EDiagMsg.code700;
         case EDiagCode.code801: return EDiagMsg.code801;
         case EDiagCode.code802: return EDiagMsg.code802;
@@ -45,6 +46,7 @@ function setTargetRaw(value: EDiagCode): EDiagFsPath {
         case EDiagCode.code114: return EDiagFsPath.code114;
         case EDiagCode.code201: return EDiagFsPath.code201;
         case EDiagCode.code301: return EDiagFsPath.code301;
+        case EDiagCode.code501: return EDiagFsPath.code501;
         case EDiagCode.code700: return EDiagFsPath.code700;
         case EDiagCode.code801: return EDiagFsPath.code801;
         case EDiagCode.code802: return EDiagFsPath.code802;

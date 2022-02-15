@@ -1,6 +1,7 @@
 /* eslint-disable security/detect-unsafe-regex */
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,10,60,1000,200] }] */
 import * as vscode from 'vscode';
+import { Detecter } from '../../core/Detecter';
 import { getGlobalValDef } from '../../core/getGlobalValDef';
 import {
     DeepAnalysisResult,
@@ -146,15 +147,24 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
 
     const cache = w.getWm(ahkSymbol);
     if (cache) return cache;
+
+    const { uri } = document;
+    const diagS = [...Detecter.diagColl.get(uri) ?? []];
     const DocStrMap = Pretreatment(
         document.getText(ahkSymbol.range).split('\n'),
         ahkSymbol.range.start.line,
     );
-    const argMap: TArgMap = setArgMap(document.uri, ahkSymbol, DocStrMap);
-    const valMap: TValMap = setValList(document.uri, ahkSymbol, DocStrMap, argMap);
+    const [argMap, diagArgs] = setArgMap(uri, ahkSymbol, DocStrMap);
+
+    const valMap: TValMap = setValList(uri, ahkSymbol, DocStrMap, argMap);
     const v: DeepAnalysisResult = {
         argMap,
         valMap,
     };
+
+    console.log('🚀 ~ DeepAnalysis ~ ahkSymbol.name', ahkSymbol.name);
+
+    // Detecter.diagColl.set(uri, [...diagS, ...diagArgs]);
+
     return w.setWm(ahkSymbol, v);
 }
