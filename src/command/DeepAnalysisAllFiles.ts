@@ -1,12 +1,14 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
-import { TAhkSymbolList } from '../globalEnum';
+import { DeepAnalysisResult, TAhkSymbolList } from '../globalEnum';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 
 export async function DeepAnalysisAllFiles(): Promise<null> {
     const t1 = Date.now();
     const allFsPath = Detecter.getDocMapFile();
 
+    let size = 0;
+    const need: DeepAnalysisResult[] = [];
     for (const fsPath of allFsPath) {
         const AhkSymbolList: TAhkSymbolList | null = Detecter.getDocMap(fsPath);
         if (AhkSymbolList === null) continue;
@@ -15,11 +17,19 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
         // eslint-disable-next-line no-await-in-loop
         const document = await vscode.workspace.openTextDocument(Uri);
         for (const ahkSymbol of AhkSymbolList) {
-            DeepAnalysis(document, ahkSymbol);
+            const ed = DeepAnalysis(document, ahkSymbol);
+            if (ed === null) continue;
+
+            need.push(ed);
+            size += ed.argMap.size;
+            size += ed.valMap.size;
         }
     }
+
     const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
     OutputChannel.appendLine('Deep Analysis All Files');
+    OutputChannel.appendLine(`Deep Analysis : ${need.length} Symbol `);
+    OutputChannel.appendLine(`All Size is ${size}`);
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();
 
