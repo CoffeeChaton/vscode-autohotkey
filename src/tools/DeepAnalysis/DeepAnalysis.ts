@@ -162,8 +162,6 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
         valMap,
     };
 
-    console.log('🚀 ~ DeepAnalysis ~ ahkSymbol.name', ahkSymbol.name);
-
     // Detecter.diagColl.set(uri, [...diagS, ...diagArgs]);
 
     return w.setWm(ahkSymbol, v);

@@ -21,12 +21,12 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
         if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w+\(/, '');
         if (endLine === line) lStrFix = lStrFix.replace(/\)\s*\{?\s*$/, '');
 
-        const e5 = lStrFix
-            .replace(/:?=\s*[_\d.]+/g, replacerSpace)
+        const strList: string[] = lStrFix
+            .replace(/:?=\s*[-+.\w]+/g, replacerSpace) // Test 0x00ffffff  , -0.5 , 0.8
             .split(',')
             .map((v) => v.trim());
 
-        for (const argName of e5) {
+        for (const argName of strList) {
             const isByRef = (/^ByRef\s+/i).test(argName);
             const key0 = isByRef
                 ? argName.replace(/^ByRef\s+/i, '')
@@ -39,7 +39,8 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
             if (!(/^\w+$/).test(keyRawName)) {
                 const errCode = '--99--37--21--';
                 const errMsg = 'DeepAnalysis NekoHelp Unknown Syntax of ';
-                const message = `${errMsg} ${ahkSymbol.name} args Error ${keyRawName}${errCode}`;
+                const errLoc = `${uri.fsPath} line : ${line + 1}`;
+                const message = `${errMsg} ${ahkSymbol.name} args Error ${keyRawName}${errCode}${errLoc}`;
                 console.log('.forEach ~ message', message);
                 vscode.window.showInformationMessage(message);
                 throw new Error(message);

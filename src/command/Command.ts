@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { DeepAnalysisAllFiles } from './DeepAnalysisAllFiles';
 import { DevLoopOfClearOutlineCache } from './DevMode';
 import { ListAllFunc, ListAllFuncSort } from './ListAllFunc';
 import { ListAllInclude } from './ListAllInclude';
@@ -24,6 +25,7 @@ export async function statusBarClick(): Promise<void> {
         { label: '4 -> list all Function() ; link', fn: (): null => ListAllFunc(true) },
         { label: '5 -> list all Function() sort a -> z', fn: (): null => ListAllFuncSort(false) },
         { label: '6 -> list all Function() sort z -> a', fn: (): null => ListAllFuncSort(true) },
+        { label: '7 -> DeepAnalysis All File', fn: DeepAnalysisAllFiles },
     ];
 
     const pick = await vscode.window.showQuickPick<TPick>(items);
