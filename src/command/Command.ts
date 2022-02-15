@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { DevLoopOfClearOutlineCache } from './DevMode';
 import { ListAllFunc, ListAllFuncSort } from './ListAllFunc';
 import { ListAllInclude } from './ListAllInclude';
-import { UpdateCacheOfNekoHelp } from './UpdateCacheOfNekoHelp';
+import { UpdateCacheAsync } from './UpdateCache';
 
 type TPick = {
     label: string;
@@ -13,7 +13,7 @@ type TPick = {
 };
 
 // eslint-disable-next-line require-await
-const fn0 = async (): Promise<null> => UpdateCacheOfNekoHelp(false);
+const fn0 = async (): Promise<null> => UpdateCacheAsync(true);
 
 export async function statusBarClick(): Promise<void> {
     const items: TPick[] = [

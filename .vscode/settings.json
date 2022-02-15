@@ -1,4 +1,25 @@
 {
+    "[javascript]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[rust]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[toml]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
     "cSpell.enableFiletypes": [
         "ahk",
         "c",
@@ -114,6 +135,7 @@
         "source.fixAll": true,
         "source.organizeImports": true
     },
+    "editor.defaultFormatter": "dprint.dprint",
     "eslint.enable": true,
     "eslint.options": {
         "extensions": [
@@ -124,26 +146,11 @@
     "eslint.probe": [
         "typescript"
     ],
-    "editor.defaultFormatter": "dprint.dprint",
-    "[javascript]": {
-        "editor.defaultFormatter": "dprint.dprint"
-    },
-    "[typescript]": {
-        "editor.defaultFormatter": "dprint.dprint"
-    },
-    "[json]": {
-        "editor.defaultFormatter": "dprint.dprint"
-    },
-    "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
-    "[markdown]": {
-        "editor.defaultFormatter": "dprint.dprint"
-    },
-    "[toml]": {
-        "editor.defaultFormatter": "dprint.dprint"
-    },
-    "[rust]": {
-        "editor.defaultFormatter": "dprint.dprint"
+    "files.associations": {
+        ".eslintrc.json": "jsonc",
+        "dprint.json": "jsonc",
+        "extensions.json": "jsonc",
+        "settings.json": "jsonc",
+        "tsconfig.json": "jsonc"
     }
 }

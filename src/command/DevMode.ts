@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { UpdateCacheOfNekoHelp } from './UpdateCacheOfNekoHelp';
+import { UpdateCacheAsync } from './UpdateCache';
 
 let c1: NodeJS.Timeout[] = [];
 
@@ -28,7 +28,7 @@ export async function DevLoopOfClearOutlineCache(): Promise<null> {
     const iMax = pick.maxTime;
     for (let i = 1; i <= iMax; i++) {
         c1.push(setTimeout(() => {
-            UpdateCacheOfNekoHelp(true);
+            UpdateCacheAsync(false);
         }, i * base));
     }
     return null;

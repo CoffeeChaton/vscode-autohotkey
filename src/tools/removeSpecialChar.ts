@@ -7,7 +7,7 @@ export function getSkipSign2(text: string): boolean {
 }
 
 export function getSkipSign(text: string): boolean {
-    return (/^\s*msgbox\b[\s,]/i).test(text)
+    return (/^\s*msgbox[\s,]/i).test(text)
         || (/^\s*(?:control)?send(?:Raw\b|\b.*{Raw})/i).test(text);
 }
 
@@ -21,13 +21,11 @@ export function getLStr(textRaw: string): string {
     if ((/^\s*;/).test(textRaw)) return '';
     const textFix = textRaw.replace(/`./g, '__').replace(/"[^"]*?"/g, fnReplacerStr);
     const i = textFix.indexOf(';');
+    // dprint-ignore
     switch (i) {
-        case -1:
-            return textFix;
-        case 0:
-            return '';
-        default:
-            return textFix.substring(0, i);
+        case -1: return textFix;
+        case 0: return '';
+        default: return textFix.substring(0, i);
     }
 }
 

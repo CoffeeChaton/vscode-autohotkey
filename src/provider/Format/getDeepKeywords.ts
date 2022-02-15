@@ -12,7 +12,7 @@ export function getDeepKeywords(textFix: string, oneCommandCode: number): number
         /^while\b/i,
         /^if(?:not)?exist\b/i,
         /^ifWin(?:not)?(?:active|exist)\b/i,
-        /^if(?:not)?instring\b/i,
+        /^if(?:not)?inString\b/i,
         /^ifmsgbox\b/i,
         /^try\b/i,
         /^catch\b/i,

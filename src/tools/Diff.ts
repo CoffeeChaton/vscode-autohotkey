@@ -6,11 +6,10 @@ import { EStr } from '../globalEnum';
 
 export type DiffType = {
     leftText: string;
-    right: string | vscode.Uri;
-    fsPath: string;
+    rightUri: vscode.Uri;
 };
 
-export async function callDiff({ leftText, right: rightInput, fsPath }: DiffType): Promise<void> {
+export async function callDiff({ leftText, rightUri }: DiffType): Promise<void> {
     temp.track();
     const affixes: temp.AffixOptions = {
         prefix: EStr.diff_name_prefix,
@@ -18,19 +17,12 @@ export async function callDiff({ leftText, right: rightInput, fsPath }: DiffType
         // dir?: string,
     };
     const left = temp.createWriteStream(affixes);
-    const right = temp.createWriteStream(affixes);
 
-    if (typeof left.path !== 'string' || typeof right.path !== 'string') return;
+    if (typeof left.path !== 'string') return;
 
     left.write(leftText);
-    if (typeof rightInput === 'string') {
-        right.write(rightInput);
-    }
-    const rightUri: vscode.Uri = typeof rightInput === 'string'
-        ? vscode.Uri.file(right.path)
-        : rightInput;
 
-    const title = `${path.basename(fsPath)} -> after Format`;
+    const title = `${path.basename(rightUri.fsPath)} -> after Format`;
     const options: vscode.TextDocumentShowOptions = {
         //   viewColumn: ViewColumn,
         preserveFocus: true,
@@ -46,6 +38,5 @@ export async function callDiff({ leftText, right: rightInput, fsPath }: DiffType
         options,
     );
 
-    right.end();
     left.end();
 }

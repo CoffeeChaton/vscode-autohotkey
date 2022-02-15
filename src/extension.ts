@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { statusBarClick } from './command/Command';
+import { UpdateCache } from './command/UpdateCache';
 // import { CompletionComma } from './provider/CompletionItemProvider';
 import { configChangEvent } from './configUI';
 import { Detecter } from './core/Detecter';
@@ -39,18 +40,14 @@ export function activate(context: vscode.ExtensionContext): void {
         }),
         vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
     );
-    const ahkRootPath = vscode.workspace.workspaceFolders;
-    if (ahkRootPath) Detecter.buildByPathAsync(true, ahkRootPath[0].uri.fsPath);
+    UpdateCache();
 }
 
 export function deactive(): void {
     Detecter.DocMap.clear();
     Detecter.diagColl.clear();
 }
-// if ([^\x00-\x7F] not in "" block ) auto warn
-// [^\x00-\x7F]
-// [^\x1F-\x7F]
-// 😋 ؄. 體 体 ㅀ の Ａ Ββ Αα ❤♡ ∈ ال‎ ß Œ
+
 /*
 https://github.com/think2011/vscode-i18n-core/blob/10abc4b356cfb34f64d17a7dbdb73e58f6bd6274/editor/Annotation.ts
 

@@ -3,11 +3,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
+import * as path from 'path';
 import * as vscode from 'vscode';
 import { getFormatConfig } from '../../configUI';
 import {
     DeepReadonly,
     DetailType,
+    EStr,
     TFormatChannel,
     TTokenStream,
     VERSION,
@@ -62,68 +64,84 @@ type WarnUseType =
         hasDiff: [boolean];
     };
 
-// eslint-disable-next-line camelcase
-function fn_Warn_thisLineText_WARN({
-    DocStrMap,
-    textFix,
-    line,
-    occ,
-    deep,
-    labDeep,
-    inLTrim,
-    textRaw,
-    switchRangeArray,
-    document,
-    options,
-    hasDiff,
-}: WarnUseType): vscode.TextEdit {
-    const wrap = (text: string): vscode.TextEdit => {
-        const CommentBlock = DocStrMap[line].detail.includes(DetailType.inComment);
-        const newText = getFormatConfig()
-            ? lineReplace(text, textFix, CommentBlock, inLTrim)
-            : text;
-        // eslint-disable-next-line no-param-reassign
-        if (newText !== text) hasDiff[0] = true;
+function wrap(args: WarnUseType, text: string): vscode.TextEdit {
+    const {
+        DocStrMap,
+        textFix,
+        line,
+        inLTrim,
+        textRaw,
+        hasDiff,
+    } = args;
 
-        const endCharacter = Math.max(newText.length, textRaw.length);
-        const range = new vscode.Range(line, 0, line, endCharacter);
-        return new vscode.TextEdit(range, newText);
-    };
+    const CommentBlock = DocStrMap[line].detail.includes(DetailType.inComment);
+    const newText = getFormatConfig()
+        ? lineReplace(text, textFix, CommentBlock, inLTrim)
+        : text;
+    // eslint-disable-next-line no-param-reassign
+    if (newText !== text) {
+        hasDiff[0] = true;
+    }
+
+    const endCharacter = Math.max(newText.length, textRaw.length);
+    const range = new vscode.Range(line, 0, line, endCharacter);
+    return new vscode.TextEdit(range, newText);
+}
+
+// eslint-disable-next-line camelcase
+function fn_Warn_thisLineText_WARN(args: WarnUseType): vscode.TextEdit {
+    const {
+        textFix,
+        line,
+        occ,
+        deep,
+        labDeep,
+        inLTrim,
+        textRaw,
+        switchRangeArray,
+        document,
+        options, // by self
+    } = args;
 
     if (
         inLTrim === 1
         && !(/^\s\(/i).test(textRaw)
     ) {
-        return wrap(document.lineAt(line).text);
+        return wrap(args, document.lineAt(line).text);
     }
 
     const WarnLineBodyWarn = document.lineAt(line).text.trimStart();
     if (WarnLineBodyWarn === '') {
-        return wrap(WarnLineBodyWarn);
+        return wrap(args, WarnLineBodyWarn);
     }
 
     const switchDeep = inSwitchBlock(textFix, line, switchRangeArray);
     const LineDeep: 0 | 1 = (occ !== 0)
         ? 0
         : thisLineDeep(textFix);
+
     const curlyBracketsChange: 0 | -1 = textFix.startsWith('}') || (occ > 0 && textFix.startsWith('{'))
         ? -1
         : 0;
+
     const deepFix = Math.max(
         0,
         deep + labDeep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(inLTrim, textRaw),
     );
+
     const TabSpaces = options.insertSpaces
         ? ' '
         : '\t';
+
     const TabSize = options.insertSpaces
         ? options.tabSize
         : 1;
+
     const DeepStr = TabSpaces.repeat(deepFix * TabSize);
-    return wrap(`${DeepStr}${WarnLineBodyWarn}`);
+    return wrap(args, `${DeepStr}${WarnLineBodyWarn}`);
 }
 
-type TFmtArgs = {
+type TFmtCoreArgs = {
     document: vscode.TextDocument;
     options: vscode.FormattingOptions;
     token: vscode.CancellationToken;
@@ -139,8 +157,13 @@ export function FormatCore(
         fmtStart,
         fmtEnd,
         from,
-    }: TFmtArgs,
+    }: TFmtCoreArgs,
 ): vscode.ProviderResult<vscode.TextEdit[]> {
+    if (path.basename(document.uri.fsPath, '.ahk').startsWith(EStr.diff_name_prefix)) {
+        const message = "Don't Format the TEMP file!";
+        vscode.window.showWarningMessage(message);
+        return [];
+    }
     const timeStart = Date.now();
     const AllDoc = document.getText();
     const DocStrMap = Pretreatment(AllDoc.split('\n'), 0);
@@ -211,16 +234,14 @@ export function FormatCore(
 
     console.log(`Format Document is Beta ${VERSION.format}, ${Date.now() - timeStart}ms`);
 
-    if (getFormatConfig()) {
+    if (getFormatConfig() && hasDiff[0]) {
         fmtReplaceWarn(timeStart, from);
-        if (hasDiff[0]) {
-            const diffVar: DiffType = {
-                leftText: AllDoc,
-                right: document.uri,
-                fsPath: document.uri.fsPath,
-            };
-            setTimeout(callDiff, 100, diffVar);
-        }
+        const diffVar: DiffType = {
+            leftText: AllDoc,
+            rightUri: document.uri,
+        };
+        setTimeout(callDiff, 100, diffVar);
+        // callDiff(diffVar);
     }
 
     return newTextList;

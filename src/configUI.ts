@@ -67,7 +67,7 @@ export function configChangEvent(): void {
 
 export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
     const time = Date.now() - timeStart;
-    statusBarItem.text = `$(heart) ${time} ms of${path.basename(uri.fsPath)}`;
+    statusBarItem.text = `$(heart) ${time} ms of ${path.basename(uri.fsPath)}`;
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
 }
@@ -93,6 +93,8 @@ export function getIgnoredFolder(file: string): boolean {
 }
 
 export function getIgnoredFile(buildPath: string): boolean {
+    if (!buildPath.endsWith('.ahk')) return true;
+
     const fileFix = path.basename(buildPath, '.ahk');
     const { startsWith } = config.Ignored.File;
     for (const e of startsWith) {

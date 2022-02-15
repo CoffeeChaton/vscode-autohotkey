@@ -7,7 +7,7 @@ export class SymBolProvider implements vscode.DocumentSymbolProvider {
         document: vscode.TextDocument,
         token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.DocumentSymbol[]> {
-        return Detecter.updateDocDef(false, document.uri.fsPath);
+        return Detecter.updateDocDef(true, document.uri.fsPath);
     }
     // May 08 2020, vscode.SymbolInformation  -> vscode.DocumentSymbol[]
 }

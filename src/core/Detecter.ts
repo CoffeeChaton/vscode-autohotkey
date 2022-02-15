@@ -72,7 +72,7 @@ export const Detecter = {
         }
     },
 
-    async updateDocDef(isTest: boolean, fsPath: string): Promise<vscode.DocumentSymbol[]> {
+    async updateDocDef(showMsg: boolean, fsPath: string): Promise<vscode.DocumentSymbol[]> {
         const Uri = vscode.Uri.file(fsPath);
         const document = await vscode.workspace.openTextDocument(Uri);
         const timeStart = Date.now();
@@ -97,25 +97,39 @@ export const Detecter = {
         });
 
         if (!fsPath.includes(EStr.diff_name_prefix)) {
-            if (!isTest) showTimeSpend(document.uri, timeStart);
+            if (showMsg) showTimeSpend(document.uri, timeStart);
             Detecter.DocMap.set(fsPath, result);
             Detecter.globalValMap.set(fsPath, gValMapBySelf);
             Diagnostic(DocStrMap, result, Uri, Detecter.diagColl);
         }
         return result as vscode.DocumentSymbol[];
     },
-
-    async buildByPathAsync(isTest: boolean, buildPath: string): Promise<void> {
-        if (fs.statSync(buildPath).isDirectory()) {
-            const files = fs.readdirSync(buildPath);
-            for (const file of files) {
-                if (!getIgnoredFolder(file)) {
-                    await Detecter.buildByPathAsync(isTest, `${buildPath}/${file}`);
-                }
-            }
-        } else if (buildPath.endsWith('.ahk') && !getIgnoredFile(buildPath)) {
-            // const Uri = vscode.Uri.file(buildPath);
-            await Detecter.updateDocDef(isTest, vscode.Uri.file(buildPath).fsPath);
-        }
-    },
 };
+
+export async function buildByPathAsync(showMsg: boolean, buildPath: string): Promise<void> {
+    if (fs.statSync(buildPath).isDirectory()) {
+        const files = fs.readdirSync(buildPath);
+        for (const file of files) {
+            if (!getIgnoredFolder(file)) {
+                await buildByPathAsync(showMsg, `${buildPath}/${file}`);
+            }
+        }
+    } else if (!getIgnoredFile(buildPath)) {
+        // const Uri = vscode.Uri.file(buildPath);
+        await Detecter.updateDocDef(showMsg, vscode.Uri.file(buildPath).fsPath);
+    }
+}
+
+export function buildByPath(buildPath: string): void {
+    if (fs.statSync(buildPath).isDirectory()) {
+        const files = fs.readdirSync(buildPath);
+        for (const file of files) {
+            if (!getIgnoredFolder(file)) {
+                buildByPath(`${buildPath}/${file}`);
+            }
+        }
+    } else if (!getIgnoredFile(buildPath)) {
+        // const Uri = vscode.Uri.file(buildPath);
+        Detecter.updateDocDef(false, vscode.Uri.file(buildPath).fsPath);
+    }
+}
