@@ -1,24 +1,12 @@
-/* eslint-disable no-magic-numbers */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable immutable/no-this */
-import { resolve } from 'path';
 import * as vscode from 'vscode';
 import { getDebugPath } from '../../configUI';
-
 import { getNowDate } from '../../tools/timeTools';
 import { EFileModel, FileManagerRecord } from './fileManager';
-import { Process } from './Process';
 
 function createTemplate(content: string): string {
     const fileName = `temp-${getNowDate(new Date())}.ahk`;
-    const ed: string = FileManagerRecord(fileName, content, EFileModel.WRITE);
-    return ed;
-}
 
-function checkAndSaveActive(): void {
-    if (!vscode.window?.activeTextEditor?.document.isUntitled) {
-        vscode.commands.executeCommand('workbench.action.files.save');
-    }
+    return FileManagerRecord(fileName, content, EFileModel.WRITE);
 }
 
 export function getPathByActive(): string {
@@ -27,39 +15,10 @@ export function getPathByActive(): string {
 
     if (document.isUntitled) {
         vscode.window.showTextDocument(document.uri);
-        const ed = createTemplate(document.getText());
-        return ed;
+
+        return createTemplate(document.getText());
     }
     return document.fileName;
-}
-
-/**
- * run script
- * @param path execute script path
- */
-async function runAhk(path: string): Promise<void> {
-    const executePath = getDebugPath();
-    checkAndSaveActive();
-    const pathFix = (!path)
-        ? getPathByActive()
-        : path;
-
-    const command = `"${executePath}" "${pathFix}"`;
-    const opt = { cwd: `${resolve(pathFix, '..')}` };
-    await Process(command, opt);
-}
-
-function runSelection(): void {
-    const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
-    if (!editor) {
-        const msg = 'Not active editor found! --33--19--83 --neko-help';
-        vscode.window.showErrorMessage(msg);
-        throw new Error(msg);
-    }
-
-    const { selection } = editor;
-    const text = editor.document.getText(selection);
-    runAhk(createTemplate(text));
 }
 
 /**

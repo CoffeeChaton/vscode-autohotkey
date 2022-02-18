@@ -1,7 +1,4 @@
-/* eslint-disable immutable/no-mutation */
 /* eslint-disable promise/avoid-new */
-/* eslint-disable immutable/no-this */
-
 import { DebugServer } from '../debugServer';
 import { TDbgpResponse } from '../DebugTypeEnum';
 
@@ -29,16 +26,16 @@ export class CommandHandler {
     public async sendComand(command: string, data?: string): Promise<TDbgpResponse> {
         this.transId++;
         const commandRun: string = setCommandRun(this.transId, command, data);
-        // console.log('🚀 ~89~ CommandHandler ~ sendComand ~ commandRun', commandRun);
         this.debugServer.write(commandRun);
 
-        return new Promise<TDbgpResponse>((resolve): void => {
+        const needAwait = await new Promise<TDbgpResponse>((resolve): void => {
             const key = `${this.transId}`;
             const value: TFn = (response: TDbgpResponse): void => {
                 resolve(response);
             };
             this.commandCallback.set(key, value);
         });
+        return needAwait;
     }
 
     public fnCallback(transId: string, response: TDbgpResponse): void {

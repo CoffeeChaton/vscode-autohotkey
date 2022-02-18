@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
 import { NekoDebugSession } from './NekoDebugSession';
 

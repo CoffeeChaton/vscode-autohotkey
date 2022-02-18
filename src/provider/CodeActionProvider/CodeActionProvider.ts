@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable immutable/no-mutation */
 import * as vscode from 'vscode';
 import { EDiagBase, EDiagCode, EDiagFsPath } from '../../globalEnum';
 
-function consoleDefault(d: never, diag: vscode.Diagnostic): null {
+function consoleDefault(d: never, _diag: vscode.Diagnostic): null {
     console.log('--99--66-33--44 Default -> a', d);
     // console.log('diag', diag);
     return null;
@@ -60,11 +58,12 @@ function setIgnoreLine(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.
     return CA;
 }
 export class CodeActionProvider implements vscode.CodeActionProvider {
+    // eslint-disable-next-line class-methods-use-this
     public provideCodeActions(
         document: vscode.TextDocument,
         range: vscode.Range | vscode.Selection,
         context: vscode.CodeActionContext,
-        token: vscode.CancellationToken,
+        _token: vscode.CancellationToken,
     ): vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
         if (context.diagnostics.length === 0) return null;
         const { uri } = document;

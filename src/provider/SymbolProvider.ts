@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';

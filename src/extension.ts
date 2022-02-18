@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { statusBarClick } from './command/Command';
 import { UpdateCache } from './command/UpdateCache';
-// import { CompletionComma } from './provider/CompletionItemProvider';
 import { configChangEvent } from './configUI';
 import { Detecter } from './core/Detecter';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';

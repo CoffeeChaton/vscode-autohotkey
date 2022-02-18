@@ -21,6 +21,7 @@ async function chIsNextLine(
     return [array[position.line - 1]];
 }
 export class OnTypeFormattingEditProvider implements vscode.OnTypeFormattingEditProvider {
+    // eslint-disable-next-line class-methods-use-this
     public provideOnTypeFormattingEdits(
         document: vscode.TextDocument,
         position: vscode.Position,

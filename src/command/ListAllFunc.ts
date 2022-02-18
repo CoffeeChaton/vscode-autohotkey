@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/require-array-sort-compare */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { TAhkSymbolList } from '../globalEnum';
@@ -63,11 +62,14 @@ export function ListAllFuncSort(reverse: boolean): null {
 
     OutputChannel.appendLine('[neko-help] List All Function()');
 
+    // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
+    AllList.sort();
     const appendText: string = reverse
-        ? AllList.sort()
+        ? AllList
             .reverse()
             .join('\n')
-        : AllList.sort().join('\n');
+        : AllList.join('\n');
+
     OutputChannel.appendLine(appendText);
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();

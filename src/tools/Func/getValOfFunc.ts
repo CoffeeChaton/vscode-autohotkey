@@ -1,5 +1,3 @@
-/* eslint-disable no-await-in-loop */
-
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { DeepReadonly, EMode, TAhkSymbol } from '../../globalEnum';

@@ -1,6 +1,3 @@
-/* eslint-disable no-magic-numbers */
-/* eslint-disable immutable/no-this */
-/* eslint-disable immutable/no-mutation */
 function calcSize<V>(v: V): number {
     if (Array.isArray(v)) return v.length;
     if (v instanceof Map) return v.size;

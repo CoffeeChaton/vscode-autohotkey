@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable max-lines */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
 import * as path from 'path';
@@ -78,7 +76,7 @@ function wrap(args: WarnUseType, text: string): vscode.TextEdit {
     const newText = getFormatConfig()
         ? lineReplace(text, textFix, CommentBlock, inLTrim)
         : text;
-    // eslint-disable-next-line no-param-reassign
+
     if (newText !== text) {
         hasDiff[0] = true;
     }
@@ -88,7 +86,7 @@ function wrap(args: WarnUseType, text: string): vscode.TextEdit {
     return new vscode.TextEdit(range, newText);
 }
 
-// eslint-disable-next-line camelcase
+// eslint-disable-next-line @typescript-eslint/naming-convention
 function fn_Warn_thisLineText_WARN(args: WarnUseType): vscode.TextEdit {
     const {
         textFix,
@@ -160,7 +158,7 @@ export function FormatCore(
     }: TFmtCoreArgs,
 ): vscode.ProviderResult<vscode.TextEdit[]> {
     if (path.basename(document.uri.fsPath, '.ahk').startsWith(EStr.diff_name_prefix)) {
-        const message = "Don't Format the TEMP file!";
+        const message = 'Don\'t Format the TEMP file!';
         vscode.window.showWarningMessage(message);
         return [];
     }
@@ -248,6 +246,7 @@ export function FormatCore(
 }
 
 export class FormatProvider implements vscode.DocumentFormattingEditProvider {
+    // eslint-disable-next-line class-methods-use-this
     public provideDocumentFormattingEdits(
         document: vscode.TextDocument,
         options: vscode.FormattingOptions,

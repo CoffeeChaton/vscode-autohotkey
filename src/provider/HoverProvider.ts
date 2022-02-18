@@ -1,6 +1,3 @@
-/* eslint-disable no-magic-numbers */
-/* eslint-disable security/detect-unsafe-regex */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable security/detect-non-literal-regexp */
 import * as vscode from 'vscode';
 import { DeepAnalysisResult, EMode, TAhkSymbol } from '../globalEnum';
@@ -12,6 +9,7 @@ import { ClassWm } from '../tools/wm';
 import { tryGetSymbol } from './Def/DefProvider';
 import { DeepAnalysisHover } from './Hover/DeepAnalysisHover';
 
+// eslint-disable-next-line no-magic-numbers
 const wm = new ClassWm<TAhkSymbol, vscode.Hover>(10 * 60 * 1000, 'HoverFunc', 60);
 
 async function HoverFunc(wordUp: string, textRaw: string): Promise<null | vscode.Hover> {
@@ -32,17 +30,18 @@ async function HoverFunc(wordUp: string, textRaw: string): Promise<null | vscode
 }
 
 export class HoverProvider implements vscode.HoverProvider {
+    // eslint-disable-next-line class-methods-use-this
     public async provideHover(
         document: vscode.TextDocument,
         position: vscode.Position,
-        token: vscode.CancellationToken,
+        _token: vscode.CancellationToken,
     ): Promise<vscode.Hover | null> {
         const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
         let ed: DeepAnalysisResult | null = null;
         if (ahkSymbol) {
             ed = DeepAnalysis(document, ahkSymbol);
         }
-
+        // eslint-disable-next-line security/detect-unsafe-regex
         const range = document.getWordRangeAtPosition(position, /(?<![.`%])\b\w+\b(?!%)/);
         if (!range) {
             // const range2 = document.getWordRangeAtPosition(position, /(?:%)\b\w\w*\b(?:%)/);

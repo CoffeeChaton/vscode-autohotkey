@@ -1,10 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-magic-numbers */
-/* eslint-disable immutable/no-this */
-/* eslint-disable immutable/no-mutation */
 /* eslint-disable max-lines */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100,300,131072] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100,300,5000,131072] }] */
 import { Scope, StackFrame, Variable } from '@vscode/debugadapter';
 import { DebugProtocol } from '@vscode/debugprotocol';
 import { spawn } from 'child_process';
@@ -13,7 +8,6 @@ import { existsSync } from 'fs';
 import { getPort } from 'get-port-please';
 import { resolve } from 'path';
 import * as vscode from 'vscode';
-
 import { mapToStr } from '../../tools/mapToStr';
 import { OutputChannel } from '../../tools/OutputChannel';
 import { startDebugger } from '../Service/Service';
@@ -101,24 +95,24 @@ export class DebugDispather extends EventEmitter {
                 this.sendComand('run');
             })
             .on('stream', (stream) => {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 this.emit('output', Buffer.from(stream.content as string, 'base64').toString());
             })
             .on('response', (response: TDbgpResponse) => {
-                if (response.attr.command) {
-                    this.commandHandler.fnCallback(response.attr.transaction_id, response);
-                    switch (response.attr.command) {
-                        case 'run':
-                        case 'step_into':
-                        case 'step_over':
-                        case 'step_out':
-                            this.processRunResponse(response);
-                            break;
-                        case 'stop':
-                            this.end();
-                            break;
-                        default:
-                            break;
-                    }
+                if (!(response.attr.command)) return;
+                this.commandHandler.fnCallback(response.attr.transaction_id, response);
+                switch (response.attr.command) {
+                    case 'run':
+                    case 'step_into':
+                    case 'step_over':
+                    case 'step_out':
+                        this.processRunResponse(response);
+                        break;
+                    case 'stop':
+                        this.end();
+                        break;
+                    default:
+                        break;
                 }
             });
 
@@ -189,16 +183,15 @@ export class DebugDispather extends EventEmitter {
             property !== EVarScopeStr.Local
             && property !== EVarScopeStr.Global
         ) {
-            const ed2 = await this.getVariable(frameId, scope, property.name); // TODO address
-            return ed2;
+            // TODO address
+            return this.getVariable(frameId, scope, property.name);
         }
 
         const command = `context_get -d ${frameId} -c ${scope}`;
         const response = await this.sendComand(command);
         if (!response) throw new Error(`--4589--33--22--11 command as ${command}`);
 
-        const ed: Variable[] = this.variableHandler.parse(response, scope);
-        return ed;
+        return (this.variableHandler.parse(response, scope));
     }
 
     public async getVariableByEval(args: DebugProtocol.EvaluateArguments): Promise<string> {
@@ -335,24 +328,24 @@ export class DebugDispather extends EventEmitter {
             const edStr: string = mapToStr(ahkVar.value);
             endStrList.push(edStr);
         }
-        const ed = endStrList.join('\n');
-        return ed;
+
+        return endStrList.join('\n');
     }
 
     private async getVariable(frameId: number, scope: EVarScope, variableName: string): Promise<Variable[]> {
         const response = await this.sendComand(`property_get -d ${frameId} -c ${scope} -n ${variableName}`);
         // FIXME -p  : the port that the IDE listens for debugging on. The address is retrieved from the connection information.
-        const ed = this.variableHandler.parsePropertyget(response, scope);
-        return ed;
+
+        return this.variableHandler.parsePropertyget(response, scope);
     }
 
     private async setBreakPonit(bp: DebugProtocol.Breakpoint): Promise<void> {
-        if (this.debugServer && bp.verified) {
-            const res = await this.sendComand(
-                `breakpoint_set -t line -f ${bp.source?.path ?? ''} -n ${bp?.line ?? ''}`,
-            );
-            bp.id = res.attr.id;
-        }
+        if (!(this.debugServer && bp.verified)) return;
+        const res = await this.sendComand(
+            `breakpoint_set -t line -f ${bp.source?.path ?? ''} -n ${bp?.line ?? ''}`,
+        );
+        // eslint-disable-next-line no-param-reassign
+        bp.id = res.attr.id;
     }
 
     /**

@@ -1,6 +1,4 @@
 import * as vscode from 'vscode';
-// import * as vscLsp from 'vscode-languageserver';
-// import { CompletionItem, MarkupKind, CompletionItemKind } from 'vscode-languageserver-types';
 
 const sendBigBlock: vscode.CompletionItem[] = [
     'Blind',
@@ -24,16 +22,13 @@ const sendBigBlock: vscode.CompletionItem[] = [
     'Text',
     'PrintScreen',
     'Click 100, 200, 0',
-].map((e) => {
-    const c = {
-        label: `{${e}}`,
-        insertText: e,
-        kind: vscode.CompletionItemKind.Text,
-        detail: 'neko help',
-        documentation: 'CompletionItem of Send\n\nhttps://www.autohotkey.com/docs/commands/Send.htm',
-    };
-    return c;
-});
+].map((e) => ({
+    label: `{${e}}`,
+    insertText: e,
+    kind: vscode.CompletionItemKind.Text,
+    detail: 'neko help',
+    documentation: 'CompletionItem of Send\n\nhttps://www.autohotkey.com/docs/commands/Send.htm',
+}));
 
 export function ahkSend(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
     if (position.character === 0) return [];

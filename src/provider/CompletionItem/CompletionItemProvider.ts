@@ -1,9 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable security/detect-unsafe-regex */
 /* eslint-disable security/detect-non-literal-regexp */
-/* eslint-disable immutable/no-mutation */
 /* eslint-disable no-await-in-loop */
-
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { getValOfFunc } from '../../tools/Func/getValOfFunc';
@@ -39,6 +35,7 @@ async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
     }
     return itemS;
 }
+
 function wrapperOfValOFFuncList(
     document: vscode.TextDocument,
     position: vscode.Position,
@@ -99,6 +96,7 @@ async function wrapListAllFuncClass(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): Promise<vscode.CompletionItem[]> {
+    // eslint-disable-next-line security/detect-unsafe-regex
     const Range = document.getWordRangeAtPosition(position, /(?<![.`%])\b\w+\b(?!%)/);
     if (Range === undefined) return []; // exp: . / []
 
@@ -110,21 +108,25 @@ async function wrapListAllFuncClass(
             Range.start.character,
         );
         const newStr = document.getText(newRange);
-        return (newStr !== '.' && newStr !== '`' && newStr !== '%')
-            ? listAllFuncClass(document, position, Range)
-            : []; // exp className.d    -->  newStr === "."
+        if (newStr !== '.' && newStr !== '`' && newStr !== '%') {
+            const need0 = await listAllFuncClass(document, position, Range);
+            return need0;
+        }
+        return [];
     }
-    const ed2 = await listAllFuncClass(document, position, Range); // at line start
+    // at line start
+    const ed2 = await listAllFuncClass(document, position, Range);
     return ed2;
 }
 
 // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
 export class CompletionItemProvider implements vscode.CompletionItemProvider {
+    // eslint-disable-next-line class-methods-use-this
     public async provideCompletionItems(
         document: vscode.TextDocument,
         position: vscode.Position,
-        token: vscode.CancellationToken,
-        context: vscode.CompletionContext,
+        _token: vscode.CancellationToken,
+        _context: vscode.CompletionContext,
     ): Promise<null | vscode.CompletionItem[]> {
         const t1 = Date.now();
         const completions: vscode.CompletionItem[] = [

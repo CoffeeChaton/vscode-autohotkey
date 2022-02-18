@@ -93,13 +93,12 @@ export function setArgMap(
     });
     const diagS: vscode.Diagnostic[] = [];
     argMap.forEach((v): void => {
-        if (v.refLoc.length === 0) {
-            const { range } = v.defLoc[0];
-            const severity = vscode.DiagnosticSeverity.Warning;
-            const tags = [vscode.DiagnosticTag.Deprecated];
-            const diag = setDiagnostic(EDiagCode.code501, range, severity, tags);
-            diagS.push(diag);
-        }
+        if (!(v.refLoc.length === 0)) return;
+        const { range } = v.defLoc[0];
+        const severity = vscode.DiagnosticSeverity.Warning;
+        const tags = [vscode.DiagnosticTag.Deprecated];
+        const diag = setDiagnostic(EDiagCode.code501, range, severity, tags);
+        diagS.push(diag);
     });
     return [argMap, diagS];
 }

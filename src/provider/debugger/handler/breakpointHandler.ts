@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 import { Breakpoint, Source } from '@vscode/debugadapter';
 import { DebugProtocol } from '@vscode/debugprotocol';
 import { readFileSync } from 'fs';

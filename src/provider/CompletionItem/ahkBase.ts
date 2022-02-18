@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-/* eslint-disable immutable/no-mutation */
 
 export type TAhkBaseObj = {
     ahkArray: boolean;

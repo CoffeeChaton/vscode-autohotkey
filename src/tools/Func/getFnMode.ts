@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import { EFnMode, TAhkSymbol, TTokenStream } from '../../globalEnum';
 import { ClassWm } from '../wm';
 import { kindPick } from './kindPick';
@@ -18,6 +17,7 @@ function getFnMode(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
     return EFnMode.normal;
 }
 
+// eslint-disable-next-line no-magic-numbers
 const w = new ClassWm<TAhkSymbol, EFnMode>(10 * 60 * 1000, 'getFnMode', 20000);
 
 export function getFnModeWM(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {

@@ -1,4 +1,3 @@
-/* eslint-disable security/detect-non-literal-fs-filename */
 import * as path from 'path';
 import * as temp from 'temp';
 import * as vscode from 'vscode';
@@ -16,6 +15,7 @@ export async function callDiff({ leftText, rightUri }: DiffType): Promise<void> 
         suffix: '.ahk',
         // dir?: string,
     };
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const left = temp.createWriteStream(affixes);
 
     if (typeof left.path !== 'string') return;

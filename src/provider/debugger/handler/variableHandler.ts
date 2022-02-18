@@ -1,9 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-lines */
 /* eslint-disable no-magic-numbers */
-/* eslint-disable immutable/no-mutation */
-/* eslint-disable immutable/no-this */
-
 import { Handles, Scope, Variable } from '@vscode/debugadapter';
 import { enumLog } from '../../../tools/enumErr';
 import { toArray } from '../Base64';
@@ -124,15 +120,14 @@ function parseTail({
         ? 1
         : undefined;
 
-    const ed = new Variable(
+    //  ed.type = typeAttr;
+    return new Variable(
         fullname,
         value,
         ref,
         indexedVariables,
         namedVariables,
     );
-    //  ed.type = typeAttr;
-    return ed;
 }
 
 /**
@@ -170,7 +165,7 @@ export class VariableHandler {
         return this.variableMap.get(fullname);
     }
 
-    public getArrayValue(ref: number, start: number, count: number): Variable[] | PromiseLike<Variable[]> {
+    public getArrayValue(ref: number, _start: number, _count: number): Variable[] | PromiseLike<Variable[]> {
         const ahkVar: EVarScopeStr | TAhkVariable = this.getVarByRef(ref);
         const message = 'VariableHandler ~ getArrayValue ~ ahkVar';
         console.error(message, ahkVar);
@@ -216,8 +211,7 @@ export class VariableHandler {
             throw new Error('--85--31--69--Array.isArray(responseFix2)');
         }
 
-        const ed = this.parse(responseFix2, scope);
-        return ed;
+        return this.parse(responseFix2, scope);
     }
 
     // eslint-disable-next-line max-statements

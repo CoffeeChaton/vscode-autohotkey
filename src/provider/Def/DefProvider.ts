@@ -1,6 +1,3 @@
-/* eslint-disable security/detect-unsafe-regex */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable max-len */
 /* eslint-disable security/detect-non-literal-regexp */
 /* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
@@ -122,7 +119,7 @@ export async function userDef(
     // TODO get def of AST
     const defRefList: RegExp[] = [
         // class ClassName
-        new RegExp(`class\\b\\s\\s*\\b(${wordUp})\\b`, 'i'),
+        new RegExp(`class\\b\\s+\\b(${wordUp})\\b`, 'i'),
         // funcName( , not search class.Method()
         //   new RegExp(`(?<!\\.)\\b(${wordUp})\\(`, 'i'),
         new RegExp(`(?<!\\.|\`|%)\\b(${wordUp})\\(`, 'i'),
@@ -132,6 +129,7 @@ export async function userDef(
 
     const usingRegList: RegExp[] = [
         new RegExp(
+            // eslint-disable-next-line max-len
             `(?:^class\\b\\s\\s*\\b(${wordUp})\\b)|(?:\\bnew\\s\\s*\\b(${wordUp})\\b)|(?:(${wordUp})\\.)|(?:\\bextends\\b\\s\\s*(${wordUp}))|(?:\\bglobal\\b\\s\\s*\\b(${wordUp})\\b)|(?:{\\s*base:\\s*(${wordUp}))|(?:\\w\\w*\\.base\\s*:=\\s*(${wordUp}))`,
             'i',
         ),
@@ -169,14 +167,16 @@ export async function userDef(
 // open the definition to the side with ( via Ctrl+Alt+Click )
 // Peek Definition (via Alt+F12)
 export class DefProvider implements vscode.DefinitionProvider {
+    // eslint-disable-next-line class-methods-use-this
     public async provideDefinition(
         document: vscode.TextDocument,
         position: vscode.Position,
-        token: vscode.CancellationToken,
+        _token: vscode.CancellationToken,
     ): Promise<null | vscode.Location | vscode.Location[] | vscode.LocationLink[]> {
         if (isPosAtStr(document, position)) return null;
 
-        const range = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w\w*\b(?!%)/);
+        // eslint-disable-next-line security/detect-unsafe-regex
+        const range = document.getWordRangeAtPosition(position, /(?<![.`%])\b\w+\b(?!%)/);
         if (!range) return null;
         const wordUp = document.getText(range).toUpperCase();
         const fileLink = ahkInclude(document, position);

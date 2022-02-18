@@ -1,4 +1,4 @@
-/* eslint-disable no-magic-numbers */
+// eslint-disable-next-line no-magic-numbers
 const Pad2 = (n: number): string => `${n}`.padStart(2, '0');
 
 /**

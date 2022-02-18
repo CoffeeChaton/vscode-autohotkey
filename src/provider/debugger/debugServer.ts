@@ -1,5 +1,3 @@
-/* eslint-disable immutable/no-this */
-/* eslint-disable immutable/no-mutation */
 import { EventEmitter } from 'events';
 import * as Net from 'net';
 import * as xml2js from 'xml2js';

@@ -1,8 +1,5 @@
-/* eslint-disable immutable/no-mutation */
-/* eslint-disable promise/avoid-new */
 /* eslint-disable security/detect-non-literal-fs-filename */
 /* eslint-disable no-magic-numbers */
-/* eslint-disable immutable/no-this */
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
@@ -13,6 +10,7 @@ export const enum EFileModel {
 }
 
 export function checkAndMkdir(pathA: string): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     if (!fs.existsSync(pathA)) fs.mkdirSync(pathA);
 }
 

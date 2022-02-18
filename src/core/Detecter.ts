@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable security/detect-non-literal-fs-filename */
 import * as fs from 'fs';

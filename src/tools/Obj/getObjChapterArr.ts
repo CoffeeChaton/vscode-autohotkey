@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4] }] */
 import * as vscode from 'vscode';
 

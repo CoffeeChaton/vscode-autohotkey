@@ -1,5 +1,4 @@
-/* eslint-disable security/detect-unsafe-regex */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
 import { isPosAtStr } from '../tools/isPosAtStr';
 import { userDef } from './Def/DefProvider';
@@ -10,11 +9,12 @@ export class ReferenceProvider implements vscode.ReferenceProvider {
     public async provideReferences(
         document: vscode.TextDocument,
         position: vscode.Position,
-        context: vscode.ReferenceContext,
-        token: vscode.CancellationToken,
+        _context: vscode.ReferenceContext,
+        _token: vscode.CancellationToken,
     ): Promise<vscode.Location[] | null> {
         if (isPosAtStr(document, position)) return null;
 
+        // eslint-disable-next-line security/detect-unsafe-regex
         const range = document.getWordRangeAtPosition(position, /(?<![.`%])\b\w+\b(?!%)/);
         if (!range) return null;
         const wordUp = document.getText(range).toUpperCase();

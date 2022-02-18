@@ -1,4 +1,3 @@
-/* eslint-disable immutable/no-mutation */
 import * as vscode from 'vscode';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import { kindPick } from '../../tools/Func/kindPick';

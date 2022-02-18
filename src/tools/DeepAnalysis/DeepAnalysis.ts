@@ -1,5 +1,3 @@
-/* eslint-disable security/detect-unsafe-regex */
-/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,10,60,1000,200] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { getGlobalValDef } from '../../core/getGlobalValDef';
@@ -108,9 +106,11 @@ function setValMapDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenS
     const startLine = ahkSymbol.selectionRange.end.line;
     for (const { lStr, textRaw, line } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
+        // eslint-disable-next-line no-magic-numbers
         if (lStr.trim().length < 2) continue; // a=b need length >=3
 
         const lineType: TAhkValType = getLineType(lStr, fnMode);
+        // eslint-disable-next-line security/detect-unsafe-regex
         for (const v of lStr.matchAll(/(?<![.`%])\b(\w+)\b\s*:?=/g)) {
             const character = v.index;
             if (character === undefined) continue;
@@ -135,10 +135,11 @@ function setValMapDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenS
 
 function setValList(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgMap): TValMap {
     const valMap: TValMap = setValMapDef(uri, ahkSymbol, DocStrMap, argList);
-    const valMap2: TValMap = setValMapRef(uri, ahkSymbol, DocStrMap, valMap);
-    return valMap2;
+
+    return setValMapRef(uri, ahkSymbol, DocStrMap, valMap);
 }
 
+// eslint-disable-next-line no-magic-numbers
 const w = new ClassWm<TAhkSymbol, DeepAnalysisResult>(10 * 60 * 1000, 'DeepAnalysis', 200);
 
 export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbol): null | DeepAnalysisResult {
@@ -162,7 +163,7 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
         valMap,
     };
 
-    // Detecter.diagColl.set(uri, [...diagS, ...diagArgs]);
+    Detecter.diagColl.set(uri, [...diagS, ...diagArgs]);
 
     return w.setWm(ahkSymbol, v);
 }

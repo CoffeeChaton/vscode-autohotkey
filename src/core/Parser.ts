@@ -1,5 +1,3 @@
-/* eslint-disable immutable/no-mutation */
-/* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable max-lines */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,20] }] */
 import * as vscode from 'vscode';
@@ -17,7 +15,6 @@ import { FuncInputType, getChildren } from './getChildren';
 import { getCaseDefaultName, getSwitchName } from './getSwitchCaseName';
 import { setGlobalVar } from './setGlobalVar';
 
-// // import * as Oniguruma from 'vscode-oniguruma';
 function getReturnName(textRaw: string): string | null {
     const ReturnMatch = (/\breturn\b\s+(.+)/i).exec(textRaw);
     if (ReturnMatch === null) return null;

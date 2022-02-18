@@ -8,7 +8,9 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
     const allFsPath = Detecter.getDocMapFile();
 
     let size = 0;
+
     const need: DeepAnalysisResult[] = [];
+
     for (const fsPath of allFsPath) {
         const AhkSymbolList: TAhkSymbolList | null = Detecter.getDocMap(fsPath);
         if (AhkSymbolList === null) continue;
@@ -28,7 +30,7 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
 
     const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
     OutputChannel.appendLine('Deep Analysis All Files');
-    OutputChannel.appendLine(`Deep Analysis : ${need.length} Symbol `);
+    OutputChannel.appendLine(`Deep Analysis : ${need.length} Symbol`);
     OutputChannel.appendLine(`All Size is ${size}`);
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();

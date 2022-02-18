@@ -1,6 +1,6 @@
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
-// import * as vscode from 'vscode';
+
 import { DetailType, TAhkToken, TTokenStream } from '../globalEnum';
 import { inCommentBlock } from './inCommentBlock';
 import { inLTrimRange } from './inLTrimRange';

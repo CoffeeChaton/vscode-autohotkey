@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-lines */
 /* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
@@ -23,6 +22,7 @@ export const enum EMode {
 export const enum EStr {
     diff_name_prefix = '_diff_temp_',
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [P in keyof T]: DeepReadonly<T[P]> };
 
 export const enum DetailType {
@@ -47,8 +47,7 @@ export type TAhkToken = {
 export type TTokenStream = DeepReadonly<TAhkToken>;
 export type TAhkSymbol = DeepReadonly<vscode.DocumentSymbol>;
 export type TAhkSymbolList = DeepReadonly<vscode.DocumentSymbol[]>;
-// export type TAhkSymbol = Readonly<vscode.DocumentSymbol>;
-// export type TAhkSymbolList = Readonly<Readonly<vscode.DocumentSymbol>[]>;
+
 export type TSymAndFsPath = {
     ahkSymbol: TAhkSymbol;
     fsPath: string;

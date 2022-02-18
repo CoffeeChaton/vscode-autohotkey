@@ -108,6 +108,5 @@ export function getValDefInFunc(
     if (!ahkSymbol) return null;
     if (!kindPick(ahkSymbol.kind)) return null;
 
-    const ed: null | vscode.Location[] = match(ahkSymbol, document, position, wordUp, listAllUsing);
-    return ed;
+    return match(ahkSymbol, document, position, wordUp, listAllUsing);
 }

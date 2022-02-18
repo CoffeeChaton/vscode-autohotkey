@@ -25,7 +25,7 @@
     "typescript": {
         "binaryExpression.operatorPosition": "nextLine",
         "importDeclaration.preferSingleLine": false, // keep eslint <-> dprint friendly
-        "quoteStyle": "preferSingle",
+        "quoteStyle": "alwaysSingle",
         "semiColons": "prefer"
     }
 }

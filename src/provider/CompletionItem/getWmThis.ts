@@ -1,10 +1,9 @@
-/* eslint-disable no-magic-numbers */
-/* eslint-disable immutable/no-mutation */
 import * as vscode from 'vscode';
 import { TAhkSymbol, TSymAndFsPath } from '../../globalEnum';
 import { Pretreatment } from '../../tools/Pretreatment';
 import { ClassWm } from '../../tools/wm';
 
+// eslint-disable-next-line no-magic-numbers
 const w = new ClassWm<TAhkSymbol, vscode.CompletionItem[]>(10 * 60 * 1000, 'getThisItemOfWm', 700);
 
 async function getWmThisCore({ ahkSymbol, fsPath }: TSymAndFsPath): Promise<vscode.CompletionItem[]> {

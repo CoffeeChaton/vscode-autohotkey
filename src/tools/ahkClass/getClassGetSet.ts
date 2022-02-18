@@ -1,4 +1,3 @@
-/* eslint-disable immutable/no-mutation */
 import * as vscode from 'vscode';
 import { FuncInputType, getChildren } from '../../core/getChildren';
 import { TAhkSymbol } from '../../globalEnum';

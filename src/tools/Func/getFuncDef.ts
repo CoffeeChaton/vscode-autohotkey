@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
 import { TTokenStream } from '../../globalEnum';
 
@@ -77,6 +76,7 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | Fu
     if (DocStrMap[defLine].lStr.includes(')')) return false; // fn_Name( ... ) ...  ,this is not ahk function
 
     // I don't think the definition of the function will exceed 15 lines.
+    // eslint-disable-next-line no-magic-numbers
     const iMax = Math.min(defLine + 15, DocStrMap.length);
     for (let searchLine = defLine + 1; searchLine < iMax; searchLine++) {
         const searchText = DocStrMap[searchLine].lStr;

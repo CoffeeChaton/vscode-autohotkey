@@ -1,5 +1,4 @@
-/* eslint-disable no-magic-numbers */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
 import { getLintConfig } from '../../configUI';
@@ -45,6 +44,7 @@ function getLoopErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagn
     const SecondSection = exec[1];
     if ((/^(?:\d+|Files|Parse|Read|Reg)$/i).test(SecondSection)) return 1;
 
+    // eslint-disable-next-line no-magic-numbers
     const position = Math.max(0, lStr.search(/\bloop\b/i)) + 4;
     const col = Math.max(0, lStr.indexOf(SecondSection, position));
     const range = new vscode.Range(line, col, line, col + SecondSection.length);
@@ -123,7 +123,8 @@ function getCommandErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Di
     if (fnReplaceErr) return fnReplaceErr;
     if ((/^Loop$/i).test(commandHead)) return getLoopErr(DocStrMap, line);
 
-    const temp = {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _temp = {
         exec: /^EnvMult$/i, // TODO EnvDiv
         EDiagCode: EDiagCode.code903,
     };

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as vscode from 'vscode';
 import { ahkValRegex } from '../tools/regexTools';
 import { removeBigParentheses } from '../tools/removeBigParentheses';
@@ -42,9 +41,8 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
                 rVal, // string // Right value is textRaw
             };
             const oldVale = gValMapBySelf.get(lName);
-            const dummy = (oldVale)
-                ? gValMapBySelf.set(lName, [...oldVale, newValue])
-                : gValMapBySelf.set(lName, [newValue]);
+            gValMapBySelf.set(lName, [...oldVale ?? [], newValue]);
+
             return lName;
         })
         .join(', ')

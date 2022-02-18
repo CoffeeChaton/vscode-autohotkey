@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
 import { DeepAnalysisResult } from '../../globalEnum';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';

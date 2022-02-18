@@ -1,4 +1,3 @@
-/* eslint-disable immutable/no-mutation */
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
@@ -41,16 +40,15 @@ function getConfig(): TConfigs {
     const { executePath } = ed.Debug;
 
     fs.access(executePath, (err: NodeJS.ErrnoException | null): void => {
-        if (err) {
-            const errCode = err.message
-                ? ` <---> err.message ${err.message}`
-                : '';
-            const msg = `setting err of "AhkNekoHelp.Debug.executePath" : "${executePath}"${errCode}`;
-            console.log('fs.access ~ msg', msg);
-            vscode.window.showErrorMessage(msg);
-            const msg2 = `can't find the file at "${executePath}"`;
-            vscode.window.showErrorMessage(msg2);
-        }
+        if (!(err)) return;
+        const errCode = err.message
+            ? ` <---> err.message ${err.message}`
+            : '';
+        const msg = `setting err of "AhkNekoHelp.Debug.executePath" : "${executePath}"${errCode}`;
+        console.log('fs.access ~ msg', msg);
+        vscode.window.showErrorMessage(msg);
+        const msg2 = `can't find the file at "${executePath}"`;
+        vscode.window.showErrorMessage(msg2);
     });
     return ed;
 }
