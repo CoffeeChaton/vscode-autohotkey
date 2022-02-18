@@ -3,14 +3,14 @@ import { Detecter } from '../core/Detecter';
 import { DeepAnalysisResult, TAhkSymbolList } from '../globalEnum';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 
+const need: DeepAnalysisResult[] = [];
 export async function DeepAnalysisAllFiles(): Promise<null> {
     const t1 = Date.now();
     const allFsPath = Detecter.getDocMapFile();
 
     let size = 0;
 
-    const need: DeepAnalysisResult[] = [];
-
+    need.length = 0;
     for (const fsPath of allFsPath) {
         const AhkSymbolList: TAhkSymbolList | null = Detecter.getDocMap(fsPath);
         if (AhkSymbolList === null) continue;
