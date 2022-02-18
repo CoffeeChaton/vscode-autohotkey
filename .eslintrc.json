@@ -76,7 +76,6 @@
         "jest-formatting"
     ],
     "rules": {
-        // "require-unicode-regexp": "error",
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",
         "@typescript-eslint/await-thenable": "error",
@@ -297,6 +296,7 @@
         "promise/valid-params": "warn",
         "react/jsx-filename-extension": "off",
         "require-await": "error",
+        "require-unicode-regexp": "error",
         "security/detect-object-injection": "off",
         "use-isnan": "error",
         "wrap-regex": "error"

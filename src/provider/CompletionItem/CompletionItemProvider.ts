@@ -86,7 +86,7 @@ async function listAllFuncClass(
     Range: vscode.Range,
 ): Promise<vscode.CompletionItem[]> {
     const wordUp = document.getText(Range).toUpperCase();
-    const wordStartReg = new RegExp(`${wordUp}`, 'i');
+    const wordStartReg = new RegExp(`${wordUp}`, 'iu');
     const funcOrClassNameList = await getItemSOfEMode(wordStartReg);
     const valOFFuncList = wrapperOfValOFFuncList(document, position, wordUp);
     return [...funcOrClassNameList, ...valOFFuncList];
@@ -97,7 +97,7 @@ async function wrapListAllFuncClass(
     position: vscode.Position,
 ): Promise<vscode.CompletionItem[]> {
     // eslint-disable-next-line security/detect-unsafe-regex
-    const Range = document.getWordRangeAtPosition(position, /(?<![.`%])\b\w+\b(?!%)/);
+    const Range = document.getWordRangeAtPosition(position, /(?<![.`%])\b\w+\b(?!%)/u);
     if (Range === undefined) return []; // exp: . / []
 
     if (Range.start.character - 1 > -1) {

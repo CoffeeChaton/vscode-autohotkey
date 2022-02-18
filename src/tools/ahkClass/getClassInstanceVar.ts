@@ -7,11 +7,11 @@ export function getClassInstanceVar(FuncInput: FuncInputType): false | TAhkSymbo
     const { line, lStr } = FuncInput;
 
     if (lStr.indexOf(':=') === -1) return false;
-    if ((/^\s*\b(?:static|global)\b/i).test(lStr)) return false;
+    if ((/^\s*\b(?:static|global)\b/iu).test(lStr)) return false;
 
     const name = removeParentheses(lStr)
         .split(',')
-        .map((str) => str.replace(/:=.*/, '').trim())
+        .map((str) => str.replace(/:=.*/u, '').trim())
         .join(', ');
 
     const detail = 'Instance Var';

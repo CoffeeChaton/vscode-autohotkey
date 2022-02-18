@@ -18,25 +18,25 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
     for (const { lStr, textRaw, line } of DocStrMap) {
         if (line > endLine) break;
         let lStrFix = lStr;
-        if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w+\(/, '');
-        if (endLine === line) lStrFix = lStrFix.replace(/\)\s*\{?\s*$/, '');
+        if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w+\(/u, '');
+        if (endLine === line) lStrFix = lStrFix.replace(/\)\s*\{?\s*$/u, '');
 
         const strList: string[] = lStrFix
-            .replace(/:?=\s*[-+.\w]+/g, replacerSpace) // Test 0x00ffffff  , -0.5 , 0.8
+            .replace(/:?=\s*[-+.\w]+/ug, replacerSpace) // Test 0x00ffffff  , -0.5 , 0.8
             .split(',')
             .map((v) => v.trim());
 
         for (const argName of strList) {
-            const isByRef = (/^ByRef\s+/i).test(argName);
+            const isByRef = (/^ByRef\s+/ui).test(argName);
             const key0 = isByRef
-                ? argName.replace(/^ByRef\s+/i, '')
+                ? argName.replace(/^ByRef\s+/ui, '')
                 : argName;
             if (key0 === '') continue;
-            const isVariadic = (/^\w+\*$/).test(argName); // https://ahkde.github.io/docs/Functions.htm#Variadic
+            const isVariadic = (/^\w+\*$/u).test(argName); // https://ahkde.github.io/docs/Functions.htm#Variadic
             const keyRawName = isVariadic
-                ? key0.replace(/\*$/, '')
+                ? key0.replace(/\*$/u, '')
                 : key0;
-            if (!(/^\w+$/).test(keyRawName)) {
+            if (!(/^\w+$/u).test(keyRawName)) {
                 const errCode = '--99--37--21--';
                 const errMsg = 'DeepAnalysis NekoHelp Unknown Syntax of ';
                 const errLoc = `${uri.fsPath} line : ${line + 1}`;

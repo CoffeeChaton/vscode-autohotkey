@@ -2,13 +2,14 @@ export function getSkipSign2(text: string): boolean {
     const col0 = text.indexOf('=');
     if (col0 === -1) return false;
 
-    return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/).test(text)
+    return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/u).test(text)
         && text.indexOf('.=') === -1;
 }
 
 export function getSkipSign(text: string): boolean {
-    return (/^\s*msgbox[\s,]/i).test(text)
-        || (/^\s*(?:control)?send(?:Raw\b|\b.*{Raw})/i).test(text);
+    return (/^\s*msgbox[\s,]/ui).test(text)
+        || (/^\s*(?:control)?send(?:Raw)\b/ui).test(text)
+        || (/^\s*(?:control)?send\b.*\{Raw\}/ui).test(text);
 }
 
 export const replacerSpace = (match: string): string => ' '.repeat(match.length);
@@ -18,8 +19,8 @@ const fnReplacerStr = (match: string): string => '_'.repeat(match.length);
 // [textFix , '; comment text']
 export function getLStr(textRaw: string): string {
     if (textRaw[0] === ';') return '';
-    if ((/^\s*;/).test(textRaw)) return '';
-    const textFix = textRaw.replace(/`./g, '__').replace(/"[^"]*?"/g, fnReplacerStr);
+    if ((/^\s*;/u).test(textRaw)) return '';
+    const textFix = textRaw.replace(/`./ug, '__').replace(/"[^"]*?"/ug, fnReplacerStr);
     const i = textFix.indexOf(';');
     // dprint-ignore
     switch (i) {

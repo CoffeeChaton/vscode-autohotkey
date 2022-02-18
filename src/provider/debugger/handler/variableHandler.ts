@@ -19,7 +19,7 @@ function getLikeArrayLength(property: TDbgpProperty): number {
     if (properties.length === 0) return 0;
 
     for (let i = properties.length - 1; i > 0; i--) {
-        const match = properties[i]?.attr?.name?.match(/\[(\d+)]/);
+        const match = properties[i]?.attr?.name?.match(/\[(\d+)]/u);
         if (match && match[1]) return parseInt(match[1], 10);
     }
     return 0;

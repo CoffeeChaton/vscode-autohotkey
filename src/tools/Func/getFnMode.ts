@@ -9,9 +9,9 @@ function getFnMode(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue;
         if (line > endLine) break;
-        if ((/^\s*local\s*$/i).test(lStr)) return EFnMode.local;
-        if ((/^\s*global\s*$/i).test(lStr)) return EFnMode.global;
-        if ((/^\s*Static\s*$/i).test(lStr)) return EFnMode.Static;
+        if ((/^\s*local\s*$/iu).test(lStr)) return EFnMode.local;
+        if ((/^\s*global\s*$/iu).test(lStr)) return EFnMode.global;
+        if ((/^\s*Static\s*$/iu).test(lStr)) return EFnMode.Static;
     }
 
     return EFnMode.normal;

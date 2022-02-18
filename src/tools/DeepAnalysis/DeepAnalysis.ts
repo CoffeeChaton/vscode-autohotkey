@@ -25,9 +25,9 @@ import { setValMapRef } from './setValMapRef';
 
 export function getLineType(lStr: string, fnMode: EFnMode): EValType.local | EValType.global | EValType.Static {
     const fnTypeList: ([RegExp, TRunValType2])[] = [
-        [/^\s*local\s/i, EValType.local],
-        [/^\s*global\s/i, EValType.global],
-        [/^\s*Static\s/i, EValType.Static],
+        [/^\s*local\s/iu, EValType.local],
+        [/^\s*global\s/iu, EValType.global],
+        [/^\s*Static\s/iu, EValType.Static],
     ];
     for (const [ruler, t] of fnTypeList) {
         if (ruler.test(lStr)) {
@@ -111,7 +111,7 @@ function setValMapDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenS
 
         const lineType: TAhkValType = getLineType(lStr, fnMode);
         // eslint-disable-next-line security/detect-unsafe-regex
-        for (const v of lStr.matchAll(/(?<![.`%])\b(\w+)\b\s*:?=/g)) {
+        for (const v of lStr.matchAll(/(?<![.`%])\b(\w+)\b\s*:?=/gu)) {
             const character = v.index;
             if (character === undefined) continue;
             const keyRawName = v[1];
@@ -140,7 +140,7 @@ function setValList(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStr
 }
 
 // eslint-disable-next-line no-magic-numbers
-const w = new ClassWm<TAhkSymbol, DeepAnalysisResult>(10 * 60 * 1000, 'DeepAnalysis', 200);
+const w = new ClassWm<TAhkSymbol, DeepAnalysisResult>(10 * 60 * 1000, 'DeepAnalysis', 10000);
 
 export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbol): null | DeepAnalysisResult {
     const kindStr = kindPick(ahkSymbol.kind);

@@ -26,9 +26,9 @@ function getTypeList({
     if (oldMap) return oldMap;
 
     const TypeList: ([RegExp, TRunValType2])[] = [
-        [/^\s*local\s/i, EValType.local],
-        [/^\s*global\s/i, EValType.global],
-        [/^\s*Static\s/i, EValType.Static],
+        [/^\s*local\s/iu, EValType.local],
+        [/^\s*global\s/iu, EValType.global],
+        [/^\s*Static\s/iu, EValType.Static],
     ];
 
     let Offset = 0;
@@ -41,7 +41,7 @@ function getTypeList({
                     break;
                 }
             }
-            if ((/^\s*,/).test(lStr)) {
+            if ((/^\s*,/u).test(lStr)) {
                 const lastVal = v.get(Offset - 1);
                 if (lastVal) v.set(Offset, lastVal);
             }

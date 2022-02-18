@@ -16,16 +16,16 @@ import { getCaseDefaultName, getSwitchName } from './getSwitchCaseName';
 import { setGlobalVar } from './setGlobalVar';
 
 function getReturnName(textRaw: string): string | null {
-    const ReturnMatch = (/\breturn\b\s+(.+)/i).exec(textRaw);
+    const ReturnMatch = (/\breturn\b\s+(.+)/iu).exec(textRaw);
     if (ReturnMatch === null) return null;
 
     let name = ReturnMatch[1];
     if (ReturnMatch) {
-        const Func = (/^\s*(\w+)\(/).exec(name);
+        const Func = (/^\s*(\w+)\(/u).exec(name);
         if (Func) {
             name = `${Func[1]}(...)`;
         } else if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
-            const obj = (/^\s*({\s*\w+\s*:)/).exec(name);
+            const obj = (/^\s*(\{\s*\w+\s*:)/u).exec(name);
             if (obj) name = `Obj ${obj[1]}`;
         }
 
@@ -35,8 +35,8 @@ function getReturnName(textRaw: string): string | null {
 }
 
 export function getReturnByLine(FuncInput: FuncInputType): false | TAhkSymbol {
-    if (!(/\breturn\b/i).test(FuncInput.lStr)) return false;
-    if (!(/\sreturn\s+\S/i).test(FuncInput.lStr)) return false;
+    if (!(/\breturn\b/iu).test(FuncInput.lStr)) return false;
+    if (!(/\sreturn\s+\S/iu).test(FuncInput.lStr)) return false;
     const { line } = FuncInput;
     const { textRaw } = FuncInput.DocStrMap[FuncInput.line];
     const name = getReturnName(textRaw);
@@ -65,61 +65,61 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             detail: '#IncludeAgain',
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
-                const e = (/^\s*#IncludeAgain\s+(\S+)[\s|$]/).exec(str);
+                const e = (/^\s*#IncludeAgain\s+(\S+)[\s|$]/ui).exec(str);
                 return e
                     ? `#IncludeAgain ${e[1]}`
                     : null;
             },
 
             test(str: string): boolean {
-                return (/^\s*#IncludeAgain\b/i).test(str);
+                return (/^\s*#IncludeAgain\b/iu).test(str);
             },
         },
         {
             detail: '#Include',
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
-                const e = (/^\s*#Include\s+(\S+)[\s|$]/i).exec(str);
+                const e = (/^\s*#Include\s+(\S+)[\s|$]/iu).exec(str);
                 return e
                     ? `#Include ${e[1]}`
                     : null;
             },
 
             test(str: string): boolean {
-                return (/^\s*#Include\b/i).test(str);
+                return (/^\s*#Include\b/iu).test(str);
             },
         },
         {
             detail: 'directive',
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
-                const e = (/^\s*(#\w+)/).exec(str);
+                const e = (/^\s*(#\w+)/u).exec(str);
                 return e
                     ? e[1]
                     : null;
             },
 
             test(str: string): boolean {
-                return (/^\s*#/).test(str);
+                return (/^\s*#/u).test(str);
             },
         },
         {
             detail: 'global',
             kind: vscode.SymbolKind.Variable,
             getName(str: string): string | null {
-                return (/^\s*\bglobal\b\s*$/i).test(str)
+                return (/^\s*\bglobal\b\s*$/iu).test(str)
                     ? null
                     : setGlobalVar(FuncInput);
             },
             test(str: string): boolean {
-                return (/^\s*\bglobal\b/i).test(str);
+                return (/^\s*\bglobal\b/iu).test(str);
             },
         },
         {
             detail: 'static',
             kind: vscode.SymbolKind.Variable,
             getName(str: string): string | null {
-                return removeParentheses(removeBigParentheses(str.replace(/^\s*\bstatic\b[\s,]/i, '')))
+                return removeParentheses(removeBigParentheses(str.replace(/^\s*\bstatic\b[\s,]/iu, '')))
                     .split(',')
                     .map((v) => {
                         const col = v.indexOf(':=');
@@ -132,35 +132,35 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             },
 
             test(str: string): boolean {
-                return (/^\s*\bstatic\b[\s,]/i).test(str);
+                return (/^\s*\bstatic\b[\s,]/iu).test(str);
             },
         },
         {
             detail: 'throw',
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
-                const e = (/^\s*\bthrow\b[\s,]+(.+)/i).exec(str);
+                const e = (/^\s*\bthrow\b[\s,]+(.+)/iu).exec(str);
                 return e
                     ? `throw ${e[1]}`
                     : null;
             },
 
             test(str: string): boolean {
-                return (/^\s*\bthrow\b/i).test(str);
+                return (/^\s*\bthrow\b/iu).test(str);
             },
         },
         {
             detail: 'label',
             kind: vscode.SymbolKind.Package,
             getName(str: string): string | null {
-                const e = (/^\s*(\w+:)\s*$/).exec(str);
+                const e = (/^\s*(\w+:)\s*$/u).exec(str);
                 return e
                     ? e[1]
                     : null;
             },
 
             test(str: string): boolean {
-                return (/^\s*\w+:\s*$/).test(str);
+                return (/^\s*\w+:\s*$/u).test(str);
             },
         },
         {
@@ -168,7 +168,7 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             detail: 'HotString',
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
-                const e = (/^\s*(:[^:]*?:[^:]+::)/).exec(str);
+                const e = (/^\s*(:[^:]*?:[^:]+::)/u).exec(str);
                 return e
                     ? e[1]
                     : null;
@@ -176,14 +176,14 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
 
             test(str: string): boolean {
                 if (str.indexOf('::') === -1) return false;
-                return (/^\s*:[^:]*?:[^:]+::/).test(str);
+                return (/^\s*:[^:]*?:[^:]+::/u).test(str);
             },
         },
         {
             detail: 'HotKeys',
             kind: vscode.SymbolKind.Event,
             getName(str: string): string | null {
-                const e = (/^\s*([^:]+::)/).exec(str);
+                const e = (/^\s*([^:]+::)/u).exec(str);
                 return e
                     ? e[1]
                     : null;
@@ -191,7 +191,7 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
 
             test(str: string): boolean {
                 if (str.indexOf('::') === -1) return false;
-                return (/^\s*[^:]+::/).test(str);
+                return (/^\s*[^:]+::/u).test(str);
             },
         },
     ];
@@ -250,7 +250,7 @@ export const ParserBlock = {
     },
 
     getSwitchBlock(FuncInput: FuncInputType): false | TAhkSymbol {
-        if (!(/^\s*\bswitch\b/i).test(FuncInput.lStr)) return false;
+        if (!(/^\s*\bswitch\b/ui).test(FuncInput.lStr)) return false;
 
         const {
             gValMapBySelf,
@@ -333,9 +333,9 @@ export const ParserBlock = {
     },
 
     getClass(FuncInput: FuncInputType): false | TAhkSymbol {
-        if (!(/^\s*\bclass\b/i).test(FuncInput.lStr)) return false;
+        if (!(/^\s*\bclass\b/ui).test(FuncInput.lStr)) return false;
 
-        const classExec = (/^\s*\bclass\b\s+(\w+)/i).exec(FuncInput.lStr);
+        const classExec = (/^\s*\bclass\b\s+(\w+)/ui).exec(FuncInput.lStr);
         if (classExec === null) return false;
 
         const {
@@ -388,7 +388,7 @@ export const ParserBlock = {
             inClass,
         } = FuncInput;
         // ;;
-        const CommentLine = textRaw.search(/^\s*;;/);
+        const CommentLine = textRaw.search(/^\s*;;/u);
         if (CommentLine > -1) {
             const name = textRaw.substring(CommentLine + 2).trimEnd();
             const Range = new vscode.Range(new vscode.Position(line, 0), new vscode.Position(line, textRaw.length));
@@ -397,12 +397,12 @@ export const ParserBlock = {
 
         // { ;;
         if (textRaw.indexOf('{') >= textRaw.indexOf(';;')) return false;
-        const Comments = (/^\s*{\s;;/).test(textRaw);
+        const Comments = (/^\s*\{\s;;/u).test(textRaw);
         if (!Comments) return false;
 
         const getName = (): string => {
             if (line - 1 >= 0) {
-                const nameKind: string[] = (/^\s*(\w+)/)
+                const nameKind: string[] = (/^\s*(\w+)/u)
                     .exec(FuncInput.DocStrMap[FuncInput.line - 1].textRaw) ?? [''];
                 return nameKind[0].trim();
             }

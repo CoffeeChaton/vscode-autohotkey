@@ -38,13 +38,13 @@ export function ahkSend(document: vscode.TextDocument, position: vscode.Position
 
     const textRaw = document.lineAt(position).text;
     if (
-        !(/\b(?:Control)?Send(?:Input|Play|Event)?\b/i).test(textRaw)
+        !(/\b(?:Control)?Send(?:Input|Play|Event)?\b/ui).test(textRaw)
         || textRaw.indexOf('::') === -1
-        || !(/InputHook\(/i).test(textRaw)
+        || !(/InputHook\(/ui).test(textRaw)
     ) {
         return [];
     }
-    if ((/{Raw}/i).test(textRaw)) return [];
+    if ((/\{Raw\}/ui).test(textRaw)) return [];
 
     return sendBigBlock;
 }

@@ -2,37 +2,37 @@
 import { getSkipSign, getSkipSign2 } from '../../tools/removeSpecialChar';
 
 function textReplace(textElement: string): string {
-    return textElement.replace(/ *, */g, ', ')
-        .replace(/ *:= */g, ' := ')
-        .replace(/ *!= */g, ' != ')
+    return textElement.replace(/ *, */gu, ', ')
+        .replace(/ *:= */ug, ' := ')
+        .replace(/ *!= */ug, ' != ')
         // .replace(/ *== */g, ' == ') test err
         // .replace(/ *>= */g, ' >= ') test err
         // .replace(/ *<= */g, ' <= ') test err
         // TODO .replace(/ *== */g, ' == ')
-        .replace(/ *\.= */g, ' .= ')
-        .replace(/ *\+= */g, ' += ')
-        .replace(/ *-= */g, ' -= ')
-        .replace(/ *\|\| */g, ' || ')
-        .replace(/ *&& */g, ' && ')
-        .replace(/ *<> */g, ' <> ')
-        .replace(/\breturn\s+/g, 'return ')
-        .replace(/\bReturn\s+/g, 'Return ')
+        .replace(/ *\.= */ug, ' .= ')
+        .replace(/ *\+= */ug, ' += ')
+        .replace(/ *-= */ug, ' -= ')
+        .replace(/ *\|\| */ug, ' || ')
+        .replace(/ *&& */ug, ' && ')
+        .replace(/ *<> */ug, ' <> ')
+        .replace(/\breturn\s+/ug, 'return ')
+        .replace(/\bReturn\s+/ug, 'Return ')
         // .replace(/ *\? */g, ' ? ')
-        .replace(/\( */g, '(')
-        .replace(/ *\)/g, ')')
-        .replace(/\[ */g, '[')
-        .replace(/ *]/g, ']')
-        .replace(/ *{ */g, ' {')
-        .replace(/ *}/g, '}')
-        .replace(/}\s+/g, '} ')
-        .replace(/\)\s*{ */g, ') {')
-        .replace(/\bif\s*\(/g, 'if (')
-        .replace(/\bIf\s*\(/g, 'If (')
-        .replace(/\bIF\s*\(/g, 'IF (')
-        .replace(/\bwhile\s*\(/g, 'while (')
-        .replace(/\bWhile\s*\(/g, 'While (')
-        .replace(/\bWHILE\s*\(/g, 'WHILE (')
-        .replace(/ *;/g, ' ;');
+        .replace(/\( */ug, '(')
+        .replace(/ *\)/ug, ')')
+        .replace(/\[ */ug, '[')
+        .replace(/ *\]/ug, ']')
+        .replace(/ *\{ */ug, ' {')
+        .replace(/ *\}/ug, '}')
+        .replace(/\}\s+/ug, '} ')
+        .replace(/\)\s*\{ */ug, ') {')
+        .replace(/\bif\s*\(/ug, 'if (')
+        .replace(/\bIf\s*\(/ug, 'If (')
+        .replace(/\bIF\s*\(/ug, 'IF (')
+        .replace(/\bwhile\s*\(/ug, 'while (')
+        .replace(/\bWhile\s*\(/ug, 'While (')
+        .replace(/\bWHILE\s*\(/ug, 'WHILE (')
+        .replace(/ *;/ug, ' ;');
     // \s === [ \f\n\r\t\v]
     // TODO more TEST & options
 }
@@ -50,7 +50,7 @@ function fnLR(strElement: string): string {
 }
 
 function fnStrGroup(text: string): string {
-    const headInt = text.search(/\S/);
+    const headInt = text.search(/\S/u);
 
     const head = (headInt > 0)
         ? text.substring(0, headInt)

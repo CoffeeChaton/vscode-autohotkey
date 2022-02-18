@@ -2,7 +2,7 @@ export function getCommentOfLine({ textRaw, lStr }: { textRaw: string; lStr: str
     if (textRaw.length > lStr.length) {
         const comment = textRaw.substring(lStr.length, textRaw.length);
         if (comment.startsWith(';;')) {
-            return comment.replace(/^;;/, '');
+            return comment.replace(/^;;/u, '');
         }
     }
     return null;

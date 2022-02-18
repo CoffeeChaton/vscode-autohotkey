@@ -15,14 +15,14 @@ import * as vscode from 'vscode';
 
 export function ahkInclude(document: vscode.TextDocument, position: vscode.Position): false | vscode.Location {
     // at #include line
-    const includeExec = (/^\s*#include(?:again)?\s*(?:\*i )?\s*(\S+\.ahk)\s*$/i).exec(document.lineAt(position).text);
+    const includeExec = (/^\s*#include(?:again)?\s*(?:\*i )?\s*(\S+\.ahk)\s*$/ui).exec(document.lineAt(position).text);
     if (includeExec === null) return false; //               includeExec[1]
 
     const length = Math.max(document.uri.path.lastIndexOf('/'), document.uri.path.lastIndexOf('\\'));
     if (length <= 0) return false;
     const lPath = path.dirname(document.uri.fsPath);
-    const rPath = includeExec[1].replace(/%A_Space%/g, ' ').replace(/%A_Tab%/g, '\t');
-    if ((/%A_\w+%/).test(rPath)) {
+    const rPath = includeExec[1].replace(/%A_Space%/ug, ' ').replace(/%A_Tab%/ug, '\t');
+    if ((/%A_\w+%/u).test(rPath)) {
         console.log('ahkInclude ~ neko-help not support of %A_ScriptDir% or Similar syntax');
         return false;
     }

@@ -16,7 +16,7 @@ type FuncTailType = {
 
 function getSelectionRange(DocStrMap: TTokenStream, defLine: number, searchLine: number): vscode.Range {
     // const argPos = Math.max(DocStrMap[defLine].lStr.indexOf('('), 0);
-    const colS = DocStrMap[defLine].lStr.search(/\w/);
+    const colS = DocStrMap[defLine].lStr.search(/\w/u);
     const colE = DocStrMap[searchLine].lStr.lastIndexOf(')');
     //  const colFixE = colE === -1 ? DocStrMap[searchLine].lStr.length : colE;
     return new vscode.Range(
@@ -35,7 +35,7 @@ function getFuncTail({
     defLine,
 }: FuncTailType): false | FuncDefData {
     // i+1   ^, something , something ........ ) {$
-    if ((/\)\s*{\s*$/).test(searchText)) {
+    if ((/\)\s*\{\s*$/u).test(searchText)) {
         const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine);
         return { name, selectionRange };
     }
@@ -44,8 +44,8 @@ function getFuncTail({
     // i+1   ^, something , something ......)$
     // i+2   ^{
     if (
-        (/\)\s*$/).test(searchText)
-        && (/^\s*{/).test(DocStrMap[searchLine + 1].lStr)
+        (/\)\s*$/u).test(searchText)
+        && (/^\s*\{/u).test(DocStrMap[searchLine + 1].lStr)
     ) {
         const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine);
         return { name, selectionRange };
@@ -58,11 +58,11 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | Fu
     if (defLine + 1 === DocStrMap.length) return false;
     const textFix = DocStrMap[defLine].lStr;
 
-    const fnHead = (/^\s*(\w+)\(/).exec(textFix); //  funcName(...
+    const fnHead = (/^\s*(\w+)\(/u).exec(textFix); //  funcName(...
     if (fnHead === null) return false;
 
     const name = fnHead[1];
-    if ((/^(?:if|while)$/i).test(name)) return false;
+    if ((/^(?:if|while)$/ui).test(name)) return false;
 
     const funcData = getFuncTail({
         DocStrMap,
@@ -81,7 +81,7 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | Fu
     for (let searchLine = defLine + 1; searchLine < iMax; searchLine++) {
         const searchText = DocStrMap[searchLine].lStr;
 
-        if (!(/^\s*,/).test(searchText)) return false;
+        if (!(/^\s*,/u).test(searchText)) return false;
 
         const funcData2 = getFuncTail({
             DocStrMap,

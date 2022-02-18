@@ -12,7 +12,7 @@ async function getWmThisCore({ ahkSymbol, fsPath }: TSymAndFsPath): Promise<vsco
     const lineBase = ahkSymbol.range.start.line;
     Pretreatment(document.getText(ahkSymbol.range).split('\n'), lineBase)
         .forEach((v, index) => {
-            [...v.lStr.matchAll(/\bthis\.(\w\w+)\b/gi)]
+            [...v.lStr.matchAll(/\bthis\.(\w\w+)\b/gui)]
                 .forEach((name) => {
                     if (!mapStrNumber.has(name[1])) mapStrNumber.set(name[1], index + lineBase);
                 });

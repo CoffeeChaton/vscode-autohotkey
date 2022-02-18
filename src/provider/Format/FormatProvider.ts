@@ -28,20 +28,20 @@ function Hashtag(textFix: string): '#if' | '#HotString' | '' {
 
     // https://www.autohotkey.com/docs/commands/_If.htm#Basic_Operation
     if (
-        (/^#ifwin(?:not)?(?:active|exist)\b/i).test(textFix)
-        || (/^#if\b/i).test(textFix)
+        (/^#ifwin(?:not)?(?:active|exist)\b/ui).test(textFix)
+        || (/^#if\b/ui).test(textFix)
     ) {
         return '#if';
     }
 
     // https://www.autohotkey.com/docs/commands/_Hotstring.htm
-    if ((/^#hotstring\b/i).test(textFix)) return '#HotString';
+    if ((/^#hotstring\b/ui).test(textFix)) return '#HotString';
 
     return '';
 }
 
 function isReturn(tagDeep: number, deep: number, textFix: string): boolean {
-    return (tagDeep === deep && (/^\s*return\s*$/i).test(textFix));
+    return (tagDeep === deep && (/^\s*return\s*$/iu).test(textFix));
 }
 
 type WarnUseType =
@@ -103,7 +103,7 @@ function fn_Warn_thisLineText_WARN(args: WarnUseType): vscode.TextEdit {
 
     if (
         inLTrim === 1
-        && !(/^\s\(/i).test(textRaw)
+        && !(/^\s\(/iu).test(textRaw)
     ) {
         return wrap(args, document.lineAt(line).text);
     }

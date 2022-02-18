@@ -26,9 +26,9 @@ function getValAssignOfFunc(document: vscode.TextDocument, wordUp: string, ahkSy
         const { textRaw, lStr } = DocStrMap[linePos];
         if (
             lStr.indexOf(':=') === -1
-            && !(/^\s*static\s+\w/i).test(lStr)
-            && !(/^\s*global\s+\w/i).test(lStr)
-            && !(/^\s*local\s+\w/i).test(lStr)
+            && !(/^\s*static\s+\w/ui).test(lStr)
+            && !(/^\s*global\s+\w/ui).test(lStr)
+            && !(/^\s*local\s+\w/ui).test(lStr)
         ) {
             continue;
         }
@@ -36,15 +36,15 @@ function getValAssignOfFunc(document: vscode.TextDocument, wordUp: string, ahkSy
 
         const comment = getCommentOfLine({ lStr, textRaw }) ?? '';
         const lStrFix = removeParentheses(lStr);
-        lStrFix.replace(/^\s*static\b/i, '')
-            .replace(/^\s*global\b/i, '')
-            .replace(/^\s*local\b/i, '')
+        lStrFix.replace(/^\s*static\b/ui, '')
+            .replace(/^\s*global\b/ui, '')
+            .replace(/^\s*local\b/ui, '')
             .trim()
             .split(',')
             .map((str) => str.trim())
             .filter((str) => str.toUpperCase().startsWith(wordUp))
-            .map((str) => str.replace(/:=.*/, '').trim())
-            .filter((v) => !(/[%.[\]]/).test(v))
+            .map((str) => str.replace(/:=.*/u, '').trim())
+            .filter((v) => !(/[%.[\]]/u).test(v))
             .forEach((name) => {
                 const col = Math.max(0, lStr.indexOf(name));
                 arr.push({
@@ -71,14 +71,14 @@ function getArgsOfFunc(document: vscode.TextDocument, wordUp: string, ahkSymbol:
         const { textRaw, lStr } = DocStrMap[linePos];
         const comment = getCommentOfLine({ lStr, textRaw }) ?? '';
         lStr
-            .replace(/^\s*\w+\(\s*/, '')
-            .replace(/\)\s*$/, '')
+            .replace(/^\s*\w+\(\s*/u, '')
+            .replace(/\)\s*$/u, '')
             .trim()
             .split(',')
             .map((v) => v.trim())
             .filter((v) => v.toUpperCase().startsWith(wordUp)) // TODO FIX startsWith OR ===
             .forEach((v) => {
-                const name = v.replace(/:=.*/, '').trim();
+                const name = v.replace(/:=.*/u, '').trim();
                 arr.push({
                     name,
                     comment,

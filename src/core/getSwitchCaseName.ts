@@ -1,10 +1,10 @@
 export function getCaseDefaultName(textRaw: string, lStr: string): false | string {
     //  isDefault
-    if ((/^\s*\bdefault\b\s*:/i).test(lStr)) return 'Default :';
+    if ((/^\s*\bdefault\b\s*:/iu).test(lStr)) return 'Default :';
 
-    if (!(/^\s*\bcase\b[\s,]/i).test(lStr)) return false;
+    if (!(/^\s*\bcase\b[\s,]/ui).test(lStr)) return false;
 
-    const caseS = lStr.search(/\scase[\s,]/i);
+    const caseS = lStr.search(/\scase[\s,]/ui);
     if (caseS === -1) return false;
 
     const caseE = lStr.indexOf(':');
@@ -15,7 +15,7 @@ export function getCaseDefaultName(textRaw: string, lStr: string): false | strin
 }
 
 export function getSwitchName(textRaw: string): string {
-    return textRaw.replace(/^\s*\bswitch\b\s*/i, '')
-        .replace(/{\s*$/, '')
+    return textRaw.replace(/^\s*\bswitch\b\s*/ui, '')
+        .replace(/\{\s*$/u, '')
         .trim() || '!!not find Switch Name';
 }

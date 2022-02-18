@@ -16,7 +16,7 @@ function getIgnore(DocStrMap: TTokenStream, line: number, IgnoreLine: number): n
     // ;@ahk-ignore 30 line.
     // textRaw
     if (DocStrMap[line].textRaw.indexOf(EDiagBase.ignore) === -1) return IgnoreLine;
-    const ignoreExec = (/^\s*;@ahk-ignore\s+(\d+)\s/).exec(DocStrMap[line].textRaw);
+    const ignoreExec = (/^\s*;@ahk-ignore\s+(\d+)\s/iu).exec(DocStrMap[line].textRaw);
     if (ignoreExec === null) {
         // console.log('function getIgnore -> ignoreExec === null');
         // console.log(line, ' line');
@@ -39,22 +39,22 @@ function assign(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnosti
 }
 function getLoopErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnostic {
     const { lStr } = DocStrMap[line];
-    const exec = (/^\s*Loop\b[\s,]+(\w+)/i).exec(lStr);
+    const exec = (/^\s*Loop\b[\s,]+(\w+)/iu).exec(lStr);
     if (exec === null) return 0;
     const SecondSection = exec[1];
-    if ((/^(?:\d+|Files|Parse|Read|Reg)$/i).test(SecondSection)) return 1;
+    if ((/^(?:\d+|Files|Parse|Read|Reg)$/ui).test(SecondSection)) return 1;
 
     // eslint-disable-next-line no-magic-numbers
-    const position = Math.max(0, lStr.search(/\bloop\b/i)) + 4;
+    const position = Math.max(0, lStr.search(/\bloop\b/iu)) + 4;
     const col = Math.max(0, lStr.indexOf(SecondSection, position));
     const range = new vscode.Range(line, col, line, col + SecondSection.length);
-    if ((/^RootKey$/i).test(SecondSection)) {
+    if ((/^RootKey$/ui).test(SecondSection)) {
         // https://www.autohotkey.com/docs/commands/LoopReg.htm#old
         const value = EDiagCode.code801;
         const tags = [vscode.DiagnosticTag.Deprecated];
         return setDiagnostic(value, range, vscode.DiagnosticSeverity.Warning, tags);
     }
-    if ((/^FilePattern$/i).test(SecondSection)) {
+    if ((/^FilePattern$/ui).test(SecondSection)) {
         // https://www.autohotkey.com/docs/commands/LoopFile.htm#old
         const value = EDiagCode.code802;
         const tags = [vscode.DiagnosticTag.Deprecated];
@@ -69,25 +69,25 @@ function getLoopErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagn
 function getDirectivesErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnostic {
     // err of #Directives
     if (DocStrMap[line].lStr.indexOf('#') === -1) return 0;
-    if (!(/^\s*#/i).test(DocStrMap[line].lStr)) return 0;
+    if (!(/^\s*#/ui).test(DocStrMap[line].lStr)) return 0;
 
     const { lStr } = DocStrMap[line];
-    const exec = (/^\s*#(\w+)/).exec(lStr);
+    const exec = (/^\s*#(\w+)/u).exec(lStr);
     if (exec === null) return 0;
     const Directives = exec[1];
     const col = Math.max(0, lStr.indexOf(Directives));
     const range = new vscode.Range(line, col, line, col + Directives.length);
-    if ((/^EscapeChar$/i).test(Directives)) {
+    if ((/^EscapeChar$/ui).test(Directives)) {
         // change of ` https://www.autohotkey.com/docs/commands/_EscapeChar.htm
         const value = EDiagCode.code901;
         return setDiagnostic(value, range, vscode.DiagnosticSeverity.Error, []);
     }
-    if ((/^CommentFlag$/i).test(Directives)) {
+    if ((/^CommentFlag$/ui).test(Directives)) {
         // change of ; https://www.autohotkey.com/docs/commands/_CommentFlag.htm
         const value = EDiagCode.code902;
         return setDiagnostic(value, range, vscode.DiagnosticSeverity.Error, []);
     }
-    if ((/^(?:DerefChar|Delimiter)$/i).test(Directives)) {
+    if ((/^(?:DerefChar|Delimiter)$/ui).test(Directives)) {
         // change of % , #DerefChar https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related
         const value = EDiagCode.code903;
         return setDiagnostic(value, range, vscode.DiagnosticSeverity.Error, []);
@@ -96,8 +96,8 @@ function getDirectivesErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode
 }
 function getCommandErrFnReplace(commandHead: string, lStr: string, line: number): null | vscode.Diagnostic {
     if (
-        (/^(?:File(Append|GetAttrib|Read)|GetKeyState|IfExist|IfInString|IfWin(Active|Exist))$/i).test(commandHead)
-        || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/i).test(commandHead)
+        (/^(?:File(Append|GetAttrib|Read)|GetKeyState|IfExist|IfInString|IfWin(Active|Exist))$/ui).test(commandHead)
+        || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/ui).test(commandHead)
     ) {
         const col = lStr.indexOf(commandHead);
         const range = new vscode.Range(line, col, line, col + commandHead.length);
@@ -112,20 +112,20 @@ function getCommandErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Di
     // TODO result: Readonly<MyDocSymbol[]>
     // TODO search Deprecated
     // if (h.indexOf(line) !== -1) return 1;
-    if (!(/^\s*\w+[\s,]/).test(DocStrMap[line].lStr)) return 0;
+    if (!(/^\s*\w+[\s,]/u).test(DocStrMap[line].lStr)) return 0;
     const { lStr } = DocStrMap[line];
-    const exec = (/^\s*(\w+)[\s,]/).exec(lStr);
+    const exec = (/^\s*(\w+)[\s,]/u).exec(lStr);
     if (exec === null) return 0;
     const commandHead = exec[1];
-    if ((/^switch|case|if|while|else|return|Break|for|sleep$/i).test(commandHead)) return 1;
+    if ((/^switch|case|if|while|else|return|Break|for|sleep$/ui).test(commandHead)) return 1;
 
     const fnReplaceErr = getCommandErrFnReplace(commandHead, lStr, line);
     if (fnReplaceErr) return fnReplaceErr;
-    if ((/^Loop$/i).test(commandHead)) return getLoopErr(DocStrMap, line);
+    if ((/^Loop$/ui).test(commandHead)) return getLoopErr(DocStrMap, line);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _temp = {
-        exec: /^EnvMult$/i, // TODO EnvDiv
+        exec: /^EnvMult$/ui, // TODO EnvDiv
         EDiagCode: EDiagCode.code903,
     };
     // TODO ifEq https://wyagd001.github.io/zh-cn/docs/commands/IfEqual.htm

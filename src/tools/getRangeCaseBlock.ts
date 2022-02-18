@@ -10,7 +10,7 @@ export function getRangeCaseBlock(
     RangeEnd: number,
     lStr: string,
 ): vscode.Range {
-    if (!(/:\s*$/).test(lStr)) {
+    if (!(/:\s*$/u).test(lStr)) {
         // exp : case "cat": return "cat";
         // exp : case 3: do something;
         return getRangeOfLine(DocStrMap, defLine);
@@ -24,7 +24,7 @@ export function getRangeCaseBlock(
 
         const lineLStr = DocStrMap[line].lStr;
 
-        if ((/^\s*\bswitch\b/i).test(lineLStr)) {
+        if ((/^\s*\bswitch\b/ui).test(lineLStr)) {
             const SwitchRange = getRange(DocStrMap, line, line, RangeEnd);
             Resolved = SwitchRange.end.line;
             //       console.log(line, `line, Nested SwitchRange -> ${Resolved}`, Resolved);
@@ -32,7 +32,7 @@ export function getRangeCaseBlock(
         }
         if (
             lineLStr.indexOf(':') !== -1
-            && ((/^\s*\bcase\b\s*/i).test(lineLStr) || (/^\s*\bdefault\b\s*:/i).test(lineLStr))
+            && ((/^\s*\bcase\b\s*/ui).test(lineLStr) || (/^\s*\bdefault\b\s*:/ui).test(lineLStr))
         ) {
             const col = DocStrMap[line - 1].lStr.length;
             return new vscode.Range(startPos, new vscode.Position(line - 1, col));

@@ -9,7 +9,7 @@ export function isPosAtStr(document: vscode.TextDocument, position: vscode.Posit
         return true; // in ;comment
     }
     let tf = 1;
-    const text = textRaw.replace(/`./g, '  ');
+    const text = textRaw.replace(/`./ug, '  ');
     const sL = text.length;
     for (let i = 0; i < sL; i++) {
         if (col === i) return tf !== 1;

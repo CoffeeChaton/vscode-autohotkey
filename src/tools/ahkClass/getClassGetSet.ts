@@ -11,7 +11,7 @@ function getName(FuncInput: FuncInputType): string | false {
         RangeEndLine,
     } = FuncInput;
     const lStrTrim = lStr.trim();
-    const exec = (/\w+/).exec(lStrTrim);
+    const exec = (/\w+/u).exec(lStrTrim);
     if (exec === null) return false;
     if (lStrTrim.endsWith('{')) return exec[0];
 
@@ -32,7 +32,7 @@ export function getClassGetSet(FuncInput: FuncInputType): false | TAhkSymbol {
     } = FuncInput;
     if (lStr.indexOf('(') !== -1 || lStr.indexOf('=') !== -1) return false;
 
-    if (!(/^\s*\w+(?:\[\\])?\s*{?\s*$/).test(lStr)) return false;
+    if (!(/^\s*\w+(?:\[\])?\s*\{?\s*$/u).test(lStr)) return false;
     const name = getName(FuncInput);
     if (name === false) return false;
 

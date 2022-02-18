@@ -2,7 +2,7 @@ import { toArray } from '../Base64';
 import { TDbgpProperty } from '../DebugTypeEnum';
 
 export function likeArray(property: TDbgpProperty, name: string | undefined): boolean {
-    if (name && (/^\[\d+]$/).test(name)) return true;
+    if (name && (/^\[\d+]$/u).test(name)) return true;
     if (!property.property) return false;
 
     return toArray(property.property)
@@ -10,6 +10,6 @@ export function likeArray(property: TDbgpProperty, name: string | undefined): bo
             const attrName = childProperty.attr?.name;
             return (!attrName)
                 ? false
-                : (/\[\d+]/).test(attrName);
+                : (/\[\d+]/u).test(attrName);
         });
 }

@@ -4,7 +4,7 @@ export function isHotStr(textFix: string): boolean {
 }
 export function isLabel(textFix: string): boolean {
     if (textFix === '') return false;
-    return (/^(?!case)\s+\w*\w:$/i).test(textFix);
+    return (/^(?!case)\s+\w*\w:$/iu).test(textFix);
 }
 /*
 ```ahk

@@ -7,19 +7,19 @@ export function thisLineDeep(textFix: string): 1 | 0 {
         return 0;
     }
     const CLL = [
-        /^[,.?]/,
-        /^:[^:]/, // ? : Ternary operation -> ':' // if (hasDoubleSemicolon === true)  will not goto this line.
-        /^\+[^+]/, // +
-        /^-[^-]/, // -
-        /^\*[^/]/, // /^*  but not */
-        /^\//, // /
-        /^and\b/i,
-        /^or\b/i,
-        /^\|\|/i, // ||
-        /^&&/, // &&
-        /^[!~&/<>|^]/,
-        /^new\b/i,
-        /^not\b/i,
+        /^[,.?]/u,
+        /^:[^:]/u, // ? : Ternary operation -> ':' // if (hasDoubleSemicolon === true)  will not goto this line.
+        /^\+[^+]/u, // +
+        /^-[^-]/u, // -
+        /^\*[^/]/u, // /^*  but not */
+        /^\//u, // /
+        /^and\b/ui,
+        /^or\b/ui,
+        /^\|\|/ui, // ||
+        /^&&/u, // &&
+        /^[!~&/<>|^]/u,
+        /^new\b/ui,
+        /^not\b/ui,
         // Don't do it /^%/, because ``` %i%Name := ... ```
     ];
     const iMax = CLL.length;

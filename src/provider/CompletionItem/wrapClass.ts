@@ -77,8 +77,8 @@ async function parsingUserDefClassRecursive(
 ): Promise<vscode.CompletionItem[]> {
     const { fsPath, ahkSymbol } = c0;
     const fnStrEq = ChapterArr[deep]
-        ? new RegExp(`^${ChapterArr[deep]}$`, 'i')
-        : /^$/;
+        ? new RegExp(`^${ChapterArr[deep]}$`, 'iu')
+        : /^$/u;
     const itemS: vscode.CompletionItem[] = [];
     const strKind = getKind(ahkSymbol.kind);
     const newTrack = [...track, `${strKind}  ${ahkSymbol.name}`];
@@ -93,7 +93,7 @@ async function parsingUserDefClassRecursive(
     if (ahkSymbol.kind === vscode.SymbolKind.Class) {
         const ahkExtends = ahkSymbol.detail;
         if (ahkExtends !== '') {
-            const testName = new RegExp(`^${ahkExtends}$`, 'i');
+            const testName = new RegExp(`^${ahkExtends}$`, 'iu');
             const c1 = getUserDefClassSymbol(testName);
             if (c1 && c1.ahkSymbol.kind === vscode.SymbolKind.Class) {
                 itemS.push(...await parsingUserDefClassRecursive(c1, newTrack, ChapterArr, deep));
@@ -107,8 +107,8 @@ type TMathName = { ChapterArr: readonly string[]; strPart: string; ahkBaseObj: T
 
 function matchClassName({ ChapterArr, strPart, ahkBaseObj }: TMathName): string | null {
     // case 1: https://www.autohotkey.com/docs/Objects.htm#Objects_as_Functions
-    if ((/^new\s/i).test(strPart)) {
-        const ahkNewClass = (/^\w\w+/).exec(strPart.replace(/^new\s*/i, ''));
+    if ((/^new\s/iu).test(strPart)) {
+        const ahkNewClass = (/^\w+/u).exec(strPart.replace(/^new\s*/iu, ''));
         if (ahkNewClass !== null) return ahkNewClass[0];
     }
     // case 2:
@@ -147,7 +147,7 @@ function valTrack(
         const { lStr } = DocStrMap[linePos];
         const col = lStr.search(reg);
         if (col === -1) continue;
-        const strPart = lStr.substring(col + Head.length, lStr.length).replace(/^\s*:=\s*/, ''); // TODO
+        const strPart = lStr.substring(col + Head.length, lStr.length).replace(/^\s*:=\s*/u, ''); // TODO
         const name0 = matchClassName({ ChapterArr, strPart, ahkBaseObj });
         if (name0) classNameList.add(name0);
     }
@@ -170,7 +170,7 @@ async function triggerClassCore(
     const itemS: vscode.CompletionItem[] = [];
     const nameList = valTrack(document, position, ChapterArr, ahkBaseObj);
     for (const name of nameList) {
-        const testName = new RegExp(`^${name}$`, 'i');
+        const testName = new RegExp(`^${name}$`, 'ui');
         const c0 = getUserDefClassSymbol(testName);
         if (c0) {
             const ahkThis = ChapterArr.length === 1
@@ -194,7 +194,7 @@ async function triggerClass(
     */
 
     const Head = ChapterArr[0];
-    if ((/^this$/i).test(Head)) {
+    if ((/^this$/iu).test(Head)) {
         const stackPro = getStack(document, position);
         return (stackPro === null || stackPro.stack.length === 0
                 || stackPro.stack[0].ahkSymbol.kind !== vscode.SymbolKind.Class)
@@ -202,7 +202,7 @@ async function triggerClass(
             : getWmThis({ ahkSymbol: stackPro.stack[0].ahkSymbol, fsPath: document.uri.fsPath });
     }
 
-    const testName0 = new RegExp(`^${Head}$`, 'i');
+    const testName0 = new RegExp(`^${Head}$`, 'ui');
     const c0 = getUserDefClassSymbol(testName0); // static class / val / Method
     if (c0) {
         const { fsPath } = document.uri;

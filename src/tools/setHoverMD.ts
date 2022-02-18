@@ -16,15 +16,15 @@ function getCommentText(textRaw: string): string {
 }
 
 function getReturnText(lStr: string, textRaw: string): string {
-    const col = lStr.search(/\breturn\b[\s,]+.+/i);
+    const col = lStr.search(/\breturn\b[\s,]+.+/ui);
     if (col === -1) return '';
 
     let name = textRaw.substring(col).trim();
-    const Func = (/^(\w+)\(/).exec(name);
+    const Func = (/^(\w+)\(/u).exec(name);
     if (Func) {
         name = `${Func[1]}(...)`;
     } else if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
-        const returnObj = (/^({\s*\w+\s*:)/).exec(name);
+        const returnObj = (/^({\s*\w+\s*:)/u).exec(name);
         if (returnObj) name = `obj ${returnObj[1]}`;
     }
     return `    ${name.trim()}\n`;
@@ -32,8 +32,8 @@ function getReturnText(lStr: string, textRaw: string): string {
 
 export function inCommentBlock2(textRaw: string, commentBlock: boolean): boolean {
     if (commentBlock) {
-        if ((/^\s*\*\//).test(textRaw)) return false; // */
-    } else if ((/^\s*\/\*\*/).test(textRaw)) {
+        if ((/^\s*\*\//u).test(textRaw)) return false; // */
+    } else if ((/^\s*\/\*\*/u).test(textRaw)) {
         return true; // /**
     }
     return commentBlock;

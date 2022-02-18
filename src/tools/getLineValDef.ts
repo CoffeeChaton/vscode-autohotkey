@@ -17,7 +17,7 @@ class CLineVal {
 }
 */
 export function getLineValDef(lStr: string): string[] {
-    const lStrFix = lStr.replace(/^\s*(local|global|static)\s/i, '');
+    const lStrFix = lStr.replace(/^\s*(local|global|static)\s/ui, '');
     return removeParentheses(removeBigParentheses(lStrFix))
         .split(',')
         .map((str) => {

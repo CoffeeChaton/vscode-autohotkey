@@ -255,9 +255,9 @@ export class DebugDispather extends EventEmitter {
         if (isVariable) {
             const ahkVar = (await this.getVariable(frameId, scope, value))[0];
             value = ahkVar.value;
-            if (value.match(/^"|"$/g)) {
+            if (value.match(/^"|"$/gu)) {
                 type = 'string';
-                value = value.replace(/^"|"$/g, '');
+                value = value.replace(/^"|"$/gu, '');
             }
         }
 
