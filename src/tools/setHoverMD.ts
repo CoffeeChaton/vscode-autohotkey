@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { EMode, TAhkSymbol } from '../globalEnum';
 import { Pretreatment } from './Pretreatment';
+import { ClassWm } from './wm';
 
 function commentFix(commentText: string): string {
     return commentText !== ''
@@ -43,13 +44,18 @@ type TSymbol = {
     AhkSymbol: TAhkSymbol;
     fsPath: string;
 };
+// eslint-disable-next-line no-magic-numbers
+const w = new ClassWm<TAhkSymbol, vscode.MarkdownString>(10 * 60 * 1000, 'setFuncHoverMD', 9000);
 
 export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.MarkdownString> {
     const { AhkSymbol, fsPath } = mySymbol;
-    const document = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
     if (AhkSymbol.kind !== vscode.SymbolKind.Function && AhkSymbol.kind !== vscode.SymbolKind.Method) {
         return new vscode.MarkdownString('just support Function/Method hover now', true);
     }
+    const cache = w.getWm(AhkSymbol);
+    if (cache) return cache;
+
+    const document = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
     // --set end---
 
     let commentBlock = false;
@@ -73,10 +79,12 @@ export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.Markdown
     const title = `${document.getText(AhkSymbol.selectionRange)}{\n`;
 
     const commentText2 = commentFix(commentText);
-    return new vscode.MarkdownString('', true)
+    const md = new vscode.MarkdownString('', true)
         .appendCodeblock(kindDetail, 'ahk')
         .appendCodeblock(title, 'ahk')
         .appendCodeblock(returnList, 'ahk')
         .appendCodeblock('}\n', 'ahk')
         .appendMarkdown(commentText2);
+
+    return w.setWm(AhkSymbol, md);
 }
