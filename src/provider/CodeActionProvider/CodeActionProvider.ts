@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { EDiagBase, EDiagCode, EDiagFsPath } from '../../globalEnum';
+import { IgnoreArgNeverUsed } from './IgnoreArgNeverUsed';
 
 function consoleDefault(d: never, _diag: vscode.Diagnostic): null {
     console.log('--99--66-33--44 Default -> a', d);
@@ -42,7 +43,7 @@ function setEdit(uri: vscode.Uri, line: number, FsPath: EDiagFsPath): vscode.Wor
     return edit;
 }
 
-function setIgnoreLine(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.CodeAction {
+function setIgnore(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.CodeAction {
     // diag
     //    code: 102
     //    message: "assign warning"
@@ -51,6 +52,8 @@ function setIgnoreLine(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.
     //    source: "neko help"
     const FsPath = getFsPath(diag);
     if (FsPath === null) return null;
+    if (FsPath === EDiagFsPath.code501) return IgnoreArgNeverUsed(uri, diag);
+
     const CA = new vscode.CodeAction('ignore line');
     CA.edit = setEdit(uri, diag.range.start.line, FsPath);
     CA.kind = vscode.CodeActionKind.QuickFix;
@@ -61,7 +64,7 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
     // eslint-disable-next-line class-methods-use-this
     public provideCodeActions(
         document: vscode.TextDocument,
-        range: vscode.Range | vscode.Selection,
+        _range: vscode.Range | vscode.Selection,
         context: vscode.CodeActionContext,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
@@ -69,7 +72,7 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
         const { uri } = document;
         const CAList: vscode.CodeAction[] = [];
         for (const diag of context.diagnostics) {
-            const CA = setIgnoreLine(uri, diag);
+            const CA = setIgnore(uri, diag);
             if (CA) CAList.push(CA);
         }
 
