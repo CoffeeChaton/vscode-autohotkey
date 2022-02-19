@@ -10,7 +10,7 @@ export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {
     Detecter.DocMap.clear();
 
     const results: Promise<void>[] = [];
-    ahkRootPath.forEach((folder) => results.push(buildByPathAsync(showMsg, folder.uri.fsPath)));
+    ahkRootPath.forEach((folder) => results.push(buildByPathAsync(showMsg, folder.uri.fsPath, false)));
     await Promise.all(results);
 
     if (showMsg) {
@@ -27,6 +27,6 @@ export function UpdateCache(): null {
     if (ahkRootPath === null) return null;
     Detecter.DocMap.clear();
 
-    ahkRootPath.forEach((folder): void => buildByPath(folder.uri.fsPath));
+    ahkRootPath.forEach((folder): void => buildByPath(folder.uri.fsPath, false));
     return null;
 }

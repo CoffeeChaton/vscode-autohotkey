@@ -11,8 +11,11 @@ import {
     TValName,
 } from '../globalEnum';
 import { Diagnostic } from '../provider/Diagnostic/Diagnostic';
+import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { Pretreatment } from '../tools/Pretreatment';
+import { diagColl } from './diagColl';
 import { getChildren } from './getChildren';
+import { globalValMap } from './globalValMap';
 import { getReturnByLine, ParserBlock, ParserLine } from './Parser';
 import { renameFn as renameFileNameFunc } from './renameFileNameFunc';
 
@@ -20,16 +23,6 @@ export const Detecter = {
     // key : vscode.Uri.fsPath,
     // val : vscode.DocumentSymbol[] -> MyDocSymbolArr
     DocMap: new Map<string, TAhkSymbolList>(),
-
-    // diagColl : vscode.DiagnosticCollection
-    diagColl: vscode.languages.createDiagnosticCollection('ahk-neko-help'),
-
-    // key : vscode.Uri.fsPath,
-    // val : Map<
-    //          key: TValName
-    //          val : TVal
-    //          >
-    globalValMap: new Map<string, TGValMap>(),
 
     getDocMapFile(): IterableIterator<string> {
         return Detecter.DocMap.keys();
@@ -46,7 +39,7 @@ export const Detecter = {
             if (fsPath.endsWith('.ahk')) {
                 Detecter.DocMap.delete(fsPath);
             }
-            Detecter.diagColl.delete(Uri);
+            diagColl.delete(Uri);
         }
     },
 
@@ -54,7 +47,7 @@ export const Detecter = {
         for (const Uri of e.files) {
             const { fsPath } = Uri;
             if (fsPath.endsWith('.ahk')) {
-                Detecter.updateDocDef(false, fsPath);
+                Detecter.updateDocDef(false, fsPath, true);
             }
         }
     },
@@ -63,15 +56,15 @@ export const Detecter = {
         for (const { oldUri, newUri } of e.files) {
             if (oldUri.fsPath.endsWith('.ahk') && newUri.fsPath.endsWith('.ahk')) {
                 Detecter.DocMap.delete(oldUri.fsPath);
-                Detecter.diagColl.delete(oldUri);
-                Detecter.updateDocDef(false, newUri.fsPath);
+                diagColl.delete(oldUri);
+                Detecter.updateDocDef(false, newUri.fsPath, true);
                 const fsPathList = Detecter.getDocMapFile();
                 renameFileNameFunc(oldUri, newUri, [...fsPathList]);
             }
         }
     },
 
-    async updateDocDef(showMsg: boolean, fsPath: string): Promise<vscode.DocumentSymbol[]> {
+    async updateDocDef(showMsg: boolean, fsPath: string, useDeepAnalysis: boolean): Promise<vscode.DocumentSymbol[]> {
         const Uri = vscode.Uri.file(fsPath);
         const document = await vscode.workspace.openTextDocument(Uri);
         const timeStart = Date.now();
@@ -98,37 +91,42 @@ export const Detecter = {
         if (!fsPath.includes(EStr.diff_name_prefix)) {
             if (showMsg) showTimeSpend(document.uri, timeStart);
             Detecter.DocMap.set(fsPath, result);
-            Detecter.globalValMap.set(fsPath, gValMapBySelf);
-            Diagnostic(DocStrMap, result, Uri, Detecter.diagColl);
+            globalValMap.set(fsPath, gValMapBySelf);
+            Diagnostic(DocStrMap, result, Uri, diagColl);
+            if (useDeepAnalysis) {
+                for (const ahkSymbol of result) {
+                    DeepAnalysis(document, ahkSymbol);
+                }
+            }
         }
         return result as vscode.DocumentSymbol[];
     },
 };
 
-export async function buildByPathAsync(showMsg: boolean, buildPath: string): Promise<void> {
+export async function buildByPathAsync(showMsg: boolean, buildPath: string, useDeepAnalysis: boolean): Promise<void> {
     if (fs.statSync(buildPath).isDirectory()) {
         const files = fs.readdirSync(buildPath);
         for (const file of files) {
             if (!getIgnoredFolder(file)) {
-                await buildByPathAsync(showMsg, `${buildPath}/${file}`);
+                await buildByPathAsync(showMsg, `${buildPath}/${file}`, useDeepAnalysis);
             }
         }
     } else if (!getIgnoredFile(buildPath)) {
         // const Uri = vscode.Uri.file(buildPath);
-        await Detecter.updateDocDef(showMsg, vscode.Uri.file(buildPath).fsPath);
+        await Detecter.updateDocDef(showMsg, vscode.Uri.file(buildPath).fsPath, useDeepAnalysis);
     }
 }
 
-export function buildByPath(buildPath: string): void {
+export function buildByPath(buildPath: string, useDeepAnalysis: boolean): void {
     if (fs.statSync(buildPath).isDirectory()) {
         const files = fs.readdirSync(buildPath);
         for (const file of files) {
             if (!getIgnoredFolder(file)) {
-                buildByPath(`${buildPath}/${file}`);
+                buildByPath(`${buildPath}/${file}`, useDeepAnalysis);
             }
         }
     } else if (!getIgnoredFile(buildPath)) {
         // const Uri = vscode.Uri.file(buildPath);
-        Detecter.updateDocDef(false, vscode.Uri.file(buildPath).fsPath);
+        Detecter.updateDocDef(false, vscode.Uri.file(buildPath).fsPath, useDeepAnalysis);
     }
 }

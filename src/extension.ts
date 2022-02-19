@@ -3,6 +3,7 @@ import { statusBarClick } from './command/Command';
 import { UpdateCache } from './command/UpdateCache';
 import { configChangEvent } from './configUI';
 import { Detecter } from './core/Detecter';
+import { diagColl } from './core/diagColl';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
@@ -44,7 +45,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
 export function deactive(): void {
     Detecter.DocMap.clear();
-    Detecter.diagColl.clear();
+    diagColl.clear();
 }
 
 /*

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Detecter } from '../../core/Detecter';
+import { diagColl } from '../../core/diagColl';
 import { getGlobalValDef } from '../../core/getGlobalValDef';
 import {
     DeepAnalysisResult,
@@ -150,7 +150,7 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
     if (cache) return cache;
 
     const { uri } = document;
-    const diagS = [...Detecter.diagColl.get(uri) ?? []];
+    const diagS = [...diagColl.get(uri) ?? []];
     const DocStrMap = Pretreatment(
         document.getText(ahkSymbol.range).split('\n'),
         ahkSymbol.range.start.line,
@@ -163,7 +163,7 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
         valMap,
     };
 
-    Detecter.diagColl.set(uri, [...diagS, ...diagArgs]);
+    diagColl.set(uri, [...diagS, ...diagArgs]);
 
     return w.setWm(ahkSymbol, v);
 }
