@@ -8,21 +8,21 @@ import { DeepAnalysisToCompletionItem } from './DeepAnalysisToCompletionItem';
 import { insertTextWm } from './insertTextWm';
 import { wrapClass } from './wrapClass';
 
-async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
+async function listAllFuncClass(): Promise<vscode.CompletionItem[]> {
     const fsPaths = Detecter.getDocMapFile();
     const itemS: vscode.CompletionItem[] = [];
     for (const fsPath of fsPaths) {
         const AhkSymbolList = Detecter.getDocMap(fsPath);
         if (AhkSymbolList === null) continue;
         for (const ahkSymbol of AhkSymbolList) {
-            if (ahkSymbol.kind === vscode.SymbolKind.Class && reg.test(ahkSymbol.name)) {
+            if (ahkSymbol.kind === vscode.SymbolKind.Class) {
                 const kind = vscode.CompletionItemKind.Class;
                 const item = new vscode.CompletionItem(ahkSymbol.name, kind);
                 item.insertText = await insertTextWm({ ahkSymbol, fsPath });
                 item.detail = 'neko help';
                 item.documentation = 'user def class';
                 itemS.push(item);
-            } else if (ahkSymbol.kind === vscode.SymbolKind.Function && reg.test(ahkSymbol.name)) {
+            } else if (ahkSymbol.kind === vscode.SymbolKind.Function) {
                 const kind = vscode.CompletionItemKind.Function;
                 const item = new vscode.CompletionItem(ahkSymbol.name, kind);
                 item.insertText = await insertTextWm({ ahkSymbol, fsPath });
@@ -33,17 +33,6 @@ async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
         }
     }
     return itemS;
-}
-
-async function listAllFuncClass(
-    document: vscode.TextDocument,
-    position: vscode.Position,
-    Range: vscode.Range,
-): Promise<vscode.CompletionItem[]> {
-    const wordUp = document.getText(Range).toUpperCase();
-    const wordStartReg = new RegExp(`${wordUp}`, 'iu');
-    const funcOrClassNameList = await getItemSOfEMode(wordStartReg);
-    return funcOrClassNameList;
 }
 
 async function wrapListAllFuncClass(
@@ -63,13 +52,13 @@ async function wrapListAllFuncClass(
         );
         const newStr = document.getText(newRange);
         if (newStr !== '.' && newStr !== '`' && newStr !== '%') {
-            const need0 = await listAllFuncClass(document, position, Range);
+            const need0 = await listAllFuncClass();
             return need0;
         }
         return [];
     }
     // at line start
-    const ed2 = await listAllFuncClass(document, position, Range);
+    const ed2 = await listAllFuncClass();
     return ed2;
 }
 
