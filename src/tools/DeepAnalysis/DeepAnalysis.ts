@@ -111,7 +111,7 @@ function setValMapDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenS
 
         const lineType: TAhkValType = getLineType(lStr, fnMode);
         // eslint-disable-next-line security/detect-unsafe-regex
-        for (const v of lStr.matchAll(/(?<![.`%])\b(\w+)\b\s*:?=/gu)) {
+        for (const v of lStr.matchAll(/(?<![.`])\b(\w+)\b\s*:?=/gu)) {
             const character = v.index;
             if (character === undefined) continue;
             const keyRawName = v[1];

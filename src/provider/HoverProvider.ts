@@ -1,6 +1,5 @@
 /* eslint-disable security/detect-non-literal-regexp */
 import * as vscode from 'vscode';
-import { Detecter } from '../core/Detecter';
 import {
     DeepAnalysisResult,
     EMode,
@@ -41,24 +40,14 @@ export class HoverProvider implements vscode.HoverProvider {
         position: vscode.Position,
         _token: vscode.CancellationToken,
     ): Promise<vscode.Hover | null> {
-        const AhkSymbolList = Detecter.getDocMap(document.uri.fsPath) ?? [];
-        for (const ahkSymbol of AhkSymbolList) {
-            DeepAnalysis(document, ahkSymbol);
-        }
         const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
         let ed: DeepAnalysisResult | null = null;
         if (ahkSymbol) {
             ed = DeepAnalysis(document, ahkSymbol);
         }
         // eslint-disable-next-line security/detect-unsafe-regex
-        const range = document.getWordRangeAtPosition(position, /(?<![.`%])\b\w+\b(?!%)/u);
-        if (!range) {
-            // const range2 = document.getWordRangeAtPosition(position, /(?:%)\b\w\w*\b(?:%)/);
-            // const word2 = document.getText(range2);
-            // const md2 = DeepAnalysisHover(document, position, word2);
-            // if (md2) return new vscode.Hover(md2);
-            return null;
-        }
+        const range = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
+        if (!range) return null;
 
         if (isPosAtStr(document, position)) return null;
 
@@ -73,7 +62,7 @@ export class HoverProvider implements vscode.HoverProvider {
         // if (commands) return commands;
 
         if (ed) {
-            const md = DeepAnalysisHover(ed, word.toUpperCase());
+            const md = DeepAnalysisHover(ed, wordUp);
             if (md) return new vscode.Hover(md);
         }
 

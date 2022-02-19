@@ -6,7 +6,6 @@ const filter = (src, _dest) => {
         '.config',
         '.git',
         '.history',
-        '.husky',
         '.idea',
         '.vscode',
         'coverage',

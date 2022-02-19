@@ -10,6 +10,7 @@
         "ipatalas.vscode-postfix-ts",
         "github.copilot",
         "alefragnani.project-manager",
-        "chakrounanas.turbo-console-log"
+        "chakrounanas.turbo-console-log",
+        "EditorConfig.EditorConfig"
     ]
 }

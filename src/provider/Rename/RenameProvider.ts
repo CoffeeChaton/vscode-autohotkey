@@ -36,7 +36,7 @@ export class RenameProvider implements vscode.RenameProvider {
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.WorkspaceEdit> {
         // eslint-disable-next-line security/detect-unsafe-regex
-        const wordRange = document.getWordRangeAtPosition(position, /(?<!\.|`|%)\b\w+\b(?!%)/u);
+        const wordRange = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
         if (!wordRange) return null;
         const word = document.getText(wordRange);
 

@@ -97,7 +97,7 @@ async function wrapListAllFuncClass(
     position: vscode.Position,
 ): Promise<vscode.CompletionItem[]> {
     // eslint-disable-next-line security/detect-unsafe-regex
-    const Range = document.getWordRangeAtPosition(position, /(?<![.`%])\b\w+\b(?!%)/u);
+    const Range = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
     if (Range === undefined) return []; // exp: . / []
 
     if (Range.start.character - 1 > -1) {

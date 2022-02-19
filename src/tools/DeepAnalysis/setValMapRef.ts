@@ -11,10 +11,11 @@ function getValRegMap(valMap: TValMap): Map<string, RegExp> {
 
     for (const [valName] of valMap) {
         // eslint-disable-next-line security/detect-non-literal-regexp
-        regMap.set(valName, new RegExp(`(?<![.\`%])\\b(${valName})\\b(?!%)`, 'igu'));
+        regMap.set(valName, new RegExp(`(?<![.\`])\\b(${valName})\\b`, 'igu'));
     }
     return regMap;
 }
+
 type TNeed = {
     valMap: TValMap;
     valMap2: TValMap;

@@ -176,7 +176,7 @@ export class DefProvider implements vscode.DefinitionProvider {
         if (isPosAtStr(document, position)) return null;
 
         // eslint-disable-next-line security/detect-unsafe-regex
-        const range = document.getWordRangeAtPosition(position, /(?<![.`%])\b\w+\b(?!%)/u);
+        const range = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
         if (!range) return null;
         const wordUp = document.getText(range).toUpperCase();
         const fileLink = ahkInclude(document, position);
