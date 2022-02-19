@@ -24,7 +24,7 @@ function getReturnText(lStr: string, textRaw: string): string {
     if (Func) {
         name = `${Func[1]}(...)`;
     } else if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
-        const returnObj = (/^({\s*\w+\s*:)/u).exec(name);
+        const returnObj = (/^(\{\s*\w+\s*:)/u).exec(name);
         if (returnObj) name = `obj ${returnObj[1]}`;
     }
     return `    ${name.trim()}\n`;

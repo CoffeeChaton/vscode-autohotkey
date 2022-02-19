@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import {
     EDiagCode,
     TAhkSymbol,
-    TArgListVal,
+    TArgAnalysis,
     TArgMap,
     TTokenStream,
 } from '../../globalEnum';
@@ -12,7 +12,7 @@ import { ahkValRegex } from '../regexTools';
 import { replacerSpace } from '../removeSpecialChar';
 
 function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TArgMap {
-    const argMap: TArgMap = new Map<string, TArgListVal>();
+    const argMap: TArgMap = new Map<string, TArgAnalysis>();
     const startLine = ahkSymbol.selectionRange.start.line;
     const endLine = ahkSymbol.selectionRange.end.line;
     for (const { lStr, textRaw, line } of DocStrMap) {
@@ -50,7 +50,7 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
                 new vscode.Position(line, character),
                 new vscode.Position(line, character + keyRawName.length),
             );
-            const value: TArgListVal = {
+            const value: TArgAnalysis = {
                 keyRawName,
                 defLoc: [new vscode.Location(uri, range)],
                 refLoc: [],

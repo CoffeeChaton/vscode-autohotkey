@@ -2,7 +2,6 @@
 /* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { getValOfFunc } from '../../tools/Func/getValOfFunc';
 import { setFuncHoverMD } from '../../tools/setHoverMD';
 import { ahkSend } from './ahkSend';
 import { DeepAnalysisToCompletionItem } from './DeepAnalysisToCompletionItem';
@@ -36,50 +35,6 @@ async function getItemSOfEMode(reg: RegExp): Promise<vscode.CompletionItem[]> {
     return itemS;
 }
 
-function wrapperOfValOFFuncList(
-    document: vscode.TextDocument,
-    position: vscode.Position,
-    wordUp: string,
-): vscode.CompletionItem[] {
-    const valOfFunc = getValOfFunc(document, position, wordUp);
-    if (valOfFunc === null) return [];
-    const { argItemS, valAssignItemS } = valOfFunc;
-    const itemS: vscode.CompletionItem[] = [];
-
-    const argLen = argItemS.length;
-    for (let i = 0; i < argLen; i++) {
-        const { name, comment, textRawFix } = argItemS[i];
-        const item = new vscode.CompletionItem(name, vscode.CompletionItemKind.Variable);
-        item.detail = 'neko help';
-        item.documentation = new vscode.MarkdownString(`${name}    arg    \n`, true)
-            .appendMarkdown('use `f12` or  `shift f12` goto def    \n')
-            .appendMarkdown(comment)
-            .appendMarkdown('    \n')
-            .appendCodeblock(textRawFix);
-        itemS.push(item);
-    }
-
-    const valLen = valAssignItemS.length;
-    for (let i = 0; i < valLen; i++) {
-        const {
-            name,
-            comment,
-            line,
-            textRawFix,
-        } = valAssignItemS[i];
-        const item = new vscode.CompletionItem(name, vscode.CompletionItemKind.Variable);
-        item.detail = 'neko help';
-        item.documentation = new vscode.MarkdownString(`line \`${line + 1}\`    \n`, true)
-            .appendMarkdown('use `f12` or  `shift f12` goto def    \n')
-            .appendMarkdown(comment)
-            .appendMarkdown('    \n')
-            .appendCodeblock(textRawFix);
-        itemS.push(item);
-    }
-
-    return itemS;
-}
-
 async function listAllFuncClass(
     document: vscode.TextDocument,
     position: vscode.Position,
@@ -88,8 +43,7 @@ async function listAllFuncClass(
     const wordUp = document.getText(Range).toUpperCase();
     const wordStartReg = new RegExp(`${wordUp}`, 'iu');
     const funcOrClassNameList = await getItemSOfEMode(wordStartReg);
-    const valOFFuncList = wrapperOfValOFFuncList(document, position, wordUp);
-    return [...funcOrClassNameList, ...valOFFuncList];
+    return funcOrClassNameList;
 }
 
 async function wrapListAllFuncClass(

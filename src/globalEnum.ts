@@ -150,7 +150,7 @@ export type TGetTypeInput = {
     ahkSymbol: TAhkSymbol;
 };
 export type TMapLineType = Map<number, EValType.local | EValType.global | EValType.Static>; // Map<line,ahkType>
-export type TArgListVal = {
+export type TArgAnalysis = {
     keyRawName: string;
     defLoc: vscode.Location[];
     refLoc: vscode.Location[];
@@ -159,18 +159,25 @@ export type TArgListVal = {
     isByRef: boolean;
     isVariadic: boolean;
 };
-export type TArgMap = Map<string, TArgListVal>; // k = valNameUP
-export type TValObj = {
+export type TArgMap = Map<string, TArgAnalysis>; // k = valNameUP
+export type TValAnalysis = {
     keyRawName: string;
     defLoc: vscode.Location[];
     refLoc: vscode.Location[];
     commentList: string[];
     ahkValType: TAhkValType;
 };
-export type TValMap = Map<string, TValObj>; // k = valNameUP
+export type TValMap = Map<string, TValAnalysis>; // k = valNameUP
+export type TTextAnalysis = {
+    keyRawName: string;
+    refLoc: vscode.Location[];
+};
+
+export type TTextMap = Map<string, TTextAnalysis>; // k = valNameUP
 export type DeepAnalysisResult = {
     argMap: TArgMap;
     valMap: TValMap;
+    textMap: TTextMap;
 };
 export const enum TAhkSymbolRange {
     argsRange = 2,

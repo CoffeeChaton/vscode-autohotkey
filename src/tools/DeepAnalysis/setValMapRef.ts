@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import {
     TAhkSymbol,
     TTokenStream,
+    TValAnalysis,
     TValMap,
-    TValObj,
 } from '../../globalEnum';
 
 function getValRegMap(valMap: TValMap): Map<string, RegExp> {
@@ -34,7 +34,7 @@ function setValUse(
         uri,
         line,
     }: TNeed,
-): TValObj | null {
+): TValAnalysis | null {
     // o === ['bgColor', 'bgColor', index: 18, input: '        Case ___: bgColor := 0xFF0000
     // ', groups: undefined]
     const defVal = valMap.get(valName.toUpperCase());
@@ -91,7 +91,7 @@ export function setValMapRef(
 ): TValMap {
     const regMap = getValRegMap(valMap);
 
-    const valMap2: TValMap = new Map<string, TValObj>();
+    const valMap2: TValMap = new Map<string, TValAnalysis>();
     const startLine = ahkSymbol.selectionRange.end.line;
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue;
@@ -100,7 +100,7 @@ export function setValMapRef(
         regMap.forEach((reg, valName) => {
             const matches = lStr.matchAll(reg);
             for (const o of matches) {
-                const newVal: TValObj | null = setValUse({
+                const newVal: TValAnalysis | null = setValUse({
                     valMap,
                     valMap2,
                     o,

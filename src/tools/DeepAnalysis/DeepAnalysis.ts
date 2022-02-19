@@ -9,9 +9,10 @@ import {
     TAhkValType,
     TArgMap,
     TRunValType2,
+    TTextMap,
     TTokenStream,
+    TValAnalysis,
     TValMap,
-    TValObj,
 } from '../../globalEnum';
 import { fnModeToValType } from '../Func/fnModeToValType';
 import { getFnModeWM } from '../Func/getFnMode';
@@ -21,6 +22,7 @@ import { Pretreatment } from '../Pretreatment';
 import { ahkValRegex } from '../regexTools';
 import { ClassWm } from '../wm';
 import { setArgMap } from './fnArgs';
+import { getTextMap } from './getTextMap';
 import { setValMapRef } from './setValMapRef';
 
 export function getLineType(lStr: string, fnMode: EFnMode): EValType.local | EValType.global | EValType.Static {
@@ -58,7 +60,7 @@ function getValue({
     lStr,
     lineType,
     uri,
-}: TGetValue): TValObj {
+}: TGetValue): TValAnalysis {
     const range = new vscode.Range(
         new vscode.Position(line, character),
         new vscode.Position(line, character + keyRawName.length),
@@ -76,7 +78,7 @@ function getValue({
     //     };
     // } // FIXME
 
-    const oldVal: TValObj | undefined = valMap.get(keyRawName.toUpperCase());
+    const oldVal: TValAnalysis | undefined = valMap.get(keyRawName.toUpperCase());
     if (oldVal) {
         return {
             keyRawName,
@@ -101,7 +103,7 @@ function getValue({
 
 function setValMapDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgMap): TValMap {
     const fnMode = getFnModeWM(ahkSymbol, DocStrMap);
-    const valMap: TValMap = new Map<string, TValObj>();
+    const valMap: TValMap = new Map<string, TValAnalysis>();
 
     const startLine = ahkSymbol.selectionRange.end.line;
     for (const { lStr, textRaw, line } of DocStrMap) {
@@ -115,7 +117,7 @@ function setValMapDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenS
             const character = v.index;
             if (character === undefined) continue;
             const keyRawName = v[1];
-            const value: TValObj = getValue({
+            const value: TValAnalysis = getValue({
                 keyRawName,
                 line,
                 character,
@@ -133,7 +135,7 @@ function setValMapDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenS
     return valMap;
 }
 
-function setValList(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgMap): TValMap {
+function setValMap(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argList: TArgMap): TValMap {
     const valMap: TValMap = setValMapDef(uri, ahkSymbol, DocStrMap, argList);
 
     return setValMapRef(uri, ahkSymbol, DocStrMap, valMap);
@@ -157,10 +159,12 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
     );
     const [argMap, diagArgs] = setArgMap(uri, ahkSymbol, DocStrMap);
 
-    const valMap: TValMap = setValList(uri, ahkSymbol, DocStrMap, argMap);
+    const valMap: TValMap = setValMap(uri, ahkSymbol, DocStrMap, argMap);
+    const textMap: TTextMap = getTextMap(uri, ahkSymbol, DocStrMap, argMap, valMap);
     const v: DeepAnalysisResult = {
         argMap,
         valMap,
+        textMap,
     };
 
     diagColl.set(uri, [...diagS, ...diagArgs]);

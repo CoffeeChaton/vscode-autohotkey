@@ -1,8 +1,15 @@
 import * as vscode from 'vscode';
+import {
+    DeepAnalysisResult,
+    TAhkSymbol,
+} from '../../globalEnum';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import { kindPick } from '../../tools/Func/kindPick';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
 import { isPosAtStr } from '../../tools/isPosAtStr';
+import { getArgCompletion } from './getArgCompletion';
+import { getTextCompletion } from './getTextCompletion';
+import { getValCompletion } from './getValCompletion';
 
 export function DeepAnalysisToCompletionItem(
     document: vscode.TextDocument,
@@ -10,41 +17,19 @@ export function DeepAnalysisToCompletionItem(
 ): vscode.CompletionItem[] {
     if (isPosAtStr(document, position)) return [];
 
-    const ahkSymbol = getFnOfPos(document, position);
+    const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
     if (!ahkSymbol) return [];
 
     const kindStr = kindPick(ahkSymbol.kind);
     if (!kindStr) return [];
 
-    const ed = DeepAnalysis(document, ahkSymbol);
+    const ed: null | DeepAnalysisResult = DeepAnalysis(document, ahkSymbol);
     if (!ed) return [];
 
-    const { argMap, valMap } = ed;
-    const need: vscode.CompletionItem[] = [];
-    argMap.forEach((v) => {
-        // const item = new vscode.CompletionItem(`(^・ω・^ ) ${v.keyRawName}`);
-        const item = new vscode.CompletionItem(v.keyRawName);
-        item.kind = vscode.CompletionItemKind.Variable;
-        item.insertText = v.keyRawName;
-        item.detail = `arg of ${kindStr} (neko-help-DeepAnalysis)`;
+    const { argMap, valMap, textMap } = ed;
+    const argCompletion = getArgCompletion(argMap, ahkSymbol.name);
+    const valCompletion = getValCompletion(valMap, ahkSymbol.name);
+    const textCompletion = getTextCompletion(textMap, ahkSymbol.name);
 
-        const md: vscode.MarkdownString = new vscode.MarkdownString('', true);
-        md.appendCodeblock(`arg of ${ahkSymbol.name}()`);
-        md.appendMarkdown(v.commentList.join('\n'));
-        v.refLoc.forEach((e) => {
-            md.appendCodeblock(`ref Pos Ln ${e.range.start.line + 1}, Col ${e.range.start.character + 1}`);
-        });
-
-        item.documentation = md;
-        need.push(item);
-    });
-    valMap.forEach((v) => {
-        const item = new vscode.CompletionItem(v.keyRawName, vscode.CompletionItemKind.Variable);
-        item.insertText = v.keyRawName;
-        item.detail = `val this ${kindStr} (neko-help-DeepAnalysis)`;
-        item.documentation = new vscode.MarkdownString(v.commentList.join('\n'));
-        need.push(item);
-    });
-
-    return need;
+    return [...argCompletion, ...valCompletion, ...textCompletion];
 }
