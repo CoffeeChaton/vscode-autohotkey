@@ -1,16 +1,6 @@
 import * as vscode from 'vscode';
 import { buildByPath, buildByPathAsync, Detecter } from '../core/Detecter';
-
-const getWorkspaceFolders = (): readonly vscode.WorkspaceFolder[] | null => {
-    const ahkRootPath = vscode.workspace.workspaceFolders;
-    if (ahkRootPath === undefined) {
-        vscode.window.showInformationMessage(
-            'pleas using workspaces! \nhttps://code.visualstudio.com/docs/editor/workspaces',
-        );
-        return null;
-    }
-    return ahkRootPath;
-};
+import { getWorkspaceFolders } from '../tools/getWorkspaceFolders';
 
 export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {
     const timeStart = Date.now();

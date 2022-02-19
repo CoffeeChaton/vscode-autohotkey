@@ -4,7 +4,7 @@
 import { DetailType, TAhkToken, TTokenStream } from '../globalEnum';
 import { inCommentBlock } from './inCommentBlock';
 import { inLTrimRange } from './inLTrimRange';
-import { getLStr, getSkipSign, getSkipSign2 } from './removeSpecialChar';
+import { getLStr, isSetVarTradition } from './removeSpecialChar';
 
 // LexicalAnalysisSimple
 
@@ -49,17 +49,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
             continue;
         }
 
-        if (getSkipSign(textRaw)) {
-            result.push({
-                lStr: '',
-                deep,
-                textRaw,
-                detail: [DetailType.inSkipSign],
-                line,
-            });
-            continue;
-        }
-        if (getSkipSign2(textRaw)) {
+        if (isSetVarTradition(textRaw)) {
             result.push({
                 lStr: '',
                 deep,

@@ -3,8 +3,10 @@ const copyStaticFiles = require('esbuild-copy-static-files');
 
 const filter = (src, _dest) => {
     const folder = [
+        '.config',
         '.git',
         '.history',
+        '.husky',
         '.idea',
         '.vscode',
         'coverage',
@@ -24,6 +26,7 @@ const filter = (src, _dest) => {
         'jest.config.js',
         'pnpm-lock.yaml',
         'tsconfig.json',
+        'rslintrc.toml',
     ];
     const List = [...folder, ...file];
     for (const ed of List) {

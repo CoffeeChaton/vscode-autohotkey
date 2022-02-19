@@ -214,3 +214,11 @@ export const enum TFormatChannel {
     byFormatOnType = 'Format OnType',
     byDev = 'wait for dev',
 }
+
+export type TPick<TNeed> = {
+    label: string;
+    fn: () => Promise<TNeed>;
+} | {
+    label: string;
+    fn: () => TNeed;
+};

@@ -1,15 +1,35 @@
-export function getSkipSign2(text: string): boolean {
-    const col0 = text.indexOf('=');
-    if (col0 === -1) return false;
+export function isSetVarTradition(text: string): boolean {
+    // Var = Value
+    // https://www.autohotkey.com/docs/Variables.htm#operators
+    // is https://wyagd001.github.io/zh-cn/docs/commands/SetEnv.htm
+    const t = text.trim();
+    const col0 = t.indexOf('=');
+    // a=
+    // 01
+    if (col0 < 1) return false;
+    if (t[col0 + 1] === '=') return false;
 
-    return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/u).test(text)
-        && text.indexOf('.=') === -1;
-}
+    switch (t[col0 - 1]) {
+        case ':': // :=
+        case '<': // <=
+        case '>': // >=
+        case '~': // ~=
+        case '+': // +=
+        case '-': // -=
+        case '*': // *=
+        case '/': // /=
+        case '.': // .=
+        case '|': // |=
+        case '&': // &=
+        case '^': // ^=:
+            return false;
+        default:
+            break;
+    }
+    const eqLeftStr = t.substring(0, col0).trim();
 
-export function getSkipSign(text: string): boolean {
-    return (/^\s*msgbox[\s,]/ui).test(text)
-        || (/^\s*(?:control)?send(?:Raw)\b/ui).test(text)
-        || (/^\s*(?:control)?send\b.*\{Raw\}/ui).test(text);
+    return (/^[%\w.[\]]+$/u).test(eqLeftStr);
+    // return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/u).test(t);
 }
 
 export const replacerSpace = (match: string): string => ' '.repeat(match.length);

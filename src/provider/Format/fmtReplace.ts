@@ -1,5 +1,5 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
-import { getSkipSign, getSkipSign2 } from '../../tools/removeSpecialChar';
+import { isSetVarTradition } from '../../tools/removeSpecialChar';
 
 function textReplace(textElement: string): string {
     return textElement.replace(/ *, */gu, ', ')
@@ -77,8 +77,8 @@ function fnStrGroup(text: string): string {
 }
 
 export function lineReplace(text: string, textFix: string, CommentBlock: boolean, inLTrim: 0 | 1 | 2): string {
-    return (CommentBlock || textFix === '' || inLTrim > 0 || getSkipSign(textFix)
-            || getSkipSign2(textFix) || textFix.startsWith(':') || textFix.includes('::'))
+    return (CommentBlock || textFix === '' || inLTrim > 0
+            || isSetVarTradition(textFix) || textFix.startsWith(':') || textFix.includes('::'))
         ? text
         : fnStrGroup(text);
 }

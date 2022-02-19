@@ -142,10 +142,10 @@ function fn_Warn_thisLineText_WARN(args: WarnUseType): vscode.TextEdit {
 type TFmtCoreArgs = {
     document: vscode.TextDocument;
     options: vscode.FormattingOptions;
-    token: vscode.CancellationToken;
     fmtStart: number;
     fmtEnd: number;
     from: TFormatChannel;
+    needDiff: boolean;
 };
 
 export function FormatCore(
@@ -155,6 +155,7 @@ export function FormatCore(
         fmtStart,
         fmtEnd,
         from,
+        needDiff,
     }: TFmtCoreArgs,
 ): vscode.ProviderResult<vscode.TextEdit[]> {
     if (path.basename(document.uri.fsPath, '.ahk').startsWith(EStr.diff_name_prefix)) {
@@ -230,16 +231,22 @@ export function FormatCore(
             : getDeepKeywords(textFix, occ); // TODO fmt_a1
     }
 
-    console.log(`Format Document is Beta ${VERSION.format}, ${Date.now() - timeStart}ms`);
-
-    if (getFormatConfig() && hasDiff[0]) {
+    if (needDiff && hasDiff[0]) {
+        console.log(`Format Document is Beta ${VERSION.format}, ${Date.now() - timeStart}ms`);
         fmtReplaceWarn(timeStart, from);
+
+        const rTextList: string[] = [];
+        newTextList.forEach((v: vscode.TextEdit) => rTextList.push(v.newText));
+
+        const rightText: string = rTextList.join('\n');
         const diffVar: DiffType = {
             leftText: AllDoc,
-            rightUri: document.uri,
+            rightText,
+            basename: path.basename(document.uri.fsPath),
         };
         setTimeout(callDiff, 100, diffVar);
-        // callDiff(diffVar);
+        // do not callDiff(diffVar);
+        // using setTimeout call.
     }
 
     return newTextList;
@@ -250,15 +257,15 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
     public provideDocumentFormattingEdits(
         document: vscode.TextDocument,
         options: vscode.FormattingOptions,
-        token: vscode.CancellationToken,
+        _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.TextEdit[]> {
         return FormatCore({
             document,
             options,
             fmtStart: 0,
             fmtEnd: document.lineCount - 1,
-            token,
             from: TFormatChannel.byFormatAllFile,
+            needDiff: true,
         });
     }
 }
@@ -284,7 +291,7 @@ for k,v in Monitors
     for k,v in Monitors
         for k,v in Monitors
             if gg(){
-                dddddd:=gggggg
+                d:=g
                 for k,v in Monitors
                     for k,v in Monitors
                         if dd()

@@ -1,10 +1,12 @@
 import * as vscode from 'vscode';
 import {
+    EDiagCode,
     TAhkSymbol,
     TArgListVal,
     TArgMap,
     TTokenStream,
 } from '../../globalEnum';
+import { setDiagnostic } from '../../provider/Diagnostic/setDiagnostic';
 import { getCommentOfLine } from '../getCommentOfLine';
 import { ahkValRegex } from '../regexTools';
 import { replacerSpace } from '../removeSpecialChar';
@@ -90,14 +92,15 @@ export function setArgMap(
         }
     });
     const diagS: vscode.Diagnostic[] = [];
-    // FIXME about ref loc && %Str%
-    // argMap.forEach((v): void => {
-    //     if (!(v.refLoc.length === 0)) return;
-    //     const { range } = v.defLoc[0];
-    //     const severity = vscode.DiagnosticSeverity.Warning;
-    //     const tags = [vscode.DiagnosticTag.Deprecated];
-    //     const diag = setDiagnostic(EDiagCode.code501, range, severity, tags);
-    //     diagS.push(diag);
-    // });
+    // FIXME s = argName
+    argMap.forEach((v): void => {
+        if (!(v.refLoc.length === 0)) return;
+        if (v.keyRawName.startsWith('_')) return;
+        const { range } = v.defLoc[0];
+        const severity = vscode.DiagnosticSeverity.Warning;
+        const tags = [vscode.DiagnosticTag.Unnecessary];
+        const diag = setDiagnostic(EDiagCode.code501, range, severity, tags);
+        diagS.push(diag);
+    });
     return [argMap, diagS];
 }

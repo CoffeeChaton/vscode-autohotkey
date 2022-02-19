@@ -1,6 +1,11 @@
 /* eslint-disable security/detect-non-literal-regexp */
 import * as vscode from 'vscode';
-import { DeepAnalysisResult, EMode, TAhkSymbol } from '../globalEnum';
+import { Detecter } from '../core/Detecter';
+import {
+    DeepAnalysisResult,
+    EMode,
+    TAhkSymbol,
+} from '../globalEnum';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { getFnOfPos } from '../tools/getScopeOfPos';
 import { isPosAtStr } from '../tools/isPosAtStr';
@@ -36,6 +41,10 @@ export class HoverProvider implements vscode.HoverProvider {
         position: vscode.Position,
         _token: vscode.CancellationToken,
     ): Promise<vscode.Hover | null> {
+        const AhkSymbolList = Detecter.getDocMap(document.uri.fsPath) ?? [];
+        for (const ahkSymbol of AhkSymbolList) {
+            DeepAnalysis(document, ahkSymbol);
+        }
         const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
         let ed: DeepAnalysisResult | null = null;
         if (ahkSymbol) {

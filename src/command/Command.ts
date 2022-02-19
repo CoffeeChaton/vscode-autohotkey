@@ -1,23 +1,19 @@
 import * as vscode from 'vscode';
+import { TPick } from '../globalEnum';
 import { DeepAnalysisAllFiles } from './DeepAnalysisAllFiles';
 import { DevLoopOfClearOutlineCache } from './DevMode';
+import { FormatAllFile } from './FormatAllFile';
 import { ListAllFunc, ListAllFuncSort } from './ListAllFunc';
 import { ListAllInclude } from './ListAllInclude';
 import { UpdateCacheAsync } from './UpdateCache';
 
-type TPick = {
-    label: string;
-    fn: () => Promise<null>;
-} | {
-    label: string;
-    fn: () => null;
-};
-
 // eslint-disable-next-line require-await
 const fn0 = async (): Promise<null> => UpdateCacheAsync(true);
 
+type TCommand = TPick<null>;
+
 export async function statusBarClick(): Promise<void> {
-    const items: TPick[] = [
+    const items: TCommand[] = [
         { label: '0 -> update Cache', fn: fn0 },
         { label: '1 -> dev tools', fn: DevLoopOfClearOutlineCache },
         { label: '2 -> list all #Include', fn: ListAllInclude },
@@ -26,9 +22,10 @@ export async function statusBarClick(): Promise<void> {
         { label: '5 -> list all Function() sort a -> z', fn: (): null => ListAllFuncSort(false) },
         { label: '6 -> list all Function() sort z -> a', fn: (): null => ListAllFuncSort(true) },
         { label: '7 -> DeepAnalysis All File', fn: DeepAnalysisAllFiles },
+        { label: '8 -> format All File', fn: FormatAllFile },
     ];
 
-    const pick = await vscode.window.showQuickPick<TPick>(items);
+    const pick = await vscode.window.showQuickPick<TCommand>(items);
 
     pick?.fn();
 }

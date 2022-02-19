@@ -6,15 +6,15 @@ async function chIsNextLine(
     document: vscode.TextDocument,
     position: vscode.Position,
     options: vscode.FormattingOptions,
-    token: vscode.CancellationToken,
+    _token: vscode.CancellationToken,
 ): Promise<vscode.TextEdit[]> {
     const array = await FormatCore({
         document,
         options,
-        token,
         fmtStart: 0,
         fmtEnd: position.line - 1,
         from: TFormatChannel.byFormatOnType,
+        needDiff: false,
     });
     if (!array) return [];
 

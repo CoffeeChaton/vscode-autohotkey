@@ -260,6 +260,7 @@
         "no-plusplus": "off",
         "no-restricted-syntax": "off",
         "no-return-assign": "error",
+        "no-return-await": "error",
         "no-self-compare": "error",
         "no-sequences": "error",
         "no-shadow": "off",
