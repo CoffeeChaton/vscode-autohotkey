@@ -1,5 +1,5 @@
 *.cpuprofile
-.cpuprofile
+*.heapsnapshot
 .dccache
 .eslintcache
 .history/

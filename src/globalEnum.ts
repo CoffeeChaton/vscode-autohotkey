@@ -53,12 +53,13 @@ export type TSymAndFsPath = {
     fsPath: string;
 };
 
-export type TValArray = {
+export type TGlobalVal = {
     lRange: vscode.Range; // left Range
     rVal: string | null; // Right value is textRaw
-}[];
-export type TValName = string;
-export type TGValMap = Map<TValName, TValArray>;
+    rawName: string; //
+};
+export type TValUpName = string;
+export type TGValMap = Map<TValUpName, TGlobalVal[]>;
 
 export const enum VERSION {
     getValDefInFunc = '0.4beta',

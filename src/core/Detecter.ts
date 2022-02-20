@@ -6,9 +6,9 @@ import { getIgnoredFile, getIgnoredFolder, showTimeSpend } from '../configUI';
 import {
     EStr,
     TAhkSymbolList,
+    TGlobalVal,
     TGValMap,
-    TValArray,
-    TValName,
+    TValUpName,
 } from '../globalEnum';
 import { Diagnostic } from '../provider/Diagnostic/Diagnostic';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
@@ -68,7 +68,7 @@ export const Detecter = {
         const Uri = vscode.Uri.file(fsPath);
         const document = await vscode.workspace.openTextDocument(Uri);
         const timeStart = Date.now();
-        const gValMapBySelf: TGValMap = new Map<TValName, TValArray>();
+        const gValMapBySelf: TGValMap = new Map<TValUpName, TGlobalVal[]>();
 
         const DocStrMap = Pretreatment(document.getText().split('\n'), 0);
         const result = getChildren({

@@ -19,7 +19,6 @@ import { getFnModeWM } from '../Func/getFnMode';
 import { kindPick } from '../Func/kindPick';
 import { getCommentOfLine } from '../getCommentOfLine';
 import { Pretreatment } from '../Pretreatment';
-import { ahkValRegex } from '../regexTools';
 import { ClassWm } from '../wm';
 import { setArgMap } from './fnArgs';
 import { getTextMap } from './getTextMap';
@@ -89,7 +88,7 @@ function getValue({
         };
     }
 
-    const ahkValType = getGlobalValDef(ahkValRegex(keyRawName.toUpperCase()))
+    const ahkValType = getGlobalValDef(keyRawName.toUpperCase())
         ? EValType.global
         : lineType;
     return {

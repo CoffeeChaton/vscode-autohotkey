@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { TGlobalVal } from '../globalEnum';
 import { ahkValRegex } from '../tools/regexTools';
 import { removeBigParentheses } from '../tools/removeBigParentheses';
 import { removeParentheses } from '../tools/removeParentheses';
@@ -16,7 +17,7 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
         gValMapBySelf,
     } = FuncInput;
     const { textRaw } = DocStrMap[line];
-    const lStrFix = removeParentheses(removeBigParentheses(lStr.replace(/^\s*\bglobal\b/ui, fnReplacer)));
+    const lStrFix = removeParentheses(removeBigParentheses(lStr.replace(/^\s*\bglobal\b[,\s]+/ui, fnReplacer)));
 
     return lStrFix.split(',')
         .map((v) => {
@@ -24,24 +25,27 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
             const lName = (col > 0)
                 ? v.substring(0, col).trim()
                 : v.trim(); // rVal need to use textRaw;
-            const reg = ahkValRegex(lName);
-            const col2 = lStrFix.search(reg);
+
+            const col2 = lStrFix.search(ahkValRegex(lName));
             if (col2 < 0) {
+                console.log('🚀 ~ setGlobalVar ~ FuncInput', FuncInput);
+                console.log('line', line);
                 console.log('textRaw', textRaw);
-                console.log('col2 ', col2);
-                console.log('lStrFix ', lStrFix);
-                console.log('lName ', lName);
+                // console.log('col2 ', col2);
+                // console.log('lStrFix ', lStrFix);
+                // console.log('lName ', lName);
                 return lName;
             }
             const rVal: string | null = (col > 0)
                 ? DocStrMap[line].textRaw.substring(col2 + lName.length, v.length).replace(/\s*:=/u, '')
                 : null;
-            const newValue = {
+            const newValue: TGlobalVal = {
                 lRange: new vscode.Range(line, col2, line, col2 + lName.length), //  vscode.Range, // left Range
                 rVal, // string // Right value is textRaw
+                rawName: lName,
             };
-            const oldVale = gValMapBySelf.get(lName);
-            gValMapBySelf.set(lName, [...oldVale ?? [], newValue]);
+            const oldVale = gValMapBySelf.get(lName.toUpperCase());
+            gValMapBySelf.set(lName.toUpperCase(), [...oldVale ?? [], newValue]);
 
             return lName;
         })

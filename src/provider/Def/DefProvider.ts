@@ -55,7 +55,7 @@ async function getReference(usingReg: RegExp, timeStart: number, wordUp: string)
             }
         }
     }
-    console.log(`list all using of "${wordUp}"`, Date.now() - timeStart, ' ms');
+    console.log(`🚀 list all using of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 10~15ms
     return List;
 }
 
@@ -91,7 +91,7 @@ async function ahkDef(
     // searchUsing
     const searchUsing = (): false | vscode.Location[] => {
         if (textTrimUp.search(usingReg) === -1) return false;
-        console.log(`goto Def of ${wordUp} ()`, Date.now() - timeStart, 'ms)');
+        console.log(`🚀 goto Def of ${AhkSymbol.name} ()`, Date.now() - timeStart, 'ms)'); // < ssd < 1ms
         const Uri = vscode.Uri.file(fsPath);
         return [new vscode.Location(Uri, AhkSymbol.range)];
     };

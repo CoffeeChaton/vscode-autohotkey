@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { getGlobalValDef } from '../../core/getGlobalValDef';
 import {
     TAhkSymbol,
     TArgMap,
@@ -21,13 +22,22 @@ export function getTextMap(
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
 
-        for (const v of lStr.matchAll(/\b(\w+)\b/gu)) {
-            const keyRawName = v[1].trim();
+        // eslint-disable-next-line security/detect-unsafe-regex
+        for (const v of lStr.matchAll(/(?<!\.)\b(\w+)\b/gu)) {
+            const keyRawName = v[1];
             const wordUp = keyRawName.toLocaleUpperCase();
-            if ((/^\d+$/ui).test(wordUp) || argMap.has(wordUp) || valMap.has(wordUp)) continue;
+            if ((/^\d+$/ui).test(wordUp) || argMap.has(wordUp) || valMap.has(wordUp) || getGlobalValDef(wordUp)) {
+                continue;
+            }
 
             const character = lStr.search(ahkValRegex(wordUp));
-            if (character === -1) continue;
+
+            if (character === -1) {
+                console.log('🚀 ~ line', line);
+                console.log('🚀 ~ ahkSymbol', ahkSymbol);
+                console.log('🚀 ~ wordUp', wordUp);
+                continue;
+            }
 
             const range = new vscode.Range(
                 new vscode.Position(line, character),

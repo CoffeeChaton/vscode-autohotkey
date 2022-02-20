@@ -106,13 +106,11 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
         {
             detail: 'global',
             kind: vscode.SymbolKind.Variable,
-            getName(str: string): string | null {
-                return (/^\s*\bglobal\b\s*$/iu).test(str)
-                    ? null
-                    : setGlobalVar(FuncInput);
+            getName(_str: string): string | null {
+                return setGlobalVar(FuncInput);
             },
             test(str: string): boolean {
-                return (/^\s*\bglobal\b/iu).test(str);
+                return (/^\s*\bglobal\b[\s,]/iu).test(str) && !(/^\s*global[\s,]+$/iu).test(str);
             },
         },
         {

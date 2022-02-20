@@ -11,6 +11,16 @@
         "github.copilot",
         "alefragnani.project-manager",
         "chakrounanas.turbo-console-log",
-        "EditorConfig.EditorConfig"
+        "editorconfig.editorconfig",
+        "visualstudioexptteam.vscodeintellicode",
+        "tabnine.tabnine-vscode",
+        "uyiosa-enabulele.reopenclosedtab",
+        "bierner.markdown-preview-github-styles",
+        "davidanson.vscode-markdownlint",
+        "yzhang.markdown-all-in-one",
+        "sburg.vscode-javascript-booster",
+        "eamodio.gitlens",
+        "donjayamanne.githistory",
+        "mhutchie.git-graph"
     ]
 }

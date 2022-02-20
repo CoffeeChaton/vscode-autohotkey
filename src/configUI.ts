@@ -43,7 +43,7 @@ function getConfig(): TConfigs {
     const { executePath } = ed.Debug;
 
     fs.access(executePath, (err: NodeJS.ErrnoException | null): void => {
-        if (!(err)) return;
+        if (err === null) return;
         const errCode = err.message
             ? ` <---> err.message ${err.message}`
             : '';

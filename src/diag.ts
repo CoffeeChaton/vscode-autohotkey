@@ -1,3 +1,6 @@
+/* eslint-disable max-lines */
+import { DeepReadonly } from './globalEnum';
+
 /* eslint-disable no-magic-numbers */
 export const enum EDiagCode {
     code107 = 107,
@@ -49,7 +52,7 @@ export type TDiags = {
     };
 };
 
-export const Diags: TDiags = {
+export const Diags: DeepReadonly<TDiags> = {
     107: {
         msg: 'assign warning',
         path: 'https://www.autohotkey.com/docs/commands/SetEnv.htm',

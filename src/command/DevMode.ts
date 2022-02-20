@@ -23,7 +23,7 @@ export async function DevLoopOfClearOutlineCache(): Promise<null> {
     ];
 
     const pick = await vscode.window.showQuickPick<TPick>(items);
-    if (!pick) return null;
+    if (pick === undefined) return null;
 
     const iMax = pick.maxTime;
     for (let i = 1; i <= iMax; i++) {
