@@ -47,10 +47,10 @@ Deep Analysis : 809 Symbol
 All Size is 14238
 Done in 748 ms
 
-// weakMap
+// ignoreSet textMap
 Deep Analysis All Files
 Deep Analysis : 809 Symbol
-All Size is 14238
-Done in 1 ms
+All Size is 10362
+Done in 539 ms
 
 */

@@ -17,17 +17,27 @@ export function getTextMap(
     argMap: TArgMap,
     valMap: TValMap,
 ): TTextMap {
+    const ignoreSet = new Set<string>();
     const textMap: TTextMap = new Map<string, TTextAnalysis>();
     const startLine = ahkSymbol.selectionRange.end.line;
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
 
         // eslint-disable-next-line security/detect-unsafe-regex
-        for (const v of lStr.matchAll(/(?<!\.)\b(\w+)\b/gu)) {
+        for (const v of lStr.matchAll(/(?<!\.)\b(\w+)\b(?!\()/gu)) {
             const keyRawName = v[1];
             const wordUp = keyRawName.toLocaleUpperCase();
-            if ((/^\d+$/ui).test(wordUp) || argMap.has(wordUp) || valMap.has(wordUp) || getGlobalValDef(wordUp)) {
-                continue;
+            if (!textMap.has(wordUp)) {
+                if (
+                    ignoreSet.has(wordUp)
+                    || (/^\d+$/ui).test(wordUp)
+                    || argMap.has(wordUp)
+                    || valMap.has(wordUp)
+                    || getGlobalValDef(wordUp)
+                ) {
+                    ignoreSet.add(wordUp);
+                    continue;
+                }
             }
 
             const character = lStr.search(ahkValRegex(wordUp));
