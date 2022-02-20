@@ -26,14 +26,14 @@ export const enum EStr {
 export type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [P in keyof T]: DeepReadonly<T[P]> };
 
 export const enum DetailType {
-    inComment = 'c',
+    inComment = 3,
     // inLTrim0 = 0,
     inLTrim1 = 1,
     inLTrim2 = 2,
     // inSkipSign = 'Sk',
-    inSkipSign2 = 'Sk2',
-    deepAdd = '+',
-    deepSubtract = '-',
+    inSkipSign2 = 4,
+    deepAdd = 5,
+    deepSubtract = 6,
 }
 
 export type TAhkToken = {
