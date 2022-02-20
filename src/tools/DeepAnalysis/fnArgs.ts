@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
+import { EDiagCode } from '../../diag';
 import {
-    EDiagCode,
     TAhkSymbol,
     TArgAnalysis,
     TArgMap,
@@ -42,7 +42,7 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
                 const errLoc = `${uri.fsPath} line : ${line + 1}`;
                 const message = `${errMsg} ${ahkSymbol.name} args Error ${keyRawName}${errCode}${errLoc}`;
                 console.log('.forEach ~ message', message);
-                vscode.window.showInformationMessage(message);
+                void vscode.window.showInformationMessage(message);
                 throw new Error(message);
             }
             const character = lStr.search(ahkValRegex(argName));

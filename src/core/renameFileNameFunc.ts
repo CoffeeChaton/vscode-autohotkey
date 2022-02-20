@@ -30,7 +30,7 @@ export async function renameFn(oldUri: vscode.Uri, newUri: vscode.Uri, fsPathLis
         }
     }
     for (const uri of uriList) {
-        vscode.window.showTextDocument(uri);
+        void vscode.window.showTextDocument(uri);
     }
-    vscode.workspace.applyEdit(edit);
+    void vscode.workspace.applyEdit(edit);
 }

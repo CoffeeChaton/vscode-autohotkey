@@ -160,7 +160,7 @@ export function FormatCore(
 ): vscode.ProviderResult<vscode.TextEdit[]> {
     if (path.basename(document.uri.fsPath, '.ahk').startsWith(EStr.diff_name_prefix)) {
         const message = 'Don\'t Format the TEMP file!';
-        vscode.window.showWarningMessage(message);
+        void vscode.window.showWarningMessage(message);
         return [];
     }
     const timeStart = Date.now();

@@ -2,10 +2,10 @@
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
 import { getLintConfig } from '../../configUI';
+import { EDiagCode } from '../../diag';
 import {
     DetailType,
     EDiagBase,
-    EDiagCode,
     TAhkSymbol,
     TTokenStream,
 } from '../../globalEnum';

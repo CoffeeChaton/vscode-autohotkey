@@ -27,5 +27,5 @@ export async function statusBarClick(): Promise<void> {
 
     const pick = await vscode.window.showQuickPick<TCommand>(items);
 
-    pick?.fn();
+    void pick?.fn();
 }

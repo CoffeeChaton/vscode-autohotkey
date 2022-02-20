@@ -17,7 +17,7 @@ export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {
         const timeEnd = Date.now() - timeStart;
         const msg = `Update docFuncMap cash (${timeEnd}ms)`;
         console.log(msg);
-        vscode.window.showInformationMessage(msg);
+        void vscode.window.showInformationMessage(msg);
     }
     return null;
 }

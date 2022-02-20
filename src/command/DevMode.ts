@@ -4,7 +4,7 @@ import { UpdateCacheAsync } from './UpdateCache';
 let c1: NodeJS.Timeout[] = [];
 
 export async function DevLoopOfClearOutlineCache(): Promise<null> {
-    vscode.window.showInformationMessage('this is Dev function ,open profile-flame to get .cpuprofile');
+    void vscode.window.showInformationMessage('this is Dev function ,open profile-flame to get .cpuprofile');
 
     c1.forEach((e) => clearInterval(e));
     c1 = [];
@@ -28,7 +28,7 @@ export async function DevLoopOfClearOutlineCache(): Promise<null> {
     const iMax = pick.maxTime;
     for (let i = 1; i <= iMax; i++) {
         c1.push(setTimeout(() => {
-            UpdateCacheAsync(false);
+            void UpdateCacheAsync(false);
         }, i * base));
     }
     return null;

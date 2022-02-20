@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import * as Net from 'net';
 import * as xml2js from 'xml2js';
 
-const enum Enum {
+const enum EnumStr {
     END = 0,
     HEADER = '<?xml version="1.0" encoding="UTF-8"?>',
 }
@@ -40,7 +40,7 @@ export class DebugServer extends EventEmitter {
                     tempData = tempData
                         ? Buffer.concat([tempData, chunk])
                         : chunk;
-                    if (tempData[tempData.length - 1] === Enum.END) {
+                    if (tempData[tempData.length - 1] === EnumStr.END) {
                         this.process(tempData.toString());
                         tempData = null;
                     }
@@ -63,14 +63,14 @@ export class DebugServer extends EventEmitter {
 
     public process(data: string): void {
         const data1 = data.substring(data.indexOf('<?xml'));
-        const data2 = (data1.indexOf(Enum.HEADER) === -1)
-            ? Enum.HEADER + data1
+        const data2 = (data1.indexOf(EnumStr.HEADER) === -1)
+            ? EnumStr.HEADER + data1
             : data1;
-        const dataList = data2.split(Enum.HEADER);
+        const dataList = data2.split(EnumStr.HEADER);
         dataList.forEach((part: string) => {
             if (part.trim() === '') return;
 
-            const xmlString = Enum.HEADER + part;
+            const xmlString = EnumStr.HEADER + part;
             this.parser.parseStringPromise(xmlString)
                 .then((res: Record<string, unknown>): null => {
                     if (typeof res === 'object' && res !== null) {

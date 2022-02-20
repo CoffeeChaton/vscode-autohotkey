@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable max-lines */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100,300,5000,131072] }] */
 import { Scope, StackFrame, Variable } from '@vscode/debugadapter';

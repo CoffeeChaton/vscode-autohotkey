@@ -6,7 +6,7 @@ import { Detecter } from '../core/Detecter';
 export class SymBolProvider implements vscode.DocumentSymbolProvider {
     public provideDocumentSymbols(
         document: vscode.TextDocument,
-        token: vscode.CancellationToken,
+        _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.DocumentSymbol[]> {
         return Detecter.updateDocDef(true, document.uri.fsPath, true);
     }

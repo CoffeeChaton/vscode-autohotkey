@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import * as vscode from 'vscode';
 import { getDebugPath } from '../../configUI';
 import { getNowDate } from '../../tools/timeTools';

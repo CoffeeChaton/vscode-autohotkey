@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.workspace.onDidRenameFiles((e): void => Detecter.renameFileName(e)),
         // vscode.workspace.onDidChangeTextDocument((e) => d(e)),
         vscode.commands.registerCommand('ahk.bar.click', (): void => {
-            statusBarClick();
+            void statusBarClick();
         }),
         vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
     );

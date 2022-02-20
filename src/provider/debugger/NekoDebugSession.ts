@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
@@ -52,7 +53,7 @@ export class NekoDebugSession extends LoggingDebugSession {
 
     protected initializeRequest(
         response: DebugProtocol.InitializeResponse,
-        args: DebugProtocol.InitializeRequestArguments,
+        _args: DebugProtocol.InitializeRequestArguments,
     ): void {
         response.body = {
             ...response.body,
@@ -74,8 +75,8 @@ export class NekoDebugSession extends LoggingDebugSession {
 
     protected restartRequest(
         response: DebugProtocol.RestartResponse,
-        args: DebugProtocol.RestartArguments,
-        request?: DebugProtocol.Request,
+        _args: DebugProtocol.RestartArguments,
+        _request?: DebugProtocol.Request,
     ): void {
         this.dispather.restart();
         this.sendResponse(response);
@@ -105,8 +106,8 @@ export class NekoDebugSession extends LoggingDebugSession {
 
     protected disconnectRequest(
         response: DebugProtocol.DisconnectResponse,
-        args: DebugProtocol.DisconnectArguments,
-        request?: DebugProtocol.Request,
+        _args: DebugProtocol.DisconnectArguments,
+        _request?: DebugProtocol.Request,
     ): void {
         this.dispather.stop();
         this.sendResponse(response);
@@ -144,7 +145,7 @@ export class NekoDebugSession extends LoggingDebugSession {
     protected async variablesRequest(
         response: DebugProtocol.VariablesResponse,
         args: DebugProtocol.VariablesArguments,
-        request?: DebugProtocol.Request,
+        _request?: DebugProtocol.Request,
     ): Promise<void> {
         response.body = { variables: await this.dispather.listVariables(args) };
         this.sendResponse(response);
@@ -153,7 +154,7 @@ export class NekoDebugSession extends LoggingDebugSession {
     protected async setVariableRequest(
         response: DebugProtocol.SetVariableResponse,
         args: DebugProtocol.SetVariableArguments,
-        request?: DebugProtocol.Request,
+        _request?: DebugProtocol.Request,
     ): Promise<void> {
         try {
             console.log('NekoDebugSession ~ setVariableRequest ~ args', args);
@@ -176,27 +177,27 @@ export class NekoDebugSession extends LoggingDebugSession {
 
     protected pauseRequest(
         response: DebugProtocol.PauseResponse,
-        args: DebugProtocol.PauseArguments,
-        request?: DebugProtocol.Request,
+        _args: DebugProtocol.PauseArguments,
+        _request?: DebugProtocol.Request,
     ): void {
         this.dispather.sendComand(EContinue.BREAK);
         this.sendResponse(response);
     }
 
-    protected continueRequest(response: DebugProtocol.ContinueResponse, args: DebugProtocol.ContinueArguments): void {
+    protected continueRequest(response: DebugProtocol.ContinueResponse, _args: DebugProtocol.ContinueArguments): void {
         this.dispather.sendComand(EContinue.RUN);
         this.sendResponse(response);
     }
 
-    protected nextRequest(response: DebugProtocol.NextResponse, args: DebugProtocol.NextArguments): void {
+    protected nextRequest(response: DebugProtocol.NextResponse, _args: DebugProtocol.NextArguments): void {
         this.dispather.sendComand(EContinue.STEP_OVER);
         this.sendResponse(response);
     }
 
     protected stepInRequest(
         response: DebugProtocol.StepInResponse,
-        args: DebugProtocol.StepInArguments,
-        request?: DebugProtocol.Request,
+        _args: DebugProtocol.StepInArguments,
+        _request?: DebugProtocol.Request,
     ): void {
         this.dispather.sendComand(EContinue.STEP_INTO);
         this.sendResponse(response);
@@ -204,8 +205,8 @@ export class NekoDebugSession extends LoggingDebugSession {
 
     protected stepOutRequest(
         response: DebugProtocol.StepOutResponse,
-        args: DebugProtocol.StepOutArguments,
-        request?: DebugProtocol.Request,
+        _args: DebugProtocol.StepOutArguments,
+        _request?: DebugProtocol.Request,
     ): void {
         this.dispather.sendComand(EContinue.STEP_OUT);
         this.sendResponse(response);
@@ -218,7 +219,7 @@ export class NekoDebugSession extends LoggingDebugSession {
 
     protected async completionsRequest(
         response: DebugProtocol.CompletionsResponse,
-        args: DebugProtocol.CompletionsArguments,
+        _args: DebugProtocol.CompletionsArguments,
     ): Promise<void> {
         response.body = {
             targets: [

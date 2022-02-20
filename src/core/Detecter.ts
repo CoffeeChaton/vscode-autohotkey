@@ -47,7 +47,7 @@ export const Detecter = {
         for (const Uri of e.files) {
             const { fsPath } = Uri;
             if (fsPath.endsWith('.ahk')) {
-                Detecter.updateDocDef(false, fsPath, true);
+                void Detecter.updateDocDef(false, fsPath, true);
             }
         }
     },
@@ -57,9 +57,9 @@ export const Detecter = {
             if (oldUri.fsPath.endsWith('.ahk') && newUri.fsPath.endsWith('.ahk')) {
                 Detecter.DocMap.delete(oldUri.fsPath);
                 diagColl.delete(oldUri);
-                Detecter.updateDocDef(false, newUri.fsPath, true);
+                void Detecter.updateDocDef(false, newUri.fsPath, true);
                 const fsPathList = Detecter.getDocMapFile();
-                renameFileNameFunc(oldUri, newUri, [...fsPathList]);
+                void renameFileNameFunc(oldUri, newUri, [...fsPathList]);
             }
         }
     },
@@ -127,6 +127,6 @@ export function buildByPath(buildPath: string, useDeepAnalysis: boolean): void {
         }
     } else if (!getIgnoredFile(buildPath)) {
         // const Uri = vscode.Uri.file(buildPath);
-        Detecter.updateDocDef(false, vscode.Uri.file(buildPath).fsPath, useDeepAnalysis);
+        void Detecter.updateDocDef(false, vscode.Uri.file(buildPath).fsPath, useDeepAnalysis);
     }
 }
