@@ -404,7 +404,6 @@ const ItemOfFileOpen: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => 
 })();
 
 const ItemOfFunc: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
-    // TODO
     const itemS: vscode.CompletionItem[] = [];
     ['Name', 'IsBuiltIn', 'IsVariadic', 'MinParams', 'MaxParams', '__Handle']
         .forEach((v) => {

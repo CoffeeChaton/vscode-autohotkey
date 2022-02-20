@@ -147,7 +147,7 @@ function valTrack(
         const { lStr } = DocStrMap[linePos];
         const col = lStr.search(reg);
         if (col === -1) continue;
-        const strPart = lStr.substring(col + Head.length, lStr.length).replace(/^\s*:=\s*/u, ''); // TODO
+        const strPart = lStr.substring(col + Head.length, lStr.length).replace(/^\s*:=\s*/u, '');
         const name0 = matchClassName({ ChapterArr, strPart, ahkBaseObj });
         if (name0) classNameList.add(name0);
     }

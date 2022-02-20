@@ -183,6 +183,11 @@
                     "type": "string",
                     "default": "C:/Program Files/AutoHotkey/AutoHotkeyU64.exe",
                     "description": "Execute path of autohotkey."
+                },
+                "AhkNekoHelp.snippets.intelligent": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "true -> intelligent, false -> list all snippets"
                 }
             }
         },

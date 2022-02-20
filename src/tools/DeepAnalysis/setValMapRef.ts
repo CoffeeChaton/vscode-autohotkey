@@ -44,7 +44,6 @@ function setValUse(
     }
     const character = o.index;
     if (character === undefined) {
-        console.error('🚀 ~ERR24~ o.index : ', o);
         return null;
     }
 

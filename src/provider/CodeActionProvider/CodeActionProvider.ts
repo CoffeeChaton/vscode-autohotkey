@@ -8,6 +8,7 @@ function consoleDefault(d: never, _diag: vscode.Diagnostic): null {
     return null;
 }
 
+// eslint-disable-next-line complexity
 function getFsPath(diag: vscode.Diagnostic): EDiagFsPath | null {
     const code = diag?.code;
     if (code === undefined || typeof code === 'string' || typeof code === 'number') return null;
@@ -27,6 +28,28 @@ function getFsPath(diag: vscode.Diagnostic): EDiagFsPath | null {
         case EDiagCode.code700: return EDiagFsPath.code700;
         case EDiagCode.code801: return EDiagFsPath.code801;
         case EDiagCode.code802: return EDiagFsPath.code802;
+        case EDiagCode.code803: return EDiagFsPath.code803;
+        case EDiagCode.code804: return EDiagFsPath.code804;
+        case EDiagCode.code805: return EDiagFsPath.code805;
+        case EDiagCode.code806: return EDiagFsPath.code806;
+        case EDiagCode.code807: return EDiagFsPath.code807;
+        case EDiagCode.code808: return EDiagFsPath.code808;
+        case EDiagCode.code809: return EDiagFsPath.code809;
+        case EDiagCode.code810: return EDiagFsPath.code810;
+        case EDiagCode.code811: return EDiagFsPath.code811;
+        case EDiagCode.code812: return EDiagFsPath.code812;
+        case EDiagCode.code813: return EDiagFsPath.code813;
+        case EDiagCode.code814: return EDiagFsPath.code814;
+        case EDiagCode.code815: return EDiagFsPath.code815;
+        case EDiagCode.code816: return EDiagFsPath.code816;
+        case EDiagCode.code817: return EDiagFsPath.code817;
+        case EDiagCode.code818: return EDiagFsPath.code818;
+        case EDiagCode.code819: return EDiagFsPath.code819;
+        case EDiagCode.code820: return EDiagFsPath.code820;
+        case EDiagCode.code821: return EDiagFsPath.code821;
+        case EDiagCode.code822: return EDiagFsPath.code822;
+        case EDiagCode.code823: return EDiagFsPath.code823;
+        case EDiagCode.code824: return EDiagFsPath.code824;
         case EDiagCode.code901: return EDiagFsPath.code901;
         case EDiagCode.code902: return EDiagFsPath.code902;
         case EDiagCode.code903: return EDiagFsPath.code903;

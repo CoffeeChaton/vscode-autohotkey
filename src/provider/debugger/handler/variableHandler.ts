@@ -77,10 +77,8 @@ function formatPropertyValue({
     }
 
     if (classname === undefined) return 'undefined of Not defined';
-    if (classname === 'undefined') {
-        console.log('🚀 ~ classname', classname);
-        return 'undefined-2(neko-help-88)';
-    }
+    if (classname === 'undefined') return 'undefined-2(neko-help-88)';
+
     return `${classname}`;
 }
 
@@ -286,12 +284,7 @@ export class VariableHandler {
             const ref = typeAttr !== 'object'
                 ? 0
                 : this.variableHandles.create(ahkVar);
-            if (name === 'Name' || classname === 'Func') {
-                console.log('🚀 ~267~ VariableHandler ~ .forEach ~ response', response);
-            }
-            if (attr.classname === 'File' || fullname === 'myFile') {
-                console.log('🚀 ~104~ File obj', fullname);
-            }
+
             const ed = parseTail({
                 property,
                 attr,

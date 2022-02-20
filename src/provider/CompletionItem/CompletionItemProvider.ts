@@ -86,7 +86,7 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
     }
 }
 
-/* TODO *1
+/*
 Functions are assume-local by default. Variables accessed or created inside an assume-local function are local by default,
 with the following exceptions:
 

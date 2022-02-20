@@ -4,21 +4,13 @@
         "body": "#ClipboardTimeout, ${1:Milliseconds}",
         "description": "Changes how long the script keeps trying to access the clipboard when the first attempt fails."
     },
-    "#CommentFlag": {
-        "prefix": "#CommentFlag",
-        "body": "#CommentFlag ${1:NewString}",
-        "description": "Changes the script's comment symbol from semicolon to some other string.\n⚠Note: This directive is not recommended for use in new scripts because a) it does more harm than good and b) it is no longer available in AutoHotkey v2."
-    },
+
     "#ErrorStdOut": {
         "prefix": "#ErrorStdOut",
         "body": "#ErrorStdOut",
         "description": "Sends any syntax error that prevents a script from launching to stderr rather than displaying a dialog."
     },
-    "#EscapeChar": {
-        "prefix": "#EscapeChar",
-        "body": "#EscapeChar, ${1:NewChar}",
-        "description": "Changes the script's escape character (e.g. accent vs. backslash).\n⚠Note: This directive is not recommended for use in new scripts because a) it does more harm than good and b) it is no longer available in AutoHotkey v2."
-    },
+
     "#HotkeyInterval": {
         "prefix": "#HotkeyInterval",
         "body": "#HotkeyInterval, ${1:Milliseconds}",
@@ -44,41 +36,7 @@
         "body": "#IfTimeout, ${1:Timeout}",
         "description": "Sets the maximum time that may be spent evaluating a single #If expression."
     },
-    "#IfWinActive": {
-        "prefix": "#IfWinActive",
-        "body": "#IfWinActive, ${1:[ WinTitle}, ${2:WinText]}",
-        "description": "Creates context-sensitive hotkeys and hotstrings. Such hotkeys perform a different action (or none at all) depending on the type of window that is active or exists.\nThe #IfWin directives are positional: they affect all hotkeys and hotstrings physically beneath them in the script."
-    },
-    "#IfWinActiveClose": {
-        "prefix": "#IfWinActive",
-        "body": "#IfWinActive",
-        "description": "To turn off context sensitivity, specify any #IfWin directive but omit all of its parameters."
-    },
-    "#IfWinExist": {
-        "prefix": "#IfWinExist",
-        "body": "#IfWinExist, ${1:[ WinTitle}, ${2:WinText]}",
-        "description": "Creates context-sensitive hotkeys and hotstrings. Such hotkeys perform a different action (or none at all) depending on the type of window that is active or exists."
-    },
-    "#IfWinExistClose": {
-        "prefix": "#IfWinExist",
-        "body": "#IfWinExist",
-        "description": "To turn off context sensitivity, specify any #IfWin directive but omit all of its parameters."
-    },
-    "#IfWinNotActive": {
-        "prefix": "#IfWinNotActive",
-        "body": "#IfWinNotActive, ${1:[ WinTitle}, ${2:WinText]}",
-        "description": "Creates context-sensitive hotkeys and hotstrings. Such hotkeys perform a different action (or none at all) depending on the type of window that is active or exists."
-    },
-    "#IfWinNotActiveClose": {
-        "prefix": "#IfWinNotActive",
-        "body": "#IfWinNotActive",
-        "description": "To turn off context sensitivity, specify any #IfWin directive but omit all of its parameters."
-    },
-    "#IfWinNotExist": {
-        "prefix": "#IfWinNotExist",
-        "body": "#IfWinNotExist, ${1:[ WinTitle}, ${2:WinText]}",
-        "description": "Creates context-sensitive hotkeys and hotstrings. Such hotkeys perform a different action (or none at all) depending on the type of window that is active or exists."
-    },
+
     "#Include": {
         "prefix": "#Include",
         "body": "#Include, ${1:FileOrDirName}",
@@ -314,21 +272,12 @@
         "body": "EnvAdd, ${1:Var}, ${2:Value [}, ${3:TimeUnits]}",
         "description": "Sets a variable to the sum of itself plus the given value (can also add or subtract time from a date-time value). Synonymous with: var += value."
     },
-    "EnvDiv": {
-        "prefix": "EnvDiv",
-        "body": "EnvDiv, ${1:Var}, ${2:Value}",
-        "description": "Sets a variable to itself divided by the given value.\n⚠Deprecated: This command is not recommended for use in new scripts. Use Var := Var / Value or Var /= Value instead."
-    },
     "EnvGet": {
         "prefix": "EnvGet",
         "body": "EnvGet, ${1:OutputVar}, ${2:EnvVarName}",
         "description": "Retrieves an environment variable."
     },
-    "EnvMult": {
-        "prefix": "EnvMult",
-        "body": "EnvMult, ${1:Var}, ${2:Value}",
-        "description": "Sets a variable to itself times the given value.\n⚠Deprecated: This command is not recommended for use in new scripts. Use Var := Var * Value or Var *= Value instead."
-    },
+
     "EnvSet": {
         "prefix": "EnvSet",
         "body": "EnvSet, ${1:EnvVar}, ${2:Value}",
@@ -354,11 +303,7 @@
         "body": "ExitApp, ${1:[ ExitCode]}",
         "description": "Terminates the script unconditionally."
     },
-    "FileAppend": {
-        "prefix": "FileAppend",
-        "body": "FileAppend, ${1:[ Text}, ${2:Filename]}",
-        "description": "Writes text to the end of a file (first creating the file, if necessary)."
-    },
+
     "FileCopy": {
         "prefix": "FileCopy",
         "body": "FileCopy, ${1:Source}, ${2:Dest [}, ${3:Flag (1 = overwrite)]}",
@@ -389,11 +334,7 @@
         "body": "FileEncoding, ${1:[Encoding]}",
         "description": "Sets the default encoding for FileRead, FileReadLine, Loop Read, FileAppend, and FileOpen()."
     },
-    "FileGetAttrib": {
-        "prefix": "FileGetAttrib",
-        "body": "FileGetAttrib, ${1:OutputVar(RASHNDOCT) [}, ${2:Filename]}",
-        "description": "Reports whether a file or folder is read-only, hidden, etc."
-    },
+
     "FileGetShortcut": {
         "prefix": "FileGetShortcut",
         "body": "FileGetShortcut, ${1:LinkFile [}, ${2:OutTarget}, ${3:OutDir}, ${4:OutArgs}, ${5:OutDescription}, ${6:OutIcon}, ${7:OutIconNum}, ${8:OutRunState]}",
@@ -429,11 +370,7 @@
         "body": "FileMoveDir, ${1:Source}, ${2:Dest [}, ${3:Flag (2 = overwrite)]}",
         "description": "Moves a folder along with all its sub-folders and files. It can also rename a folder."
     },
-    "FileRead": {
-        "prefix": "FileRead",
-        "body": "FileRead, ${1:OutputVar}, ${2:Filename}",
-        "description": "Reads a file's contents into a variable."
-    },
+
     "FileReadLine": {
         "prefix": "FileReadLine",
         "body": "FileReadLine, ${1:OutputVar}, ${2:Filename}, ${3:LineNum}",
@@ -489,11 +426,7 @@
         "body": "FormatTime, ${1:OutputVar [}, ${2:YYYYMMDDHH24MISS}, ${3:Format]}",
         "description": "Transforms a YYYYMMDDHH24MISS timestamp into the specified date/time format."
     },
-    "GetKeyState": {
-        "prefix": "GetKeyState",
-        "body": "GetKeyState, ${1:OutputVar}, ${2:WhichKey [}, ${3:Mode (P|T)]}",
-        "description": "Checks if a keyboard key or mouse/joystick button is down or up. Also retrieves joystick status."
-    },
+
     "Gosub": {
         "prefix": "Gosub",
         "body": "Gosub, ${1:Label}",
@@ -569,81 +502,12 @@
         "body": "If ${1:Var} is ${2:integer|float|number|digit|xdigit|alpha|upper|lower|alnum|space|time}",
         "description": "Checks whether a variable's contents are numeric, uppercase, etc."
     },
-    "IfEqual": {
-        "prefix": "IfEqual",
-        "body": "IfEqual, ${1:Var}, ${2:Value}",
-        "description": "⚠Deprecated: Legacy If statements are not recommended for use in new scripts."
-    },
-    "IfExist": {
-        "prefix": "IfExist",
-        "body": "IfExist, ${1:File|Dir|Pattern}",
-        "description": "Checks for the existence of a file or folder.⚠ Deprecated: These commands are not recommended for use in new scripts. Use the FileExist function instead."
-    },
-    "IfGreater": {
-        "prefix": "IfGreater",
-        "body": "IfGreater, ${1:Var}, ${2:Value}",
-        "description": "⚠Deprecated: Legacy If statements are not recommended for use in new scripts."
-    },
-    "IfGreaterOrEqual": {
-        "prefix": "IfGreaterOrEqual",
-        "body": "IfGreaterOrEqual, ${1:Var}, ${2:Value}",
-        "description": "⚠Deprecated: Legacy If statements are not recommended for use in new scripts."
-    },
-    "IfInString": {
-        "prefix": "IfInString",
-        "body": "IfInString, ${1:Var}, ${2:SearchString}",
-        "description": "⚠Deprecated: Legacy If statements are not recommended for use in new scripts. Use the InStr function instead."
-    },
-    "IfLess": {
-        "prefix": "IfLess",
-        "body": "IfLess, ${1:Var}, ${2:Value}",
-        "description": "⚠Deprecated: Legacy If statements are not recommended for use in new scripts."
-    },
-    "IfLessOrEqual": {
-        "prefix": "IfLessOrEqual",
-        "body": "IfLessOrEqual, ${1:Var}, ${2:Value}",
-        "description": "⚠Deprecated: Legacy If statements are not recommended for use in new scripts."
-    },
     "IfMsgBox": {
         "prefix": "IfMsgBox",
         "body": "IfMsgBox, ${1:Yes|No|OK|Cancel|Abort|Ignore|Retry|Timeout}",
         "description": "Checks which button was pushed by the user during the most recent MsgBox command."
     },
-    "IfNotEqual": {
-        "prefix": "IfNotEqual",
-        "body": "IfNotEqual, ${1:Var}, ${2:Value}",
-        "description": "⚠Deprecated: Legacy If statements are not recommended for use in new scripts."
-    },
-    "IfNotExist": {
-        "prefix": "IfNotExist",
-        "body": "IfNotExist, ${1:File|Dir|Pattern}",
-        "description": "Checks for the existence of a file or folder.⚠Deprecated: These commands are not recommended for use in new scripts. Use the FileExist function instead."
-    },
-    "IfNotInString": {
-        "prefix": "IfNotInString",
-        "body": "IfNotInString, ${1:Var}, ${2:SearchString}",
-        "description": "Checks if a variable contains the specified string.⚠Deprecated: These commands are not recommended for use in new scripts. Use the InStr function instead."
-    },
-    "IfWinActive": {
-        "prefix": "IfWinActive",
-        "body": "IfWinActive, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}",
-        "description": "Checks if the specified window exists and is currently active (foremost). If it is, WinActive() returns its Unique ID (HWND)."
-    },
-    "IfWinExist": {
-        "prefix": "IfWinExist",
-        "body": "IfWinExist, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}",
-        "description": "Checks if a matching window exists. If it is, WinExist() returns the Unique ID (HWND) of the first matching window."
-    },
-    "IfWinNotActive": {
-        "prefix": "IfWinNotActive",
-        "body": "IfWinNotActive, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}",
-        "description": "Checks if the specified window exists and is currently active (foremost). If it is, WinActive() returns its Unique ID (HWND)."
-    },
-    "IfWinNotExist": {
-        "prefix": "IfWinNotExist",
-        "body": "IfWinNotExist, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}",
-        "description": "Checks if a matching window exists. If it is, WinExist() returns the Unique ID (HWND) of the first matching window."
-    },
+
     "ImageSearch": {
         "prefix": "ImageSearch",
         "body": "ImageSearch, ${1:OutputVarX}, ${2:OutputVarY}, ${3:X1}, ${4:Y1}, ${5:X2}, ${6:Y2}, ${7:ImageFile}",
@@ -706,7 +570,7 @@
     },
     "Loop <file>": {
         "prefix": "Loop <file>",
-        "body": "Loop, ${1:FilePattern [}, ${2:IncludeFolders?}, ${3:Recurse?]}",
+        "body": "Loop, ${1:Files [}, ${2:FilePattern}, ${3:Mode?]}",
         "description": "Retrieves the specified files or folders, one at a time."
     },
     "Loop parse": {
@@ -789,11 +653,7 @@
         "body": "Process, ${1:Cmd}, ${2:PID-or-Name [}, ${3:Param3]}",
         "description": "Performs one of the following operations on a process: checks if it exists; changes its priority; closes it; waits for it to close."
     },
-    "Progress": {
-        "prefix": "Progress",
-        "body": "Progress, ${1:Param1 [}, ${2:SubText}, ${3:MainText}, ${4:WinTitle}, ${5:FontName]}",
-        "description": "Creates or updates a window containing a progress bar or an image."
-    },
+
     "Random": {
         "prefix": "Random",
         "body": "Random, ${1:OutputVar [}, ${2:Min}, ${3:Max]}",
@@ -806,7 +666,7 @@
     },
     "RegRead": {
         "prefix": "RegRead",
-        "body": "RegRead, ${1:OutputVar}, ${2:HKLM|HKU|HKCU|HKCR|HKCC}, ${3:SubKey [}, ${4:ValueName]}",
+        "body": "RegRead, ${1:OutputVar}, ${2:HKLM|HKU|HKCU|HKCR|HKCC}, ${4:ValueName]}",
         "description": "Reads a value from the registry."
     },
     "RegWrite": {
@@ -899,16 +759,7 @@
         "body": "SetDefaultMouseSpeed, ${1:Speed}",
         "description": "Sets the mouse speed that will be used if unspecified in Click and MouseMove/Click/Drag."
     },
-    "SetEnv": {
-        "prefix": "SetEnv",
-        "body": "SetEnv, ${1:Var}, ${2:Value}",
-        "description": "Assigns the specified value to a variable.\n⚠Deprecated: This command or a legacy assignment is not recommended for use in new scripts. Use expression assignments like Var := Value instead."
-    },
-    "SetFormat": {
-        "prefix": "SetFormat",
-        "body": "SetFormat, ${1:float|integer}, ${2:TotalWidth.DecimalPlaces|hex|d}",
-        "description": "Sets the format of integers and floating point numbers generated by math operations.\n⚠Deprecated: This command is not recommended for use in new scripts. Use the Format function instead."
-    },
+
     "SetKeyDelay": {
         "prefix": "SetKeyDelay",
         "body": "SetKeyDelay, ${1:[ Delay}, ${2:PressDuration]}",
@@ -1004,21 +855,7 @@
         "body": "SoundSetWaveVolume, ${1:Percent [}, ${2:DeviceNumber]}",
         "description": "Changes the wave output volume for a sound device."
     },
-    "SplashImage": {
-        "prefix": "SplashImage",
-        "body": "SplashImage, ${1:[ ImageFile}, ${2:Options}, ${3:SubText}, ${4:MainText}, ${5:WinTitle}, ${6:FontName]}",
-        "description": "Creates or updates a window containing a progress bar or an image."
-    },
-    "SplashTextOff": {
-        "prefix": "SplashTextOff",
-        "body": "SplashTextOff",
-        "description": "Creates a customizable text popup window."
-    },
-    "SplashTextOn": {
-        "prefix": "SplashTextOn",
-        "body": "SplashTextOn, ${1:[ Width}, ${2:Height}, ${3:Title}, ${4:Text]}",
-        "description": "Creates a customizable text popup window."
-    },
+
     "SplitPath": {
         "prefix": "SplitPath",
         "body": "SplitPath, ${1:InputVar [}, ${2:OutFileName}, ${3:OutDir}, ${4:OutExtension}, ${5:OutNameNoExt}, ${6:OutDrive]}",
@@ -1039,61 +876,7 @@
         "body": "StringCaseSense, ${1:On|Off|Locale}",
         "description": "Determines whether string comparisons are case sensitive (default is \"not case sensitive\")."
     },
-    "StringGetPos": {
-        "prefix": "StringGetPos",
-        "body": "StringGetPos, ${1:OutputVar}, ${2:InputVar}, ${3:SearchText [}, ${4:L#|R#}, ${5:Offset]}",
-        "description": "Retrieves the position of the specified substring within a string.\n⚠Deprecated: This command is not recommended for use in new scripts. Use the InStr function instead."
-    },
-    "StringLeft": {
-        "prefix": "StringLeft",
-        "body": "StringLeft, ${1:OutputVar}, ${2:InputVar}, ${3:Count}",
-        "description": "Retrieves a number of characters from the left-hand side of a string.\n⚠Deprecated: These commands are not recommended for use in new scripts. Use the SubStr function instead."
-    },
-    "StringLen": {
-        "prefix": "StringLen",
-        "body": "StringLen, ${1:OutputVar}, ${2:InputVar}",
-        "description": "Retrieves the count of how many characters are in a string.\n⚠Deprecated: Use the StrLen function instead."
-    },
-    "StringLower": {
-        "prefix": "StringLower",
-        "body": "StringLower, ${1:OutputVar}, ${2:InputVar [}, ${3:T]}",
-        "description": "Converts a string to lowercase."
-    },
-    "StringMid": {
-        "prefix": "StringMid",
-        "body": "StringMid, ${1:OutputVar}, ${2:InputVar}, ${3:StartChar [}, ${4:Count}, ${5:L]}",
-        "description": "Retrieves one or more characters from the specified position in a string.\n⚠Deprecated: This command is not recommended for use in new scripts. Use the SubStr function instead."
-    },
-    "StringReplace": {
-        "prefix": "StringReplace",
-        "body": "StringReplace, ${1:OutputVar}, ${2:InputVar}, ${3:SearchText [}, ${4:ReplaceText}, ${5:All]}",
-        "description": "Replaces the specified substring with a new string.\n⚠Deprecated: Use the StrReplace function instead."
-    },
-    "StringRight": {
-        "prefix": "StringRight",
-        "body": "StringRight, ${1:OutputVar}, ${2:InputVar}, ${3:Count}",
-        "description": "Retrieves a number of characters from the right-hand side of a string.\n⚠Deprecated: These commands are not recommended for use in new scripts. Use the SubStr function instead."
-    },
-    "StringSplit": {
-        "prefix": "StringSplit",
-        "body": "StringSplit, ${1:OutputArray}, ${2:InputVar [}, ${3:Delimiters}, ${4:OmitChars]}",
-        "description": "Separates a string into an array of substrings using the specified delimiters."
-    },
-    "StringTrimLeft": {
-        "prefix": "StringTrimLeft",
-        "body": "StringTrimLeft, ${1:OutputVar}, ${2:InputVar}, ${3:Count}",
-        "description": "Removes a number of characters from the left-hand side of a string.\n⚠Deprecated: These commands are not recommended for use in new scripts. Use the SubStr function instead."
-    },
-    "StringTrimRight": {
-        "prefix": "StringTrimRight",
-        "body": "StringTrimRight, ${1:OutputVar}, ${2:InputVar}, ${3:Count}",
-        "description": "Removes a number of characters from the right-hand side of a string.\n⚠Deprecated: These commands are not recommended for use in new scripts. Use the SubStr function instead."
-    },
-    "StringUpper": {
-        "prefix": "StringUpper",
-        "body": "StringUpper, ${1:OutputVar}, ${2:InputVar [}, ${3:T]}",
-        "description": "Converts a string to uppercase."
-    },
+
     "Suspend": {
         "prefix": "Suspend",
         "body": "Suspend, ${1:[ On|Off|Toggle|Permit]}",
@@ -1119,11 +902,7 @@
         "body": "ToolTip, ${1:[ Text}, ${2:X}, ${3:Y}, ${4:WhichToolTip]}",
         "description": "Creates an always-on-top window anywhere on the screen."
     },
-    "Transform": {
-        "prefix": "Transform",
-        "body": "Transform, ${1:OutputVar}, ${2:Cmd}, ${3:Value1 [}, ${4:Value2]}",
-        "description": "Performs miscellaneous math functions, bitwise operations, and tasks such as ASCII/Unicode conversion."
-    },
+
     "TrayTip": {
         "prefix": "TrayTip",
         "body": "TrayTip, ${1:[ Title}, ${2:Text}, ${3:Seconds}, ${4:Options]}",
@@ -1339,11 +1118,7 @@
         "body": "ComObjConnect(${1:ComObject} [, ${2:Prefix}])",
         "description": "Connects the object's event sources to functions with a given prefix."
     },
-    "ComObjEnwrap()": {
-        "prefix": "ComObjEnwrap()",
-        "body": "ComObjEnwrap(${1:DispPtr})",
-        "description": "Wraps a raw IDispatch pointer in a usable object and automatically calls AddRef.\n⚠Deprecated"
-    },
+
     "ComObjError()": {
         "prefix": "ComObjError()",
         "body": "ComObjError(${1:[Enable]})",
@@ -1359,11 +1134,7 @@
         "body": "ComObjGet(${1:Name})",
         "description": "Returns a reference to an object provided by a COM component."
     },
-    "ComObjMissing()": {
-        "prefix": "ComObjMissing()",
-        "body": "ComObjMissing()",
-        "description": "Creates an object which may be used in place of an optional parameter's default value when calling a method of a COM object.\n⚠Deprecated"
-    },
+
     "ComObjParameter()": {
         "prefix": "ComObjParameter()",
         "body": "ComObjParameter(${1:VarType}, ${2:Value} [, ${3:Flags}])",
@@ -1379,11 +1150,7 @@
         "body": "ComObjType(${1:ComObject}, \"${2:Name|IID}\")",
         "description": "Retrieves type information from a COM object."
     },
-    "ComObjUnwrap()": {
-        "prefix": "ComObjUnwrap()",
-        "body": "ComObjUnwrap(${1:ComObject})",
-        "description": "Unwraps a raw IDispatch pointer in a usable object and automatically calls AddRef.\n⚠Deprecated"
-    },
+
     "ComObjValue()": {
         "prefix": "ComObjValue()",
         "body": "ComObjValue(${1:ComObject})",
@@ -1639,11 +1406,7 @@
         "body": "StrPut(${1:String}, ${2:Address}, ${3:[Length]}, ${4:[Encoding = None]})",
         "description": "Copies a string to a memory address, optionally converting it to a given code page."
     },
-    "StrSplit()": {
-        "prefix": "StrSplit()",
-        "body": "StrSplit(${1:String}, ${2:[Delimiters}, ${3:OmitChars]})",
-        "description": "Separates a string into an array of substrings using the specified delimiters.⚠Deprecated: Use the StrSplit function instead."
-    },
+
     "StrReplace()": {
         "prefix": "StrReplace()",
         "body": "StrReplace(${1:Haystack}, ${2:SearchText [}, ${3:ReplaceText}, ${4:OutputVarCount}, ${5:Limit := -1]})",

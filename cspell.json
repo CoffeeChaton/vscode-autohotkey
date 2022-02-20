@@ -1,0 +1,9 @@
+{
+    "version": "0.2",
+    "ignorePaths": ["ahk.snippets.json"],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [],
+    "ignoreWords": [],
+    "import": []
+}

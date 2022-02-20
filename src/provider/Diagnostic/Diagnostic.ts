@@ -37,6 +37,7 @@ function assign(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnosti
     const value = EDiagCode.code107;
     return setDiagnostic(value, range, vscode.DiagnosticSeverity.Information, []);
 }
+
 function getLoopErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnostic {
     const { lStr } = DocStrMap[line];
     const exec = (/^\s*Loop\b[\s,]+(\w+)/iu).exec(lStr);
@@ -94,50 +95,169 @@ function getDirectivesErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode
     }
     return 1;
 }
+
 function getCommandErrFnReplace(commandHead: string, lStr: string, line: number): null | vscode.Diagnostic {
+    // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
     if (
-        (/^(?:File(Append|GetAttrib|Read)|GetKeyState|IfExist|IfInString|IfWin(Active|Exist))$/ui).test(commandHead)
+        (/^(?:File(Append|GetAttrib|Read)|GetKeyState|IfExist|IfInString|IfWin(?:Not)?(?:Active|Exist))$/ui).test(
+            commandHead,
+        )
         || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/ui).test(commandHead)
     ) {
         const col = lStr.indexOf(commandHead);
         const range = new vscode.Range(line, col, line, col + commandHead.length);
-        // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
         const value = EDiagCode.code700;
         const tags = [vscode.DiagnosticTag.Deprecated];
         return setDiagnostic(value, range, vscode.DiagnosticSeverity.Warning, tags);
     }
     return null;
 }
+
+type TCommandErr = {
+    reg: RegExp;
+    code: EDiagCode;
+};
 function getCommandErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnostic {
-    // TODO result: Readonly<MyDocSymbol[]>
-    // TODO search Deprecated
     // if (h.indexOf(line) !== -1) return 1;
     if (!(/^\s*\w+[\s,]/u).test(DocStrMap[line].lStr)) return 0;
     const { lStr } = DocStrMap[line];
     const exec = (/^\s*(\w+)[\s,]/u).exec(lStr);
     if (exec === null) return 0;
     const commandHead = exec[1];
-    if ((/^switch|case|if|while|else|return|Break|for|sleep$/ui).test(commandHead)) return 1;
+    if ((/^(?:switch|case|if|while|else|return|Break|for|sleep)$/ui).test(commandHead)) return 1;
 
     const fnReplaceErr = getCommandErrFnReplace(commandHead, lStr, line);
     if (fnReplaceErr) return fnReplaceErr;
     if ((/^Loop$/ui).test(commandHead)) return getLoopErr(DocStrMap, line);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const _temp = {
-        exec: /^EnvMult$/ui, // TODO EnvDiv
-        EDiagCode: EDiagCode.code903,
-    };
-    // TODO ifEq https://wyagd001.github.io/zh-cn/docs/commands/IfEqual.htm
-    // SetFormat -> Format  https://www.autohotkey.com/docs/commands/SetFormat.htm
-    // StringMid -> SubStr() https://www.autohotkey.com/docs/commands/StringMid.htm
-    // EscapeChar.htm
+    const headMatch: TCommandErr[] = [
+        {
+            reg: /^EnvDiv$/ui,
+            code: EDiagCode.code803,
+        },
+        {
+            reg: /^EnvMult$/ui,
+            code: EDiagCode.code804,
+        },
+        {
+            reg: /^GetKeyState$/ui,
+            code: EDiagCode.code805,
+        },
+        {
+            reg: /^If(?:Equal|NotEqual|Less|LessOrEqual|Greater|GreaterOrEqual)$/ui,
+            code: EDiagCode.code806,
+        },
+        {
+            reg: /^If(?:Exist|NotExist)$/ui,
+            code: EDiagCode.code807,
+        },
+        {
+            reg: /^If(?:Not)?InString$/ui,
+            code: EDiagCode.code808,
+        },
+        {
+            reg: /^IfWin(?:Not)?Active$/ui,
+            code: EDiagCode.code809,
+        },
+        {
+            reg: /^IfWin(?:Not)?Exist$/ui,
+            code: EDiagCode.code810,
+        },
+        {
+            reg: /^SplashImage|Progress$/ui,
+            code: EDiagCode.code813,
+        },
+        {
+            reg: /^SetEnv$/ui,
+            code: EDiagCode.code814,
+        },
+        {
+            reg: /^SetFormat$/ui,
+            code: EDiagCode.code815,
+        },
+        {
+            reg: /^SplashText(?:On|Off)$/ui,
+            code: EDiagCode.code816,
+        },
+        {
+            reg: /^StringGetPos$/ui,
+            code: EDiagCode.code817,
+        },
+        {
+            reg: /^String(?:Left|Right)/ui,
+            code: EDiagCode.code818,
+        },
+        {
+            reg: /^StringLen/ui,
+            code: EDiagCode.code819,
+        },
+        {
+            reg: /^StringMid$/ui,
+            code: EDiagCode.code820,
+        },
+        {
+            reg: /^StringReplace$/ui,
+            code: EDiagCode.code821,
+        },
+        {
+            reg: /^StringSplit$/ui,
+            code: EDiagCode.code822,
+        },
+        {
+            reg: /^StringTrim(?:Left|Right)$/ui,
+            code: EDiagCode.code823,
+        },
+        {
+            reg: /^Transform$/ui,
+            code: EDiagCode.code824,
+        },
+    ]; // TODO search Deprecated
+
+    for (const v of headMatch) {
+        if (v.reg.test(commandHead)) {
+            const col = lStr.search(commandHead);
+            const range = new vscode.Range(line, col, line, col + commandHead.length);
+            const tags: vscode.DiagnosticTag[] = [vscode.DiagnosticTag.Deprecated];
+            return setDiagnostic(v.code, range, vscode.DiagnosticSeverity.Warning, tags);
+        }
+    }
+    // TODO Reg,,,... i need to Count colon  ??
     return 1;
 }
+
+function getLabelErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnostic {
+    // if (h.indexOf(line) !== -1) return 1;
+    if (DocStrMap[line].lStr.indexOf(':') < 1) return 0;
+    const { lStr } = DocStrMap[line];
+    const exec = (/^\s*(\w+)\s*:/u).exec(lStr);
+    if (exec === null) return 0;
+    const labName = exec[1];
+    const headMatch: TCommandErr[] = [
+        {
+            reg: /^OnClipboardChange$/ui,
+            code: EDiagCode.code811,
+        },
+        {
+            reg: /^OnExit$/ui,
+            code: EDiagCode.code812,
+        },
+    ];
+    for (const v of headMatch) {
+        if (v.reg.test(labName)) {
+            const col = lStr.search(labName);
+            const range = new vscode.Range(line, col, line, col + labName.length);
+            const tags: vscode.DiagnosticTag[] = [vscode.DiagnosticTag.Deprecated];
+            return setDiagnostic(v.code, range, vscode.DiagnosticSeverity.Warning, tags);
+        }
+    }
+
+    return 1;
+}
+
 type TFnLineErr = (DocStrMap: TTokenStream, line: number, uri: vscode.Uri) => 0 | 1 | vscode.Diagnostic;
 
 function getLineErr(DocStrMap: TTokenStream, line: number, uri: vscode.Uri): null | vscode.Diagnostic {
-    const fnList: TFnLineErr[] = [assign, getDirectivesErr, getCommandErr];
+    const fnList: TFnLineErr[] = [assign, getDirectivesErr, getCommandErr, getLabelErr];
     for (const fn of fnList) {
         const err = fn(DocStrMap, line, uri);
         // dprint-ignore
@@ -155,6 +275,7 @@ function setFuncErr(func: TAhkSymbol): vscode.Diagnostic {
     const range = func.selectionRange;
     return setDiagnostic(value, range, vscode.DiagnosticSeverity.Warning, []);
 }
+
 function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol): boolean {
     const maxFnSize = getLintConfig().funcSize;
     let fnSize = 0;
@@ -169,6 +290,7 @@ function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol): boolean {
     }
     return false;
 }
+
 function getFuncErr(
     DocStrMap: TTokenStream,
     funcS: Readonly<TAhkSymbol[]>,

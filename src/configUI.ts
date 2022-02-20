@@ -36,6 +36,9 @@ function getConfig(): TConfigs {
         Debug: {
             executePath: Configs.get('Debug.executePath') as string,
         },
+        snippets: {
+            intelligent: Configs.get('snippets.intelligent') as boolean,
+        },
     } as const;
     const { executePath } = ed.Debug;
 
@@ -45,7 +48,7 @@ function getConfig(): TConfigs {
             ? ` <---> err.message ${err.message}`
             : '';
         const msg = `setting err of "AhkNekoHelp.Debug.executePath" : "${executePath}"${errCode}`;
-        console.log('fs.access ~ msg', msg);
+        console.log('🚀 fs.access ~ msg', msg);
         vscode.window.showErrorMessage(msg);
         const msg2 = `can't find the file at "${executePath}"`;
         vscode.window.showErrorMessage(msg2);
@@ -104,8 +107,13 @@ export function getIgnoredFile(buildPath: string): boolean {
     }
     return false;
 }
+
 export function getDebugPath(): string {
     return config.Debug.executePath;
+}
+
+export function getSnippetsMode(): boolean {
+    return config.snippets.intelligent;
 }
 // vscode.window.setStatusBarMessage(timeSpend);
 // vscode.window.showErrorMessage()

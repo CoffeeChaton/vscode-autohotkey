@@ -18,7 +18,7 @@ export async function renameFn(oldUri: vscode.Uri, newUri: vscode.Uri, fsPathLis
             if (
                 RegexInclude.test(textRaw)
                 && textRaw.includes(oldFileName)
-            ) { // TODO TEST
+            ) {
                 const Today = new Date();
                 const Remarks = `\n;;${oldFileName} -> ${newFileName} ; at ${Today.toLocaleString()}`;
                 const newText = textRaw.replace(oldFileName, newFileName) + Remarks;

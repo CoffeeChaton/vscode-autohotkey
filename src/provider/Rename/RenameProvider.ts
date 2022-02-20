@@ -19,9 +19,8 @@ function DeepAnalysisRename(document: vscode.TextDocument, position: vscode.Posi
     }
 
     const locList = ed.valMap.get(word);
-
     if (locList) {
-        console.log('🚀 ~ locList', locList); // bug
+        console.log('🚀 ~ DeepAnalysisRename ~ locList', locList);
         // loc.push(...locList.defLoc, ...locList.refLoc);
     }
 

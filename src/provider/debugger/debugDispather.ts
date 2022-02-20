@@ -79,7 +79,6 @@ export class DebugDispather extends EventEmitter {
             name: 'neko-ahk-debug',
             ports,
         });
-        console.log('🚀 ~ DebugDispather ~ start ~ port', port);
         this.debugServer = new DebugServer(port);
         this.commandHandler = new CommandHandler(this.debugServer);
         this.debugServer

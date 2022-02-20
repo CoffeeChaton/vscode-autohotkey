@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 
 export function IgnoreArgNeverUsed(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.CodeAction {
-    console.log('🚀 ~ IgnoreArgNeverUsed ~ diag', diag);
     // diag
     //    code: 102
     //    message: "assign warning"

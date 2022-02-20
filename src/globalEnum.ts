@@ -69,6 +69,7 @@ export const enum EDiagBase {
     ignore = ';@ahk-ignore ', // ;@ahk-ignore 30 line.
     source = 'neko help',
 }
+
 export const enum EDiagCode {
     code107 = 107,
     code110 = 110, // 100~110 is switch err
@@ -81,12 +82,37 @@ export const enum EDiagCode {
     code501 = 501, // 501~599 Analysis Func or Method
     code700 = 700, // 700 is Command -> func
     // code701 = 701, // 701~799 is Command error
-    code801 = 801, // 800~899 is Deprecated / Old Syntax
+    // 800~899 is Deprecated / Old Syntax
+    code801 = 801,
     code802 = 802,
-    code901 = 901, // 901~999 is not recommended
+    code803 = 803,
+    code804 = 804,
+    code805 = 805,
+    code806 = 806,
+    code807 = 807,
+    code808 = 808,
+    code809 = 809,
+    code810 = 810,
+    code811 = 811,
+    code812 = 812,
+    code813 = 813,
+    code814 = 814,
+    code815 = 815,
+    code816 = 816,
+    code817 = 817,
+    code818 = 818,
+    code819 = 819,
+    code820 = 820,
+    code821 = 821,
+    code822 = 822,
+    code823 = 823,
+    code824 = 824,
+    // 901~999 is not recommended
+    code901 = 901,
     code902 = 902,
     code903 = 903,
 }
+
 export const enum EDiagMsg {
     code107 = 'assign warning',
     code110 = 'default : not find ',
@@ -100,10 +126,33 @@ export const enum EDiagMsg {
     code700 = 'try to use function replace Command(obsolete code)',
     code801 = 'Old Syntax(obsolete code)',
     code802 = 'Old Syntax(obsolete code)',
+    code803 = 'Use `Var := Var / Value` or `Var /= Value` instead.',
+    code804 = 'Use `Var := Var * Value` or `Var *= Value` instead.',
+    code805 = 'Use the `GetKeyState()` function instead.',
+    code806 = 'Use `If (expression)` instead.',
+    code807 = 'Use the `FileExist()` function instead.',
+    code808 = 'Use the `InStr()` function instead.',
+    code809 = 'Use the `WinActive()` function instead.',
+    code810 = 'Use the `WinExist()` function instead.',
+    code811 = 'Use the `OnClipboardChange()` function instead.',
+    code812 = 'Use the `OnExit()` function instead.',
+    code813 = 'Use the `Gui,` command instead.',
+    code814 = 'Use expression assignments like `Var := Value` instead.',
+    code815 = 'Use the `Format()` function instead.',
+    code816 = 'Use the `Gui` command instead.',
+    code817 = 'Use the `InStr()` function instead.',
+    code818 = 'Use the `SubStr()` function instead.',
+    code819 = 'Use the `StrLen()` function instead.',
+    code820 = 'Use the `SubStr()` function instead.',
+    code821 = 'Use the `StrReplace()` function instead.',
+    code822 = 'Use the `StrSplit()` function instead.',
+    code823 = 'Use the `SubStr()` function instead.',
+    code824 = 'Deprecated: This command is not recommended for use in new scripts.',
     code901 = 'ahk-doc not recommended and ahk-neko-help Syntax highlighting is not work.',
     code902 = 'ahk-doc not recommended and ahk-neko-help Syntax highlighting is not work.',
     code903 = 'ahk-doc not recommended and ahk-neko-help Syntax highlighting is not work.',
 }
+
 export const enum EDiagFsPath {
     code107 = 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
     code110 = 'https://www.autohotkey.com/docs/commands/Switch.htm',
@@ -117,10 +166,33 @@ export const enum EDiagFsPath {
     code700 = 'https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
     code801 = 'https://www.autohotkey.com/docs/commands/LoopReg.htm#old',
     code802 = 'https://www.autohotkey.com/docs/commands/LoopFile.htm#old',
+    code803 = 'https://www.autohotkey.com/docs/commands/EnvDiv.htm',
+    code804 = 'https://www.autohotkey.com/docs/commands/EnvMult.htm',
+    code805 = 'https://www.autohotkey.com/docs/commands/GetKeyState.htm#command',
+    code806 = 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
+    code807 = 'https://www.autohotkey.com/docs/commands/IfExist.htm',
+    code808 = 'https://www.autohotkey.com/docs/commands/IfInString.htm',
+    code809 = 'https://www.autohotkey.com/docs/commands/IfWinActive.htm',
+    code810 = 'https://www.autohotkey.com/docs/commands/IfWinExist.htm',
+    code811 = 'https://www.autohotkey.com/docs/commands/OnClipboardChange.htm#label',
+    code812 = 'https://www.autohotkey.com/docs/commands/OnExit.htm#command',
+    code813 = 'https://www.autohotkey.com/docs/commands/Progress.htm',
+    code814 = 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
+    code815 = 'https://www.autohotkey.com/docs/commands/SetFormat.htm',
+    code816 = 'https://www.autohotkey.com/docs/commands/SplashTextOn.htm',
+    code817 = 'https://www.autohotkey.com/docs/commands/StringGetPos.htm',
+    code818 = 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
+    code819 = 'https://www.autohotkey.com/docs/commands/StringLen.htm',
+    code820 = 'https://www.autohotkey.com/docs/commands/StringMid.htm',
+    code821 = 'https://www.autohotkey.com/docs/commands/StringReplace.htm',
+    code822 = 'https://www.autohotkey.com/docs/commands/StringSplit.htm',
+    code823 = 'https://www.autohotkey.com/docs/commands/StringTrimLeft.htm',
+    code824 = 'https://www.autohotkey.com/docs/commands/Transform.htm',
     code901 = 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm',
     code902 = 'https://www.autohotkey.com/docs/commands/_CommentFlag.htm',
     code903 = 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related',
 }
+
 export const enum EFnMode {
     normal = 1,
     local = 2,
@@ -209,6 +281,9 @@ type TempConfigs = {
     };
     Debug: {
         executePath: string;
+    };
+    snippets: {
+        intelligent: boolean;
     };
 };
 export type TConfigs = DeepReadonly<TempConfigs>;

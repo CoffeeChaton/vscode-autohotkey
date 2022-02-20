@@ -86,6 +86,6 @@ export async function FormatAllFile(): Promise<null> {
     for (const folder of ahkRootPath) {
         await formatByPathAsync(folder.uri.fsPath, options);
     }
-    console.log(`FormatAllFile ${Date.now() - timeStart}ms`);
+    console.log(`🚀 FormatAllFile ${Date.now() - timeStart}ms`);
     return null;
 }
