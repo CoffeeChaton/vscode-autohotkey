@@ -8,7 +8,7 @@ export function getTextCompletion(
     const need: vscode.CompletionItem[] = [];
     textMap.forEach((v) => {
         const item = new vscode.CompletionItem(v.keyRawName);
-        item.kind = vscode.CompletionItemKind.Issue;
+        item.kind = vscode.CompletionItemKind.Text;
         item.insertText = v.keyRawName;
         item.detail = 'text (neko-help-DeepAnalysis)';
 

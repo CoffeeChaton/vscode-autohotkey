@@ -21,11 +21,10 @@ export function getTextMap(
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
 
-        // eslint-disable-next-line security/detect-unsafe-regex
         for (const v of lStr.matchAll(/\b(\w+)\b/gu)) {
             const keyRawName = v[1].trim();
             const wordUp = keyRawName.toLocaleUpperCase();
-            if (argMap.has(wordUp) || valMap.has(wordUp)) continue;
+            if ((/^\d+$/ui).test(wordUp) || argMap.has(wordUp) || valMap.has(wordUp)) continue;
 
             const character = lStr.search(ahkValRegex(wordUp));
             if (character === -1) continue;
