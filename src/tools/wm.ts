@@ -1,4 +1,4 @@
-function calcSize<V>(v: V): number {
+function calcSize<V>(v: V | undefined): number {
     if (Array.isArray(v)) return v.length;
     if (v instanceof Map) return v.size;
     if (v === null || v === undefined) return 0;
@@ -36,10 +36,11 @@ export class ClassWm<T extends Record<string, unknown>, V> {
     }
 
     public setWm(t: T, v: V): V {
+        this.wmSize -= calcSize<V>(this.wm.get(t));
         if (this.wmSize > this.wmMaxSize) {
             this.wm = new WeakMap<T, V>();
             this.wmSize = 0;
-            console.log(`wm Clear ${this.fnName} with wmSize ${this.wmSize} > ${this.wmMaxSize} wmMaxSize`);
+            console.log(`🚀 wm Clear ${this.fnName} with wmSize ${this.wmSize} > ${this.wmMaxSize} wmMaxSize`);
         }
         this.wm.set(t, v);
         this.wmSize += calcSize<V>(v);

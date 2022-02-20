@@ -3,14 +3,13 @@ import { Detecter } from '../core/Detecter';
 import { DeepAnalysisResult, TAhkSymbolList } from '../globalEnum';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 
-const need: DeepAnalysisResult[] = [];
 export async function DeepAnalysisAllFiles(): Promise<null> {
     const t1 = Date.now();
     const allFsPath = Detecter.getDocMapFile();
 
     let size = 0;
 
-    need.length = 0;
+    const need: DeepAnalysisResult[] = [];
     for (const fsPath of allFsPath) {
         const AhkSymbolList: TAhkSymbolList | null = Detecter.getDocMap(fsPath);
         if (AhkSymbolList === null) continue;
@@ -25,6 +24,7 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
             need.push(ed);
             size += ed.argMap.size;
             size += ed.valMap.size;
+            size += ed.textMap.size;
         }
     }
 
@@ -37,3 +37,20 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
 
     return null;
 }
+
+/*
+my project:
+
+// not weakMap
+Deep Analysis All Files
+Deep Analysis : 809 Symbol
+All Size is 14238
+Done in 748 ms
+
+// weakMap
+Deep Analysis All Files
+Deep Analysis : 809 Symbol
+All Size is 14238
+Done in 1 ms
+
+*/

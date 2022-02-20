@@ -9,7 +9,7 @@ const filter = (src, _dest) => {
         '.idea',
         '.vscode',
         'coverage',
-        'image',
+        'image', // vsocde plugin readme.md need https:// img now.
         'node_modules',
         'out',
         'src',
@@ -19,13 +19,15 @@ const filter = (src, _dest) => {
         '.editorconfig',
         '.eslintcache',
         '.eslintrc.json',
+        '.gitattributes',
         '.gitignore',
+        'cspell.json',
         'dprint.json',
         'esbuild.config.js',
         'jest.config.js',
         'pnpm-lock.yaml',
-        'tsconfig.json',
         'rslintrc.toml',
+        'tsconfig.json',
     ];
     const List = [...folder, ...file];
     for (const ed of List) {

@@ -18,7 +18,10 @@
     },
     "categories": [
         "Programming Languages",
-        "Snippets"
+        "Snippets",
+        "Linters",
+        "Debuggers",
+        "Formatters"
     ],
     "license": "SEE LICENSE IN LICENSE.md",
     "icon": "icon.png",
