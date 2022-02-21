@@ -53,4 +53,10 @@ Deep Analysis : 809 Symbol
 All Size is 10362
 Done in 539 ms
 
+// ignoreSet textMap (/^_{3,}/ui).test(wordUp)
+Deep Analysis All Files
+Deep Analysis : 809 Symbol
+All Size is 7821
+Done in 515 ms
+
 */

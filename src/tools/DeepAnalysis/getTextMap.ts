@@ -30,6 +30,7 @@ export function getTextMap(
             if (!textMap.has(wordUp)) {
                 if (
                     ignoreSet.has(wordUp)
+                    || (/^_{3,}/ui).test(wordUp)
                     || (/^\d+$/ui).test(wordUp)
                     || argMap.has(wordUp)
                     || valMap.has(wordUp)
