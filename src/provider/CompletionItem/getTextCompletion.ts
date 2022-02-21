@@ -10,14 +10,14 @@ export function getTextCompletion(
         const item = new vscode.CompletionItem(v.keyRawName);
         item.kind = vscode.CompletionItemKind.Text;
         item.insertText = v.keyRawName;
-        item.detail = 'text (neko-help-DeepAnalysis)';
+        item.detail = 'unknown text (neko-help-DeepAnalysis)';
 
         const ref: string = v.refLoc
             .map((loc): string => `line ${loc.range.start.line + 1}, col ${loc.range.start.character + 1}  `)
             .join('\n');
 
         const md = new vscode.MarkdownString('', true)
-            .appendCodeblock(`text of ${funcName}()`)
+            .appendCodeblock(`unknown text of ${funcName}()`)
             .appendMarkdown('use `shift f12` goto ref    \n')
             .appendMarkdown(ref);
 

@@ -87,19 +87,7 @@ export const enum EValType {
 export type TRunValType = Exclude<EValType, EValType.normal>;
 export type TRunValType2 = Exclude<TRunValType, EValType.args>;
 export type TAhkValType = EValType.local | EValType.global | EValType.Static;
-export type TGetDefType = {
-    fnMode: EFnMode;
-    DocStrMap: TTokenStream;
-    regex: RegExp;
-    ahkSymbol: TAhkSymbol;
-    word: string;
-};
-export type TGetTypeInput = {
-    DocStrMap: TTokenStream;
-    regex: RegExp;
-    ahkSymbol: TAhkSymbol;
-};
-export type TMapLineType = Map<number, EValType.local | EValType.global | EValType.Static>; // Map<line,ahkType>
+
 export type TArgAnalysis = {
     keyRawName: string;
     defLoc: vscode.Location[];

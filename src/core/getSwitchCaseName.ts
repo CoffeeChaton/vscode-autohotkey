@@ -4,7 +4,7 @@ export function getCaseDefaultName(textRaw: string, lStr: string): false | strin
 
     if (!(/^\s*\bcase\b[\s,]/ui).test(lStr)) return false;
 
-    const caseS = lStr.search(/\scase[\s,]/ui);
+    const caseS = lStr.search(/\bcase[\s,]/ui);
     if (caseS === -1) return false;
 
     const caseE = lStr.indexOf(':');

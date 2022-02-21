@@ -15,7 +15,8 @@ export function getRangeCaseBlock(
         // exp : case 3: do something;
         return getRangeOfLine(DocStrMap, defLine);
     }
-    // exp : case 0:
+    // exp : case 0:\s*
+    //          something at next line;
     const startPos: vscode.Position = new vscode.Position(defLine, 0);
     const nextLine = searchLine + 1;
     let Resolved = -1;

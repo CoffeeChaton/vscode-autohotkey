@@ -28,12 +28,9 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
 
             const col2 = lStrFix.search(ahkValRegex(lName));
             if (col2 < 0) {
-                console.log('🚀 ~ setGlobalVar ~ FuncInput', FuncInput);
-                console.log('line', line);
-                console.log('textRaw', textRaw);
-                // console.log('col2 ', col2);
-                // console.log('lStrFix ', lStrFix);
-                // console.log('lName ', lName);
+                console.error('🚀 ~ setGlobalVar ~ FuncInput', FuncInput);
+                console.error('line', line);
+                console.error('textRaw', textRaw);
                 return lName;
             }
             const rVal: string | null = (col > 0)

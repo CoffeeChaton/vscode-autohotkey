@@ -27,10 +27,10 @@ export function getTextMap(
         for (const v of lStr.matchAll(/(?<!\.)\b(\w+)\b(?!\()/gu)) {
             const keyRawName = v[1];
             const wordUp = keyRawName.toLocaleUpperCase();
+            if (ignoreSet.has(wordUp)) continue;
             if (!textMap.has(wordUp)) {
                 if (
-                    ignoreSet.has(wordUp)
-                    || (/^_{3,}/ui).test(wordUp)
+                    (/^[A_\d]_/u).test(wordUp) // (A_Variables) or ( _*2 start varName EX: __varName) or (start with number EX: 0_VarName)
                     || (/^\d+$/ui).test(wordUp)
                     || argMap.has(wordUp)
                     || valMap.has(wordUp)

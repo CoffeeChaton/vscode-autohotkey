@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,20] }] */
 import * as vscode from 'vscode';
-import { DeepReadonly, TAhkSymbol } from '../globalEnum';
+import { TAhkSymbol } from '../globalEnum';
 import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
@@ -9,206 +9,38 @@ import { getFuncDef } from '../tools/Func/getFuncDef';
 import { getRange } from '../tools/getRange';
 import { getRangeCaseBlock } from '../tools/getRangeCaseBlock';
 import { getRangeOfLine } from '../tools/getRangeOfLine';
-import { removeBigParentheses } from '../tools/removeBigParentheses';
-import { removeParentheses } from '../tools/removeParentheses';
 import { FuncInputType, getChildren } from './getChildren';
 import { getCaseDefaultName, getSwitchName } from './getSwitchCaseName';
-import { setGlobalVar } from './setGlobalVar';
+import { ParserLine } from './ParserLine';
 
 function getReturnName(textRaw: string): string | null {
     const ReturnMatch = (/\breturn\b\s+(.+)/iu).exec(textRaw);
     if (ReturnMatch === null) return null;
 
-    let name = ReturnMatch[1];
+    let name = ReturnMatch[1].trim();
     if (ReturnMatch) {
-        const Func = (/^\s*(\w+)\(/u).exec(name);
-        if (Func) {
-            name = `${Func[1]}(...)`;
-        } else if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
-            const obj = (/^\s*(\{\s*\w+\s*:)/u).exec(name);
-            if (obj) name = `Obj ${obj[1]}`;
-        }
+        const Func = (/^(\w+)\(/u).exec(name);
+        if (Func) return `${Func[1]}(...)`; //
+
+        // if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
+        //     const obj = (/^\s*(\{\s*\w+\s*:)/u).exec(name); // ex Array := {KeyA: ValueA, KeyB: ValueB, ..., KeyZ: ValueZ}
+        //     if (obj) name = `Obj ${obj[1]}`;
+        // }
 
         if (name.length > 20) name = `${name.substring(0, 20)}...`;
     }
-    return name.trim();
+    return name;
 }
 
 export function getReturnByLine(FuncInput: FuncInputType): false | TAhkSymbol {
-    if (!(/\breturn\b/iu).test(FuncInput.lStr)) return false;
-    if (!(/\sreturn\s+\S/iu).test(FuncInput.lStr)) return false;
+    // if (!(/\breturn\b/iu).test(FuncInput.lStr)) return false;
+    if (!(/\s\breturn\b\s+\S/iu).test(FuncInput.lStr)) return false;
     const { line } = FuncInput;
     const { textRaw } = FuncInput.DocStrMap[FuncInput.line];
     const name = getReturnName(textRaw);
     if (!name) return false;
-    const rangeRaw = new vscode.Range(line, 0, line, textRaw.length);
+    const rangeRaw = new vscode.Range(line, 0, line, textRaw.length); // FIXME: startCharacter err, is not 0
     return new vscode.DocumentSymbol(`Return ${name}`, '', vscode.SymbolKind.Variable, rangeRaw, rangeRaw);
-}
-
-type LineRulerType = DeepReadonly<{
-    detail: string;
-    kind: vscode.SymbolKind;
-    // regex?: RegExp,
-    test: (str: string) => boolean;
-    getName: (str: string) => string | null;
-}[]>;
-
-export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
-    const {
-        DocStrMap,
-        line,
-        lStr,
-    } = FuncInput;
-    if (lStr === '') return false;
-    const LineRuler: LineRulerType = [
-        {
-            detail: '#IncludeAgain',
-            kind: vscode.SymbolKind.Event,
-            getName(str: string): string | null {
-                const e = (/^\s*#IncludeAgain\s+(\S+)[\s|$]/ui).exec(str);
-                return e
-                    ? `#IncludeAgain ${e[1]}`
-                    : null;
-            },
-
-            test(str: string): boolean {
-                return (/^\s*#IncludeAgain\b/iu).test(str);
-            },
-        },
-        {
-            detail: '#Include',
-            kind: vscode.SymbolKind.Event,
-            getName(str: string): string | null {
-                const e = (/^\s*#Include\s+(\S+)[\s|$]/iu).exec(str);
-                return e
-                    ? `#Include ${e[1]}`
-                    : null;
-            },
-
-            test(str: string): boolean {
-                return (/^\s*#Include\b/iu).test(str);
-            },
-        },
-        {
-            detail: 'directive',
-            kind: vscode.SymbolKind.Event,
-            getName(str: string): string | null {
-                const e = (/^\s*(#\w+)/u).exec(str);
-                return e
-                    ? e[1]
-                    : null;
-            },
-
-            test(str: string): boolean {
-                return (/^\s*#/u).test(str);
-            },
-        },
-        {
-            detail: 'global',
-            kind: vscode.SymbolKind.Variable,
-            getName(_str: string): string | null {
-                return setGlobalVar(FuncInput);
-            },
-            test(str: string): boolean {
-                return (/^\s*\bglobal\b[\s,]/iu).test(str) && !(/^\s*global[\s,]+$/iu).test(str);
-            },
-        },
-        {
-            detail: 'static',
-            kind: vscode.SymbolKind.Variable,
-            getName(str: string): string | null {
-                return removeParentheses(removeBigParentheses(str.replace(/^\s*\bstatic\b[\s,]/iu, '')))
-                    .split(',')
-                    .map((v) => {
-                        const col = v.indexOf(':=');
-                        return (col > 0)
-                            ? v.substring(0, col).trim()
-                            : v;
-                    })
-                    .join(', ')
-                    .trim();
-            },
-
-            test(str: string): boolean {
-                return (/^\s*\bstatic\b[\s,]/iu).test(str);
-            },
-        },
-        {
-            detail: 'throw',
-            kind: vscode.SymbolKind.Event,
-            getName(str: string): string | null {
-                const e = (/^\s*\bthrow\b[\s,]+(.+)/iu).exec(str);
-                return e
-                    ? `throw ${e[1]}`
-                    : null;
-            },
-
-            test(str: string): boolean {
-                return (/^\s*\bthrow\b/iu).test(str);
-            },
-        },
-        {
-            detail: 'label',
-            kind: vscode.SymbolKind.Package,
-            getName(str: string): string | null {
-                const e = (/^\s*(\w+:)\s*$/u).exec(str);
-                return e
-                    ? e[1]
-                    : null;
-            },
-
-            test(str: string): boolean {
-                return (/^\s*\w+:\s*$/u).test(str);
-            },
-        },
-        {
-            // HotStr
-            detail: 'HotString',
-            kind: vscode.SymbolKind.Event,
-            getName(str: string): string | null {
-                const e = (/^\s*(:[^:]*?:[^:]+::)/u).exec(str);
-                return e
-                    ? e[1]
-                    : null;
-            },
-
-            test(str: string): boolean {
-                if (str.indexOf('::') === -1) return false;
-                return (/^\s*:[^:]*?:[^:]+::/u).test(str);
-            },
-        },
-        {
-            detail: 'HotKeys',
-            kind: vscode.SymbolKind.Event,
-            getName(str: string): string | null {
-                const e = (/^\s*([^:]+::)/u).exec(str);
-                return e
-                    ? e[1]
-                    : null;
-            },
-
-            test(str: string): boolean {
-                if (str.indexOf('::') === -1) return false;
-                return (/^\s*[^:]+::/u).test(str);
-            },
-        },
-    ];
-    for (const ruler of LineRuler) {
-        if (ruler.test(lStr)) {
-            const name = ruler.getName(lStr);
-            if (name) {
-                const rangeRaw = getRangeOfLine(DocStrMap, line);
-                return new vscode.DocumentSymbol(
-                    name,
-                    ruler.detail,
-                    ruler.kind,
-                    rangeRaw,
-                    rangeRaw,
-                );
-            }
-        }
-    }
-    return false;
 }
 
 export const ParserBlock = {

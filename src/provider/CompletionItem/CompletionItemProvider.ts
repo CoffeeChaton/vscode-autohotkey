@@ -8,10 +8,20 @@ import { DeepAnalysisToCompletionItem } from './DeepAnalysisToCompletionItem';
 import { insertTextWm } from './insertTextWm';
 import { wrapClass } from './wrapClass';
 
+function CompletionIgnore(fsPath: string): boolean {
+    // TODO
+    if (fsPath.endsWith('Gdip_All_2020.ahk') || fsPath.endsWith('Gdip_all_2020_08_24.ahk')) {
+        return true;
+    }
+    return false;
+}
+
 async function listAllFuncClass(): Promise<vscode.CompletionItem[]> {
     const fsPaths = Detecter.getDocMapFile();
     const itemS: vscode.CompletionItem[] = [];
     for (const fsPath of fsPaths) {
+        if (CompletionIgnore(fsPath)) continue;
+
         const AhkSymbolList = Detecter.getDocMap(fsPath);
         if (AhkSymbolList === null) continue;
         for (const ahkSymbol of AhkSymbolList) {

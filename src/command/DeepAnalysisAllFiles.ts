@@ -41,22 +41,10 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
 /*
 my project:
 
-// not weakMap
+// (A_Variables) or ( _*2 start varName EX: __varName) or (start with number EX: 0_VarName)
 Deep Analysis All Files
 Deep Analysis : 809 Symbol
-All Size is 14238
-Done in 748 ms
-
-// ignoreSet textMap
-Deep Analysis All Files
-Deep Analysis : 809 Symbol
-All Size is 10362
-Done in 539 ms
-
-// ignoreSet textMap (/^_{3,}/ui).test(wordUp)
-Deep Analysis All Files
-Deep Analysis : 809 Symbol
-All Size is 7821
-Done in 515 ms
+All Size is 7459
+Done in 0 ms
 
 */

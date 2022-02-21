@@ -39,6 +39,7 @@ function getConfig(): TConfigs {
         snippets: {
             intelligent: Configs.get('snippets.intelligent') as boolean,
         },
+        // TODO CompletionIgnore
     } as const;
     const { executePath } = ed.Debug;
 

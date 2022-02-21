@@ -10,13 +10,14 @@ import {
     TGValMap,
     TValUpName,
 } from '../globalEnum';
-import { Diagnostic } from '../provider/Diagnostic/Diagnostic';
+import { nekoDiagnostic } from '../provider/Diagnostic/Diagnostic';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { Pretreatment } from '../tools/Pretreatment';
 import { diagColl } from './diagColl';
 import { getChildren } from './getChildren';
 import { globalValMap } from './globalValMap';
-import { getReturnByLine, ParserBlock, ParserLine } from './Parser';
+import { getReturnByLine, ParserBlock } from './Parser';
+import { ParserLine } from './ParserLine';
 import { renameFn as renameFileNameFunc } from './renameFileNameFunc';
 
 export const Detecter = {
@@ -92,7 +93,7 @@ export const Detecter = {
             if (showMsg) showTimeSpend(document.uri, timeStart);
             Detecter.DocMap.set(fsPath, result);
             globalValMap.set(fsPath, gValMapBySelf);
-            Diagnostic(DocStrMap, result, Uri, diagColl);
+            nekoDiagnostic(DocStrMap, result, Uri, diagColl);
             if (useDeepAnalysis) {
                 for (const ahkSymbol of result) {
                     DeepAnalysis(document, ahkSymbol);
