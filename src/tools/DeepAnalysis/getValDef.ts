@@ -6,6 +6,7 @@ import {
     EValType,
     TAhkSymbol,
     TAhkValType,
+    TArgMap,
     TRunValType2,
     TTokenStream,
     TValAnalysis,
@@ -35,6 +36,7 @@ type TNeed = {
     line: number;
     lineType: TAhkValType;
     uri: vscode.Uri;
+    argMap: TArgMap;
 };
 
 // := the walrus operator
@@ -44,26 +46,30 @@ function getVarOfWalrusOperator({
     line,
     lineType,
     uri,
+    argMap,
 }: TNeed): void {
     for (const v of lStr.matchAll(/(?<![.`])\b(\w+)\b\s*:=/gui)) {
         const ch = v.index;
         if (ch === undefined) continue;
-        const character = ch;
 
-        const keyRawName = v[1];
+        const RawName = v[1];
+        const UpName = RawName.toUpperCase();
+        if (argMap.has(UpName)) continue;
+
+        const character = ch;
         const range = new vscode.Range(
             new vscode.Position(line, character),
-            new vscode.Position(line, character + keyRawName.length),
+            new vscode.Position(line, character + RawName.length),
         );
         const defLoc = new vscode.Location(uri, range);
 
         const value: TValAnalysis = getValue({
-            keyRawName,
+            RawName,
             valMap,
             defLoc,
             lineType,
         });
-        valMap.set(keyRawName.toUpperCase(), value);
+        valMap.set(UpName, value);
     }
 }
 
@@ -74,26 +80,30 @@ function getVarOfVarSetCapacity({
     line,
     lineType,
     uri,
+    argMap,
 }: TNeed): void {
     for (const v of lStr.matchAll(/(?<![.%`])\bVarSetCapacity\b\(\s*(\w+)\b/gui)) {
         const ch = v.index;
         if (ch === undefined) continue;
-        const character = ch + 15;
 
-        const keyRawName = v[1];
+        const RawName = v[1];
+        const UpName = RawName.toUpperCase();
+        if (argMap.has(UpName)) continue;
+
+        const character = ch + 15;
         const range = new vscode.Range(
             new vscode.Position(line, character),
-            new vscode.Position(line, character + keyRawName.length),
+            new vscode.Position(line, character + RawName.length),
         );
         const defLoc = new vscode.Location(uri, range);
 
         const value: TValAnalysis = getValue({
-            keyRawName,
+            RawName,
             valMap,
             defLoc,
             lineType,
         });
-        valMap.set(keyRawName.toUpperCase(), value);
+        valMap.set(RawName.toUpperCase(), value);
     }
 }
 
@@ -104,12 +114,13 @@ function getVarOfForLoop({
     line,
     lineType,
     uri,
+    argMap,
 }: TNeed): void {
     for (const v of lStr.matchAll(/[\s^]For\s+(\w+)\s*,\s*(\w+)?\s+in\s/giu)) {
         const ch = v.index;
         if (ch === undefined) continue;
         const v1 = v[1];
-        if (v1) {
+        if (v1 && !argMap.has(v1.toUpperCase())) {
             const character = ch + v[0].indexOf(v1, 3);
             const range = new vscode.Range(
                 new vscode.Position(line, character),
@@ -118,15 +129,16 @@ function getVarOfForLoop({
             const defLoc = new vscode.Location(uri, range);
 
             const value: TValAnalysis = getValue({
-                keyRawName: v1,
+                RawName: v1,
                 valMap,
                 defLoc,
                 lineType,
             });
             valMap.set(v1.toUpperCase(), value);
         }
+
         const v2 = v[2];
-        if (v2) {
+        if (v2 && !argMap.has(v2.toUpperCase())) {
             const character = ch + v[0].lastIndexOf(v2);
             const range = new vscode.Range(
                 new vscode.Position(line, character),
@@ -135,7 +147,7 @@ function getVarOfForLoop({
             const defLoc = new vscode.Location(uri, range);
 
             const value: TValAnalysis = getValue({
-                keyRawName: v2,
+                RawName: v2,
                 valMap,
                 defLoc,
                 lineType,
@@ -149,6 +161,7 @@ export function getValDef(
     uri: vscode.Uri,
     ahkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
+    argMap: TArgMap,
 ): TValMap {
     const fnMode = getFnModeWM(ahkSymbol, DocStrMap);
     const valMap: TValMap = new Map<string, TValAnalysis>();
@@ -167,6 +180,7 @@ export function getValDef(
             line,
             lineType,
             uri,
+            argMap,
         };
         getVarOfWalrusOperator(need); // :=
         getVarOfVarSetCapacity(need); // VarSetCapacity(varName)

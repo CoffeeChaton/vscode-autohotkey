@@ -44,7 +44,7 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
                 void vscode.window.showErrorMessage(message);
                 throw new Error(message);
             }
-            const character = lStr.search(ahkValRegex(argName));
+            const character = lStr.search(ahkValRegex(key0));
             const range = new vscode.Range(
                 new vscode.Position(line, character),
                 new vscode.Position(line, character + keyRawName.length),

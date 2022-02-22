@@ -8,33 +8,33 @@ import {
 } from '../../globalEnum';
 
 type TGetValue = {
-    keyRawName: string;
+    RawName: string;
     valMap: TValMap;
     lineType: TAhkValType;
     defLoc: vscode.Location;
 };
 
 export function getValue({
-    keyRawName,
+    RawName,
     valMap,
     lineType,
     defLoc,
 }: TGetValue): TValAnalysis {
-    const oldVal: TValAnalysis | undefined = valMap.get(keyRawName.toUpperCase());
+    const oldVal: TValAnalysis | undefined = valMap.get(RawName.toUpperCase());
     if (oldVal) {
         return {
-            keyRawName,
+            keyRawName: RawName,
             defLoc: [defLoc, ...oldVal.defLoc],
             refLoc: [],
             ahkValType: oldVal.ahkValType,
         };
     }
 
-    const ahkValType = getGlobalValDef(keyRawName.toUpperCase())
+    const ahkValType = getGlobalValDef(RawName.toUpperCase())
         ? EValType.global
         : lineType;
     return {
-        keyRawName,
+        keyRawName: RawName,
         defLoc: [defLoc],
         refLoc: [],
         ahkValType,

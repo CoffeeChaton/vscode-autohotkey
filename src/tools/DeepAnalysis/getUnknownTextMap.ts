@@ -10,7 +10,7 @@ import {
 } from '../../globalEnum';
 import { ahkValRegex } from '../regexTools';
 
-export function getTextMap(
+export function getUnknownTextMap(
     uri: vscode.Uri,
     ahkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
@@ -44,9 +44,9 @@ export function getTextMap(
             const character = lStr.search(ahkValRegex(wordUp));
 
             if (character === -1) {
-                console.log('🚀 ~ line', line);
-                console.log('🚀 ~ ahkSymbol', ahkSymbol);
-                console.log('🚀 ~ wordUp', wordUp);
+                console.error('🚀 ~ line', line);
+                console.error('🚀 ~ ahkSymbol', ahkSymbol);
+                console.error('🚀 ~ wordUp', wordUp);
                 continue;
             }
 
