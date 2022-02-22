@@ -47,10 +47,9 @@ my project:
 
 Deep Analysis All Files
 Deep Analysis : 809 Symbol
-argMapSize is 2231 <--
-valMapSize is 2229
-textMapSize is 2921
-All Size is 7381
-Done in 587 ms
-
+argMapSize is 2231 <--keep 2231!
+valMapSize is 2050
+textMapSize is 2921 <- next plan: ignore keyWord.
+All Size is 7202
+Done in 491 ms
 */

@@ -38,7 +38,7 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
         document.getText(ahkSymbol.range).split('\n'),
         ahkSymbol.range.start.line,
     );
-    const [argMap, diagArgs] = setArgMap(uri, ahkSymbol, DocStrMap);
+    const { argMap, diagArgs } = setArgMap(uri, ahkSymbol, DocStrMap);
 
     const valMap: TValMap = setValMap(uri, ahkSymbol, DocStrMap, argMap);
     const textMap: TTextMap = getUnknownTextMap(uri, ahkSymbol, DocStrMap, argMap, valMap);
