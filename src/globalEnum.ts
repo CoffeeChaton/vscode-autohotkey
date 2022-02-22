@@ -92,7 +92,6 @@ export type TArgAnalysis = {
     keyRawName: string;
     defLoc: vscode.Location[];
     refLoc: vscode.Location[];
-    commentList: string[];
 
     isByRef: boolean;
     isVariadic: boolean;
@@ -102,7 +101,7 @@ export type TValAnalysis = {
     keyRawName: string;
     defLoc: vscode.Location[];
     refLoc: vscode.Location[];
-    commentList: string[];
+
     ahkValType: TAhkValType;
 };
 export type TValMap = Map<string, TValAnalysis>; // k = valNameUP

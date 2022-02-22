@@ -26,7 +26,6 @@ export function DeepAnalysisHover(
         md.appendMarkdown('is args');
         if (arg.isByRef) md.appendMarkdown('(ByRef)');
         if (arg.isVariadic) md.appendMarkdown('(Variadic)');
-        arg.commentList.forEach((v) => md.appendMarkdown(v));
         return md;
     }
 
@@ -36,7 +35,6 @@ export function DeepAnalysisHover(
             `is ${getAhkTypeName(value.ahkValType)} val of this func`,
             true,
         );
-        md.appendMarkdown(value.commentList.join());
         return md;
     }
 

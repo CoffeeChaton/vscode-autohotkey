@@ -7,8 +7,9 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
     const t1 = Date.now();
     const allFsPath = Detecter.getDocMapFile();
 
-    let size = 0;
-
+    let argMapSize = 0;
+    let valMapSize = 0;
+    let textMapSize = 0;
     const need: DeepAnalysisResult[] = [];
     for (const fsPath of allFsPath) {
         const AhkSymbolList: TAhkSymbolList | null = Detecter.getDocMap(fsPath);
@@ -22,16 +23,19 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
             if (ed === null) continue;
 
             need.push(ed);
-            size += ed.argMap.size;
-            size += ed.valMap.size;
-            size += ed.textMap.size;
+            argMapSize += ed.argMap.size;
+            valMapSize += ed.valMap.size;
+            textMapSize += ed.textMap.size;
         }
     }
 
     const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
     OutputChannel.appendLine('Deep Analysis All Files');
     OutputChannel.appendLine(`Deep Analysis : ${need.length} Symbol`);
-    OutputChannel.appendLine(`All Size is ${size}`);
+    OutputChannel.appendLine(`argMapSize is ${argMapSize}`);
+    OutputChannel.appendLine(`valMapSize is ${valMapSize}`);
+    OutputChannel.appendLine(`textMapSize is ${textMapSize}`);
+    OutputChannel.appendLine(`All Size is ${argMapSize + valMapSize + textMapSize}`);
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();
 
@@ -41,10 +45,12 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
 /*
 my project:
 
-// (A_Variables) or ( _*2 start varName EX: __varName) or (start with number EX: 0_VarName)
 Deep Analysis All Files
 Deep Analysis : 809 Symbol
-All Size is 7459
-Done in 0 ms
+argMapSize is 2231 <--
+valMapSize is 2229
+textMapSize is 2921
+All Size is 7381
+Done in 587 ms
 
 */

@@ -50,7 +50,6 @@ function setValUse(
     const {
         keyRawName,
         defLoc,
-        commentList,
         ahkValType,
     } = defVal;
 
@@ -76,7 +75,6 @@ function setValUse(
     return {
         keyRawName,
         defLoc,
-        commentList,
         refLoc,
         ahkValType,
     };
@@ -88,7 +86,7 @@ export function setValMapRef(
     DocStrMap: TTokenStream,
     valMap: TValMap,
 ): TValMap {
-    const regMap = getValRegMap(valMap);
+    const regMap: Map<string, RegExp> = getValRegMap(valMap);
 
     const valMap2: TValMap = new Map<string, TValAnalysis>();
     const startLine = ahkSymbol.selectionRange.end.line;

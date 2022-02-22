@@ -7,7 +7,6 @@ import {
     TTokenStream,
 } from '../../globalEnum';
 import { setDiagnostic } from '../../provider/Diagnostic/setDiagnostic';
-import { getCommentOfLine } from '../getCommentOfLine';
 import { ahkValRegex } from '../regexTools';
 import { replacerSpace } from '../removeSpecialChar';
 
@@ -15,7 +14,7 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
     const argMap: TArgMap = new Map<string, TArgAnalysis>();
     const startLine = ahkSymbol.selectionRange.start.line;
     const endLine = ahkSymbol.selectionRange.end.line;
-    for (const { lStr, textRaw, line } of DocStrMap) {
+    for (const { lStr, line } of DocStrMap) {
         if (line > endLine) break;
         let lStrFix = lStr;
         if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w+\(/u, '');
@@ -41,8 +40,8 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
                 const errMsg = 'DeepAnalysis NekoHelp Unknown Syntax of ';
                 const errLoc = `${uri.fsPath} line : ${line + 1}`;
                 const message = `${errMsg} ${ahkSymbol.name} args Error ${keyRawName}${errCode}${errLoc}`;
-                console.log('.forEach ~ message', message);
-                void vscode.window.showInformationMessage(message);
+                console.error('.forEach ~ message', message);
+                void vscode.window.showErrorMessage(message);
                 throw new Error(message);
             }
             const character = lStr.search(ahkValRegex(argName));
@@ -54,7 +53,6 @@ function setArgDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStre
                 keyRawName,
                 defLoc: [new vscode.Location(uri, range)],
                 refLoc: [],
-                commentList: [getCommentOfLine({ lStr, textRaw }) ?? ''],
                 isByRef,
                 isVariadic,
             };
@@ -74,7 +72,7 @@ export function setArgMap(
     const argMap: TArgMap = setArgDef(uri, ahkSymbol, DocStrMap);
     argMap.forEach((v, argName): void => {
         const startLine = ahkSymbol.selectionRange.end.line;
-        for (const { lStr, textRaw, line } of DocStrMap) {
+        for (const { lStr, line } of DocStrMap) {
             if (line <= startLine) continue;
             const character = lStr.search(ahkValRegex(argName));
             if (character !== -1) {
@@ -84,10 +82,6 @@ export function setArgMap(
                 );
                 const loc = new vscode.Location(uri, range);
                 v.refLoc.push(loc);
-                const comment = getCommentOfLine({ textRaw, lStr });
-                if (comment) {
-                    v.commentList.push(comment);
-                }
             }
         }
     });
