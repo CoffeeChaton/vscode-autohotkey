@@ -19,7 +19,7 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
         // eslint-disable-next-line no-await-in-loop
         const document = await vscode.workspace.openTextDocument(Uri);
         for (const ahkSymbol of AhkSymbolList) {
-            const ed = DeepAnalysis(document, ahkSymbol);
+            const ed: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
             if (ed === null) continue;
 
             need.push(ed);

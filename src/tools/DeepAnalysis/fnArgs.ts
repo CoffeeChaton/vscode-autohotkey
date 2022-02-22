@@ -36,14 +36,13 @@ function getNeed(argName: string, uri: vscode.Uri, line: number, lStr: string): 
         new vscode.Position(line, character),
         new vscode.Position(line, character + keyRawName.length),
     );
-    const value: TArgAnalysis = {
+    return {
         keyRawName,
         defLoc: [new vscode.Location(uri, range)],
         refLoc: [],
         isByRef,
         isVariadic,
     };
-    return value;
 }
 
 function getParamDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TArgMap {

@@ -67,6 +67,7 @@ export const Detecter = {
 
     async updateDocDef(showMsg: boolean, fsPath: string, useDeepAnalysis: boolean): Promise<vscode.DocumentSymbol[]> {
         const Uri = vscode.Uri.file(fsPath);
+        globalValMap.delete(fsPath);
         const document = await vscode.workspace.openTextDocument(Uri);
         const timeStart = Date.now();
         const gValMapBySelf: TGValMap = new Map<TValUpName, TGlobalVal[]>();

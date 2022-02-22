@@ -31,5 +31,9 @@ export async function DevLoopOfClearOutlineCache(): Promise<null> {
             void UpdateCacheAsync(false);
         }, i * base));
     }
+    c1.push(setTimeout(() => {
+        void vscode.window.showInformationMessage('The task should be completed, please confirm!');
+        // eslint-disable-next-line no-magic-numbers
+    }, (iMax + 10) * base));
     return null;
 }

@@ -33,7 +33,7 @@ function getReturnName(textRaw: string): string | null {
 }
 
 export function getReturnByLine(FuncInput: FuncInputType): false | TAhkSymbol {
-    // if (!(/\breturn\b/iu).test(FuncInput.lStr)) return false;
+    // if (!(/\bReturn\b/iu).test(FuncInput.lStr)) return false;
     if (!(/\s\breturn\b\s+\S/iu).test(FuncInput.lStr)) return false;
     const { line } = FuncInput;
     const { textRaw } = FuncInput.DocStrMap[FuncInput.line];
