@@ -3,6 +3,7 @@ import { diagColl } from '../../core/diagColl';
 import {
     DeepAnalysisResult,
     TAhkSymbol,
+    TArgMap,
     TTextMap,
     TTokenStream,
     TValMap,
@@ -18,7 +19,7 @@ import { setValMapRef } from './setValMapRef';
 function setValMap(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argMap: TArgMap): TValMap {
     const valMap: TValMap = getValDef(uri, ahkSymbol, DocStrMap, argMap);
 
-    return setValMapRef(uri, ahkSymbol, DocStrMap, valMap, argMap);
+    return setValMapRef(uri, ahkSymbol, DocStrMap, valMap);
 }
 
 // eslint-disable-next-line no-magic-numbers
