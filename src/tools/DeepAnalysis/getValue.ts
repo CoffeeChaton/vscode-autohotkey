@@ -24,7 +24,7 @@ export function getValue({
     if (oldVal) {
         return {
             keyRawName: RawName,
-            defLoc: [defLoc, ...oldVal.defLoc],
+            defLoc: [...oldVal.defLoc, defLoc],
             refLoc: [],
             ahkValType: oldVal.ahkValType,
         };

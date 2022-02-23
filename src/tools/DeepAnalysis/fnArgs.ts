@@ -10,13 +10,13 @@ import { setDiagnostic } from '../../provider/Diagnostic/setDiagnostic';
 import { ahkValRegex } from '../regexTools';
 import { replacerSpace } from '../removeSpecialChar';
 
-function getNeed(argName: string, uri: vscode.Uri, line: number, lStr: string): null | TArgAnalysis {
-    const isByRef = (/^ByRef\s+/ui).test(argName);
+function getNeed(param: string, uri: vscode.Uri, line: number, lStr: string): null | TArgAnalysis {
+    const isByRef = (/^ByRef\s+/ui).test(param);
     const key0 = isByRef
-        ? argName.replace(/^ByRef\s+/ui, '')
-        : argName;
+        ? param.replace(/^ByRef\s+/ui, '')
+        : param;
     if (key0 === '') return null;
-    const isVariadic = (/^\w+\*$/u).test(argName); // https://ahkde.github.io/docs/Functions.htm#Variadic
+    const isVariadic = (/^\w+\*$/u).test(param); // https://ahkde.github.io/docs/Functions.htm#Variadic
     const keyRawName = isVariadic
         ? key0.replace(/\*$/u, '')
         : key0;
@@ -61,11 +61,11 @@ function getParamDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenSt
             .map((v) => v.trim());
 
         for (const param of strList) {
-            const value = getNeed(param, uri, line, lStr);
-            if (value === null) continue;
+            const ArgAnalysis = getNeed(param, uri, line, lStr);
+            if (ArgAnalysis === null) continue;
 
-            const key = value.keyRawName.toUpperCase();
-            argMap.set(key, value);
+            const key = ArgAnalysis.keyRawName.toUpperCase();
+            argMap.set(key, ArgAnalysis);
         }
     }
 
