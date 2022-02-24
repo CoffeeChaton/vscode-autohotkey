@@ -25,7 +25,7 @@ function getNeed(param: string, uri: vscode.Uri, line: number, lStr: string): nu
         const errMsg = 'DeepAnalysis NekoHelp Unknown Syntax of ';
         const errLoc = `${uri.fsPath} line : ${line + 1}`;
         const message = `${errMsg} args Error ${keyRawName}${errCode}${errLoc}`;
-        console.error('.forEach ~ message', message);
+        console.error('🚀 getParamDef ~ message', message);
         void vscode.window.showErrorMessage(message);
         throw new Error(message);
     }
@@ -86,13 +86,15 @@ function paramNeverUsed(argMap: TArgMap): vscode.Diagnostic[] {
     return diagS;
 }
 
-type TSetArgMap = {
-    argMap: TArgMap;
-    diagArgs: vscode.Diagnostic[];
-};
-
-function setParamRef(argMap: TArgMap, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, uri: vscode.Uri): void {
+function setParamRef(
+    argMap: TArgMap,
+    ahkSymbol: TAhkSymbol,
+    DocStrMap: TTokenStream,
+    uri: vscode.Uri,
+    diagParam: vscode.Diagnostic[],
+): void {
     argMap.forEach((v, argName): void => {
+        let warnMax = 3;
         const startLine = ahkSymbol.selectionRange.end.line;
         for (const { lStr, line } of DocStrMap) {
             if (line <= startLine) continue;
@@ -103,22 +105,40 @@ function setParamRef(argMap: TArgMap, ahkSymbol: TAhkSymbol, DocStrMap: TTokenSt
                     new vscode.Position(line, character + argName.length),
                 );
                 const loc = new vscode.Location(uri, range);
+                if (warnMax > 0) {
+                    const newParamStr = lStr.substring(character, character + argName.length);
+                    if (v.keyRawName !== newParamStr) {
+                        const severity = vscode.DiagnosticSeverity.Warning;
+                        const tags = [vscode.DiagnosticTag.Unnecessary];
+                        const diag = setDiagnostic(EDiagCode.code503, loc.range, severity, tags);
+                        diagParam.push(diag);
+                        warnMax -= 1;
+                    }
+                }
+
                 v.refLoc.push(loc);
             }
         }
     });
 }
+
+type TSetArgMap = {
+    argMap: TArgMap;
+    diagParam: vscode.Diagnostic[];
+};
+
 export function setArgMap(
     uri: vscode.Uri,
     ahkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
 ): TSetArgMap {
+    const diagParam: vscode.Diagnostic[] = [];
     const argMap: TArgMap = getParamDef(uri, ahkSymbol, DocStrMap);
-    setParamRef(argMap, ahkSymbol, DocStrMap, uri);
+    setParamRef(argMap, ahkSymbol, DocStrMap, uri, diagParam);
 
-    const diagArgs: vscode.Diagnostic[] = paramNeverUsed(argMap);
+    paramNeverUsed(argMap);
     return {
         argMap,
-        diagArgs,
+        diagParam,
     };
 }

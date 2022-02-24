@@ -1,7 +1,23 @@
+/* eslint-disable no-magic-numbers */
 /* eslint-disable max-lines */
 import { DeepReadonly } from './globalEnum';
 
-/* eslint-disable no-magic-numbers */
+// export const enum EDADiagCode {
+//     DACode501 = 'DA501', // 501~599 Analysis Func or Method
+//     DACode502 = 'DA502', // case sensitivity
+// }
+
+// export const DADiag = {
+//     DA501: {
+//         msg: 'args is assigned but never used.',
+//         path: 'https://www.autohotkey.com/docs/Functions.htm',
+//     },
+//     DA502: {
+//         msg: 'case sensitivity',
+//         path: 'https://www.autohotkey.com/docs/Concepts.htm#names',
+//     },
+// };
+
 export const enum EDiagCode {
     code107 = 107,
     code110 = 110, // 100~110 is switch err
@@ -12,6 +28,8 @@ export const enum EDiagCode {
     code201 = 201, // 200~299 is not expression // need use %
     code301 = 301, // 300~399 is func err
     code501 = 501, // 501~599 Analysis Func or Method
+    code502 = 502, // case sensitivity
+    code503 = 503, // param case sensitivity
     code700 = 700, // 700 is Command -> func
     // code701 = 701, // 701~799 is Command error
     // 800~899 is Deprecated / Old Syntax
@@ -88,6 +106,14 @@ export const Diags: DeepReadonly<TDiags> = {
     501: {
         msg: 'args is assigned but never used.',
         path: 'https://www.autohotkey.com/docs/Functions.htm',
+    },
+    502: {
+        msg: 'case sensitivity',
+        path: 'https://www.autohotkey.com/docs/Concepts.htm#names',
+    },
+    503: {
+        msg: 'param case sensitivity',
+        path: 'https://www.autohotkey.com/docs/Concepts.htm#names',
     },
     700: {
         msg: 'try to use function replace Command(obsolete code)',

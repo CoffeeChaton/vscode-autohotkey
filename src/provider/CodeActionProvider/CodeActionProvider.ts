@@ -6,6 +6,7 @@ import { IgnoreArgNeverUsed } from './IgnoreArgNeverUsed';
 function getFsPath(diag: vscode.Diagnostic): string | null {
     const code = diag?.code;
     if (code === undefined || typeof code === 'string' || typeof code === 'number') return null;
+    // console.log('🚀 ~ getFsPath ~ code', code);
 
     const d = code.value as EDiagCode;
     const path = Diags[d]?.path;

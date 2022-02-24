@@ -1,10 +1,12 @@
 import * as vscode from 'vscode';
+import { EDiagCode } from '../../diag';
 import {
     TAhkSymbol,
     TTokenStream,
     TValAnalysis,
     TValMap,
 } from '../../globalEnum';
+import { setDiagnostic } from '../../provider/Diagnostic/setDiagnostic';
 
 function getValRegMap(valMap: TValMap): Map<string, RegExp> {
     const regMap: Map<string, RegExp> = new Map<string, RegExp>();
@@ -23,6 +25,7 @@ type TNeed = {
     valName: string;
     uri: vscode.Uri;
     line: number;
+    diagVal: vscode.Diagnostic[];
 };
 
 function setValUse(
@@ -33,6 +36,7 @@ function setValUse(
         valName,
         uri,
         line,
+        diagVal,
     }: TNeed,
 ): TValAnalysis | null {
     // o === ['bgColor', 'bgColor', index: 18, input: '        Case ___: bgColor := 0xFF0000
@@ -43,6 +47,7 @@ function setValUse(
         return null;
     }
     const character = o.index;
+
     if (character === undefined) {
         return null;
     }
@@ -69,6 +74,15 @@ function setValUse(
                 return [...oldRefLocS];
             }
         }
+
+        if (keyRawName !== o[1]) {
+            // console.log('🚀 ~ o', o);
+            const severity = vscode.DiagnosticSeverity.Warning;
+            const tags = [vscode.DiagnosticTag.Unnecessary];
+            const diag = setDiagnostic(EDiagCode.code502, newRefLoc.range, severity, tags);
+            diagVal.push(diag);
+        }
+
         return [...oldRefLocS, newRefLoc];
     })();
 
@@ -85,6 +99,7 @@ export function setValMapRef(
     ahkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
     valMap: TValMap,
+    diagVal: vscode.Diagnostic[],
 ): TValMap {
     const regMap: Map<string, RegExp> = getValRegMap(valMap);
 
@@ -104,6 +119,7 @@ export function setValMapRef(
                     valName: valName.toUpperCase(),
                     uri,
                     line,
+                    diagVal,
                 });
                 if (newVal) {
                     valMap2.set(valName.toUpperCase(), newVal);
@@ -114,3 +130,13 @@ export function setValMapRef(
 
     return valMap2;
 }
+
+/**
+ * FIXME
+ *  cat := "neko"
+ *  for i in range
+ * ...
+ * ......
+ *  MsgBox , i am cat
+ * Text is not var `i`
+ */

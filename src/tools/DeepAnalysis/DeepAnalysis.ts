@@ -3,24 +3,14 @@ import { diagColl } from '../../core/diagColl';
 import {
     DeepAnalysisResult,
     TAhkSymbol,
-    TArgMap,
     TTextMap,
-    TTokenStream,
-    TValMap,
 } from '../../globalEnum';
 import { kindPick } from '../Func/kindPick';
 import { Pretreatment } from '../Pretreatment';
 import { ClassWm } from '../wm';
 import { setArgMap } from './fnArgs';
 import { getUnknownTextMap } from './getUnknownTextMap';
-import { getValDef } from './getValDef';
-import { setValMapRef } from './setValMapRef';
-
-function setValMap(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream, argMap: TArgMap): TValMap {
-    const valMap: TValMap = getValDef(uri, ahkSymbol, DocStrMap, argMap);
-
-    return setValMapRef(uri, ahkSymbol, DocStrMap, valMap);
-}
+import { setValMap } from './setValMap';
 
 // eslint-disable-next-line no-magic-numbers
 const w = new ClassWm<TAhkSymbol, DeepAnalysisResult>(10 * 60 * 1000, 'DeepAnalysis', 500000);
@@ -38,9 +28,8 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
         document.getText(ahkSymbol.range).split('\n'),
         ahkSymbol.range.start.line,
     );
-    const { argMap, diagArgs } = setArgMap(uri, ahkSymbol, DocStrMap);
-
-    const valMap: TValMap = setValMap(uri, ahkSymbol, DocStrMap, argMap);
+    const { argMap, diagParam } = setArgMap(uri, ahkSymbol, DocStrMap);
+    const { valMap, diagVal } = setValMap(uri, ahkSymbol, DocStrMap, argMap);
     const textMap: TTextMap = getUnknownTextMap(uri, ahkSymbol, DocStrMap, argMap, valMap);
     const v: DeepAnalysisResult = {
         argMap,
@@ -48,7 +37,7 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
         textMap,
     };
 
-    diagColl.set(uri, [...diagS, ...diagArgs]);
+    diagColl.set(uri, [...diagS, ...diagParam, ...diagVal]);
 
     return w.setWm(ahkSymbol, v);
 }

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable security/detect-unsafe-regex */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,15] }] */
 import * as vscode from 'vscode';
@@ -37,6 +38,7 @@ type TNeed = {
     lineType: TAhkValType;
     uri: vscode.Uri;
     argMap: TArgMap;
+    diagVal: vscode.Diagnostic[];
 };
 
 // := the walrus operator
@@ -47,6 +49,7 @@ function getVarOfWalrusOperator({
     lineType,
     uri,
     argMap,
+    diagVal,
 }: TNeed): void {
     for (const v of lStr.matchAll(/(?<![.`])\b(\w+)\b\s*:=/gui)) {
         const ch = v.index;
@@ -68,6 +71,7 @@ function getVarOfWalrusOperator({
             valMap,
             defLoc,
             lineType,
+            diagVal,
         });
         valMap.set(UpName, value);
     }
@@ -81,6 +85,7 @@ function getVarOfVarSetCapacity({
     lineType,
     uri,
     argMap,
+    diagVal,
 }: TNeed): void {
     for (const v of lStr.matchAll(/(?<![.%`])\bVarSetCapacity\b\(\s*(\w+)\b/gui)) {
         const ch = v.index;
@@ -102,6 +107,7 @@ function getVarOfVarSetCapacity({
             valMap,
             defLoc,
             lineType,
+            diagVal,
         });
         valMap.set(RawName.toUpperCase(), value);
     }
@@ -115,6 +121,7 @@ function getVarOfForLoop({
     lineType,
     uri,
     argMap,
+    diagVal,
 }: TNeed): void {
     for (const v of lStr.matchAll(/[\s^]For\s+(\w+)\s*,\s*(\w+)?\s+in\s/giu)) {
         const ch = v.index;
@@ -133,6 +140,7 @@ function getVarOfForLoop({
                 valMap,
                 defLoc,
                 lineType,
+                diagVal,
             });
             valMap.set(v1.toUpperCase(), value);
         }
@@ -151,6 +159,7 @@ function getVarOfForLoop({
                 valMap,
                 defLoc,
                 lineType,
+                diagVal,
             });
             valMap.set(v2.toUpperCase(), value);
         }
@@ -162,6 +171,7 @@ export function getValDef(
     ahkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
     argMap: TArgMap,
+    diagVal: vscode.Diagnostic[],
 ): TValMap {
     const fnMode = getFnModeWM(ahkSymbol, DocStrMap);
     const valMap: TValMap = new Map<string, TValAnalysis>();
@@ -181,6 +191,7 @@ export function getValDef(
             lineType,
             uri,
             argMap,
+            diagVal,
         };
         getVarOfWalrusOperator(need); // :=
         getVarOfVarSetCapacity(need); // VarSetCapacity(varName)
