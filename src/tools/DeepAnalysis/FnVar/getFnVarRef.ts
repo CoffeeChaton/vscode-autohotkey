@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
-import { EDiagCode } from '../../diag';
+import { EDiagCode } from '../../../diag';
 import {
     TAhkSymbol,
     TTokenStream,
     TValAnalysis,
     TValMap,
-} from '../../globalEnum';
-import { setDiagnostic } from '../../provider/Diagnostic/setDiagnostic';
+} from '../../../globalEnum';
+import { setDiagnostic } from '../../../provider/Diagnostic/setDiagnostic';
 
 function getValRegMap(valMap: TValMap): Map<string, RegExp> {
     const regMap: Map<string, RegExp> = new Map<string, RegExp>();
@@ -28,7 +28,7 @@ type TNeed = {
     diagVal: vscode.Diagnostic[];
 };
 
-function setValUse(
+function getValRef(
     {
         valMap,
         valMap2,
@@ -48,9 +48,7 @@ function setValUse(
     }
     const character = o.index;
 
-    if (character === undefined) {
-        return null;
-    }
+    if (character === undefined) return null;
 
     const {
         keyRawName,
@@ -58,6 +56,7 @@ function setValUse(
         ahkValType,
     } = defVal;
 
+    let code502Warn = 0;
     const refLoc: vscode.Location[] = ((): vscode.Location[] => {
         const useVal = valMap2.get(valName.toUpperCase());
         const oldRefLocS: vscode.Location[] = useVal?.refLoc || [];
@@ -75,12 +74,15 @@ function setValUse(
             }
         }
 
-        if (keyRawName !== o[1]) {
+        // eslint-disable-next-line no-magic-numbers
+        const oldCode502Warn: number = useVal?.code502Warn ?? 3;
+        if (oldCode502Warn > 0 && keyRawName !== o[1]) {
             // console.log('🚀 ~ o', o);
             const severity = vscode.DiagnosticSeverity.Warning;
             const tags = [vscode.DiagnosticTag.Unnecessary];
             const diag = setDiagnostic(EDiagCode.code502, newRefLoc.range, severity, tags);
             diagVal.push(diag);
+            code502Warn = oldCode502Warn - 1;
         }
 
         return [...oldRefLocS, newRefLoc];
@@ -91,10 +93,12 @@ function setValUse(
         defLoc,
         refLoc,
         ahkValType,
+        code502Warn,
     };
 }
 
-export function setValMapRef(
+// eslint-disable-next-line max-params
+export function getFnVarRef(
     uri: vscode.Uri,
     ahkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
@@ -112,7 +116,7 @@ export function setValMapRef(
         regMap.forEach((reg, valName) => {
             const matches = lStr.matchAll(reg);
             for (const o of matches) {
-                const newVal: TValAnalysis | null = setValUse({
+                const newVal: TValAnalysis | null = getValRef({
                     valMap,
                     valMap2,
                     o,

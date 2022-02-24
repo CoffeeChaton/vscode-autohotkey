@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5] }] */
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
@@ -38,6 +39,12 @@ function getConfig(): TConfigs {
         },
         snippets: {
             intelligent: Configs.get('snippets.intelligent') as boolean,
+        },
+        Diag: {
+            WarningCap: {
+                code502: Configs.get('Diag.WarningCap.code502') as number ?? 3, // of var
+                code503: Configs.get('Diag.WarningCap.code503') as number ?? 5, // of param
+            },
         },
         // TODO CompletionIgnore
     } as const;
@@ -116,6 +123,21 @@ export function getDebugPath(): string {
 export function getSnippetsMode(): boolean {
     return config.snippets.intelligent;
 }
+
+/**
+ * of var in function.
+ */
+export function getCode502Default(): number {
+    return config.Diag.WarningCap.code502;
+}
+
+/**
+ * of param.
+ */
+export function getCode503Default(): number {
+    return config.Diag.WarningCap.code503;
+}
+
 // vscode.window.setStatusBarMessage(timeSpend);
 // vscode.window.showErrorMessage()
 // vscode.window.showInformationMessage()

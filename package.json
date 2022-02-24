@@ -125,22 +125,51 @@
             "type": "object",
             "title": "AhkNekoHelp",
             "properties": {
-                "AhkNekoHelp.statusBar.displayColor": {
+                "AhkNekoHelp.Debug.executePath": {
                     "type": "string",
-                    "default": "",
-                    "description": "color of status bar, use '' to use theme color,or use HTML Color, exp: '#e783e1' or 'rgb(255,255,100)"
+                    "default": "C:/Program Files/AutoHotkey/AutoHotkeyU64.exe",
+                    "description": "Execute path of autohotkey."
                 },
-                "AhkNekoHelp.format.textReplace": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "test options: call textReplace & diff"
-                },
-                "AhkNekoHelp.lint.funcSize": {
+                "AhkNekoHelp.Diag.WarningCap.code502": {
                     "type": "number",
-                    "default": 100,
-                    "minimum": 3,
-                    "maximum": 100000,
-                    "description": "lint of function/Method size (line)"
+                    "default": 3,
+                    "minimum": 0,
+                    "maximum": 99,
+                    "description": "(code502) For each function variable, Max number of warnings.\\n use 0 to close warn."
+                },
+                "AhkNekoHelp.Diag.WarningCap.code503": {
+                    "type": "number",
+                    "default": 3,
+                    "minimum": 0,
+                    "maximum": 99,
+                    "description": "(code503) For each function parameter, Max number of warnings.\\n use 0 to close warn."
+                },
+                "AhkNekoHelp.Ignored.File.endsWith": {
+                    "type": "array",
+                    "default": [],
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Do not scan while File names endsWith this array"
+                },
+                "AhkNekoHelp.Ignored.File.startsWith": {
+                    "type": "array",
+                    "default": [],
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Do not scan while File names startsWith this array"
+                },
+                "AhkNekoHelp.Ignored.folder.endsWith": {
+                    "type": "array",
+                    "default": [
+                        "TEST",
+                        "Test"
+                    ],
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Do not scan while folder names endsWith this array"
                 },
                 "AhkNekoHelp.Ignored.folder.startsWith": {
                     "type": "array",
@@ -155,42 +184,27 @@
                     },
                     "description": "Do not scan while folder names startsWith this array"
                 },
-                "AhkNekoHelp.Ignored.folder.endsWith": {
-                    "type": "array",
-                    "default": [
-                        "TEST",
-                        "Test"
-                    ],
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "Do not scan while folder names endsWith this array"
+                "AhkNekoHelp.format.textReplace": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "test options: call textReplace & diff"
                 },
-                "AhkNekoHelp.Ignored.File.startsWith": {
-                    "type": "array",
-                    "default": [],
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "Do not scan while File names startsWith this array"
-                },
-                "AhkNekoHelp.Ignored.File.endsWith": {
-                    "type": "array",
-                    "default": [],
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "Do not scan while File names endsWith this array"
-                },
-                "AhkNekoHelp.Debug.executePath": {
-                    "type": "string",
-                    "default": "C:/Program Files/AutoHotkey/AutoHotkeyU64.exe",
-                    "description": "Execute path of autohotkey."
+                "AhkNekoHelp.lint.funcSize": {
+                    "type": "number",
+                    "default": 100,
+                    "minimum": 3,
+                    "maximum": 100000,
+                    "description": "lint of function/Method size (line)"
                 },
                 "AhkNekoHelp.snippets.intelligent": {
                     "type": "boolean",
                     "default": true,
                     "description": "true -> intelligent, false -> list all snippets"
+                },
+                "AhkNekoHelp.statusBar.displayColor": {
+                    "type": "string",
+                    "default": "",
+                    "description": "color of status bar, use '' to use theme color,or use HTML Color, exp: '#e783e1' or 'rgb(255,255,100)"
                 }
             }
         },
@@ -244,7 +258,7 @@
         "@types/glob": "^7.2.0",
         "@types/jest": "^27.4.1",
         "@types/micromatch": "^4.0.2",
-        "@types/node": "^17.0.20",
+        "@types/node": "^17.0.21",
         "@types/temp": "^0.9.1",
         "@types/vscode": "^1.64.0",
         "@types/xml2js": "^0.4.9",

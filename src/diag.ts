@@ -104,11 +104,11 @@ export const Diags: DeepReadonly<TDiags> = {
         path: 'https://www.autohotkey.com/docs/Functions.htm',
     },
     501: {
-        msg: 'args is assigned but never used.',
+        msg: 'param is assigned but never used.',
         path: 'https://www.autohotkey.com/docs/Functions.htm',
     },
     502: {
-        msg: 'case sensitivity',
+        msg: 'var case sensitivity',
         path: 'https://www.autohotkey.com/docs/Concepts.htm#names',
     },
     503: {

@@ -97,12 +97,25 @@ export type TArgAnalysis = {
     isVariadic: boolean;
 };
 export type TArgMap = Map<string, TArgAnalysis>; // k = valNameUP
+
+export type TGetFnDefNeed = {
+    lStr: string;
+    valMap: TValMap;
+    line: number;
+    lineType: TAhkValType;
+    uri: vscode.Uri;
+    argMap: TArgMap;
+    diagVal: vscode.Diagnostic[];
+    warnNumber: [number];
+};
+
 export type TValAnalysis = {
     keyRawName: string;
     defLoc: vscode.Location[];
     refLoc: vscode.Location[];
 
     ahkValType: TAhkValType;
+    code502Warn: number; // about code502 available // TODO config -> codeWarnMax now is 3
 };
 export type TValMap = Map<string, TValAnalysis>; // k = valNameUP
 export type TTextAnalysis = {
@@ -142,6 +155,12 @@ type TempConfigs = {
     };
     snippets: {
         intelligent: boolean;
+    };
+    Diag: {
+        WarningCap: {
+            code502: number; // of var
+            code503: number; // of param
+        };
     };
 };
 export type TConfigs = DeepReadonly<TempConfigs>;

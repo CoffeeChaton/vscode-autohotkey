@@ -13,7 +13,7 @@ import {
 import { nekoDiagnostic } from '../provider/Diagnostic/Diagnostic';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { Pretreatment } from '../tools/Pretreatment';
-import { diagColl } from './diagColl';
+import { diagColl } from './diag/diagRoot';
 import { getChildren } from './getChildren';
 import { globalValMap } from './globalValMap';
 import { getReturnByLine, ParserBlock } from './Parser';
