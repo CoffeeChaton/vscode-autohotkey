@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,10] }] */
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
@@ -43,7 +43,7 @@ function getConfig(): TConfigs {
         Diag: {
             WarningCap: {
                 code502: Configs.get('Diag.WarningCap.code502') as number ?? 3, // of var
-                code503: Configs.get('Diag.WarningCap.code503') as number ?? 5, // of param
+                code503: Configs.get('Diag.WarningCap.code503') as number ?? 3, // of param
             },
         },
         // TODO CompletionIgnore
@@ -125,7 +125,7 @@ export function getSnippetsMode(): boolean {
 }
 
 /**
- * of var in function.
+ * of var.
  */
 export function getCode502Default(): number {
     return config.Diag.WarningCap.code502;

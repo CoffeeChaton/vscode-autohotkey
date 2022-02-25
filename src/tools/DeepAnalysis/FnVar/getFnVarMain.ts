@@ -22,16 +22,16 @@ export function getFnVarMain(
 ): TSetValMap {
     const warnNumber: [number] = [getCode502Default()];
     const diagFnVar: vscode.Diagnostic[] = []; // TODO NeverUsed or Inconsistent capitalization
-    const valMap0: TValMap = getFnVarDef({
+    const valMap: TValMap = getFnVarDef({
         uri,
         ahkSymbol,
         DocStrMap,
         argMap,
-        diagVal: diagFnVar,
+        diagFnVar,
         warnNumber,
     });
 
-    const valMap: TValMap = getFnVarRef(uri, ahkSymbol, DocStrMap, valMap0, diagFnVar);
+    getFnVarRef(uri, ahkSymbol, DocStrMap, valMap, diagFnVar);
 
     return {
         valMap,

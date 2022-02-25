@@ -28,7 +28,7 @@ export const enum EDiagCode {
     code201 = 201, // 200~299 is not expression // need use %
     code301 = 301, // 300~399 is func err
     code501 = 501, // 501~599 Analysis Func or Method
-    code502 = 502, // case sensitivity
+    code502 = 502, // var case sensitivity
     code503 = 503, // param case sensitivity
     code700 = 700, // 700 is Command -> func
     // code701 = 701, // 701~799 is Command error

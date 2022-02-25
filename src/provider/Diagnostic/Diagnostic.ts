@@ -318,7 +318,7 @@ function getFuncErr(
     return digS;
 }
 
-export function nekoDiagnostic(
+export function baseDiagnostic(
     DocStrMap: TTokenStream,
     result: Readonly<TAhkSymbol[]>,
     uri: vscode.Uri,

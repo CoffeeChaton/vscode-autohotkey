@@ -2,7 +2,11 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { getIgnoredFile, getIgnoredFolder, showTimeSpend } from '../configUI';
+import {
+    getIgnoredFile,
+    getIgnoredFolder,
+    showTimeSpend,
+} from '../configUI';
 import {
     EStr,
     TAhkSymbolList,
@@ -10,7 +14,7 @@ import {
     TGValMap,
     TValUpName,
 } from '../globalEnum';
-import { nekoDiagnostic } from '../provider/Diagnostic/Diagnostic';
+import { baseDiagnostic } from '../provider/Diagnostic/Diagnostic';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { Pretreatment } from '../tools/Pretreatment';
 import { diagColl } from './diag/diagRoot';
@@ -94,7 +98,7 @@ export const Detecter = {
             if (showMsg) showTimeSpend(document.uri, timeStart);
             Detecter.DocMap.set(fsPath, result);
             globalValMap.set(fsPath, gValMapBySelf);
-            nekoDiagnostic(DocStrMap, result, Uri, diagColl);
+            baseDiagnostic(DocStrMap, result, Uri, diagColl);
             if (useDeepAnalysis) {
                 for (const ahkSymbol of result) {
                     DeepAnalysis(document, ahkSymbol);

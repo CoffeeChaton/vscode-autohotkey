@@ -61,6 +61,11 @@ export type TGlobalVal = {
 export type TValUpName = string;
 export type TGValMap = Map<TValUpName, TGlobalVal[]>;
 
+export type TMaxWarnOfDA = {
+    code502: number;
+    code503: number;
+};
+
 export const enum VERSION {
     getValDefInFunc = '0.4beta',
     format = 'v0.5',

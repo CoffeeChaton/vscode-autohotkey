@@ -39,7 +39,7 @@ type TFnVarDef = {
     ahkSymbol: TAhkSymbol;
     DocStrMap: TTokenStream;
     argMap: TArgMap;
-    diagVal: vscode.Diagnostic[];
+    diagFnVar: vscode.Diagnostic[];
     warnNumber: [number];
 };
 
@@ -49,7 +49,7 @@ export function getFnVarDef(
         ahkSymbol,
         DocStrMap,
         argMap,
-        diagVal,
+        diagFnVar: diagVal,
         warnNumber,
     }: TFnVarDef,
 ): TValMap {
