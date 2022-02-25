@@ -10,8 +10,6 @@ export function walrusOperator({
     lineType,
     uri,
     argMap,
-    diagVal,
-    warnNumber,
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line security/detect-unsafe-regex
     for (const v of lStr.matchAll(/(?<![.`])\b(\w+)\b\s*:=/gui)) {
@@ -34,8 +32,6 @@ export function walrusOperator({
             valMap,
             defLoc,
             lineType,
-            diagVal,
-            warnNumber,
         });
         valMap.set(UpName, value);
     }

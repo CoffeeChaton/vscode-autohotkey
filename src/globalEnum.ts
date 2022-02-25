@@ -110,8 +110,6 @@ export type TGetFnDefNeed = {
     lineType: TAhkValType;
     uri: vscode.Uri;
     argMap: TArgMap;
-    diagVal: vscode.Diagnostic[];
-    warnNumber: [number];
 };
 
 export type TValAnalysis = {
@@ -120,7 +118,6 @@ export type TValAnalysis = {
     refLoc: vscode.Location[];
 
     ahkValType: TAhkValType;
-    code502Warn: number; // about code502 available // TODO config -> codeWarnMax now is 3
 };
 export type TValMap = Map<string, TValAnalysis>; // k = valNameUP
 export type TTextAnalysis = {

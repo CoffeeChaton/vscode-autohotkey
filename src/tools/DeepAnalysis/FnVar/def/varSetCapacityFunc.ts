@@ -10,8 +10,6 @@ export function varSetCapacityFunc({
     lineType,
     uri,
     argMap,
-    diagVal,
-    warnNumber,
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line security/detect-unsafe-regex
     for (const v of lStr.matchAll(/(?<![.%`])\bVarSetCapacity\b\(\s*(\w+)\b/gui)) {
@@ -35,8 +33,6 @@ export function varSetCapacityFunc({
             valMap,
             defLoc,
             lineType,
-            diagVal,
-            warnNumber,
         });
         valMap.set(RawName.toUpperCase(), value);
     }

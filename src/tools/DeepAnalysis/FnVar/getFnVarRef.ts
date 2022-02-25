@@ -1,12 +1,10 @@
 import * as vscode from 'vscode';
-import { EDiagCode } from '../../../diag';
 import {
     TAhkSymbol,
     TTokenStream,
     TValAnalysis,
     TValMap,
 } from '../../../globalEnum';
-import { setDiagnostic } from '../../../provider/Diagnostic/setDiagnostic';
 
 function getValRegMap(valMap: TValMap): Map<string, RegExp> {
     const regMap: Map<string, RegExp> = new Map<string, RegExp>();
@@ -25,7 +23,6 @@ type TNeed = {
     valName: string;
     uri: vscode.Uri;
     line: number;
-    diagVal: vscode.Diagnostic[];
 };
 
 function getValRef(
@@ -36,7 +33,6 @@ function getValRef(
         valName,
         uri,
         line,
-        diagVal,
     }: TNeed,
 ): TValAnalysis | null {
     // o === ['bgColor', 'bgColor', index: 18, input: '        Case ___: bgColor := 0xFF0000
@@ -56,7 +52,6 @@ function getValRef(
         ahkValType,
     } = defVal;
 
-    let code502Warn = 0;
     const refLoc: vscode.Location[] = ((): vscode.Location[] => {
         const useVal = valMap2.get(valName.toUpperCase());
         const oldRefLocS: vscode.Location[] = useVal?.refLoc || [];
@@ -74,17 +69,6 @@ function getValRef(
             }
         }
 
-        // eslint-disable-next-line no-magic-numbers
-        const oldCode502Warn: number = useVal?.code502Warn ?? 3;
-        if (oldCode502Warn > 0 && keyRawName !== o[1]) {
-            // console.log('🚀 ~ o', o);
-            const severity = vscode.DiagnosticSeverity.Warning;
-            const tags = [vscode.DiagnosticTag.Unnecessary];
-            const diag = setDiagnostic(EDiagCode.code502, newRefLoc.range, severity, tags);
-            diagVal.push(diag);
-            code502Warn = oldCode502Warn - 1;
-        }
-
         return [...oldRefLocS, newRefLoc];
     })();
 
@@ -93,7 +77,6 @@ function getValRef(
         defLoc,
         refLoc,
         ahkValType,
-        code502Warn,
     };
 }
 
@@ -103,7 +86,6 @@ export function getFnVarRef(
     ahkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
     valMap: TValMap,
-    diagVal: vscode.Diagnostic[],
 ): TValMap {
     const regMap: Map<string, RegExp> = getValRegMap(valMap);
 
@@ -123,7 +105,6 @@ export function getFnVarRef(
                     valName: valName.toUpperCase(),
                     uri,
                     line,
-                    diagVal,
                 });
                 if (newVal) {
                     valMap2.set(valName.toUpperCase(), newVal);

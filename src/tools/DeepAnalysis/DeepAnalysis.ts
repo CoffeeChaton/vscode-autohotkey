@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { diagColl } from '../../core/diag/diagRoot';
 import {
     DeepAnalysisResult,
     TAhkSymbol,
@@ -23,21 +22,18 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
     if (cache) return cache;
 
     const { uri } = document;
-    const diagS = [...diagColl.get(uri) ?? []];
     const DocStrMap = Pretreatment(
         document.getText(ahkSymbol.range).split('\n'),
         ahkSymbol.range.start.line,
     );
-    const { argMap, diagParam } = getParamMain(uri, ahkSymbol, DocStrMap);
-    const { valMap, diagFnVar } = getFnVarMain(uri, ahkSymbol, DocStrMap, argMap);
+    const argMap = getParamMain(uri, ahkSymbol, DocStrMap);
+    const valMap = getFnVarMain(uri, ahkSymbol, DocStrMap, argMap);
     const textMap: TTextMap = getUnknownTextMap(uri, ahkSymbol, DocStrMap, argMap, valMap);
     const v: DeepAnalysisResult = {
         argMap,
         valMap,
         textMap,
     };
-
-    diagColl.set(uri, [...diagS, ...diagParam, ...diagFnVar]);
 
     return w.setWm(ahkSymbol, v);
 }

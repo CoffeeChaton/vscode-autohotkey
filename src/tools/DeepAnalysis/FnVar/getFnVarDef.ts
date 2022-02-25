@@ -39,8 +39,6 @@ type TFnVarDef = {
     ahkSymbol: TAhkSymbol;
     DocStrMap: TTokenStream;
     argMap: TArgMap;
-    diagFnVar: vscode.Diagnostic[];
-    warnNumber: [number];
 };
 
 export function getFnVarDef(
@@ -49,8 +47,6 @@ export function getFnVarDef(
         ahkSymbol,
         DocStrMap,
         argMap,
-        diagFnVar: diagVal,
-        warnNumber,
     }: TFnVarDef,
 ): TValMap {
     const fnMode = getFnModeWM(ahkSymbol, DocStrMap);
@@ -71,8 +67,6 @@ export function getFnVarDef(
             lineType,
             uri,
             argMap,
-            diagVal,
-            warnNumber,
         };
         walrusOperator(need); // :=
         varSetCapacityFunc(need); // VarSetCapacity(varName)
