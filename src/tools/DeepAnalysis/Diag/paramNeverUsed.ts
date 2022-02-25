@@ -11,7 +11,7 @@ export function paramNeverUsed(argMap: TArgMap): vscode.Diagnostic[] {
         const { range } = v.defLoc[0];
         const severity = vscode.DiagnosticSeverity.Warning;
         const tags = [vscode.DiagnosticTag.Unnecessary];
-        const diag = setDiagnostic(EDiagCode.code501, range, severity, tags);
+        const diag: vscode.Diagnostic = setDiagnostic(EDiagCode.code501, range, severity, tags);
         diagS.push(diag);
     });
     return diagS;

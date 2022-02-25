@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { DeepAnalysisResult, TAhkSymbolList } from '../globalEnum';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
+import { diagDAFile } from '../tools/DeepAnalysis/Diag/diagDA';
 
 export async function DeepAnalysisAllFiles(): Promise<null> {
     const t1 = Date.now();
@@ -27,6 +28,7 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
             valMapSize += ed.valMap.size;
             textMapSize += ed.textMap.size;
         }
+        diagDAFile(AhkSymbolList, document, Uri);
     }
 
     const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');

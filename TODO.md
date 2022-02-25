@@ -1,6 +1,6 @@
 # TODO list
 
-1. [FIX getFnVarRef](src/tools/DeepAnalysis/FnVar/getFnVarRef.ts)
+1. [Need to add support caseSensitivityParam](src/tools/DeepAnalysis/Diag/caseSensitivityVar.ts)
 2. [about config && package.json](src/tools/pathIgnore.ts)
 3. [.cpuprofile performance analysis](src/core/ParserLine.ts)
 4. [.cpuprofile performance analysis](src/provider/Diagnostic/Diagnostic.ts)

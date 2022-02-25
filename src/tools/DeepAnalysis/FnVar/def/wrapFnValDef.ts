@@ -3,9 +3,21 @@ import { getGlobalValDef } from '../../../../core/getGlobalValDef';
 import {
     EValType,
     TAhkValType,
+    TC502,
     TValAnalysis,
     TValMap,
 } from '../../../../globalEnum';
+
+function newC502(oldVal: TValAnalysis, RawName: string, defLoc: vscode.Location): TC502[] {
+    if (oldVal.keyRawName !== RawName) {
+        const newWarn: TC502 = {
+            varName: RawName, // case sensitivity;
+            loc: defLoc,
+        };
+        return [...oldVal.c502List, newWarn];
+    }
+    return [...oldVal.c502List];
+}
 
 type TGetValue = {
     RawName: string;
@@ -23,10 +35,11 @@ export function wrapFnValDef({
     const oldVal: TValAnalysis | undefined = valMap.get(RawName.toUpperCase());
     if (oldVal) {
         return {
-            keyRawName: RawName,
+            keyRawName: oldVal.keyRawName,
             defLoc: [...oldVal.defLoc, defLoc],
             refLoc: [],
             ahkValType: oldVal.ahkValType,
+            c502List: newC502(oldVal, RawName, defLoc),
         };
     }
 
@@ -38,5 +51,6 @@ export function wrapFnValDef({
         defLoc: [defLoc],
         refLoc: [],
         ahkValType,
+        c502List: [],
     };
 }

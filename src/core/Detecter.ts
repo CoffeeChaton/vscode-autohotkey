@@ -15,7 +15,7 @@ import {
     TValUpName,
 } from '../globalEnum';
 import { baseDiagnostic } from '../provider/Diagnostic/Diagnostic';
-import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
+import { diagDAFile } from '../tools/DeepAnalysis/Diag/diagDA';
 import { Pretreatment } from '../tools/Pretreatment';
 import { diagColl } from './diag/diagRoot';
 import { getChildren } from './getChildren';
@@ -77,7 +77,7 @@ export const Detecter = {
         const gValMapBySelf: TGValMap = new Map<TValUpName, TGlobalVal[]>();
 
         const DocStrMap = Pretreatment(document.getText().split('\n'), 0);
-        const result = getChildren({
+        const result: TAhkSymbolList = getChildren({
             gValMapBySelf,
             Uri,
             DocStrMap,
@@ -99,11 +99,7 @@ export const Detecter = {
             Detecter.DocMap.set(fsPath, result);
             globalValMap.set(fsPath, gValMapBySelf);
             baseDiagnostic(DocStrMap, result, Uri, diagColl);
-            if (useDeepAnalysis) {
-                for (const ahkSymbol of result) {
-                    DeepAnalysis(document, ahkSymbol);
-                }
-            }
+            if (useDeepAnalysis) diagDAFile(result, document, Uri);
         }
         return result as vscode.DocumentSymbol[];
     },

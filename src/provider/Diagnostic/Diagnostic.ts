@@ -322,7 +322,7 @@ export function baseDiagnostic(
     DocStrMap: TTokenStream,
     result: Readonly<TAhkSymbol[]>,
     uri: vscode.Uri,
-    collection: vscode.DiagnosticCollection,
+    diagColl: vscode.DiagnosticCollection,
 ): void {
     const lineMax = DocStrMap.length;
     let IgnoreLine = -1;
@@ -344,6 +344,6 @@ export function baseDiagnostic(
         ...getTreeErr(result, displayErr),
         ...getFuncErr(DocStrMap, result, displayErr),
     );
-    collection.set(uri, diagS);
+    diagColl.set(uri, diagS);
 }
 // TODO  vscode.languages.getDiagnostics()

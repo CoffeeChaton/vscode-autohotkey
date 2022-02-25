@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import {
     TAhkSymbol,
+    TC502,
     TTokenStream,
     TValAnalysis,
     TValMap,
@@ -50,6 +51,7 @@ function getValRef(
         keyRawName,
         defLoc,
         ahkValType,
+        c502List,
     } = defVal;
 
     const refLoc: vscode.Location[] = ((): vscode.Location[] => {
@@ -68,7 +70,15 @@ function getValRef(
                 return [...oldRefLocS];
             }
         }
-
+        const newStr = o[1];
+        const oldStr: string | undefined = useVal?.keyRawName;
+        if (oldStr && oldStr !== newStr) {
+            const C502: TC502 = {
+                varName: newStr,
+                loc: newRefLoc,
+            };
+            c502List.push(C502);
+        }
         return [...oldRefLocS, newRefLoc];
     })();
 
@@ -77,6 +87,7 @@ function getValRef(
         defLoc,
         refLoc,
         ahkValType,
+        c502List,
     };
 }
 

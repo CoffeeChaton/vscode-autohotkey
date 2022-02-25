@@ -112,12 +112,18 @@ export type TGetFnDefNeed = {
     argMap: TArgMap;
 };
 
+export type TC502 = {
+    varName: string; // case sensitivity;
+    loc: vscode.Location;
+};
+
 export type TValAnalysis = {
     keyRawName: string;
     defLoc: vscode.Location[];
     refLoc: vscode.Location[];
 
     ahkValType: TAhkValType;
+    c502List: TC502[];
 };
 export type TValMap = Map<string, TValAnalysis>; // k = valNameUP
 export type TTextAnalysis = {
