@@ -41,18 +41,33 @@ function setIgnore(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.Code
     return CA;
 }
 
-function codeActionOfDA(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.CodeAction {
+function codeActionOfDA(uri: vscode.Uri, diag: vscode.Diagnostic): vscode.CodeAction[] {
     const code = diag?.code;
-    if (code === undefined || typeof code === 'string' || typeof code === 'number') return null;
+    if (code === undefined || typeof code === 'string' || typeof code === 'number') return [];
     const { value } = code;
     if (value === EDiagCodeDA.code501) {
-        return c501ignoreArgNeverUsed(uri, diag);
+        return [c501ignoreArgNeverUsed(uri, diag)];
     }
     if (value === EDiagCodeDA.code502 || value === EDiagCodeDA.code503) {
-        return c502c503CodeAction(uri, diag);
+        return [...c502c503CodeAction(uri, diag)];
     }
 
-    return null;
+    return [];
+}
+
+function CodeActionCore(uri: vscode.Uri, diagnostics: readonly vscode.Diagnostic[]): vscode.CodeAction[] {
+    const CAList: vscode.CodeAction[] = [];
+    for (const diag of diagnostics) {
+        if (diag.source === EDiagBase.source) {
+            const CA = setIgnore(uri, diag);
+            if (CA) CAList.push(CA);
+        } else if (diag.source === EDiagBase.sourceDA) {
+            CAList.push(...codeActionOfDA(uri, diag));
+        }
+    }
+
+    console.log('🚀 ~ CodeActionProvider ~ CAList', CAList);
+    return CAList;
 }
 
 export class CodeActionProvider implements vscode.CodeActionProvider {
@@ -65,18 +80,7 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
     ): vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
         if (context.diagnostics.length === 0) return null;
         const { uri } = document;
-        const CAList: vscode.CodeAction[] = [];
-        for (const diag of context.diagnostics) {
-            if (diag.source === EDiagBase.source) {
-                const CA = setIgnore(uri, diag);
-                if (CA) CAList.push(CA);
-            } else if (diag.source === EDiagBase.sourceDA) {
-                console.log('🚀 ~ CodeActionProvider ~ diag', diag);
-                const CA = codeActionOfDA(uri, diag);
-                if (CA) CAList.push(CA);
-            }
-        }
-
-        return CAList;
+        if (!uri.fsPath.endsWith('.ahk')) return null;
+        return CodeActionCore(uri, context.diagnostics);
     }
 }

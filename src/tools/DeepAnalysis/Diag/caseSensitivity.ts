@@ -3,12 +3,7 @@ import { getCode502Default, getCode503Default } from '../../../configUI';
 import { EDiagCodeDA } from '../../../diag';
 import { TArgMap, TValMap } from '../../../globalEnum';
 import { setDiagnosticDA } from '../../../provider/Diagnostic/setDiagnostic';
-
-function setMsg(firstName: string, defPos: vscode.Position, c502Name: string, prefix: string): string {
-    const defPosStr = `[${defPos.line + 1}, ${defPos.character + 1}]`;
-    // var "A" is the same variable as "a" defined earlier (at [165, 20])
-    return `${prefix} "${c502Name}" is the some variable as "${firstName}" defined earlier (at ${defPosStr})`;
-}
+import { setDiagCaseMsg } from './caseSensitivityMagic';
 
 export function caseSensitivityVar(valMap: TValMap, code502List: vscode.Diagnostic[]): vscode.Diagnostic[] {
     if (code502List.length > getCode502Default()) {
@@ -22,7 +17,7 @@ export function caseSensitivityVar(valMap: TValMap, code502List: vscode.Diagnost
             const { range } = C502;
             const c502Name: string = C502.varName;
             const defPos: vscode.Position = ValAnalysis.defLoc[0].range.start;
-            const message: string = setMsg(ValAnalysis.keyRawName, defPos, c502Name, 'var');
+            const message: string = setDiagCaseMsg(ValAnalysis.keyRawName, defPos, c502Name, 'var');
 
             const severity = vscode.DiagnosticSeverity.Information;
             const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCodeDA.code502, range, severity, [], message);
@@ -47,7 +42,7 @@ export function caseSensitivityParam(argMap: TArgMap, code503List: vscode.Diagno
             const { range } = C503;
             const c503Name: string = C503.ParamNewName;
             const defPos: vscode.Position = ArgAnalysis.defLoc[0].range.start;
-            const message: string = setMsg(ArgAnalysis.keyRawName, defPos, c503Name, 'param');
+            const message: string = setDiagCaseMsg(ArgAnalysis.keyRawName, defPos, c503Name, 'param');
 
             const severity = vscode.DiagnosticSeverity.Information;
             const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCodeDA.code503, range, severity, [], message);

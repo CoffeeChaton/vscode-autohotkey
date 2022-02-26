@@ -1,26 +1,38 @@
 import * as vscode from 'vscode';
+import { ParseDiagCaseMsg } from '../../tools/DeepAnalysis/Diag/caseSensitivityMagic';
 
-export function c502c503CodeAction(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.CodeAction {
-    const magStrList: string[] = [];
-    for (const magic of diag.message.matchAll(/"(\w+)"/uig)) {
-        magStrList.push(magic[1]);
-    }
+// replace ref like Def
+function getCA0(uri: vscode.Uri, defStr: string, refRange: vscode.Range): vscode.CodeAction {
+    const title0 = `replace this as "${defStr}"`;
+    const CA0 = new vscode.CodeAction(title0);
+    CA0.kind = vscode.CodeActionKind.QuickFix;
+    CA0.edit = new vscode.WorkspaceEdit();
+    CA0.edit.replace(uri, refRange, defStr);
 
-    // magicString of
-    // var "A" is the same variable as "a" defined earlier (at [165, 20])
-    // eslint-disable-next-line no-magic-numbers
-    if (magStrList.length !== 2) return null;
+    return CA0;
+}
 
-    magStrList.reverse();
-    const title = `replace this as "${magStrList[0]}"`;
-    const CA = new vscode.CodeAction(title);
+// replace def like Ref
+function getCA1(uri: vscode.Uri, refStr: string, defRange: vscode.Range): vscode.CodeAction {
+    const title1 = `replace def as "${refStr}"`;
+    const CA1 = new vscode.CodeAction(title1);
+    CA1.kind = vscode.CodeActionKind.QuickFix;
+    CA1.edit = new vscode.WorkspaceEdit();
+    CA1.edit.replace(uri, defRange, refStr);
 
-    const edit = new vscode.WorkspaceEdit();
-    edit.replace(uri, diag.range, magStrList[0]);
+    return CA1;
+}
 
-    CA.edit = edit;
-    CA.kind = vscode.CodeActionKind.QuickFix;
+export function c502c503CodeAction(uri: vscode.Uri, diag: vscode.Diagnostic): vscode.CodeAction[] {
+    const {
+        defStr,
+        defRange,
+        refStr,
+        refRange,
+    } = ParseDiagCaseMsg(diag);
 
-    // TODO replace Def As Ref
-    return CA;
+    return [
+        getCA0(uri, defStr, refRange),
+        getCA1(uri, refStr, defRange),
+    ];
 }
