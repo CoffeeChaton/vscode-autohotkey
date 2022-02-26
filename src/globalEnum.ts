@@ -61,11 +61,6 @@ export type TGlobalVal = {
 export type TValUpName = string;
 export type TGValMap = Map<TValUpName, TGlobalVal[]>;
 
-export type TMaxWarnOfDA = {
-    code502: number;
-    code503: number;
-};
-
 export const enum VERSION {
     getValDefInFunc = '0.4beta',
     format = 'v0.5',
@@ -74,6 +69,7 @@ export const enum VERSION {
 export const enum EDiagBase {
     ignore = ';@ahk-ignore ', // ;@ahk-ignore 30 line.
     source = 'neko help',
+    sourceDA = 'neko help(DA)',
 }
 
 export const enum EFnMode {

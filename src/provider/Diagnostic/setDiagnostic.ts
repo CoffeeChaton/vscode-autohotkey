@@ -1,5 +1,10 @@
 import * as vscode from 'vscode';
-import { Diags, EDiagCode } from '../../diag';
+import {
+    Diags,
+    DiagsDA,
+    EDiagCode,
+    EDiagCodeDA,
+} from '../../diag';
 import {
     EDiagBase,
 } from '../../globalEnum';
@@ -20,15 +25,15 @@ export function setDiagnostic(
 }
 
 export function setDiagnosticDA(
-    value: EDiagCode,
+    value: EDiagCodeDA,
     range: vscode.Range,
     severity: vscode.DiagnosticSeverity,
     tags: vscode.DiagnosticTag[],
     message: string,
 ): vscode.Diagnostic {
-    const target = vscode.Uri.parse(Diags[value].path);
+    const target = vscode.Uri.parse(DiagsDA[value].path);
     const diag1 = new vscode.Diagnostic(range, message, severity);
-    diag1.source = EDiagBase.source;
+    diag1.source = EDiagBase.sourceDA;
     diag1.code = { value, target };
     diag1.tags = tags;
     return diag1;

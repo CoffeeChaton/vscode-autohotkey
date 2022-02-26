@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { EDiagCode } from '../../../diag';
+import { DiagsDA, EDiagCodeDA } from '../../../diag';
 import { TArgMap } from '../../../globalEnum';
-import { setDiagnostic } from '../../../provider/Diagnostic/setDiagnostic';
+import { setDiagnosticDA } from '../../../provider/Diagnostic/setDiagnostic';
 
 export function paramNeverUsed(argMap: TArgMap): vscode.Diagnostic[] {
     const diagS: vscode.Diagnostic[] = [];
@@ -11,7 +11,8 @@ export function paramNeverUsed(argMap: TArgMap): vscode.Diagnostic[] {
         const { range } = v.defLoc[0];
         const severity = vscode.DiagnosticSeverity.Warning;
         const tags = [vscode.DiagnosticTag.Unnecessary];
-        const diag: vscode.Diagnostic = setDiagnostic(EDiagCode.code501, range, severity, tags);
+        const message: string = DiagsDA[EDiagCodeDA.code501].msg;
+        const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCodeDA.code501, range, severity, tags, message);
         diagS.push(diag);
     });
     return diagS;

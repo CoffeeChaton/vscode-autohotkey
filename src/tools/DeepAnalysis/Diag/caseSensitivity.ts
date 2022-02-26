@@ -1,14 +1,13 @@
 import * as vscode from 'vscode';
 import { getCode502Default, getCode503Default } from '../../../configUI';
-import { EDiagCode } from '../../../diag';
+import { EDiagCodeDA } from '../../../diag';
 import { TArgMap, TValMap } from '../../../globalEnum';
 import { setDiagnosticDA } from '../../../provider/Diagnostic/setDiagnostic';
 
 function setMsg(firstName: string, defPos: vscode.Position, c502Name: string, prefix: string): string {
     const defPosStr = `[${defPos.line + 1}, ${defPos.character + 1}]`;
-    const message = `${prefix} "${c502Name}" is the some variable as "${firstName}" defined earlier (at ${defPosStr})`;
-    // var "A" is the same variable as "a" defined earlier (at a)
-    return message;
+    // var "A" is the same variable as "a" defined earlier (at [165, 20])
+    return `${prefix} "${c502Name}" is the some variable as "${firstName}" defined earlier (at ${defPosStr})`;
 }
 
 export function caseSensitivityVar(valMap: TValMap, code502List: vscode.Diagnostic[]): vscode.Diagnostic[] {
@@ -26,7 +25,7 @@ export function caseSensitivityVar(valMap: TValMap, code502List: vscode.Diagnost
             const message: string = setMsg(ValAnalysis.keyRawName, defPos, c502Name, 'var');
 
             const severity = vscode.DiagnosticSeverity.Information;
-            const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCode.code502, range, severity, [], message);
+            const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCodeDA.code502, range, severity, [], message);
 
             code502List.push(diag);
             if (code502List.length > getCode502Default()) {
@@ -51,7 +50,7 @@ export function caseSensitivityParam(argMap: TArgMap, code503List: vscode.Diagno
             const message: string = setMsg(ArgAnalysis.keyRawName, defPos, c503Name, 'param');
 
             const severity = vscode.DiagnosticSeverity.Information;
-            const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCode.code503, range, severity, [], message);
+            const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCodeDA.code503, range, severity, [], message);
 
             code503List.push(diag);
             if (code503List.length > getCode502Default()) {

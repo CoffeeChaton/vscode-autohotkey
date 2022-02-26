@@ -1,7 +1,12 @@
 import * as vscode from 'vscode';
-import { Diags, EDiagCode } from '../../diag';
+import {
+    Diags,
+    EDiagCode,
+    EDiagCodeDA,
+} from '../../diag';
 import { EDiagBase } from '../../globalEnum';
-import { IgnoreArgNeverUsed } from './IgnoreArgNeverUsed';
+import { c501ignoreArgNeverUsed } from './c501ignoreArgNeverUsed';
+import { c502c503CodeAction } from './c502c503CodeAction';
 
 function getFsPath(diag: vscode.Diagnostic): string | null {
     const code = diag?.code;
@@ -28,8 +33,6 @@ function setEdit(uri: vscode.Uri, line: number, FsPath: string): vscode.Workspac
 function setIgnore(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.CodeAction {
     const FsPath: string | null = getFsPath(diag);
     if (FsPath === null) return null;
-    // eslint-disable-next-line no-magic-numbers
-    if (FsPath === Diags[501].path) return IgnoreArgNeverUsed(uri, diag);
 
     const CA = new vscode.CodeAction('ignore line');
     CA.edit = setEdit(uri, diag.range.start.line, FsPath);
@@ -37,6 +40,21 @@ function setIgnore(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.Code
     //  CA.diagnostics = [diag];
     return CA;
 }
+
+function codeActionOfDA(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.CodeAction {
+    const code = diag?.code;
+    if (code === undefined || typeof code === 'string' || typeof code === 'number') return null;
+    const { value } = code;
+    if (value === EDiagCodeDA.code501) {
+        return c501ignoreArgNeverUsed(uri, diag);
+    }
+    if (value === EDiagCodeDA.code502 || value === EDiagCodeDA.code503) {
+        return c502c503CodeAction(uri, diag);
+    }
+
+    return null;
+}
+
 export class CodeActionProvider implements vscode.CodeActionProvider {
     // eslint-disable-next-line class-methods-use-this
     public provideCodeActions(
@@ -49,8 +67,14 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
         const { uri } = document;
         const CAList: vscode.CodeAction[] = [];
         for (const diag of context.diagnostics) {
-            const CA = setIgnore(uri, diag);
-            if (CA) CAList.push(CA);
+            if (diag.source === EDiagBase.source) {
+                const CA = setIgnore(uri, diag);
+                if (CA) CAList.push(CA);
+            } else if (diag.source === EDiagBase.sourceDA) {
+                console.log('🚀 ~ CodeActionProvider ~ diag', diag);
+                const CA = codeActionOfDA(uri, diag);
+                if (CA) CAList.push(CA);
+            }
         }
 
         return CAList;

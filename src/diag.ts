@@ -18,6 +18,35 @@ import { DeepReadonly } from './globalEnum';
 //     },
 // };
 
+export const enum EDiagCodeDA {
+    // 501~599 Analysis Func or Method
+    code501 = 501, // param is assigned but never used.
+    code502 = 502, // var case sensitivity
+    code503 = 503, // param case sensitivity
+}
+
+export type TDiagsDA = {
+    [k in EDiagCodeDA]: {
+        msg: string;
+        path: string;
+    };
+};
+
+export const DiagsDA: DeepReadonly<TDiagsDA> = {
+    501: {
+        msg: 'param is assigned but never used.',
+        path: 'https://www.autohotkey.com/docs/Functions.htm',
+    },
+    502: {
+        msg: 'var case sensitivity',
+        path: 'https://www.autohotkey.com/docs/Concepts.htm#names',
+    },
+    503: {
+        msg: 'param case sensitivity',
+        path: 'https://www.autohotkey.com/docs/Concepts.htm#names',
+    },
+};
+
 export const enum EDiagCode {
     code107 = 107,
     code110 = 110, // 100~110 is switch err
@@ -27,10 +56,6 @@ export const enum EDiagCode {
     code114 = 114,
     code201 = 201, // 200~299 is not expression // need use %
     code301 = 301, // 300~399 is func err
-    // 501~599 Analysis Func or Method
-    code501 = 501, // param is assigned but never used.
-    code502 = 502, // var case sensitivity
-    code503 = 503, // param case sensitivity
     code700 = 700, // 700 is Command -> func
     // code701 = 701, // 701~799 is Command error
     // 800~899 is Deprecated / Old Syntax
@@ -103,18 +128,6 @@ export const Diags: DeepReadonly<TDiags> = {
     301: {
         msg: 'function or Method is so big',
         path: 'https://www.autohotkey.com/docs/Functions.htm',
-    },
-    501: {
-        msg: 'param is assigned but never used.',
-        path: 'https://www.autohotkey.com/docs/Functions.htm',
-    },
-    502: {
-        msg: 'var case sensitivity',
-        path: 'https://www.autohotkey.com/docs/Concepts.htm#names',
-    },
-    503: {
-        msg: 'param case sensitivity',
-        path: 'https://www.autohotkey.com/docs/Concepts.htm#names',
     },
     700: {
         msg: 'try to use function replace Command(obsolete code)',
