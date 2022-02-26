@@ -98,7 +98,7 @@ export type TC503 = {
 
 export type TArgAnalysis = {
     keyRawName: string;
-    defLoc: vscode.Location[];
+    defLoc: vscode.Location[]; // Normally defLoc.len is 1, but ... the ahk-user wild style , i need diags "Duplicate parameter".
     refLoc: vscode.Location[];
 
     isByRef: boolean;

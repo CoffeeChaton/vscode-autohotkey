@@ -23,6 +23,7 @@ function wrapper(
     ahkSymbol: TAhkSymbol,
     wordUp: string,
     listAllUsing: boolean,
+    position: vscode.Position,
 ): vscode.Location[] {
     const DA = DeepAnalysis(document, ahkSymbol);
     if (!DA) return [];
@@ -33,19 +34,29 @@ function wrapper(
     } = DA;
     const argList = argMap.get(wordUp);
     if (argList) {
-        return listAllUsing
-            ? [...argList.defLoc, ...argList.refLoc]
-            : [...argList.defLoc];
+        if (listAllUsing) return [...argList.defLoc, ...argList.refLoc];
+        return argList.defLoc;
     }
     const valList = valMap.get(wordUp);
     if (valList) {
-        return listAllUsing
-            ? [...valList.defLoc, ...valList.refLoc]
-            : [...valList.defLoc];
+        if (listAllUsing) return [...valList.defLoc, ...valList.refLoc];
+        // <
+        // when I open "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
+        // why vscode can't Identify loc.range.contains(position)
+        //      , and auto let F12 -> shift F12 ?
+        //           (auto let goto Def -> Ref)
+        // What else do I need to read?
+        for (const loc of valList.defLoc) {
+            if (loc.range.contains(position)) {
+                return [...valList.defLoc, ...valList.refLoc];
+            }
+        }
+        // >
+        return valList.defLoc;
     }
     const textList = textMap.get(wordUp);
     if (textList) {
-        return [...textList.refLoc];
+        return textList.refLoc;
     }
     return [];
 }
@@ -60,8 +71,8 @@ function match(
     const funcPos = atFunPos(ahkSymbol, position);
     // dprint-ignore
     switch (funcPos) {
-        case EFuncPos.isFuncArg: return wrapper(document, ahkSymbol, wordUp, true);
-        case EFuncPos.isInBody: return wrapper(document, ahkSymbol, wordUp, listAllUsing);
+        case EFuncPos.isFuncArg: return wrapper(document, ahkSymbol, wordUp, true, position);
+        case EFuncPos.isInBody: return wrapper(document, ahkSymbol, wordUp, listAllUsing, position);
         case EFuncPos.isFuncName:
             console.error('EFuncPos.isFuncName', wordUp, position); // is never now
             void vscode.window.showErrorMessage('EFuncPos.isFuncName', wordUp);
