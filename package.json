@@ -132,17 +132,17 @@
                 },
                 "AhkNekoHelp.Diag.WarningCap.code502": {
                     "type": "number",
-                    "default": 3,
+                    "default": 10,
                     "minimum": 0,
                     "maximum": 99,
-                    "description": "(code502) For each function variable, Max number of warnings.\\n use 0 to close warn."
+                    "description": "(code502) case sensitivity check of variable, a file max checks number.\\n use 0 to close warn."
                 },
                 "AhkNekoHelp.Diag.WarningCap.code503": {
                     "type": "number",
-                    "default": 3,
+                    "default": 10,
                     "minimum": 0,
                     "maximum": 99,
-                    "description": "(code503) For each function parameter, Max number of warnings.\\n use 0 to close warn."
+                    "description": "(code503) case sensitivity check of parameter, a file max checks number.\\n use 0 to close warn."
                 },
                 "AhkNekoHelp.Ignored.File.endsWith": {
                     "type": "array",

@@ -348,27 +348,6 @@
         "body": "Sqrt(${1:Number})",
         "description": "Returns the square root of Number."
     },
-    "StrGet()": {
-        "prefix": "StrGet()",
-        "body": "StrGet(${1:Address}, ${2:[Length]}, ${3:[Encoding = None]})",
-        "description": "Copies a string from a memory address, optionally converting it from a given code page."
-    },
-    "StrLen()": {
-        "prefix": "StrLen()",
-        "body": "StrLen(${1:String})",
-        "description": "Retrieves the count of how many characters are in a string."
-    },
-    "StrPut()": {
-        "prefix": "StrPut()",
-        "body": "StrPut(${1:String}, ${2:Address}, ${3:[Length]}, ${4:[Encoding = None]})",
-        "description": "Copies a string to a memory address, optionally converting it to a given code page."
-    },
-
-    "StrReplace()": {
-        "prefix": "StrReplace()",
-        "body": "StrReplace(${1:Haystack}, ${2:SearchText [}, ${3:ReplaceText}, ${4:OutputVarCount}, ${5:Limit := -1]})",
-        "description": "Replaces the specified substring with a new string."
-    },
     "SubStr()": {
         "prefix": "SubStr()",
         "body": "SubStr(${1:String}, ${2:StartingPos [}, ${3:Length]})",
@@ -1382,18 +1361,6 @@
         "prefix": "Background",
         "body": "Background"
     },
-    "bold": {
-        "prefix": "bold",
-        "body": "bold"
-    },
-    "italic": {
-        "prefix": "italic",
-        "body": "italic"
-    },
-    "strike": {
-        "prefix": "strike",
-        "body": "strike"
-    },
     "underline": {
         "prefix": "underline",
         "body": "underline"
@@ -1565,46 +1532,6 @@
     "Exist": {
         "prefix": "Exist",
         "body": "Exist"
-    },
-    "Unicode": {
-        "prefix": "Unicode",
-        "body": "Unicode"
-    },
-    "Asc": {
-        "prefix": "Asc",
-        "body": "Asc"
-    },
-    "Chr": {
-        "prefix": "Chr",
-        "body": "Chr"
-    },
-    "Deref": {
-        "prefix": "Deref",
-        "body": "Deref"
-    },
-    "Mod": {
-        "prefix": "Mod",
-        "body": "Mod"
-    },
-    "Pow": {
-        "prefix": "Pow",
-        "body": "Pow"
-    },
-    "Exp": {
-        "prefix": "Exp",
-        "body": "Exp"
-    },
-    "Sqrt": {
-        "prefix": "Sqrt",
-        "body": "Sqrt"
-    },
-    "Log": {
-        "prefix": "Log",
-        "body": "Log"
-    },
-    "Ln": {
-        "prefix": "Ln",
-        "body": "Ln"
     },
 
     "Yes": {
