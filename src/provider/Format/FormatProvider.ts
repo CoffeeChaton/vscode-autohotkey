@@ -10,7 +10,6 @@ import {
     EStr,
     TFormatChannel,
     TTokenStream,
-    VERSION,
 } from '../../globalEnum';
 import { callDiff, DiffType } from '../../tools/Diff';
 import { inLTrimRange } from '../../tools/inLTrimRange';
@@ -232,7 +231,6 @@ export function FormatCore(
     }
 
     if (needDiff && hasDiff[0]) {
-        console.log(`Format Document is Beta ${VERSION.format}, ${Date.now() - timeStart}ms`);
         fmtReplaceWarn(timeStart, from);
 
         const rTextList: string[] = [];

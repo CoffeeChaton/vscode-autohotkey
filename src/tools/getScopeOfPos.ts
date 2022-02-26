@@ -17,7 +17,6 @@ function dfs(father: TAhkSymbolList, position: vscode.Position, StackPro: TStack
     const { stack, isEnd, deep } = StackPro;
     for (const ch of father) {
         if (ch.range.contains(position)) {
-            // console.log('s.name', s.name);
             return dfs(ch.children, position, {
                 stack: [
                     ...stack,
@@ -29,11 +28,6 @@ function dfs(father: TAhkSymbolList, position: vscode.Position, StackPro: TStack
                 isEnd, // Don't assign
                 deep: deep + 1,
             });
-
-            // if (d.isEnd) {
-            //     console.log('s.name End', s.name);
-            // }
-            // return d; // No brother
         }
     }
     return {

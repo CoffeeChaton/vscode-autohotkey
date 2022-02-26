@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import { DeepAnalysisResult, TAhkSymbol } from '../../../globalEnum';
 import { getArgCompletion } from './getArgCompletion';
-import { getUnknownTextCompletion } from './getUnknowTextCompletion';
+import { getUnknownTextCompletion } from './getUnknownTextCompletion';
 import { getValCompletion } from './getValCompletion';
 
 function getContextRange(position: vscode.Position, ahkSymbol: TAhkSymbol): vscode.Range {
@@ -45,8 +45,6 @@ function getSuggestList(
             }
         }
     }
-    console.log('🚀 ~ inputStr', inputStr);
-    console.log('🚀 ~ suggestList', [...suggestList]);
     return suggestList;
 }
 

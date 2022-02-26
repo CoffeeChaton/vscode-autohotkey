@@ -54,7 +54,6 @@ export class DebugDispather extends EventEmitter {
         const { runtime } = args;
         if (!existsSync(runtime)) {
             const message = `Autohotkey Execute Bin Not Found : ${runtime} --112--883--963--by neko-help`;
-            console.log(message, runtime);
             vscode.window.showInformationMessage(message);
             OutputChannel.log(message);
             this.end();
@@ -198,15 +197,10 @@ export class DebugDispather extends EventEmitter {
         const variableName: string = args.expression;
 
         if (args.context === 'variables') {
-            console.log('DebugDispather ~ getVariableByEval ~ args', args);
-            console.log('DebugDispather ~ getVariableByEval ~ variableName ->', variableName);
             return variableName;
         }
 
         const frameId: number = this.variableHandler.getFrameId();
-        if (variableName === 'File') {
-            console.log('DebugDispather ~ getVariableByEval ~ args', args);
-        }
 
         const varLocal = await this.getVariable(frameId, EVarScope.LOCAL, variableName);
         switch (varLocal.length) {
@@ -245,9 +239,6 @@ export class DebugDispather extends EventEmitter {
         const a = fnObtainValueSet(args.value);
         let { value } = a;
         let { type } = a;
-        if (type === 'undefined') {
-            console.log('DebugDispather ~ args', args);
-        }
 
         const frameId: number = this.variableHandler.getFrameId();
         const scope: number = this.variableHandler.getScopeByRef(args.variablesReference);
@@ -271,7 +262,6 @@ export class DebugDispather extends EventEmitter {
             fullname = isIndex === true
                 ? `${parentFullName.name}${fullname}`
                 : `${parentFullName.name}.${fullname}`;
-            console.log('DebugDispather ~ fnObtainValue ~ fullname', fullname);
         }
 
         const response: TDbgpResponse = await this.sendComand(
@@ -319,7 +309,6 @@ export class DebugDispather extends EventEmitter {
         for (const valName of valNameList) {
             const ahkVar = this.variableHandler.getVarByFullname(valName);
             if (!ahkVar) {
-                console.log('DebugDispather ~ getVariableByEvalDefault ~ varLocal', varList);
                 continue;
             }
             if (typeof ahkVar.value !== 'string') {

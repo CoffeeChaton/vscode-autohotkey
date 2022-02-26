@@ -27,7 +27,6 @@ export function ahkInclude(document: vscode.TextDocument, position: vscode.Posit
         return false;
     }
     const pathFix = `${lPath}\\${rPath}`;
-    // console.log('ahkInclude -> pathFix', pathFix);
     const uri = vscode.Uri.file(pathFix);
     return new vscode.Location(uri, new vscode.Position(0, 0));
 }

@@ -8,7 +8,7 @@ export const OutputChannel = {
         channel.show(true);
     },
     err(message: string, err: NodeJS.ErrnoException): void {
-        console.log('OutputChannel -> err -> val', err);
+        console.error('OutputChannel -> err -> val', err);
         channel.appendLine(message);
         channel.show(true);
     },

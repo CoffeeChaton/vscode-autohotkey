@@ -56,7 +56,6 @@ function getConfig(): TConfigs {
             ? ` <---> err.message ${err.message}`
             : '';
         const msg = `setting err of "AhkNekoHelp.Debug.executePath" : "${executePath}"${errCode}`;
-        console.log('🚀 fs.access ~ msg', msg);
         void vscode.window.showErrorMessage(msg);
         const msg2 = `can't find the file at "${executePath}"`;
         void vscode.window.showErrorMessage(msg2);

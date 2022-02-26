@@ -19,7 +19,8 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
         const line = Offset + startLineBaseZero;
         const textRaw = strArray[Offset];
         if (deep < 0) {
-            console.log(Offset, 'Pretreatment -> line , deep < 0 ');
+            console.warn(Offset, 'Pretreatment -> line , deep < 0 ');
+            // void vscode.window.showWarningMessage
             deep = 0;
         }
         CommentBlock = inCommentBlock(textRaw, CommentBlock);
@@ -83,8 +84,5 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
             line,
         });
     }
-    //  const g = Object.freeze(result);
-    //  const time = Date.now() - timeStart;
-    //  console.log(time, ' ms of ', document.fileName, ' Pretreatment ');
     return result;
 }

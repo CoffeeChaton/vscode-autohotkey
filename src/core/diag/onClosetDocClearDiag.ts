@@ -8,11 +8,6 @@ function clearNekoDA(uri: vscode.Uri): null {
     const diagNewList: vscode.Diagnostic[] = diagS.filter(
         (diag: vscode.Diagnostic) => diag.source === EDiagBase.source,
     );
-    // for (const diag of diagS) {
-    //     if (diag.source === EDiagBase.source) {
-    //         diagNewList.push(diag);
-    //     }
-    // }
     diagColl.delete(uri);
     diagColl.set(uri, diagNewList);
     return null;

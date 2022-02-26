@@ -157,7 +157,6 @@ export class NekoDebugSession extends LoggingDebugSession {
         _request?: DebugProtocol.Request,
     ): Promise<void> {
         try {
-            console.log('NekoDebugSession ~ setVariableRequest ~ args', args);
             response.body = await this.dispather.setVariable(args);
             this.sendResponse(response);
         } catch (error) {
@@ -242,7 +241,6 @@ export class NekoDebugSession extends LoggingDebugSession {
         const str: string = args.expression;
         const exp = str.split('=');
         if (exp.length !== 1) {
-            console.log('NekoDebugSession ~ evaluateRequest ~ response', response);
             this.dispather.setVariable({ name: exp[0], value: exp[1], variablesReference: EVscodeScope.LOCAL });
         }
 

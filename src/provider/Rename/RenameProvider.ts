@@ -18,11 +18,8 @@ function DeepAnalysisRename(document: vscode.TextDocument, position: vscode.Posi
         loc.push(...argLoc.defLoc, ...argLoc.refLoc);
     }
 
-    const locList = ed.valMap.get(word);
-    if (locList) {
-        console.log('🚀 ~ DeepAnalysisRename ~ locList', locList);
-        // loc.push(...locList.defLoc, ...locList.refLoc);
-    }
+    // const locList = ed.valMap.get(word);
+    // TODO i need to fix lStr.
 
     return loc;
 }

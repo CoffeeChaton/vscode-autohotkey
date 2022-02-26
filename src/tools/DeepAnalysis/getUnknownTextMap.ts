@@ -44,9 +44,7 @@ export function getUnknownTextMap(
             const character = lStr.search(ahkValRegex(wordUp));
 
             if (character === -1) {
-                console.error('🚀 ~ line', line);
-                console.error('🚀 ~ ahkSymbol', ahkSymbol);
-                console.error('🚀 ~ wordUp', wordUp);
+                void vscode.window.showErrorMessage(`getUnknownTextMap Error at line ${line} of ${uri.fsPath}`);
                 continue;
             }
 

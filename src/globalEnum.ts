@@ -21,7 +21,7 @@ export const enum EMode {
 
 export const enum EStr {
     diff_name_prefix = '_diff_temp_',
-    suggestStr = '✿',
+    suggestStr = ' ✿',
     neverStr = '▽',
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

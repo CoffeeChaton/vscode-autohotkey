@@ -5,7 +5,6 @@
     import { loadWASM } from 'vscode-oniguruma';
 
     const REPO_ROOT = path.join(vscode.env.appRoot, 'node_modules.asar', 'vscode-oniguruma', 'release', 'onig.wasm');
-    console.log('REPO_ROOT', REPO_ROOT);
 
     const wasm: ArrayBufferLike = fs.readFileSync(REPO_ROOT).buffer;
 
@@ -17,7 +16,6 @@
     const s = new OnigString(textFix;
 
     const ed = scan.findNextMatchSync(s, 0);
-    console.log('ed', ed);
 
     // All regex
     const {start, end, length} = ed.captureIndices[0];

@@ -51,11 +51,6 @@ export class ClassWm<T extends Record<string, unknown>, V> {
         const cache = this.wm.get(t) ?? null;
         if (cache) {
             this.cacheHits++;
-            // if (this.cacheHits > 3) {
-            //     console.log('wm.cacheHits > 3', this.fnName);
-            // }
-            // console.log('t', t);
-            // console.log('cache', cache);
         }
         return cache;
     }

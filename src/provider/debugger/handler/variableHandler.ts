@@ -47,7 +47,6 @@ function formatPropertyValue({
     const aType = attr.type;
     if (!TESTAttrTypeList.includes(aType)) {
         TESTAttrTypeList.push(aType);
-        console.log('--77--51--aType', aType);
     }
     const str: WithImplicitCoercion<string> = content ?? '';
     const { encoding } = attr;
@@ -62,7 +61,6 @@ function formatPropertyValue({
 
             const attrClassname = attr.classname;
             if (!TESTAttrClassname.includes(attrClassname)) {
-                console.log('18-55--44-attrClassname', attrClassname);
                 TESTAttrClassname.push(attrClassname);
             }
             if (attrClassname) return `${attrClassname} Object`;
@@ -170,7 +168,6 @@ export class VariableHandler {
         throw new Error(message);
         // const aValue = ahkVar.value;
         // const message = 'VariableHandler ~ getArrayValue ~ aValue';
-        // console.log(message, aValue);
         // throw new Error(message);
 
         // return (aValue)
@@ -215,9 +212,6 @@ export class VariableHandler {
     // eslint-disable-next-line max-statements
     public parse(response: TDbgpProperty, scope: number): Variable[] {
         const classname = response.attr?.classname;
-        if (classname) {
-            console.log('VariableHandler ~ parse ~ response', response);
-        }
 
         const temp: TDbgpProperty | TDbgpProperty[] | undefined = response.property;
         if (temp === undefined) {
@@ -226,24 +220,9 @@ export class VariableHandler {
             if (!attr) return [];
             const { type, fullname } = attr;
             if (type === 'undefined' || !type || !classname || !fullname) {
-                console.log('--83--55--44attr.type === undefined', response);
                 return [];
             }
-            //    const  attr_new = {
-            //         name: "myFile",
-            //         fullname: "myFile",
-            //         type: "object",
-            //         facet: "",
-            //         classname: "File",
-            //         address: "9346224",
-            //         size: "0",
-            //         page: "0",
-            //         pagesize: "300",
-            //         children: "0",
-            //         numchildren: "0",
-            //     };
-            const message = '🚀 ~BH49~ VariableHandler ~ parse ~ attr === [] ---94--53--75, response';
-            console.log(message, response);
+
             return [];
         }
 

@@ -28,9 +28,7 @@ function buildVariableValueObj(attr: TDbgpPropertyAttr, property: TDbgpProperty)
     const childs = toArray(property.property);
     if (attr.classname === 'Object' && likeArray(property, attr.name)) {
         const ahkArr = childs.map((v) => base64ToStr(v.content || '""'));
-        const strJson = JSON.stringify(ahkArr);
-        if (strJson === 'undefined') console.log('55-44-33-00-buildVariableValueObj ~ strJson', strJson);
-        return strJson;
+        return JSON.stringify(ahkArr);
     }
     // k = child.attr.fullname
     // v = string
@@ -53,7 +51,6 @@ export function buildVariableValue(property: TDbgpProperty, attr: TDbgpPropertyA
     const aType = attr.type;
     if (!TESTAttrTypeList2.includes(aType)) {
         TESTAttrTypeList2.push(aType);
-        console.log('--77--51--aType2 ', aType);
     }
     const primitive = base64ToStr(content);
     // dprint-ignore
