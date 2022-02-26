@@ -1,8 +1,8 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,10] }] */
-import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { TConfigs } from './globalEnum';
+import { checkDebugFile } from './tools/file';
 
 /*
     ---set start---
@@ -48,18 +48,8 @@ function getConfig(): TConfigs {
         },
         // TODO CompletionIgnore
     } as const;
-    const { executePath } = ed.Debug;
 
-    fs.access(executePath, (err: NodeJS.ErrnoException | null): void => {
-        if (err === null) return;
-        const errCode = err.message
-            ? ` <---> err.message ${err.message}`
-            : '';
-        const msg = `setting err of "AhkNekoHelp.Debug.executePath" : "${executePath}"${errCode}`;
-        void vscode.window.showErrorMessage(msg);
-        const msg2 = `can't find the file at "${executePath}"`;
-        void vscode.window.showErrorMessage(msg2);
-    });
+    checkDebugFile(ed.Debug.executePath);
     return ed;
 }
 
