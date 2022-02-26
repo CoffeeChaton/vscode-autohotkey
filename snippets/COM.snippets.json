@@ -1,0 +1,60 @@
+{
+    "ComObjCreate()": {
+        "prefix": "ComObjCreate()",
+        "body": "ComObjCreate(${1:CLSID} [, ${2:IID}])",
+        "description": "Creates a COM object."
+    },
+    "ComObjActive()": {
+        "prefix": "ComObjActive()",
+        "body": "ComObjActive(${1:CLSID})",
+        "description": "Retrieves a running object that has been registered with OLE."
+    },
+    "ComObjArray()": {
+        "prefix": "ComObjArray()",
+        "body": "ComObjArray(${1:VarType}, ${2:Count1} [, ${3:Count2, ... Count8}])",
+        "description": "Creates a SafeArray for use with COM."
+    },
+    "ComObjConnect()": {
+        "prefix": "ComObjConnect()",
+        "body": "ComObjConnect(${1:ComObject} [, ${2:Prefix}])",
+        "description": "Connects the object's event sources to functions with a given prefix."
+    },
+
+    "ComObjError()": {
+        "prefix": "ComObjError()",
+        "body": "ComObjError(${1:[Enable]})",
+        "description": "Enables or disables notification of COM errors."
+    },
+    "ComObjFlags()": {
+        "prefix": "ComObjFlags()",
+        "body": "ComObjFlags(${1:ComObject} [, ${2:NewFlags}, ${3:Mask}])",
+        "description": "Retrieves or changes flags which control a COM wrapper object's behaviour."
+    },
+    "ComObjGet()": {
+        "prefix": "ComObjGet()",
+        "body": "ComObjGet(${1:Name})",
+        "description": "Returns a reference to an object provided by a COM component."
+    },
+
+    "ComObjParameter()": {
+        "prefix": "ComObjParameter()",
+        "body": "ComObjParameter(${1:VarType}, ${2:Value} [, ${3:Flags}])",
+        "description": "⚠Deprecated. Use ComObject() instead."
+    },
+    "ComObjQuery()": {
+        "prefix": "ComObjQuery()",
+        "body": "ComObjQuery(${1:ComObject}, [${2:SID},] ${3:IID})",
+        "description": "Queries a COM object for an interface or service."
+    },
+    "ComObjType()": {
+        "prefix": "ComObjType()",
+        "body": "ComObjType(${1:ComObject}, \"${2:Name|IID}\")",
+        "description": "Retrieves type information from a COM object."
+    },
+
+    "ComObjValue()": {
+        "prefix": "ComObjValue()",
+        "body": "ComObjValue(${1:ComObject})",
+        "description": "Retrieves the value or pointer stored in a COM wrapper object."
+    }
+}

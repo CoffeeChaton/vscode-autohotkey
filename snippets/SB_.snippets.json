@@ -1,0 +1,17 @@
+{
+    "SB_SetIcon()": {
+        "prefix": "SB_SetIcon()",
+        "body": "SB_SetIcon(${1:Filename [}, ${2:IconNumber}, ${3:PartNumber]})",
+        "description": "Displays a small icon to the left of the text in the specified part."
+    },
+    "SB_SetParts()": {
+        "prefix": "SB_SetParts()",
+        "body": "SB_SetParts(${1:[Width}, ${2:Width2}, ${3:... Width255]})",
+        "description": "Divides the bar into multiple sections according to the specified widths (in pixels)."
+    },
+    "SB_SetText()": {
+        "prefix": "SB_SetText()",
+        "body": "SB_SetText(${1:NewText [}, ${2:PartNumber}, ${3:Style]})",
+        "description": "Displays NewText in the specified part of the status bar."
+    }
+}

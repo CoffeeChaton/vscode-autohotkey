@@ -1,0 +1,30 @@
+{
+    "Browser_Back": {
+        "prefix": "Browser_Back",
+        "body": "Browser_Back"
+    },
+    "Browser_Forward": {
+        "prefix": "Browser_Forward",
+        "body": "Browser_Forward"
+    },
+    "Browser_Refresh": {
+        "prefix": "Browser_Refresh",
+        "body": "Browser_Refresh"
+    },
+    "Browser_Stop": {
+        "prefix": "Browser_Stop",
+        "body": "Browser_Stop"
+    },
+    "Browser_Search": {
+        "prefix": "Browser_Search",
+        "body": "Browser_Search"
+    },
+    "Browser_Favorites": {
+        "prefix": "Browser_Favorites",
+        "body": "Browser_Favorites"
+    },
+    "Browser_Home": {
+        "prefix": "Browser_Home",
+        "body": "Browser_Home"
+    }
+}

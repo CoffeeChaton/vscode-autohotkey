@@ -1,0 +1,57 @@
+{
+    "TV_Add()": {
+        "prefix": "TV_Add()",
+        "body": "TV_Add(${1:Name}, ${2:[ParentItemID}, ${3:Options]})",
+        "description": "Adds a new item to the TreeView and returns its unique Item ID number (or 0 upon failure)."
+    },
+    "TV_Delete()": {
+        "prefix": "TV_Delete()",
+        "body": "TV_Delete(${1:[ItemID]})",
+        "description": "Deletes the specified item or all items."
+    },
+    "TV_GetChild()": {
+        "prefix": "TV_GetChild()",
+        "body": "TV_GetChild(${1:ParentItemID})",
+        "description": "Returns the ID number of the specified item's first/top child (or 0 if none)."
+    },
+    "TV_GetCount()": {
+        "prefix": "TV_GetCount()",
+        "body": "TV_GetCount()",
+        "description": "Returns the total number of items in the control."
+    },
+    "TV_GetNext()": {
+        "prefix": "TV_GetNext()",
+        "body": "TV_GetNext(${1:[ItemID}, ${2:\"Checked | Full\"]})",
+        "description": "Returns the ID number of the next item below the specified item (or 0 if none)."
+    },
+    "TV_Get()": {
+        "prefix": "TV_Get()",
+        "body": "TV_Get(${1:ItemID}, ${2:\"Expand | Check | Bold\"})",
+        "description": "Returns the ID number of the specified item if it has the specified attribute."
+    },
+    "TV_GetParent()": {
+        "prefix": "TV_GetParent()",
+        "body": "TV_GetParent(${1:ItemID})",
+        "description": "Returns the specified item's parent as an item ID."
+    },
+    "TV_GetPrev()": {
+        "prefix": "TV_GetPrev()",
+        "body": "TV_GetPrev(${1:ItemID})",
+        "description": "Returns the ID number of the sibling above the specified item (or 0 if none)."
+    },
+    "TV_GetSelection()": {
+        "prefix": "TV_GetSelection()",
+        "body": "TV_GetSelection()",
+        "description": "Returns the selected item's ID number."
+    },
+    "TV_GetText()": {
+        "prefix": "TV_GetText()",
+        "body": "TV_GetText(${1:OutputVar}, ${2:ItemID})",
+        "description": "Retrieves the text/name of the specified ItemID and stores it in OutputVar."
+    },
+    "TV_Modify()": {
+        "prefix": "TV_Modify()",
+        "body": "TV_Modify(${1:ItemID [}, ${2:Options}, ${3:NewName]})",
+        "description": "Modifies the attributes and/or name of an item."
+    }
+}
