@@ -93,6 +93,11 @@ export type TRunValType = Exclude<EValType, EValType.normal>;
 export type TRunValType2 = Exclude<TRunValType, EValType.args>;
 export type TAhkValType = EValType.local | EValType.global | EValType.Static;
 
+export type TC503 = {
+    ParamNewName: string; // case sensitivity;
+    range: vscode.Range;
+};
+
 export type TArgAnalysis = {
     keyRawName: string;
     defLoc: vscode.Location[];
@@ -100,6 +105,7 @@ export type TArgAnalysis = {
 
     isByRef: boolean;
     isVariadic: boolean;
+    c503List: TC503[];
 };
 export type TArgMap = Map<string, TArgAnalysis>; // k = valNameUP
 

@@ -40,6 +40,7 @@ function getNeed(param: string, uri: vscode.Uri, line: number, lStr: string): nu
         refLoc: [],
         isByRef,
         isVariadic,
+        c503List: [],
     };
 }
 

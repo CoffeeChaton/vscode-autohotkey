@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { DeepAnalysisResult } from '../../../globalEnum';
-import { caseSensitivityVar } from './caseSensitivityVar';
+import { caseSensitivityParam, caseSensitivityVar } from './caseSensitivity';
 import { paramNeverUsed } from './paramNeverUsed';
 
 export type TDiagDA = {
@@ -16,9 +16,10 @@ export function diagDACore(DA: DeepAnalysisResult, DiagDA: TDiagDA): TDiagDA {
     } = DiagDA;
     const c501: vscode.Diagnostic[] = paramNeverUsed(DA.argMap);
     const c502: vscode.Diagnostic[] = caseSensitivityVar(DA.valMap, code502List); // var case sensitivity
+    const c503: vscode.Diagnostic[] = caseSensitivityParam(DA.argMap, code503List);
     return {
         code501List: [...code501List, ...c501],
         code502List: [...c502],
-        code503List,
+        code503List: [...c503],
     };
 }

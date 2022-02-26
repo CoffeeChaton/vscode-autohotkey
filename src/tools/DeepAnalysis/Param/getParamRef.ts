@@ -2,9 +2,11 @@ import * as vscode from 'vscode';
 import {
     TAhkSymbol,
     TArgMap,
+    TC503,
     TTokenStream,
 } from '../../../globalEnum';
 import { ahkValRegex } from '../../regexTools';
+import { newC503 } from './diag/c503';
 
 export function getParamRef(
     argMap: TArgMap,
@@ -12,7 +14,7 @@ export function getParamRef(
     DocStrMap: TTokenStream,
     uri: vscode.Uri,
 ): void {
-    for (const [paramUpName, v] of argMap) {
+    for (const [paramUpName, ArgAnalysis] of argMap) {
         const startLine = ahkSymbol.selectionRange.end.line;
         for (const { lStr, line } of DocStrMap) {
             if (line <= startLine) continue;
@@ -25,7 +27,14 @@ export function getParamRef(
             );
 
             const loc = new vscode.Location(uri, range);
-            v.refLoc.push(loc);
+            ArgAnalysis.refLoc.push(loc);
+
+            const ParamNewName = lStr.substring(col, col + paramUpName.length);
+            const c503Err: TC503 | null = newC503(ArgAnalysis, ParamNewName, range);
+            if (c503Err) {
+                console.log('🚀 ~ c503Err', c503Err);
+                ArgAnalysis.c503List.push(c503Err);
+            }
         }
     }
 }
