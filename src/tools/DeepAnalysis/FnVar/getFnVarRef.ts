@@ -108,6 +108,9 @@ export function getFnVarRef(
         if (lStr.trim() === '') continue;
 
         regMap.forEach((reg, valName) => {
+            if (valName.toUpperCase() === 'PTR') {
+                console.log('🚀 ~ regMap.forEach ~ reg', reg);
+            }
             const matches = lStr.matchAll(reg);
             for (const o of matches) {
                 const newVal: TValAnalysis | null = getValRef({
