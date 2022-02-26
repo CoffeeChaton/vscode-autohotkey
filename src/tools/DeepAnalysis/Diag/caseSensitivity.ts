@@ -6,7 +6,7 @@ import { setDiagnosticDA } from '../../../provider/Diagnostic/setDiagnostic';
 import { setDiagCaseMsg } from './caseSensitivityMagic';
 
 export function caseSensitivityVar(valMap: TValMap, code502List: vscode.Diagnostic[]): vscode.Diagnostic[] {
-    if (code502List.length > getCode502Default()) {
+    if (code502List.length >= getCode502Default()) {
         return code502List;
     }
 
@@ -23,7 +23,7 @@ export function caseSensitivityVar(valMap: TValMap, code502List: vscode.Diagnost
             const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCodeDA.code502, range, severity, [], message);
 
             code502List.push(diag);
-            if (code502List.length > getCode502Default()) {
+            if (code502List.length >= getCode502Default()) {
                 return code502List;
             }
         }
@@ -32,9 +32,10 @@ export function caseSensitivityVar(valMap: TValMap, code502List: vscode.Diagnost
 }
 
 export function caseSensitivityParam(argMap: TArgMap, code503List: vscode.Diagnostic[]): vscode.Diagnostic[] {
-    if (code503List.length > getCode503Default()) {
+    if (code503List.length >= getCode503Default()) {
         return code503List;
     }
+
     // eslint-disable-next-line @typescript-eslint/naming-convention
     for (const [_, ArgAnalysis] of argMap) {
         const { c503List } = ArgAnalysis;
@@ -48,7 +49,7 @@ export function caseSensitivityParam(argMap: TArgMap, code503List: vscode.Diagno
             const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCodeDA.code503, range, severity, [], message);
 
             code503List.push(diag);
-            if (code503List.length > getCode502Default()) {
+            if (code503List.length >= getCode503Default()) {
                 return code503List;
             }
         }
