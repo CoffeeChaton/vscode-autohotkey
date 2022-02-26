@@ -231,7 +231,8 @@ export function FormatCore(
     }
 
     if (needDiff && hasDiff[0]) {
-        fmtReplaceWarn(timeStart, from);
+        const fileName = path.basename(document.uri.fsPath);
+        fmtReplaceWarn(timeStart, from, fileName);
 
         const rTextList: string[] = [];
         newTextList.forEach((v: vscode.TextEdit) => rTextList.push(v.newText));
@@ -240,7 +241,7 @@ export function FormatCore(
         const diffVar: DiffType = {
             leftText: AllDoc,
             rightText,
-            basename: path.basename(document.uri.fsPath),
+            fileName,
         };
         setTimeout(callDiff, 100, diffVar);
         // do not callDiff(diffVar);

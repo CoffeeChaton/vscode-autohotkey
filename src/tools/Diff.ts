@@ -6,10 +6,10 @@ import { EStr } from '../globalEnum';
 export type DiffType = {
     leftText: string;
     rightText: string;
-    basename: string; // path.basename(vscode.Uri.fsPath)
+    fileName: string; // path.basename(vscode.Uri.fsPath)
 };
 
-export async function callDiff({ leftText, rightText, basename }: DiffType): Promise<void> {
+export async function callDiff({ leftText, rightText, fileName: basename }: DiffType): Promise<void> {
     temp.track();
     const affixes: temp.AffixOptions = {
         prefix: EStr.diff_name_prefix,

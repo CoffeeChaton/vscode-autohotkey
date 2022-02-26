@@ -1,5 +1,5 @@
 {
-        "StrGet()": {
+    "StrGet()": {
         "prefix": "StrGet()",
         "body": "StrGet(${1:Address}, ${2:[Length]}, ${3:[Encoding = None]})",
         "description": "Copies a string from a memory address, optionally converting it from a given code page."
@@ -19,5 +19,5 @@
         "prefix": "StrReplace()",
         "body": "StrReplace(${1:Haystack}, ${2:SearchText [}, ${3:ReplaceText}, ${4:OutputVarCount}, ${5:Limit := -1]})",
         "description": "Replaces the specified substring with a new string."
-    },
+    }
 }

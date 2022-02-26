@@ -9,12 +9,16 @@ import { TFormatChannel, TPick } from '../globalEnum';
 import { FormatCore } from '../provider/Format/FormatProvider';
 import { getWorkspaceFolders } from '../tools/getWorkspaceFolders';
 
-async function formatByPathAsync(formatPath: string, options: vscode.FormattingOptions): Promise<void> {
+async function formatByPathAsync(
+    formatPath: string,
+    options: vscode.FormattingOptions,
+    jestTest: boolean,
+): Promise<void> {
     if (fs.statSync(formatPath).isDirectory()) {
         const files = fs.readdirSync(formatPath);
         for (const file of files) {
             if (!getIgnoredFolder(file)) {
-                await formatByPathAsync(`${formatPath}/${file}`, options);
+                await formatByPathAsync(`${formatPath}/${file}`, options, jestTest);
             }
         }
     } else if (!getIgnoredFile(formatPath)) {
@@ -29,10 +33,12 @@ async function formatByPathAsync(formatPath: string, options: vscode.FormattingO
             from: TFormatChannel.byFormatAllFile,
             needDiff: true,
         });
-        if (edits) {
-            const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
-            edit.set(Uri, edits);
-            await vscode.workspace.applyEdit(edit);
+        if (!jestTest) {
+            if (edits) {
+                const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
+                edit.set(Uri, edits);
+                await vscode.workspace.applyEdit(edit);
+            }
         }
     }
 }
@@ -75,16 +81,35 @@ async function setFormattingOptions(): Promise<vscode.FormattingOptions | null> 
     };
 }
 
+async function getJustTest(): Promise<boolean | null> {
+    type TJustTest = TPick<boolean>;
+    const items: TJustTest[] = [
+        { label: '1 -> just test format replace func <---bug now', fn: () => true },
+        { label: '2 -> need format all', fn: () => false },
+    ];
+    const jestTestPick = await vscode.window.showQuickPick<TJustTest>(items, {
+        title: 'this is Dev tools',
+    });
+
+    const jestTest = await jestTestPick?.fn();
+    if (jestTest === undefined) return null;
+
+    return jestTest;
+}
+
 export async function FormatAllFile(): Promise<null> {
     const ahkRootPath = getWorkspaceFolders();
     if (ahkRootPath === null) return null;
+
+    const jestTest = await getJustTest();
+    if (jestTest === null) return null;
 
     const options: vscode.FormattingOptions | null = await setFormattingOptions();
     if (options === null) return null;
 
     const timeStart = Date.now();
     for (const folder of ahkRootPath) {
-        await formatByPathAsync(folder.uri.fsPath, options);
+        await formatByPathAsync(folder.uri.fsPath, options, jestTest);
     }
     void vscode.window.showInformationMessage(`FormatAllFile ${Date.now() - timeStart}ms`);
     return null;
