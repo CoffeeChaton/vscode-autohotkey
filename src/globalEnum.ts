@@ -114,7 +114,7 @@ export type TGetFnDefNeed = {
 
 export type TC502 = {
     varName: string; // case sensitivity;
-    loc: vscode.Location;
+    range: vscode.Range;
 };
 
 export type TValAnalysis = {

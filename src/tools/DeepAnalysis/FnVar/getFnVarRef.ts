@@ -72,10 +72,11 @@ function getValRef(
         }
         const newStr = o[1];
         const oldStr: string | undefined = useVal?.keyRawName;
-        if (oldStr && oldStr !== newStr) {
+        // eslint-disable-next-line no-magic-numbers
+        if (oldStr && oldStr !== newStr && c502List.length < 5) {
             const C502: TC502 = {
                 varName: newStr,
-                loc: newRefLoc,
+                range: newRefLoc.range,
             };
             c502List.push(C502);
         }

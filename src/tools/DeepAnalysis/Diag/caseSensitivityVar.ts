@@ -22,7 +22,7 @@ export function caseSensitivityVar(valMap: TValMap, code502List: vscode.Diagnost
     for (const [_, ValAnalysis] of valMap) {
         const { c502List } = ValAnalysis;
         for (const C502 of c502List) {
-            const { range } = C502.loc;
+            const { range } = C502;
             const c502Name = C502.varName;
 
             const message = setMsg(ValAnalysis, c502Name);

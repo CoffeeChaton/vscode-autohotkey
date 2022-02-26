@@ -265,10 +265,10 @@
         "@typescript-eslint/eslint-plugin": "^5.12.1",
         "@typescript-eslint/parser": "^5.12.1",
         "@vscode/test-electron": "^2.1.2",
-        "dprint": "^0.22.2",
+        "dprint": "^0.23.0",
         "esbuild": "^0.14.23",
         "esbuild-copy-static-files": "^0.1.0",
-        "eslint": "^8.9.0",
+        "eslint": "^8.10.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-airbnb-typescript": "^16.1.0",
@@ -283,7 +283,7 @@
         "eslint-plugin-no-setter-return": "^0.1.2",
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-promise": "^6.0.0",
-        "eslint-plugin-react": "^7.28.0",
+        "eslint-plugin-react": "^7.29.1",
         "eslint-plugin-react-hooks": "^4.3.0",
         "eslint-plugin-security": "^1.4.0",
         "fs": "0.0.1-security",
@@ -296,12 +296,12 @@
         "vscode-languageserver-protocol": "^3.16.0",
         "vscode-languageserver-textdocument": "^1.0.4",
         "vscode-languageserver-types": "^3.16.0",
-        "vscode-oniguruma": "^1.6.1"
+        "vscode-oniguruma": "^1.6.2"
     },
     "dependencies": {
-        "@vscode/debugadapter": "^1.53.0",
-        "@vscode/debugprotocol": "^1.53.0",
-        "get-port-please": "^2.3.0",
+        "@vscode/debugadapter": "^1.54.0",
+        "@vscode/debugprotocol": "^1.54.0",
+        "get-port-please": "^2.4.2",
         "micromatch": "^4.0.4",
         "temp": "^0.9.4",
         "xml2js": "^0.4.23"

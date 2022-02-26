@@ -3,21 +3,10 @@ import { getGlobalValDef } from '../../../../core/getGlobalValDef';
 import {
     EValType,
     TAhkValType,
-    TC502,
     TValAnalysis,
     TValMap,
 } from '../../../../globalEnum';
-
-function newC502(oldVal: TValAnalysis, RawName: string, defLoc: vscode.Location): TC502[] {
-    if (oldVal.keyRawName !== RawName) {
-        const newWarn: TC502 = {
-            varName: RawName, // case sensitivity;
-            loc: defLoc,
-        };
-        return [...oldVal.c502List, newWarn];
-    }
-    return [...oldVal.c502List];
-}
+import { newC502 } from './diag/c502';
 
 type TGetValue = {
     RawName: string;
