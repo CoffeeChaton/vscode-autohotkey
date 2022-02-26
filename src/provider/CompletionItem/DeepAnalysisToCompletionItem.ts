@@ -7,13 +7,12 @@ import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import { kindPick } from '../../tools/Func/kindPick';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
 import { isPosAtStr } from '../../tools/isPosAtStr';
-import { getArgCompletion } from './getArgCompletion';
-import { getTextCompletion } from './getTextCompletion';
-import { getValCompletion } from './getValCompletion';
+import { suggest } from './DA/suggestSort';
 
 export function DeepAnalysisToCompletionItem(
     document: vscode.TextDocument,
     position: vscode.Position,
+    inputStr: string,
 ): vscode.CompletionItem[] {
     if (isPosAtStr(document, position)) return [];
 
@@ -26,10 +25,5 @@ export function DeepAnalysisToCompletionItem(
     const ed: null | DeepAnalysisResult = DeepAnalysis(document, ahkSymbol);
     if (!ed) return [];
 
-    const { argMap, valMap, textMap } = ed;
-    const argCompletion = getArgCompletion(argMap, ahkSymbol.name);
-    const valCompletion = getValCompletion(valMap, ahkSymbol.name);
-    const textCompletion = getTextCompletion(textMap, ahkSymbol.name);
-
-    return [...argCompletion, ...valCompletion, ...textCompletion];
+    return suggest(ed, ahkSymbol, position, inputStr);
 }

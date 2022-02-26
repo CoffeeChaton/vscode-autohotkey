@@ -637,103 +637,6 @@
         "body": "CapsLock"
     },
 
-    "F1": {
-        "prefix": "F1",
-        "body": "F1"
-    },
-    "F2": {
-        "prefix": "F2",
-        "body": "F2"
-    },
-    "F3": {
-        "prefix": "F3",
-        "body": "F3"
-    },
-    "F4": {
-        "prefix": "F4",
-        "body": "F4"
-    },
-    "F5": {
-        "prefix": "F5",
-        "body": "F5"
-    },
-    "F6": {
-        "prefix": "F6",
-        "body": "F6"
-    },
-    "F7": {
-        "prefix": "F7",
-        "body": "F7"
-    },
-    "F8": {
-        "prefix": "F8",
-        "body": "F8"
-    },
-    "F9": {
-        "prefix": "F9",
-        "body": "F9"
-    },
-    "F10": {
-        "prefix": "F10",
-        "body": "F10"
-    },
-    "F11": {
-        "prefix": "F11",
-        "body": "F11"
-    },
-    "F12": {
-        "prefix": "F12",
-        "body": "F12"
-    },
-    "F13": {
-        "prefix": "F13",
-        "body": "F13"
-    },
-    "F14": {
-        "prefix": "F14",
-        "body": "F14"
-    },
-    "F15": {
-        "prefix": "F15",
-        "body": "F15"
-    },
-    "F16": {
-        "prefix": "F16",
-        "body": "F16"
-    },
-    "F17": {
-        "prefix": "F17",
-        "body": "F17"
-    },
-    "F18": {
-        "prefix": "F18",
-        "body": "F18"
-    },
-    "F19": {
-        "prefix": "F19",
-        "body": "F19"
-    },
-    "F20": {
-        "prefix": "F20",
-        "body": "F20"
-    },
-    "F21": {
-        "prefix": "F21",
-        "body": "F21"
-    },
-    "F22": {
-        "prefix": "F22",
-        "body": "F22"
-    },
-    "F23": {
-        "prefix": "F23",
-        "body": "F23"
-    },
-    "F24": {
-        "prefix": "F24",
-        "body": "F24"
-    },
-
     "Volume_Mute": {
         "prefix": "Volume_Mute",
         "body": "Volume_Mute"
@@ -1306,30 +1209,7 @@
         "prefix": "Range",
         "body": "Range"
     },
-    "xm": {
-        "prefix": "xm",
-        "body": "xm"
-    },
-    "ym": {
-        "prefix": "ym",
-        "body": "ym"
-    },
-    "ys": {
-        "prefix": "ys",
-        "body": "ys"
-    },
-    "xs": {
-        "prefix": "xs",
-        "body": "xs"
-    },
-    "xp": {
-        "prefix": "xp",
-        "body": "xp"
-    },
-    "yp": {
-        "prefix": "yp",
-        "body": "yp"
-    },
+
     "Font": {
         "prefix": "Font",
         "body": "Font"
@@ -1726,70 +1606,7 @@
         "prefix": "Ln",
         "body": "Ln"
     },
-    "Round": {
-        "prefix": "Round",
-        "body": "Round"
-    },
-    "Ceil": {
-        "prefix": "Ceil",
-        "body": "Ceil"
-    },
-    "Floor": {
-        "prefix": "Floor",
-        "body": "Floor"
-    },
-    "Abs": {
-        "prefix": "Abs",
-        "body": "Abs"
-    },
-    "Sin": {
-        "prefix": "Sin",
-        "body": "Sin"
-    },
-    "Cos": {
-        "prefix": "Cos",
-        "body": "Cos"
-    },
-    "Tan": {
-        "prefix": "Tan",
-        "body": "Tan"
-    },
-    "ASin": {
-        "prefix": "ASin",
-        "body": "ASin"
-    },
-    "ACos": {
-        "prefix": "ACos",
-        "body": "ACos"
-    },
-    "ATan": {
-        "prefix": "ATan",
-        "body": "ATan"
-    },
-    "BitNot": {
-        "prefix": "BitNot",
-        "body": "BitNot"
-    },
-    "BitAnd": {
-        "prefix": "BitAnd",
-        "body": "BitAnd"
-    },
-    "BitOr": {
-        "prefix": "BitOr",
-        "body": "BitOr"
-    },
-    "BitXOr": {
-        "prefix": "BitXOr",
-        "body": "BitXOr"
-    },
-    "BitShiftLeft": {
-        "prefix": "BitShiftLeft",
-        "body": "BitShiftLeft"
-    },
-    "BitShiftRight": {
-        "prefix": "BitShiftRight",
-        "body": "BitShiftRight"
-    },
+
     "Yes": {
         "prefix": "Yes",
         "body": "Yes"

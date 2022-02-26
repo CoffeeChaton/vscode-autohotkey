@@ -2,15 +2,15 @@
 /* eslint-disable security/detect-non-literal-regexp */
 /* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
-import { Detecter } from '../../core/Detecter';
-import { EMode, TAhkSymbol, TSymAndFsPath } from '../../globalEnum';
-import { getScopeOfPos, getStack } from '../../tools/getScopeOfPos';
-import { getObjChapterArr } from '../../tools/Obj/getObjChapterArr';
-import { Pretreatment } from '../../tools/Pretreatment';
-import { ahkValDefRegex } from '../../tools/regexTools';
-import { kindCheck } from '../Def/kindCheck';
-import { ahkBaseUp, TAhkBaseObj } from './ahkBase';
-import { ahkBaseWrap } from './ahkBaseWrap';
+import { Detecter } from '../../../core/Detecter';
+import { EMode, TAhkSymbol, TSymAndFsPath } from '../../../globalEnum';
+import { getScopeOfPos, getStack } from '../../../tools/getScopeOfPos';
+import { getObjChapterArr } from '../../../tools/Obj/getObjChapterArr';
+import { Pretreatment } from '../../../tools/Pretreatment';
+import { ahkValDefRegex } from '../../../tools/regexTools';
+import { kindCheck } from '../../Def/kindCheck';
+import { ahkBaseUp, TAhkBaseObj } from '../ahkObj/ahkBase';
+import { ahkBaseWrap } from '../ahkObj/ahkBaseWrap';
 import { getWmThis } from './getWmThis';
 import { insertTextWm } from './insertTextWm';
 

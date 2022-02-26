@@ -1,16 +1,27 @@
 import * as vscode from 'vscode';
-import { TValMap } from '../../globalEnum';
+import { EStr, TValMap } from '../../../globalEnum';
 
 export function getValCompletion(
     valMap: TValMap,
     funcName: string,
+    suggestList: Set<string>,
 ): vscode.CompletionItem[] {
     const need: vscode.CompletionItem[] = [];
     valMap.forEach((v) => {
-        const item = new vscode.CompletionItem(v.keyRawName);
+        const { keyRawName } = v;
+        const isSuggest = suggestList.has(keyRawName);
+        const label = isSuggest
+            ? `${EStr.suggestStr} ${keyRawName}`
+            : keyRawName;
+
+        const item = new vscode.CompletionItem(label);
         item.kind = vscode.CompletionItemKind.Variable;
-        item.insertText = v.keyRawName;
+        item.insertText = keyRawName;
         item.detail = 'val (neko-help-DeepAnalysis)';
+        // if (isSuggest) {
+        //     const sortText = String.fromCharCode(0) + String.fromCharCode(1);
+        //     item.sortText = sortText;
+        // }
 
         const ref: string = v.refLoc
             .map((loc): string => `line ${loc.range.start.line + 1}, col ${loc.range.start.character + 1}  `)

@@ -21,6 +21,8 @@ export const enum EMode {
 
 export const enum EStr {
     diff_name_prefix = '_diff_temp_',
+    suggestStr = '✿',
+    neverStr = '▽',
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [P in keyof T]: DeepReadonly<T[P]> };

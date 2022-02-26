@@ -1,15 +1,16 @@
 import * as vscode from 'vscode';
-import { TTextMap } from '../../globalEnum';
+import { TTextMap } from '../../../globalEnum';
 
-export function getTextCompletion(
+export function getUnknownTextCompletion(
     textMap: TTextMap,
     funcName: string,
 ): vscode.CompletionItem[] {
     const need: vscode.CompletionItem[] = [];
     textMap.forEach((v) => {
-        const item = new vscode.CompletionItem(v.keyRawName);
+        const { keyRawName } = v;
+        const item = new vscode.CompletionItem(keyRawName);
         item.kind = vscode.CompletionItemKind.Text;
-        item.insertText = v.keyRawName;
+        item.insertText = keyRawName;
         item.detail = 'unknown text (neko-help-DeepAnalysis)';
 
         const ref: string = v.refLoc

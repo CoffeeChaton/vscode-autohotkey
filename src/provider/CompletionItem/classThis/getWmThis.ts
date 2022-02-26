@@ -1,10 +1,7 @@
 import * as vscode from 'vscode';
-import { TAhkSymbol, TSymAndFsPath } from '../../globalEnum';
-import { Pretreatment } from '../../tools/Pretreatment';
-import { ClassWm } from '../../tools/wm';
-
-// eslint-disable-next-line no-magic-numbers
-const w = new ClassWm<TAhkSymbol, vscode.CompletionItem[]>(10 * 60 * 1000, 'getThisItemOfWm', 700);
+import { TAhkSymbol, TSymAndFsPath } from '../../../globalEnum';
+import { Pretreatment } from '../../../tools/Pretreatment';
+import { ClassWm } from '../../../tools/wm';
 
 async function getWmThisCore({ ahkSymbol, fsPath }: TSymAndFsPath): Promise<vscode.CompletionItem[]> {
     const document = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
@@ -29,6 +26,9 @@ async function getWmThisCore({ ahkSymbol, fsPath }: TSymAndFsPath): Promise<vsco
     });
     return itemS;
 }
+
+// eslint-disable-next-line no-magic-numbers
+const w = new ClassWm<TAhkSymbol, vscode.CompletionItem[]>(10 * 60 * 1000, 'getThisItemOfWm', 700);
 
 export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionItem[]> {
     const { ahkSymbol, fsPath } = c0;
