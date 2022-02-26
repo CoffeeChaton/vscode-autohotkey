@@ -31,10 +31,7 @@ export function getParamRef(
 
             const ParamNewName = lStr.substring(col, col + paramUpName.length);
             const c503Err: TC503 | null = newC503(ArgAnalysis, ParamNewName, range);
-            if (c503Err) {
-                console.log('🚀 ~ c503Err', c503Err);
-                ArgAnalysis.c503List.push(c503Err);
-            }
+            if (c503Err) ArgAnalysis.c503List.push(c503Err);
         }
     }
 }
