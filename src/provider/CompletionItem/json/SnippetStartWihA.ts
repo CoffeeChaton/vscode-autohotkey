@@ -18,7 +18,7 @@ export function snippetStartWihA(): vscode.CompletionItem[] {
         // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
         item.kind = vscode.CompletionItemKind.Variable;
         item.insertText = k;
-        item.filterText = 'A_';
+        // item.filterText = 'A_';
         item.detail = 'Built-in Variables (neko-help)'; // description
         const md = new vscode.MarkdownString('', true)
             .appendCodeblock(k, 'ahk')
