@@ -79,7 +79,7 @@ export const Detecter = {
         const gValMapBySelf: TGValMap = new Map<TValUpName, TGlobalVal[]>();
 
         const DocStrMap = Pretreatment(document.getText().split('\n'), 0);
-        const result: TAhkSymbolList = getChildren({
+        const AhkSymbolList: TAhkSymbolList = getChildren({
             gValMapBySelf,
             Uri,
             DocStrMap,
@@ -98,12 +98,12 @@ export const Detecter = {
 
         if (!fsPath.includes(EStr.diff_name_prefix)) {
             if (showMsg) showTimeSpend(document.uri, timeStart);
-            Detecter.DocMap.set(fsPath, result);
+            Detecter.DocMap.set(fsPath, AhkSymbolList);
             globalValMap.set(fsPath, gValMapBySelf);
-            baseDiagnostic(DocStrMap, result, Uri, diagColl);
-            if (useDeepAnalysis) diagDAFile(result, document, Uri);
+            baseDiagnostic(DocStrMap, AhkSymbolList, Uri, diagColl);
+            if (useDeepAnalysis) diagDAFile(AhkSymbolList, document, Uri);
         }
-        return result as vscode.DocumentSymbol[];
+        return AhkSymbolList as vscode.DocumentSymbol[];
     },
 };
 

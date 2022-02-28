@@ -16,6 +16,7 @@ export function diagDACore(DA: DeepAnalysisResult, DiagDA: TDiagDA): TDiagDA {
         code501List,
         code502List,
         code503List,
+        code504List,
     } = DiagDA;
     // TODO weakMap && let getCode502Default() to here
     const c501: vscode.Diagnostic[] = paramNeverUsed(DA.argMap);
@@ -26,6 +27,6 @@ export function diagDACore(DA: DeepAnalysisResult, DiagDA: TDiagDA): TDiagDA {
         code501List: [...code501List, ...c501],
         code502List: [...c502],
         code503List: [...c503],
-        code504List: [...c504],
+        code504List: [...code504List, ...c504],
     };
 }
