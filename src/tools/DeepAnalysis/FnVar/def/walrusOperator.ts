@@ -28,7 +28,7 @@ export function walrusOperator({
         const defLoc = new vscode.Location(uri, range);
 
         const value: TValAnalysis = wrapFnValDef({
-            RawName,
+            RawNameNew: RawName,
             valMap,
             defLoc,
             lineType,
@@ -36,4 +36,4 @@ export function walrusOperator({
         valMap.set(UpName, value);
     }
 }
-// FIXME:     text := LT_bgColor_N := set_list := wait_time := Percentage := "Discard" ;clean
+// Test OK     text := LT_bgColor_N := set_list := wait_time := Percentage := "Discard" ;clean

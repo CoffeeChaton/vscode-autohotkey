@@ -29,7 +29,7 @@ export function varSetCapacityFunc({
         const defLoc = new vscode.Location(uri, range);
 
         const value: TValAnalysis = wrapFnValDef({
-            RawName,
+            RawNameNew: RawName,
             valMap,
             defLoc,
             lineType,

@@ -28,8 +28,8 @@ export function DeepAnalysisHover(
     const value = ed.valMap.get(word);
     if (value) {
         const {
-            refLoc,
-            defLoc,
+            refLocList: refLoc,
+            defLocList: defLoc,
             ahkValType,
         } = value;
         const typeValType = getAhkTypeName(ahkValType);

@@ -39,20 +39,20 @@ function wrapper(
     }
     const valList = valMap.get(wordUp);
     if (valList) {
-        if (listAllUsing) return [...valList.defLoc, ...valList.refLoc];
+        if (listAllUsing) return [...valList.defLocList, ...valList.refLocList];
         // <
         // when I open "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
         // why vscode can't Identify loc.range.contains(position)
         //      , and auto let F12 -> shift F12 ?
         //           (auto let goto Def -> Ref)
         // What else do I need to read?
-        for (const loc of valList.defLoc) {
+        for (const loc of valList.defLocList) {
             if (loc.range.contains(position)) {
-                return [...valList.defLoc, ...valList.refLoc];
+                return [...valList.defLocList, ...valList.refLocList];
             }
         }
         // >
-        return valList.defLoc;
+        return valList.defLocList;
     }
     const textList = textMap.get(wordUp);
     if (textList) {

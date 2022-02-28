@@ -48,10 +48,10 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
 my project:
 
 Deep Analysis All Files
-Deep Analysis : 809 Symbol
+Deep Analysis : 809 Symbol <--keep 809!
 argMapSize is 2231 <--keep 2231!
 valMapSize is 2050
 textMapSize is 2921 <- next plan: ignore keyWord.
 All Size is 7202
-Done in 491 ms
+Done in 370~430 ms
 */

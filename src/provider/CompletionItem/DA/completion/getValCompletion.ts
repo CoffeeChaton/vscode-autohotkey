@@ -15,8 +15,8 @@ export function getValCompletion(
     valMap.forEach((v) => {
         const {
             keyRawName,
-            refLoc,
-            defLoc,
+            refLocList: refLoc,
+            defLocList: defLoc,
             ahkValType,
         } = v;
         const typeValType = getAhkTypeName(ahkValType);

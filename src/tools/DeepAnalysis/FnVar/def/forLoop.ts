@@ -20,7 +20,7 @@ function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {
     const defLoc = new vscode.Location(uri, range);
 
     const value: TValAnalysis = wrapFnValDef({
-        RawName,
+        RawNameNew: RawName,
         valMap,
         defLoc,
         lineType,

@@ -22,7 +22,7 @@ export function getContextRange(position: vscode.Position, ahkSymbol: TAhkSymbol
 export function setVarRec(Rec: TSnippetRecMap, valMap: TValMap, inputStr: string, contextRange: vscode.Range): void {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     for (const [_upName, ValAnalysis] of valMap) {
-        const { defLoc, refLoc, keyRawName } = ValAnalysis;
+        const { defLocList: defLoc, refLocList: refLoc, keyRawName } = ValAnalysis;
 
         const defNear = defLoc.find((loc) => contextRange.contains(loc.range));
         if (defNear) {

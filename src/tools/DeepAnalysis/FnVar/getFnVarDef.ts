@@ -59,7 +59,7 @@ export function getFnVarDef(
         // eslint-disable-next-line no-magic-numbers
         if (lStr.trim().length < 2) continue; // a=b need length >=3
 
-        const lineType: TAhkValType = getLineType(lStr, fnMode);
+        const lineType: TAhkValType = getLineType(lStr, fnMode); // TODO fix , at line first, we should use line coloring.
         const need: TGetFnDefNeed = {
             lStr,
             valMap,
@@ -71,6 +71,7 @@ export function getFnVarDef(
         walrusOperator(need); // :=
         varSetCapacityFunc(need); // VarSetCapacity(varName)
         forLoop(need); // for var1 , var2 in
+        // TODO just `global variableName`, but not :=
     }
 
     return valMap;

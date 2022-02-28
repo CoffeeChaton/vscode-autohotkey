@@ -21,7 +21,7 @@ export function getFnVarMain(
         argMap,
     });
 
-    const valMap2 = getFnVarRef(uri, ahkSymbol, DocStrMap, valMap);
+    getFnVarRef(uri, ahkSymbol, DocStrMap, valMap);
 
-    return valMap2;
+    return valMap;
 }
