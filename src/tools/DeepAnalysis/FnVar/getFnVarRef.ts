@@ -37,7 +37,9 @@ function getValRef(param: TNeedSetRef): void {
     const oldVal: TValAnalysis | undefined = valMap.get(valUpName);
 
     if (oldVal === undefined || character === undefined) {
-        console.error('🚀 ~ WTF getValRef ~ valUpName', valUpName);
+        const msg = '🚀 ~ ERROR OF getValRef--40--71-33 oldVal === undefined || character === undefined';
+        console.error('🚀 ~ WTF getValRef ~ valUpName', valUpName, oldVal);
+        void vscode.window.showErrorMessage(msg);
         // WTF ???
         return;
     }
@@ -66,8 +68,7 @@ export function getFnVarRef(
         if (lStr.trim() === '') continue;
 
         for (const [valUpName, reg] of regMap) {
-            const matches = lStr.matchAll(reg);
-            for (const o of matches) {
+            for (const o of lStr.matchAll(reg)) {
                 getValRef({
                     valMap,
                     o,
