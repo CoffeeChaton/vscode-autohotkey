@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { diagColl } from '../../../core/diag/diagRoot';
-import { TAhkSymbolList } from '../../../globalEnum';
+import { EDiagBase, TAhkSymbolList } from '../../../globalEnum';
 import { DeepAnalysis } from '../DeepAnalysis';
 import { diagDACore, TDiagDA } from './diagDACore';
 
@@ -20,7 +20,8 @@ export function diagDAFile(
             DiagDA = diagDACore(DA, DiagDA);
         }
     }
-    const baseDiag: readonly vscode.Diagnostic[] = diagColl.get(Uri) || [];
+    const baseAll = diagColl.get(Uri) || [];
+    const baseDiag = baseAll.filter((v) => v.source !== EDiagBase.sourceDA);
     diagColl.set(Uri, [
         ...baseDiag,
         ...DiagDA.code501List,
