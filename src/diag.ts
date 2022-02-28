@@ -23,6 +23,7 @@ export const enum EDiagCodeDA {
     code501 = 501, // param is assigned but never used.
     code502 = 502, // var case sensitivity
     code503 = 503, // param case sensitivity
+    code504 = 504, // Variadic param * >1
 }
 
 export type TDiagsDA = {
@@ -44,6 +45,10 @@ export const DiagsDA: DeepReadonly<TDiagsDA> = {
     503: {
         msg: 'param case sensitivity',
         path: 'https://www.autohotkey.com/docs/Concepts.htm#names',
+    },
+    504: {
+        msg: 'Note: The "variadic" parameter can only appear at the end of the formal parameter list.',
+        path: 'https://www.autohotkey.com/docs/Functions.htm#Variadic',
     },
 };
 

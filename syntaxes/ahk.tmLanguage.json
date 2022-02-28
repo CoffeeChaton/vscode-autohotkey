@@ -169,6 +169,10 @@
                         {
                             "match": ":=|=",
                             "name": "keyword.operator.assignment.ahk"
+                        },
+                        {
+                            "match": "(?i:\\bbyref\\b)",
+                            "name": "keyword.other.byref.ahk"
                         }
                     ]
                 },

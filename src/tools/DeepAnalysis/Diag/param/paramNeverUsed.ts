@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { DiagsDA, EDiagCodeDA } from '../../../diag';
-import { TArgMap } from '../../../globalEnum';
-import { setDiagnosticDA } from '../../../provider/Diagnostic/setDiagnostic';
+import { DiagsDA, EDiagCodeDA } from '../../../../diag';
+import { TArgMap } from '../../../../globalEnum';
+import { setDiagnosticDA } from '../../../../provider/Diagnostic/setDiagnostic';
 
 export function paramNeverUsed(argMap: TArgMap): vscode.Diagnostic[] {
     const diagS: vscode.Diagnostic[] = [];

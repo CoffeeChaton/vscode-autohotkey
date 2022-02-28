@@ -13,6 +13,7 @@ export function diagDAFile(
         code501List: [],
         code502List: [],
         code503List: [],
+        code504List: [],
     };
     for (const ahkSymbol of AhkSymbolList) {
         const DA = DeepAnalysis(document, ahkSymbol);
@@ -27,5 +28,6 @@ export function diagDAFile(
         ...DiagDA.code501List,
         ...DiagDA.code502List,
         ...DiagDA.code503List,
+        ...DiagDA.code504List,
     ]);
 }
