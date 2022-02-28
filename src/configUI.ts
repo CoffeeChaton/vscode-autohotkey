@@ -46,6 +46,7 @@ function getConfig(): TConfigs {
                 code503: Configs.get('Diag.WarningCap.code503') as number ?? 3, // of param
             },
         },
+        openUriStr: Configs.get('open.Documents.Uri') as string,
         // TODO CompletionIgnore
     } as const;
 
@@ -127,6 +128,9 @@ export function getCode503Default(): number {
     return config.Diag.WarningCap.code503;
 }
 
+export function getDocUriStr(): string {
+    return config.openUriStr;
+}
 // vscode.window.setStatusBarMessage(timeSpend);
 // vscode.window.showErrorMessage()
 // vscode.window.showInformationMessage()

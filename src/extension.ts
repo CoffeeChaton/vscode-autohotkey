@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { statusBarClick } from './command/Command';
+import { openDocs, statusBarClick } from './command/Command';
 import { UpdateCache } from './command/UpdateCache';
 import { configChangEvent } from './configUI';
 import { Detecter } from './core/Detecter';
@@ -20,29 +20,27 @@ import { SymBolProvider } from './provider/SymbolProvider';
 export function activate(context: vscode.ExtensionContext): void {
     const language: vscode.DocumentSelector = { language: 'ahk' };
     context.subscriptions.push(
-        vscode.languages.registerHoverProvider(language, new HoverProvider()),
+        vscode.languages.registerCodeActionsProvider(language, new CodeActionProvider()),
         vscode.languages.registerCompletionItemProvider(language, new CompletionItemProvider(), '', '.', '{'),
         vscode.languages.registerDefinitionProvider(language, new DefProvider()),
-        vscode.languages.registerReferenceProvider(language, new ReferenceProvider()),
-        vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
         vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
         vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
+        vscode.languages.registerDocumentSymbolProvider(language, new SymBolProvider()),
+        vscode.languages.registerHoverProvider(language, new HoverProvider()),
         vscode.languages.registerOnTypeFormattingEditProvider(language, new OnTypeFormattingEditProvider(), '\n'),
+        vscode.languages.registerReferenceProvider(language, new ReferenceProvider()),
         vscode.languages.registerRenameProvider(language, new RenameProvider()),
         // vscode.languages.registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', ','),
-        vscode.languages.registerCodeActionsProvider(language, new CodeActionProvider()),
         vscode.workspace.onDidChangeConfiguration((): void => configChangEvent()),
         vscode.workspace.onDidDeleteFiles((e): void => Detecter.delMap(e)),
         vscode.workspace.onDidCreateFiles((e): void => Detecter.createMap(e)),
-        vscode.workspace.onDidRenameFiles((e): void => Detecter.renameFileName(e)),
-        vscode.workspace.onDidCloseTextDocument((document: vscode.TextDocument) => {
-            const { fsPath } = document.uri;
-            onClosetDocClearDiag(fsPath);
+        vscode.workspace.onDidRenameFiles((e): void => Detecter.renameFileName(e)), // just support rename, not support Move
+        vscode.workspace.onDidCloseTextDocument((document: vscode.TextDocument): void => {
+            void onClosetDocClearDiag(document.uri.fsPath);
         }),
         // vscode.workspace.onDidChangeTextDocument((e) => d(e)),
-        vscode.commands.registerCommand('ahk.bar.click', (): void => {
-            void statusBarClick();
-        }),
+        vscode.commands.registerCommand('ahk.bar.click', (): void => void statusBarClick()),
+        vscode.commands.registerCommand('ahk.nekoHelp.openDoc', (): void => void openDocs()),
         vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
     );
     UpdateCache();

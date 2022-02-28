@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import { Pretreatment } from '../tools/Pretreatment';
 
-export async function renameFn(oldUri: vscode.Uri, newUri: vscode.Uri, fsPathList: string[]): Promise<void> {
+export async function renameFileNameFunc(oldUri: vscode.Uri, newUri: vscode.Uri, fsPathList: string[]): Promise<void> {
     const oldFileName = path.basename(oldUri.fsPath, '.ahk');
     const newFileName = path.basename(newUri.fsPath, '.ahk');
     const RegexInclude = /^\s*#Include(?:Again)?\s+/ui;

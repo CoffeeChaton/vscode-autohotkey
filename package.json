@@ -119,6 +119,10 @@
             {
                 "command": "ahk.bar.click",
                 "title": "ahk:List all ahk-neko-help command"
+            },
+            {
+                "command": "ahk.nekoHelp.openDoc",
+                "title": "open docs"
             }
         ],
         "configuration": {
@@ -129,6 +133,11 @@
                     "type": "string",
                     "default": "C:/Program Files/AutoHotkey/AutoHotkeyU64.exe",
                     "description": "Execute path of autohotkey."
+                },
+                "AhkNekoHelp.open.Documents.Uri": {
+                    "type": "string",
+                    "default": "https://www.autohotkey.com/docs/AutoHotkey.htm",
+                    "description": "the doc uri"
                 },
                 "AhkNekoHelp.Diag.WarningCap.code502": {
                     "type": "number",
@@ -204,7 +213,7 @@
                 "AhkNekoHelp.statusBar.displayColor": {
                     "type": "string",
                     "default": "",
-                    "description": "color of status bar, use '' to use theme color,or use HTML Color, exp: '#e783e1' or 'rgb(255,255,100)"
+                    "description": "color of status bar, use HTML Color, exp: '#e783e1' or 'rgb(255,255,100)"
                 }
             }
         },
@@ -239,6 +248,13 @@
             {
                 "language": "ahk",
                 "path": "./snippets/ahk.snippets.json"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "ahk.nekoHelp.openDoc",
+                "key": "ctrl+f1",
+                "when": "editorLangId == ahk"
             }
         ]
     },

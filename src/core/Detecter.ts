@@ -22,7 +22,7 @@ import { getChildren } from './getChildren';
 import { globalValMap } from './globalValMap';
 import { getReturnByLine, ParserBlock } from './Parser';
 import { ParserLine } from './ParserLine';
-import { renameFn as renameFileNameFunc } from './renameFileNameFunc';
+import { renameFileNameFunc } from './renameFileNameFunc';
 
 export const Detecter = {
     // key : vscode.Uri.fsPath,
@@ -59,12 +59,14 @@ export const Detecter = {
 
     renameFileName(e: vscode.FileRenameEvent): void {
         for (const { oldUri, newUri } of e.files) {
-            if (oldUri.fsPath.endsWith('.ahk') && newUri.fsPath.endsWith('.ahk')) {
+            if (oldUri.fsPath.endsWith('.ahk')) {
                 Detecter.DocMap.delete(oldUri.fsPath);
                 diagColl.delete(oldUri);
-                void Detecter.updateDocDef(false, newUri.fsPath, true);
-                const fsPathList = Detecter.getDocMapFile();
-                void renameFileNameFunc(oldUri, newUri, [...fsPathList]);
+                if (newUri.fsPath.endsWith('.ahk')) {
+                    void Detecter.updateDocDef(false, newUri.fsPath, true);
+                    const fsPathList = Detecter.getDocMapFile();
+                    void renameFileNameFunc(oldUri, newUri, [...fsPathList]);
+                } // else EXP : let a.ahk -> a.ahk0 or a.0ahk
             }
         }
     },

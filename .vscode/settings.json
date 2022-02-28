@@ -65,5 +65,8 @@
         "extensions.json": "jsonc",
         "settings.json": "jsonc",
         "tsconfig.json": "jsonc"
-    }
+    },
+    "cSpell.words": [
+        "HKLM"
+    ]
 }

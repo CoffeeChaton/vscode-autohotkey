@@ -8,7 +8,6 @@ function textReplace(textElement: string): string {
         // .replace(/ *== */g, ' == ') test err
         // .replace(/ *>= */g, ' >= ') test err
         // .replace(/ *<= */g, ' <= ') test err
-        // TODO .replace(/ *== */g, ' == ')
         .replace(/ *\.= */ug, ' .= ')
         .replace(/ *\+= */ug, ' += ')
         .replace(/ *-= */ug, ' -= ')

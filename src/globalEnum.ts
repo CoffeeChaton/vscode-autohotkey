@@ -21,8 +21,12 @@ export const enum EMode {
 
 export const enum EStr {
     diff_name_prefix = '_diff_temp_',
-    suggestStr = ' ✿',
+    suggestStr = '✿',
     neverStr = '▽',
+}
+export const enum EUri {
+    ahkDoc = 'https://www.autohotkey.com/docs/',
+    nekoHelpHome = 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp',
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [P in keyof T]: DeepReadonly<T[P]> };
@@ -102,7 +106,7 @@ export type TArgAnalysis = {
     refLoc: vscode.Location[];
 
     isByRef: boolean;
-    isVariadic: boolean;
+    isVariadic: boolean; // https://www.autohotkey.com/docs/Functions.htm#Variadic  // TODO DIAG *is last
     c503List: TC503[];
 };
 export type TArgMap = Map<string, TArgAnalysis>; // k = valNameUP
@@ -174,6 +178,7 @@ type TempConfigs = {
             code503: number; // of param
         };
     };
+    openUriStr: string; //
 };
 export type TConfigs = DeepReadonly<TempConfigs>;
 
@@ -193,3 +198,18 @@ export type TPick<TNeed> = {
     label: string;
     fn: () => TNeed;
 };
+
+export const enum ETime {
+    SnippetStartWihA = 5000, // delay 5 sec
+}
+
+export const enum ESnippetRecBecause {
+    paramNeverUsed = 'param is assigned but never used.\n\n',
+    paramStartWith = 'param start with(Case Sensitive)\n\n',
+    varDefNear = 'Def within the 5 lines\n\n',
+    varRefNear = 'Ref within the 5 lines\n\n',
+    varStartWith = 'var start with(Case Sensitive)\n\n',
+}
+
+export type TKeyRawName = string;
+export type TSnippetRecMap = Map<TKeyRawName, ESnippetRecBecause>;

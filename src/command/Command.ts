@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { getDocUriStr } from '../configUI';
 import { TPick } from '../globalEnum';
 import { DeepAnalysisAllFiles } from './DeepAnalysisAllFiles';
 import { DevLoopOfClearOutlineCache } from './DevMode';
@@ -28,4 +29,14 @@ export async function statusBarClick(): Promise<void> {
     const pick = await vscode.window.showQuickPick<TCommand>(items);
 
     void pick?.fn();
+}
+
+export function openDocs(): void {
+    const Uri: vscode.Uri = vscode.Uri.parse(getDocUriStr());
+    void vscode.commands.executeCommand(
+        'vscode.open',
+        Uri,
+    );
+    //  .vscode.open();
+    // this.run(await this.createTemplate(text));
 }
