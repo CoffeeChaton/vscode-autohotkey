@@ -33,6 +33,7 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
         argMap,
         valMap,
         textMap,
+        funcRawName: ahkSymbol.name,
     };
 
     return w.setWm(ahkSymbol, v);

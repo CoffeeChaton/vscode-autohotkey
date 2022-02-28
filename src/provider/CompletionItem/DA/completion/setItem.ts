@@ -4,7 +4,7 @@ import {
     EStr,
     TSnippetRecMap,
 } from '../../../../globalEnum';
-import { setMD } from './setMD';
+import { setMD } from '../../../../tools/setMD';
 
 type TSetItem = {
     prefix: string;

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ESnippetRecBecause } from '../../../../globalEnum';
+import { ESnippetRecBecause } from '../globalEnum';
 
 export function setMD(
     prefix: string,

@@ -3,6 +3,7 @@ import {
     TSnippetRecMap,
     TValMap,
 } from '../../../../globalEnum';
+import { getAhkTypeName } from '../../../Hover/getAhkTypeName';
 import { setItemCore } from './setItem';
 
 export function getValCompletion(
@@ -12,9 +13,15 @@ export function getValCompletion(
 ): vscode.CompletionItem[] {
     const need: vscode.CompletionItem[] = [];
     valMap.forEach((v) => {
-        const { keyRawName, refLoc, defLoc } = v;
+        const {
+            keyRawName,
+            refLoc,
+            defLoc,
+            ahkValType,
+        } = v;
+        const typeValType = getAhkTypeName(ahkValType);
         const item: vscode.CompletionItem = setItemCore({
-            prefix: 'var',
+            prefix: `${typeValType} var`,
             recMap,
             keyRawName,
             funcName,

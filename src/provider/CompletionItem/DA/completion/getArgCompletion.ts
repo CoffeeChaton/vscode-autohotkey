@@ -3,6 +3,7 @@ import {
     TArgMap,
     TSnippetRecMap,
 } from '../../../../globalEnum';
+import { setPreFix } from '../../../../tools/setPreFix';
 import { setItemCore } from './setItem';
 
 export function getParamCompletion(
@@ -29,15 +30,4 @@ export function getParamCompletion(
     });
 
     return need;
-}
-
-function setPreFix(isByRef: boolean, isVariadic: boolean): string {
-    const ByRef = isByRef
-        ? 'ByRef '
-        : '';
-    const Variadic = isVariadic
-        ? 'Variadic '
-        : '';
-
-    return `${ByRef}${Variadic}param`;
 }

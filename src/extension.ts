@@ -12,7 +12,7 @@ import { DefProvider } from './provider/Def/DefProvider';
 import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
-import { HoverProvider } from './provider/HoverProvider';
+import { HoverProvider } from './provider/Hover/HoverProvider';
 import { ReferenceProvider } from './provider/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
 import { SymBolProvider } from './provider/SymbolProvider';

@@ -144,6 +144,7 @@ export type DeepAnalysisResult = {
     argMap: TArgMap;
     valMap: TValMap;
     textMap: TTextMap;
+    funcRawName: string;
 };
 
 type TempConfigs = {

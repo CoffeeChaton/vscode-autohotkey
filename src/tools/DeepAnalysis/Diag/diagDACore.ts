@@ -14,6 +14,7 @@ export function diagDACore(DA: DeepAnalysisResult, DiagDA: TDiagDA): TDiagDA {
         code502List,
         code503List,
     } = DiagDA;
+    // TODO weakMap && let getCode502Default() to here
     const c501: vscode.Diagnostic[] = paramNeverUsed(DA.argMap);
     const c502: vscode.Diagnostic[] = caseSensitivityVar(DA.valMap, code502List); // var case sensitivity
     const c503: vscode.Diagnostic[] = caseSensitivityParam(DA.argMap, code503List);

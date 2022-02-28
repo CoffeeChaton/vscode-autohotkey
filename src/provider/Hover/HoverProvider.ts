@@ -4,14 +4,14 @@ import {
     DeepAnalysisResult,
     EMode,
     TAhkSymbol,
-} from '../globalEnum';
-import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
-import { getFnOfPos } from '../tools/getScopeOfPos';
-import { isPosAtStr } from '../tools/isPosAtStr';
-import { setFuncHoverMD } from '../tools/setHoverMD';
-import { ClassWm } from '../tools/wm';
-import { tryGetSymbol } from './Def/DefProvider';
-import { DeepAnalysisHover } from './Hover/DeepAnalysisHover';
+} from '../../globalEnum';
+import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
+import { getFnOfPos } from '../../tools/getScopeOfPos';
+import { isPosAtStr } from '../../tools/isPosAtStr';
+import { setFuncHoverMD } from '../../tools/setHoverMD';
+import { ClassWm } from '../../tools/wm';
+import { tryGetSymbol } from '../Def/DefProvider';
+import { DeepAnalysisHover } from './DeepAnalysisHover';
 
 // eslint-disable-next-line no-magic-numbers
 const wm = new ClassWm<TAhkSymbol, vscode.Hover>(10 * 60 * 1000, 'HoverFunc', 60);
