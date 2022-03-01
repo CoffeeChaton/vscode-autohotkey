@@ -36,11 +36,11 @@ function getNeed(param: string, uri: vscode.Uri, line: number, lStr: string): nu
     );
     return {
         keyRawName,
-        defLoc: [new vscode.Location(uri, range)],
-        refLoc: [],
+        defLocList: [new vscode.Location(uri, range)],
+        refLocList: [],
         isByRef,
         isVariadic,
-        c503List: [],
+        c502Array: [0],
     };
 }
 

@@ -4,38 +4,35 @@ import { setMD } from '../../tools/setMD';
 import { setPreFix } from '../../tools/setPreFix';
 import { getAhkTypeName } from './getAhkTypeName';
 
-/**
- * @param word  word.toUpperCase()
- */
 export function DeepAnalysisHover(
     ed: DeepAnalysisResult,
-    word: string,
+    wordUp: string,
 ): vscode.MarkdownString | null {
     const funcName = ed.funcRawName;
 
-    const arg: TArgAnalysis | undefined = ed.argMap.get(word);
+    const arg: TArgAnalysis | undefined = ed.argMap.get(wordUp);
     if (arg) {
         const {
             isByRef,
             isVariadic,
-            refLoc,
-            defLoc,
+            refLocList,
+            defLocList,
         } = arg;
         const prefix = setPreFix(isByRef, isVariadic);
-        return setMD(prefix, refLoc, defLoc, funcName, null);
+        return setMD(prefix, refLocList, defLocList, funcName, null);
     }
 
-    const value = ed.valMap.get(word);
+    const value = ed.valMap.get(wordUp);
     if (value) {
         const {
-            refLocList: refLoc,
-            defLocList: defLoc,
+            refLocList,
+            defLocList,
             ahkValType,
         } = value;
         const typeValType = getAhkTypeName(ahkValType);
         const prefix = `${typeValType} var`;
 
-        return setMD(prefix, refLoc, defLoc, funcName, null);
+        return setMD(prefix, refLocList, defLocList, funcName, null);
     }
 
     return null;

@@ -1,10 +1,14 @@
 /* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
-import { DeepAnalysisResult } from '../../globalEnum';
+import { DeepAnalysisResult, TArgAnalysis, TValAnalysis } from '../../globalEnum';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
 
-function DeepAnalysisRename(document: vscode.TextDocument, position: vscode.Position, word: string): vscode.Location[] {
+function DeepAnalysisRename(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    wordUp: string,
+): vscode.Location[] {
     const ahkSymbol = getFnOfPos(document, position);
     if (!ahkSymbol) return [];
 
@@ -13,13 +17,15 @@ function DeepAnalysisRename(document: vscode.TextDocument, position: vscode.Posi
 
     const loc: vscode.Location[] = [];
 
-    const argLoc = ed.argMap.get(word);
-    if (argLoc) {
-        loc.push(...argLoc.defLoc, ...argLoc.refLoc);
+    const argMap: TArgAnalysis | undefined = ed.argMap.get(wordUp);
+    if (argMap) {
+        loc.push(...argMap.defLocList, ...argMap.refLocList);
     }
 
-    // const locList = ed.valMap.get(word);
-    // TODO i need to fix lStr.
+    const valMap: TValAnalysis | undefined = ed.valMap.get(wordUp);
+    if (valMap) {
+        loc.push(...valMap.defLocList, ...valMap.refLocList);
+    }
 
     return loc;
 }
@@ -39,7 +45,10 @@ export class RenameProvider implements vscode.RenameProvider {
         const edit = new vscode.WorkspaceEdit();
         const locList = DeepAnalysisRename(document, position, word.toUpperCase());
         for (const loc of locList) {
-            edit.replace(loc.uri, loc.range, newName);
+            edit.replace(loc.uri, loc.range, newName, {
+                needsConfirmation: true,
+                label: 'is test now',
+            });
         }
         // const fnRenameList = fnRename()
         return edit;

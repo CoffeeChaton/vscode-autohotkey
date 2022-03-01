@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
-import { buildByPath, buildByPathAsync, Detecter } from '../core/Detecter';
+import { buildByPath } from '../core/buildByPath';
+import { buildByPathAsync } from '../core/buildByPathAsync';
+import { Detecter } from '../core/Detecter';
 import { getWorkspaceFolders } from '../tools/getWorkspaceFolders';
 
 export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {

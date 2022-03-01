@@ -23,7 +23,7 @@ export function wrapFnValDef({
 }: TGetValue): TValAnalysis {
     const oldVal: TValAnalysis | undefined = valMap.get(RawNameNew.toUpperCase());
     if (oldVal) {
-        oldVal.c502Array.push(newC502(oldVal, RawNameNew));
+        oldVal.c502Array.push(newC502(oldVal.keyRawName, RawNameNew));
         oldVal.defLocList.push(defLoc);
         return oldVal;
     }

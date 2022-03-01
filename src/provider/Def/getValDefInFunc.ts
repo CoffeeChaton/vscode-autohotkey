@@ -34,8 +34,9 @@ function wrapper(
     } = DA;
     const argList = argMap.get(wordUp);
     if (argList) {
-        if (listAllUsing) return [...argList.defLoc, ...argList.refLoc];
-        return argList.defLoc;
+        return listAllUsing
+            ? [...argList.defLocList, ...argList.refLocList]
+            : argList.defLocList;
     }
     const valList = valMap.get(wordUp);
     if (valList) {

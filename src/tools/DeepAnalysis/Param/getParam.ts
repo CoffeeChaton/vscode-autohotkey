@@ -4,8 +4,8 @@ import {
     TArgMap,
     TTokenStream,
 } from '../../../globalEnum';
+import { getFnVarRef } from '../FnVar/getFnVarRef';
 import { getParamDef } from './getParamDef';
-import { getParamRef } from './getParamRef';
 
 export function getParamMain(
     uri: vscode.Uri,
@@ -13,7 +13,7 @@ export function getParamMain(
     DocStrMap: TTokenStream,
 ): TArgMap {
     const argMap: TArgMap = getParamDef(uri, ahkSymbol, DocStrMap);
-    getParamRef(argMap, ahkSymbol, DocStrMap, uri);
+    getFnVarRef(uri, ahkSymbol, DocStrMap, argMap);
 
     return argMap;
 }

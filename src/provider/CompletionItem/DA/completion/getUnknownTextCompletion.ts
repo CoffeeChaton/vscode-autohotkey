@@ -14,8 +14,8 @@ export function getUnknownTextCompletion(
             recMap: new Map(),
             keyRawName,
             funcName,
-            refLoc,
-            defLoc: [],
+            refLocList: refLoc,
+            defLocList: [],
             kind: vscode.CompletionItemKind.Text,
         });
         need.push(item);

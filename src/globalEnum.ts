@@ -95,19 +95,20 @@ export type TRunValType = Exclude<EValType, EValType.normal>;
 export type TRunValType2 = Exclude<TRunValType, EValType.args>;
 export type TAhkValType = EValType.local | EValType.global | EValType.Static;
 
-export type TC503 = {
-    ParamNewName: string; // case sensitivity;
-    range: vscode.Range;
-};
-
+/**
+ * if keyRawName = first def name
+ *  -> 0
+ *  -> string
+ */
+export type TC502New = (0 | string);
 export type TArgAnalysis = {
     keyRawName: string;
-    defLoc: vscode.Location[]; // Normally defLoc.len is 1, but ... the ahk-user wild style , i need diags "Duplicate parameter".
-    refLoc: vscode.Location[];
+    defLocList: vscode.Location[]; // TODO diags "Duplicate parameter".
+    refLocList: vscode.Location[];
+    c502Array: TC502New[];
 
     isByRef: boolean;
     isVariadic: boolean; // https://www.autohotkey.com/docs/Functions.htm#Variadic  // TODO DIAG *is last
-    c503List: TC503[];
 };
 export type TArgMap = Map<string, TArgAnalysis>; // k = valNameUP
 
@@ -120,17 +121,16 @@ export type TGetFnDefNeed = {
     argMap: TArgMap;
 };
 
-export type TC502New = (0 | string);
 export type TValAnalysis = {
     keyRawName: string;
     defLocList: vscode.Location[];
     refLocList: vscode.Location[];
+    c502Array: TC502New[];
 
     ahkValType: TAhkValType;
-    c502Array: TC502New[]; // (0|string)[] , arrLength = defLoc + refLoc
-    // 0 is === first defStr, && range === defLoc -> refLoc
 };
 export type TValMap = Map<string, TValAnalysis>; // k = valNameUP
+export type TParamOrValMap = TValMap | TArgMap;
 export type TTextAnalysis = {
     keyRawName: string;
     refLoc: vscode.Location[];

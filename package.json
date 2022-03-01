@@ -143,14 +143,14 @@
                     "type": "number",
                     "default": 10,
                     "minimum": 0,
-                    "maximum": 99,
+                    "maximum": 999,
                     "description": "(code502) case sensitivity check of variable, a file max checks number.\\n use 0 to close warn."
                 },
                 "AhkNekoHelp.Diag.WarningCap.code503": {
                     "type": "number",
                     "default": 10,
                     "minimum": 0,
-                    "maximum": 99,
+                    "maximum": 999,
                     "description": "(code503) case sensitivity check of parameter, a file max checks number.\\n use 0 to close warn."
                 },
                 "AhkNekoHelp.Ignored.File.endsWith": {

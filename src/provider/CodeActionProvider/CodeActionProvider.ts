@@ -47,7 +47,7 @@ function codeActionOfDA(uri: vscode.Uri, diag: vscode.Diagnostic): vscode.CodeAc
     if (value === EDiagCodeDA.code501) {
         return [c501ignoreArgNeverUsed(uri, diag)];
     }
-    if (value === EDiagCodeDA.code502 || value === EDiagCodeDA.code503) {
+    if (value === EDiagCodeDA.code502) {
         return [...c502c503CodeAction(uri, diag)];
     }
 

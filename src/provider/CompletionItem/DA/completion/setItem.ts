@@ -11,8 +11,8 @@ type TSetItem = {
     recMap: TSnippetRecMap;
     keyRawName: string;
     funcName: string;
-    refLoc: vscode.Location[];
-    defLoc: vscode.Location[];
+    refLocList: vscode.Location[];
+    defLocList: vscode.Location[];
     kind: vscode.CompletionItemKind;
 };
 
@@ -22,8 +22,8 @@ export function setItemCore(
         recMap,
         keyRawName,
         funcName,
-        refLoc,
-        defLoc,
+        refLocList,
+        defLocList,
         kind,
     }: TSetItem,
 ): vscode.CompletionItem {
@@ -45,7 +45,7 @@ export function setItemCore(
         item.preselect = true;
     }
 
-    const md: vscode.MarkdownString = setMD(prefix, refLoc, defLoc, funcName, recStr);
+    const md: vscode.MarkdownString = setMD(prefix, refLocList, defLocList, funcName, recStr);
 
     item.documentation = md;
     return item;

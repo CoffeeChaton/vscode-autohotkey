@@ -3,16 +3,16 @@ import { ESnippetRecBecause } from '../globalEnum';
 
 export function setMD(
     prefix: string,
-    refLoc: vscode.Location[],
-    defLoc: vscode.Location[],
+    refLocList: vscode.Location[],
+    defLocList: vscode.Location[],
     funcName: string,
     recStr: ESnippetRecBecause | null,
 ): vscode.MarkdownString {
-    const def: string = defLoc
+    const def: string = defLocList
         .map((loc): string => `line ${loc.range.start.line + 1}, col ${loc.range.start.character + 1}  `)
         .join('\n');
 
-    const ref: string = refLoc
+    const ref: string = refLocList
         .map((loc): string => `line ${loc.range.start.line + 1}, col ${loc.range.start.character + 1}  `)
         .join('\n');
 
