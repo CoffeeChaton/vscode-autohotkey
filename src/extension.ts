@@ -4,7 +4,6 @@ import { UpdateCache } from './command/UpdateCache';
 import { configChangEvent } from './configUI';
 import { Detecter } from './core/Detecter';
 import { diagColl } from './core/diag/diagRoot';
-import { onClosetDocClearDiag } from './core/diag/onClosetDocClearDiag';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
@@ -35,9 +34,6 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.workspace.onDidDeleteFiles((e): void => Detecter.delMap(e)),
         vscode.workspace.onDidCreateFiles((e): void => Detecter.createMap(e)),
         vscode.workspace.onDidRenameFiles((e): void => Detecter.renameFileName(e)), // just support rename, not support Move
-        vscode.workspace.onDidCloseTextDocument((document: vscode.TextDocument): void => {
-            void onClosetDocClearDiag(document.uri.fsPath);
-        }),
         // vscode.workspace.onDidChangeTextDocument((e) => d(e)),
         vscode.commands.registerCommand('ahk.bar.click', (): void => void statusBarClick()),
         vscode.commands.registerCommand('ahk.nekoHelp.openDoc', (): void => void openDocs()),

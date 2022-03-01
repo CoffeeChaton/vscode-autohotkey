@@ -177,6 +177,7 @@ type TempConfigs = {
         };
     };
     openUriStr: string; //
+    PerformanceMode: boolean; // AhkNekoHelp.PerformanceMode
 };
 export type TConfigs = DeepReadonly<TempConfigs>;
 

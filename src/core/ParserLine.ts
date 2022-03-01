@@ -1,8 +1,10 @@
+/* eslint-disable max-lines */
 import * as vscode from 'vscode';
+import { isPerformanceMode } from '../configUI';
 import { DeepReadonly, TAhkSymbol } from '../globalEnum';
 import { getRangeOfLine } from '../tools/getRangeOfLine';
-import { removeBigParentheses } from '../tools/removeBigParentheses';
-import { removeParentheses } from '../tools/removeParentheses';
+// import { removeBigParentheses } from '../tools/removeBigParentheses';
+// import { removeParentheses } from '../tools/removeParentheses';
 import { FuncInputType } from './getChildren';
 import { setGlobalVar } from './setGlobalVar';
 
@@ -59,41 +61,41 @@ const directive = {
     },
 };
 
-const ahkStatic = {
-    detail: 'static',
-    kind: vscode.SymbolKind.Variable,
-    getName(str: string): string | null {
-        return removeParentheses(removeBigParentheses(str.replace(/^\s*\bstatic\b[\s,]/iu, '')))
-            .split(',')
-            .map((v) => {
-                const col = v.indexOf(':=');
-                return (col > 0)
-                    ? v.substring(0, col).trim()
-                    : v;
-            })
-            .join(', ')
-            .trim();
-    },
+// const ahkStatic = {
+//     detail: 'static',
+//     kind: vscode.SymbolKind.Variable,
+//     getName(str: string): string | null {
+//         return removeParentheses(removeBigParentheses(str.replace(/^\s*\bstatic\b[\s,]/iu, '')))
+//             .split(',')
+//             .map((v) => {
+//                 const col = v.indexOf(':=');
+//                 return (col > 0)
+//                     ? v.substring(0, col).trim()
+//                     : v;
+//             })
+//             .join(', ')
+//             .trim();
+//     },
 
-    test(str: string): boolean {
-        return (/^\s*\bstatic\b[\s,]/iu).test(str);
-    },
-};
+//     test(str: string): boolean {
+//         return (/^\s*\bstatic\b[\s,]/iu).test(str);
+//     },
+// };
 
-const ahkThrow = {
-    detail: 'throw',
-    kind: vscode.SymbolKind.Event,
-    getName(str: string): string | null {
-        const e = (/^\s*\bthrow\b[\s,]+(.+)/iu).exec(str);
-        return e
-            ? `throw ${e[1]}`
-            : null;
-    },
+// const ahkThrow = {
+//     detail: 'throw',
+//     kind: vscode.SymbolKind.Event,
+//     getName(str: string): string | null {
+//         const e = (/^\s*\bthrow\b[\s,]+(.+)/iu).exec(str);
+//         return e
+//             ? `throw ${e[1]}`
+//             : null;
+//     },
 
-    test(str: string): boolean {
-        return (/^\s*\bthrow\b/iu).test(str);
-    },
-};
+//     test(str: string): boolean {
+//         return (/^\s*\bthrow\b/iu).test(str);
+//     },
+// };
 
 const ahkLabel = {
     detail: 'label',
@@ -161,17 +163,27 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
         },
     };
 
-    const LineRuler: LineRulerType[] = [
-        IncludeAgain,
-        Include,
-        directive,
-        ahkGlobal,
-        ahkStatic,
-        ahkThrow,
-        ahkLabel,
-        HotString,
-        HotKeys,
-    ];
+    const LineRuler: LineRulerType[] = isPerformanceMode()
+        ? [ // // my project is 60~75
+            IncludeAgain,
+            Include,
+            directive,
+            ahkGlobal,
+            // ahkLabel,
+            // HotString,
+            // HotKeys,
+        ]
+        : [ // // my project is 70~80
+            IncludeAgain,
+            Include,
+            directive,
+            ahkGlobal,
+            // ahkStatic,
+            // ahkThrow,
+            ahkLabel,
+            HotString,
+            HotKeys,
+        ];
     for (const ruler of LineRuler) {
         if (ruler.test(lStr)) {
             const name = ruler.getName(lStr);

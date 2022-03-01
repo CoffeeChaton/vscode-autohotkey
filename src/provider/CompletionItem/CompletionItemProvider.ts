@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import { ahkSend } from './ahkSend';
 import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
+import { globalValCompletion } from './global/globalValCompletion';
 import { snippetStartWihA } from './json/SnippetStartWihA';
 import { wrapListAllFuncClass } from './listAllFuncClass/listAllFuncClass';
 import { getStartWithStr } from './util';
@@ -25,6 +26,7 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
             ...ahkSend(document, position), // '{'
             ...DeepAnalysisToCompletionItem(document, position, inputStr),
             ...snippetStartWihA(),
+            ...globalValCompletion(document, position, inputStr),
         ];
         // TODO #Include list fsPath List && suggest never #include
         console.log('CompletionItemProvider -> time Cost', Date.now() - t1);

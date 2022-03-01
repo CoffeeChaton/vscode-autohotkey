@@ -31,6 +31,13 @@ export function wrapFnValDef({
     const ahkValType = getGlobalValDef(RawNameNew.toUpperCase())
         ? EValType.global
         : lineType;
+    if (EValType.global === ahkValType) {
+        // FIXME if normal color -> getGlobalValDef
+        // else if local color -> check has input global
+        // TODO line color -> isLocal -> check all input
+        // else key by key check Global
+        console.log('🚀 ~ RawNameNew', RawNameNew);
+    }
     return {
         keyRawName: RawNameNew,
         defLocList: [defLoc],
