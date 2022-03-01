@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { getLStr } from './removeSpecialChar';
+import { getLStr } from './str/removeSpecialChar';
 
 export function isPosAtStr(document: vscode.TextDocument, position: vscode.Position): boolean {
     const col = position.character;

@@ -12,8 +12,8 @@ import {
     TTokenStream,
 } from '../../globalEnum';
 import { callDiff, DiffType } from '../../tools/Diff';
-import { inLTrimRange } from '../../tools/inLTrimRange';
 import { Pretreatment } from '../../tools/Pretreatment';
+import { inLTrimRange } from '../../tools/str/inLTrimRange';
 import { lineReplace } from './fmtReplace';
 import { fmtReplaceWarn } from './fmtReplaceWarn';
 import { getDeepKeywords } from './getDeepKeywords';

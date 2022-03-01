@@ -6,7 +6,7 @@ import {
     TTokenStream,
 } from '../../../globalEnum';
 import { ahkValRegex } from '../../regexTools';
-import { replacerSpace } from '../../removeSpecialChar';
+import { replacerSpace } from '../../str/removeSpecialChar';
 
 function getNeed(param: string, uri: vscode.Uri, line: number, lStr: string): null | TArgAnalysis {
     const isByRef = (/^ByRef\s+/ui).test(param);

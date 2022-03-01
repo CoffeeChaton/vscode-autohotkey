@@ -1,5 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
-import { isSetVarTradition } from '../../tools/removeSpecialChar';
+
+import { isSetVarTradition } from '../../tools/str/removeSpecialChar';
 
 function textReplace(textElement: string): string {
     return textElement.replace(/ *, */gu, ', ')

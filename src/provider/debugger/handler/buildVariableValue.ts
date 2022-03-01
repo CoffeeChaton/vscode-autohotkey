@@ -1,5 +1,5 @@
 import { enumLog } from '../../../tools/enumErr';
-import { mapToStr } from '../../../tools/mapToStr';
+import { mapToStr } from '../../../tools/str/mapToStr';
 import { base64ToStr, toArray } from '../Base64';
 import { TDbgpProperty, TDbgpPropertyAttr } from '../DebugTypeEnum';
 import { likeArray } from './likeArray';

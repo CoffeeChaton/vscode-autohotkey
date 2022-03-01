@@ -3,7 +3,7 @@ import {
     TArgMap,
     TSnippetRecMap,
 } from '../../../../globalEnum';
-import { setPreFix } from '../../../../tools/setPreFix';
+import { setPreFix } from '../../../../tools/str/setPreFix';
 import { setItemCore } from './setItem';
 
 export function getParamCompletion(

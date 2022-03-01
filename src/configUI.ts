@@ -2,7 +2,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { TConfigs } from './globalEnum';
-import { checkDebugFile } from './tools/file';
+import { checkDebugFile } from './tools/fsTools/file';
 
 /*
     ---set start---

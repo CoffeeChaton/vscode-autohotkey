@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { FuncInputType } from '../../core/getChildren';
 import { TAhkSymbol } from '../../globalEnum';
-import { removeParentheses } from '../removeParentheses';
+import { removeParentheses } from '../str/removeParentheses';
 
 export function getClassInstanceVar(FuncInput: FuncInputType): false | TAhkSymbol {
     const { line, lStr } = FuncInput;

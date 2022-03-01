@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { getGlobalValDef } from '../../core/getGlobalValDef';
+import { getGlobalValDef } from '../../core/Global';
 import {
     TAhkSymbol,
     TArgMap,

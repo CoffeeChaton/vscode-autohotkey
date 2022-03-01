@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { DetailType, TTokenStream } from '../globalEnum';
+import { DetailType, TTokenStream } from '../../globalEnum';
 
 function getSearchLineFix(DocStrMap: TTokenStream, searchLine: number, RangeEnd: number): number {
     for (let line = searchLine; line < RangeEnd; line++) {
@@ -9,6 +9,7 @@ function getSearchLineFix(DocStrMap: TTokenStream, searchLine: number, RangeEnd:
     }
     return RangeEnd;
 }
+
 export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: number, RangeEnd: number): vscode.Range {
     //  selectionRange must be contained in fullRange
 

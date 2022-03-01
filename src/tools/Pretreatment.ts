@@ -2,9 +2,9 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 
 import { DetailType, TAhkToken, TTokenStream } from '../globalEnum';
-import { inCommentBlock } from './inCommentBlock';
-import { inLTrimRange } from './inLTrimRange';
-import { getLStr, isSetVarTradition } from './removeSpecialChar';
+import { inCommentBlock } from './str/inCommentBlock';
+import { inLTrimRange } from './str/inLTrimRange';
+import { getLStr, isSetVarTradition } from './str/removeSpecialChar';
 
 // LexicalAnalysisSimple
 

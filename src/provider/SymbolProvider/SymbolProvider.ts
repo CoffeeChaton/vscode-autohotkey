@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as vscode from 'vscode';
-import { Detecter } from '../core/Detecter';
+import { Detecter } from '../../core/Detecter';
 
 export class SymBolProvider implements vscode.DocumentSymbolProvider {
     public provideDocumentSymbols(

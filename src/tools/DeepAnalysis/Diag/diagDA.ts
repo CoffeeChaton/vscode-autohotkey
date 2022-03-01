@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { getCode502Default, getCode503Default } from '../../../configUI';
-import { diagColl } from '../../../core/diag/diagRoot';
+import { diagColl } from '../../../core/diagRoot';
 import { EDiagBase, TAhkSymbolList } from '../../../globalEnum';
 import { DeepAnalysis } from '../DeepAnalysis';
 import { caseSensitivityVar } from './caseSensitivity';

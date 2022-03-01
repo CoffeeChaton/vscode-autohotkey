@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { globalValMap } from '../../../core/globalValMap';
+import { globalValMap } from '../../../core/Global';
 
 export function globalValCompletion(
     _document: vscode.TextDocument,

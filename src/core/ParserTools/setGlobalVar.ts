@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
-import { TGlobalVal } from '../globalEnum';
-import { ahkValRegex } from '../tools/regexTools';
-import { removeBigParentheses } from '../tools/removeBigParentheses';
-import { removeParentheses } from '../tools/removeParentheses';
-import { FuncInputType } from './getChildren';
+import { TGlobalVal } from '../../globalEnum';
+import { ahkValRegex } from '../../tools/regexTools';
+import { removeBigParentheses } from '../../tools/str/removeBigParentheses';
+import { removeParentheses } from '../../tools/str/removeParentheses';
+import { FuncInputType } from '../getChildren';
 
 function fnReplacer(match: string): string {
     return ' '.repeat(match.length);

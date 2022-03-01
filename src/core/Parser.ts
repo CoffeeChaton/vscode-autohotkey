@@ -2,16 +2,16 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,20] }] */
 import * as vscode from 'vscode';
 import { TAhkSymbol } from '../globalEnum';
+import { getCaseDefaultName, getSwitchName } from '../provider/SymbolProvider/getSwitchCaseName';
 import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
 import { getFuncDef } from '../tools/Func/getFuncDef';
-import { getRange } from '../tools/getRange';
-import { getRangeCaseBlock } from '../tools/getRangeCaseBlock';
-import { getRangeOfLine } from '../tools/getRangeOfLine';
+import { getRange } from '../tools/range/getRange';
+import { getRangeCaseBlock } from '../tools/range/getRangeCaseBlock';
+import { getRangeOfLine } from '../tools/range/getRangeOfLine';
 import { FuncInputType, getChildren } from './getChildren';
-import { getCaseDefaultName, getSwitchName } from './getSwitchCaseName';
-import { ParserLine } from './ParserLine';
+import { ParserLine } from './ParserTools/ParserLine';
 
 function getReturnName(textRaw: string): string | null {
     const ReturnMatch = (/\breturn\b\s+(.+)/iu).exec(textRaw);

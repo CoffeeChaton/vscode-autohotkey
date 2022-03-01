@@ -2,8 +2,8 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../../../core/Detecter';
 import { EStr } from '../../../globalEnum';
-import { pathIgnore } from '../../../tools/pathIgnore';
-import { setFuncHoverMD } from '../../../tools/setHoverMD';
+import { pathIgnore } from '../../../tools/fsTools/pathIgnore';
+import { setFuncHoverMD } from '../../../tools/MD/setHoverMD';
 import { insertTextWm } from '../classThis/insertTextWm';
 
 async function listAllFuncClass(inputStr: string): Promise<vscode.CompletionItem[]> {

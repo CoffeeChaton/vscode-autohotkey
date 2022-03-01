@@ -3,7 +3,7 @@ import { openDocs, statusBarClick } from './command/Command';
 import { UpdateCache } from './command/UpdateCache';
 import { configChangEvent } from './configUI';
 import { Detecter } from './core/Detecter';
-import { diagColl } from './core/diag/diagRoot';
+import { diagColl } from './core/diagRoot';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
@@ -14,7 +14,7 @@ import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/On
 import { HoverProvider } from './provider/Hover/HoverProvider';
 import { ReferenceProvider } from './provider/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
-import { SymBolProvider } from './provider/SymbolProvider';
+import { SymBolProvider } from './provider/SymbolProvider/SymbolProvider';
 
 export function activate(context: vscode.ExtensionContext): void {
     const language: vscode.DocumentSelector = { language: 'ahk' };

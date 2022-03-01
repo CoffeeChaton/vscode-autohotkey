@@ -7,7 +7,7 @@ import * as vscode from 'vscode';
 import { getIgnoredFile, getIgnoredFolder } from '../configUI';
 import { TFormatChannel, TPick } from '../globalEnum';
 import { FormatCore } from '../provider/Format/FormatProvider';
-import { getWorkspaceFolders } from '../tools/getWorkspaceFolders';
+import { getWorkspaceFolders } from '../tools/fsTools/getWorkspaceFolders';
 
 async function formatByPathAsync(
     formatPath: string,

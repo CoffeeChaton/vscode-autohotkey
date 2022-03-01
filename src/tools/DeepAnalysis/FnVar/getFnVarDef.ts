@@ -31,6 +31,7 @@ function getLineType(lStr: string, fnMode: EFnMode): EValType.local | EValType.g
             return t;
         }
     }
+    // if lStr start with [,+-*]
     return fnModeToValType(fnMode);
 }
 

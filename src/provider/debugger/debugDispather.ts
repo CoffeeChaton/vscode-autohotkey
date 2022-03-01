@@ -9,8 +9,8 @@ import { existsSync } from 'fs';
 import { getPort } from 'get-port-please';
 import { resolve } from 'path';
 import * as vscode from 'vscode';
-import { mapToStr } from '../../tools/mapToStr';
 import { OutputChannel } from '../../tools/OutputChannel';
+import { mapToStr } from '../../tools/str/mapToStr';
 import { startDebugger } from '../Service/Service';
 import { DebugServer } from './debugServer';
 import {

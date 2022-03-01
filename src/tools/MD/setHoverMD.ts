@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { EMode, TAhkSymbol } from '../globalEnum';
-import { Pretreatment } from './Pretreatment';
-import { ClassWm } from './wm';
+import { EMode, TAhkSymbol } from '../../globalEnum';
+import { Pretreatment } from '../Pretreatment';
+import { ClassWm } from '../wm';
 
 function commentFix(commentText: string): string {
     return commentText !== ''

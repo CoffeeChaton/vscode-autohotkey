@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { Pretreatment } from '../tools/Pretreatment';
+import { Pretreatment } from '../../tools/Pretreatment';
 
 export async function renameFileNameFunc(oldUri: vscode.Uri, newUri: vscode.Uri, fsPathList: string[]): Promise<void> {
     const oldFileName = path.basename(oldUri.fsPath, '.ahk');

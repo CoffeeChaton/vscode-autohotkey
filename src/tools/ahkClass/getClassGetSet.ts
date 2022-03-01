@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { FuncInputType, getChildren } from '../../core/getChildren';
 import { TAhkSymbol } from '../../globalEnum';
-import { getRange } from '../getRange';
+import { getRange } from '../range/getRange';
 
 function getName(FuncInput: FuncInputType): string | false {
     const {

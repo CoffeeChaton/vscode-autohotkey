@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { DeepAnalysisResult, TArgAnalysis } from '../../globalEnum';
-import { setMD } from '../../tools/setMD';
-import { setPreFix } from '../../tools/setPreFix';
+import { setMD } from '../../tools/MD/setMD';
+import { setPreFix } from '../../tools/str/setPreFix';
 import { getAhkTypeName } from './getAhkTypeName';
 
 export function DeepAnalysisHover(

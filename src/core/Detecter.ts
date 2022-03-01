@@ -12,14 +12,15 @@ import {
     TValUpName,
 } from '../globalEnum';
 import { baseDiagnostic } from '../provider/Diagnostic/Diagnostic';
+import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
 import { diagDAFile } from '../tools/DeepAnalysis/Diag/diagDA';
 import { Pretreatment } from '../tools/Pretreatment';
-import { diagColl } from './diag/diagRoot';
+import { hashCode } from '../tools/str/hashCode';
+import { diagColl } from './diagRoot';
 import { getChildren } from './getChildren';
-import { globalValMap } from './globalValMap';
+import { globalValMap } from './Global';
 import { getReturnByLine, ParserBlock } from './Parser';
-import { ParserLine } from './ParserLine';
-import { renameFileNameFunc } from './renameFileNameFunc';
+import { ParserLine } from './ParserTools/ParserLine';
 
 export const Detecter = {
     // key : vscode.Uri.fsPath,
@@ -72,10 +73,13 @@ export const Detecter = {
         const Uri = vscode.Uri.file(fsPath);
         globalValMap.delete(fsPath);
         const document = await vscode.workspace.openTextDocument(Uri);
-        const timeStart = Date.now();
         const gValMapBySelf: TGValMap = new Map<TValUpName, TGlobalVal[]>();
+        const timeStart = Date.now();
 
-        const DocStrMap = Pretreatment(document.getText().split('\n'), 0);
+        const fullText = document.getText();
+        const hash = hashCode(fullText);
+
+        const DocStrMap = Pretreatment(fullText.split('\n'), 0);
         const AhkSymbolList: TAhkSymbolList = getChildren({
             gValMapBySelf,
             Uri,
@@ -103,6 +107,9 @@ export const Detecter = {
                 // console.log('🚀 ~ file size', document.getText().length);
                 // Gdip_all_2020_08_24 -> 2^18 ~ 2^19
                 diagDAFile(AhkSymbolList, document, Uri);
+
+                console.log('🚀 ~ updateDocDef ~ hash', hash);
+                console.log('🚀 ~ updateDocDef ~ hash', Date.now() - timeStart, 'ms'); //  gdip_all_20xx just need 1ms
             }
         }
         return AhkSymbolList as vscode.DocumentSymbol[];

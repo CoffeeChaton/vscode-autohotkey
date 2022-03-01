@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { DeepReadonly, TTokenStream } from '../../globalEnum';
-import { getRange } from '../../tools/getRange';
+import { getRange } from '../../tools/range/getRange';
 
 export function getSwitchRange(
     document: vscode.TextDocument,

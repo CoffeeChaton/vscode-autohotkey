@@ -1,11 +1,11 @@
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
-import { isPerformanceMode } from '../configUI';
-import { DeepReadonly, TAhkSymbol } from '../globalEnum';
-import { getRangeOfLine } from '../tools/getRangeOfLine';
+import { isPerformanceMode } from '../../configUI';
+import { DeepReadonly, TAhkSymbol } from '../../globalEnum';
+import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 // import { removeBigParentheses } from '../tools/removeBigParentheses';
 // import { removeParentheses } from '../tools/removeParentheses';
-import { FuncInputType } from './getChildren';
+import { FuncInputType } from '../getChildren';
 import { setGlobalVar } from './setGlobalVar';
 
 type LineRulerType = DeepReadonly<{

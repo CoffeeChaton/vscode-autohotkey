@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-export const getWorkspaceFolders = (): readonly vscode.WorkspaceFolder[] | null => {
+export function getWorkspaceFolders(): readonly vscode.WorkspaceFolder[] | null {
     const ahkRootPath = vscode.workspace.workspaceFolders;
     if (ahkRootPath === undefined) {
         void vscode.window.showInformationMessage(
@@ -9,4 +9,4 @@ export const getWorkspaceFolders = (): readonly vscode.WorkspaceFolder[] | null 
         return null;
     }
     return ahkRootPath;
-};
+}
