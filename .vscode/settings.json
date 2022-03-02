@@ -66,10 +66,5 @@
         "settings.json": "jsonc",
         "tsconfig.json": "jsonc"
     },
-    "cSpell.words": [
-        "Classname",
-        "Dispather",
-        "HKLM",
-        "Propertyget"
-    ]
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }

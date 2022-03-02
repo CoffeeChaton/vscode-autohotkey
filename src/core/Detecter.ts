@@ -78,7 +78,7 @@ export const Detecter = {
 
         const fullText = document.getText();
         const hash = hashCode(fullText);
-
+        const a = 0;
         const DocStrMap = Pretreatment(fullText.split('\n'), 0);
         const AhkSymbolList: TAhkSymbolList = getChildren({
             gValMapBySelf,
