@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Breakpoint, Source } from '@vscode/debugadapter';
 import { DebugProtocol } from '@vscode/debugprotocol';
 import { readFileSync } from 'fs';
@@ -32,7 +36,7 @@ export class BreakPointHandler {
         const sourceLines = readFileSync(path)
             .toString()
             .split('\n');
-        const bps = sourceBreakpoints
+        const bps: Breakpoint[] = sourceBreakpoints
             .map((sourceBreakpoint): Breakpoint => {
                 const name = basename(path);
                 const source: Source = new Source(name, path);

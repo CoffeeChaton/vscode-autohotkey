@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { NekoDebugSession } from './provider/debugger/NekoDebugSession';
 
-NekoDebugSession.run(NekoDebugSession);
+void NekoDebugSession.run(NekoDebugSession);

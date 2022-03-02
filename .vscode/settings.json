@@ -67,6 +67,9 @@
         "tsconfig.json": "jsonc"
     },
     "cSpell.words": [
-        "HKLM"
+        "Classname",
+        "Dispather",
+        "HKLM",
+        "Propertyget"
     ]
 }
