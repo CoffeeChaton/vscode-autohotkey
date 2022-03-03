@@ -288,7 +288,7 @@
         "@typescript/analyze-trace": "^0.8.0",
         "@vscode/test-electron": "^2.1.2",
         "dprint": "^0.23.0",
-        "esbuild": "^0.14.23",
+        "esbuild": "^0.14.24",
         "esbuild-copy-static-files": "^0.1.0",
         "eslint": "^8.10.0",
         "eslint-config-airbnb": "^19.0.4",
@@ -324,6 +324,7 @@
         "get-port-please": "^2.4.3",
         "micromatch": "^4.0.4",
         "temp": "^0.9.4",
+        "ts-debounce": "^4.0.0",
         "xml2js": "^0.4.23"
     }
 }

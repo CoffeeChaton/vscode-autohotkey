@@ -11,7 +11,7 @@ function getValRegMap(paramOrValMap: TParamOrValMap): Map<string, RegExp> {
 
     for (const [valName] of paramOrValMap) {
         // eslint-disable-next-line security/detect-non-literal-regexp
-        regMap.set(valName, new RegExp(`(?<![.\`])\\b(${valName})\\b`, 'igu'));
+        regMap.set(valName, new RegExp(`(?<![.\`])\\b(${valName})\\b(?!\\()`, 'igu'));
     }
     return regMap;
 }
