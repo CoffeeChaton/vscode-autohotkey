@@ -8,13 +8,13 @@ export function getUnknownTextCompletion(
 ): vscode.CompletionItem[] {
     const need: vscode.CompletionItem[] = [];
     textMap.forEach((v) => {
-        const { keyRawName, refLoc } = v;
+        const { keyRawName, refLocList } = v;
         const item: vscode.CompletionItem = setItemCore({
             prefix: 'unknown Text',
             recMap: new Map(),
             keyRawName,
             funcName,
-            refLocList: refLoc,
+            refLocList,
             defLocList: [],
             kind: vscode.CompletionItemKind.Text,
         });

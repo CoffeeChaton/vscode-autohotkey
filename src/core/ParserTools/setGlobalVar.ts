@@ -34,7 +34,10 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
                 return lName;
             }
             const rVal: string | null = (col > 0)
-                ? DocStrMap[line].textRaw.substring(col2 + lName.length, v.length).replace(/\s*:=/u, '')
+                ? textRaw
+                    .substring(col2 + lName.length, v.length)
+                    .replace(/\s*:=/u, '')
+                    .trim()
                 : null;
             const newValue: TGlobalVal = {
                 lRange: new vscode.Range(line, col2, line, col2 + lName.length), //  vscode.Range, // left Range

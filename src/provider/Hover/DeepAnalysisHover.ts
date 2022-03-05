@@ -1,5 +1,10 @@
 import * as vscode from 'vscode';
-import { DeepAnalysisResult, TArgAnalysis } from '../../globalEnum';
+import {
+    DeepAnalysisResult,
+    TArgAnalysis,
+    TTextAnalysis,
+    TValAnalysis,
+} from '../../globalEnum';
 import { setMD } from '../../tools/MD/setMD';
 import { setPreFix } from '../../tools/str/setPreFix';
 import { getAhkTypeName } from './getAhkTypeName';
@@ -22,7 +27,7 @@ export function DeepAnalysisHover(
         return setMD(prefix, refLocList, defLocList, funcName, null);
     }
 
-    const value = ed.valMap.get(wordUp);
+    const value: TValAnalysis | undefined = ed.valMap.get(wordUp);
     if (value) {
         const {
             refLocList,
@@ -31,8 +36,14 @@ export function DeepAnalysisHover(
         } = value;
         const typeValType = getAhkTypeName(ahkValType);
         const prefix = `${typeValType} var`;
-
         return setMD(prefix, refLocList, defLocList, funcName, null);
+    }
+
+    const unKnownText: TTextAnalysis | undefined = ed.textMap.get(wordUp);
+    if (unKnownText) {
+        const { refLocList } = unKnownText;
+        const prefix = 'unKnownText';
+        return setMD(prefix, refLocList, [], funcName, null);
     }
 
     return null;

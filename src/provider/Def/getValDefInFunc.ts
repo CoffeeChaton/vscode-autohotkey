@@ -57,7 +57,7 @@ function wrapper(
     }
     const textList = textMap.get(wordUp);
     if (textList) {
-        return textList.refLoc;
+        return textList.refLocList;
     }
     return [];
 }

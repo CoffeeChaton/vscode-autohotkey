@@ -133,7 +133,7 @@ export type TValMap = Map<string, TValAnalysis>; // k = valNameUP
 export type TParamOrValMap = TValMap | TArgMap;
 export type TTextAnalysis = {
     keyRawName: string;
-    refLoc: vscode.Location[];
+    refLocList: vscode.Location[];
 };
 
 export type TTextMap = Map<string, TTextAnalysis>; // k = valNameUP

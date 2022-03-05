@@ -31,7 +31,7 @@ export function getUnknownTextMap(
             if (!textMap.has(wordUp)) {
                 if (
                     (/^[A_\d]_/u).test(wordUp) // (A_Variables) or ( _*2 start varName EX: __varName) or (start with number EX: 0_VarName)
-                    || (/^\d+$/ui).test(wordUp)
+                    || (/^\d+$/ui).test(wordUp) // just number
                     || argMap.has(wordUp)
                     || valMap.has(wordUp)
                     || getGlobalValDef(wordUp)
@@ -41,7 +41,7 @@ export function getUnknownTextMap(
                 }
             }
 
-            const character = lStr.search(ahkValRegex(wordUp));
+            const character = lStr.search(ahkValRegex(wordUp)); // need fix
 
             if (character === -1) {
                 void vscode.window.showErrorMessage(`getUnknownTextMap Error at line ${line} of ${uri.fsPath}`);
@@ -53,12 +53,9 @@ export function getUnknownTextMap(
                 new vscode.Position(line, character + wordUp.length),
             );
 
-            const loc = new vscode.Location(uri, range);
-            const refLoc: vscode.Location[] = [...textMap.get(wordUp)?.refLoc ?? [], loc];
-
             const need: TTextAnalysis = {
                 keyRawName,
-                refLoc,
+                refLocList: [...textMap.get(wordUp)?.refLocList ?? [], new vscode.Location(uri, range)],
             };
 
             textMap.set(wordUp, need);
