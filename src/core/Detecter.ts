@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import { showTimeSpend } from '../configUI';
 import {
+    EDiagBase,
     EStr,
     TAhkSymbolList,
     TGlobalVal,
@@ -104,8 +105,9 @@ export const Detecter = {
             if (useDeepAnalysis) {
                 // console.log('🚀 ~ file size', document.getText().length);
                 // Gdip_all_2020_08_24 -> 2^18 ~ 2^19
-                diagDAFile(AhkSymbolList, document, Uri);
-
+                const diagnostics = diagDAFile(AhkSymbolList, document);
+                const baseDiag = (diagColl.get(Uri) || []).filter((v) => v.source !== EDiagBase.sourceDA);
+                diagColl.set(Uri, [...baseDiag, ...diagnostics]);
                 console.log('🚀 ~ updateDocDef ~ hash', hash);
                 console.log('🚀 ~ updateDocDef ~ hash', Date.now() - timeStart, 'ms'); //  gdip_all_20xx just need 1ms
             }

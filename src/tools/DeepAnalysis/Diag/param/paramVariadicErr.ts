@@ -3,7 +3,7 @@ import { DiagsDA, EDiagCodeDA } from '../../../../diag';
 import { TArgMap } from '../../../../globalEnum';
 import { setDiagnosticDA } from '../../../../provider/Diagnostic/setDiagnostic';
 
-export function paramVariadicErr(argMap: TArgMap, code504List: vscode.Diagnostic[]): void {
+export function paramVariadicErr(argMap: TArgMap, code504List: Set<vscode.Diagnostic>): void {
     const rightIndex = argMap.size - 1;
     let i = 0;
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -14,7 +14,7 @@ export function paramVariadicErr(argMap: TArgMap, code504List: vscode.Diagnostic
             const severity = vscode.DiagnosticSeverity.Error;
             const message: string = DiagsDA[EDiagCodeDA.code504].msg;
             const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCodeDA.code504, range, severity, [], message);
-            code504List.push(diag);
+            code504List.add(diag);
         }
         i += 1;
     }

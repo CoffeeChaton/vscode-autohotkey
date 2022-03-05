@@ -26,7 +26,7 @@ function wrapper(
     position: vscode.Position,
 ): vscode.Range[] {
     const DA = DeepAnalysis(document, ahkSymbol);
-    if (!DA) return [];
+    if (DA === null) return [];
 
     const {
         argMap,
@@ -35,29 +35,30 @@ function wrapper(
     } = DA;
     const argList = argMap.get(wordUp);
     if (argList) {
+        const { defRangeList, refRangeList } = argList;
         return listAllUsing
-            ? [...argList.defRangeList, ...argList.refRangeList]
-            : argList.defRangeList;
+            ? [...defRangeList, ...refRangeList]
+            : defRangeList;
     }
+
     const valList = valMap.get(wordUp);
     if (valList) {
-        if (listAllUsing) return [...valList.defRangeList, ...valList.refRangeList];
-        // <
-        // when I open "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
-        // why vscode can't Identify loc.range.contains(position)
-        //      , and auto let F12 -> shift F12 ?
-        //           (auto let goto Def -> Ref)
-        // What else do I need to read?
-        for (const range of valList.defRangeList) {
-            if (range.contains(position)) {
-                return [...valList.defRangeList, ...valList.refRangeList];
-                // void new ReferenceProvider(); // not work
-                // return [];
-            }
+        const { defRangeList, refRangeList } = valList;
+        if (listAllUsing) return [...defRangeList, ...refRangeList];
+
+        if (defRangeList.length === 1 && defRangeList[0].contains(position)) {
+            // <
+            // when I open "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
+            // why vscode can't Identify range.contains(position)
+            //      , and auto let F12 -> shift F12 ?
+            //           (auto let goto Def -> Ref)
+            // What else I need to read/Do?
+            return [...defRangeList, ...refRangeList];
+            // >
         }
-        // >
-        return valList.defRangeList;
+        return defRangeList;
     }
+
     const textList = textMap.get(wordUp);
     if (textList) {
         return textList.refRangeList;
@@ -100,6 +101,5 @@ export function getValDefInFunc(
     if (rangeList === null) return null;
 
     const { uri } = document;
-    const locList = rangeList.map((range) => new vscode.Location(uri, range));
-    return locList;
+    return rangeList.map((range) => new vscode.Location(uri, range));
 }

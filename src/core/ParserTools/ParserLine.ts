@@ -61,53 +61,18 @@ const directive = {
     },
 };
 
-// const ahkStatic = {
-//     detail: 'static',
-//     kind: vscode.SymbolKind.Variable,
-//     getName(str: string): string | null {
-//         return removeParentheses(removeBigParentheses(str.replace(/^\s*\bstatic\b[\s,]/iu, '')))
-//             .split(',')
-//             .map((v) => {
-//                 const col = v.indexOf(':=');
-//                 return (col > 0)
-//                     ? v.substring(0, col).trim()
-//                     : v;
-//             })
-//             .join(', ')
-//             .trim();
-//     },
-
-//     test(str: string): boolean {
-//         return (/^\s*\bstatic\b[\s,]/iu).test(str);
-//     },
-// };
-
-// const ahkThrow = {
-//     detail: 'throw',
-//     kind: vscode.SymbolKind.Event,
-//     getName(str: string): string | null {
-//         const e = (/^\s*\bthrow\b[\s,]+(.+)/iu).exec(str);
-//         return e
-//             ? `throw ${e[1]}`
-//             : null;
-//     },
-
-//     test(str: string): boolean {
-//         return (/^\s*\bthrow\b/iu).test(str);
-//     },
-// };
-
 const ahkLabel = {
     detail: 'label',
     kind: vscode.SymbolKind.Package,
     getName(str: string): string | null {
-        const e = (/^\s*(\w+:)\s*$/u).exec(str);
+        const e = (/^\s*(\w+:)/u).exec(str);
         return e
             ? e[1]
             : null;
     },
 
     test(str: string): boolean {
+        // Generally, aside from whitespace and comments, no other code can be written on the same line as a label.
         return (/^\s*\w+:\s*$/u).test(str);
     },
 };
@@ -124,6 +89,7 @@ const HotString = {
     },
 
     test(str: string): boolean {
+        // Hotstring labels consist of a colon, zero or more options, another colon, an abbreviation and double-colon.
         if (str.indexOf('::') === -1) return false;
         return (/^\s*:[^:]*?:[^:]+::/u).test(str);
     },
@@ -140,6 +106,7 @@ const HotKeys = {
     },
 
     test(str: string): boolean {
+        // Hotkey labels consist of a hotkey followed by double-colon.
         if (str.indexOf('::') === -1) return false;
         return (/^\s*[^:]+::/u).test(str);
     },
@@ -178,8 +145,6 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             Include,
             directive,
             ahkGlobal,
-            // ahkStatic,
-            // ahkThrow,
             ahkLabel,
             HotString,
             HotKeys,

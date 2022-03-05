@@ -3,7 +3,7 @@ import { DiagsDA, EDiagCodeDA } from '../../../../diag';
 import { TArgMap } from '../../../../globalEnum';
 import { setDiagnosticDA } from '../../../../provider/Diagnostic/setDiagnostic';
 
-export function paramNeverUsed(argMap: TArgMap, code501List: vscode.Diagnostic[]): void {
+export function paramNeverUsed(argMap: TArgMap, code501List: Set<vscode.Diagnostic>): void {
     argMap.forEach((v): void => {
         if (!(v.refRangeList.length === 0)) return;
         if (v.keyRawName.startsWith('_')) return;
@@ -12,6 +12,6 @@ export function paramNeverUsed(argMap: TArgMap, code501List: vscode.Diagnostic[]
         const tags = [vscode.DiagnosticTag.Unnecessary];
         const message: string = DiagsDA[EDiagCodeDA.code501].msg;
         const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCodeDA.code501, range, severity, tags, message);
-        code501List.push(diag);
+        code501List.add(diag);
     });
 }

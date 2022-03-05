@@ -1,16 +1,37 @@
+/* eslint-disable max-statements */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
-import { DeepAnalysisResult, TAhkSymbolList } from '../globalEnum';
+import { diagColl } from '../core/diagRoot';
+import { DeepAnalysisResult, EDiagBase, TAhkSymbolList } from '../globalEnum';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { diagDAFile } from '../tools/DeepAnalysis/Diag/diagDA';
 
-export async function DeepAnalysisAllFiles(): Promise<null> {
-    const t1 = Date.now();
-    const allFsPath = Detecter.getDocMapFile();
-
+const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
+function showOutputChannel(need: DeepAnalysisResult[], t1: number): void {
     let argMapSize = 0;
     let valMapSize = 0;
     let textMapSize = 0;
+    need.forEach((ed) => {
+        argMapSize += ed.argMap.size;
+        valMapSize += ed.valMap.size;
+        textMapSize += ed.textMap.size;
+    });
+
+    OutputChannel.clear();
+    OutputChannel.appendLine('Deep Analysis All Files');
+    OutputChannel.appendLine(`Deep Analysis : ${need.length} Symbol`);
+    OutputChannel.appendLine(`argMapSize is ${argMapSize}`);
+    OutputChannel.appendLine(`valMapSize is ${valMapSize}`);
+    OutputChannel.appendLine(`textMapSize is ${textMapSize}`);
+    OutputChannel.appendLine(`All Size is ${argMapSize + valMapSize + textMapSize}`);
+    OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
+    OutputChannel.show();
+}
+
+export async function DeepAnalysisAllFiles(): Promise<null> {
+    const t1 = Date.now();
+    const allFsPath = Detecter.getDocMapFile(); // FIX
+
     const need: DeepAnalysisResult[] = [];
     for (const fsPath of allFsPath) {
         const AhkSymbolList: TAhkSymbolList | null = Detecter.getDocMap(fsPath);
@@ -21,25 +42,17 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
         const document = await vscode.workspace.openTextDocument(Uri);
         for (const ahkSymbol of AhkSymbolList) {
             const ed: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
-            if (ed === null) continue;
-
-            need.push(ed);
-            argMapSize += ed.argMap.size;
-            valMapSize += ed.valMap.size;
-            textMapSize += ed.textMap.size;
+            if (ed !== null) need.push(ed);
         }
-        diagDAFile(AhkSymbolList, document, Uri);
+        const diagnostics = diagDAFile(AhkSymbolList, document);
+        const baseDiag = (diagColl.get(Uri) || []).filter((v) => v.source !== EDiagBase.sourceDA);
+        diagColl.set(Uri, [
+            ...baseDiag,
+            ...diagnostics,
+        ]);
     }
 
-    const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
-    OutputChannel.appendLine('Deep Analysis All Files');
-    OutputChannel.appendLine(`Deep Analysis : ${need.length} Symbol`);
-    OutputChannel.appendLine(`argMapSize is ${argMapSize}`);
-    OutputChannel.appendLine(`valMapSize is ${valMapSize}`);
-    OutputChannel.appendLine(`textMapSize is ${textMapSize}`);
-    OutputChannel.appendLine(`All Size is ${argMapSize + valMapSize + textMapSize}`);
-    OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
-    OutputChannel.show();
+    showOutputChannel(need, t1);
 
     return null;
 }
