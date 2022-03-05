@@ -18,6 +18,86 @@
             "name": "comment.line.semicolon.ahk"
         },
         {
+            "begin": "^\\s*/\\*\\*",
+            "beginCaptures": {
+                "1": {
+                    "name": "comment.block.documentation.start.ahk"
+                }
+            },
+            "end": "^\\s*\\*/",
+            "endCaptures": {
+                "1": {
+                    "name": "comment.block.documentation.end.ahk"
+                }
+            },
+            "name": "comment.block.documentation.ahk",
+            "patterns": [
+                {
+                    "captures": {
+                        "1": {
+                            "name": "storage.type.parameters.comment.block.documentation.ahk"
+                        },
+                        "2": {
+                            "name": "variable.comment.block.documentation.ahk"
+                        },
+                        "3": {
+                            "name": "entity.name.type.instance.comment.block.documentation.ahk"
+                        }
+                    },
+                    "match": "^\\s*\\*\\s+(?i:@param)\\s+(\\w+)\\s+(\\w+)?",
+                    "name": "comment.block.documentation.ahk"
+                },
+                {
+                    "captures": {
+                        "1": {
+                            "name": "storage.type.parameters.comment.block.documentation.ahk"
+                        },
+                        "2": {
+                            "name": "variable.comment.block.documentation.ahk"
+                        }
+                    },
+                    "match": "^\\s*\\*\\s+(?i:@param)\\s+(\\w+)",
+                    "name": "comment.block.documentation.ahk"
+                },
+                {
+                    "captures": {
+                        "1": {
+                            "name": "storage.comment.block.documentation.ahk"
+                        },
+                        "2": {
+                            "name": "variable.comment.block.documentation.ahk"
+                        },
+                        "3": {
+                            "name": "entity.name.type.instance.comment.block.documentation.ahk"
+                        }
+                    },
+                    "match": "^\\s*\\*\\s+(?i:@Return)\\s+(\\w+)\\s+(\\w+)?",
+                    "name": "comment.block.documentation.ahk"
+                },
+                {
+                    "captures": {
+                        "1": {
+                            "name": "storage.comment.block.documentation.ahk"
+                        },
+                        "2": {
+                            "name": "variable.comment.block.documentation.ahk"
+                        }
+                    },
+                    "match": "^\\s*\\*\\s+(@\\w+)\\s+(\\w+)",
+                    "name": "comment.block.documentation.ahk"
+                },
+                {
+                    "captures": {
+                        "1": {
+                            "name": "storage.comment.block.documentation.ahk"
+                        }
+                    },
+                    "match": "^\\s*\\*\\s+(@\\w+)",
+                    "name": "comment.block.documentation.ahk"
+                }
+            ]
+        },
+        {
             "begin": "^\\s*/\\*",
             "end": "^\\s*\\*/",
             "name": "comment.block.slashstar.ahk"
