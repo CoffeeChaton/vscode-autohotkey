@@ -19,7 +19,6 @@ function getValRegMap(paramOrValMap: TParamOrValMap): Map<string, RegExp> {
 type TNeedSetRef = {
     o: RegExpMatchArray;
     valUpName: string;
-    uri: vscode.Uri;
     line: number;
 };
 
@@ -27,7 +26,6 @@ function getValRef(param: TNeedSetRef, paramOrValMap: TParamOrValMap): void {
     const {
         o,
         valUpName,
-        uri,
         line,
     } = param;
     const newRawName: string = o[1];
@@ -46,15 +44,13 @@ function getValRef(param: TNeedSetRef, paramOrValMap: TParamOrValMap): void {
         new vscode.Position(line, character),
         new vscode.Position(line, character + newRawName.length),
     );
-    const { refLocList, c502Array } = oldVal;
-    const loc = new vscode.Location(uri, Range);
-    refLocList.push(loc);
+    const { refRangeList, c502Array } = oldVal;
+    refRangeList.push(Range);
     c502Array.push(newC502(oldVal.keyRawName, newRawName));
 }
 
 // eslint-disable-next-line max-params
 export function getFnVarRef(
-    uri: vscode.Uri,
     ahkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
     paramOrValMap: TParamOrValMap,
@@ -70,7 +66,6 @@ export function getFnVarRef(
                 getValRef({
                     o,
                     valUpName,
-                    uri,
                     line,
                 }, paramOrValMap);
             }

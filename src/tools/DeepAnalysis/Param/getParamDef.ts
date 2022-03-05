@@ -8,7 +8,7 @@ import {
 import { ahkValRegex } from '../../regexTools';
 import { replacerSpace } from '../../str/removeSpecialChar';
 
-function getNeed(param: string, uri: vscode.Uri, line: number, lStr: string): null | TArgAnalysis {
+function getNeed(param: string, funcRawName: string, line: number, lStr: string): null | TArgAnalysis {
     const isByRef = (/^ByRef\s+/ui).test(param);
     const key0 = isByRef
         ? param.replace(/^ByRef\s+/ui, '')
@@ -21,7 +21,7 @@ function getNeed(param: string, uri: vscode.Uri, line: number, lStr: string): nu
     if (!(/^\w+$/u).test(keyRawName)) {
         const errCode = '--99--37--21--';
         const errMsg = 'DeepAnalysis NekoHelp Unknown Syntax of ';
-        const errLoc = `${uri.fsPath} line : ${line + 1}`;
+        const errLoc = `${funcRawName}() line : ${line + 1}`;
         const message = `${errMsg} args Error ${keyRawName}${errCode}${errLoc}`;
         console.error('🚀 getParamDef ~ message', message);
         void vscode.window.showErrorMessage(message);
@@ -36,18 +36,19 @@ function getNeed(param: string, uri: vscode.Uri, line: number, lStr: string): nu
     );
     return {
         keyRawName,
-        defLocList: [new vscode.Location(uri, range)],
-        refLocList: [],
+        defRangeList: [range],
+        refRangeList: [],
         isByRef,
         isVariadic,
         c502Array: [0],
     };
 }
 
-export function getParamDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TArgMap {
+export function getParamDef(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TArgMap {
     const argMap: TArgMap = new Map<string, TArgAnalysis>();
     const startLine = ahkSymbol.selectionRange.start.line;
     const endLine = ahkSymbol.selectionRange.end.line;
+    const funcRawName = ahkSymbol.name;
     for (const { lStr, line } of DocStrMap) {
         if (line > endLine) break;
         let lStrFix = lStr;
@@ -60,7 +61,7 @@ export function getParamDef(uri: vscode.Uri, ahkSymbol: TAhkSymbol, DocStrMap: T
             .map((v) => v.trim());
 
         for (const param of strList) {
-            const ArgAnalysis = getNeed(param, uri, line, lStr);
+            const ArgAnalysis = getNeed(param, funcRawName, line, lStr);
             if (ArgAnalysis === null) continue;
 
             const key = ArgAnalysis.keyRawName.toUpperCase();

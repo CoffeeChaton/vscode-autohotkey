@@ -23,7 +23,7 @@ export function diagDAFile(
         if (DA) {
             paramNeverUsed(DA.argMap, code501List);
             caseSensitivityVar('var', DA.valMap, code502List, code502Max); // var case sensitivity
-            caseSensitivityVar('parm', DA.argMap, code503List, code503Max);
+            caseSensitivityVar('param', DA.argMap, code503List, code503Max);
             paramVariadicErr(DA.argMap, code504List);
         }
     }

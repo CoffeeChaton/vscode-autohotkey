@@ -15,15 +15,15 @@ export function getParamCompletion(
     argMap.forEach((v) => {
         // dprint-ignore
         const {
-            keyRawName, refLocList, defLocList, isByRef, isVariadic,
+            keyRawName, refRangeList, defRangeList, isByRef, isVariadic,
         } = v;
         const item: vscode.CompletionItem = setItemCore({
             prefix: setPreFix(isByRef, isVariadic),
             recMap,
             keyRawName,
             funcName,
-            refLocList,
-            defLocList,
+            refRangeList,
+            defRangeList,
             kind: vscode.CompletionItemKind.Variable,
         });
         need.push(item);

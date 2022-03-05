@@ -1,9 +1,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable security/detect-non-literal-fs-filename */
 import * as vscode from 'vscode';
-import {
-    showTimeSpend,
-} from '../configUI';
+import { showTimeSpend } from '../configUI';
 import {
     EStr,
     TAhkSymbolList,

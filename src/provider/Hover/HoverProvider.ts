@@ -51,8 +51,7 @@ export class HoverProvider implements vscode.HoverProvider {
 
         if (isPosAtStr(document, position)) return null;
 
-        const word = document.getText(range);
-        const wordUp = word.toUpperCase();
+        const wordUp = document.getText(range).toUpperCase();
         const textRaw = document.lineAt(position).text;
         const isFunc = await HoverFunc(wordUp, textRaw);
         if (isFunc) return isFunc;

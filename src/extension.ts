@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.workspace.onDidRenameFiles((e): void => Detecter.renameFileName(e)), // just support rename, not support Move
         // vscode.workspace.onDidChangeTextDocument((e) => d(e)),
         vscode.commands.registerCommand('ahk.bar.click', (): void => void statusBarClick()),
-        vscode.commands.registerCommand('ahk.nekoHelp.openDoc', (): void => void openDocs()),
+        vscode.commands.registerCommand('ahk.nekoHelp.openDoc', (): void => openDocs()),
         vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
     );
     UpdateCache();

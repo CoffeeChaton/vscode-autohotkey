@@ -8,7 +8,6 @@ export function varSetCapacityFunc({
     valMap,
     line,
     lineType,
-    uri,
     argMap,
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line security/detect-unsafe-regex
@@ -21,17 +20,16 @@ export function varSetCapacityFunc({
         if (argMap.has(UpName)) continue;
 
         // eslint-disable-next-line no-magic-numbers
-        const character = ch + 15;
-        const range = new vscode.Range(
+        const character = ch + 15; // "VarSetCapacity(".len ===  15
+        const defRange = new vscode.Range(
             new vscode.Position(line, character),
             new vscode.Position(line, character + RawName.length),
         );
-        const defLoc = new vscode.Location(uri, range);
 
         const value: TValAnalysis = wrapFnValDef({
             RawNameNew: RawName,
             valMap,
-            defLoc,
+            defRange,
             lineType,
         });
         valMap.set(RawName.toUpperCase(), value);

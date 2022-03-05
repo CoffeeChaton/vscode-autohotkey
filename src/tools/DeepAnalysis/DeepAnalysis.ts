@@ -2,7 +2,9 @@ import * as vscode from 'vscode';
 import {
     DeepAnalysisResult,
     TAhkSymbol,
+    TArgMap,
     TTextMap,
+    TValMap,
 } from '../../globalEnum';
 import { kindPick } from '../Func/kindPick';
 import { Pretreatment } from '../Pretreatment';
@@ -21,14 +23,14 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
     const cache = w.getWm(ahkSymbol);
     if (cache) return cache;
 
-    const { uri } = document;
     const DocStrMap = Pretreatment(
         document.getText(ahkSymbol.range).split('\n'),
         ahkSymbol.range.start.line,
     );
-    const argMap = getParamMain(uri, ahkSymbol, DocStrMap);
-    const valMap = getFnVarMain(uri, ahkSymbol, DocStrMap, argMap);
-    const textMap: TTextMap = getUnknownTextMap(uri, ahkSymbol, DocStrMap, argMap, valMap);
+
+    const argMap: TArgMap = getParamMain(ahkSymbol, DocStrMap);
+    const valMap: TValMap = getFnVarMain(ahkSymbol, DocStrMap, argMap);
+    const textMap: TTextMap = getUnknownTextMap(ahkSymbol, DocStrMap, argMap, valMap);
     const v: DeepAnalysisResult = {
         argMap,
         valMap,

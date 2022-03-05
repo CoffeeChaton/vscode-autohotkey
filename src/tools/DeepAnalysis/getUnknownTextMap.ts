@@ -11,7 +11,6 @@ import {
 import { ahkValRegex } from '../regexTools';
 
 export function getUnknownTextMap(
-    uri: vscode.Uri,
     ahkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
     argMap: TArgMap,
@@ -44,7 +43,7 @@ export function getUnknownTextMap(
             const character = lStr.search(ahkValRegex(wordUp)); // need fix
 
             if (character === -1) {
-                void vscode.window.showErrorMessage(`getUnknownTextMap Error at line ${line} of ${uri.fsPath}`);
+                void vscode.window.showErrorMessage(`getUnknownTextMap Error at line ${line} of ${ahkSymbol.name}()`);
                 continue;
             }
 
@@ -55,7 +54,7 @@ export function getUnknownTextMap(
 
             const need: TTextAnalysis = {
                 keyRawName,
-                refLocList: [...textMap.get(wordUp)?.refLocList ?? [], new vscode.Location(uri, range)],
+                refRangeList: [...textMap.get(wordUp)?.refRangeList ?? [], range],
             };
 
             textMap.set(wordUp, need);

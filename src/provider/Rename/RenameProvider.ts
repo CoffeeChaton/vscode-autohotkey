@@ -8,23 +8,23 @@ function DeepAnalysisRename(
     document: vscode.TextDocument,
     position: vscode.Position,
     wordUp: string,
-): vscode.Location[] {
+): vscode.Range[] {
     const ahkSymbol = getFnOfPos(document, position);
     if (!ahkSymbol) return [];
 
     const ed: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
     if (!ed) return [];
 
-    const loc: vscode.Location[] = [];
+    const loc: vscode.Range[] = [];
 
     const argMap: TArgAnalysis | undefined = ed.argMap.get(wordUp);
     if (argMap) {
-        loc.push(...argMap.defLocList, ...argMap.refLocList);
+        loc.push(...argMap.defRangeList, ...argMap.refRangeList);
     }
 
     const valMap: TValAnalysis | undefined = ed.valMap.get(wordUp);
     if (valMap) {
-        loc.push(...valMap.defLocList, ...valMap.refLocList);
+        loc.push(...valMap.defRangeList, ...valMap.refRangeList);
     }
 
     return loc;
@@ -42,10 +42,10 @@ export class RenameProvider implements vscode.RenameProvider {
         if (!wordRange) return null;
         const word = document.getText(wordRange);
 
-        const edit = new vscode.WorkspaceEdit();
-        const locList = DeepAnalysisRename(document, position, word.toUpperCase());
-        for (const loc of locList) {
-            edit.replace(loc.uri, loc.range, newName, {
+        const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
+        const rangeList: vscode.Range[] = DeepAnalysisRename(document, position, word.toUpperCase());
+        for (const range of rangeList) {
+            edit.replace(document.uri, range, newName, {
                 needsConfirmation: true,
                 label: 'is test now',
             });

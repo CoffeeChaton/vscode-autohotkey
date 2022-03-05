@@ -1,8 +1,4 @@
-import {
-    ESnippetRecBecause,
-    TArgMap,
-    TSnippetRecMap,
-} from '../../../../globalEnum';
+import { ESnippetRecBecause, TArgMap, TSnippetRecMap } from '../../../../globalEnum';
 
 export function setParaRec(suggestMap: TSnippetRecMap, argMap: TArgMap, inputStr: string): void {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -14,7 +10,7 @@ export function setParaRec(suggestMap: TSnippetRecMap, argMap: TArgMap, inputStr
         }
 
         // arg Never user
-        if (ArgAnalysis.refLocList.length === 0) {
+        if (ArgAnalysis.refRangeList.length === 0) {
             suggestMap.set(ArgAnalysis.keyRawName, ESnippetRecBecause.paramNeverUsed);
         }
     }

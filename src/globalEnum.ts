@@ -22,12 +22,12 @@ export const enum EMode {
 export const enum EStr {
     diff_name_prefix = '_diff_temp_',
     suggestStr = '✿',
-    neverStr = '▽',
+    // neverStr = '▽',
 }
-export const enum EUri {
-    ahkDoc = 'https://www.autohotkey.com/docs/',
-    nekoHelpHome = 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp',
-}
+// export const enum EUri {
+//     ahkDoc = 'https://www.autohotkey.com/docs/',
+//     nekoHelpHome = 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp',
+// }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [P in keyof T]: DeepReadonly<T[P]> };
 
@@ -103,8 +103,8 @@ export type TAhkValType = EValType.local | EValType.global | EValType.Static;
 export type TC502New = (0 | string);
 export type TArgAnalysis = {
     keyRawName: string;
-    defLocList: vscode.Location[]; // TODO diags "Duplicate parameter".
-    refLocList: vscode.Location[];
+    defRangeList: vscode.Range[]; // TODO diags "Duplicate parameter".
+    refRangeList: vscode.Range[];
     c502Array: TC502New[];
 
     isByRef: boolean;
@@ -117,14 +117,13 @@ export type TGetFnDefNeed = {
     valMap: TValMap;
     line: number;
     lineType: TAhkValType;
-    uri: vscode.Uri;
     argMap: TArgMap;
 };
 
 export type TValAnalysis = {
     keyRawName: string;
-    defLocList: vscode.Location[];
-    refLocList: vscode.Location[];
+    defRangeList: vscode.Range[];
+    refRangeList: vscode.Range[];
     c502Array: TC502New[];
 
     ahkValType: TAhkValType;
@@ -133,7 +132,7 @@ export type TValMap = Map<string, TValAnalysis>; // k = valNameUP
 export type TParamOrValMap = TValMap | TArgMap;
 export type TTextAnalysis = {
     keyRawName: string;
-    refLocList: vscode.Location[];
+    refRangeList: vscode.Range[];
 };
 
 export type TTextMap = Map<string, TTextAnalysis>; // k = valNameUP

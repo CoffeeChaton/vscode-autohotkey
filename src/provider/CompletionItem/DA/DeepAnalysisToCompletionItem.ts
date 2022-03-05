@@ -1,9 +1,5 @@
 import * as vscode from 'vscode';
-import {
-    DeepAnalysisResult,
-    TAhkSymbol,
-    TSnippetRecMap,
-} from '../../../globalEnum';
+import { DeepAnalysisResult, TAhkSymbol, TSnippetRecMap } from '../../../globalEnum';
 import { DeepAnalysis } from '../../../tools/DeepAnalysis/DeepAnalysis';
 import { kindPick } from '../../../tools/Func/kindPick';
 import { getFnOfPos } from '../../../tools/getScopeOfPos';

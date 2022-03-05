@@ -30,7 +30,7 @@ function buildVariableValueObj(attr: TDbgpPropertyAttr, property: TDbgpProperty)
         const ahkArr = childs.map((v) => base64ToStr(v.content || '""'));
         return JSON.stringify(ahkArr);
     }
-    // k = child.attr.fullname
+    // k = child.attr.fullName
     // v = string
     const mapA = new Map<string, string>();
     childs.forEach((child) => {

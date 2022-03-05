@@ -91,7 +91,7 @@ export class DebugDispather extends EventEmitter {
                 });
                 this.sendComand(`feature_set -n max_children -v ${maxChildren}`);
                 this.sendComand(`feature_set -n max_data -v ${maxData}`);
-                this.sendComand('feature_set -n max_depth -v 2'); // Get properties recursively. Therefore fixed at 2
+                this.sendComand('feature_set -n max_depth -v 2'); // Get properties recursively. Therefore, fixed at 2
                 this.sendComand('stdout -c 1');
                 this.sendComand('stderr -c 1');
                 this.sendComand('run');
@@ -262,7 +262,7 @@ export class DebugDispather extends EventEmitter {
             && parentFullName !== EVarScopeStr.Global
         ) {
             const isIndex: boolean = fullname.includes('[') && fullname.includes(']');
-            fullname = isIndex === true
+            fullname = isIndex
                 ? `${parentFullName.name}${fullname}`
                 : `${parentFullName.name}.${fullname}`;
         }

@@ -15,8 +15,8 @@ export function getValCompletion(
     valMap.forEach((v) => {
         const {
             keyRawName,
-            refLocList,
-            defLocList,
+            refRangeList,
+            defRangeList,
             ahkValType,
         } = v;
         const typeValType = getAhkTypeName(ahkValType);
@@ -25,8 +25,8 @@ export function getValCompletion(
             recMap,
             keyRawName,
             funcName,
-            refLocList,
-            defLocList,
+            refRangeList,
+            defRangeList,
             kind: vscode.CompletionItemKind.Variable,
         });
         need.push(item);

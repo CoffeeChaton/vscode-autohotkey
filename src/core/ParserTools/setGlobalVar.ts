@@ -19,14 +19,21 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
     const { textRaw } = DocStrMap[line];
     const lStrFix = removeParentheses(removeBigParentheses(lStr.replace(/^\s*\bglobal\b[,\s]+/ui, fnReplacer)));
 
-    return lStrFix.split(',')
+    // can't match global func
+    // fn(){
+    //     global
+    //     a:= 0 // a is global
+    //     b := 1 // b is global
+    // }
+
+    return lStrFix.split(',') // bug: global a := fn_A(x,b,c) , d := fn(e,f:=g)... can't match f ?
         .map((v) => {
             const col = v.indexOf(':=');
             const lName = (col > 0)
                 ? v.substring(0, col).trim()
-                : v.trim(); // rVal need to use textRaw;
+                : v.trim();
 
-            const col2 = lStrFix.search(ahkValRegex(lName));
+            const col2 = lStrFix.search(ahkValRegex(lName)); // bug: global a := fn_A(a,b,c) , a := fn_B() , just find first a
             if (col2 < 0) {
                 console.error('🚀 ~ setGlobalVar ~ FuncInput', FuncInput);
                 console.error('line', line);
@@ -41,11 +48,12 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
                 : null;
             const newValue: TGlobalVal = {
                 lRange: new vscode.Range(line, col2, line, col2 + lName.length), //  vscode.Range, // left Range
-                rVal, // string // Right value is textRaw
+                rVal, // Right value is textRaw
                 rawName: lName,
             };
-            const oldVale = gValMapBySelf.get(lName.toUpperCase());
-            gValMapBySelf.set(lName.toUpperCase(), [...oldVale ?? [], newValue]);
+            const upName = lName.toUpperCase();
+            const oldVale = gValMapBySelf.get(upName);
+            gValMapBySelf.set(upName, [...oldVale ?? [], newValue]);
 
             return lName;
         })

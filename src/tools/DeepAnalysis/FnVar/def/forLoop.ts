@@ -9,20 +9,18 @@ import { wrapFnValDef } from './wrapFnValDef';
 function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {
     const {
         line,
-        uri,
         valMap,
         lineType,
     } = arg;
-    const range = new vscode.Range(
+    const defRange = new vscode.Range(
         new vscode.Position(line, character),
         new vscode.Position(line, character + RawName.length),
     );
-    const defLoc = new vscode.Location(uri, range);
 
     const value: TValAnalysis = wrapFnValDef({
         RawNameNew: RawName,
         valMap,
-        defLoc,
+        defRange,
         lineType,
     });
     valMap.set(RawName.toUpperCase(), value);

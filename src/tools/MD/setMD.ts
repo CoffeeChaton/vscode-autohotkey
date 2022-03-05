@@ -3,25 +3,27 @@ import { ESnippetRecBecause } from '../../globalEnum';
 
 export function setMD(
     prefix: string,
-    refLocList: vscode.Location[],
-    defLocList: vscode.Location[],
+    refRangeList: vscode.Range[],
+    defRangeList: vscode.Range[],
     funcName: string,
-    recStr: ESnippetRecBecause | null,
+    recStr: ESnippetRecBecause | '',
 ): vscode.MarkdownString {
-    const def: string = defLocList
-        .map((loc): string => `line ${loc.range.start.line + 1}, col ${loc.range.start.character + 1}  `)
+    const def: string = defRangeList
+        .map((range): string => `line ${range.start.line + 1}, col ${range.start.character + 1}  `)
         .join('\n');
 
-    const ref: string = refLocList
-        .map((loc): string => `line ${loc.range.start.line + 1}, col ${loc.range.start.character + 1}  `)
+    const ref: string = refRangeList
+        .map((range): string => `line ${range.start.line + 1}, col ${range.start.character + 1}  `)
         .join('\n');
 
     return new vscode.MarkdownString('', true)
         .appendCodeblock(`${prefix} of ${funcName}()`)
-        .appendMarkdown(recStr ?? '')
+        .appendMarkdown(recStr)
         .appendMarkdown('use`f12` goto def    \n')
         .appendMarkdown(def)
         .appendMarkdown('   \n')
         .appendMarkdown('use`shift f12` goto ref    \n')
         .appendMarkdown(ref);
 }
+
+// icon https://code.visualstudio.com/api/references/icons-in-labels

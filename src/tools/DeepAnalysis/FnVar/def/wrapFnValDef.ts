@@ -12,19 +12,19 @@ type TGetValue = {
     RawNameNew: string;
     valMap: TValMap;
     lineType: TAhkValType;
-    defLoc: vscode.Location;
+    defRange: vscode.Range;
 };
 
 export function wrapFnValDef({
     RawNameNew,
     valMap,
     lineType,
-    defLoc,
+    defRange,
 }: TGetValue): TValAnalysis {
     const oldVal: TValAnalysis | undefined = valMap.get(RawNameNew.toUpperCase());
     if (oldVal) {
         oldVal.c502Array.push(newC502(oldVal.keyRawName, RawNameNew));
-        oldVal.defLocList.push(defLoc);
+        oldVal.defRangeList.push(defRange);
         return oldVal;
     }
 
@@ -40,8 +40,8 @@ export function wrapFnValDef({
     }
     return {
         keyRawName: RawNameNew,
-        defLocList: [defLoc],
-        refLocList: [],
+        defRangeList: [defRange],
+        refRangeList: [],
         ahkValType,
         c502Array: [0],
     };

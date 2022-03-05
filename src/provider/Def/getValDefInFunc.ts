@@ -24,9 +24,10 @@ function wrapper(
     wordUp: string,
     listAllUsing: boolean,
     position: vscode.Position,
-): vscode.Location[] {
+): vscode.Range[] {
     const DA = DeepAnalysis(document, ahkSymbol);
     if (!DA) return [];
+
     const {
         argMap,
         valMap,
@@ -35,29 +36,31 @@ function wrapper(
     const argList = argMap.get(wordUp);
     if (argList) {
         return listAllUsing
-            ? [...argList.defLocList, ...argList.refLocList]
-            : argList.defLocList;
+            ? [...argList.defRangeList, ...argList.refRangeList]
+            : argList.defRangeList;
     }
     const valList = valMap.get(wordUp);
     if (valList) {
-        if (listAllUsing) return [...valList.defLocList, ...valList.refLocList];
+        if (listAllUsing) return [...valList.defRangeList, ...valList.refRangeList];
         // <
         // when I open "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
         // why vscode can't Identify loc.range.contains(position)
         //      , and auto let F12 -> shift F12 ?
         //           (auto let goto Def -> Ref)
         // What else do I need to read?
-        for (const loc of valList.defLocList) {
-            if (loc.range.contains(position)) {
-                return [...valList.defLocList, ...valList.refLocList];
+        for (const range of valList.defRangeList) {
+            if (range.contains(position)) {
+                return [...valList.defRangeList, ...valList.refRangeList];
+                // void new ReferenceProvider(); // not work
+                // return [];
             }
         }
         // >
-        return valList.defLocList;
+        return valList.defRangeList;
     }
     const textList = textMap.get(wordUp);
     if (textList) {
-        return textList.refLocList;
+        return textList.refRangeList;
     }
     return [];
 }
@@ -68,7 +71,7 @@ function match(
     position: vscode.Position,
     wordUp: string,
     listAllUsing: boolean,
-): null | vscode.Location[] {
+): null | vscode.Range[] {
     const funcPos = atFunPos(ahkSymbol, position);
     // dprint-ignore
     switch (funcPos) {
@@ -93,5 +96,10 @@ export function getValDefInFunc(
     if (!ahkSymbol) return null;
     if (!kindPick(ahkSymbol.kind)) return null;
 
-    return match(ahkSymbol, document, position, wordUp, listAllUsing);
+    const rangeList: vscode.Range[] | null = match(ahkSymbol, document, position, wordUp, listAllUsing);
+    if (rangeList === null) return null;
+
+    const { uri } = document;
+    const locList = rangeList.map((range) => new vscode.Location(uri, range));
+    return locList;
 }

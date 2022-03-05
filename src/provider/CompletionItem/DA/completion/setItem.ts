@@ -11,8 +11,8 @@ type TSetItem = {
     recMap: TSnippetRecMap;
     keyRawName: string;
     funcName: string;
-    refLocList: vscode.Location[];
-    defLocList: vscode.Location[];
+    refRangeList: vscode.Range[];
+    defRangeList: vscode.Range[];
     kind: vscode.CompletionItemKind;
 };
 
@@ -22,12 +22,12 @@ export function setItemCore(
         recMap,
         keyRawName,
         funcName,
-        refLocList,
-        defLocList,
+        refRangeList,
+        defRangeList,
         kind,
     }: TSetItem,
 ): vscode.CompletionItem {
-    const recStr: ESnippetRecBecause | null = recMap.get(keyRawName) ?? null;
+    const recStr: ESnippetRecBecause | undefined = recMap.get(keyRawName);
 
     const label: vscode.CompletionItemLabel = {
         label: recStr
@@ -45,7 +45,7 @@ export function setItemCore(
         item.preselect = true;
     }
 
-    const md: vscode.MarkdownString = setMD(prefix, refLocList, defLocList, funcName, recStr);
+    const md: vscode.MarkdownString = setMD(prefix, refRangeList, defRangeList, funcName, recStr ?? '');
 
     item.documentation = md;
     return item;

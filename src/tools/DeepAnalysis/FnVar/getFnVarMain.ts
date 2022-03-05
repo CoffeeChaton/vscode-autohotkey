@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 import {
     TAhkSymbol,
     TArgMap,
@@ -9,19 +8,17 @@ import { getFnVarDef } from './getFnVarDef';
 import { getFnVarRef } from './getFnVarRef';
 
 export function getFnVarMain(
-    uri: vscode.Uri,
     ahkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
     argMap: TArgMap,
 ): TValMap {
     const valMap: TValMap = getFnVarDef({
-        uri,
         ahkSymbol,
         DocStrMap,
         argMap,
     });
 
-    getFnVarRef(uri, ahkSymbol, DocStrMap, valMap);
+    getFnVarRef(ahkSymbol, DocStrMap, valMap);
 
     return valMap;
 }

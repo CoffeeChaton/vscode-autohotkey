@@ -20,30 +20,30 @@ export function DeepAnalysisHover(
         const {
             isByRef,
             isVariadic,
-            refLocList,
-            defLocList,
+            refRangeList,
+            defRangeList,
         } = arg;
         const prefix = setPreFix(isByRef, isVariadic);
-        return setMD(prefix, refLocList, defLocList, funcName, null);
+        return setMD(prefix, refRangeList, defRangeList, funcName, '');
     }
 
     const value: TValAnalysis | undefined = ed.valMap.get(wordUp);
     if (value) {
         const {
-            refLocList,
-            defLocList,
+            refRangeList,
+            defRangeList,
             ahkValType,
         } = value;
         const typeValType = getAhkTypeName(ahkValType);
         const prefix = `${typeValType} var`;
-        return setMD(prefix, refLocList, defLocList, funcName, null);
+        return setMD(prefix, refRangeList, defRangeList, funcName, '');
     }
 
     const unKnownText: TTextAnalysis | undefined = ed.textMap.get(wordUp);
     if (unKnownText) {
-        const { refLocList } = unKnownText;
+        const { refRangeList } = unKnownText;
         const prefix = 'unKnownText';
-        return setMD(prefix, refLocList, [], funcName, null);
+        return setMD(prefix, refRangeList, [], funcName, '');
     }
 
     return null;

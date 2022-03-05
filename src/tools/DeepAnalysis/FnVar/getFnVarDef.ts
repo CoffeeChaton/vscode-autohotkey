@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 /* eslint-disable security/detect-unsafe-regex */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,15] }] */
-import * as vscode from 'vscode';
 import {
     EFnMode,
     EValType,
@@ -36,7 +35,6 @@ function getLineType(lStr: string, fnMode: EFnMode): EValType.local | EValType.g
 }
 
 type TFnVarDef = {
-    uri: vscode.Uri;
     ahkSymbol: TAhkSymbol;
     DocStrMap: TTokenStream;
     argMap: TArgMap;
@@ -44,7 +42,6 @@ type TFnVarDef = {
 
 export function getFnVarDef(
     {
-        uri,
         ahkSymbol,
         DocStrMap,
         argMap,
@@ -66,7 +63,6 @@ export function getFnVarDef(
             valMap,
             line,
             lineType,
-            uri,
             argMap,
         };
         walrusOperator(need); // :=

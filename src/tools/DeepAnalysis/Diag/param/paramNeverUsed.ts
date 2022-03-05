@@ -5,9 +5,9 @@ import { setDiagnosticDA } from '../../../../provider/Diagnostic/setDiagnostic';
 
 export function paramNeverUsed(argMap: TArgMap, code501List: vscode.Diagnostic[]): void {
     argMap.forEach((v): void => {
-        if (!(v.refLocList.length === 0)) return;
+        if (!(v.refRangeList.length === 0)) return;
         if (v.keyRawName.startsWith('_')) return;
-        const { range } = v.defLocList[0];
+        const range = v.defRangeList[0];
         const severity = vscode.DiagnosticSeverity.Warning;
         const tags = [vscode.DiagnosticTag.Unnecessary];
         const message: string = DiagsDA[EDiagCodeDA.code501].msg;

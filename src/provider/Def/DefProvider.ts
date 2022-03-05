@@ -105,9 +105,6 @@ async function ahkDef(
     return false;
 }
 
-/**
- * @param wordUp word.toUpperCase();
- */
 export async function userDef(
     document: vscode.TextDocument,
     position: vscode.Position,
