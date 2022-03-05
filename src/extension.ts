@@ -8,6 +8,7 @@ import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProv
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
 import { DefProvider } from './provider/Def/DefProvider';
+import { onClosetDocClearDiag } from './provider/event/onClosetDocClearDiag';
 import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
@@ -35,6 +36,9 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.workspace.onDidCreateFiles((e): void => Detecter.createMap(e)),
         vscode.workspace.onDidRenameFiles((e): void => Detecter.renameFileName(e)), // just support rename, not support Move
         // vscode.workspace.onDidChangeTextDocument((e) => d(e)),
+        vscode.workspace.onDidCloseTextDocument((doc: vscode.TextDocument): void => {
+            void onClosetDocClearDiag(doc.uri.fsPath);
+        }),
         vscode.commands.registerCommand('ahk.bar.click', (): void => void statusBarClick()),
         vscode.commands.registerCommand('ahk.nekoHelp.openDoc', (): void => openDocs()),
         vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),

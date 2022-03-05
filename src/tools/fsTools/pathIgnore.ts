@@ -15,3 +15,4 @@ export function pathIgnore(fsPath: string): boolean {
 // vscode.languages.findFiles('**​/*.js', '**​/node_modules/**')
 // vscode.languages.match
 // TODO OutputChannel of user setting of pathIgnore <--> getConfig
+// https://code.visualstudio.com/api/references/vscode-api#GlobPattern

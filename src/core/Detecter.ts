@@ -21,6 +21,13 @@ import { globalValMap } from './Global';
 import { getReturnByLine, ParserBlock } from './Parser';
 import { ParserLine } from './ParserTools/ParserLine';
 
+type TFsPath = string;
+type TCache = {
+    hash: string;
+    AhkSymbolList: TAhkSymbolList;
+};
+const cache = new Map<TFsPath, TCache[]>();
+
 export const Detecter = {
     // key : vscode.Uri.fsPath,
     // val : vscode.DocumentSymbol[] -> MyDocSymbolArr
@@ -98,6 +105,11 @@ export const Detecter = {
 
         if (!fsPath.includes(EStr.diff_name_prefix)) {
             if (showMsg) showTimeSpend(document.uri, timeStart);
+            const TextDocument = vscode.workspace.textDocuments;
+            TextDocument.forEach((doc) => {
+                console.log('🚀 ~ TextDocument.forEach ~   doc.fileName', doc.fileName);
+            });
+            console.log(fsPath, '---isDirty-----', document.isDirty);
             Detecter.DocMap.set(fsPath, AhkSymbolList);
             globalValMap.set(fsPath, gValMapBySelf);
             baseDiagnostic(DocStrMap, AhkSymbolList, Uri, diagColl);
