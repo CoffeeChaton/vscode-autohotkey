@@ -105,11 +105,11 @@ export const Detecter = {
 
         if (!fsPath.includes(EStr.diff_name_prefix)) {
             if (showMsg) showTimeSpend(document.uri, timeStart);
-            const TextDocument = vscode.workspace.textDocuments;
-            TextDocument.forEach((doc) => {
-                console.log('🚀 ~ TextDocument.forEach ~   doc.fileName', doc.fileName);
-            });
-            console.log(fsPath, '---isDirty-----', document.isDirty);
+            // const TextDocument = vscode.workspace.textDocuments;
+            // TextDocument.forEach((doc) => {
+            //     console.log('🚀 ~ TextDocument.forEach ~   doc.fileName', doc.fileName);
+            // });
+            // console.log(fsPath, '---isDirty-----', document.isDirty);
             Detecter.DocMap.set(fsPath, AhkSymbolList);
             globalValMap.set(fsPath, gValMapBySelf);
             baseDiagnostic(DocStrMap, AhkSymbolList, Uri, diagColl);
@@ -120,8 +120,8 @@ export const Detecter = {
                 const diagnostics = diagDAFile(AhkSymbolList, document);
                 const baseDiag = (diagColl.get(Uri) || []).filter((v) => v.source !== EDiagBase.sourceDA);
                 diagColl.set(Uri, [...baseDiag, ...diagnostics]);
-                console.log('🚀 ~ updateDocDef ~ hash', hash);
-                console.log('🚀 ~ updateDocDef ~ hash', Date.now() - timeStart, 'ms'); //  gdip_all_20xx just need 1ms
+                // console.log('🚀 ~ updateDocDef ~ hash', hash);
+                // console.log('🚀 ~ updateDocDef ~ hash', Date.now() - timeStart, 'ms'); //  gdip_all_20xx just need 1ms
             }
         }
         return AhkSymbolList as vscode.DocumentSymbol[];

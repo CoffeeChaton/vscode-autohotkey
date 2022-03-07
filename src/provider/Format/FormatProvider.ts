@@ -27,7 +27,7 @@ function Hashtag(textFix: string): '#if' | '#HotString' | '' {
 
     // https://www.autohotkey.com/docs/commands/_If.htm#Basic_Operation
     if (
-        (/^#ifwin(?:not)?(?:active|exist)\b/ui).test(textFix)
+        (/^#ifWin(?:not)?(?:active|exist)\b/ui).test(textFix)
         || (/^#if\b/ui).test(textFix)
     ) {
         return '#if';
@@ -70,9 +70,10 @@ function wrap(args: WarnUseType, text: string): vscode.TextEdit {
         textRaw,
         hasDiff,
     } = args;
+    const { detail } = DocStrMap[line];
 
-    const CommentBlock = DocStrMap[line].detail.includes(DetailType.inComment);
-    const newText = getFormatConfig()
+    const CommentBlock: boolean = detail.includes(DetailType.inComment);
+    const newText: string = getFormatConfig()
         ? lineReplace(text, textFix, CommentBlock, inLTrim)
         : text;
 
@@ -80,7 +81,7 @@ function wrap(args: WarnUseType, text: string): vscode.TextEdit {
         hasDiff[0] = true;
     }
 
-    const endCharacter = Math.max(newText.length, textRaw.length);
+    const endCharacter: number = Math.max(newText.length, textRaw.length);
     const range = new vscode.Range(line, 0, line, endCharacter);
     return new vscode.TextEdit(range, newText); // FIXME some time, we don't need new TextEdit. but callDiff need this...
 }
@@ -105,8 +106,10 @@ function fn_Warn_thisLineText_WARN(args: WarnUseType): vscode.TextEdit {
         && !(/^\s\(/iu).test(textRaw)
     ) {
         return wrap(args, document.lineAt(line).text);
+        //    return wrap(args, textRaw.replace(/\r$/u, ''));
     }
 
+    // const WarnLineBodyWarn: string = textRaw.replace(/\r$/u, '').trimStart();
     const WarnLineBodyWarn = document.lineAt(line).text.trimStart();
     if (WarnLineBodyWarn === '') {
         return wrap(args, WarnLineBodyWarn);
@@ -230,6 +233,7 @@ export function FormatCore(
             : getDeepKeywords(textFix, occ); // TODO fmt_a1
     }
 
+    console.log('🚀 ~ fmt ', Date.now() - timeStart);
     if (needDiff && hasDiff[0]) {
         const fileName = path.basename(document.uri.fsPath);
         fmtReplaceWarn(timeStart, from, fileName);
@@ -298,3 +302,5 @@ for k,v in Monitors
             }
 ```
 */
+
+// TODO add /** */ a space to fold
