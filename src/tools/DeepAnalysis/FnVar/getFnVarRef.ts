@@ -44,7 +44,11 @@ function getValRef(param: TNeedSetRef, paramOrValMap: TParamOrValMap): void {
         new vscode.Position(line, character),
         new vscode.Position(line, character + newRawName.length),
     );
-    const { refRangeList, c502Array } = oldVal;
+    const { refRangeList, c502Array, defRangeList } = oldVal;
+
+    const isDef: boolean = defRangeList.some((defRange) => defRange.isEqual(Range));
+    if (isDef) return; // is Def
+
     refRangeList.push(Range);
     c502Array.push(newC502(oldVal.keyRawName, newRawName));
 }
