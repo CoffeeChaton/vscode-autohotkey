@@ -44,7 +44,7 @@
                             "name": "entity.name.type.instance.comment.block.documentation.ahk"
                         }
                     },
-                    "match": "^\\s*\\*\\s+(?i:@param)\\s+(\\w+)\\s+(\\w+)?",
+                    "match": "^\\s*\\*\\s+((?i:@param))\\s+(\\w+)\\s+(\\w+)?",
                     "name": "comment.block.documentation.ahk"
                 },
                 {
@@ -56,7 +56,7 @@
                             "name": "variable.comment.block.documentation.ahk"
                         }
                     },
-                    "match": "^\\s*\\*\\s+(?i:@param)\\s+(\\w+)",
+                    "match": "^\\s*\\*\\s+((?i:@param))\\s+(\\w+)",
                     "name": "comment.block.documentation.ahk"
                 },
                 {
@@ -71,7 +71,7 @@
                             "name": "entity.name.type.instance.comment.block.documentation.ahk"
                         }
                     },
-                    "match": "^\\s*\\*\\s+(?i:@Return)\\s+(\\w+)\\s+(\\w+)?",
+                    "match": "^\\s*\\*\\s+((?i:@Return))\\s+(\\w+)\\s+(\\w+)?",
                     "name": "comment.block.documentation.ahk"
                 },
                 {
