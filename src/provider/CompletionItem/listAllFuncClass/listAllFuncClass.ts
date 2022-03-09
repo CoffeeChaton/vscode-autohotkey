@@ -6,7 +6,7 @@ import { pathIgnore } from '../../../tools/fsTools/pathIgnore';
 import { setFuncHoverMD } from '../../../tools/MD/setHoverMD';
 import { insertTextWm } from '../classThis/insertTextWm';
 
-async function listAllFuncClass(inputStr: string): Promise<vscode.CompletionItem[]> {
+export async function listAllFuncClass(inputStr: string): Promise<vscode.CompletionItem[]> {
     const fsPaths = Detecter.getDocMapFile();
     const itemS: vscode.CompletionItem[] = [];
     for (const fsPath of fsPaths) {
@@ -39,32 +39,4 @@ async function listAllFuncClass(inputStr: string): Promise<vscode.CompletionItem
         }
     }
     return itemS;
-}
-
-export async function wrapListAllFuncClass(
-    document: vscode.TextDocument,
-    position: vscode.Position,
-    inputStr: string,
-): Promise<vscode.CompletionItem[]> {
-    // eslint-disable-next-line security/detect-unsafe-regex
-    const Range = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
-    if (Range === undefined) return []; // exp: . / []
-
-    if (Range.start.character - 1 > -1) {
-        const newRange = new vscode.Range(
-            Range.start.line,
-            Range.start.character - 1,
-            Range.start.line,
-            Range.start.character,
-        );
-        const newStr = document.getText(newRange);
-        if (newStr !== '.' && newStr !== '`') {
-            const need0 = await listAllFuncClass(inputStr);
-            return need0;
-        }
-        return [];
-    }
-    // at line start
-    const ed2 = await listAllFuncClass(inputStr);
-    return ed2;
 }

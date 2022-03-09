@@ -5,8 +5,9 @@ import { ahkSend } from './ahkSend';
 import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
 import { globalValCompletion } from './global/globalValCompletion';
+import { isNormalPos } from './isNormalPos';
 import { snippetStartWihA } from './json/SnippetStartWihA';
-import { wrapListAllFuncClass } from './listAllFuncClass/listAllFuncClass';
+import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
 import { getStartWithStr } from './util';
 
 // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
@@ -22,12 +23,17 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
         const inputStr = getStartWithStr(document, position);
         const completions: vscode.CompletionItem[] = [
             ...await wrapClass(document, position), // '.'
-            ...await wrapListAllFuncClass(document, position, inputStr), // ''
             ...ahkSend(document, position), // '{'
-            ...DeepAnalysisToCompletionItem(document, position, inputStr),
-            ...snippetStartWihA(),
-            ...globalValCompletion(document, position, inputStr),
         ];
+
+        if (isNormalPos(document, position)) {
+            completions.push(
+                ...await listAllFuncClass(inputStr),
+                ...DeepAnalysisToCompletionItem(document, position, inputStr),
+                ...snippetStartWihA(),
+                ...globalValCompletion(document, position, inputStr),
+            );
+        }
         // TODO #Include list fsPath List && suggest never #include
         console.log('CompletionItemProvider -> time Cost', Date.now() - t1);
 
