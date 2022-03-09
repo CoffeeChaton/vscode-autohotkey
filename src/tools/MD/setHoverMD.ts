@@ -1,20 +1,7 @@
 import * as vscode from 'vscode';
-import { EMode, TAhkSymbol } from '../../globalEnum';
+import { EMode, TAhkSymbol, TTokenStream } from '../../globalEnum';
 import { Pretreatment } from '../Pretreatment';
 import { ClassWm } from '../wm';
-
-function commentFix(commentText: string): string {
-    return commentText !== ''
-        ? `/**  \n  \n${commentText}  \n*/  \n`
-        : '  \n'; // '/* not comment */  \n';
-}
-
-function getCommentText(textRaw: string): string {
-    const textFix = textRaw.trimStart();
-    return textFix.trimStart().startsWith(';')
-        ? `${textFix.substring(1)}  \n`
-        : '';
-}
 
 function getReturnText(lStr: string, textRaw: string): string {
     const col = lStr.search(/\breturn\b[\s,]+.+/ui);
@@ -34,7 +21,7 @@ function getReturnText(lStr: string, textRaw: string): string {
 export function inCommentBlock2(textRaw: string, commentBlock: boolean): boolean {
     if (commentBlock) {
         if ((/^\s*\*\//u).test(textRaw)) return false; // */
-    } else if ((/^\s*\/\*\*/u).test(textRaw)) {
+    } else if ((/^\s*\/\*{2}/u).test(textRaw)) {
         return true; // /**
     }
     return commentBlock;
@@ -59,17 +46,17 @@ export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.Markdown
     // --set end---
 
     let commentBlock = false;
-    let commentText = '';
+    const commentList: string[] = [];
     let returnList = '';
     const startLineBaseZero = AhkSymbol.range.start.line;
-    const DocStrMap = Pretreatment(document.getText(AhkSymbol.range).split('\n'), startLineBaseZero);
+    const DocStrMap: TTokenStream = Pretreatment(document.getText(AhkSymbol.range).split('\n'), startLineBaseZero);
     const starLine = 0;
     const endLine = DocStrMap.length;
     for (let line = starLine; line < endLine; line++) {
         const { textRaw } = DocStrMap[line];
         commentBlock = inCommentBlock2(textRaw, commentBlock);
         if (commentBlock) {
-            commentText += getCommentText(textRaw);
+            commentList.push(textRaw.trimStart().substring(1));
             continue;
         }
         returnList += getReturnText(DocStrMap[line].lStr, DocStrMap[line].textRaw);
@@ -78,13 +65,14 @@ export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.Markdown
     const kindDetail = `(${EMode.ahkFunc}) ${AhkSymbol.detail}\n`;
     const title = `${document.getText(AhkSymbol.selectionRange)}{\n`;
 
-    const commentText2 = commentFix(commentText);
     const md = new vscode.MarkdownString('', true)
         .appendCodeblock(kindDetail, 'ahk')
         .appendCodeblock(title, 'ahk')
         .appendCodeblock(returnList, 'ahk')
-        .appendCodeblock('}\n', 'ahk')
-        .appendMarkdown(commentText2);
+        .appendCodeblock('}\n\n', 'ahk')
+        .appendMarkdown(commentList.join('\n\n'));
+
+    md.supportHtml = true;
 
     return w.setWm(AhkSymbol, md);
 }

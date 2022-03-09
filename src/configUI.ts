@@ -65,9 +65,9 @@ export function configChangEvent(): void {
     ---set end---
 */
 
-export function showTimeSpend(uri: vscode.Uri, timeStart: number): void {
+export function showTimeSpend(fsPath: string, timeStart: number): void {
     const time = Date.now() - timeStart;
-    statusBarItem.text = `$(heart) ${time} ms of ${path.basename(uri.fsPath)}`;
+    statusBarItem.text = `$(heart) ${time} ms of ${path.basename(fsPath)}`;
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
 }

@@ -36,13 +36,12 @@ export function globalValCompletion(
                 const ln = lRange.start.line;
                 const uri = vscode.Uri.parse(fsPath).toString();
                 const showFileName = `${fileName} ln:${ln + 1} ch:${ch + 1}`;
-                const md = new vscode.MarkdownString('', true)
+                item.documentation = new vscode.MarkdownString('', true)
                     .appendMarkdown(
                         `[${showFileName}](file:///${uri})\n\n`,
                     )
                     .appendCodeblock(`Global ${rawName} := ${rVal}`, 'ahk');
 
-                item.documentation = md;
                 map.set(valUpName, item);
             }
         }

@@ -20,13 +20,11 @@ export function snippetStartWihA(): vscode.CompletionItem[] {
         item.insertText = k;
         // item.filterText = 'A_';
         item.detail = 'Built-in Variables (neko-help)'; // description
-        const md = new vscode.MarkdownString('', true)
+        item.documentation = new vscode.MarkdownString('', true)
             .appendCodeblock(k, 'ahk')
             .appendMarkdown(v.class)
             .appendMarkdown('\n\n')
             .appendMarkdown(`[Read Doc](${v.uri})`);
-
-        item.documentation = md;
         snippetList.push(item);
     }
     Object.freeze(snippetList);

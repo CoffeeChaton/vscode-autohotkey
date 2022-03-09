@@ -27,12 +27,10 @@ export function diagDAFile(
         }
     }
 
-    const diagnostics: readonly vscode.Diagnostic[] = [
+    return [
         ...code501List,
         ...code502List,
         ...code503List,
         ...code504List,
     ];
-
-    return diagnostics;
 }

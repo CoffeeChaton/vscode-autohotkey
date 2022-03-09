@@ -61,17 +61,17 @@ AutoHotKey language support for VS Code
 
 ```ahk
 /**
-    ; in /** block.
-    ; and the line first character is ';'
-    ; can use partial grammar of markdown.
-    ; exp@email.com
-    ; [Markdown Rule](https://en.wikipedia.org/wiki/Markdown)
-    ; <https://en.wikipedia.org/wiki/Markdown>
-    ; ![Image](/D:/icon.png "icon")
-    ; ~~ABC~~
-    ; _ABC_ _ABC_
-    ; - - -
-    ;  `monospace`
+    * in /** block.
+    * and the line first character is '*'
+    * can use partial grammar of markdown.
+    * exp@email.com
+    * [Markdown Rule](https://en.wikipedia.org/wiki/Markdown)
+    * <https://en.wikipedia.org/wiki/Markdown>
+    * ![Image](/D:/icon.png "icon")
+    * ~~ABC~~
+    * _ABC_ _ABC_
+    * - - -
+    *  `monospace`
 */
 ```
 

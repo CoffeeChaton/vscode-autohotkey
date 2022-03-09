@@ -252,12 +252,12 @@ function getLabelErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diag
     return 1;
 }
 
-type TFnLineErr = (DocStrMap: TTokenStream, line: number, uri: vscode.Uri) => 0 | 1 | vscode.Diagnostic;
+type TFnLineErr = (DocStrMap: TTokenStream, line: number) => 0 | 1 | vscode.Diagnostic;
 
-function getLineErr(DocStrMap: TTokenStream, line: number, uri: vscode.Uri): null | vscode.Diagnostic {
+function getLineErr(DocStrMap: TTokenStream, line: number): null | vscode.Diagnostic {
     const fnList: TFnLineErr[] = [assign, getDirectivesErr, getCommandErr, getLabelErr];
     for (const fn of fnList) {
-        const err = fn(DocStrMap, line, uri);
+        const err = fn(DocStrMap, line);
         // dprint-ignore
         switch (err) {
             case 0: break; // break switch
@@ -319,13 +319,11 @@ function getFuncErr(
 export function baseDiagnostic(
     DocStrMap: TTokenStream,
     result: Readonly<TAhkSymbol[]>,
-    uri: vscode.Uri,
-    diagColl: vscode.DiagnosticCollection,
-): void {
+): vscode.Diagnostic[] {
     const lineMax = DocStrMap.length;
     let IgnoreLine = -1;
     const displayErr: boolean[] = [];
-    const diagS: vscode.Diagnostic[] = [];
+    const lineDiagS: vscode.Diagnostic[] = [];
     // const h = symbolList(result);
     for (let line = 0; line < lineMax; line++) {
         IgnoreLine = getIgnore(DocStrMap, line, IgnoreLine);
@@ -334,14 +332,14 @@ export function baseDiagnostic(
             continue;
         }
         displayErr.push(true);
-        const err = getLineErr(DocStrMap, line, uri);
-        if (err !== null) diagS.push(err);
+        const err = getLineErr(DocStrMap, line);
+        if (err !== null) lineDiagS.push(err);
     }
 
-    diagS.push(
+    return [
+        ...lineDiagS,
         ...getTreeErr(result, displayErr),
         ...getFuncErr(DocStrMap, result, displayErr),
-    );
-    diagColl.set(uri, diagS);
+    ];
 }
 // TODO  vscode.languages.getDiagnostics()

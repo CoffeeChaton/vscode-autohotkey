@@ -9,6 +9,7 @@ import { getLStr, isSetVarTradition } from './str/removeSpecialChar';
 // LexicalAnalysisSimple
 
 export function Pretreatment(strArray: readonly string[], startLineBaseZero: number): TTokenStream {
+    // FIXME this Need cache
     const result: TAhkToken = [];
     let CommentBlock = false;
     let inLTrim: 0 | 1 | 2 = 0;
@@ -17,7 +18,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
     //  const timeStart = Date.now();
     for (let Offset = 0; Offset < lineMax; Offset++) {
         const line = Offset + startLineBaseZero;
-        const textRaw = strArray[Offset];
+        const textRaw = strArray[Offset].replace(/\r/ug, '');
         if (deep < 0) {
             console.warn(Offset, 'Pretreatment -> line , deep < 0 ');
             // void vscode.window.showWarningMessage

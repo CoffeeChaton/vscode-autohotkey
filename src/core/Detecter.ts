@@ -6,27 +6,13 @@ import {
     EDiagBase,
     EStr,
     TAhkSymbolList,
-    TGlobalVal,
-    TGValMap,
-    TValUpName,
 } from '../globalEnum';
 import { baseDiagnostic } from '../provider/Diagnostic/Diagnostic';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
 import { diagDAFile } from '../tools/DeepAnalysis/Diag/diagDA';
-import { Pretreatment } from '../tools/Pretreatment';
-import { hashCode } from '../tools/str/hashCode';
+import { getBaseData } from './BaseScanCache/cache';
 import { diagColl } from './diagRoot';
-import { getChildren } from './getChildren';
 import { globalValMap } from './Global';
-import { getReturnByLine, ParserBlock } from './Parser';
-import { ParserLine } from './ParserTools/ParserLine';
-
-type TFsPath = string;
-type TCache = {
-    hash: string;
-    AhkSymbolList: TAhkSymbolList;
-};
-const cache = new Map<TFsPath, TCache[]>();
 
 export const Detecter = {
     // key : vscode.Uri.fsPath,
@@ -76,52 +62,26 @@ export const Detecter = {
     },
 
     async updateDocDef(showMsg: boolean, fsPath: string, useDeepAnalysis: boolean): Promise<vscode.DocumentSymbol[]> {
-        const Uri = vscode.Uri.file(fsPath);
+        const Uri: vscode.Uri = vscode.Uri.file(fsPath);
         globalValMap.delete(fsPath);
-        const document = await vscode.workspace.openTextDocument(Uri);
-        const gValMapBySelf: TGValMap = new Map<TValUpName, TGlobalVal[]>();
-        const timeStart = Date.now();
-
-        const fullText = document.getText();
-        const hash = hashCode(fullText);
-        const a = 0; // just test eslint is working, or not
-        const DocStrMap = Pretreatment(fullText.split('\n'), 0);
-        const AhkSymbolList: TAhkSymbolList = getChildren({
+        const document: vscode.TextDocument = await vscode.workspace.openTextDocument(Uri);
+        const timeStart: number = Date.now();
+        const {
             gValMapBySelf,
-            Uri,
             DocStrMap,
-            RangeStartLine: 0,
-            RangeEndLine: DocStrMap.length,
-            inClass: false,
-            fnList: [
-                ParserBlock.getClass,
-                ParserBlock.getFunc,
-                ParserBlock.getComment,
-                ParserBlock.getSwitchBlock,
-                getReturnByLine,
-                ParserLine,
-            ],
-        });
+            AhkSymbolList,
+        } = getBaseData(document);
 
         if (!fsPath.includes(EStr.diff_name_prefix)) {
-            if (showMsg) showTimeSpend(document.uri, timeStart);
-            // const TextDocument = vscode.workspace.textDocuments;
-            // TextDocument.forEach((doc) => {
-            //     console.log('🚀 ~ TextDocument.forEach ~   doc.fileName', doc.fileName);
-            // });
-            // console.log(fsPath, '---isDirty-----', document.isDirty);
+            if (showMsg) showTimeSpend(fsPath, timeStart);
             Detecter.DocMap.set(fsPath, AhkSymbolList);
             globalValMap.set(fsPath, gValMapBySelf);
-            baseDiagnostic(DocStrMap, AhkSymbolList, Uri, diagColl);
-            // TODO debounce of deepDiag A File // );
+            const baseDiag = baseDiagnostic(DocStrMap, AhkSymbolList);
+            diagColl.set(Uri, [...baseDiag]);
             if (useDeepAnalysis) {
-                // console.log('🚀 ~ file size', document.getText().length);
-                // Gdip_all_2020_08_24 -> 2^18 ~ 2^19
                 const diagnostics = diagDAFile(AhkSymbolList, document);
-                const baseDiag = (diagColl.get(Uri) || []).filter((v) => v.source !== EDiagBase.sourceDA);
-                diagColl.set(Uri, [...baseDiag, ...diagnostics]);
-                // console.log('🚀 ~ updateDocDef ~ hash', hash);
-                // console.log('🚀 ~ updateDocDef ~ hash', Date.now() - timeStart, 'ms'); //  gdip_all_20xx just need 1ms
+                const otherDiag = (diagColl.get(Uri) || []).filter((v) => v.source !== EDiagBase.sourceDA);
+                diagColl.set(Uri, [...otherDiag, ...diagnostics]);
             }
         }
         return AhkSymbolList as vscode.DocumentSymbol[];

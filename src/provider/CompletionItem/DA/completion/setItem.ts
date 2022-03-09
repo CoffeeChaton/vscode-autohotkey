@@ -1,9 +1,5 @@
 import * as vscode from 'vscode';
-import {
-    ESnippetRecBecause,
-    EStr,
-    TSnippetRecMap,
-} from '../../../../globalEnum';
+import { ESnippetRecBecause, EStr, TSnippetRecMap } from '../../../../globalEnum';
 import { setMD } from '../../../../tools/MD/setMD';
 
 type TSetItem = {
@@ -45,8 +41,6 @@ export function setItemCore(
         item.preselect = true;
     }
 
-    const md: vscode.MarkdownString = setMD(prefix, refRangeList, defRangeList, funcName, recStr ?? '');
-
-    item.documentation = md;
+    item.documentation = setMD(prefix, refRangeList, defRangeList, funcName, recStr ?? '');
     return item;
 }

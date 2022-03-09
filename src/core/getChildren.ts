@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 import {
     TAhkSymbol,
     TAhkSymbolList,
@@ -12,7 +11,6 @@ export type FuncInputType = Readonly<{
     RangeEndLine: number;
     inClass: boolean;
     DocStrMap: TTokenStream;
-    Uri: vscode.Uri;
     gValMapBySelf: TGValMap;
 }>;
 
@@ -23,14 +21,12 @@ type ChildType = Readonly<{
     fnList: FuncLimit[];
     RangeStartLine: number;
     RangeEndLine: number;
-    Uri: vscode.Uri;
     DocStrMap: TTokenStream;
     gValMapBySelf: TGValMap;
 }>;
 
 export function getChildren(child: ChildType): TAhkSymbolList {
     const {
-        Uri,
         DocStrMap,
         RangeStartLine,
         RangeEndLine,
@@ -48,7 +44,6 @@ export function getChildren(child: ChildType): TAhkSymbolList {
         for (let i = 0; i < iMax; i++) {
             const DocumentSymbol: false | TAhkSymbol = fnList[i]({
                 lStr,
-                Uri,
                 DocStrMap,
                 line,
                 RangeEndLine,

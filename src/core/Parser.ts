@@ -49,7 +49,6 @@ export const ParserBlock = {
         if (lStr === '' || lStr.indexOf(':') === -1) return false;
         const {
             gValMapBySelf,
-            Uri,
             RangeEndLine,
             inClass,
             line,
@@ -69,7 +68,6 @@ export const ParserBlock = {
         );
         Block.children = getChildren({
             gValMapBySelf,
-            Uri,
             DocStrMap,
             RangeStartLine: Range.start.line + 1,
             RangeEndLine: Range.end.line,
@@ -84,7 +82,6 @@ export const ParserBlock = {
 
         const {
             gValMapBySelf,
-            Uri,
             DocStrMap,
             line,
             RangeEndLine,
@@ -103,7 +100,6 @@ export const ParserBlock = {
         );
         SwitchBlock.children = getChildren({
             gValMapBySelf,
-            Uri,
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
@@ -116,7 +112,6 @@ export const ParserBlock = {
     getFunc(FuncInput: FuncInputType): false | TAhkSymbol {
         const {
             gValMapBySelf,
-            Uri,
             DocStrMap,
             line,
             RangeEndLine,
@@ -146,7 +141,6 @@ export const ParserBlock = {
         const funcSymbol: TAhkSymbol = new vscode.DocumentSymbol(name, detail, kind, range, selectionRange);
         funcSymbol.children = getChildren({
             gValMapBySelf,
-            Uri,
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
@@ -170,7 +164,6 @@ export const ParserBlock = {
 
         const {
             gValMapBySelf,
-            Uri,
             DocStrMap,
             line,
             RangeEndLine,
@@ -195,7 +188,6 @@ export const ParserBlock = {
         );
         classSymbol.children = getChildren({
             gValMapBySelf,
-            Uri,
             DocStrMap,
             RangeStartLine: Range.start.line + 1,
             RangeEndLine: Range.end.line,
@@ -211,7 +203,6 @@ export const ParserBlock = {
         const kind = vscode.SymbolKind.Package;
         const {
             gValMapBySelf,
-            Uri,
             DocStrMap,
             line,
             RangeEndLine,
@@ -251,7 +242,6 @@ export const ParserBlock = {
         );
         CommentBlock.children = getChildren({
             gValMapBySelf,
-            Uri,
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
