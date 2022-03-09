@@ -8,8 +8,9 @@ function calcSize<V>(v: V | undefined): number {
     return 1;
 }
 
+type TObj = Record<string, unknown>;
 // T === Object has name
-export class ClassWm<T extends Record<string, unknown>, V> {
+export class ClassWm<T extends TObj | unknown[] | readonly unknown[], V> {
     public cacheHits = 0;
 
     public wmSize = 0;

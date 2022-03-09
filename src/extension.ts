@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { openDocs, statusBarClick } from './command/Command';
 import { UpdateCache } from './command/UpdateCache';
 import { configChangEvent } from './configUI';
+import { clearBaseScanCache } from './core/BaseScanCache/cache';
 import { Detecter } from './core/Detecter';
 import { diagColl } from './core/diagRoot';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
@@ -48,6 +49,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
 export function deactive(): void {
     Detecter.DocMap.clear();
+    clearBaseScanCache();
     diagColl.clear();
 }
 

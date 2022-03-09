@@ -73,11 +73,12 @@ export const Detecter = {
         } = getBaseData(document);
 
         if (!fsPath.includes(EStr.diff_name_prefix)) {
-            if (showMsg) showTimeSpend(fsPath, timeStart);
+            if (showMsg) showTimeSpend(fsPath, timeStart); // just base scan // TODO config
             Detecter.DocMap.set(fsPath, AhkSymbolList);
             globalValMap.set(fsPath, gValMapBySelf);
             const baseDiag = baseDiagnostic(DocStrMap, AhkSymbolList);
             diagColl.set(Uri, [...baseDiag]);
+            // if (showMsg) showTimeSpend(fsPath, timeStart); // base scan + baseDiag
             if (useDeepAnalysis) {
                 const diagnostics = diagDAFile(AhkSymbolList, document);
                 const otherDiag = (diagColl.get(Uri) || []).filter((v) => v.source !== EDiagBase.sourceDA);

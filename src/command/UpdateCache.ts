@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { clearBaseScanCache } from '../core/BaseScanCache/cache';
 import { Detecter } from '../core/Detecter';
 import { buildByPath } from '../tools/fsTools/buildByPath';
 import { buildByPathAsync } from '../tools/fsTools/buildByPathAsync';
@@ -10,6 +11,7 @@ export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {
     const ahkRootPath = getWorkspaceFolders();
     if (ahkRootPath === null) return null;
     Detecter.DocMap.clear();
+    clearBaseScanCache();
 
     const results: Promise<void>[] = [];
     ahkRootPath.forEach((folder) => results.push(buildByPathAsync(showMsg, folder.uri.fsPath, false)));
@@ -28,6 +30,7 @@ export function UpdateCache(): null {
     const ahkRootPath = getWorkspaceFolders();
     if (ahkRootPath === null) return null;
     Detecter.DocMap.clear();
+    clearBaseScanCache();
 
     ahkRootPath.forEach((folder): void => buildByPath(folder.uri.fsPath, false));
     return null;

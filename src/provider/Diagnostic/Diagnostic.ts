@@ -7,8 +7,10 @@ import {
     DetailType,
     EDiagBase,
     TAhkSymbol,
+    TAhkSymbolList,
     TTokenStream,
 } from '../../globalEnum';
+import { ClassWm } from '../../tools/wm';
 import { getTreeErr } from './getTreeErr';
 import { setDiagnostic } from './setDiagnostic';
 
@@ -111,10 +113,6 @@ function getCommandErrFnReplace(commandHead: string, lStr: string, line: number)
     return null;
 }
 
-type TCommandErr = {
-    reg: RegExp;
-    code: EDiagCode;
-};
 function getCommandErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diagnostic {
     // if (h.indexOf(line) !== -1) return 1;
     if (!(/^\s*\w+[\s,]/u).test(DocStrMap[line].lStr)) return 0;
@@ -128,6 +126,10 @@ function getCommandErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Di
     if (fnReplaceErr) return fnReplaceErr;
     if ((/^Loop$/ui).test(commandHead)) return getLoopErr(DocStrMap, line);
 
+    type TCommandErr = {
+        reg: RegExp;
+        code: EDiagCode;
+    };
     const headMatch: TCommandErr[] = [
         {
             reg: /^EnvDiv$/ui,
@@ -209,7 +211,7 @@ function getCommandErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Di
             reg: /^Transform$/ui,
             code: EDiagCode.code824,
         },
-    ]; // TODO search Deprecated
+    ];
 
     for (const v of headMatch) {
         if (v.reg.test(commandHead)) {
@@ -219,7 +221,7 @@ function getCommandErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Di
             return setDiagnostic(v.code, range, vscode.DiagnosticSeverity.Warning, tags);
         }
     }
-    // TODO Reg,,,... i need to Count colon  ??
+    // Reg,,,... i need to Count colon  ??
     return 1;
 }
 
@@ -230,7 +232,11 @@ function getLabelErr(DocStrMap: TTokenStream, line: number): 0 | 1 | vscode.Diag
     const exec = (/^\s*(\w+)\s*:/u).exec(lStr);
     if (exec === null) return 0;
     const labName = exec[1];
-    const headMatch: TCommandErr[] = [
+    type TLabelErr = {
+        reg: RegExp;
+        code: EDiagCode;
+    };
+    const headMatch: TLabelErr[] = [
         {
             reg: /^OnClipboardChange$/ui,
             code: EDiagCode.code811,
@@ -291,7 +297,7 @@ function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol): boolean {
 
 function getFuncErr(
     DocStrMap: TTokenStream,
-    funcS: Readonly<TAhkSymbol[]>,
+    funcS: TAhkSymbolList,
     displayErr: readonly boolean[],
 ): vscode.Diagnostic[] {
     const digS: vscode.Diagnostic[] = [];
@@ -316,11 +322,17 @@ function getFuncErr(
     return digS;
 }
 
+// eslint-disable-next-line no-magic-numbers
+const wm = new ClassWm<TTokenStream, vscode.Diagnostic[]>(10 * 60 * 1000, 'baseDiagnostic', 3000);
+
 export function baseDiagnostic(
     DocStrMap: TTokenStream,
-    result: Readonly<TAhkSymbol[]>,
+    AhkSymbolList: TAhkSymbolList,
 ): vscode.Diagnostic[] {
-    const lineMax = DocStrMap.length;
+    const cache = wm.getWm(DocStrMap);
+    if (cache) return cache;
+
+    const lineMax: number = DocStrMap.length;
     let IgnoreLine = -1;
     const displayErr: boolean[] = [];
     const lineDiagS: vscode.Diagnostic[] = [];
@@ -336,10 +348,11 @@ export function baseDiagnostic(
         if (err !== null) lineDiagS.push(err);
     }
 
-    return [
+    const diagList = [
         ...lineDiagS,
-        ...getTreeErr(result, displayErr),
-        ...getFuncErr(DocStrMap, result, displayErr),
+        ...getTreeErr(AhkSymbolList, displayErr),
+        ...getFuncErr(DocStrMap, AhkSymbolList, displayErr),
     ];
+    return wm.setWm(DocStrMap, diagList);
 }
 // TODO  vscode.languages.getDiagnostics()
