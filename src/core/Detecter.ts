@@ -76,7 +76,7 @@ export const Detecter = {
             if (showMsg) showTimeSpend(fsPath, timeStart); // just base scan // TODO config
             Detecter.DocMap.set(fsPath, AhkSymbolList);
             globalValMap.set(fsPath, gValMapBySelf);
-            const baseDiag = baseDiagnostic(DocStrMap, AhkSymbolList);
+            const baseDiag = baseDiagnostic(DocStrMap, AhkSymbolList, fsPath);
             diagColl.set(Uri, [...baseDiag]);
             // if (showMsg) showTimeSpend(fsPath, timeStart); // base scan + baseDiag
             if (useDeepAnalysis) {

@@ -17,7 +17,7 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
         document: vscode.TextDocument,
         position: vscode.Position,
         _token: vscode.CancellationToken,
-        _context: vscode.CompletionContext,
+        context: vscode.CompletionContext,
     ): Promise<null | vscode.CompletionItem[]> {
         const t1 = Date.now();
         const inputStr = getStartWithStr(document, position);
@@ -26,6 +26,9 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
             ...ahkSend(document, position), // '{'
         ];
 
+        if (context.triggerCharacter !== undefined) {
+            console.log('🚀 ~ CompletionItemProvider ~ ...ahkSend ~ context', context);
+        }
         if (isNormalPos(document, position)) {
             completions.push(
                 ...await listAllFuncClass(inputStr),

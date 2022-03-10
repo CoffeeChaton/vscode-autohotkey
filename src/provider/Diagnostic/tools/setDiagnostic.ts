@@ -4,10 +4,10 @@ import {
     DiagsDA,
     EDiagCode,
     EDiagCodeDA,
-} from '../../diag';
+} from '../../../diag';
 import {
     EDiagBase,
-} from '../../globalEnum';
+} from '../../../globalEnum';
 
 export function setDiagnostic(
     value: EDiagCode,

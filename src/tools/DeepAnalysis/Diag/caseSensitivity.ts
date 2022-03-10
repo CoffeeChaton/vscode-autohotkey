@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { EDiagCodeDA } from '../../../diag';
 import { TC502New, TParamOrValMap } from '../../../globalEnum';
-import { setDiagnosticDA } from '../../../provider/Diagnostic/setDiagnostic';
+import { setDiagnosticDA } from '../../../provider/Diagnostic/tools/setDiagnostic';
 import { setDiagCaseMsg } from './caseSensitivityMagic';
 
 function getRangeOfC502(defRangeList: vscode.Range[], refRangeList: vscode.Range[], i: number): vscode.Range {

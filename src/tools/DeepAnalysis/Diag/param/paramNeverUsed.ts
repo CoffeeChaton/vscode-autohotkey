@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { DiagsDA, EDiagCodeDA } from '../../../../diag';
 import { TArgMap } from '../../../../globalEnum';
-import { setDiagnosticDA } from '../../../../provider/Diagnostic/setDiagnostic';
+import { setDiagnosticDA } from '../../../../provider/Diagnostic/tools/setDiagnostic';
 
 export function paramNeverUsed(argMap: TArgMap, code501List: Set<vscode.Diagnostic>): void {
     argMap.forEach((v): void => {

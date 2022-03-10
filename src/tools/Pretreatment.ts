@@ -6,6 +6,10 @@ import { inCommentBlock } from './str/inCommentBlock';
 import { inLTrimRange } from './str/inLTrimRange';
 import { getLStr, isSetVarTradition } from './str/removeSpecialChar';
 
+// let lastFsPath = ''; // vscode.Uri.fsPath
+// type THash = number;
+// const cacheMap = new Map<THash, TLineErr | 0>();
+
 // LexicalAnalysisSimple
 
 export function Pretreatment(strArray: readonly string[], startLineBaseZero: number): TTokenStream {

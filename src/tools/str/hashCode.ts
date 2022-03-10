@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 /**
  * Returns a hash code for a string.
  * (Compatible to Java's String.hashCode())
@@ -9,20 +10,17 @@
  * and ^ indicates exponentiation.
  * (The hash value of the empty string is zero.)
  *
- * @param {string} s a string
+ * read more https://gist.github.com/hyamamoto/fd435505d29ebfa3d9716fd2be8d42f0?permalink_comment_id=2694461#gistcomment-2694461
+ * @param {string} str a string
  * @return {number} a hash code value for the given string.
  */
-export function hashCode(s: string): number {
-    const enum EHash {
-        // eslint-disable-next-line no-magic-numbers
-        x = 31,
-    }
-
-    let h = 0;
-    for (let i = 0; i < s.length; i++) {
+export function hashCode(str: string): number {
+    let hash = 0;
+    const len = str.length;
+    for (let i = 0; i < len; i++) {
         // eslint-disable-next-line no-bitwise
-        h = Math.imul(EHash.x, h) + s.charCodeAt(i) | 0;
+        hash = Math.imul(31, hash) + str.charCodeAt(i) | 0;
     }
 
-    return h;
+    return hash;
 }

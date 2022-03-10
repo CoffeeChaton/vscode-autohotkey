@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext): void {
     const language: vscode.DocumentSelector = { language: 'ahk' };
     context.subscriptions.push(
         vscode.languages.registerCodeActionsProvider(language, new CodeActionProvider()),
-        vscode.languages.registerCompletionItemProvider(language, new CompletionItemProvider(), '', '.', '{'),
+        vscode.languages.registerCompletionItemProvider(language, new CompletionItemProvider(), 'A_', '', '.', '{'),
         vscode.languages.registerDefinitionProvider(language, new DefProvider()),
         vscode.languages.registerDocumentFormattingEditProvider(language, new FormatProvider()),
         vscode.languages.registerDocumentRangeFormattingEditProvider(language, new RangeFormatProvider()),
