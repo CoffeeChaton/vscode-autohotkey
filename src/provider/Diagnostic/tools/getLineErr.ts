@@ -2,7 +2,6 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../diag';
 import { TTokenStream } from '../../../globalEnum';
-import { hashCode } from '../../../tools/str/hashCode';
 import { assignErr } from './lineErr/assignErr';
 import { EDiagLine, TLineDiag, TLineErr } from './lineErr/lineErrTools';
 import { setDiagnostic } from './setDiagnostic';
@@ -280,6 +279,7 @@ function lineErrDiag(line: number, lineErr: TLineErr): vscode.Diagnostic {
 }
 
 function getLineErrCore(lStr: string): 0 | TLineErr {
+    if (lStr.trim() === '') return 0;
     type TFnLineErr = (lStr: string) => TLineDiag;
     const fnList: TFnLineErr[] = [getDirectivesErr, getCommandErr, getLabelErr];
     for (const fn of fnList) {
@@ -297,33 +297,16 @@ function getLineErrCore(lStr: string): 0 | TLineErr {
 
 // ----------------------------------------------------------------
 
-let lastFsPath = ''; // vscode.Uri.fsPath
-type THash = number;
-const cacheMap = new Map<THash, TLineErr | 0>();
-
-export function getLineErr(DocStrMap: TTokenStream, line: number, fsPath: string): null | vscode.Diagnostic {
-    if (fsPath !== lastFsPath) {
-        lastFsPath = fsPath;
-        cacheMap.clear();
-    }
-
+export function getLineErr(DocStrMap: TTokenStream, line: number): null | vscode.Diagnostic {
     const { textRaw, lStr, detail } = DocStrMap[line];
     const err0: TLineDiag = assignErr(textRaw, detail);
     if (err0 && err0 !== EDiagLine.OK) {
         return lineErrDiag(line, err0);
     }
 
-    // lStr -> hash ->  TLineDiag
-    const hash: THash = hashCode(lStr);
-    const oldCache: TLineErr | undefined | 0 = cacheMap.get(hash);
-    if (oldCache) return lineErrDiag(line, oldCache);
-    if (oldCache === 0) return null;
-
     const err1: TLineErr | 0 = getLineErrCore(lStr);
-    cacheMap.set(hash, err1);
 
     if (err1) return lineErrDiag(line, err1);
-
     // err1 === 0
     return null;
 }

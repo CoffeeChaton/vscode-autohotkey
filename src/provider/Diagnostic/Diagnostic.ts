@@ -17,7 +17,6 @@ const wm = new ClassWm<TTokenStream, vscode.Diagnostic[]>(10 * 60 * 1000, 'baseD
 export function baseDiagnostic(
     DocStrMap: TTokenStream,
     AhkSymbolList: TAhkSymbolList,
-    fsPath: string,
 ): vscode.Diagnostic[] {
     const cache = wm.getWm(DocStrMap);
     if (cache) return cache;
@@ -38,7 +37,7 @@ export function baseDiagnostic(
         IgnoreLine = getIgnore(DocStrMap[line].textRaw, line, IgnoreLine);
 
         displayErr.push(true);
-        const err = getLineErr(DocStrMap, line, fsPath);
+        const err = getLineErr(DocStrMap, line);
         if (err !== null) lineDiagS.push(err);
     }
 
@@ -48,7 +47,7 @@ export function baseDiagnostic(
         ...getFuncErr(DocStrMap, AhkSymbolList, displayErr),
     ];
     // console.log('🚀 ~ baseDiagnostic', Date.now() - timeStart, 'ms');
-    // 8k lines without hashCache -> 8ms
+    // 8k lines without hashCache -> 6ms
     // with hashCache -> 2ms
     return wm.setWm(DocStrMap, diagList);
 }

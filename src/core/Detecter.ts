@@ -76,13 +76,13 @@ export const Detecter = {
             if (showMsg) showTimeSpend(fsPath, timeStart); // just base scan // TODO config
             Detecter.DocMap.set(fsPath, AhkSymbolList);
             globalValMap.set(fsPath, gValMapBySelf);
-            const baseDiag = baseDiagnostic(DocStrMap, AhkSymbolList, fsPath);
+            const baseDiag = baseDiagnostic(DocStrMap, AhkSymbolList);
             diagColl.set(Uri, [...baseDiag]);
             // if (showMsg) showTimeSpend(fsPath, timeStart); // base scan + baseDiag
             if (useDeepAnalysis) {
-                const diagnostics = diagDAFile(AhkSymbolList, document);
+                const DADiag = diagDAFile(AhkSymbolList, document);
                 const otherDiag = (diagColl.get(Uri) || []).filter((v) => v.source !== EDiagBase.sourceDA);
-                diagColl.set(Uri, [...otherDiag, ...diagnostics]);
+                diagColl.set(Uri, [...otherDiag, ...DADiag]);
             }
         }
         return AhkSymbolList as vscode.DocumentSymbol[];
