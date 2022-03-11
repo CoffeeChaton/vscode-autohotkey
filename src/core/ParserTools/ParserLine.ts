@@ -12,14 +12,14 @@ type LineRulerType = DeepReadonly<{
     kind: vscode.SymbolKind;
     // regex?: RegExp,
     test: (strTrim: string) => boolean;
-    getName: (str: string) => string | null;
+    getName: (strTrim: string) => string | null;
 }>;
 
-const IncludeAgain = {
+const IncludeAgain: LineRulerType = {
     detail: '#IncludeAgain',
     kind: vscode.SymbolKind.Event,
-    getName(str: string): string | null {
-        const e = (/^\s*#IncludeAgain\s+(\S+)[\s|$]/ui).exec(str);
+    getName(strTrim: string): string | null {
+        const e = (/^#IncludeAgain\s+(\S+)[\s|$]/ui).exec(strTrim);
         return e
             ? `#IncludeAgain ${e[1]}`
             : null;
@@ -30,11 +30,11 @@ const IncludeAgain = {
     },
 };
 
-const Include = {
+const Include: LineRulerType = {
     detail: '#Include',
     kind: vscode.SymbolKind.Event,
-    getName(str: string): string | null {
-        const e = (/^\s*#Include\s+(\S+)[\s|$]/iu).exec(str);
+    getName(strTrim: string): string | null {
+        const e = (/^#Include\s+(\S+)[\s|$]/iu).exec(strTrim);
         return e
             ? `#Include ${e[1]}`
             : null;
@@ -45,11 +45,11 @@ const Include = {
     },
 };
 
-const directive = {
+const directive: LineRulerType = {
     detail: 'directive',
     kind: vscode.SymbolKind.Event,
-    getName(str: string): string | null {
-        const e = (/^\s*(#\w+)/u).exec(str);
+    getName(strTrim: string): string | null {
+        const e = (/^(#\w+)/u).exec(strTrim);
         return e
             ? e[1]
             : null;
@@ -60,29 +60,30 @@ const directive = {
     },
 };
 
-const ahkLabel = {
+const ahkLabel: LineRulerType = {
     detail: 'label',
     kind: vscode.SymbolKind.Package,
-    getName(str: string): string | null {
-        const e = (/^\s*(\w+:)/u).exec(str);
+    getName(strTrim: string): string | null {
+        const e = (/^(\w+:)/u).exec(strTrim);
         return e
             ? e[1]
             : null;
     },
 
     test(strTrim: string): boolean {
-        if (strTrim.indexOf(':') < 1) return false;
+        // if (strTrim.indexOf(':') < 1) return false;
+        if (!strTrim.endsWith(':')) return false;
         // Generally, aside from whitespace and comments, no other code can be written on the same line as a label.
         return (/^\w+:$/u).test(strTrim);
     },
 };
 
-const HotString = {
+const HotString: LineRulerType = {
     // HotStr
     detail: 'HotString',
     kind: vscode.SymbolKind.Event,
-    getName(str: string): string | null {
-        const e = (/^\s*(:[^:]*?:[^:]+::)/u).exec(str);
+    getName(strTrim: string): string | null {
+        const e = (/^(:[^:]*?:[^:]+::)/u).exec(strTrim);
         return e
             ? e[1]
             : null;
@@ -90,16 +91,16 @@ const HotString = {
 
     test(strTrim: string): boolean {
         // Hotstring labels consist of a colon, zero or more options, another colon, an abbreviation and double-colon.
-        if (strTrim.indexOf('::') === -1) return false;
+        if (!strTrim.startsWith(':') && strTrim.indexOf('::') === -1) return false;
         return (/^:[^:]*?:[^:]+::/u).test(strTrim);
     },
 };
 
-const HotKeys = {
+const HotKeys: LineRulerType = {
     detail: 'HotKeys',
     kind: vscode.SymbolKind.Event,
-    getName(str: string): string | null {
-        const e = (/^\s*([^:]+::)/u).exec(str);
+    getName(strTrim: string): string | null {
+        const e = (/^([^:]+::)/u).exec(strTrim);
         return e
             ? e[1]
             : null;
@@ -119,7 +120,7 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
         lStr,
     } = FuncInput;
     if (lStr === '') return false;
-    const ahkGlobal = {
+    const ahkGlobal: LineRulerType = {
         detail: 'global',
         kind: vscode.SymbolKind.Variable,
         getName(_str: string): string | null {
@@ -143,7 +144,7 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
     const strTrim = lStr.trim();
     for (const ruler of LineRuler) {
         if (ruler.test(strTrim)) {
-            const name = ruler.getName(lStr);
+            const name: string | null = ruler.getName(strTrim);
             if (name) {
                 const rangeRaw = getRangeOfLine(DocStrMap, line);
                 return new vscode.DocumentSymbol(
