@@ -14,7 +14,7 @@ import { FuncInputType, getChildren } from './getChildren';
 import { ParserLine } from './ParserTools/ParserLine';
 
 function getReturnName(textRaw: string): string | null {
-    const ReturnMatch: RegExpMatchArray | null = textRaw.match(/\bReturn\b\s+(.{1,20}?)/iu);
+    const ReturnMatch: RegExpMatchArray | null = textRaw.match(/\bReturn\b\s+?(\S.{1,20})/iu);
     if (ReturnMatch === null) return null;
 
     const name: string = ReturnMatch[1].trim();
@@ -31,11 +31,19 @@ function getReturnName(textRaw: string): string | null {
 export function getReturnByLine(FuncInput: FuncInputType): false | TAhkSymbol {
     // if (!(/\bReturn\b/iu).test(FuncInput.lStr)) return false;
     const { line, lStr } = FuncInput;
-    if (!(/\s\bReturn\b\s+\S/iu).test(lStr)) return false;
+    const enum EMagic {
+        // eslint-disable-next-line no-magic-numbers
+        ReturnLenAddSpace = 7,
+    }
+    if (lStr.length < EMagic.ReturnLenAddSpace) return false;
+    const lStrTrim = lStr.trim();
+    if (lStrTrim.length < EMagic.ReturnLenAddSpace) return false;
+    if (!(/^Return\s+\S/iu).test(lStrTrim)) return false;
     const { textRaw } = FuncInput.DocStrMap[line];
     const name: string | null = getReturnName(textRaw);
     if (name === null) return false;
-    const rangeRaw = new vscode.Range(line, 0, line, textRaw.length); // FIXME: startCharacter err, is not 0
+    const col = textRaw.search(/Return\s/ui);
+    const rangeRaw = new vscode.Range(line, col, line, textRaw.length); // FIXME: startCharacter err, is not 0
     return new vscode.DocumentSymbol(`Return ${name}`, '', vscode.SymbolKind.Variable, rangeRaw, rangeRaw);
 }
 
@@ -115,7 +123,7 @@ export const ParserBlock = {
             lStr,
         } = FuncInput;
 
-        if (lStr.length < 1 || lStr.indexOf('(') === -1) return false;
+        if (lStr.length < 1 || lStr.indexOf('(') === -1 || lStr.indexOf('}') > -1) return false;
         const isFunc = getFuncDef(DocStrMap, line);
         if (isFunc === false) return false;
         const { name, selectionRange } = isFunc;

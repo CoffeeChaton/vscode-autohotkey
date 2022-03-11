@@ -49,6 +49,7 @@ export function baseDiagnostic(
     // console.log('🚀 ~ baseDiagnostic', Date.now() - timeStart, 'ms');
     // 8k lines without hashCache -> 6ms
     // with hashCache -> 2ms
+    // I think this way, complexity && ram >> 4ms
     return wm.setWm(DocStrMap, diagList);
 }
 // TODO  vscode.languages.getDiagnostics()
