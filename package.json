@@ -153,11 +153,6 @@
                     "maximum": 999,
                     "description": "(code503) case sensitivity check of parameter, a file max checks number.\\n use 0 to close warn."
                 },
-                "AhkNekoHelp.PerformanceMode": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Disable analysis `HotString` `HotKeys` `Label` .\nBecause the frequency is not high, and is usually concentrated in a specific file, in order to manage"
-                },
                 "AhkNekoHelp.Ignored.File.endsWith": {
                     "type": "array",
                     "default": [],

@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
-import { isPerformanceMode } from '../../configUI';
 import { DeepReadonly, TAhkSymbol } from '../../globalEnum';
 import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 // import { removeBigParentheses } from '../tools/removeBigParentheses';
@@ -12,7 +11,7 @@ type LineRulerType = DeepReadonly<{
     detail: string;
     kind: vscode.SymbolKind;
     // regex?: RegExp,
-    test: (str: string) => boolean;
+    test: (strTrim: string) => boolean;
     getName: (str: string) => string | null;
 }>;
 
@@ -26,8 +25,8 @@ const IncludeAgain = {
             : null;
     },
 
-    test(str: string): boolean {
-        return (/^\s*#IncludeAgain\b/iu).test(str);
+    test(strTrim: string): boolean {
+        return (/^#IncludeAgain\b/iu).test(strTrim);
     },
 };
 
@@ -41,8 +40,8 @@ const Include = {
             : null;
     },
 
-    test(str: string): boolean {
-        return (/^\s*#Include\b/iu).test(str);
+    test(strTrim: string): boolean {
+        return (/^#Include\b/iu).test(strTrim);
     },
 };
 
@@ -56,8 +55,8 @@ const directive = {
             : null;
     },
 
-    test(str: string): boolean {
-        return (/^\s*#/u).test(str);
+    test(strTrim: string): boolean {
+        return (/^#/u).test(strTrim);
     },
 };
 
@@ -71,9 +70,10 @@ const ahkLabel = {
             : null;
     },
 
-    test(str: string): boolean {
+    test(strTrim: string): boolean {
+        if (strTrim.indexOf(':') < 1) return false;
         // Generally, aside from whitespace and comments, no other code can be written on the same line as a label.
-        return (/^\s*\w+:\s*$/u).test(str);
+        return (/^\w+:$/u).test(strTrim);
     },
 };
 
@@ -88,10 +88,10 @@ const HotString = {
             : null;
     },
 
-    test(str: string): boolean {
+    test(strTrim: string): boolean {
         // Hotstring labels consist of a colon, zero or more options, another colon, an abbreviation and double-colon.
-        if (str.indexOf('::') === -1) return false;
-        return (/^\s*:[^:]*?:[^:]+::/u).test(str);
+        if (strTrim.indexOf('::') === -1) return false;
+        return (/^:[^:]*?:[^:]+::/u).test(strTrim);
     },
 };
 
@@ -105,10 +105,10 @@ const HotKeys = {
             : null;
     },
 
-    test(str: string): boolean {
+    test(strTrim: string): boolean {
         // Hotkey labels consist of a hotkey followed by double-colon.
-        if (str.indexOf('::') === -1) return false;
-        return (/^\s*[^:]+::/u).test(str);
+        if (strTrim.indexOf('::') === -1) return false;
+        return (/^[^:]+::/u).test(strTrim);
     },
 };
 
@@ -125,32 +125,24 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
         getName(_str: string): string | null {
             return setGlobalVar(FuncInput);
         },
-        test(str: string): boolean {
-            return (/^\s*\bglobal\b[\s,]/iu).test(str) && !(/^\s*global[\s,]+$/iu).test(str);
+        test(strTrim: string): boolean {
+            return (/^global\b[\s,]/iu).test(strTrim) && !(/^global[\s,]+$/iu).test(strTrim);
         },
     };
 
-    const LineRuler: LineRulerType[] = isPerformanceMode()
-        ? [ // // my project is 60~75
-            IncludeAgain,
-            Include,
-            directive,
-            ahkGlobal,
-            // ahkLabel,
-            // HotString,
-            // HotKeys,
-        ]
-        : [ // // my project is 70~80
-            IncludeAgain,
-            Include,
-            directive,
-            ahkGlobal,
-            ahkLabel,
-            HotString,
-            HotKeys,
-        ];
+    const LineRuler: LineRulerType[] = [
+        IncludeAgain,
+        Include,
+        directive,
+        ahkGlobal,
+        ahkLabel,
+        HotString,
+        HotKeys,
+    ];
+
+    const strTrim = lStr.trim();
     for (const ruler of LineRuler) {
-        if (ruler.test(lStr)) {
+        if (ruler.test(strTrim)) {
             const name = ruler.getName(lStr);
             if (name) {
                 const rangeRaw = getRangeOfLine(DocStrMap, line);

@@ -47,7 +47,6 @@ function getConfig(): TConfigs {
             },
         },
         openUriStr: Configs.get('open.Documents.Uri') as string,
-        PerformanceMode: Configs.get('PerformanceMode') as boolean,
         // TODO CompletionIgnore
     } as const;
 
@@ -133,9 +132,6 @@ export function getDocUriStr(): string {
     return config.openUriStr;
 }
 
-export function isPerformanceMode(): boolean {
-    return config.PerformanceMode;
-}
 // vscode.window.setStatusBarMessage(timeSpend);
 // vscode.window.showErrorMessage()
 // vscode.window.showInformationMessage()
