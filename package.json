@@ -191,7 +191,7 @@
                     "items": {
                         "type": "string"
                     },
-                    "description": "Do not scan while folder names startsWith this array"
+                    "description": "Do not scan while folder names startsWith this array.\nTODO https://en.wikipedia.org/wiki/Glob_(programming)"
                 },
                 "AhkNekoHelp.format.textReplace": {
                     "type": "boolean",

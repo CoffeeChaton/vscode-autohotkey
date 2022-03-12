@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { openDocs, statusBarClick } from './command/Command';
-import { UpdateCache } from './command/UpdateCache';
+import { UpdateCacheAsync } from './command/UpdateCache';
 import { configChangEvent } from './configUI';
 import { clearBaseScanCache } from './core/BaseScanCache/cache';
 import { Detecter } from './core/Detecter';
@@ -44,7 +44,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.commands.registerCommand('ahk.nekoHelp.openDoc', (): void => openDocs()),
         vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
     );
-    UpdateCache();
+    void UpdateCacheAsync(false); // not await
 }
 
 export function deactive(): void {

@@ -38,13 +38,13 @@ export function getReturnByLine(FuncInput: FuncInputType): false | TAhkSymbol {
     if (lStr.length < EMagic.ReturnLenAddSpace) return false;
     const lStrTrim = lStr.trim();
     if (lStrTrim.length < EMagic.ReturnLenAddSpace) return false;
-    if (!(/^Return\s+\S/iu).test(lStrTrim)) return false;
+    if (!(/^Return\b/iu).test(lStrTrim)) return false;
     const { textRaw } = FuncInput.DocStrMap[line];
     const name: string | null = getReturnName(textRaw);
     if (name === null) return false;
     const col = textRaw.search(/Return\s/ui);
-    const rangeRaw = new vscode.Range(line, col, line, textRaw.length); // FIXME: startCharacter err, is not 0
-    return new vscode.DocumentSymbol(`Return ${name}`, '', vscode.SymbolKind.Variable, rangeRaw, rangeRaw);
+    const Range = new vscode.Range(line, col, line, textRaw.length); // FIXME: startCharacter err, is not 0
+    return new vscode.DocumentSymbol(`Return ${name}`, '', vscode.SymbolKind.Variable, Range, Range);
 }
 
 export const ParserBlock = {

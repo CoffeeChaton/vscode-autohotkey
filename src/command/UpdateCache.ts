@@ -1,20 +1,20 @@
 import * as vscode from 'vscode';
 import { clearBaseScanCache } from '../core/BaseScanCache/cache';
-import { Detecter } from '../core/Detecter';
-import { buildByPath } from '../tools/fsTools/buildByPath';
-import { buildByPathAsync } from '../tools/fsTools/buildByPathAsync';
-import { getWorkspaceFolders } from '../tools/fsTools/getWorkspaceFolders';
+import { Detecter, TUpdateDocDefReturn } from '../core/Detecter';
+import { getUriList } from '../tools/fsTools/buildByPath';
 
 export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {
     const timeStart = Date.now();
 
-    const ahkRootPath = getWorkspaceFolders();
-    if (ahkRootPath === null) return null;
     Detecter.DocMap.clear();
     clearBaseScanCache();
+    const uriList: vscode.Uri[] | null = getUriList();
+    if (uriList === null) return null;
 
-    const results: Promise<void>[] = [];
-    ahkRootPath.forEach((folder) => results.push(buildByPathAsync(showMsg, folder.uri.fsPath, false)));
+    const results: Promise<TUpdateDocDefReturn>[] = [];
+    for (const uri of uriList) {
+        results.push(Detecter.updateDocDef(false, uri.fsPath));
+    }
     await Promise.all(results);
 
     if (showMsg) {
@@ -23,15 +23,5 @@ export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {
         console.log(msg);
         void vscode.window.showInformationMessage(msg);
     }
-    return null;
-}
-
-export function UpdateCache(): null {
-    const ahkRootPath = getWorkspaceFolders();
-    if (ahkRootPath === null) return null;
-    Detecter.DocMap.clear();
-    clearBaseScanCache();
-
-    ahkRootPath.forEach((folder): void => buildByPath(folder.uri.fsPath, false));
     return null;
 }

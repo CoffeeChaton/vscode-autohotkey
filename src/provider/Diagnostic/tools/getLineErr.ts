@@ -117,8 +117,6 @@ function getCommandErrFnReplace(commandHead: string, lStr: string): TLineDiag {
 }
 
 function getCommandErr(lStr: string): TLineDiag {
-    if (!(/^\s*\w+[\s,]/u).test(lStr)) return 0;
-
     const exec = (/^\s*(\w+)[\s,]/u).exec(lStr);
     if (exec === null) return 0;
     const commandHead: string = exec[1];

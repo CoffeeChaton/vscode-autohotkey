@@ -11,7 +11,9 @@ import { getLStr, isSetVarTradition } from './str/removeSpecialChar';
 // const cacheMap = new Map<THash, TLineErr | 0>();
 
 // LexicalAnalysisSimple
-
+/**
+ * TODO SyntaxKind
+ */
 export function Pretreatment(strArray: readonly string[], startLineBaseZero: number): TTokenStream {
     // FIXME this Need cache
     const result: TAhkToken = [];

@@ -1,5 +1,10 @@
+'use strict';
+const fs = require('fs');
 const esbuild = require('esbuild');
 const copyStaticFiles = require('esbuild-copy-static-files');
+
+const rawData = fs.readFileSync('./esbuildTarget.json');
+const esbuildTarget = JSON.parse(rawData).A;
 
 const filter = (src, _dest) => {
     const folder = [
@@ -21,10 +26,11 @@ const filter = (src, _dest) => {
         '.eslintrc.json',
         '.gitattributes',
         '.gitignore',
+        '.heapsnapshot',
         'cspell.json',
         'dprint.json',
         'esbuild.config.js',
-        'jest.config.js',
+        'esbuildTarget.json',
         'pnpm-lock.yaml',
         'rslintrc.toml',
         'tsconfig.json',
@@ -54,7 +60,7 @@ const config = {
     plugins: [
         copyStaticFiles({
             src: './',
-            dest: 'C:/Users/antec0217/.vscode/extensions/cz00',
+            dest: esbuildTarget, // 'C:/Users/<useName>/.vscode/extensions/cz00',
             filter,
             preserveTimestamps: true,
         }),

@@ -64,8 +64,7 @@ export function configChangEvent(): void {
     ---set end---
 */
 
-export function showTimeSpend(fsPath: string, timeStart: number): void {
-    const time = Date.now() - timeStart;
+export function showTimeSpend(fsPath: string, time: number): void {
     statusBarItem.text = `$(heart) ${time} ms of ${path.basename(fsPath)}`;
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
