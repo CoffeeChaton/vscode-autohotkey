@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { clearBaseScanCache } from '../core/BaseScanCache/cache';
 import { Detecter, TUpdateDocDefReturn } from '../core/Detecter';
-import { getUriList } from '../tools/fsTools/buildByPath';
+import { getUriList } from '../tools/fsTools/getUriList';
 
 export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {
     const timeStart = Date.now();

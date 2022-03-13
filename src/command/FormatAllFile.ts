@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import { TFormatChannel, TPick } from '../globalEnum';
 import { FormatCore } from '../provider/Format/FormatProvider';
-import { getUriList } from '../tools/fsTools/buildByPath';
+import { getUriList } from '../tools/fsTools/getUriList';
 
 async function formatByPathAsync(
     uri: vscode.Uri,
