@@ -14,7 +14,7 @@ const filter = (src, _dest) => {
         '.idea',
         '.vscode',
         'coverage',
-        'image', // vsocde plugin readme.md need https:// img now.
+        'image', // vscode plugin readme.md need https:// img now.
         'node_modules',
         'out',
         'src',

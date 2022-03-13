@@ -56,6 +56,7 @@ export const enum EDiagCode {
     code114 = 114,
     code201 = 201, // 200~299 is not expression // need use %
     code301 = 301, // 300~399 is func err
+    code601 = 601, // 601 is Prototype pollution!
     code700 = 700, // 700 is Command -> func
     // code701 = 701, // 701~799 is Command error
     // 800~899 is Deprecated / Old Syntax
@@ -128,6 +129,10 @@ export const Diags: DeepReadonly<TDiags> = {
     301: {
         msg: 'function or Method is so big',
         path: 'https://www.autohotkey.com/docs/Functions.htm',
+    },
+    601: {
+        msg: 'Alert Prototype Pollution!! Suggest to use class replace',
+        path: 'https://www.autohotkey.com/docs/Objects.htm#Custom_Classes',
     },
     700: {
         msg: 'try to use function replace Command(obsolete code)',

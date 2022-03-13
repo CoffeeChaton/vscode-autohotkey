@@ -273,23 +273,24 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
     }
 }
 /*
-
-```ahk
+-----------------------------------------------
 TEST OK
+
 for k,v in Monitors
     if (v.Num = MonitorNum)
         return v
+-----------------------------------------------
+TEST NOT well
 
-TEST NOT good
 if (ggc()
     && bbc()
     && dd()
     || fff() and feg()) {
 
 }
+-----------------------------------------------
+TEST NOT well
 
-TEST NOT good
-TODO fmt_a1
 for k,v in Monitors
     for k,v in Monitors
         for k,v in Monitors
@@ -300,7 +301,5 @@ for k,v in Monitors
                         if dd()
                             bbb :=ddd()
             }
-```
+----------------------------------------------
 */
-
-// TODO add /** */ a space to fold

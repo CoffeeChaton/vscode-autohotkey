@@ -11,11 +11,9 @@ import { getLStr, isSetVarTradition } from './str/removeSpecialChar';
 // const cacheMap = new Map<THash, TLineErr | 0>();
 
 // LexicalAnalysisSimple
-/**
- * TODO SyntaxKind
- */
+// TODO use hash check line Unaffected && -> getChildren
 export function Pretreatment(strArray: readonly string[], startLineBaseZero: number): TTokenStream {
-    // FIXME this Need cache
+    // FIXME this Need cache && use scanner
     const result: TAhkToken = [];
     let CommentBlock = false;
     let inLTrim: 0 | 1 | 2 = 0;

@@ -103,12 +103,12 @@ export type TAhkValType = EValType.local | EValType.global | EValType.Static;
 export type TC502New = (0 | string);
 export type TArgAnalysis = {
     keyRawName: string;
-    defRangeList: vscode.Range[]; // TODO diags "Duplicate parameter".
+    defRangeList: vscode.Range[]; // TODO diags "Duplicate parameter". or TODO no-param-reassign
     refRangeList: vscode.Range[];
     c502Array: TC502New[];
 
     isByRef: boolean;
-    isVariadic: boolean; // https://www.autohotkey.com/docs/Functions.htm#Variadic  // TODO DIAG *is last
+    isVariadic: boolean; // https://www.autohotkey.com/docs/Functions.htm#Variadic
 };
 export type TArgMap = Map<string, TArgAnalysis>; // k = valNameUP
 

@@ -32,7 +32,7 @@ export function wrapFnValDef({
         ? EValType.global
         : lineType;
     if (EValType.global === ahkValType) {
-        // FIXME if normal color -> getGlobalValDef
+        // if normal color -> getGlobalValDef
         // else if local color -> check has input global
         // TODO line color -> isLocal -> check all input
         // else key by key check Global

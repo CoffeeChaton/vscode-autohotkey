@@ -57,7 +57,7 @@ export function getFnVarDef(
         // eslint-disable-next-line no-magic-numbers
         if (lStr.trim().length < 2) continue; // a=b need length >=3
 
-        const lineType: TAhkValType = getLineType(lStr, fnMode); // TODO fix , at line first, we should use line coloring.
+        const lineType: TAhkValType = getLineType(lStr, fnMode);
         const need: TGetFnDefNeed = {
             lStr,
             valMap,

@@ -43,7 +43,7 @@ export function getReturnByLine(FuncInput: FuncInputType): false | TAhkSymbol {
     const name: string | null = getReturnName(textRaw);
     if (name === null) return false;
     const col = textRaw.search(/Return\s/ui);
-    const Range = new vscode.Range(line, col, line, textRaw.length); // FIXME: startCharacter err, is not 0
+    const Range = new vscode.Range(line, col, line, textRaw.length);
     return new vscode.DocumentSymbol(`Return ${name}`, '', vscode.SymbolKind.Variable, Range, Range);
 }
 

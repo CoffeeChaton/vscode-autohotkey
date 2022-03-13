@@ -135,7 +135,6 @@ export class DebugDispather extends EventEmitter {
 
     /**
      * send command to the ahk debug proxy.
-     * @param command
      */
     public async sendComand(command: string, data?: string): Promise<TDbgpResponse> {
         const ed: TDbgpResponse = await this.commandHandler.sendComand(command, data);
@@ -164,7 +163,6 @@ export class DebugDispather extends EventEmitter {
 
     /**
      * List all variable or get refrence variable property detail.
-     * @param scopeId 0(Local) and 1(Global)
      * @param args
      */
     public async listVariables(args: DebugProtocol.VariablesArguments): Promise<Variable[]> {
@@ -326,7 +324,7 @@ export class DebugDispather extends EventEmitter {
 
     private async getVariable(frameId: number, scope: EVarScope, variableName: string): Promise<Variable[]> {
         const response = await this.sendComand(`property_get -d ${frameId} -c ${scope} -n ${variableName}`);
-        // FIXME -p  : the port that the IDE listens for debugging on. The address is retrieved from the connection information.
+        // -p  : the port that the IDE listens for debugging on. The address is retrieved from the connection information.
 
         return this.variableHandler.parsePropertyget(response, scope);
     }

@@ -17,9 +17,7 @@ return
     SendInput %CurrentDateTime%
 return
 ```
-
-// FIXME Function HotStrings
-
+// not work
 ```ahk
 :C:BTW::  ; Typed in all-caps.
 :C:Btw::  ; Typed with only the first letter upper-case.

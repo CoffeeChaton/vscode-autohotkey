@@ -47,7 +47,7 @@ export class HoverProvider implements vscode.HoverProvider {
         }
         // eslint-disable-next-line security/detect-unsafe-regex
         const range = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
-        if (!range) return null;
+        if (range === undefined) return null;
 
         if (isPosAtStr(document, position)) return null;
 

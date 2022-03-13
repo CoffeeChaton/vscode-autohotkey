@@ -115,26 +115,17 @@ export async function userDef(
     // isDef: (textTrim: string) => boolean
     // TODO get def of AST
     const defRefList: RegExp[] = [
-        // class ClassName
-        // new RegExp(`class\\b\\s+\\b(${wordUp})\\b`, 'iu'),
-        // funcName( , not search class.Method()
         //   new RegExp(`(?<!\\.)\\b(${wordUp})\\(`, 'i'),
-        new RegExp(`(?<![.\`])\\b(${wordUp})\\(`, 'iu'),
+        new RegExp(`(?<![.\`%])\\b(${wordUp})\\(`, 'iu'),
         // global var_name :=
-        new RegExp(`\\bglobal\\s+(${wordUp})\\s+:?=`, 'iu'),
+        new RegExp(`\\bGlobal\\s+(${wordUp})\\s+:?=`, 'iu'),
     ];
 
     const usingRegList: RegExp[] = [
-        // new RegExp(
-        // eslint-disable-next-line max-len
-        //     `(?:^class\\b\\s+\\b(${wordUp})\\b)|(?:\\bNew\\s+\\b(${wordUp})\\b)|(?:(${wordUp})\\.)|(?:\\bExtends\\b\\s+(${wordUp}))|(?:\\bGlobal\\b\\s\\s*\\b(${wordUp})\\b)|(?:{\\s*base:\\s*(${wordUp}))|(?:\\w\\w*\\.base\\s*:=\\s*(${wordUp}))`,
-        //     'iu',
-        // ),
-        // // class ClassName | new className | className. | extends  className | global className |  {base: className | .base := baseObject
-        new RegExp(`(?:(?<![.\`])\\b(${wordUp})\\()|(?<=\bfunc\\()\\s*"\b(wordUp)${wordUp}\b"`, 'iu'),
         // funcName( | Func("funcName"
-        new RegExp(`(?<![.\`])\\b(${wordUp})\\b`, 'iu'),
+        new RegExp(`(?:(?<![.\`%])\\b(${wordUp})\\()|(?<=\bfunc\\()\\s*"\b(wordUp)${wordUp}\b"`, 'iu'),
         // var_name
+        new RegExp(`(?<![.\`])\\b(${wordUp})\\b`, 'iu'),
     ];
 
     const Modes: Readonly<EMode[]> = [

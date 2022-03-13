@@ -52,4 +52,3 @@ export function baseDiagnostic(
     // I think this way, complexity && ram >> 4ms
     return wm.setWm(DocStrMap, diagList);
 }
-// TODO  vscode.languages.getDiagnostics()
