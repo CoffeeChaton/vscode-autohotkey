@@ -1,5 +1,6 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 import * as fs from 'fs';
+import * as path from 'path';
 import * as vscode from 'vscode';
 import {
     getIgnored,
@@ -10,8 +11,9 @@ function buildByPath(needPath: Set<string>, buildPath: string): void {
     if (fs.statSync(buildPath).isDirectory()) {
         const files = fs.readdirSync(buildPath);
         for (const file of files) {
-            if (!getIgnored(file)) {
-                buildByPath(needPath, `${buildPath}/${file}`);
+            const f = path.join(buildPath, file);
+            if (!getIgnored(f)) {
+                buildByPath(needPath, f);
             }
         }
     } else if (buildPath.endsWith('.ahk') && !getIgnored(buildPath)) {
@@ -26,5 +28,5 @@ export function getUriList(): vscode.Uri[] | null {
     const needPath: Set<string> = new Set<string>();
     ahkRootPath.forEach((folder): void => buildByPath(needPath, folder.uri.fsPath));
 
-    return [...needPath].map((path): vscode.Uri => vscode.Uri.file(path));
+    return [...needPath].map((path0): vscode.Uri => vscode.Uri.file(path0));
 }

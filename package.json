@@ -164,6 +164,7 @@
                 "AhkNekoHelp.baseScan.IgnoredList": {
                     "type": "array",
                     "default": [
+                        "**/.*/**",
                         "**/node_modules/**",
                         "**/*neko_Exp_GDIP*.ahk"
                     ],
