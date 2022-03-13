@@ -1,6 +1,7 @@
 /* eslint-disable security/detect-non-literal-regexp */
 /* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
+import { getSnippetBlockFilesList } from '../../configUI';
 import { ahkSend } from './ahkSend';
 import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
@@ -17,8 +18,10 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
         document: vscode.TextDocument,
         position: vscode.Position,
         _token: vscode.CancellationToken,
-        context: vscode.CompletionContext,
+        _context: vscode.CompletionContext,
     ): Promise<null | vscode.CompletionItem[]> {
+        const blockList: readonly string[] = getSnippetBlockFilesList();
+
         const t1 = Date.now();
         const inputStr = getStartWithStr(document, position);
         const completions: vscode.CompletionItem[] = [
@@ -26,12 +29,9 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
             ...ahkSend(document, position), // '{'
         ];
 
-        if (context.triggerCharacter !== undefined) {
-            console.log('🚀 ~ CompletionItemProvider ~ ...ahkSend ~ context', context);
-        }
         if (isNormalPos(document, position)) {
             completions.push(
-                ...await listAllFuncClass(inputStr),
+                ...await listAllFuncClass(inputStr, blockList),
                 ...DeepAnalysisToCompletionItem(document, position, inputStr),
                 ...snippetStartWihA(),
                 ...globalValCompletion(document, position, inputStr),

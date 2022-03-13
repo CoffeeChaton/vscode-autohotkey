@@ -233,7 +233,7 @@ export function FormatCore(
             : getDeepKeywords(textFix, occ); // TODO fmt_a1
     }
 
-    // console.log('🚀 ~ fmt ', Date.now() - timeStart);
+    // TODO return have Diff
     if (needDiff && hasDiff[0]) {
         const fileName = path.basename(document.uri.fsPath);
         fmtReplaceWarn(timeStart, from, fileName);

@@ -28,7 +28,6 @@ export function getRangeCaseBlock(
         if ((/^\s*\bswitch\b/ui).test(lineLStr)) {
             const SwitchRange = getRange(DocStrMap, line, line, RangeEnd);
             Resolved = SwitchRange.end.line;
-            //       console.log(line, `line, Nested SwitchRange -> ${Resolved}`, Resolved);
             continue;
         }
         if (

@@ -2,7 +2,7 @@
 /* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { EMode, TAhkSymbol } from '../../globalEnum';
+import { EMode, TAhkSymbol, TAhkSymbolList } from '../../globalEnum';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { ahkInclude } from './ahkInclude';
 import { getValDefInFunc } from './getValDefInFunc';
@@ -22,15 +22,15 @@ type DefObj = Readonly<{
 export function tryGetSymbol(wordUP: string, mode: EMode): false | { fsPath: string; AhkSymbol: TAhkSymbol } {
     const fsPaths = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
-        const docSymbolList = Detecter.getDocMap(fsPath);
-        if (docSymbolList === null) continue;
-        const iMax = docSymbolList.length;
+        const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath);
+        if (AhkSymbolList === undefined) continue;
+        const iMax = AhkSymbolList.length;
         for (let i = 0; i < iMax; i++) {
             if (
-                kindCheck(mode, docSymbolList[i].kind)
-                && docSymbolList[i].name.toUpperCase() === wordUP
+                kindCheck(mode, AhkSymbolList[i].kind)
+                && AhkSymbolList[i].name.toUpperCase() === wordUP
             ) {
-                return { AhkSymbol: docSymbolList[i], fsPath };
+                return { AhkSymbol: AhkSymbolList[i], fsPath };
             }
         }
     }

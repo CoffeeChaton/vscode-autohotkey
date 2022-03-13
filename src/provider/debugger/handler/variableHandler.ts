@@ -260,7 +260,7 @@ export class VariableHandler {
                 name: fullname,
                 value: content
                     ? buildVariableValue(property, attr, content)
-                    : '', // TODO : '' address:'49519792'
+                    : '', // address:'49519792'
             };
             this.variableMap.set(fullname, ahkVar);
             const ref = typeAttr !== 'object'

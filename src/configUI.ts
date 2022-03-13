@@ -1,4 +1,5 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,10] }] */
+import * as mm from 'micromatch';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { TConfigs } from './globalEnum';
@@ -8,10 +9,10 @@ import { checkDebugFile } from './tools/fsTools/file';
     ---set start---
 */
 const id = 'ahk-neko-help';
-const statusBarItem = vscode.window.createStatusBarItem(id, vscode.StatusBarAlignment.Left, 0);
+const statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(id, vscode.StatusBarAlignment.Left, 0);
 statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
 statusBarItem.command = 'ahk.bar.click';
-let Configs = vscode.workspace.getConfiguration('AhkNekoHelp');
+let Configs: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration('AhkNekoHelp');
 
 function getConfig(): TConfigs {
     const ed: TConfigs = {
@@ -24,21 +25,14 @@ function getConfig(): TConfigs {
         lint: {
             funcSize: Configs.get('lint.funcSize') as number,
         },
-        Ignored: {
-            folder: {
-                startsWith: Configs.get('Ignored.folder.startsWith') as string[],
-                endsWith: Configs.get('Ignored.folder.endsWith') as string[],
-            },
-            File: {
-                startsWith: Configs.get('Ignored.File.startsWith') as string[],
-                endsWith: Configs.get('Ignored.File.endsWith') as string[],
-            },
+        baseScan: {
+            IgnoredList: Configs.get('baseScan.IgnoredList') as readonly string[],
         },
         Debug: {
             executePath: Configs.get('Debug.executePath') as string,
         },
         snippets: {
-            intelligent: Configs.get('snippets.intelligent') as boolean,
+            blockFilesList: Configs.get('snippets.blockFilesList') as readonly string[],
         },
         Diag: {
             WarningCap: {
@@ -54,7 +48,7 @@ function getConfig(): TConfigs {
     return ed;
 }
 
-let config = getConfig();
+let config: TConfigs = getConfig();
 
 export function configChangEvent(): void {
     Configs = vscode.workspace.getConfiguration('AhkNekoHelp');
@@ -78,39 +72,17 @@ export function getFormatConfig(): boolean {
     return config.format.textReplace;
 }
 
-export function getIgnoredFolder(file: string): boolean {
-    const { startsWith } = config.Ignored.folder;
-    for (const e of startsWith) {
-        if (file.startsWith(e)) return true;
-    }
-    const { endsWith } = config.Ignored.folder;
-    for (const e of endsWith) {
-        if (file.endsWith(e)) return true;
-    }
-    return false;
-}
-
-export function getIgnoredFile(buildPath: string): boolean {
-    if (!buildPath.endsWith('.ahk')) return true;
-
-    const fileFix = path.basename(buildPath, '.ahk');
-    const { startsWith } = config.Ignored.File;
-    for (const e of startsWith) {
-        if (fileFix.startsWith(e)) return true;
-    }
-    const { endsWith } = config.Ignored.File;
-    for (const e of endsWith) {
-        if (fileFix.endsWith(e)) return true;
-    }
-    return false;
+export function getIgnored(fsPath: string): boolean {
+    const blockList = config.baseScan.IgnoredList;
+    return mm.isMatch(fsPath, blockList);
 }
 
 export function getDebugPath(): string {
     return config.Debug.executePath;
 }
 
-export function getSnippetsMode(): boolean {
-    return config.snippets.intelligent;
+export function getSnippetBlockFilesList(): readonly string[] {
+    return config.snippets.blockFilesList;
 }
 
 /**

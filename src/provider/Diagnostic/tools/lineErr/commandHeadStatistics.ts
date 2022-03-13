@@ -21,8 +21,6 @@ function commandHeadStatistics(commandHead: string): void {
         }
 
         e5.sort((a: TElement, b: TElement): number => a.v - b.v);
-
-        console.log('🚀 ~ statistics ~ isDebug', e5);
     }
 }
 // const e5 = [

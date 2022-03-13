@@ -34,8 +34,8 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
 
     const need: DeepAnalysisResult[] = [];
     for (const fsPath of allFsPath) {
-        const AhkSymbolList: TAhkSymbolList | null = Detecter.getDocMap(fsPath);
-        if (AhkSymbolList === null) continue;
+        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath);
+        if (AhkSymbolList === undefined) continue;
 
         const Uri = vscode.Uri.file(fsPath);
         // eslint-disable-next-line no-await-in-loop

@@ -23,7 +23,7 @@ export function ahkInclude(document: vscode.TextDocument, position: vscode.Posit
     const lPath = path.dirname(document.uri.fsPath);
     const rPath = includeExec[1].replace(/%A_Space%/ug, ' ').replace(/%A_Tab%/ug, '\t');
     if ((/%A_\w+%/u).test(rPath)) {
-        console.log('ahkInclude ~ neko-help not support of %A_ScriptDir% or Similar syntax');
+        // 'ahkInclude ~ neko-help not support of %A_ScriptDir% or Similar syntax');
         return false;
     }
     const pathFix = `${lPath}\\${rPath}`;

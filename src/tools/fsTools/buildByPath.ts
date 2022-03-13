@@ -2,8 +2,7 @@
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 import {
-    getIgnoredFile,
-    getIgnoredFolder,
+    getIgnored,
 } from '../../configUI';
 import { getWorkspaceFolders } from './getWorkspaceFolders';
 
@@ -11,11 +10,11 @@ function buildByPath(needPath: Set<string>, buildPath: string): void {
     if (fs.statSync(buildPath).isDirectory()) {
         const files = fs.readdirSync(buildPath);
         for (const file of files) {
-            if (!getIgnoredFolder(file)) {
+            if (!getIgnored(file)) {
                 buildByPath(needPath, `${buildPath}/${file}`);
             }
         }
-    } else if (!getIgnoredFile(buildPath)) {
+    } else if (buildPath.endsWith('.ahk') && !getIgnored(buildPath)) {
         needPath.add(buildPath);
     }
 }

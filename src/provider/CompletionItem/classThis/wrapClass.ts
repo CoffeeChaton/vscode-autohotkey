@@ -3,7 +3,12 @@
 /* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 import { Detecter } from '../../../core/Detecter';
-import { EMode, TAhkSymbol, TSymAndFsPath } from '../../../globalEnum';
+import {
+    EMode,
+    TAhkSymbol,
+    TAhkSymbolList,
+    TSymAndFsPath,
+} from '../../../globalEnum';
 import { getScopeOfPos, getStack } from '../../../tools/getScopeOfPos';
 import { getObjChapterArr } from '../../../tools/Obj/getObjChapterArr';
 import { Pretreatment } from '../../../tools/Pretreatment';
@@ -17,8 +22,8 @@ import { insertTextWm } from './insertTextWm';
 function getUserDefClassSymbol(testName: RegExp): TSymAndFsPath | null {
     const fsPaths = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
-        const AhkSymbolList = Detecter.getDocMap(fsPath);
-        if (AhkSymbolList === null) continue;
+        const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath);
+        if (AhkSymbolList === undefined) continue;
         for (const ahkSymbol of AhkSymbolList) {
             if (
                 kindCheck(EMode.ahkClass, ahkSymbol.kind)

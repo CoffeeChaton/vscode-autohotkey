@@ -183,7 +183,7 @@ export class DebugDispather extends EventEmitter {
             property !== EVarScopeStr.Local
             && property !== EVarScopeStr.Global
         ) {
-            // TODO address
+            // address
             return this.getVariable(frameId, scope, property.name);
         }
 

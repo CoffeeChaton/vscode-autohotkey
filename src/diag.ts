@@ -2,22 +2,6 @@
 /* eslint-disable max-lines */
 import { DeepReadonly } from './globalEnum';
 
-// export const enum EDADiagCode {
-//     DACode501 = 'DA501', // 501~599 Analysis Func or Method
-//     DACode502 = 'DA502', // case sensitivity
-// }
-
-// export const DADiag = {
-//     DA501: {
-//         msg: 'args is assigned but never used.',
-//         path: 'https://www.autohotkey.com/docs/Functions.htm',
-//     },
-//     DA502: {
-//         msg: 'case sensitivity',
-//         path: 'https://www.autohotkey.com/docs/Concepts.htm#names',
-//     },
-// };
-
 export const enum EDiagCodeDA {
     // 501~599 Analysis Func or Method
     code501 = 501, // param is assigned but never used.

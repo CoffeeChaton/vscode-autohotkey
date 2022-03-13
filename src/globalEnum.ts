@@ -153,21 +153,14 @@ type TempConfigs = {
     lint: {
         funcSize: number;
     };
-    Ignored: {
-        folder: {
-            startsWith: string[];
-            endsWith: string[];
-        };
-        File: {
-            startsWith: string[];
-            endsWith: string[];
-        };
+    baseScan: {
+        IgnoredList: readonly string[];
     };
     Debug: {
         executePath: string;
     };
     snippets: {
-        intelligent: boolean;
+        blockFilesList: readonly string[];
     };
     Diag: {
         WarningCap: {

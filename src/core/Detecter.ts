@@ -25,12 +25,14 @@ export const Detecter = {
     DocMap: new Map<string, TAhkSymbolList>(),
 
     getDocMapFile(): IterableIterator<string> {
+        // FIXME: check file exit / or change
         return Detecter.DocMap.keys();
     },
 
-    getDocMap(fsPath: string): null | TAhkSymbolList {
+    getDocMap(fsPath: string): undefined | TAhkSymbolList {
         //  const Uri = vscode.Uri.file(fsPath);
-        return Detecter.DocMap.get(fsPath) ?? null;
+        // FIXME: check file exit / or change
+        return Detecter.DocMap.get(fsPath);
     },
 
     delMap(e: vscode.FileDeleteEvent): void {

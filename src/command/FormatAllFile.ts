@@ -1,45 +1,29 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable security/detect-non-literal-fs-filename */
 /* eslint no-magic-numbers: ["error", { "ignore": [1,2,3,4,5,6,7,8] }] */
 
-import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { getIgnoredFile, getIgnoredFolder } from '../configUI';
 import { TFormatChannel, TPick } from '../globalEnum';
 import { FormatCore } from '../provider/Format/FormatProvider';
-import { getWorkspaceFolders } from '../tools/fsTools/getWorkspaceFolders';
+import { getUriList } from '../tools/fsTools/buildByPath';
 
 async function formatByPathAsync(
-    formatPath: string,
+    uri: vscode.Uri,
     options: vscode.FormattingOptions,
     jestTest: boolean,
 ): Promise<void> {
-    if (fs.statSync(formatPath).isDirectory()) {
-        const files = fs.readdirSync(formatPath);
-        for (const file of files) {
-            if (!getIgnoredFolder(file)) {
-                await formatByPathAsync(`${formatPath}/${file}`, options, jestTest);
-            }
-        }
-    } else if (!getIgnoredFile(formatPath)) {
-        const Uri = vscode.Uri.file(formatPath);
-        const document = await vscode.workspace.openTextDocument(Uri);
+    const document = await vscode.workspace.openTextDocument(uri);
 
-        const edits: vscode.TextEdit[] | null | undefined = await FormatCore({
-            document,
-            options,
-            fmtStart: 0,
-            fmtEnd: document.lineCount - 1,
-            from: TFormatChannel.byFormatAllFile,
-            needDiff: true,
-        });
-        if (!jestTest) {
-            if (edits) {
-                const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
-                edit.set(Uri, edits);
-                await vscode.workspace.applyEdit(edit);
-            }
-        }
+    const edits: vscode.TextEdit[] | null | undefined = await FormatCore({
+        document,
+        options,
+        fmtStart: 0,
+        fmtEnd: document.lineCount - 1,
+        from: TFormatChannel.byFormatAllFile,
+        needDiff: true,
+    });
+    if (!jestTest && edits) {
+        const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
+        edit.set(uri, edits);
+        await vscode.workspace.applyEdit(edit);
     }
 }
 
@@ -98,8 +82,8 @@ async function getJustTest(): Promise<boolean | null> {
 }
 
 export async function FormatAllFile(): Promise<null> {
-    const ahkRootPath = getWorkspaceFolders();
-    if (ahkRootPath === null) return null;
+    const uriList: vscode.Uri[] | null = getUriList();
+    if (uriList === null) return null;
 
     const jestTest = await getJustTest();
     if (jestTest === null) return null;
@@ -108,9 +92,12 @@ export async function FormatAllFile(): Promise<null> {
     if (options === null) return null;
 
     const timeStart = Date.now();
-    for (const folder of ahkRootPath) {
-        await formatByPathAsync(folder.uri.fsPath, options, jestTest);
+    const results: Promise<void>[] = [];
+    for (const uri of uriList) {
+        results.push(formatByPathAsync(uri, options, jestTest));
     }
+    await Promise.all(results);
+
     void vscode.window.showInformationMessage(`FormatAllFile ${Date.now() - timeStart}ms`);
     return null;
 }

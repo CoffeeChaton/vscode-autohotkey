@@ -1,19 +1,22 @@
 /* eslint-disable no-await-in-loop */
+import * as mm from 'micromatch';
 import * as vscode from 'vscode';
 import { Detecter } from '../../../core/Detecter';
-import { EStr } from '../../../globalEnum';
-import { pathIgnore } from '../../../tools/fsTools/pathIgnore';
+import { EStr, TAhkSymbolList } from '../../../globalEnum';
 import { setFuncHoverMD } from '../../../tools/MD/setHoverMD';
 import { insertTextWm } from '../classThis/insertTextWm';
 
-export async function listAllFuncClass(inputStr: string): Promise<vscode.CompletionItem[]> {
+export async function listAllFuncClass(
+    inputStr: string,
+    blockList: readonly string[],
+): Promise<vscode.CompletionItem[]> {
     const fsPaths = Detecter.getDocMapFile();
     const itemS: vscode.CompletionItem[] = [];
     for (const fsPath of fsPaths) {
-        if (pathIgnore(fsPath)) continue;
+        if (mm.isMatch(fsPath, blockList)) continue;
 
-        const AhkSymbolList = Detecter.getDocMap(fsPath);
-        if (AhkSymbolList === null) continue;
+        const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath);
+        if (AhkSymbolList === undefined) continue;
         for (const ahkSymbol of AhkSymbolList) {
             if (ahkSymbol.kind === vscode.SymbolKind.Class) {
                 const kind = vscode.CompletionItemKind.Class;

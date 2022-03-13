@@ -38,9 +38,9 @@ function dfs(father: TAhkSymbolList, position: vscode.Position, StackPro: TStack
 }
 
 export function getStack(document: vscode.TextDocument, position: vscode.Position): TStackPro | null {
-    const ahkSymbolS = Detecter.getDocMap(document.uri.fsPath);
-    if (ahkSymbolS === null) return null;
-    return dfs(ahkSymbolS, position, {
+    const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(document.uri.fsPath);
+    if (AhkSymbolList === undefined) return null;
+    return dfs(AhkSymbolList, position, {
         stack: [],
         isEnd: false,
         deep: 0,

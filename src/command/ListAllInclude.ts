@@ -21,8 +21,8 @@ export function ListAllInclude(): null {
 
     const AllList: string[] = ['[neko-help] List All #Include'];
     for (const fsPath of allFsPath) {
-        const AhkSymbolList: TAhkSymbolList | null = Detecter.getDocMap(fsPath);
-        if (AhkSymbolList === null) continue;
+        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath);
+        if (AhkSymbolList === undefined) continue;
 
         const List: string[] = [];
         List.push(fsPath);

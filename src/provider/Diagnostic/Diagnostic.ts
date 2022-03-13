@@ -46,7 +46,6 @@ export function baseDiagnostic(
         ...getTreeErr(AhkSymbolList, displayErr),
         ...getFuncErr(DocStrMap, AhkSymbolList, displayErr),
     ];
-    // console.log('🚀 ~ baseDiagnostic', Date.now() - timeStart, 'ms');
     // 8k lines without hashCache -> 6ms
     // with hashCache -> 2ms
     // I think this way, complexity && ram >> 4ms
