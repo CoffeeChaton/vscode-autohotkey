@@ -19,24 +19,10 @@ function getReturnText(lStr: string, textRaw: string): string {
     return `    ${name.trim()}\n`;
 }
 
-type TSymbol = {
-    AhkSymbol: TAhkSymbol;
-    fsPath: string;
-};
-// eslint-disable-next-line no-magic-numbers
-const w = new ClassWm<TAhkSymbol, vscode.MarkdownString>(10 * 60 * 1000, 'setFuncHoverMD', 9000);
-
-export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.MarkdownString> {
-    const { AhkSymbol, fsPath } = mySymbol;
-    if (AhkSymbol.kind !== vscode.SymbolKind.Function && AhkSymbol.kind !== vscode.SymbolKind.Method) {
-        return new vscode.MarkdownString('just support Function/Method hover now', true);
-    }
-    const cache = w.getWm(AhkSymbol);
-    if (cache) return cache;
-
-    const document = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
-    // --set end---
-
+function getFuncDocCore(
+    AhkSymbol: TAhkSymbol,
+    document: vscode.TextDocument,
+): vscode.MarkdownString {
     let flag = EDocBlock.other;
     const fnDocList: string[] = [];
     let returnList = '';
@@ -70,6 +56,22 @@ export async function setFuncHoverMD(mySymbol: TSymbol): Promise<vscode.Markdown
         .appendMarkdown(fnDocList.join('\n'));
 
     md.supportHtml = true;
+
+    return md;
+}
+// eslint-disable-next-line no-magic-numbers
+const w = new ClassWm<TAhkSymbol, vscode.MarkdownString>(10 * 60 * 1000, 'setFuncHoverMD', 9000);
+
+export async function getFuncDocMD(AhkSymbol: TAhkSymbol, fsPath: string): Promise<vscode.MarkdownString> {
+    if (AhkSymbol.kind !== vscode.SymbolKind.Function && AhkSymbol.kind !== vscode.SymbolKind.Method) {
+        return new vscode.MarkdownString('just support Function/Method hover now', true);
+    }
+    const cache = w.getWm(AhkSymbol);
+    if (cache) return cache;
+
+    const document: vscode.TextDocument = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
+
+    const md: vscode.MarkdownString = getFuncDocCore(AhkSymbol, document);
 
     return w.setWm(AhkSymbol, md);
 }

@@ -4,11 +4,12 @@ import {
     DeepAnalysisResult,
     EMode,
     TAhkSymbol,
+    TSymAndFsPath,
 } from '../../globalEnum';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
 import { isPosAtStr } from '../../tools/isPosAtStr';
-import { setFuncHoverMD } from '../../tools/MD/setHoverMD';
+import { getFuncDocMD } from '../../tools/MD/getFuncDocMD';
 import { ClassWm } from '../../tools/wm';
 import { tryGetSymbol } from '../Def/DefProvider';
 import { DeepAnalysisHover } from './DeepAnalysisHover';
@@ -20,17 +21,17 @@ async function HoverFunc(wordUp: string, textRaw: string): Promise<null | vscode
     const isFunc = new RegExp(`(?<![.%\`])(${wordUp})\\(`, 'iu'); // not search class.Method()
     if (!isFunc.test(textRaw)) return null;
 
-    const ahkSymbol = tryGetSymbol(wordUp, EMode.ahkFunc);
-    if (!ahkSymbol) return null;
+    const data: null | TSymAndFsPath = tryGetSymbol(wordUp, EMode.ahkFunc);
+    if (data === null) return null;
 
-    const t = ahkSymbol.AhkSymbol;
-    const cache = wm.getWm(t);
+    const { AhkSymbol, fsPath } = data;
+    const cache: vscode.Hover | null = wm.getWm(AhkSymbol);
     if (cache) return cache;
 
-    const md = await setFuncHoverMD(ahkSymbol);
+    const md = await getFuncDocMD(AhkSymbol, fsPath);
     const hover = new vscode.Hover(md);
 
-    return wm.setWm(t, hover);
+    return wm.setWm(AhkSymbol, hover);
 }
 
 export class HoverProvider implements vscode.HoverProvider {

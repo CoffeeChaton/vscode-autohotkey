@@ -2,7 +2,7 @@
 /* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { EMode, TAhkSymbol, TAhkSymbolList } from '../../globalEnum';
+import { EMode, TAhkSymbolList, TSymAndFsPath } from '../../globalEnum';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { ahkInclude } from './ahkInclude';
 import { getValDefInFunc } from './getValDefInFunc';
@@ -19,7 +19,7 @@ type DefObj = Readonly<{
     listAllUsing: boolean;
 }>;
 
-export function tryGetSymbol(wordUP: string, mode: EMode): false | { fsPath: string; AhkSymbol: TAhkSymbol } {
+export function tryGetSymbol(wordUP: string, mode: EMode): null | TSymAndFsPath {
     const fsPaths = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
         const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath);
@@ -34,7 +34,7 @@ export function tryGetSymbol(wordUP: string, mode: EMode): false | { fsPath: str
             }
         }
     }
-    return false;
+    return null;
 }
 
 async function getReference(usingReg: RegExp, timeStart: number, wordUp: string): Promise<vscode.Location[]> {
@@ -72,9 +72,9 @@ async function ahkDef(
     }: DefObj,
 ): Promise<false | vscode.Location[]> {
     const textTrimUp = document.lineAt(position).text.trim().toUpperCase();
-    const EModeSymbol = tryGetSymbol(wordUp, Mode);
-    if (EModeSymbol === false) return false;
-    const { AhkSymbol, fsPath } = EModeSymbol;
+    const data: TSymAndFsPath | null = tryGetSymbol(wordUp, Mode);
+    if (data === null) return false;
+    const { AhkSymbol, fsPath } = data;
 
     // searchDef
     const searchDef = (): false | Promise<vscode.Location[]> => {
@@ -105,6 +105,7 @@ async function ahkDef(
     return false;
 }
 
+// FIXME goto func Def
 export async function userDef(
     document: vscode.TextDocument,
     position: vscode.Position,
@@ -115,7 +116,7 @@ export async function userDef(
     // isDef: (textTrim: string) => boolean
     // TODO get def of AST
     const defRefList: RegExp[] = [
-        //   new RegExp(`(?<!\\.)\\b(${wordUp})\\(`, 'i'),
+        //   funcName(
         new RegExp(`(?<![.\`%])\\b(${wordUp})\\(`, 'iu'),
         // global var_name :=
         new RegExp(`\\bGlobal\\s+(${wordUp})\\s+:?=`, 'iu'),

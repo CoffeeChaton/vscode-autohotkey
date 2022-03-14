@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import { Detecter } from '../../../core/Detecter';
 import { EStr, TAhkSymbolList } from '../../../globalEnum';
-import { setFuncHoverMD } from '../../../tools/MD/setHoverMD';
+import { getFuncDocMD } from '../../../tools/MD/getFuncDocMD';
 import { insertTextWm } from '../classThis/insertTextWm';
 
 function getLabel(name: string, inputStr: string): string {
@@ -44,7 +44,7 @@ export async function listAllFuncClass(
                 }, vscode.CompletionItemKind.Function);
                 item.insertText = await insertTextWm(fsPath, AhkSymbol);
                 item.detail = 'neko help';
-                item.documentation = await setFuncHoverMD({ fsPath, AhkSymbol });
+                item.documentation = await getFuncDocMD(AhkSymbol, fsPath);
                 itemS.push(item);
             }
         }
