@@ -1,5 +1,6 @@
 *.cpuprofile
 *.heapsnapshot
+.VSCodeCounter/
 .dccache
 .eslintcache
 .history/
