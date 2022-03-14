@@ -1,10 +1,17 @@
 /* eslint-disable no-await-in-loop */
 import * as mm from 'micromatch';
+import * as path from 'path';
 import * as vscode from 'vscode';
 import { Detecter } from '../../../core/Detecter';
 import { EStr, TAhkSymbolList } from '../../../globalEnum';
 import { setFuncHoverMD } from '../../../tools/MD/setHoverMD';
 import { insertTextWm } from '../classThis/insertTextWm';
+
+function getLabel(name: string, inputStr: string): string {
+    return name.startsWith(inputStr)
+        ? `${EStr.suggestStr} ${name}`
+        : name;
+}
 
 export async function listAllFuncClass(
     inputStr: string,
@@ -14,29 +21,30 @@ export async function listAllFuncClass(
     const itemS: vscode.CompletionItem[] = [];
     for (const fsPath of fsPaths) {
         if (mm.isMatch(fsPath, blockList)) continue;
+        const description = path.basename(fsPath);
 
         const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath);
         if (AhkSymbolList === undefined) continue;
-        for (const ahkSymbol of AhkSymbolList) {
-            if (ahkSymbol.kind === vscode.SymbolKind.Class) {
-                const kind = vscode.CompletionItemKind.Class;
-                const label = ahkSymbol.name.startsWith(inputStr)
-                    ? `${EStr.suggestStr} ${ahkSymbol.name}`
-                    : ahkSymbol.name;
-                const item = new vscode.CompletionItem(label, kind);
-                item.insertText = await insertTextWm({ ahkSymbol, fsPath });
+        for (const AhkSymbol of AhkSymbolList) {
+            if (AhkSymbol.kind === vscode.SymbolKind.Class) {
+                const { name } = AhkSymbol;
+                const item = new vscode.CompletionItem({
+                    label: getLabel(name, inputStr),
+                    description,
+                }, vscode.CompletionItemKind.Class);
+                item.insertText = await insertTextWm({ AhkSymbol, fsPath });
                 item.detail = 'neko help';
                 item.documentation = 'user def class';
                 itemS.push(item);
-            } else if (ahkSymbol.kind === vscode.SymbolKind.Function) {
-                const kind = vscode.CompletionItemKind.Function;
-                const label = ahkSymbol.name.startsWith(inputStr)
-                    ? `${EStr.suggestStr} ${ahkSymbol.name}`
-                    : ahkSymbol.name;
-                const item = new vscode.CompletionItem(label, kind);
-                item.insertText = await insertTextWm({ ahkSymbol, fsPath });
+            } else if (AhkSymbol.kind === vscode.SymbolKind.Function) {
+                const { name } = AhkSymbol;
+                const item = new vscode.CompletionItem({
+                    label: getLabel(name, inputStr),
+                    description,
+                }, vscode.CompletionItemKind.Function);
+                item.insertText = await insertTextWm({ AhkSymbol, fsPath });
                 item.detail = 'neko help';
-                item.documentation = await setFuncHoverMD({ fsPath, AhkSymbol: ahkSymbol });
+                item.documentation = await setFuncHoverMD({ fsPath, AhkSymbol });
                 itemS.push(item);
             }
         }

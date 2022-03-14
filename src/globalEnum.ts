@@ -55,7 +55,7 @@ export type TAhkSymbol = DeepReadonly<vscode.DocumentSymbol>;
 export type TAhkSymbolList = DeepReadonly<vscode.DocumentSymbol[]>;
 
 export type TSymAndFsPath = {
-    ahkSymbol: TAhkSymbol;
+    AhkSymbol: TAhkSymbol;
     fsPath: string;
 };
 

@@ -6,12 +6,12 @@ import { ClassWm } from '../../../tools/wm';
 const w = new ClassWm<TAhkSymbol, vscode.SnippetString>(10 * 60 * 1000, 'insertTextWm', 3000);
 
 export async function insertTextWm(c0: TSymAndFsPath): Promise<vscode.SnippetString> {
-    const { ahkSymbol, fsPath } = c0;
-    const cache = w.getWm(ahkSymbol);
+    const { AhkSymbol, fsPath } = c0;
+    const cache = w.getWm(AhkSymbol);
     if (cache) return cache;
 
     const document = await vscode.workspace.openTextDocument(fsPath);
-    const insertText = new vscode.SnippetString(document.getText(ahkSymbol.selectionRange));
+    const insertText = new vscode.SnippetString(document.getText(AhkSymbol.selectionRange));
 
-    return w.setWm(ahkSymbol, insertText);
+    return w.setWm(AhkSymbol, insertText);
 }

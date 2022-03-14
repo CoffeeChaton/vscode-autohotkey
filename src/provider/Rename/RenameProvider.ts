@@ -15,19 +15,17 @@ function DeepAnalysisRename(
     const ed: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
     if (!ed) return [];
 
-    const loc: vscode.Range[] = [];
-
     const argMap: TArgAnalysis | undefined = ed.argMap.get(wordUp);
     if (argMap) {
-        loc.push(...argMap.defRangeList, ...argMap.refRangeList);
+        return [...argMap.defRangeList, ...argMap.refRangeList];
     }
 
     const valMap: TValAnalysis | undefined = ed.valMap.get(wordUp);
     if (valMap) {
-        loc.push(...valMap.defRangeList, ...valMap.refRangeList);
+        return [...valMap.defRangeList, ...valMap.refRangeList];
     }
 
-    return loc;
+    return [];
 }
 
 export class RenameProvider implements vscode.RenameProvider {
@@ -45,10 +43,7 @@ export class RenameProvider implements vscode.RenameProvider {
         const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
         const rangeList: vscode.Range[] = DeepAnalysisRename(document, position, word.toUpperCase());
         for (const range of rangeList) {
-            edit.replace(document.uri, range, newName, {
-                needsConfirmation: true,
-                label: 'is test now',
-            });
+            edit.replace(document.uri, range, newName);
         }
         // const fnRenameList = fnRename()
         return edit;
