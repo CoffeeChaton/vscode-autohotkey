@@ -14,17 +14,18 @@ type FuncTailType = {
     defLine: number;
 };
 
-function getSelectionRange(DocStrMap: TTokenStream, defLine: number, searchLine: number): vscode.Range {
+function getFuncDefData(DocStrMap: TTokenStream, defLine: number, searchLine: number, name: string): FuncDefData {
     // const argPos = Math.max(DocStrMap[defLine].lStr.indexOf('('), 0);
     const colS = DocStrMap[defLine].lStr.search(/\w/u);
     const colE = DocStrMap[searchLine].lStr.lastIndexOf(')');
     //  const colFixE = colE === -1 ? DocStrMap[searchLine].lStr.length : colE;
-    return new vscode.Range(
+    const selectionRange = new vscode.Range(
         defLine,
         colS,
         searchLine,
         colE + 1,
     );
+    return { name, selectionRange };
 }
 
 function getFuncTail({
@@ -36,8 +37,7 @@ function getFuncTail({
 }: FuncTailType): false | FuncDefData {
     // i+1   ^, something , something ........ ) {$
     if ((/\)\s*\{\s*$/u).test(searchText)) {
-        const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine);
-        return { name, selectionRange };
+        return getFuncDefData(DocStrMap, defLine, searchLine, name);
     }
     if (searchLine + 1 === DocStrMap.length) return false;
 
@@ -47,8 +47,7 @@ function getFuncTail({
         (/\)\s*$/u).test(searchText)
         && (/^\s*\{/u).test(DocStrMap[searchLine + 1].lStr)
     ) {
-        const selectionRange = getSelectionRange(DocStrMap, defLine, searchLine);
-        return { name, selectionRange };
+        return getFuncDefData(DocStrMap, defLine, searchLine, name);
     }
 
     return false;

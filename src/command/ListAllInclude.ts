@@ -19,22 +19,20 @@ export function ListAllInclude(): null {
     const t1 = Date.now();
     const allFsPath = Detecter.getDocMapFile();
 
-    const AllList: string[] = ['[neko-help] List All #Include'];
+    const AllList: string[] = [];
     for (const fsPath of allFsPath) {
         const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath);
         if (AhkSymbolList === undefined) continue;
 
         const List: string[] = [];
-        List.push(fsPath);
-
         collectInclude(List, AhkSymbolList);
-
-        if (List.length > 1) {
-            AllList.push(...List, '\n');
+        if (List.length > 0) {
+            AllList.push(`\n${fsPath}`, ...List);
         }
     }
 
     const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
+    OutputChannel.appendLine('[neko-help] List All #Include');
     OutputChannel.append(AllList.join('\n'));
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();

@@ -3,7 +3,8 @@ const DEB = new Map<string, number>();
 const isDebug = false;
 
 // not export now
-function commandHeadStatistics(commandHead: string): void {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+function _commandHeadStatistics(commandHead: string): void {
     const hint = DEB.get(commandHead) ?? 0;
     DEB.set(commandHead, hint + 1);
 
@@ -71,13 +72,5 @@ function commandHeadStatistics(commandHead: string): void {
 //     {
 //         k: 'Send',
 //         v: 72,
-//     },
-//     {
-//         k: 'global',
-//         v: 191,
-//     },
-//     {
-//         k: 'Static',
-//         v: 438,
 //     },
 // ];

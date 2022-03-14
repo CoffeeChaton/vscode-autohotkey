@@ -21,7 +21,7 @@ export async function listAllFuncClass(
     const itemS: vscode.CompletionItem[] = [];
     for (const fsPath of fsPaths) {
         if (mm.isMatch(fsPath, blockList)) continue;
-        const description = path.basename(fsPath);
+        const fileName = path.basename(fsPath);
 
         const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath);
         if (AhkSymbolList === undefined) continue;
@@ -30,9 +30,9 @@ export async function listAllFuncClass(
                 const { name } = AhkSymbol;
                 const item = new vscode.CompletionItem({
                     label: getLabel(name, inputStr),
-                    description,
+                    description: fileName,
                 }, vscode.CompletionItemKind.Class);
-                item.insertText = await insertTextWm({ AhkSymbol, fsPath });
+                item.insertText = await insertTextWm(fsPath, AhkSymbol);
                 item.detail = 'neko help';
                 item.documentation = 'user def class';
                 itemS.push(item);
@@ -40,9 +40,9 @@ export async function listAllFuncClass(
                 const { name } = AhkSymbol;
                 const item = new vscode.CompletionItem({
                     label: getLabel(name, inputStr),
-                    description,
+                    description: fileName,
                 }, vscode.CompletionItemKind.Function);
-                item.insertText = await insertTextWm({ AhkSymbol, fsPath });
+                item.insertText = await insertTextWm(fsPath, AhkSymbol);
                 item.detail = 'neko help';
                 item.documentation = await setFuncHoverMD({ fsPath, AhkSymbol });
                 itemS.push(item);

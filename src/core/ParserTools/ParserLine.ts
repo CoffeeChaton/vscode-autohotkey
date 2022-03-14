@@ -19,14 +19,15 @@ const IncludeAgain: LineRulerType = {
     detail: '#IncludeAgain',
     kind: vscode.SymbolKind.Event,
     getName(strTrim: string): string | null {
-        const e = (/^#IncludeAgain\s+(\S+)[\s|$]/ui).exec(strTrim);
-        return e
-            ? `#IncludeAgain ${e[1]}`
-            : null;
+        return strTrim.replace(/^#IncludeAgain\s+/ui, '#IncludeAgain ');
+        // const e = (/^#IncludeAgain\s+?(\.+)/ui).exec(strTrim);
+        // return e
+        //     ? `#IncludeAgain ${e[1]}`
+        //     : null;
     },
 
     test(strTrim: string): boolean {
-        return (/^#IncludeAgain\b/iu).test(strTrim);
+        return (/^#IncludeAgain\s/iu).test(strTrim);
     },
 };
 
@@ -34,14 +35,15 @@ const Include: LineRulerType = {
     detail: '#Include',
     kind: vscode.SymbolKind.Event,
     getName(strTrim: string): string | null {
-        const e = (/^#Include\s+(\S+)[\s|$]/iu).exec(strTrim);
-        return e
-            ? `#Include ${e[1]}`
-            : null;
+        return strTrim.replace(/^#Include\s+/ui, '#Include ');
+        // const e = (/^#Include\s+?(\.+)/iu).exec(strTrim);
+        // return e
+        //     ? `#Include ${e[1]}`
+        //     : null;
     },
 
     test(strTrim: string): boolean {
-        return (/^#Include\b/iu).test(strTrim);
+        return (/^#Include\s/iu).test(strTrim);
     },
 };
 

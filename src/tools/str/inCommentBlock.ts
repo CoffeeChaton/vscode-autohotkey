@@ -16,32 +16,29 @@ export const enum EDocBlock {
     other = 0, // false
     inDocCommentBlockStart = 1, // /**
     inDocCommentBlockMid = 2, //
-    inDocCommentBlockEnd = 3, // */ false
+    inDocCommentBlockEnd = 3, // */
 }
 
 export function docCommentBlock(textRaw: string, flag: EDocBlock): EDocBlock {
-    if (flag === EDocBlock.other) {
-        if ((/^\s*\/\*{2}/u).test(textRaw)) { // textRaw.indexOf('/**') > -1
-            return EDocBlock.inDocCommentBlockStart;
-        }
-        return EDocBlock.other;
+    if (
+        flag === EDocBlock.other
+        || flag === EDocBlock.inDocCommentBlockEnd
+    ) {
+        return (/^\s*\/\*{2}/u).test(textRaw) // textRaw.indexOf('/**') > -1
+            ? EDocBlock.inDocCommentBlockStart
+            : EDocBlock.other;
     }
 
     if (
-        flag === EDocBlock.inDocCommentBlockStart || flag === EDocBlock.inDocCommentBlockMid
+        flag === EDocBlock.inDocCommentBlockStart
+        || flag === EDocBlock.inDocCommentBlockMid
     ) {
-        if ((/^\s*\*\//u).test(textRaw)) { // textRaw.indexOf('*/') > -1
-            return EDocBlock.inDocCommentBlockEnd;
-        }
-        return EDocBlock.inDocCommentBlockMid;
+        return (/^\s*\*\//u).test(textRaw) // textRaw.indexOf('*/') > -1
+            ? EDocBlock.inDocCommentBlockEnd
+            : EDocBlock.inDocCommentBlockMid;
     }
 
-    if (flag === EDocBlock.inDocCommentBlockEnd) {
-        if ((/^\s*\/\*{2}/u).test(textRaw)) { // textRaw.indexOf('/**') > -1
-            return EDocBlock.inDocCommentBlockStart;
-        }
-        return EDocBlock.other;
-    }
+    // NEVER-----------------------------------
     enumLog(flag);
     return EDocBlock.other;
 }

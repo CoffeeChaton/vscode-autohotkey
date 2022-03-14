@@ -2,6 +2,12 @@ import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { TAhkSymbolList } from '../globalEnum';
 
+function getFnNameLineCol(text: string, fsPath: string, start: vscode.Position): string {
+    const line = start.line + 1;
+    const column = start.character + 1;
+    return `${text} ;${fsPath}:${line}:${column}`;
+}
+
 export function ListAllFunc(showLink: boolean): null {
     const t1 = Date.now();
     const allFsPath = Detecter.getDocMapFile();
@@ -17,9 +23,7 @@ export function ListAllFunc(showLink: boolean): null {
             if (DocumentSymbol.kind === vscode.SymbolKind.Function) {
                 const text = `${DocumentSymbol.name}()`;
                 if (showLink) {
-                    const line = DocumentSymbol.selectionRange.start.line + 1;
-                    const column = DocumentSymbol.selectionRange.start.character + 1;
-                    AllList.push(`${text} ;${fsPath}:${line}:${column}`);
+                    AllList.push(getFnNameLineCol(text, fsPath, DocumentSymbol.selectionRange.start));
                 } else {
                     AllList.push(text);
                 }
@@ -51,9 +55,7 @@ export function ListAllFuncSort(reverse: boolean): null {
             if (DocumentSymbol.kind === vscode.SymbolKind.Function) {
                 const text = `${DocumentSymbol.name}()`;
 
-                const line = DocumentSymbol.selectionRange.start.line + 1;
-                const column = DocumentSymbol.selectionRange.start.character + 1;
-                AllList.push(`${text} ;${fsPath}:${line}:${column}`);
+                AllList.push(getFnNameLineCol(text, fsPath, DocumentSymbol.selectionRange.start));
             }
         }
     }

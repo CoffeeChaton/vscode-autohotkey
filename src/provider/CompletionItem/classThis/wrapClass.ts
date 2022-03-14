@@ -46,18 +46,22 @@ function getKindOfCh(ch: TAhkSymbol): vscode.CompletionItemKind {
     }
 }
 
-async function wrapItem(c0: TSymAndFsPath, track: string[]): Promise<vscode.CompletionItem> {
-    const item = new vscode.CompletionItem(c0.AhkSymbol.name.trim(), getKindOfCh(c0.AhkSymbol));
-    if (c0.AhkSymbol.kind === vscode.SymbolKind.Method) {
-        const methodName = await insertTextWm(c0);
+async function wrapItem(
+    fsPath: string,
+    AhkSymbol: TAhkSymbol,
+    track: string[],
+): Promise<vscode.CompletionItem> {
+    const item = new vscode.CompletionItem(AhkSymbol.name.trim(), getKindOfCh(AhkSymbol));
+    if (AhkSymbol.kind === vscode.SymbolKind.Method) {
+        const methodName = await insertTextWm(fsPath, AhkSymbol);
         item.label = methodName.value;
         item.insertText = methodName;
     }
     item.detail = 'neko help';
     const md = new vscode.MarkdownString('', true);
-    if (c0.AhkSymbol.detail.trim()) {
+    if (AhkSymbol.detail.trim()) {
         md.appendMarkdown('\n\ndetail: ')
-            .appendMarkdown(c0.AhkSymbol.detail.trim())
+            .appendMarkdown(AhkSymbol.detail.trim())
             .appendMarkdown('\n\n');
     }
     md.appendMarkdown([...track].reverse().join('   \n'));
@@ -89,7 +93,7 @@ async function parsingUserDefClassRecursive(
     const newTrack = [...track, `${strKind}  ${AhkSymbol.name}`];
     for (const ch of AhkSymbol.children) {
         const c1 = { AhkSymbol: ch, fsPath };
-        if (ChapterArr.length === deep) itemS.push(await wrapItem(c1, newTrack));
+        if (ChapterArr.length === deep) itemS.push(await wrapItem(fsPath, ch, newTrack));
         if (ch.kind === vscode.SymbolKind.Class && fnStrEq.test(ch.name)) {
             itemS.push(...await parsingUserDefClassRecursive(c1, newTrack, ChapterArr, deep + 1)); // getCh
         }
@@ -230,3 +234,5 @@ export async function wrapClass(
     const ahkClassItem: vscode.CompletionItem[] = await triggerClass(document, position, ChapterArr);
     return ahkClassItem;
 }
+// WTF...
+// FIXME: split this file

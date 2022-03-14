@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import { EDiagLine, TLineDiag } from './lineErrTools';
+
 // ---------------------------------------------------------------------------------------------------------------------
 function getLoopErr(lStr: string): TLineDiag {
     const exec = (/^\s*Loop\b[\s,]+(\w+)/iu).exec(lStr);
@@ -187,7 +188,7 @@ export function getCommandErr(lStr: string, lStrTrim: string): TLineDiag {
     if ((/^(?:switch|case|if|while|else|return|Break|for|sleep|Static|global)$/ui).test(commandHead)) {
         return EDiagLine.miss;
     }
-
+    //  _commandHeadStatistics()
     const fnReplaceErr: TLineDiag = getCommandErrFnReplace(commandHead, lStr);
     if (fnReplaceErr) {
         return fnReplaceErr;
