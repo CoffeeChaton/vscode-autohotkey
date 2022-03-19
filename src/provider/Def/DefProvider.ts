@@ -93,7 +93,7 @@ async function ahkDef(
         if (textTrimUp.search(usingReg) === -1) return false;
         console.log(`🚀 goto Def of ${AhkSymbol.name} ()`, Date.now() - timeStart, 'ms)'); // < ssd < 1ms
         const Uri = vscode.Uri.file(fsPath);
-        return [new vscode.Location(Uri, AhkSymbol.range)];
+        return [new vscode.Location(Uri, AhkSymbol.selectionRange)];
     };
 
     const Def = await searchDef();
@@ -161,7 +161,8 @@ export class DefProvider implements vscode.DefinitionProvider {
         document: vscode.TextDocument,
         position: vscode.Position,
         _token: vscode.CancellationToken,
-    ): Promise<null | vscode.Location | vscode.Location[] | vscode.LocationLink[]> {
+    ): Promise<null | vscode.Location | vscode.Location[]> {
+        //  Definition | DefinitionLink[]
         if (isPosAtStr(document, position)) return null;
 
         // eslint-disable-next-line security/detect-unsafe-regex

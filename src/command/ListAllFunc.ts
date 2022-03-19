@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { TAhkSymbolList } from '../globalEnum';
+import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 
 function getFnNameLineCol(text: string, fsPath: string, start: vscode.Position): string {
     const line = start.line + 1;
@@ -32,7 +33,7 @@ export function ListAllFunc(showLink: boolean): null {
         AllList.push('\n');
     }
 
-    const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
+    OutputChannel.clear();
     OutputChannel.append(AllList.join('\n'));
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();
@@ -60,10 +61,6 @@ export function ListAllFuncSort(reverse: boolean): null {
         }
     }
 
-    const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
-
-    OutputChannel.appendLine('[neko-help] List All Function()');
-
     // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
     AllList.sort();
     const appendText: string = reverse
@@ -72,6 +69,8 @@ export function ListAllFuncSort(reverse: boolean): null {
             .join('\n')
         : AllList.join('\n');
 
+    OutputChannel.clear();
+    OutputChannel.appendLine('[neko-help] List All Function()');
     OutputChannel.appendLine(appendText);
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();

@@ -11,10 +11,9 @@ import { EventEmitter } from 'events';
 import { existsSync } from 'fs';
 import { getPort } from 'get-port-please';
 import { resolve } from 'path';
-import * as vscode from 'vscode';
-import { OutputChannel } from '../../tools/OutputChannel';
 import { mapToStr } from '../../tools/str/mapToStr';
 import { startDebugger } from '../Service/Service';
+import { OutputChannel } from '../vscWindows/OutputChannel';
 import { DebugServer } from './debugServer';
 import {
     EVarScope,
@@ -56,9 +55,9 @@ export class DebugDispather extends EventEmitter {
     public async start(args: TLaunchRequestArguments): Promise<void> {
         const { runtime } = args;
         if (!existsSync(runtime)) {
-            const message = `Autohotkey Execute Bin Not Found : ${runtime} --112--883--963--by neko-help`;
-            vscode.window.showInformationMessage(message);
-            OutputChannel.log(message);
+            const message = `AHK Execute Bin Not Found : ${runtime} --112--883--963--by neko-help`;
+            OutputChannel.appendLine(message);
+            OutputChannel.show();
             this.end();
             return;
         }

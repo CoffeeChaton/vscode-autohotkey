@@ -2,9 +2,11 @@ import * as vscode from 'vscode';
 import { openDocs, statusBarClick } from './command/Command';
 import { UpdateCacheAsync } from './command/UpdateCache';
 import { configChangEvent } from './configUI';
-import { clearBaseScanCache } from './core/BaseScanCache/cache';
+import { BaseScanCache } from './core/BaseScanCache/cache';
 import { Detecter } from './core/Detecter';
 import { diagColl } from './core/diagRoot';
+import { globalValMap } from './core/Global';
+import { FileSystemWatcher } from './FileSystemWatcher';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
@@ -31,6 +33,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.languages.registerOnTypeFormattingEditProvider(language, new OnTypeFormattingEditProvider(), '\n'),
         vscode.languages.registerReferenceProvider(language, new ReferenceProvider()),
         vscode.languages.registerRenameProvider(language, new RenameProvider()),
+        // TODO registerTextDocumentContentProvider
         // vscode.languages.registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', ','),
         vscode.workspace.onDidChangeConfiguration((): void => configChangEvent()),
         vscode.workspace.onDidDeleteFiles((e): void => Detecter.delMap(e)),
@@ -43,18 +46,22 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.commands.registerCommand('ahk.bar.click', (): void => void statusBarClick()),
         vscode.commands.registerCommand('ahk.nekoHelp.openDoc', (): void => openDocs()),
         vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
+        FileSystemWatcher,
     );
     void UpdateCacheAsync(false); // not await
 }
 
 export function deactive(): void {
     Detecter.DocMap.clear();
-    clearBaseScanCache();
+    BaseScanCache.cache.clear();
+    globalValMap.clear();
     diagColl.clear();
 }
 
 /*
+TODO i18n
 https://github.com/think2011/vscode-i18n-core/blob/10abc4b356cfb34f64d17a7dbdb73e58f6bd6274/editor/Annotation.ts
+https://github.com/microsoft/vscode-extension-samples/tree/main/i18n-sample
 
 const range: vscode.Range = new vscode.Range(
     document.positionAt(index),
@@ -73,6 +80,5 @@ const decoration = {
     }
 }
 vscode.Progress
-// createTextEditorDecorationType
-QuickInput
+TODO createTextEditorDecorationType
 */

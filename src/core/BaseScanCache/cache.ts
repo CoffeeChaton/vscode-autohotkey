@@ -23,24 +23,24 @@ type TCache = {
 };
 
 function cacheFix(fsPath: string, cache: Map<TFsPath, TCache[]>): void {
-    if (cache.size > 5) {
-        cache.clear();
-    }
+    // if (cache.size > 5) {
+    //     cache.clear();
+    // }
 
-    cache.forEach((value, key) => {
-        if (key === fsPath || value.length < 5) {
+    cache.forEach((value: TCache[], key: string): void => {
+        if (value.length === 1 || key === fsPath) {
             return;
         }
-        const tempVal = value.slice(-3);
+        const tempVal = value.pop(); // last
         if (tempVal) {
             // eslint-disable-next-line no-param-reassign
             value.length = 0;
-            value.push(...tempVal);
+            value.push(tempVal);
         }
     });
 }
 
-const BaseScanCache = {
+export const BaseScanCache = {
     cache: new Map<TFsPath, TCache[]>(),
 
     cacheSizeAutoFix(fsPath: TFsPath): TCache[] {
@@ -64,10 +64,9 @@ const BaseScanCache = {
     },
 
     getCache(fsPath: TFsPath, hash: number): TCache | undefined {
-        const oldCache: TCache[] | undefined = this.cache.get(fsPath);
-        if (oldCache === undefined) return undefined;
-
-        return oldCache.find((v) => v.hash === hash);
+        return this.cache
+            .get(fsPath)
+            ?.find((v: TCache): boolean => v.hash === hash);
     },
 
     clear(): void {
@@ -75,9 +74,6 @@ const BaseScanCache = {
     },
 } as const;
 
-export function clearBaseScanCache(): void {
-    BaseScanCache.clear();
-}
 // vscode.window.activeTextEditor
 // vscode.window.visibleTextEditors
 
@@ -86,9 +82,7 @@ export function getBaseData(document: vscode.TextDocument): TCache {
     const hash: number = hashCode(fullText);
     const { fsPath } = document.uri;
     const oldCache: TCache | undefined = BaseScanCache.getCache(fsPath, hash);
-    if (oldCache) {
-        return oldCache;
-    }
+    if (oldCache !== undefined) return oldCache;
 
     const gValMapBySelf: TGValMap = new Map<TValUpName, TGlobalVal[]>();
     const DocStrMap: TTokenStream = Pretreatment(fullText.split('\n'), 0);

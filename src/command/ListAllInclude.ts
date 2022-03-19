@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { TAhkSymbolList } from '../globalEnum';
+import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 
 function collectInclude(List: string[], AhkSymbolList: TAhkSymbolList): void {
     for (const AhkSymbol of AhkSymbolList) {
@@ -31,9 +32,10 @@ export function ListAllInclude(): null {
         }
     }
 
-    const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
+    OutputChannel.clear();
     OutputChannel.appendLine('[neko-help] List All #Include');
     OutputChannel.append(AllList.join('\n'));
+    OutputChannel.appendLine('\n');
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();
 

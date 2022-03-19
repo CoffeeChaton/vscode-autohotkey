@@ -8,12 +8,12 @@ import { ListAllFunc, ListAllFuncSort } from './ListAllFunc';
 import { ListAllInclude } from './ListAllInclude';
 import { UpdateCacheAsync } from './UpdateCache';
 
-// eslint-disable-next-line require-await
-const fn0 = async (): Promise<null> => UpdateCacheAsync(true);
-
-type TCommand = TPick<null>;
-
 export async function statusBarClick(): Promise<void> {
+    // eslint-disable-next-line require-await
+    const fn0 = async (): Promise<null> => UpdateCacheAsync(true);
+
+    type TCommand = TPick<null>;
+
     const items: TCommand[] = [
         { label: '0 -> update Cache', fn: fn0 },
         { label: '1 -> dev tools', fn: DevLoopOfClearOutlineCache },

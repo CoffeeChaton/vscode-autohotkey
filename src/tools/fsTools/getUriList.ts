@@ -7,7 +7,7 @@ import { getWorkspaceFolders } from './getWorkspaceFolders';
 
 type TFsPath = string;
 
-function CollectorFsPath(fsPath: TFsPath, Collector: Set<TFsPath>): void {
+export function CollectorFsPath(fsPath: TFsPath, Collector: Set<TFsPath>): void {
     if (fs.statSync(fsPath).isDirectory()) {
         const files = fs.readdirSync(fsPath);
         for (const file of files) {

@@ -20,6 +20,7 @@ const filter = (src, _dest) => {
         'src',
     ];
     const file = [
+        '.VSCodeCounter',
         '.cpuprofile',
         '.editorconfig',
         '.eslintcache',
@@ -56,6 +57,7 @@ const config = {
     watch: false,
     logLevel: 'info',
     // minify: true, //
+    treeShaking: true,
     // define:DEBUG=false
     plugins: [
         copyStaticFiles({

@@ -46,7 +46,7 @@ function wrapper(
         const { defRangeList, refRangeList } = valList;
         if (listAllUsing) return [...defRangeList, ...refRangeList];
 
-        if (defRangeList.length === 1 && defRangeList[0].contains(position)) {
+        if (defRangeList[0].contains(position)) {
             // <
             // when I open "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
             // why vscode can't Identify range.contains(position)

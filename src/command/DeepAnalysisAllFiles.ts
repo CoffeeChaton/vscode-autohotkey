@@ -3,10 +3,10 @@ import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { diagColl } from '../core/diagRoot';
 import { DeepAnalysisResult, EDiagBase, TAhkSymbolList } from '../globalEnum';
+import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { diagDAFile } from '../tools/DeepAnalysis/Diag/diagDA';
 
-const OutputChannel = vscode.window.createOutputChannel('AHK Neko Help');
 function showOutputChannel(need: DeepAnalysisResult[], t1: number): void {
     let argMapSize = 0;
     let valMapSize = 0;
