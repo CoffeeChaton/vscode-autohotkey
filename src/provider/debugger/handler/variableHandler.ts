@@ -36,9 +36,6 @@ type TFormatPropertyValue = {
     length: number;
 };
 
-const TESTAttrTypeList: (string | undefined)[] = ['integer', 'undefined', 'object', 'string', 'float'];
-const TESTAttrClassname: (TDbgpPropertyAttr['classname'])[] = ['Object', 'Func', 'File', 'BoundFunc', 'WebBrowser'];
-
 /** formats a dbgp property value for VS Code */
 function formatPropertyValue({
     attr,
@@ -48,9 +45,6 @@ function formatPropertyValue({
     length,
 }: TFormatPropertyValue): string {
     const aType = attr.type;
-    if (!TESTAttrTypeList.includes(aType)) {
-        TESTAttrTypeList.push(aType);
-    }
     const str: WithImplicitCoercion<string> = content ?? '';
     const { encoding } = attr;
     const primitive = Buffer.from(str, encoding).toString();
@@ -63,9 +57,6 @@ function formatPropertyValue({
             if (isLikeArray) return `Array(${length})`;
 
             const attrClassname = attr.classname;
-            if (!TESTAttrClassname.includes(attrClassname)) {
-                TESTAttrClassname.push(attrClassname);
-            }
             if (attrClassname) return `${attrClassname} Object`;
             break;
         }

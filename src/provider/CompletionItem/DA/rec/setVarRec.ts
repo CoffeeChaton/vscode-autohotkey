@@ -7,12 +7,11 @@ import {
     TValMap,
 } from '../../../../globalEnum';
 
-const enum ERecLine {
-    up = 5,
-    down = 5,
-}
-
 export function getContextRange(position: vscode.Position, ahkSymbol: TAhkSymbol): vscode.Range {
+    const enum ERecLine {
+        up = 5,
+        down = 5,
+    }
     const startLine = Math.max(position.line - ERecLine.up, ahkSymbol.range.start.line);
     const endLine = Math.min(position.line + ERecLine.down, ahkSymbol.range.end.line);
 

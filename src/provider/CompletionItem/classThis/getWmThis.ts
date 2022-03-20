@@ -28,13 +28,13 @@ async function getWmThisCore({ AhkSymbol, fsPath }: TSymAndFsPath): Promise<vsco
 }
 
 // eslint-disable-next-line no-magic-numbers
-const w = new ClassWm<TAhkSymbol, vscode.CompletionItem[]>(10 * 60 * 1000, 'getThisItemOfWm', 700);
+const wm = new ClassWm<TAhkSymbol, vscode.CompletionItem[]>(10 * 60 * 1000, 'getThisItemOfWm', 700);
 
 export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionItem[]> {
     const { AhkSymbol: ahkSymbol, fsPath } = c0;
-    const cache = w.getWm(ahkSymbol);
+    const cache = wm.getWm(ahkSymbol);
     if (cache) return cache;
 
     const v = await getWmThisCore({ AhkSymbol: ahkSymbol, fsPath });
-    return w.setWm(ahkSymbol, v);
+    return wm.setWm(ahkSymbol, v);
 }

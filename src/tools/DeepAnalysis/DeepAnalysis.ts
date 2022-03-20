@@ -14,13 +14,13 @@ import { getUnknownTextMap } from './getUnknownTextMap';
 import { getParamMain } from './Param/getParam';
 
 // eslint-disable-next-line no-magic-numbers
-const w = new ClassWm<TAhkSymbol, DeepAnalysisResult>(10 * 60 * 1000, 'DeepAnalysis', 500000);
+const wm = new ClassWm<TAhkSymbol, DeepAnalysisResult>(10 * 60 * 1000, 'DeepAnalysis', 500000);
 
 export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbol): null | DeepAnalysisResult {
     const kindStr: 'Function' | 'Method' | null = kindPick(ahkSymbol.kind);
     if (kindStr === null) return null;
 
-    const cache = w.getWm(ahkSymbol);
+    const cache = wm.getWm(ahkSymbol);
     if (cache) return cache;
 
     const DocStrMap = Pretreatment(
@@ -38,5 +38,5 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
         funcRawName: ahkSymbol.name,
     };
 
-    return w.setWm(ahkSymbol, v);
+    return wm.setWm(ahkSymbol, v);
 }

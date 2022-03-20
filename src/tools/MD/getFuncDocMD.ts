@@ -60,18 +60,18 @@ function getFuncDocCore(
     return md;
 }
 // eslint-disable-next-line no-magic-numbers
-const w = new ClassWm<TAhkSymbol, vscode.MarkdownString>(10 * 60 * 1000, 'setFuncHoverMD', 9000);
+const wm = new ClassWm<TAhkSymbol, vscode.MarkdownString>(10 * 60 * 1000, 'setFuncHoverMD', 9000);
 
 export async function getFuncDocMD(AhkSymbol: TAhkSymbol, fsPath: string): Promise<vscode.MarkdownString> {
     if (AhkSymbol.kind !== vscode.SymbolKind.Function && AhkSymbol.kind !== vscode.SymbolKind.Method) {
         return new vscode.MarkdownString('just support Function/Method hover now', true);
     }
-    const cache = w.getWm(AhkSymbol);
+    const cache = wm.getWm(AhkSymbol);
     if (cache) return cache;
 
     const document: vscode.TextDocument = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
 
     const md: vscode.MarkdownString = getFuncDocCore(AhkSymbol, document);
 
-    return w.setWm(AhkSymbol, md);
+    return wm.setWm(AhkSymbol, md);
 }

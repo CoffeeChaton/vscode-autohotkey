@@ -48,8 +48,8 @@ export class ClassWm<T extends TObj | unknown[] | readonly unknown[], V> {
         return v;
     }
 
-    public getWm(t: T): V | null {
-        const cache = this.wm.get(t) ?? null;
+    public getWm(t: T): V | undefined {
+        const cache = this.wm.get(t);
         if (cache) {
             this.cacheHits++;
         }

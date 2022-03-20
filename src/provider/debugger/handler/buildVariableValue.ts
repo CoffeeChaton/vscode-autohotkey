@@ -45,13 +45,8 @@ function buildVariableValueObj(attr: TDbgpPropertyAttr, property: TDbgpProperty)
     return mapToStr(mapA);
 }
 
-const TESTAttrTypeList2: (TDbgpPropertyAttr['type'])[] = ['string', 'undefined', 'object', 'integer', 'float'];
-
 export function buildVariableValue(property: TDbgpProperty, attr: TDbgpPropertyAttr, content: string): string {
     const aType = attr.type;
-    if (!TESTAttrTypeList2.includes(aType)) {
-        TESTAttrTypeList2.push(aType);
-    }
     const primitive = base64ToStr(content);
     // dprint-ignore
     switch (aType) {

@@ -25,8 +25,8 @@ async function HoverFunc(wordUp: string, textRaw: string): Promise<null | vscode
     if (data === null) return null;
 
     const { AhkSymbol, fsPath } = data;
-    const cache: vscode.Hover | null = wm.getWm(AhkSymbol);
-    if (cache) return cache;
+    const cache: vscode.Hover | undefined = wm.getWm(AhkSymbol);
+    if (cache !== undefined) return cache;
 
     const md = await getFuncDocMD(AhkSymbol, fsPath);
     const hover = new vscode.Hover(md);

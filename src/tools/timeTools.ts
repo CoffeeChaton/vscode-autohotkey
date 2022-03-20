@@ -1,5 +1,7 @@
-// eslint-disable-next-line no-magic-numbers
-const Pad2 = (n: number): string => `${n}`.padStart(2, '0');
+function Pad2(n: number): string {
+    // eslint-disable-next-line no-magic-numbers
+    return `${n}`.padStart(2, '0');
+}
 
 /**
  * return yyMMdd HH-mm-ss

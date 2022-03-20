@@ -1,12 +1,11 @@
 import * as vscode from 'vscode';
 import { openDocs, statusBarClick } from './command/Command';
 import { UpdateCacheAsync } from './command/UpdateCache';
-import { configChangEvent } from './configUI';
+import { configChangEvent, statusBarItem } from './configUI';
 import { BaseScanCache } from './core/BaseScanCache/cache';
 import { Detecter } from './core/Detecter';
 import { diagColl } from './core/diagRoot';
 import { globalValMap } from './core/Global';
-import { FileSystemWatcher } from './FileSystemWatcher';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
@@ -19,6 +18,7 @@ import { HoverProvider } from './provider/Hover/HoverProvider';
 import { ReferenceProvider } from './provider/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
 import { SymBolProvider } from './provider/SymbolProvider/SymbolProvider';
+import { OutputChannel } from './provider/vscWindows/OutputChannel';
 
 export function activate(context: vscode.ExtensionContext): void {
     const language: vscode.DocumentSelector = { language: 'ahk' };
@@ -46,16 +46,22 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.commands.registerCommand('ahk.bar.click', (): void => void statusBarClick()),
         vscode.commands.registerCommand('ahk.nekoHelp.openDoc', (): void => openDocs()),
         vscode.debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
-        FileSystemWatcher,
+        OutputChannel,
+        statusBarItem,
+        diagColl,
     );
     void UpdateCacheAsync(false); // not await
 }
 
+// this method is called when your extension is deactivated
 export function deactive(): void {
     Detecter.DocMap.clear();
     BaseScanCache.cache.clear();
     globalValMap.clear();
-    diagColl.clear();
+
+    diagColl.dispose();
+    statusBarItem.dispose();
+    OutputChannel.dispose();
 }
 
 /*
