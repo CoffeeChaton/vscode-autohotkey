@@ -19,6 +19,7 @@ import { ReferenceProvider } from './provider/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
 import { SymBolProvider } from './provider/SymbolProvider/SymbolProvider';
 import { OutputChannel } from './provider/vscWindows/OutputChannel';
+import { WorkspaceSymbolProvider } from './provider/WorkspaceSymbolProvider/WorkspaceSymbolProvider';
 
 export function activate(context: vscode.ExtensionContext): void {
     const language: vscode.DocumentSelector = { language: 'ahk' };
@@ -34,6 +35,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.languages.registerReferenceProvider(language, new ReferenceProvider()),
         vscode.languages.registerRenameProvider(language, new RenameProvider()),
         // TODO registerTextDocumentContentProvider
+        vscode.languages.registerWorkspaceSymbolProvider(new WorkspaceSymbolProvider()),
         // vscode.languages.registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', ','),
         vscode.workspace.onDidChangeConfiguration((): void => configChangEvent()),
         vscode.workspace.onDidDeleteFiles((e): void => Detecter.delMap(e)),
@@ -87,4 +89,8 @@ const decoration = {
 }
 vscode.Progress
 TODO createTextEditorDecorationType
+
+TODO CodeLensProvider -> run this func/command DA
+...did I registerColorProvider ?
+...registerSignatureHelpProvider
 */
