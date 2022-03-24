@@ -4,11 +4,11 @@ import * as vscode from 'vscode';
 
 export const enum EMode {
     // ahkVoid = 'void',
-    ahkFunc = 'Function',
-    ahkClass = 'Class',
-    ahkMethod = 'Method',
+    ahkFunc = 'Function', // vscode.SymbolKind.Function
+    ahkClass = 'Class', // vscode.SymbolKind.Class
+    ahkMethod = 'Method', // vscode.SymbolKind.Method
     // ahkAll = 'ahkAll',
-    ahkGlobal = 'global',
+    ahkGlobal = 'global', // vscode.SymbolKind.Variable
 }
 
 // vscode.SymbolKind
@@ -191,6 +191,7 @@ export type TPick<TNeed> = {
 
 export const enum ETime {
     SnippetStartWihA = 5000, // delay 5 sec
+    snipSendBigBrackets = 6000, // delay 6 sec
 }
 
 export const enum ESnippetRecBecause {

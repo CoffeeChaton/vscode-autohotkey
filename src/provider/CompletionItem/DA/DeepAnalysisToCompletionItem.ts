@@ -39,8 +39,8 @@ export function DeepAnalysisToCompletionItem(
     const kindStr = kindPick(ahkSymbol.kind);
     if (!kindStr) return [];
 
-    const ed: null | DeepAnalysisResult = DeepAnalysis(document, ahkSymbol);
-    if (!ed) return [];
+    const DA: null | DeepAnalysisResult = DeepAnalysis(document, ahkSymbol);
+    if (!DA) return [];
 
-    return suggest(ed, ahkSymbol, position, inputStr);
+    return suggest(DA, ahkSymbol, position, inputStr);
 }

@@ -5,7 +5,7 @@ export function hasDoubleSemicolon(textFix: string): boolean {
 /*
 ```ahk
 ::t3{{::
-    SendRaw, { ccccc
+    SendRaw, { testC
 Return
 
 ::t4}}::{{{{{{}}}}}}

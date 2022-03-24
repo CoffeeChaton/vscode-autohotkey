@@ -363,5 +363,5 @@ export const A_Variables: TA_Variables = {
     },
     // TODO
 };
-// if this object size > 1k line, should use JSON.parse replace object literial
+// if this object size > 1k line, should use JSON.parse replace object literal,
 // but I need tsc && Syntax Highlight.

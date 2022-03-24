@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,5] }] */
 import * as vscode from 'vscode';
-import { TAhkSymbol } from '../../globalEnum';
+import { DeepAnalysisResult, TAhkSymbol } from '../../globalEnum';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import { enumErr } from '../../tools/enumErr';
 import { kindPick } from '../../tools/Func/kindPick';
@@ -25,7 +25,7 @@ function wrapper(
     listAllUsing: boolean,
     position: vscode.Position,
 ): vscode.Range[] {
-    const DA = DeepAnalysis(document, ahkSymbol);
+    const DA: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
     if (DA === null) return [];
 
     const {
@@ -60,10 +60,9 @@ function wrapper(
     }
 
     const textList = textMap.get(wordUp);
-    if (textList) {
-        return textList.refRangeList;
-    }
-    return [];
+    return textList
+        ? textList.refRangeList
+        : [];
 }
 
 function match(
@@ -73,7 +72,7 @@ function match(
     wordUp: string,
     listAllUsing: boolean,
 ): null | vscode.Range[] {
-    const funcPos = atFunPos(ahkSymbol, position);
+    const funcPos: EFuncPos = atFunPos(ahkSymbol, position);
     // dprint-ignore
     switch (funcPos) {
         case EFuncPos.isFuncArg: return wrapper(document, ahkSymbol, wordUp, true, position);
@@ -83,6 +82,8 @@ function match(
             void vscode.window.showErrorMessage('EFuncPos.isFuncName', wordUp);
             return null;
         default:
+            console.error('EFuncPos.isFuncName', wordUp, position); // is never now
+            void vscode.window.showErrorMessage('EFuncPos.isFuncName', wordUp);
             return enumErr(funcPos);
     }
 }

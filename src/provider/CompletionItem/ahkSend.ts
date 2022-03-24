@@ -1,50 +1,53 @@
 import * as vscode from 'vscode';
+import { ETime } from '../../globalEnum';
+import { A_Send } from '../../tools/Built-in/sendSpecialKeys';
+import { isPosAtStr } from '../../tools/isPosAtStr';
 
-const sendBigBlock: vscode.CompletionItem[] = [
-    'Blind',
-    'Click',
-    'Raw',
-    'AltDown',
-    'AltUp',
-    'ShiftDown',
-    'ShiftUp',
-    'CtrlDown',
-    'CtrlUp',
-    'LWinDown',
-    'LWinUp',
-    'RWinDown',
-    'RWinUp',
-    'Enter',
-    'Escape',
-    'Esc',
-    'Space',
-    'Tab',
-    'Text',
-    'PrintScreen',
-    'Click 100, 200, 0',
-].map((e) => ({
-    label: `{${e}}`,
-    insertText: e,
-    kind: vscode.CompletionItemKind.Text,
-    detail: 'neko help',
-    documentation: 'CompletionItem of Send\n\nhttps://www.autohotkey.com/docs/commands/Send.htm',
-}));
+const sendBigBlock: vscode.CompletionItem[] = [];
 
-export function ahkSend(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
-    if (position.character === 0) return [];
-    const newRange = new vscode.Range(position.line, position.character - 1, position.line, position.character);
-    const newStr = document.getText(newRange).trim();
-    if (newStr !== '{') return []; // just support {}
-
-    const textRaw = document.lineAt(position).text;
-    if (
-        !(/\b(?:Control)?Send(?:Input|Play|Event)?\b/ui).test(textRaw)
-        || textRaw.indexOf('::') === -1
-        || !(/InputHook\(/ui).test(textRaw)
-    ) {
-        return [];
+function ahkSendLazy(): vscode.CompletionItem[] {
+    // normal
+    if (sendBigBlock.length > 0) return sendBigBlock;
+    // First loading
+    for (const v of Object.values(A_Send)) {
+        const {
+            label,
+            icon,
+            doc,
+            insertText,
+            uri,
+        } = v;
+        const item = new vscode.CompletionItem({
+            label, // Left
+            description: icon, // Right
+        });
+        item.kind = vscode.CompletionItemKind.Text;
+        item.insertText = insertText;
+        item.detail = '{Special Keys} (neko-help)'; // description
+        item.documentation = new vscode.MarkdownString('', true)
+            .appendCodeblock(label, 'ahk')
+            .appendMarkdown(doc.join('\n\n'))
+            .appendMarkdown('\n\n')
+            .appendMarkdown(`[Read Doc](${uri})`);
+        sendBigBlock.push(item);
     }
-    if ((/\{Raw\}/ui).test(textRaw)) return [];
-
+    Object.freeze(sendBigBlock);
     return sendBigBlock;
 }
+
+// Delay loading
+setTimeout(ahkSendLazy, ETime.snipSendBigBrackets);
+
+export function ahkSend(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
+    const textRaw = document.lineAt(position).text;
+    if (
+        (/\b(?:Control)?Send(?:Input|Play|Event)?\b/ui).test(textRaw)
+        || textRaw.indexOf('::') > -1
+        || isPosAtStr(document, position)
+    ) {
+        return ahkSendLazy();
+    }
+    return [];
+}
+
+// TODO send https://www.autohotkey.com/docs/commands/Send.htm#keynames

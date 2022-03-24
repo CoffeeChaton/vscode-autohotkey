@@ -92,7 +92,7 @@ const HotString: LineRulerType = {
     },
 
     test(strTrim: string): boolean {
-        // Hotstring labels consist of a colon, zero or more options, another colon, an abbreviation and double-colon.
+        // HotString labels consist of a colon, zero or more options, another colon, an abbreviation and double-colon.
         if (!strTrim.startsWith(':') && strTrim.indexOf('::') === -1) return false;
         return (/^:[^:]*?:[^:]+::/u).test(strTrim);
     },

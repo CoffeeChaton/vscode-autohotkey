@@ -1,7 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { showTimeSpend } from '../configUI';
 import {
     EStr,
     TAhkSymbolList,
@@ -17,6 +16,7 @@ export type TUpdateDocDefReturn = {
     document: vscode.TextDocument;
     t0: number;
     t1: number;
+    t2: number;
 };
 
 export const Detecter = {
@@ -53,10 +53,9 @@ export const Detecter = {
     },
 
     createMap(e: vscode.FileCreateEvent): void {
-        for (const Uri of e.files) {
-            const { fsPath } = Uri;
-            if (fsPath.endsWith('.ahk')) {
-                void Detecter.updateDocDef(false, fsPath);
+        for (const uri of e.files) {
+            if (uri.fsPath.endsWith('.ahk')) {
+                void Detecter.updateDocDef(uri);
             }
         }
     },
@@ -66,7 +65,7 @@ export const Detecter = {
             if (oldUri.fsPath.endsWith('.ahk')) {
                 delOldCache(oldUri);
                 if (newUri.fsPath.endsWith('.ahk')) {
-                    void Detecter.updateDocDef(false, newUri.fsPath);
+                    void Detecter.updateDocDef(newUri);
                     const fsPathList = Detecter.getDocMapFile();
                     void renameFileNameFunc(oldUri, newUri, [...fsPathList]);
                 } // else EXP : let a.ahk -> a.ahk0 or a.0ahk
@@ -74,25 +73,25 @@ export const Detecter = {
         }
     },
 
-    async updateDocDef(showMsg: boolean, fsPath: string): Promise<TUpdateDocDefReturn> {
-        const Uri: vscode.Uri = vscode.Uri.file(fsPath);
-        globalValMap.delete(fsPath);
-        const document: vscode.TextDocument = await vscode.workspace.openTextDocument(Uri);
+    async updateDocDef(uri: vscode.Uri): Promise<TUpdateDocDefReturn> {
         const t0: number = Date.now();
+        const { fsPath } = uri;
+        globalValMap.delete(fsPath);
+        const document: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
+
+        const t1: number = Date.now();
         const {
             gValMapBySelf,
             DocStrMap,
             AhkSymbolList,
         } = getBaseData(document);
 
-        const t1: number = Date.now();
-        if (!fsPath.includes(EStr.diff_name_prefix)) {
-            if (showMsg) showTimeSpend(fsPath, t1 - t0); // just base scan // TODO config
+        const t2: number = Date.now();
+        if (fsPath.endsWith('.ahk') && !fsPath.includes(EStr.diff_name_prefix)) {
             Detecter.DocMap.set(fsPath, AhkSymbolList);
             globalValMap.set(fsPath, gValMapBySelf);
             const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
-            diagColl.set(Uri, [...baseDiag]);
-            // if (showMsg) showTimeSpend(fsPath, timeStart); // base scan + baseDiag
+            diagColl.set(uri, [...baseDiag]);
         }
 
         return {
@@ -100,6 +99,7 @@ export const Detecter = {
             document,
             t0,
             t1,
+            t2,
         };
     },
 };

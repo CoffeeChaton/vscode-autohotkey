@@ -16,7 +16,7 @@ export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {
 
     const results: Promise<TUpdateDocDefReturn>[] = [];
     for (const uri of uriList) {
-        results.push(Detecter.updateDocDef(false, uri.fsPath));
+        results.push(Detecter.updateDocDef(uri));
     }
     await Promise.all(results);
 

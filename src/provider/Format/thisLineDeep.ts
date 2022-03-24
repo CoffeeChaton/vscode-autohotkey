@@ -22,9 +22,8 @@ export function thisLineDeep(textFix: string): 1 | 0 {
         /^not\b/ui,
         // Don't do it /^%/, because ``` %i%Name := ... ```
     ];
-    const iMax = CLL.length;
-    for (let i = 0; i < iMax; i++) {
-        if (CLL[i].test(textFix)) return 1;
+    for (const reg of CLL) {
+        if (reg.test(textFix)) return 1;
     }
     return 0;
 }

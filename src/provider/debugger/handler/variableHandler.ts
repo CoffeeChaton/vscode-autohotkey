@@ -36,7 +36,7 @@ type TFormatPropertyValue = {
     length: number;
 };
 
-/** formats a dbgp property value for VS Code */
+/** formats a DBGp property value for VS Code */
 function formatPropertyValue({
     attr,
     content,

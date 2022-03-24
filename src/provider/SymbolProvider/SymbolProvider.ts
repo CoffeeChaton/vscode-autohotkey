@@ -1,5 +1,7 @@
 /* eslint-disable class-methods-use-this */
+import * as path from 'path';
 import * as vscode from 'vscode';
+import { showTimeSpend } from '../../configUI';
 import { Detecter } from '../../core/Detecter';
 import { diagColl } from '../../core/diagRoot';
 import { EDiagBase } from '../../globalEnum';
@@ -10,11 +12,13 @@ export class SymBolProvider implements vscode.DocumentSymbolProvider {
         document: vscode.TextDocument,
         _token: vscode.CancellationToken,
     ): Promise<vscode.DocumentSymbol[] | null | undefined> {
+        const { uri } = document;
         const {
             AhkSymbolList,
-        } = await Detecter.updateDocDef(true, document.uri.fsPath);
-
-        const { uri } = document;
+            t1,
+            t2,
+        } = await Detecter.updateDocDef(uri);
+        showTimeSpend(path.basename(uri.fsPath), t2 - t1); // TODO config
 
         const otherDiag = (diagColl.get(uri) || [])
             .filter((v) => v.source !== EDiagBase.sourceDA);

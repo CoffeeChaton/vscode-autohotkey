@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
 import { isPosAtStr } from '../tools/isPosAtStr';
-import { userDef } from './Def/DefProvider';
+import { userDefTopSymbol } from './Def/DefProvider';
 import { getValDefInFunc } from './Def/getValDefInFunc';
 
 export class ReferenceProvider implements vscode.ReferenceProvider {
@@ -21,7 +21,7 @@ export class ReferenceProvider implements vscode.ReferenceProvider {
         // TODO class.Method, this.classVar,GoSub, GoTo, ahk Built-in func
 
         const listAllUsing = true;
-        const userDefLink: vscode.Location[] | null = await userDef(document, position, wordUp, listAllUsing);
+        const userDefLink: vscode.Location[] | null = await userDefTopSymbol(document, position, wordUp, listAllUsing);
         if (userDefLink) return userDefLink;
 
         const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);

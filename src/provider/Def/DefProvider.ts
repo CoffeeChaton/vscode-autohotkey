@@ -1,61 +1,47 @@
-/* eslint-disable security/detect-non-literal-regexp */
+/* eslint-disable max-lines */
 /* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { EMode, TAhkSymbolList, TSymAndFsPath } from '../../globalEnum';
-import { isPosAtStr } from '../../tools/isPosAtStr';
+import {
+    DeepReadonly,
+    EMode,
+    TSymAndFsPath,
+} from '../../globalEnum';
+import { tryGetSymbol } from '../../tools/tryGetSymbol';
 import { ahkInclude } from './ahkInclude';
 import { getValDefInFunc } from './getValDefInFunc';
-import { kindCheck } from './kindCheck';
 
+type TFnFindCol = (lineStr: string) => undefined | number;
 type DefObj = Readonly<{
     document: vscode.TextDocument;
     position: vscode.Position;
     Mode: EMode;
     wordUp: string;
-    defReg: RegExp;
-    usingReg: RegExp;
+    refFn: TFnFindCol;
     timeStart: number;
     listAllUsing: boolean;
 }>;
 
-export function tryGetSymbol(wordUP: string, mode: EMode): null | TSymAndFsPath {
-    const fsPaths = Detecter.getDocMapFile();
-    for (const fsPath of fsPaths) {
-        const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath);
-        if (AhkSymbolList === undefined) continue;
-        const iMax = AhkSymbolList.length;
-        for (let i = 0; i < iMax; i++) {
-            if (
-                kindCheck(mode, AhkSymbolList[i].kind)
-                && AhkSymbolList[i].name.toUpperCase() === wordUP
-            ) {
-                return { AhkSymbol: AhkSymbolList[i], fsPath };
-            }
-        }
-    }
-    return null;
-}
-
-async function getReference(usingReg: RegExp, timeStart: number, wordUp: string): Promise<vscode.Location[]> {
+async function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): Promise<vscode.Location[]> {
     const List: vscode.Location[] = [];
-    const fsPathList = Detecter.getDocMapFile();
+    const fsPathList: string[] = Detecter.getDocMapFile();
     for (const fsPath of fsPathList) {
         const document = await vscode.workspace.openTextDocument(fsPath);
         const textRawList = document.getText().split('\n');
         const lineCount = textRawList.length;
         for (let line = 0; line < lineCount; line++) {
             const textRaw = textRawList[line].trim();
-            if (usingReg.test(textRaw)) {
+            const col = refFn(textRaw);
+            if (col !== undefined) {
                 const Location = new vscode.Location(
                     document.uri,
-                    new vscode.Position(line, textRawList[line].search(usingReg)),
+                    new vscode.Position(line, col),
                 );
                 List.push(Location);
             }
         }
     }
-    console.log(`🚀 list all using of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 10~15ms
+    console.log(`🚀 list all using of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 20ms
     return List;
 }
 
@@ -65,85 +51,70 @@ async function ahkDef(
         position,
         Mode,
         wordUp,
-        defReg,
-        usingReg,
+        refFn,
         timeStart,
         listAllUsing,
     }: DefObj,
 ): Promise<false | vscode.Location[]> {
-    const textTrimUp = document.lineAt(position).text.trim().toUpperCase();
     const data: TSymAndFsPath | null = tryGetSymbol(wordUp, Mode);
+
     if (data === null) return false;
     const { AhkSymbol, fsPath } = data;
 
-    // searchDef
-    const searchDef = (): false | Promise<vscode.Location[]> => {
-        if (!defReg.test(textTrimUp)) return false;
-        if (
-            listAllUsing
-            || (fsPath === document.uri.fsPath
-                && AhkSymbol.range.start.line === document.lineAt(position).lineNumber)
-        ) {
-            return getReference(usingReg, timeStart, wordUp);
-        }
-        return false;
-    };
-    // searchUsing
-    const searchUsing = (): false | vscode.Location[] => {
-        if (textTrimUp.search(usingReg) === -1) return false;
-        console.log(`🚀 goto Def of ${AhkSymbol.name} ()`, Date.now() - timeStart, 'ms)'); // < ssd < 1ms
-        const Uri = vscode.Uri.file(fsPath);
-        return [new vscode.Location(Uri, AhkSymbol.selectionRange)];
-    };
+    if (
+        listAllUsing
+        || (fsPath === document.uri.fsPath
+            && AhkSymbol.selectionRange.start.line === position.line)
+    ) {
+        const ref = await getReference(refFn, timeStart, wordUp);
+        return ref;
+    }
 
-    const Def = await searchDef();
-    if (Def !== false) return Def;
-
-    const Using = searchUsing();
-    if (Using !== false) return Using;
-
-    return false;
+    console.log(`🚀 goto def of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 1~3ms
+    return [new vscode.Location(vscode.Uri.file(fsPath), AhkSymbol.selectionRange)];
 }
 
 // FIXME goto func Def
-export async function userDef(
+export async function userDefTopSymbol(
     document: vscode.TextDocument,
     position: vscode.Position,
     wordUp: string,
     listAllUsing: boolean,
 ): Promise<null | vscode.Location[]> {
     const timeStart = Date.now();
-    // isDef: (textTrim: string) => boolean
-    // TODO get def of AST
-    const defRefList: RegExp[] = [
-        //   funcName(
-        new RegExp(`(?<![.\`%])\\b(${wordUp})\\(`, 'iu'),
-        // global var_name :=
-        new RegExp(`\\bGlobal\\s+(${wordUp})\\s+:?=`, 'iu'),
-    ];
+    type TRule = {
+        refFn: TFnFindCol;
+        Mode: EMode;
+    };
 
-    const usingRegList: RegExp[] = [
-        // funcName( | Func("funcName"
-        new RegExp(`(?:(?<![.\`%])\\b(${wordUp})\\()|(?<=\bfunc\\()\\s*"\b(wordUp)${wordUp}\b"`, 'iu'),
-        // var_name
-        new RegExp(`(?<![.\`])\\b(${wordUp})\\b`, 'iu'),
-    ];
+    const func: TRule = {
+        refFn: (lineStr: string): number | undefined => {
+            // funcName( | "funcName"
+            // eslint-disable-next-line security/detect-non-literal-regexp
+            const reg = new RegExp(`(?:(?<![.\`%])\\b(${wordUp})\\b\\()|(?:"(${wordUp})")`, 'iu');
+            return lineStr.match(reg)?.index;
+        },
+        Mode: EMode.ahkFunc,
+    };
+    const ahkGlobal: TRule = {
+        refFn: (lineStr: string): number | undefined => {
+            // var_name
+            // eslint-disable-next-line security/detect-non-literal-regexp
+            const reg = new RegExp(`(?<![.\`%])\\b(${wordUp})\\b`, 'iu');
+            return lineStr.match(reg)?.index;
+        },
+        Mode: EMode.ahkGlobal,
+    };
 
-    const Modes: Readonly<EMode[]> = [
-        // EMode.ahkClass,
-        EMode.ahkFunc,
-        EMode.ahkGlobal,
-    ];
-
-    const iMax = Modes.length;
-    for (let i = 0; i < iMax; i++) {
+    const matchList: DeepReadonly<TRule[]> = [func, ahkGlobal];
+    for (const rule of matchList) {
+        const { Mode, refFn } = rule;
         const Location = await ahkDef({
             document,
             position,
-            Mode: Modes[i],
+            Mode,
             wordUp,
-            defReg: defRefList[i],
-            usingReg: usingRegList[i],
+            refFn,
             timeStart,
             listAllUsing,
         });
@@ -163,7 +134,7 @@ export class DefProvider implements vscode.DefinitionProvider {
         _token: vscode.CancellationToken,
     ): Promise<null | vscode.Location | vscode.Location[]> {
         //  Definition | DefinitionLink[]
-        if (isPosAtStr(document, position)) return null;
+        // if (isPosAtStr(document, position)) return null;
 
         // eslint-disable-next-line security/detect-unsafe-regex
         const range = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
@@ -173,7 +144,8 @@ export class DefProvider implements vscode.DefinitionProvider {
         if (fileLink) return fileLink;
 
         const listAllUsing = false;
-        const userDefLink = await userDef(document, position, wordUp, listAllUsing);
+
+        const userDefLink = await userDefTopSymbol(document, position, wordUp, listAllUsing);
         if (userDefLink) return userDefLink;
 
         const valInFunc = getValDefInFunc(document, position, wordUp, listAllUsing);

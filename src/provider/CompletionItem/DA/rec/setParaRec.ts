@@ -1,8 +1,7 @@
 import { ESnippetRecBecause, TArgMap, TSnippetRecMap } from '../../../../globalEnum';
 
 export function setParaRec(suggestMap: TSnippetRecMap, argMap: TArgMap, inputStr: string): void {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    for (const [_upName, ArgAnalysis] of argMap) {
+    for (const ArgAnalysis of argMap.values()) {
         // startsWith
         if (ArgAnalysis.keyRawName.startsWith(inputStr)) {
             suggestMap.set(ArgAnalysis.keyRawName, ESnippetRecBecause.paramStartWith);

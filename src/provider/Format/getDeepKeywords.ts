@@ -18,9 +18,8 @@ export function getDeepKeywords(textFix: string, oneCommandCode: number): number
         /^catch\b/iu,
         /^switch\b/iu,
     ];
-    const iMax = commandRegexps.length;
-    for (let i = 0; i < iMax; i++) {
-        if (commandRegexps[i].test(textFixTwo)) {
+    for (const reg of commandRegexps) {
+        if (reg.test(textFixTwo)) {
             return occ + 1;
         }
     }

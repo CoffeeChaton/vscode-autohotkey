@@ -20,9 +20,9 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
         _token: vscode.CancellationToken,
         _context: vscode.CompletionContext,
     ): Promise<null | vscode.CompletionItem[]> {
-        const blockList: readonly string[] = getSnippetBlockFilesList();
+        // TODO wrap vscode.CompletionItem
+        const filesBlockList: readonly string[] = getSnippetBlockFilesList();
 
-        const t1 = Date.now();
         const inputStr = getStartWithStr(document, position);
         const completions: vscode.CompletionItem[] = [
             ...await wrapClass(document, position), // '.'
@@ -31,15 +31,13 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
 
         if (isNormalPos(document, position)) {
             completions.push(
-                ...await listAllFuncClass(inputStr, blockList),
+                ...await listAllFuncClass(inputStr, filesBlockList),
                 ...DeepAnalysisToCompletionItem(document, position, inputStr),
                 ...snippetStartWihA(),
                 ...globalValCompletion(document, position, inputStr),
             );
         }
         // TODO #Include list fsPath List && suggest never #include
-        console.log('CompletionItemProvider -> time Cost', Date.now() - t1);
-
         return completions;
     }
 }
@@ -52,3 +50,4 @@ Super-global variables, including classes.
 A dynamic variable reference may resolve to an existing global variable if no local variable exists by that name.
 Commands that create pseudo-arrays may create all elements as global even if only the first element is declared.
 */
+// TODO https://www.autohotkey.com/docs/KeyList.htm

@@ -22,8 +22,7 @@ export function caseSensitivityVar(
         return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    for (const [_, ValAnalysis] of paramOrValMap) {
+    for (const ValAnalysis of paramOrValMap.values()) {
         const { c502Array, defRangeList, refRangeList } = ValAnalysis;
 
         const c502ArrayLen = c502Array.length;
@@ -45,6 +44,7 @@ export function caseSensitivityVar(
             if (code502or503List.size >= maxDiag) {
                 return;
             }
+            break; // of  for (let i
         }
     }
 }

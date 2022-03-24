@@ -10,8 +10,8 @@ import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { getFuncDocMD } from '../../tools/MD/getFuncDocMD';
+import { tryGetSymbol } from '../../tools/tryGetSymbol';
 import { ClassWm } from '../../tools/wm';
-import { tryGetSymbol } from '../Def/DefProvider';
 import { DeepAnalysisHover } from './DeepAnalysisHover';
 
 // eslint-disable-next-line no-magic-numbers
@@ -42,9 +42,9 @@ export class HoverProvider implements vscode.HoverProvider {
         _token: vscode.CancellationToken,
     ): Promise<vscode.Hover | null> {
         const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
-        let ed: DeepAnalysisResult | null = null;
+        let DA: DeepAnalysisResult | null = null;
         if (ahkSymbol) {
-            ed = DeepAnalysis(document, ahkSymbol);
+            DA = DeepAnalysis(document, ahkSymbol);
         }
         // eslint-disable-next-line security/detect-unsafe-regex
         const range = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
@@ -61,8 +61,8 @@ export class HoverProvider implements vscode.HoverProvider {
         // const commands = getCommandsHover(document, position);
         // if (commands) return commands;
 
-        if (ed) {
-            const md = DeepAnalysisHover(ed, wordUp);
+        if (DA) {
+            const md = DeepAnalysisHover(DA, wordUp);
             if (md) return new vscode.Hover(md);
         }
 

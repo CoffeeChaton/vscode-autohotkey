@@ -37,12 +37,11 @@ export function getChildren(child: ChildType): TAhkSymbolList {
 
     const result = [];
     let Resolved = -2;
-    const iMax = fnList.length;
     for (let line = RangeStartLine; line < RangeEndLine; line++) {
         if (line < Resolved) continue;
         const { lStr } = DocStrMap[line];
-        for (let i = 0; i < iMax; i++) {
-            const DocumentSymbol: false | TAhkSymbol = fnList[i]({
+        for (const fn of fnList) {
+            const DocumentSymbol: false | TAhkSymbol = fn({
                 lStr,
                 DocStrMap,
                 line,

@@ -47,7 +47,8 @@ test code
                 . "`n" "discuss := -1 "
             Task_Options := fn_Input_Box(title, text, 0, 0)
 
-            Switch Task_Options {
+            Switch Task_Options
+            {
                 Case -1, 15, 25, 35, 45, 55, 65:
                     ; nothing
                 Case "Cancel":

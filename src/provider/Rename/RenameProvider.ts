@@ -12,15 +12,15 @@ function DeepAnalysisRename(
     const ahkSymbol = getFnOfPos(document, position);
     if (!ahkSymbol) return [];
 
-    const ed: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
-    if (!ed) return [];
+    const DA: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
+    if (!DA) return [];
 
-    const argMap: TArgAnalysis | undefined = ed.argMap.get(wordUp);
+    const argMap: TArgAnalysis | undefined = DA.argMap.get(wordUp);
     if (argMap) {
         return [...argMap.defRangeList, ...argMap.refRangeList];
     }
 
-    const valMap: TValAnalysis | undefined = ed.valMap.get(wordUp);
+    const valMap: TValAnalysis | undefined = DA.valMap.get(wordUp);
     if (valMap) {
         return [...valMap.defRangeList, ...valMap.refRangeList];
     }

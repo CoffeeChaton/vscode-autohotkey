@@ -1,6 +1,5 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,10] }] */
 import * as mm from 'micromatch';
-import * as path from 'path';
 import * as vscode from 'vscode';
 import { TConfigs } from './globalEnum';
 import { checkDebugFile } from './tools/fsTools/file';
@@ -62,8 +61,8 @@ export function configChangEvent(): void {
     ---set end---
 */
 
-export function showTimeSpend(fsPath: string, time: number): void {
-    statusBarItem.text = `$(heart) ${time} ms of ${path.basename(fsPath)}`;
+export function showTimeSpend(showText: string, time: number): void {
+    statusBarItem.text = `$(heart) ${time} ms of ${showText}`;
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
 }

@@ -15,10 +15,10 @@ import { EMode } from '../../globalEnum';
 export function kindCheck(mode: EMode, kind: vscode.SymbolKind): boolean {
     // dprint-ignore
     switch (mode) {
-        case 'Class': return kind === 4;
-        case 'Method': return kind === 5;
-        case 'Function': return kind === 11;
-        case 'global': return kind === 12;
+        case EMode.ahkClass: return kind === vscode.SymbolKind.Class;
+        case EMode.ahkMethod: return kind === vscode.SymbolKind.Method;
+        case EMode.ahkFunc: return kind === vscode.SymbolKind.Function;
+        case EMode.ahkGlobal: return kind === vscode.SymbolKind.Variable;
         default: return false;
     }
 }

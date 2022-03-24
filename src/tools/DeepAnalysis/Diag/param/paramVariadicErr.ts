@@ -6,16 +6,15 @@ import { setDiagnosticDA } from '../../../../provider/Diagnostic/tools/setDiagno
 export function paramVariadicErr(argMap: TArgMap, code504List: Set<vscode.Diagnostic>): void {
     const rightIndex = argMap.size - 1;
     let i = 0;
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    for (const [_k, ArgAnalysis] of argMap) {
-        const { isVariadic, defRangeList: defLocList } = ArgAnalysis;
+    for (const ArgAnalysis of argMap.values()) {
+        const { isVariadic, defRangeList } = ArgAnalysis;
         if (isVariadic && (i !== rightIndex)) {
-            const range = defLocList[0];
+            const range = defRangeList[0];
             const severity = vscode.DiagnosticSeverity.Error;
             const message: string = DiagsDA[EDiagCodeDA.code504].msg;
             const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCodeDA.code504, range, severity, [], message);
             code504List.add(diag);
         }
-        i += 1;
+        i++;
     }
 }
