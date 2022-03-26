@@ -38,6 +38,7 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
             );
         }
         // TODO #Include list fsPath List && suggest never #include
+        // "./path"
         return completions;
     }
 }

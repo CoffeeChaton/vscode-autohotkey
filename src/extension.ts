@@ -17,6 +17,10 @@ import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/On
 import { HoverProvider } from './provider/Hover/HoverProvider';
 import { ReferenceProvider } from './provider/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
+import {
+    AhkDocumentRangeSemanticTokensProvider,
+    legend,
+} from './provider/SemanticTokensProvider/SemanticTokensProvider';
 import { SymBolProvider } from './provider/SymbolProvider/SymbolProvider';
 import { OutputChannel } from './provider/vscWindows/OutputChannel';
 import { WorkspaceSymbolProvider } from './provider/WorkspaceSymbolProvider/WorkspaceSymbolProvider';
@@ -36,6 +40,11 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.languages.registerRenameProvider(language, new RenameProvider()),
         // TODO registerTextDocumentContentProvider
         vscode.languages.registerWorkspaceSymbolProvider(new WorkspaceSymbolProvider()),
+        vscode.languages.registerDocumentRangeSemanticTokensProvider(
+            language,
+            new AhkDocumentRangeSemanticTokensProvider(),
+            legend,
+        ),
         // vscode.languages.registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', ','),
         vscode.workspace.onDidChangeConfiguration((): void => configChangEvent()),
         vscode.workspace.onDidDeleteFiles((e): void => Detecter.delMap(e)),
@@ -93,4 +102,6 @@ TODO createTextEditorDecorationType
 TODO CodeLensProvider -> run this func/command DA
 ...did I registerColorProvider ?
 ...registerSignatureHelpProvider
+
+// FoldingRangeProvider
 */

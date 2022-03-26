@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { ESnippetRecBecause } from '../../globalEnum';
 
 export function setMD(
-    prefix: string,
+    prefix: string, // TODO enum
     refRangeList: vscode.Range[],
     defRangeList: vscode.Range[],
     funcName: string,
@@ -17,7 +17,7 @@ export function setMD(
         .join('\n');
 
     return new vscode.MarkdownString('', true)
-        .appendCodeblock(`${prefix} of ${funcName}()`)
+        .appendCodeblock(`${prefix} of ${funcName}()`) // TODO ahk_Hover_Doc_First_Line.tmLanguage.json ex param/local var
         .appendMarkdown(recStr)
         .appendMarkdown('use`f12` goto def    \n')
         .appendMarkdown(def)

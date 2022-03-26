@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { ETime } from '../../globalEnum';
 import { A_Send } from '../../tools/Built-in/sendSpecialKeys';
 import { isPosAtStr } from '../../tools/isPosAtStr';
+import { getLStr } from '../../tools/str/removeSpecialChar';
 
 const sendBigBlock: vscode.CompletionItem[] = [];
 
@@ -40,9 +41,10 @@ setTimeout(ahkSendLazy, ETime.snipSendBigBrackets);
 
 export function ahkSend(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
     const textRaw = document.lineAt(position).text;
+    const lStr = getLStr(textRaw);
     if (
-        (/\b(?:Control)?Send(?:Input|Play|Event)?\b/ui).test(textRaw)
-        || textRaw.indexOf('::') > -1
+        (/\b(?:Control)?Send(?:Input|Play|Event)?\b/ui).test(lStr)
+        || lStr.indexOf('::') > -1
         || isPosAtStr(document, position)
     ) {
         return ahkSendLazy();

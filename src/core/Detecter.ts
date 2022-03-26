@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import {
     EStr,
     TAhkSymbolList,
+    TTokenStream,
 } from '../globalEnum';
 import { baseDiagnostic } from '../provider/Diagnostic/Diagnostic';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
@@ -13,7 +14,7 @@ import { globalValMap } from './Global';
 
 export type TUpdateDocDefReturn = {
     AhkSymbolList: TAhkSymbolList;
-    document: vscode.TextDocument;
+    DocStrMap: TTokenStream;
     t0: number;
     t1: number;
     t2: number;
@@ -73,6 +74,7 @@ export const Detecter = {
         }
     },
 
+    // document: vscode.TextDocument
     async updateDocDef(uri: vscode.Uri): Promise<TUpdateDocDefReturn> {
         const t0: number = Date.now();
         const { fsPath } = uri;
@@ -96,7 +98,7 @@ export const Detecter = {
 
         return {
             AhkSymbolList,
-            document,
+            DocStrMap,
             t0,
             t1,
             t2,
