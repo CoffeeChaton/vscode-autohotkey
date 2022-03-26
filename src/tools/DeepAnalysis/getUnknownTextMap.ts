@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { getGlobalValDef } from '../../core/Global';
 import {
     TAhkSymbol,
     TArgMap,
@@ -33,7 +32,6 @@ export function getUnknownTextMap(
                     || (/^\d+$/ui).test(wordUp) // just number
                     || argMap.has(wordUp)
                     || valMap.has(wordUp)
-                    || getGlobalValDef(wordUp)
                 ) {
                     ignoreSet.add(wordUp);
                     continue;

@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
-import { getGlobalValDef } from '../../../../core/Global';
 import {
-    EValType,
     TAhkValType,
     TValAnalysis,
     TValMap,
@@ -28,15 +26,7 @@ export function wrapFnValDef({
         return oldVal;
     }
 
-    const ahkValType = getGlobalValDef(RawNameNew.toUpperCase())
-        ? EValType.global
-        : lineType;
-    // if (EValType.global === ahkValType) {
-    //     // if normal color -> getGlobalValDef
-    //     // else if local color -> check has input global
-    //     // TODO line color -> isLocal -> check all input
-    //     // else key by key check Global
-    // }
+    const ahkValType = lineType;
     return {
         keyRawName: RawNameNew,
         defRangeList: [defRange],

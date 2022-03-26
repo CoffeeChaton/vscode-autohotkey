@@ -18,7 +18,7 @@ export class SymBolProvider implements vscode.DocumentSymbolProvider {
             t1,
             t2,
         } = Detecter.updateDocDef(document);
-        showTimeSpend(path.basename(uri.fsPath), t2 - t1); // TODO config
+        showTimeSpend(path.basename(uri.fsPath), t2 - t1);
 
         const otherDiag = (diagColl.get(uri) || [])
             .filter((v) => v.source !== EDiagBase.sourceDA);
