@@ -8,16 +8,16 @@ import { EDiagBase } from '../../globalEnum';
 import { diagDAFile } from '../../tools/DeepAnalysis/Diag/diagDA';
 
 export class SymBolProvider implements vscode.DocumentSymbolProvider {
-    public async provideDocumentSymbols(
+    public provideDocumentSymbols(
         document: vscode.TextDocument,
         _token: vscode.CancellationToken,
-    ): Promise<vscode.DocumentSymbol[] | null | undefined> {
+    ): vscode.DocumentSymbol[] | null | undefined {
         const { uri } = document;
         const {
             AhkSymbolList,
             t1,
             t2,
-        } = await Detecter.updateDocDef(uri);
+        } = Detecter.updateDocDef(document);
         showTimeSpend(path.basename(uri.fsPath), t2 - t1); // TODO config
 
         const otherDiag = (diagColl.get(uri) || [])

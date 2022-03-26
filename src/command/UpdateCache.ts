@@ -14,9 +14,13 @@ export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {
     const uriList: vscode.Uri[] | null = getUriList();
     if (uriList === null) return null;
 
-    const results: Promise<TUpdateDocDefReturn>[] = [];
+    const results: Thenable<TUpdateDocDefReturn>[] = [];
     for (const uri of uriList) {
-        results.push(Detecter.updateDocDef(uri));
+        results.push(
+            vscode.workspace
+                .openTextDocument(uri)
+                .then((doc: vscode.TextDocument): TUpdateDocDefReturn => Detecter.updateDocDef(doc)),
+        );
     }
     await Promise.all(results);
 

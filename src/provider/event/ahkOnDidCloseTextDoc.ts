@@ -12,7 +12,7 @@ function clearNekoDA(uri: vscode.Uri): null {
     return null;
 }
 
-export function onClosetDocClearDiag(fsPath: string): void {
+function onClosetDocClearDiag(fsPath: string): void {
     const uri = vscode.Uri.file(fsPath);
     if (uri.fsPath.endsWith('.ahk')) {
         clearNekoDA(uri);
@@ -21,4 +21,8 @@ export function onClosetDocClearDiag(fsPath: string): void {
         const uriWithOutGit = vscode.Uri.file(fsPath.replace(/\.ahk\.git$/ui, '.ahk'));
         clearNekoDA(uriWithOutGit);
     }
+}
+
+export function ahkOnDidCloseTextDoc(doc: vscode.TextDocument): void {
+    void onClosetDocClearDiag(doc.uri.fsPath);
 }

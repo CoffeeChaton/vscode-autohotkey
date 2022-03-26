@@ -1,13 +1,17 @@
+import * as vscode from 'vscode';
 import {
     DeepAnalysisResult,
+    TAhkSymbolList,
 } from '../../globalEnum';
+import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import { ClassWm } from '../../tools/wm';
-import { TSemanticTokensLeaf } from './TypeEnum';
+import { pushToken, TSemanticTokensLeaf } from './tools';
 
 // eslint-disable-next-line no-magic-numbers
 const wm = new ClassWm<DeepAnalysisResult, TSemanticTokensLeaf[]>(3 * 60 * 1000, 'DA2SemanticHighlight', 700);
 
-export function DA2SemanticHighlight(
+// core -------------------------------
+function DA2SemanticHighlight(
     DA: DeepAnalysisResult,
 ): TSemanticTokensLeaf[] {
     const cache: TSemanticTokensLeaf[] | undefined = wm.getWm(DA);
@@ -36,4 +40,22 @@ export function DA2SemanticHighlight(
     }
 
     return wm.setWm(DA, Tokens);
+}
+
+// filter -----------------------------
+export function DAList2SemanticHighlight(
+    document: vscode.TextDocument,
+    SemanticRange: vscode.Range,
+    AhkSymbolList: TAhkSymbolList,
+    Collector: vscode.SemanticTokensBuilder,
+): void {
+    for (const ahkSymbol of AhkSymbolList) {
+        const newRange: vscode.Range | undefined = ahkSymbol.range.intersection(SemanticRange);
+        if (newRange === undefined) continue;
+
+        const DA: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
+        if (DA === null) continue;
+        const token: TSemanticTokensLeaf[] = DA2SemanticHighlight(DA);
+        pushToken(token, Collector);
+    }
 }

@@ -56,30 +56,34 @@ export const Detecter = {
     createMap(e: vscode.FileCreateEvent): void {
         for (const uri of e.files) {
             if (uri.fsPath.endsWith('.ahk')) {
-                void Detecter.updateDocDef(uri);
+                void vscode.workspace
+                    .openTextDocument(uri)
+                    .then((doc: vscode.TextDocument): TUpdateDocDefReturn => Detecter.updateDocDef(doc));
             }
         }
     },
 
-    renameFileName(e: vscode.FileRenameEvent): void {
+    async renameFileName(e: vscode.FileRenameEvent): Promise<void> {
         for (const { oldUri, newUri } of e.files) {
             if (oldUri.fsPath.endsWith('.ahk')) {
                 delOldCache(oldUri);
                 if (newUri.fsPath.endsWith('.ahk')) {
-                    void Detecter.updateDocDef(newUri);
-                    const fsPathList = Detecter.getDocMapFile();
-                    void renameFileNameFunc(oldUri, newUri, [...fsPathList]);
+                    await vscode.workspace
+                        .openTextDocument(newUri)
+                        .then((doc: vscode.TextDocument): TUpdateDocDefReturn => Detecter.updateDocDef(doc));
+                    await renameFileNameFunc(oldUri, newUri);
                 } // else EXP : let a.ahk -> a.ahk0 or a.0ahk
             }
         }
     },
 
     // document: vscode.TextDocument
-    async updateDocDef(uri: vscode.Uri): Promise<TUpdateDocDefReturn> {
+    updateDocDef(document: vscode.TextDocument): TUpdateDocDefReturn {
         const t0: number = Date.now();
-        const { fsPath } = uri;
+        const { uri } = document;
+        const { fsPath } = document.uri;
         globalValMap.delete(fsPath);
-        const document: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
+        // const document: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
 
         const t1: number = Date.now();
         const {

@@ -1,36 +1,42 @@
 /* eslint-disable no-await-in-loop */
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { TTokenStream } from '../../globalEnum';
+import { getUriList } from '../../tools/fsTools/getUriList';
 import { Pretreatment } from '../../tools/Pretreatment';
 
-export async function renameFileNameFunc(oldUri: vscode.Uri, newUri: vscode.Uri, fsPathList: string[]): Promise<void> {
+export async function renameFileNameFunc(oldUri: vscode.Uri, newUri: vscode.Uri): Promise<void> {
+    const UriList = getUriList();
+    if (UriList === null) {
+        return;
+    }
+
     const oldFileName = path.basename(oldUri.fsPath, '.ahk');
     const newFileName = path.basename(newUri.fsPath, '.ahk');
     const RegexInclude = /^\s*#Include(?:Again)?\s+/ui;
     const edit = new vscode.WorkspaceEdit();
-    const uriList: vscode.Uri[] = [];
-    for (const fsPath of fsPathList) {
-        const document = await vscode.workspace.openTextDocument(fsPath);
-        const DocStrMap = Pretreatment(document.getText().split('\n'), 0);
+    const editUriList: vscode.Uri[] = [];
+
+    for (const uri of UriList) {
+        const document = await vscode.workspace.openTextDocument(uri);
+        const DocStrMap: TTokenStream = Pretreatment(document.getText().split('\n'), 0);
         const lineCount = DocStrMap.length;
         for (let line = 0; line < lineCount; line++) {
-            const { textRaw } = DocStrMap[line];
+            const { textRaw, lStr } = DocStrMap[line];
             if (
-                RegexInclude.test(textRaw)
+                RegexInclude.test(lStr)
                 && textRaw.includes(oldFileName)
             ) {
-                const Today = new Date();
-                const Remarks = `\n;;${oldFileName} -> ${newFileName} ; at ${Today.toLocaleString()}`;
+                const Remarks = `\n;;${oldFileName} -> ${newFileName} ; at ${new Date().toLocaleString()}`;
                 const newText = textRaw.replace(oldFileName, newFileName) + Remarks;
                 const newPos = new vscode.Position(line, 0);
-                const uri = vscode.Uri.file(fsPath);
                 edit.insert(uri, newPos, newText);
-                uriList.push(uri);
+                editUriList.push(uri);
             }
         }
     }
-    for (const uri of uriList) {
-        void vscode.window.showTextDocument(uri);
+    for (const editUri of editUriList) {
+        void vscode.window.showTextDocument(editUri);
     }
     void vscode.workspace.applyEdit(edit);
 }
