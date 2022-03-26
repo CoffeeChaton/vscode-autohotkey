@@ -1,10 +1,13 @@
-export function setPreFix(isByRef: boolean, isVariadic: boolean): string {
-    const ByRef = isByRef
-        ? 'ByRef '
-        : '';
-    const Variadic = isVariadic
-        ? 'Variadic '
-        : '';
+import { EPrefix } from '../MD/setMD';
 
-    return `${ByRef}${Variadic}param`;
+export function setPreFix(isByRef: boolean, isVariadic: boolean): EPrefix {
+    if (isByRef) {
+        return isVariadic
+            ? EPrefix.ByRefVariadicParam
+            : EPrefix.ByRefParam;
+    }
+
+    return isVariadic
+        ? EPrefix.ByRefVariadicParam
+        : EPrefix.Param;
 }

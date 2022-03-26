@@ -1,8 +1,16 @@
 import * as vscode from 'vscode';
 import { ESnippetRecBecause } from '../../globalEnum';
 
+export const enum EPrefix {
+    var = 'var',
+    Param = 'Param',
+    ByRefVariadicParam = 'ByRef Variadic Param',
+    ByRefParam = 'ByRef Param',
+    VariadicParam = 'Variadic Param',
+    unKnownText = 'unKnownText',
+}
 export function setMD(
-    prefix: string, // TODO enum
+    prefix: EPrefix,
     refRangeList: vscode.Range[],
     defRangeList: vscode.Range[],
     funcName: string,

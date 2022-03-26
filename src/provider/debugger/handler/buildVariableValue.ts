@@ -25,15 +25,15 @@ function getContent(child: TDbgpProperty): string | null {
 function buildVariableValueObj(attr: TDbgpPropertyAttr, property: TDbgpProperty): string {
     if (!property.property) return '{}';
 
-    const childs = toArray(property.property);
+    const children = toArray(property.property);
     if (attr.classname === 'Object' && likeArray(property, attr.name)) {
-        const ahkArr = childs.map((v) => base64ToStr(v.content || '""'));
+        const ahkArr = children.map((v) => base64ToStr(v.content || '""'));
         return JSON.stringify(ahkArr);
     }
     // k = child.attr.fullName
     // v = string
     const mapA = new Map<string, string>();
-    childs.forEach((child) => {
+    children.forEach((child) => {
         const key = child?.attr?.name;
         if (key === undefined) return;
         const chContent = getContent(child);
