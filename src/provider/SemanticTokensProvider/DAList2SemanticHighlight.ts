@@ -18,7 +18,8 @@ function DA2SemanticHighlight(
     if (cache) return cache;
 
     const Tokens: TSemanticTokensLeaf[] = [];
-    for (const arg of DA.argMap.values()) {
+    const { argMap, valMap } = DA;
+    for (const arg of argMap.values()) {
         const { defRangeList, refRangeList } = arg;
         [...defRangeList, ...refRangeList].forEach((range) => {
             Tokens.push({
@@ -28,7 +29,7 @@ function DA2SemanticHighlight(
             });
         });
     }
-    for (const val of DA.valMap.values()) {
+    for (const val of valMap.values()) {
         const { defRangeList, refRangeList } = val;
         [...defRangeList, ...refRangeList].forEach((range) => {
             Tokens.push({
@@ -43,19 +44,14 @@ function DA2SemanticHighlight(
 }
 
 // filter -----------------------------
-export function DAList2SemanticHighlight(
+export function DAList2SemanticHighlightFull(
     document: vscode.TextDocument,
-    SemanticRange: vscode.Range,
     AhkSymbolList: TAhkSymbolList,
     Collector: vscode.SemanticTokensBuilder,
 ): void {
     for (const ahkSymbol of AhkSymbolList) {
-        const newRange: vscode.Range | undefined = ahkSymbol.range.intersection(SemanticRange);
-        if (newRange === undefined) continue;
-
         const DA: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
         if (DA === null) continue;
-        const token: TSemanticTokensLeaf[] = DA2SemanticHighlight(DA);
-        pushToken(token, Collector);
+        pushToken(DA2SemanticHighlight(DA), Collector);
     }
 }

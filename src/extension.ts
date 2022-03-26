@@ -26,7 +26,7 @@ import { HoverProvider } from './provider/Hover/HoverProvider';
 import { ReferenceProvider } from './provider/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
 import {
-    AhkSemanticHighlight,
+    AhkFullSemanticHighlight,
     legend,
 } from './provider/SemanticTokensProvider/SemanticTokensProvider';
 import { SymBolProvider } from './provider/SymbolProvider/SymbolProvider';
@@ -43,7 +43,7 @@ export function activate(context: ExtensionContext): void {
         languages.registerDefinitionProvider(selector, new DefProvider()),
         languages.registerDocumentFormattingEditProvider(selector, new FormatProvider()),
         languages.registerDocumentRangeFormattingEditProvider(selector, new RangeFormatProvider()),
-        languages.registerDocumentRangeSemanticTokensProvider(selector, new AhkSemanticHighlight(), legend),
+        languages.registerDocumentSemanticTokensProvider(selector, new AhkFullSemanticHighlight(), legend),
         languages.registerDocumentSymbolProvider(selector, new SymBolProvider()),
         languages.registerHoverProvider(selector, new HoverProvider()),
         languages.registerOnTypeFormattingEditProvider(selector, new OnTypeFormattingEditProvider(), '\n'),

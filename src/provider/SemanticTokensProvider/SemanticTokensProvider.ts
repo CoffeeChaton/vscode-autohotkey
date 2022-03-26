@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { DAList2SemanticHighlight } from './DAList2SemanticHighlight';
+import { DAList2SemanticHighlightFull } from './DAList2SemanticHighlight';
 import {
     TokenModifiers,
     TokenTypes,
@@ -14,29 +14,23 @@ export const legend = new vscode.SemanticTokensLegend(
 );
 
 // core-------------------------------------
-function SemanticTokensCore(
-    document: vscode.TextDocument,
-    SemanticRange: vscode.Range,
-): vscode.SemanticTokens {
-    const {
-        AhkSymbolList,
-    } = Detecter.updateDocDef(document);
+function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticTokens {
+    const { AhkSymbolList } = Detecter.updateDocDef(document);
 
     const Collector: vscode.SemanticTokensBuilder = new vscode.SemanticTokensBuilder(legend);
 
-    DAList2SemanticHighlight(document, SemanticRange, AhkSymbolList, Collector);
-    // AVariables2SemanticHighlight(DocStrMap, Collector, SemanticRange);
+    DAList2SemanticHighlightFull(document, AhkSymbolList, Collector);
 
     return Collector.build();
 }
 
 // semantic token type
-export class AhkSemanticHighlight implements vscode.DocumentRangeSemanticTokensProvider {
-    public provideDocumentRangeSemanticTokens(
+export class AhkFullSemanticHighlight implements vscode.DocumentSemanticTokensProvider {
+    // onDidChangeSemanticTokens?: vscode.Event<void> | undefined;
+    public provideDocumentSemanticTokens(
         document: vscode.TextDocument,
-        SemanticRange: vscode.Range,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.SemanticTokens> {
-        return SemanticTokensCore(document, SemanticRange);
+        return SemanticTokensCore(document);
     }
 }
