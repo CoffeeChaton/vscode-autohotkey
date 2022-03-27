@@ -4,17 +4,17 @@ import { Detecter, TUpdateDocDefReturn } from '../core/Detecter';
 import { globalValMap } from '../core/Global';
 import { getUriList } from '../tools/fsTools/getUriList';
 
-type TDocFullData = {
+export type TDocFullData = {
     nekoData: TUpdateDocDefReturn;
     vscDoc: vscode.TextDocument;
 };
-type TUpdateCacheAsyncReturn = {
+export type TUpdateCacheAsyncReturn = {
     timeSpend: number;
     DocFullData: TDocFullData[];
 };
 
 export async function UpdateCacheAsync(showMsg: boolean): Promise<null | TUpdateCacheAsyncReturn> {
-    const timeStart = Date.now();
+    const timeStart: number = Date.now();
 
     Detecter.DocMap.clear();
     globalValMap.clear();
@@ -34,9 +34,10 @@ export async function UpdateCacheAsync(showMsg: boolean): Promise<null | TUpdate
                 })),
         );
     }
-    const DocFullData = await Promise.all(waitDocFullData);
 
-    const timeSpend = Date.now() - timeStart;
+    const DocFullData: TDocFullData[] = await Promise.all(waitDocFullData);
+
+    const timeSpend: number = Date.now() - timeStart;
     if (showMsg) {
         const msg = `Update docFuncMap cash (${timeSpend}ms)`;
         console.log(msg);

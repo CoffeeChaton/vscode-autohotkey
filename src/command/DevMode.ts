@@ -1,13 +1,14 @@
+import { TAhkSymbol } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { arrSum, stdDevFn } from './tools/myMath';
 import { EPressureTestMode, pressureTestConfig, TPickReturn } from './tools/pressureTestConfig';
-import { UpdateCacheAsync } from './UpdateCache';
+import { TDocFullData, TUpdateCacheAsyncReturn, UpdateCacheAsync } from './UpdateCache';
 
 const Data: number[] = [];
 
 async function devTestBase(): Promise<null> {
-    const ed = await UpdateCacheAsync(false);
+    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync(false);
     if (ed === null) return null;
 
     Data.push(ed.timeSpend);
@@ -15,19 +16,18 @@ async function devTestBase(): Promise<null> {
 }
 
 async function devTestDA(): Promise<null> {
-    const ed = await UpdateCacheAsync(false);
+    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync(false);
     if (ed === null) return null;
     const { timeSpend, DocFullData } = ed;
 
     // DA---
-    const t1 = Date.now();
-    for (const { nekoData, vscDoc } of DocFullData) {
-        const { AhkSymbolList } = nekoData;
-        for (const ahkSymbol of AhkSymbolList) {
+    const t1: number = Date.now();
+    DocFullData.forEach(({ nekoData, vscDoc }: TDocFullData): void => {
+        nekoData.AhkSymbolList.forEach((ahkSymbol: TAhkSymbol): void => {
             DeepAnalysis(vscDoc, ahkSymbol);
-        }
-    }
-    const t2 = Date.now();
+        });
+    });
+    const t2: number = Date.now();
     // DA---
 
     Data.push(t2 - t1 + timeSpend);
@@ -76,13 +76,12 @@ export async function pressureTest(): Promise<null> {
     OutputChannel.appendLine(`   please wait of [${label}]`);
     OutputChannel.show();
 
+    const fn: () => Promise<null> = mode === EPressureTestMode.baseAndDA
+        ? devTestDA
+        : devTestBase;
+
     for (let i = 1; i <= maxTime; i++) {
-        if (mode === EPressureTestMode.justBase) {
-            c1.push(setTimeout(devTestBase, i * delay));
-        }
-        if (mode === EPressureTestMode.baseAndDA) {
-            c1.push(setTimeout(devTestDA, i * delay));
-        }
+        c1.push(setTimeout(fn, i * delay));
     }
 
     // eslint-disable-next-line no-magic-numbers
