@@ -4,7 +4,7 @@ import { Detecter, TUpdateDocDefReturn } from '../core/Detecter';
 import { globalValMap } from '../core/Global';
 import { getUriList } from '../tools/fsTools/getUriList';
 
-export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {
+export async function UpdateCacheAsync(showMsg: boolean): Promise<null | number> {
     const timeStart = Date.now();
 
     Detecter.DocMap.clear();
@@ -23,14 +23,13 @@ export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {
         );
     }
     await Promise.all(results);
-
+    const timeEnd = Date.now() - timeStart;
     if (showMsg) {
-        const timeEnd = Date.now() - timeStart;
         const msg = `Update docFuncMap cash (${timeEnd}ms)`;
         console.log(msg);
         void vscode.window.showInformationMessage(msg);
     }
-    return null;
+    return timeEnd;
 }
 // TODO detail: string -> Enum
 // kind: vscode.SymbolKind; -> myEnum

@@ -1,13 +1,43 @@
 import * as vscode from 'vscode';
+import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { arrSum, stdDevFn } from './tools/myMath';
 import { UpdateCacheAsync } from './UpdateCache';
 
-let c1: NodeJS.Timeout[] = [];
+const Data: number[] = [];
 
+async function devTest(): Promise<null> {
+    const time = await UpdateCacheAsync(false);
+    if (time === null) return null;
+    Data.push(time);
+    return null;
+}
+
+function devTestEnd(iMax: number): void {
+    const len = Data.length;
+    const sum: number = arrSum(Data);
+    const avg: number = sum / len;
+    const stdDev: number = stdDevFn(Data);
+
+    OutputChannel.appendLine('---------------------------------------------');
+    OutputChannel.appendLine('The task should be completed, please confirm!');
+    OutputChannel.appendLine(`iMax is ${iMax}`);
+    OutputChannel.appendLine(`Data len is ${len}`);
+    OutputChannel.appendLine(`sum is ${sum}`);
+    OutputChannel.appendLine(`avg is ${avg}`);
+    OutputChannel.appendLine(`stdDev is ${stdDev}`);
+    OutputChannel.appendLine(`[${Data.join(', ')}]`);
+    OutputChannel.appendLine('---------------------------------------------');
+    OutputChannel.show();
+}
+
+let c1: NodeJS.Timeout[] = [];
 export async function DevLoopOfClearOutlineCache(): Promise<null> {
     void vscode.window.showInformationMessage('this is Dev function ,open profile-flame to get .cpuprofile');
 
     c1.forEach((e) => clearInterval(e));
     c1 = [];
+    Data.length = 0;
+
     type TPick = {
         label: string;
         maxTime: number;
@@ -25,15 +55,12 @@ export async function DevLoopOfClearOutlineCache(): Promise<null> {
     const pick = await vscode.window.showQuickPick<TPick>(items);
     if (pick === undefined) return null;
 
+    // set end
     const iMax = pick.maxTime;
     for (let i = 1; i <= iMax; i++) {
-        c1.push(setTimeout(() => {
-            void UpdateCacheAsync(false);
-        }, i * base));
+        c1.push(setTimeout(devTest, i * base));
     }
-    c1.push(setTimeout(() => {
-        void vscode.window.showInformationMessage('The task should be completed, please confirm!');
-        // eslint-disable-next-line no-magic-numbers
-    }, (iMax + 10) * base));
+    // eslint-disable-next-line no-magic-numbers
+    c1.push(setTimeout(devTestEnd, (iMax + 10) * base, iMax));
     return null;
 }
