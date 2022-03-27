@@ -5,7 +5,6 @@ import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 // import { removeBigParentheses } from '../tools/removeBigParentheses';
 // import { removeParentheses } from '../tools/removeParentheses';
 import { FuncInputType } from '../getChildren';
-import { setGlobalVar } from './setGlobalVar';
 
 type LineRulerType = DeepReadonly<{
     detail: string;
@@ -121,29 +120,18 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
         line,
         lStr,
     } = FuncInput;
-    if (lStr === '') return false;
-    const ahkGlobal: LineRulerType = {
-        detail: 'global',
-        kind: vscode.SymbolKind.Variable,
-        getName(_str: string): string | null {
-            return setGlobalVar(FuncInput);
-        },
-        test(strTrim: string): boolean {
-            return (/^global\b[\s,]/iu).test(strTrim) && !(/^global[\s,]+$/iu).test(strTrim);
-        },
-    };
+    const strTrim = lStr.trim();
+    if (strTrim === '') return false;
 
     const LineRuler: LineRulerType[] = [
         IncludeAgain,
         Include,
         directive,
-        ahkGlobal,
         ahkLabel,
         HotString,
         HotKeys,
     ];
 
-    const strTrim = lStr.trim();
     for (const ruler of LineRuler) {
         if (ruler.test(strTrim)) {
             const name: string | null = ruler.getName(strTrim);

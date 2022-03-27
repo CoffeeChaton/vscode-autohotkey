@@ -32,3 +32,5 @@ export async function UpdateCacheAsync(showMsg: boolean): Promise<null> {
     }
     return null;
 }
+// TODO detail: string -> Enum
+// kind: vscode.SymbolKind; -> myEnum

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TGlobalVal } from '../../globalEnum';
+import { TGlobalVal, TGValMap } from '../../globalEnum';
 import { ahkValRegex } from '../../tools/regexTools';
 import { removeBigParentheses } from '../../tools/str/removeBigParentheses';
 import { removeParentheses } from '../../tools/str/removeParentheses';
@@ -9,12 +9,11 @@ function fnReplacer(match: string): string {
     return ' '.repeat(match.length);
 }
 
-export function setGlobalVar(FuncInput: FuncInputType): string {
+export function setGlobalVar(FuncInput: FuncInputType, gValMapBySelf: TGValMap): string {
     const {
         DocStrMap,
         line,
         lStr,
-        gValMapBySelf,
     } = FuncInput;
     const { textRaw } = DocStrMap[line];
     const lStrFix = removeParentheses(removeBigParentheses(lStr.replace(/^\s*\bglobal\b[,\s]+/ui, fnReplacer)));
@@ -26,7 +25,8 @@ export function setGlobalVar(FuncInput: FuncInputType): string {
     //     b := 1 // b is global
     // }
 
-    return lStrFix.split(',') // bug: global a := fn_A(x,b,c) , d := fn(e,f:=g)... can't match f ?
+    return lStrFix
+        .split(',') // bug: global a := fn_A(x,b,c) , d := fn(e,f:=g)... can't match f ?
         .map((v) => {
             const col = v.indexOf(':=');
             const lName = (col > 0)

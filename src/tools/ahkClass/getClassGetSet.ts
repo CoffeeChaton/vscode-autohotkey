@@ -23,7 +23,6 @@ function getName(FuncInput: FuncInputType): string | false {
 }
 export function getClassGetSet(FuncInput: FuncInputType): false | TAhkSymbol {
     const {
-        gValMapBySelf,
         line,
         lStr,
         DocStrMap,
@@ -41,7 +40,6 @@ export function getClassGetSet(FuncInput: FuncInputType): false | TAhkSymbol {
     const selectionRange = range;
     const classSymbol: TAhkSymbol = new vscode.DocumentSymbol(name, detail, kind, range, selectionRange);
     classSymbol.children = getChildren({
-        gValMapBySelf,
         DocStrMap,
         RangeStartLine: range.start.line + 1,
         RangeEndLine: range.end.line,

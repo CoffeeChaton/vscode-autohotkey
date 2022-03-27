@@ -11,7 +11,7 @@ import {
 import { Pretreatment } from '../../tools/Pretreatment';
 import { hashCode } from '../../tools/str/hashCode';
 import { getChildren } from '../getChildren';
-import { getReturnByLine, ParserBlock } from '../Parser';
+import { ParserBlock } from '../Parser';
 import { ParserLine } from '../ParserTools/ParserLine';
 
 type TFsPath = string; // vscode.uru.fsPath
@@ -87,7 +87,6 @@ export function getBaseData(document: vscode.TextDocument): TCache {
     const gValMapBySelf: TGValMap = new Map<TValUpName, TGlobalVal[]>();
     const DocStrMap: TTokenStream = Pretreatment(fullText.split('\n'), 0);
     const AhkSymbolList: TAhkSymbolList = getChildren({
-        gValMapBySelf,
         DocStrMap,
         RangeStartLine: 0,
         RangeEndLine: DocStrMap.length,
@@ -97,7 +96,6 @@ export function getBaseData(document: vscode.TextDocument): TCache {
             ParserBlock.getFunc,
             ParserBlock.getComment,
             ParserBlock.getSwitchBlock,
-            getReturnByLine,
             ParserLine,
         ],
     });

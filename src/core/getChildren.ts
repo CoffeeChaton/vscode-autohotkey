@@ -1,7 +1,6 @@
 import {
     TAhkSymbol,
     TAhkSymbolList,
-    TGValMap,
     TTokenStream,
 } from '../globalEnum';
 
@@ -11,7 +10,6 @@ export type FuncInputType = Readonly<{
     RangeEndLine: number;
     inClass: boolean;
     DocStrMap: TTokenStream;
-    gValMapBySelf: TGValMap;
 }>;
 
 export type FuncLimit = (FuncInput: FuncInputType) => false | TAhkSymbol;
@@ -22,7 +20,6 @@ type ChildType = Readonly<{
     RangeStartLine: number;
     RangeEndLine: number;
     DocStrMap: TTokenStream;
-    gValMapBySelf: TGValMap;
 }>;
 
 export function getChildren(child: ChildType): TAhkSymbolList {
@@ -32,7 +29,6 @@ export function getChildren(child: ChildType): TAhkSymbolList {
         RangeEndLine,
         inClass,
         fnList,
-        gValMapBySelf,
     } = child;
 
     const result = [];
@@ -47,7 +43,6 @@ export function getChildren(child: ChildType): TAhkSymbolList {
                 line,
                 RangeEndLine,
                 inClass,
-                gValMapBySelf,
             });
             if (DocumentSymbol !== false) {
                 result.push(DocumentSymbol);
