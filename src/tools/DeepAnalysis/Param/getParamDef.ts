@@ -8,7 +8,7 @@ import {
 import { ahkValRegex } from '../../regexTools';
 import { replacerSpace } from '../../str/removeSpecialChar';
 
-function getNeed(param: string, funcRawName: string, line: number, lStr: string): null | TArgAnalysis {
+function getParamDefNeed(param: string, funcRawName: string, line: number, lStr: string): null | TArgAnalysis {
     const isByRef = (/^ByRef\s+/ui).test(param);
     const key0 = isByRef
         ? param.replace(/^ByRef\s+/ui, '')
@@ -61,7 +61,7 @@ export function getParamDef(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TAr
             .map((v) => v.trim());
 
         for (const param of strList) {
-            const ArgAnalysis = getNeed(param, funcRawName, line, lStr);
+            const ArgAnalysis = getParamDefNeed(param, funcRawName, line, lStr);
             if (ArgAnalysis === null) continue;
 
             const key = ArgAnalysis.keyRawName.toUpperCase();

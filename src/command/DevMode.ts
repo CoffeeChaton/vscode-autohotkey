@@ -1,66 +1,91 @@
-import * as vscode from 'vscode';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { arrSum, stdDevFn } from './tools/myMath';
+import { EPressureTestMode, pressureTestConfig, TPickReturn } from './tools/pressureTestConfig';
 import { UpdateCacheAsync } from './UpdateCache';
 
 const Data: number[] = [];
 
-async function devTest(): Promise<null> {
-    const time = await UpdateCacheAsync(false);
-    if (time === null) return null;
-    Data.push(time);
+async function devTestBase(): Promise<null> {
+    const ed = await UpdateCacheAsync(false);
+    if (ed === null) return null;
+
+    Data.push(ed.timeSpend);
+    return null;
+}
+
+async function devTestDA(): Promise<null> {
+    const ed = await UpdateCacheAsync(false);
+    if (ed === null) return null;
+    const { timeSpend, DocFullData } = ed;
+
+    // DA---
+    const t1 = Date.now();
+    for (const { nekoData, vscDoc } of DocFullData) {
+        const { AhkSymbolList } = nekoData;
+        for (const ahkSymbol of AhkSymbolList) {
+            DeepAnalysis(vscDoc, ahkSymbol);
+        }
+    }
+    const t2 = Date.now();
+    // DA---
+
+    Data.push(t2 - t1 + timeSpend);
     return null;
 }
 
 function devTestEnd(iMax: number): void {
-    const len = Data.length;
-    const sum: number = arrSum(Data);
+    const statistics = [...Data];
+    Data.length = 0;
+
+    const len = statistics.length;
+    const sum: number = arrSum(statistics);
     const avg: number = sum / len;
-    const stdDev: number = stdDevFn(Data);
+    const stdDev: number = stdDevFn(statistics);
 
     OutputChannel.appendLine('---------------------------------------------');
-    OutputChannel.appendLine('The task should be completed, please confirm!');
+    OutputChannel.appendLine('The task be completed, please confirm!');
     OutputChannel.appendLine(`iMax is ${iMax}`);
-    OutputChannel.appendLine(`Data len is ${len}`);
+    OutputChannel.appendLine(`statistics len is ${len}`);
     OutputChannel.appendLine(`sum is ${sum}`);
     OutputChannel.appendLine(`avg is ${avg}`);
     OutputChannel.appendLine(`stdDev is ${stdDev}`);
-    OutputChannel.appendLine(`[${Data.join(', ')}]`);
+    OutputChannel.appendLine(`[${statistics.join(', ')}]`);
     OutputChannel.appendLine('---------------------------------------------');
     OutputChannel.show();
 }
 
-let c1: NodeJS.Timeout[] = [];
-export async function DevLoopOfClearOutlineCache(): Promise<null> {
-    void vscode.window.showInformationMessage('this is Dev function ,open profile-flame to get .cpuprofile');
-
-    c1.forEach((e) => clearInterval(e));
-    c1 = [];
+const c1: NodeJS.Timeout[] = [];
+export async function pressureTest(): Promise<null> {
+    c1.forEach((timeout: NodeJS.Timeout): void => clearInterval(timeout));
+    c1.length = 0;
     Data.length = 0;
 
-    type TPick = {
-        label: string;
-        maxTime: number;
-    };
+    const pick: TPickReturn | null = await pressureTestConfig();
+    if (pick === null) return null;
 
-    const base = 200;
-    const min1 = 300; // 60 * 1000 / base
-    const sec10 = 50; // 10 * 1000 / base
+    const {
+        maxTime,
+        delay,
+        label,
+        mode,
+    } = pick;
 
-    const items: TPick[] = [
-        { label: '1 min', maxTime: min1 },
-        { label: '10 sec', maxTime: sec10 },
-    ];
+    OutputChannel.appendLine('---------------------------------------------');
+    OutputChannel.appendLine('>> this is Dev tools ,open *vscode-js-profile-flame* to get .cpuprofile');
+    OutputChannel.appendLine(`   please wait of [${label}]`);
+    OutputChannel.show();
 
-    const pick = await vscode.window.showQuickPick<TPick>(items);
-    if (pick === undefined) return null;
-
-    // set end
-    const iMax = pick.maxTime;
-    for (let i = 1; i <= iMax; i++) {
-        c1.push(setTimeout(devTest, i * base));
+    for (let i = 1; i <= maxTime; i++) {
+        if (mode === EPressureTestMode.justBase) {
+            c1.push(setTimeout(devTestBase, i * delay));
+        }
+        if (mode === EPressureTestMode.baseAndDA) {
+            c1.push(setTimeout(devTestDA, i * delay));
+        }
     }
+
     // eslint-disable-next-line no-magic-numbers
-    c1.push(setTimeout(devTestEnd, (iMax + 10) * base, iMax));
+    c1.push(setTimeout(devTestEnd, (maxTime + 5) * delay, maxTime));
     return null;
 }

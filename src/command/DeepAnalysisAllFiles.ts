@@ -7,7 +7,7 @@ import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { diagDAFile } from '../tools/DeepAnalysis/Diag/diagDA';
 
-function showOutputChannel(need: DeepAnalysisResult[], t1: number): void {
+function showOutputChannel(need: DeepAnalysisResult[], timeSpend: number): void {
     let argMapSize = 0;
     let valMapSize = 0;
     let textMapSize = 0;
@@ -24,7 +24,7 @@ function showOutputChannel(need: DeepAnalysisResult[], t1: number): void {
     OutputChannel.appendLine(`valMapSize is ${valMapSize}`);
     OutputChannel.appendLine(`textMapSize is ${textMapSize}`);
     OutputChannel.appendLine(`All Size is ${argMapSize + valMapSize + textMapSize}`);
-    OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
+    OutputChannel.appendLine(`Done in ${timeSpend} ms`);
     OutputChannel.show();
 }
 
@@ -39,7 +39,7 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
 
         const Uri = vscode.Uri.file(fsPath);
         // eslint-disable-next-line no-await-in-loop
-        const document = await vscode.workspace.openTextDocument(Uri);
+        const document: vscode.TextDocument = await vscode.workspace.openTextDocument(Uri);
         for (const ahkSymbol of AhkSymbolList) {
             const DA: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
             if (DA !== null) need.push(DA);
@@ -52,7 +52,8 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
         ]);
     }
 
-    showOutputChannel(need, t1);
+    const t2 = Date.now();
+    showOutputChannel(need, t2 - t1);
 
     return null;
 }
