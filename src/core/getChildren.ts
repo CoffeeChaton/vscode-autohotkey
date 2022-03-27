@@ -5,6 +5,7 @@ import {
 } from '../globalEnum';
 
 export type FuncInputType = Readonly<{
+    fistWord: string;
     lStr: string;
     line: number;
     RangeEndLine: number;
@@ -35,9 +36,10 @@ export function getChildren(child: ChildType): TAhkSymbolList {
     let Resolved = -2;
     for (let line = RangeStartLine; line < RangeEndLine; line++) {
         if (line < Resolved) continue;
-        const { lStr } = DocStrMap[line];
+        const { lStr, fistWord } = DocStrMap[line];
         for (const fn of fnList) {
             const DocumentSymbol: false | TAhkSymbol = fn({
+                fistWord,
                 lStr,
                 DocStrMap,
                 line,

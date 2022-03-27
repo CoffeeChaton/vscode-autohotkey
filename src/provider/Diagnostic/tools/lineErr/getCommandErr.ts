@@ -50,18 +50,18 @@ function getLoopErr(lStr: string): TLineDiag {
     };
 }
 // ---------------------------------------------------------------------------------------------------------------------
-function getCommandErrFnReplace(commandHead: string, lStr: string): TLineDiag {
+function getCommandErrFnReplace(fistWord: string, lStr: string): TLineDiag {
     // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
     if (
         (/^(?:File(Append|GetAttrib|Read)|GetKeyState|IfExist|IfInString|IfWin(?:Not)?(?:Active|Exist))$/ui).test(
-            commandHead,
+            fistWord,
         )
-        || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/ui).test(commandHead)
+        || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/ui).test(fistWord)
     ) {
-        const colL = lStr.indexOf(commandHead);
+        const colL = lStr.indexOf(fistWord);
         return {
             colL,
-            colR: colL + commandHead.length,
+            colR: colL + fistWord.length,
             value: EDiagCode.code700,
             severity: vscode.DiagnosticSeverity.Information,
             tags: [vscode.DiagnosticTag.Deprecated],
@@ -71,7 +71,7 @@ function getCommandErrFnReplace(commandHead: string, lStr: string): TLineDiag {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-function getOtherCommandErr(commandHead: string, lStr: string): TLineDiag {
+function getOtherCommandErr(fistWord: string, lStr: string): TLineDiag {
     type TCommandErr = {
         reg: RegExp;
         code: EDiagCode;
@@ -161,11 +161,11 @@ function getOtherCommandErr(commandHead: string, lStr: string): TLineDiag {
     ];
 
     for (const v of headMatch) {
-        if (v.reg.test(commandHead)) {
-            const colL = lStr.search(commandHead);
+        if (v.reg.test(fistWord)) {
+            const colL = lStr.search(/\S/ui);
             return {
                 colL,
-                colR: colL + commandHead.length,
+                colR: colL + fistWord.length,
                 value: v.code,
                 severity: vscode.DiagnosticSeverity.Warning,
                 tags: [vscode.DiagnosticTag.Deprecated],
@@ -176,26 +176,23 @@ function getOtherCommandErr(commandHead: string, lStr: string): TLineDiag {
     return EDiagLine.miss;
 }
 // ---------------------------------------------------------------------------------------------------------------------
-export function getCommandErr(lStr: string, lStrTrim: string): TLineDiag {
-    const exec = (/^(\w+)[\s,]/u).exec(lStrTrim);
-    if (exec === null) {
-        return EDiagLine.miss;
-    }
-    const commandHead: string = exec[1];
-
+export function getCommandErr(lStr: string, _lStrTrim: string, fistWord: string): TLineDiag {
     // high frequency words && is allowed
     // don't push gui commands in this line, because not high frequency.
-    if ((/^(?:switch|case|if|while|else|return|Break|for|sleep|Static|global)$/ui).test(commandHead)) {
+    if (fistWord === '') {
+        return EDiagLine.miss;
+    }
+    if ((/^(?:SWITCH|CASE|IF|WHILE|ELSE|RETURN|BREAK|FOR|SLEEP|STATIC|GLOBAL)$/ui).test(fistWord)) {
         return EDiagLine.miss;
     }
     //  _commandHeadStatistics()
-    const fnReplaceErr: TLineDiag = getCommandErrFnReplace(commandHead, lStr);
+    const fnReplaceErr: TLineDiag = getCommandErrFnReplace(fistWord, lStr);
     if (fnReplaceErr) {
         return fnReplaceErr;
     }
-    if ((/^Loop$/ui).test(commandHead)) {
+    if ((/^LOOP$/ui).test(fistWord)) {
         return getLoopErr(lStr);
     }
 
-    return getOtherCommandErr(commandHead, lStr);
+    return getOtherCommandErr(fistWord, lStr);
 }

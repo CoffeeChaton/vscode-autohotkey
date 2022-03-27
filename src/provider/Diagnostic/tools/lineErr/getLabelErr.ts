@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import { EDiagLine, TLineDiag } from './lineErrTools';
 
-export function getLabelErr(lStr: string, lStrTrim: string): TLineDiag {
+export function getLabelErr(lStr: string, lStrTrim: string, _fistWord: string): TLineDiag {
     if (lStrTrim.indexOf(':') < 1) return EDiagLine.miss;
 
     const exec = (/^(\w+)\s*:/u).exec(lStrTrim);

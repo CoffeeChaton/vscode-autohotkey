@@ -31,6 +31,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
         CommentBlock = inCommentBlock(textRaw, CommentBlock);
         if (CommentBlock) {
             result.push({
+                fistWord: '',
                 lStr: '',
                 deep,
                 textRaw,
@@ -46,6 +47,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
                 ? DetailType.inLTrim1
                 : DetailType.inLTrim2;
             result.push({
+                fistWord: '',
                 lStr: '',
                 deep,
                 textRaw,
@@ -57,6 +59,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
 
         if (isSetVarTradition(textRaw)) {
             result.push({
+                fistWord: '',
                 lStr: '',
                 deep,
                 textRaw,
@@ -81,7 +84,11 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
             }
         }
 
+        const exec = (/^(\w+)[\s,]/u).exec(lStr.trim());
+        const fistWord: string = exec?.[1].toUpperCase() ?? '';
+
         result.push({
+            fistWord,
             lStr,
             deep,
             textRaw,

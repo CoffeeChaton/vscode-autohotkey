@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import { EDiagLine, TLineDiag } from './lineErrTools';
 
-export function getDirectivesErr(lStr: string, lStrTrim: string): TLineDiag {
+export function getDirectivesErr(lStr: string, lStrTrim: string, _fistWord: string): TLineDiag {
     // err of #Directives
     const exec = (/^#(\w+)/u).exec(lStrTrim);
     if (exec === null) return EDiagLine.miss;
