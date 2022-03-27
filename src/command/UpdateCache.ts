@@ -13,7 +13,7 @@ export type TUpdateCacheAsyncReturn = {
     DocFullData: TDocFullData[];
 };
 
-export async function UpdateCacheAsync(showMsg: boolean): Promise<null | TUpdateCacheAsyncReturn> {
+export async function UpdateCacheAsync(): Promise<null | TUpdateCacheAsyncReturn> {
     const timeStart: number = Date.now();
 
     Detecter.DocMap.clear();
@@ -38,11 +38,7 @@ export async function UpdateCacheAsync(showMsg: boolean): Promise<null | TUpdate
     const DocFullData: TDocFullData[] = await Promise.all(waitDocFullData);
 
     const timeSpend: number = Date.now() - timeStart;
-    if (showMsg) {
-        const msg = `Update docFuncMap cash (${timeSpend}ms)`;
-        console.log(msg);
-        void vscode.window.showInformationMessage(msg);
-    }
+
     return {
         timeSpend,
         DocFullData,

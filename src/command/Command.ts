@@ -8,10 +8,16 @@ import { ListAllFunc, ListAllFuncSort } from './ListAllFunc';
 import { ListAllInclude } from './ListAllInclude';
 import { UpdateCacheAsync } from './UpdateCache';
 
-export async function statusBarClick(): Promise<void> {
-    // eslint-disable-next-line require-await
-    const fn0 = async (): Promise<void> => void UpdateCacheAsync(true);
+async function fn0(): Promise<void> {
+    const ed = await UpdateCacheAsync();
+    if (ed) {
+        const msg = `Update docFuncMap cash (${ed.timeSpend}ms)`;
+        console.log(msg);
+        void vscode.window.showInformationMessage(msg);
+    }
+}
 
+export async function statusBarClick(): Promise<void> {
     type TCommand = TPick<void>;
 
     const items: TCommand[] = [

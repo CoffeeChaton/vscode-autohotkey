@@ -68,7 +68,7 @@ export function activate(context: ExtensionContext): void {
         diagColl,
     );
     //
-    void UpdateCacheAsync(false); // not await
+    void UpdateCacheAsync(); // not await
 }
 
 // this method is called when your extension is deactivated

@@ -7,7 +7,6 @@ import {
     TTokenStream,
     TValMap,
 } from '../../globalEnum';
-import { ahkValRegex } from '../regexTools';
 
 export function getUnknownTextMap(
     ahkSymbol: TAhkSymbol,
@@ -22,9 +21,9 @@ export function getUnknownTextMap(
         if (line <= startLine) continue; // in arg Range
 
         // eslint-disable-next-line security/detect-unsafe-regex
-        for (const v of lStr.matchAll(/(?<!\.)\b(\w+)\b(?!\()/gu)) {
-            const keyRawName = v[1];
-            const wordUp = keyRawName.toLocaleUpperCase();
+        for (const v of lStr.matchAll(/(?<![.%`])\b(\w+)\b(?!\()/gu)) {
+            const keyRawName: string = v[1];
+            const wordUp: string = keyRawName.toLocaleUpperCase();
             if (ignoreSet.has(wordUp)) continue;
             if (!textMap.has(wordUp)) {
                 if (
@@ -38,14 +37,14 @@ export function getUnknownTextMap(
                 }
             }
 
-            const character = lStr.search(ahkValRegex(wordUp)); // need fix
+            const character: number | undefined = v?.index;
 
-            if (character === -1) {
+            if (character === undefined) {
                 void vscode.window.showErrorMessage(`getUnknownTextMap Error at line ${line} of ${ahkSymbol.name}()`);
                 continue;
             }
 
-            const range = new vscode.Range(
+            const range: vscode.Range = new vscode.Range(
                 new vscode.Position(line, character),
                 new vscode.Position(line, character + wordUp.length),
             );

@@ -10,6 +10,9 @@ export function varSetCapacityFunc({
     lineType,
     argMap,
 }: TGetFnDefNeed): void {
+    // eslint-disable-next-line no-magic-numbers
+    if (lStr.length < 15) return;
+    if (lStr.indexOf('(') === -1) return;
     // eslint-disable-next-line security/detect-unsafe-regex
     for (const v of lStr.matchAll(/(?<![.%`])\bVarSetCapacity\b\(\s*(\w+)\b/gui)) {
         const ch = v.index;

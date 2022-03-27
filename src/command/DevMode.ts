@@ -8,7 +8,7 @@ import { TDocFullData, TUpdateCacheAsyncReturn, UpdateCacheAsync } from './Updat
 const Data: number[] = [];
 
 async function devTestBase(): Promise<null> {
-    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync(false);
+    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync();
     if (ed === null) return null;
 
     Data.push(ed.timeSpend);
@@ -16,7 +16,7 @@ async function devTestBase(): Promise<null> {
 }
 
 async function devTestDA(): Promise<null> {
-    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync(false);
+    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync();
     if (ed === null) return null;
     const { timeSpend, DocFullData } = ed;
 

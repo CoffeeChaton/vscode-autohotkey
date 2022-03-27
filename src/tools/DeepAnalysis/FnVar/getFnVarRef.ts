@@ -9,7 +9,7 @@ import { newC502 } from './def/diag/c502';
 function getValRegMap(paramOrValMap: TParamOrValMap): Map<string, RegExp> {
     const regMap: Map<string, RegExp> = new Map<string, RegExp>();
 
-    for (const [valName] of paramOrValMap) {
+    for (const valName of paramOrValMap.keys()) {
         // eslint-disable-next-line security/detect-non-literal-regexp
         regMap.set(valName, new RegExp(`(?<![.\`])\\b(${valName})\\b(?!\\()`, 'igu'));
     }
@@ -63,9 +63,13 @@ export function getFnVarRef(
     const startLine = ahkSymbol.selectionRange.end.line;
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue;
-        if (lStr.trim() === '') continue;
+        const lStrTrim = lStr.trim();
+        if (lStrTrim === '') continue;
+        const lStrTrimLen = lStrTrim.length;
 
         for (const [valUpName, reg] of regMap) {
+            if (lStrTrimLen < valUpName.length) continue;
+
             for (const o of lStr.matchAll(reg)) {
                 getValRef({
                     o,

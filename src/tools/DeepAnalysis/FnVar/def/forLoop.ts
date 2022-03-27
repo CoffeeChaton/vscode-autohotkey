@@ -12,7 +12,7 @@ function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {
         valMap,
         lineType,
     } = arg;
-    const defRange = new vscode.Range(
+    const defRange: vscode.Range = new vscode.Range(
         new vscode.Position(line, character),
         new vscode.Position(line, character + RawName.length),
     );
@@ -34,7 +34,7 @@ function setV1(
 ): void {
     if (arg.argMap.has(v1.toUpperCase())) return;
 
-    const character = ch + v0.indexOf(v1, 3);
+    const character: number = ch + v0.indexOf(v1, 3);
     wrap(arg, character, v1);
 }
 
@@ -46,7 +46,7 @@ function setV2(
 ): void {
     if (arg.argMap.has(v2.toUpperCase())) return;
 
-    const character = ch + v0.lastIndexOf(v2);
+    const character: number = ch + v0.lastIndexOf(v2);
     wrap(arg, character, v2);
 }
 
@@ -55,8 +55,12 @@ export function forLoop(arg: TGetFnDefNeed): void {
     const {
         lStr,
     } = arg;
+
+    // eslint-disable-next-line no-magic-numbers
+    if (lStr.trim().length < 10) return; // for a in b ----> len 10
+
     // eslint-disable-next-line security/detect-unsafe-regex
-    for (const v of lStr.matchAll(/[\s^]For\s+(\w+)\s*,\s*(\w+)?\s+in\s/giu)) {
+    for (const v of lStr.matchAll(/(?:\s|^)\bFor\b\s+(\w+)\s*(?:,\s*(\w+))?\s+in\s/giu)) {
         const ch: number | undefined = v.index;
         if (ch === undefined) continue;
         const v0: string = v[0];

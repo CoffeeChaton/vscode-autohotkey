@@ -10,17 +10,20 @@ export function walrusOperator({
     lineType,
     argMap,
 }: TGetFnDefNeed): void {
-    // eslint-disable-next-line security/detect-unsafe-regex
-    for (const v of lStr.matchAll(/(?<![.`])\b(\w+)\b\s*:=/gui)) {
-        const ch = v.index;
-        if (ch === undefined) continue;
+    // eslint-disable-next-line no-magic-numbers
+    if (lStr.trim().length < 4) return; // A:= ----> len 3
+    if (lStr.indexOf(':=') === -1) return;
 
-        const RawName = v[1];
-        const UpName = RawName.toUpperCase();
+    // eslint-disable-next-line security/detect-unsafe-regex
+    for (const v of lStr.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gu)) {
+        const character: number | undefined = v.index;
+        if (character === undefined) continue;
+
+        const RawName: string = v[1];
+        const UpName: string = RawName.toUpperCase();
         if (argMap.has(UpName)) continue;
 
-        const character = ch;
-        const defRange = new vscode.Range(
+        const defRange: vscode.Range = new vscode.Range(
             new vscode.Position(line, character),
             new vscode.Position(line, character + RawName.length),
         );
