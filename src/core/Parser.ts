@@ -6,11 +6,11 @@ import { getCaseDefaultName, getSwitchName } from '../provider/SymbolProvider/ge
 import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
-import { getFuncDef } from '../tools/Func/getFuncDef';
+import { getFuncDef, TFuncDefData } from '../tools/Func/getFuncDef';
 import { getRange } from '../tools/range/getRange';
 import { getRangeCaseBlock } from '../tools/range/getRangeCaseBlock';
 import { getRangeOfLine } from '../tools/range/getRangeOfLine';
-import { FuncInputType, getChildren } from './getChildren';
+import { getChildren, TFuncInput } from './getChildren';
 import { ParserLine } from './ParserTools/ParserLine';
 
 function getFuncDetail(line: number, DocStrMap: TTokenStream): string {
@@ -22,9 +22,9 @@ function getFuncDetail(line: number, DocStrMap: TTokenStream): string {
 }
 
 export const ParserBlock = {
-    getCaseDefaultBlock(FuncInput: FuncInputType): false | TAhkSymbol {
+    getCaseDefaultBlock(FuncInput: TFuncInput): null | TAhkSymbol {
         const { lStr } = FuncInput;
-        if (lStr === '' || lStr.indexOf(':') === -1) return false;
+        if (lStr === '' || lStr.indexOf(':') === -1) return null;
         const {
             RangeEndLine,
             inClass,
@@ -32,8 +32,8 @@ export const ParserBlock = {
             DocStrMap,
         } = FuncInput;
 
-        const caseName = getCaseDefaultName(DocStrMap[line].textRaw, lStr);
-        if (caseName === false) return false;
+        const caseName: string | null = getCaseDefaultName(DocStrMap[line].textRaw, lStr);
+        if (caseName === null) return null;
 
         const Range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
         const Block: TAhkSymbol = new vscode.DocumentSymbol(
@@ -53,8 +53,8 @@ export const ParserBlock = {
         return Block;
     },
 
-    getSwitchBlock(FuncInput: FuncInputType): false | TAhkSymbol {
-        if (!(/^SWITCH$/ui).test(FuncInput.fistWord)) return false;
+    getSwitchBlock(FuncInput: TFuncInput): null | TAhkSymbol {
+        if (!(/^SWITCH$/ui).test(FuncInput.fistWord)) return null;
 
         const {
             DocStrMap,
@@ -83,7 +83,7 @@ export const ParserBlock = {
         return SwitchBlock;
     },
 
-    getFunc(FuncInput: FuncInputType): false | TAhkSymbol {
+    getFunc(FuncInput: TFuncInput): null | TAhkSymbol {
         const {
             DocStrMap,
             line,
@@ -92,9 +92,9 @@ export const ParserBlock = {
             lStr,
         } = FuncInput;
 
-        if (lStr.length < 1 || lStr.indexOf('(') === -1 || lStr.indexOf('}') > -1) return false;
-        const isFunc = getFuncDef(DocStrMap, line);
-        if (isFunc === false) return false;
+        if (lStr.length < 1 || lStr.indexOf('(') === -1 || lStr.indexOf('}') > -1) return null;
+        const isFunc: TFuncDefData | null = getFuncDef(DocStrMap, line);
+        if (isFunc === null) return null;
         const { name, selectionRange } = isFunc;
 
         const searchLine = selectionRange.end.line;
@@ -120,11 +120,11 @@ export const ParserBlock = {
         return funcSymbol;
     },
 
-    getClass(FuncInput: FuncInputType): false | TAhkSymbol {
-        if (!(/^CLASS$/ui).test(FuncInput.fistWord)) return false;
+    getClass(FuncInput: TFuncInput): null | TAhkSymbol {
+        if (!(/^CLASS$/ui).test(FuncInput.fistWord)) return null;
 
         const classExec = (/^\s*\bclass\b\s+(\w+)/ui).exec(FuncInput.lStr);
-        if (classExec === null) return false;
+        if (classExec === null) return null;
 
         const {
             DocStrMap,
@@ -159,10 +159,10 @@ export const ParserBlock = {
         return classSymbol;
     },
 
-    getComment(FuncInput: FuncInputType): false | TAhkSymbol {
+    getComment(FuncInput: TFuncInput): null | TAhkSymbol {
         const { textRaw } = FuncInput.DocStrMap[FuncInput.line];
         const doubleSemicolon = textRaw.indexOf(';;');
-        if (doubleSemicolon === -1) return false;
+        if (doubleSemicolon === -1) return null;
         const kind = vscode.SymbolKind.Package;
         const {
             DocStrMap,
@@ -179,9 +179,9 @@ export const ParserBlock = {
         }
 
         // { ;;
-        if (textRaw.indexOf('{') >= doubleSemicolon) return false;
+        if (textRaw.indexOf('{') >= doubleSemicolon) return null;
         const Comments = (/^\s*\{\s+;;/u).test(textRaw);
-        if (!Comments) return false;
+        if (!Comments) return null;
 
         const range = getRange(DocStrMap, line, line, RangeEndLine);
         const name = textRaw.substring(doubleSemicolon + 2).trimEnd();

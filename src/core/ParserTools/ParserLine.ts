@@ -4,9 +4,9 @@ import { DeepReadonly, TAhkSymbol } from '../../globalEnum';
 import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 // import { removeBigParentheses } from '../tools/removeBigParentheses';
 // import { removeParentheses } from '../tools/removeParentheses';
-import { FuncInputType } from '../getChildren';
+import { TFuncInput } from '../getChildren';
 
-type LineRulerType = DeepReadonly<{
+type TLineRuler = DeepReadonly<{
     detail: string;
     kind: vscode.SymbolKind;
     // regex?: RegExp,
@@ -14,7 +14,7 @@ type LineRulerType = DeepReadonly<{
     getName: (strTrim: string) => string | null;
 }>;
 
-const IncludeAgain: LineRulerType = {
+const IncludeAgain: TLineRuler = {
     detail: '#IncludeAgain',
     kind: vscode.SymbolKind.Event,
     getName(strTrim: string): string | null {
@@ -30,7 +30,7 @@ const IncludeAgain: LineRulerType = {
     },
 };
 
-const Include: LineRulerType = {
+const Include: TLineRuler = {
     detail: '#Include',
     kind: vscode.SymbolKind.Event,
     getName(strTrim: string): string | null {
@@ -46,7 +46,7 @@ const Include: LineRulerType = {
     },
 };
 
-const ahkLabel: LineRulerType = {
+const ahkLabel: TLineRuler = {
     detail: 'label',
     kind: vscode.SymbolKind.Package,
     getName(strTrim: string): string | null {
@@ -64,7 +64,7 @@ const ahkLabel: LineRulerType = {
     },
 };
 
-const HotString: LineRulerType = {
+const HotString: TLineRuler = {
     // HotStr
     detail: 'HotString',
     kind: vscode.SymbolKind.Event,
@@ -84,7 +84,7 @@ const HotString: LineRulerType = {
     },
 };
 
-const HotKeys: LineRulerType = {
+const HotKeys: TLineRuler = {
     detail: 'HotKeys',
     kind: vscode.SymbolKind.Event,
     getName(strTrim: string): string | null {
@@ -102,16 +102,16 @@ const HotKeys: LineRulerType = {
     },
 };
 
-export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
+export function ParserLine(FuncInput: TFuncInput): null | TAhkSymbol {
     const {
         DocStrMap,
         line,
         lStr,
     } = FuncInput;
     const strTrim = lStr.trim();
-    if (strTrim === '') return false;
+    if (strTrim === '') return null;
 
-    const LineRuler: LineRulerType[] = [
+    const LineRuler: TLineRuler[] = [
         IncludeAgain,
         Include,
         ahkLabel,
@@ -134,5 +134,5 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
             }
         }
     }
-    return false;
+    return null;
 }

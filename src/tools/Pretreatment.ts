@@ -1,7 +1,7 @@
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 
-import { DetailType, TAhkToken, TTokenStream } from '../globalEnum';
+import { EDetail, TAhkToken, TTokenStream } from '../globalEnum';
 import { inCommentBlock } from './str/inCommentBlock';
 import { inLTrimRange } from './str/inLTrimRange';
 import { getLStr, isSetVarTradition } from './str/removeSpecialChar';
@@ -35,7 +35,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
                 lStr: '',
                 deep,
                 textRaw,
-                detail: [DetailType.inComment],
+                detail: [EDetail.inComment],
                 line,
             });
             continue;
@@ -44,8 +44,8 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
         inLTrim = inLTrimRange(textRaw, inLTrim);
         if (inLTrim > 0) {
             const inLTrimLevel = inLTrim === 1
-                ? DetailType.inLTrim1
-                : DetailType.inLTrim2;
+                ? EDetail.inLTrim1
+                : EDetail.inLTrim2;
             result.push({
                 fistWord: '',
                 lStr: '',
@@ -63,23 +63,23 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
                 lStr: '',
                 deep,
                 textRaw,
-                detail: [DetailType.inSkipSign2],
+                detail: [EDetail.inSkipSign2],
                 line,
             });
             continue;
         }
         const lStr = getLStr(textRaw);
 
-        const detail: DetailType[] = [];
+        const detail: EDetail[] = [];
         if (!lStr.includes('::')) {
             // {$                     || ^{
             if ((/\{\s*$/u).test(lStr) || (/^\s*\{/u).test(lStr)) {
-                detail.push(DetailType.deepAdd);
+                detail.push(EDetail.deepAdd);
                 deep++;
             }
             // ^}
             if ((/^\s*\}/u).test(lStr)) {
-                detail.push(DetailType.deepSubtract);
+                detail.push(EDetail.deepSubtract);
                 deep--;
             }
         }

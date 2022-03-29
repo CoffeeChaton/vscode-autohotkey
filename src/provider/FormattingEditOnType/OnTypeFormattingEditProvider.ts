@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TFormatChannel } from '../../globalEnum';
+import { EFormatChannel } from '../../globalEnum';
 import { FormatCore } from '../Format/FormatProvider';
 
 async function chIsNextLine(
@@ -13,7 +13,7 @@ async function chIsNextLine(
         options,
         fmtStart: 0,
         fmtEnd: position.line - 1,
-        from: TFormatChannel.byFormatOnType,
+        from: EFormatChannel.byFormatOnType,
         needDiff: false,
     });
     if (!array) return [];

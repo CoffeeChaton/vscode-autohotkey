@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import {
-    DeepAnalysisResult,
     TArgAnalysis,
+    TDeepAnalysisMeta,
     TTextAnalysis,
     TValAnalysis,
 } from '../../globalEnum';
@@ -9,7 +9,7 @@ import { EPrefix, setMD } from '../../tools/MD/setMD';
 import { setPreFix } from '../../tools/str/setPreFix';
 
 export function DeepAnalysisHover(
-    DA: DeepAnalysisResult,
+    DA: TDeepAnalysisMeta,
     wordUp: string,
 ): vscode.MarkdownString | null {
     const {

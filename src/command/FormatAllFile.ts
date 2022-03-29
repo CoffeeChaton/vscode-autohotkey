@@ -1,7 +1,7 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [1,2,3,4,5,6,7,8] }] */
 
 import * as vscode from 'vscode';
-import { TFormatChannel, TPick } from '../globalEnum';
+import { EFormatChannel, TPick } from '../globalEnum';
 import { FormatCore } from '../provider/Format/FormatProvider';
 import { getUriList } from '../tools/fsTools/getUriList';
 
@@ -17,7 +17,7 @@ async function formatByPathAsync(
         options,
         fmtStart: 0,
         fmtEnd: document.lineCount - 1,
-        from: TFormatChannel.byFormatAllFile,
+        from: EFormatChannel.byFormatAllFile,
         needDiff: true,
     });
     if (!jestTest && edits) {

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { TAhkSymbol, TGValMap } from '../../globalEnum';
 import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
-import { FuncInputType } from '../getChildren';
+import { TFuncInput } from '../getChildren';
 import { setGlobalVar } from './setGlobalVar';
 
 function getSelectionRange(lStr: string, line: number, name: string): vscode.Range {
@@ -14,7 +14,7 @@ function getSelectionRange(lStr: string, line: number, name: string): vscode.Ran
     );
 }
 
-export function ahkGlobalDef(FuncInput: FuncInputType, gValMapBySelf: TGValMap): null | TAhkSymbol {
+export function ahkGlobalDef(FuncInput: TFuncInput, gValMapBySelf: TGValMap): null | TAhkSymbol {
     const {
         DocStrMap,
         line,

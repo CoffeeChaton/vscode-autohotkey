@@ -12,7 +12,7 @@ import { ahkInclude } from './ahkInclude';
 import { getValDefInFunc } from './getValDefInFunc';
 
 type TFnFindCol = (lineStr: string) => undefined | number;
-type DefObj = Readonly<{
+type TDefObj = Readonly<{
     document: vscode.TextDocument;
     position: vscode.Position;
     Mode: EMode;
@@ -54,7 +54,7 @@ async function ahkDef(
         refFn,
         timeStart,
         listAllUsing,
-    }: DefObj,
+    }: TDefObj,
 ): Promise<null | vscode.Location[]> {
     const data: TSymAndFsPath | null = tryGetSymbol(wordUp, Mode);
 

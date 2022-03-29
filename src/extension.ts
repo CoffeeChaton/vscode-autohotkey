@@ -25,10 +25,7 @@ import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/On
 import { HoverProvider } from './provider/Hover/HoverProvider';
 import { ReferenceProvider } from './provider/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
-import {
-    AhkFullSemanticHighlight,
-    legend,
-} from './provider/SemanticTokensProvider/SemanticTokensProvider';
+import { AhkFullSemanticHighlight, legend } from './provider/SemanticTokensProvider/SemanticTokensProvider';
 import { SymBolProvider } from './provider/SymbolProvider/SymbolProvider';
 import { OutputChannel } from './provider/vscWindows/OutputChannel';
 import { WorkspaceSymbolProvider } from './provider/WorkspaceSymbolProvider/WorkspaceSymbolProvider';

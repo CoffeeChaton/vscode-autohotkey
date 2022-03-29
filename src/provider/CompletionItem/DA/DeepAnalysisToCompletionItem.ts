@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { DeepAnalysisResult, TAhkSymbol, TSnippetRecMap } from '../../../globalEnum';
+import { TAhkSymbol, TDeepAnalysisMeta, TSnippetRecMap } from '../../../globalEnum';
 import { DeepAnalysis } from '../../../tools/DeepAnalysis/DeepAnalysis';
 import { kindPick } from '../../../tools/Func/kindPick';
 import { getFnOfPos } from '../../../tools/getScopeOfPos';
@@ -10,14 +10,14 @@ import { getValCompletion } from './completion/getValCompletion';
 import { getRecMap } from './rec/getRecMap';
 
 function suggest(
-    ed: DeepAnalysisResult,
+    DA: TDeepAnalysisMeta,
     ahkSymbol: TAhkSymbol,
     position: vscode.Position,
     inputStr: string,
 ): vscode.CompletionItem[] {
-    const { argMap, valMap, textMap } = ed;
+    const { argMap, valMap, textMap } = DA;
     const { name } = ahkSymbol;
-    const recMap: TSnippetRecMap = getRecMap(ed, ahkSymbol, position, inputStr);
+    const recMap: TSnippetRecMap = getRecMap(DA, ahkSymbol, position, inputStr);
 
     return [
         ...getParamCompletion(argMap, name, recMap),
@@ -39,7 +39,7 @@ export function DeepAnalysisToCompletionItem(
     const kindStr: 'Function' | 'Method' | null = kindPick(ahkSymbol.kind);
     if (!kindStr) return [];
 
-    const DA: null | DeepAnalysisResult = DeepAnalysis(document, ahkSymbol);
+    const DA: null | TDeepAnalysisMeta = DeepAnalysis(document, ahkSymbol);
     if (!DA) return [];
 
     return suggest(DA, ahkSymbol, position, inputStr);

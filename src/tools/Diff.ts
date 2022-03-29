@@ -3,13 +3,13 @@ import * as temp from 'temp';
 import * as vscode from 'vscode';
 import { EStr } from '../globalEnum';
 
-export type DiffType = {
+export type TDiff = {
     leftText: string;
     rightText: string;
     fileName: string; // path.basename(vscode.Uri.fsPath)
 };
 
-export async function callDiff({ leftText, rightText, fileName: basename }: DiffType): Promise<void> {
+export async function callDiff({ leftText, rightText, fileName: basename }: TDiff): Promise<void> {
     temp.track();
     const affixes: temp.AffixOptions = {
         prefix: EStr.diff_name_prefix,

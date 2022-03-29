@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
 import {
-    DeepAnalysisResult,
     TAhkSymbol,
+    TDeepAnalysisMeta,
     TSnippetRecMap,
 } from '../../../../globalEnum';
 import { setParaRec } from './setParaRec';
 import { getContextRange, setVarRec } from './setVarRec';
 
 export function getRecMap(
-    ed: DeepAnalysisResult,
+    ed: TDeepAnalysisMeta,
     ahkSymbol: TAhkSymbol,
     position: vscode.Position,
     inputStr: string,

@@ -39,8 +39,8 @@ export class CommandHandler {
     }
 
     public fnCallback(transId: string, response: TDbgpResponse): void {
-        const fun = this.commandCallback.get(transId);
-        if (fun) fun(response);
+        const fun: TFn | undefined = this.commandCallback.get(transId);
+        if (fun !== undefined) fun(response);
         this.commandCallback.delete(transId);
     }
 }

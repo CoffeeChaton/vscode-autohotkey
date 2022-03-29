@@ -12,7 +12,7 @@ export const enum EMode {
 }
 
 // vscode.SymbolKind
-// enum SymbolKind {
+// enum ESymbolKind {
 //     Class = 4,
 //     Method = 5,
 //     Function = 11,
@@ -31,7 +31,7 @@ export const enum EStr {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [P in keyof T]: DeepReadonly<T[P]> };
 
-export const enum DetailType {
+export const enum EDetail {
     inComment = 3,
     // inLTrim0 = 0,
     inLTrim1 = 1,
@@ -47,13 +47,13 @@ export type TAhkToken = {
     readonly lStr: string;
     readonly textRaw: string;
     readonly deep: number;
-    readonly detail: readonly DetailType[];
+    readonly detail: readonly EDetail[];
     readonly line: number;
     // I know this is not Complete and correct Token.
 }[];
 export type TTokenStream = DeepReadonly<TAhkToken>;
 export type TAhkSymbol = DeepReadonly<vscode.DocumentSymbol>;
-export type TAhkSymbolList = DeepReadonly<vscode.DocumentSymbol[]>;
+export type TAhkSymbolList = DeepReadonly<TAhkSymbol[]>;
 
 export type TSymAndFsPath = {
     AhkSymbol: TAhkSymbol;
@@ -68,7 +68,7 @@ export type TGlobalVal = {
 export type TValUpName = string;
 export type TGValMap = Map<TValUpName, TGlobalVal[]>;
 
-export const enum VERSION {
+export const enum EVersion {
     getValDefInFunc = '0.4beta',
     format = 'v0.5',
     formatRange = ' v0.4b',
@@ -137,7 +137,7 @@ export type TTextAnalysis = {
 };
 
 export type TTextMap = Map<string, TTextAnalysis>; // k = valNameUP
-export type DeepAnalysisResult = {
+export type TDeepAnalysisMeta = {
     argMap: TArgMap;
     valMap: TValMap;
     textMap: TTextMap;
@@ -175,7 +175,7 @@ export type TConfigs = DeepReadonly<TempConfigs>;
 
 // foo<T>(a: NonNullable<T>)
 
-export const enum TFormatChannel {
+export const enum EFormatChannel {
     byFormatAllFile = 'Format File',
     byFormatRange = 'Format Range',
     byFormatOnType = 'Format OnType',

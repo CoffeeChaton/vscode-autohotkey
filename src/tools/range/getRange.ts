@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
-import { DetailType, TTokenStream } from '../../globalEnum';
+import { EDetail, TTokenStream } from '../../globalEnum';
 
 function getSearchLineFix(DocStrMap: TTokenStream, searchLine: number, RangeEnd: number): number {
     for (let line = searchLine; line < RangeEnd; line++) {
-        if (DocStrMap[line].detail.includes(DetailType.deepAdd)) {
+        if (DocStrMap[line].detail.includes(EDetail.deepAdd)) {
             return line;
         }
     }

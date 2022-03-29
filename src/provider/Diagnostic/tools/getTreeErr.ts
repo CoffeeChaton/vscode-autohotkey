@@ -74,7 +74,7 @@ function getSwErr(sw: TAhkSymbol, displayErr: readonly boolean[]): vscode.Diagno
     ) {
         [setErrDefault, setErrCase, setErrSwNameNotFind].forEach((fn) => {
             const err: vscode.Diagnostic | null = fn(sw);
-            if (err) digS.push(err);
+            if (err !== null) digS.push(err);
         });
     }
     return digS;

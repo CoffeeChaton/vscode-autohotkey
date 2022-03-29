@@ -6,12 +6,12 @@ import * as vscode from 'vscode';
 import { getFormatConfig } from '../../configUI';
 import {
     DeepReadonly,
-    DetailType,
+    EDetail,
+    EFormatChannel,
     EStr,
-    TFormatChannel,
     TTokenStream,
 } from '../../globalEnum';
-import { callDiff, DiffType } from '../../tools/Diff';
+import { callDiff, TDiff } from '../../tools/Diff';
 import { Pretreatment } from '../../tools/Pretreatment';
 import { inLTrimRange } from '../../tools/str/inLTrimRange';
 import { lineReplace } from './fmtReplace';
@@ -43,7 +43,7 @@ function isReturn(tagDeep: number, deep: number, textFix: string): boolean {
     return (tagDeep === deep && (/^\s*return\s*$/iu).test(textFix));
 }
 
-type WarnUseType =
+type TWarnUse =
     & DeepReadonly<{
         DocStrMap: TTokenStream;
         textFix: string;
@@ -61,7 +61,7 @@ type WarnUseType =
         hasDiff: [boolean];
     };
 
-function wrap(args: WarnUseType, text: string): vscode.TextEdit {
+function wrap(args: TWarnUse, text: string): vscode.TextEdit {
     const {
         DocStrMap,
         textFix,
@@ -72,7 +72,7 @@ function wrap(args: WarnUseType, text: string): vscode.TextEdit {
     } = args;
     const { detail } = DocStrMap[line];
 
-    const CommentBlock: boolean = detail.includes(DetailType.inComment);
+    const CommentBlock: boolean = detail.includes(EDetail.inComment);
     const newText: string = getFormatConfig()
         ? lineReplace(text, textFix, CommentBlock, inLTrim)
         : text;
@@ -87,7 +87,7 @@ function wrap(args: WarnUseType, text: string): vscode.TextEdit {
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-function fn_Warn_thisLineText_WARN(args: WarnUseType): vscode.TextEdit {
+function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
     const {
         textFix,
         line,
@@ -146,7 +146,7 @@ type TFmtCoreArgs = {
     options: vscode.FormattingOptions;
     fmtStart: number;
     fmtEnd: number;
-    from: TFormatChannel;
+    from: EFormatChannel;
     needDiff: boolean;
 };
 
@@ -242,7 +242,7 @@ export function FormatCore(
         newTextList.forEach((v: vscode.TextEdit) => rTextList.push(v.newText));
 
         const rightText: string = rTextList.join('\n');
-        const diffVar: DiffType = {
+        const diffVar: TDiff = {
             leftText: AllDoc,
             rightText,
             fileName,
@@ -267,7 +267,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
             options,
             fmtStart: 0,
             fmtEnd: document.lineCount - 1,
-            from: TFormatChannel.byFormatAllFile,
+            from: EFormatChannel.byFormatAllFile,
             needDiff: true,
         });
     }

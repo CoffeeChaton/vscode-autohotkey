@@ -1,9 +1,9 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,5] }] */
 import * as vscode from 'vscode';
 import {
-    DeepAnalysisResult,
     TAhkSymbol,
     TArgAnalysis,
+    TDeepAnalysisMeta,
     TTextAnalysis,
     TValAnalysis,
 } from '../../globalEnum';
@@ -31,7 +31,7 @@ function wrapper(
     listAllUsing: boolean,
     position: vscode.Position,
 ): vscode.Range[] | null {
-    const DA: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
+    const DA: TDeepAnalysisMeta | null = DeepAnalysis(document, ahkSymbol);
     if (DA === null) return null;
 
     const {

@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import {
-    DeepAnalysisResult,
     EMode,
     TAhkSymbol,
+    TDeepAnalysisMeta,
     TSymAndFsPath,
 } from '../../globalEnum';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
@@ -42,7 +42,7 @@ export class HoverProvider implements vscode.HoverProvider {
         _token: vscode.CancellationToken,
     ): Promise<vscode.Hover | null> {
         const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
-        let DA: DeepAnalysisResult | null = null;
+        let DA: TDeepAnalysisMeta | null = null;
         if (ahkSymbol !== null) {
             DA = DeepAnalysis(document, ahkSymbol);
         }

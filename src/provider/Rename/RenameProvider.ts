@@ -1,9 +1,9 @@
 /* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
 import {
-    DeepAnalysisResult,
     TAhkSymbol,
     TArgAnalysis,
+    TDeepAnalysisMeta,
     TValAnalysis,
 } from '../../globalEnum';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
@@ -17,7 +17,7 @@ function DeepAnalysisRename(
     const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
     if (!ahkSymbol) return [];
 
-    const DA: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
+    const DA: TDeepAnalysisMeta | null = DeepAnalysis(document, ahkSymbol);
     if (!DA) return [];
 
     const argMeta: TArgAnalysis | undefined = DA.argMap.get(wordUp);

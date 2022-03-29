@@ -36,7 +36,7 @@ specifiers:
   eslint-plugin-node: ^11.1.0
   eslint-plugin-promise: ^6.0.0
   eslint-plugin-react: ^7.29.4
-  eslint-plugin-react-hooks: ^4.3.0
+  eslint-plugin-react-hooks: ^4.4.0
   eslint-plugin-security: ^1.4.0
   fs: 0.0.1-security
   get-port-please: ^2.4.3
@@ -81,7 +81,7 @@ devDependencies:
   esbuild: 0.14.28
   esbuild-copy-static-files: 0.1.0
   eslint: 8.12.0
-  eslint-config-airbnb: 19.0.4_a7e92bbfccc6de9942f84c56a18bfbe3
+  eslint-config-airbnb: 19.0.4_0e8add1558a5db1c8c27993badaaf9fd
   eslint-config-airbnb-base: 15.0.0_dae71b730d6620b67a20047a747b2eda
   eslint-config-airbnb-typescript: 16.1.4_1a3f98bf42a335fa5aa49fc0ce2fcb90
   eslint-config-sukka: 1.3.0
@@ -96,7 +96,7 @@ devDependencies:
   eslint-plugin-node: 11.1.0_eslint@8.12.0
   eslint-plugin-promise: 6.0.0_eslint@8.12.0
   eslint-plugin-react: 7.29.4_eslint@8.12.0
-  eslint-plugin-react-hooks: 4.3.0_eslint@8.12.0
+  eslint-plugin-react-hooks: 4.4.0_eslint@8.12.0
   eslint-plugin-security: 1.4.0
   fs: 0.0.1-security
   jest: 27.5.1_ts-node@10.7.0
@@ -1356,7 +1356,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001322
-      electron-to-chromium: 1.4.98
+      electron-to-chromium: 1.4.99
       escalade: 3.1.1
       node-releases: 2.0.2
       picocolors: 1.0.0
@@ -1674,8 +1674,8 @@ packages:
       readable-stream: 2.3.7
     dev: true
 
-  /electron-to-chromium/1.4.98:
-    resolution: {integrity: sha512-1IdsuSAnIGVxoYT1LkcUFb9MfjRxdHhCU9qiaDzhl1XvYgK9c8E2O9aJOPgGMQ68CSI8NxmLwrYhjvGauT8yuw==}
+  /electron-to-chromium/1.4.99:
+    resolution: {integrity: sha512-YXMzbvlo6pW12KWw0bj6cIGCJi1Moy8PLCuuzgRzg6WYIcHILK3szU+HHnHFx2b373qRv+cfmHhbmRbatyAbPA==}
     dev: true
 
   /emittery/0.8.1:
@@ -2015,7 +2015,7 @@ packages:
       eslint-plugin-import: 2.25.4_eslint@8.12.0
     dev: true
 
-  /eslint-config-airbnb/19.0.4_a7e92bbfccc6de9942f84c56a18bfbe3:
+  /eslint-config-airbnb/19.0.4_0e8add1558a5db1c8c27993badaaf9fd:
     resolution: {integrity: sha512-T75QYQVQX57jiNgpF9r1KegMICE94VYwoFQyMGhrvc+lB8YF2E/M/PYDaQe1AJcWaEgqLE+ErXV1Og/+6Vyzew==}
     engines: {node: ^10.12.0 || ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
@@ -2030,7 +2030,7 @@ packages:
       eslint-plugin-import: 2.25.4_eslint@8.12.0
       eslint-plugin-jsx-a11y: 6.5.1_eslint@8.12.0
       eslint-plugin-react: 7.29.4_eslint@8.12.0
-      eslint-plugin-react-hooks: 4.3.0_eslint@8.12.0
+      eslint-plugin-react-hooks: 4.4.0_eslint@8.12.0
       object.assign: 4.1.2
       object.entries: 1.1.5
     dev: true
@@ -2208,8 +2208,8 @@ packages:
       eslint: 8.12.0
     dev: true
 
-  /eslint-plugin-react-hooks/4.3.0_eslint@8.12.0:
-    resolution: {integrity: sha512-XslZy0LnMn+84NEG9jSGR6eGqaZB3133L8xewQo3fQagbQuGt7a63gf+P1NGKZavEYEC3UXaWEAA/AqDkuN6xA==}
+  /eslint-plugin-react-hooks/4.4.0_eslint@8.12.0:
+    resolution: {integrity: sha512-U3RVIfdzJaeKDQKEJbz5p3NW8/L80PCATJAfuojwbaEL+gBjfGdhUcGde+WGUW46Q5sr/NgxevsIiDtNXrvZaQ==}
     engines: {node: '>=10'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0

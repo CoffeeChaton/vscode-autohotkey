@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
-import { DetailType } from '../../../../globalEnum';
+import { EDetail } from '../../../../globalEnum';
 import { EDiagLine, TLineDiag } from './lineErrTools';
 
-export function assignErr(textRaw: string, detail: readonly DetailType[]): TLineDiag {
+export function assignErr(textRaw: string, detail: readonly EDetail[]): TLineDiag {
     // https://www.autohotkey.com/docs/commands/SetEnv.htm
-    if (!detail.includes(DetailType.inSkipSign2)) return EDiagLine.miss;
+    if (!detail.includes(EDetail.inSkipSign2)) return EDiagLine.miss;
 
     const colL = textRaw.indexOf('=');
     return {

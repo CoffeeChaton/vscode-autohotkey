@@ -3,13 +3,13 @@ import { TGlobalVal, TGValMap } from '../../globalEnum';
 import { ahkValRegex } from '../../tools/regexTools';
 import { removeBigParentheses } from '../../tools/str/removeBigParentheses';
 import { removeParentheses } from '../../tools/str/removeParentheses';
-import { FuncInputType } from '../getChildren';
+import { TFuncInput } from '../getChildren';
 
 function fnReplacer(match: string): string {
     return ' '.repeat(match.length);
 }
 
-export function setGlobalVar(FuncInput: FuncInputType, gValMapBySelf: TGValMap): string {
+export function setGlobalVar(FuncInput: TFuncInput, gValMapBySelf: TGValMap): string {
     const {
         DocStrMap,
         line,

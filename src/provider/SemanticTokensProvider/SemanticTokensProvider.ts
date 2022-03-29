@@ -4,10 +4,7 @@ import * as vscode from 'vscode';
 import { showTimeSpend } from '../../configUI';
 import { Detecter } from '../../core/Detecter';
 import { DAList2SemanticHighlightFull } from './DAList2SemanticHighlight';
-import {
-    TokenModifiers,
-    TokenTypes,
-} from './tools';
+import { TokenModifiers, TokenTypes } from './tools';
 // https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers
 
 export const legend = new vscode.SemanticTokensLegend(

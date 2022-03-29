@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TFormatChannel } from '../../globalEnum';
+import { EFormatChannel } from '../../globalEnum';
 import { FormatCore } from '../Format/FormatProvider';
 
 export class RangeFormatProvider implements vscode.DocumentRangeFormattingEditProvider {
@@ -15,7 +15,7 @@ export class RangeFormatProvider implements vscode.DocumentRangeFormattingEditPr
             options,
             fmtStart: range.start.line,
             fmtEnd: range.end.line,
-            from: TFormatChannel.byFormatRange,
+            from: EFormatChannel.byFormatRange,
             needDiff: true,
         });
     }

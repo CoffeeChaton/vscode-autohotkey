@@ -2,12 +2,12 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { diagColl } from '../core/diagRoot';
-import { DeepAnalysisResult, EDiagBase, TAhkSymbolList } from '../globalEnum';
+import { EDiagBase, TAhkSymbolList, TDeepAnalysisMeta } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { diagDAFile } from '../tools/DeepAnalysis/Diag/diagDA';
 
-function showOutputChannel(need: DeepAnalysisResult[], timeSpend: number): void {
+function showOutputChannel(need: TDeepAnalysisMeta[], timeSpend: number): void {
     let argMapSize = 0;
     let valMapSize = 0;
     let textMapSize = 0;
@@ -32,7 +32,7 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
     const t1 = Date.now();
     const allFsPath = Detecter.getDocMapFile(); // FIX
 
-    const need: DeepAnalysisResult[] = [];
+    const need: TDeepAnalysisMeta[] = [];
     for (const fsPath of allFsPath) {
         const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath);
         if (AhkSymbolList === undefined) continue;
@@ -41,7 +41,7 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
         // eslint-disable-next-line no-await-in-loop
         const document: vscode.TextDocument = await vscode.workspace.openTextDocument(Uri);
         for (const ahkSymbol of AhkSymbolList) {
-            const DA: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
+            const DA: TDeepAnalysisMeta | null = DeepAnalysis(document, ahkSymbol);
             if (DA !== null) need.push(DA);
         }
         const diagnostics = diagDAFile(AhkSymbolList, document);

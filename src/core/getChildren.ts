@@ -4,7 +4,7 @@ import {
     TTokenStream,
 } from '../globalEnum';
 
-export type FuncInputType = Readonly<{
+export type TFuncInput = Readonly<{
     fistWord: string;
     lStr: string;
     line: number;
@@ -13,11 +13,11 @@ export type FuncInputType = Readonly<{
     DocStrMap: TTokenStream;
 }>;
 
-export type FuncLimit = (FuncInput: FuncInputType) => false | TAhkSymbol;
+export type TFuncLimit = (FuncInput: TFuncInput) => null | TAhkSymbol;
 
 type ChildType = Readonly<{
     inClass: boolean;
-    fnList: FuncLimit[];
+    fnList: TFuncLimit[];
     RangeStartLine: number;
     RangeEndLine: number;
     DocStrMap: TTokenStream;
@@ -32,13 +32,13 @@ export function getChildren(child: ChildType): TAhkSymbolList {
         fnList,
     } = child;
 
-    const result = [];
+    const result: TAhkSymbol[] = [];
     let Resolved = -2;
     for (let line = RangeStartLine; line < RangeEndLine; line++) {
         if (line < Resolved) continue;
         const { lStr, fistWord } = DocStrMap[line];
         for (const fn of fnList) {
-            const DocumentSymbol: false | TAhkSymbol = fn({
+            const DocumentSymbol: null | TAhkSymbol = fn({
                 fistWord,
                 lStr,
                 DocStrMap,
@@ -46,7 +46,7 @@ export function getChildren(child: ChildType): TAhkSymbolList {
                 RangeEndLine,
                 inClass,
             });
-            if (DocumentSymbol !== false) {
+            if (DocumentSymbol !== null) {
                 result.push(DocumentSymbol);
                 Resolved = DocumentSymbol.range.end.line;
                 break;

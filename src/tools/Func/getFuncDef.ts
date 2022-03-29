@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 import { TTokenStream } from '../../globalEnum';
 
-export type FuncDefData = {
+export type TFuncDefData = {
     name: string;
     selectionRange: vscode.Range;
 };
 
-type FuncTailType = {
+type TFuncTailType = {
     DocStrMap: TTokenStream;
     searchText: string;
     name: string;
@@ -14,7 +14,7 @@ type FuncTailType = {
     defLine: number;
 };
 
-function getFuncDefData(DocStrMap: TTokenStream, defLine: number, searchLine: number, name: string): FuncDefData {
+function getFuncDefData(DocStrMap: TTokenStream, defLine: number, searchLine: number, name: string): TFuncDefData {
     // const argPos = Math.max(DocStrMap[defLine].lStr.indexOf('('), 0);
     const colS: number = DocStrMap[defLine].lStr.search(/\w/u);
     const colE: number = DocStrMap[searchLine].lStr.lastIndexOf(')');
@@ -34,7 +34,7 @@ function getFuncTail({
     name,
     searchLine,
     defLine,
-}: FuncTailType): null | FuncDefData {
+}: TFuncTailType): null | TFuncDefData {
     // i+1   ^, something , something ........ ) {$
     if ((/\)\s*\{\s*$/u).test(searchText)) {
         return getFuncDefData(DocStrMap, defLine, searchLine, name);
@@ -53,17 +53,17 @@ function getFuncTail({
     return null;
 }
 
-export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | FuncDefData {
-    if (defLine + 1 === DocStrMap.length) return false;
+export function getFuncDef(DocStrMap: TTokenStream, defLine: number): null | TFuncDefData {
+    if (defLine + 1 === DocStrMap.length) return null;
     const textFix: string = DocStrMap[defLine].lStr;
 
     const fnHead: RegExpMatchArray | null = textFix.match(/^\s*(\w+)\(/u); //  funcName(...
-    if (fnHead === null) return false;
+    if (fnHead === null) return null;
 
     const name: string = fnHead[1];
-    if ((/^(?:if|while)$/ui).test(name)) return false;
+    if ((/^(?:if|while)$/ui).test(name)) return null;
 
-    const funcData: FuncDefData | null = getFuncTail({
+    const funcData: TFuncDefData | null = getFuncTail({
         DocStrMap,
         searchText: textFix,
         name,
@@ -72,7 +72,7 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | Fu
     });
     if (funcData !== null) return funcData;
 
-    if (DocStrMap[defLine].lStr.includes(')')) return false; // fn_Name( ... ) ...  ,this is not ahk function
+    if (DocStrMap[defLine].lStr.includes(')')) return null; // fn_Name( ... ) ...  ,this is not ahk function
 
     // I don't think the definition of the function will exceed 15 lines.
     // eslint-disable-next-line no-magic-numbers
@@ -80,9 +80,9 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | Fu
     for (let searchLine = defLine + 1; searchLine < iMax; searchLine++) {
         const searchText: string = DocStrMap[searchLine].lStr;
 
-        if (!(/^\s*,/u).test(searchText)) return false;
+        if (!(/^\s*,/u).test(searchText)) return null;
 
-        const funcData2: FuncDefData | null = getFuncTail({
+        const funcData2: TFuncDefData | null = getFuncTail({
             DocStrMap,
             searchText,
             name,
@@ -91,5 +91,5 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): false | Fu
         });
         if (funcData2 !== null) return funcData2;
     }
-    return false;
+    return null;
 }

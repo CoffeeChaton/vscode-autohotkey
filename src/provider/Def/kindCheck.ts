@@ -6,7 +6,7 @@ import { EMode } from '../../globalEnum';
 //     ahkClass = 'Class',
 //     ahkMethod = 'Method',
 // }
-// enum SymbolKind {
+// enum ESymbolKind {
 //     Class = 4,
 //     Method = 5,
 //     Function = 11,

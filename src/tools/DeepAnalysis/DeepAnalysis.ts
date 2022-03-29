@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import {
-    DeepAnalysisResult,
     TAhkSymbol,
     TArgMap,
+    TDeepAnalysisMeta,
     TTextMap,
     TTokenStream,
     TValMap,
@@ -16,13 +16,13 @@ import { getParamMain } from './Param/getParam';
 
 // eslint-disable-next-line no-magic-numbers
 const hr2 = 2 * 60 * 60 * 1000;
-const wm = new ClassWm<TAhkSymbol, DeepAnalysisResult>(hr2, 'DeepAnalysis', 0);
+const wm = new ClassWm<TAhkSymbol, TDeepAnalysisMeta>(hr2, 'DeepAnalysis', 0);
 
-export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbol): null | DeepAnalysisResult {
+export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbol): null | TDeepAnalysisMeta {
     const kindStr: 'Function' | 'Method' | null = kindPick(ahkSymbol.kind);
     if (kindStr === null) return null;
 
-    const cache: undefined | DeepAnalysisResult = wm.getWm(ahkSymbol);
+    const cache: undefined | TDeepAnalysisMeta = wm.getWm(ahkSymbol);
     if (cache !== undefined) return cache;
 
     const DocStrMap: TTokenStream = Pretreatment(
@@ -33,7 +33,7 @@ export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbo
     const argMap: TArgMap = getParamMain(ahkSymbol, DocStrMap);
     const valMap: TValMap = getFnVarMain(ahkSymbol, DocStrMap, argMap);
     const textMap: TTextMap = getUnknownTextMap(ahkSymbol, DocStrMap, argMap, valMap);
-    const v: DeepAnalysisResult = {
+    const v: TDeepAnalysisMeta = {
         argMap,
         valMap,
         textMap,
