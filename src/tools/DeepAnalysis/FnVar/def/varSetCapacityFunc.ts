@@ -14,17 +14,16 @@ export function varSetCapacityFunc({
     if (lStr.length < 15) return;
     if (lStr.indexOf('(') === -1) return;
     // eslint-disable-next-line security/detect-unsafe-regex
-    for (const v of lStr.matchAll(/(?<![.%`])\bVarSetCapacity\b\(\s*(\w+)\b/gui)) {
-        const ch = v.index;
+    for (const v of lStr.matchAll(/(?<![.%`])\bVarSetCapacity\b\(\s*(\w+)\b(?!\()/gui)) {
+        const ch: number | undefined = v.index;
         if (ch === undefined) continue;
 
-        const RawName = v[1];
-        const UpName = RawName.toUpperCase();
+        const RawName: string = v[1];
+        const UpName: string = RawName.toUpperCase();
         if (argMap.has(UpName)) continue;
 
-        // eslint-disable-next-line no-magic-numbers
-        const character = ch + 15; // "VarSetCapacity(".len ===  15
-        const defRange = new vscode.Range(
+        const character: number = ch + v[0].search(RawName); // "VarSetCapacity(".len ===  15
+        const defRange: vscode.Range = new vscode.Range(
             new vscode.Position(line, character),
             new vscode.Position(line, character + RawName.length),
         );

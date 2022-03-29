@@ -9,11 +9,13 @@ export function paramVariadicErr(argMap: TArgMap, code504List: Set<vscode.Diagno
     for (const ArgAnalysis of argMap.values()) {
         const { isVariadic, defRangeList } = ArgAnalysis;
         if (isVariadic && (i !== rightIndex)) {
-            const range = defRangeList[0];
-            const severity = vscode.DiagnosticSeverity.Error;
-            const message: string = DiagsDA[EDiagCodeDA.code504].msg;
-            const diag: vscode.Diagnostic = setDiagnosticDA(EDiagCodeDA.code504, range, severity, [], message);
-            code504List.add(diag);
+            code504List.add(setDiagnosticDA(
+                EDiagCodeDA.code504,
+                defRangeList[0],
+                vscode.DiagnosticSeverity.Error,
+                [],
+                DiagsDA[EDiagCodeDA.code504].msg,
+            ));
         }
         i++;
     }

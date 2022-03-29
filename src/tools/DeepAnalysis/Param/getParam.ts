@@ -3,7 +3,7 @@ import {
     TArgMap,
     TTokenStream,
 } from '../../../globalEnum';
-import { getFnVarRef } from '../FnVar/getFnVarRef';
+import { getDARef } from '../FnVar/getFnVarRef';
 import { getParamDef } from './getParamDef';
 
 export function getParamMain(
@@ -11,7 +11,7 @@ export function getParamMain(
     DocStrMap: TTokenStream,
 ): TArgMap {
     const argMap: TArgMap = getParamDef(ahkSymbol, DocStrMap);
-    getFnVarRef(ahkSymbol, DocStrMap, argMap);
+    getDARef(ahkSymbol, DocStrMap, argMap);
 
     return argMap;
 }

@@ -1,8 +1,11 @@
 import {
-    TAhkSymbol, TArgMap, TTokenStream, TValMap,
+    TAhkSymbol,
+    TArgMap,
+    TTokenStream,
+    TValMap,
 } from '../../../globalEnum';
 import { getFnVarDef } from './getFnVarDef';
-import { getFnVarRef } from './getFnVarRef';
+import { getDARef } from './getFnVarRef';
 
 export function getFnVarMain(
     ahkSymbol: TAhkSymbol,
@@ -15,7 +18,7 @@ export function getFnVarMain(
         argMap,
     });
 
-    getFnVarRef(ahkSymbol, DocStrMap, valMap);
+    getDARef(ahkSymbol, DocStrMap, valMap);
 
     return valMap;
 }

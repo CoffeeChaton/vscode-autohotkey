@@ -11,11 +11,30 @@ function showOutputChannel(need: TDeepAnalysisMeta[], timeSpend: number): void {
     let argMapSize = 0;
     let valMapSize = 0;
     let textMapSize = 0;
+    const DEB = new Map<string, number>();
     need.forEach((ed) => {
         argMapSize += ed.argMap.size;
         valMapSize += ed.valMap.size;
         textMapSize += ed.textMap.size;
+        ed.textMap.forEach((v, k) => {
+            const oldNum = DEB.get(k) ?? 0;
+            DEB.set(k, oldNum + v.refRangeList.length);
+        });
     });
+
+    type TElement = {
+        k: string;
+        v: number;
+    };
+    const e5: TElement[] = [];
+    for (const [k, v] of DEB) {
+        // eslint-disable-next-line no-magic-numbers
+        if (v > 20) {
+            e5.push({ k, v });
+        }
+    }
+    DEB.clear();
+    e5.sort((a: TElement, b: TElement): number => b.v - a.v);
 
     OutputChannel.clear();
     OutputChannel.appendLine('Deep Analysis All Files');
@@ -25,6 +44,11 @@ function showOutputChannel(need: TDeepAnalysisMeta[], timeSpend: number): void {
     OutputChannel.appendLine(`textMapSize is ${textMapSize}`);
     OutputChannel.appendLine(`All Size is ${argMapSize + valMapSize + textMapSize}`);
     OutputChannel.appendLine(`Done in ${timeSpend} ms`);
+    OutputChannel.appendLine('------>>>------Word frequency statistics----->>>----->>>');
+    for (const { k, v } of e5) { //
+        OutputChannel.appendLine(`${k}: ${v}`);
+    }
+    e5.length = 0; //
     OutputChannel.show();
 }
 
@@ -64,8 +88,8 @@ my project:
 Deep Analysis All Files
 Deep Analysis : 809 Symbol <--keep 809!
 argMapSize is 2231 <--keep 2231!
-valMapSize is 2050
-textMapSize is 2999 <- next plan: ignore keyWord.
-All Size is 7280
+valMapSize is 2048
+textMapSize is 1074 <- next plan: ignore keyWord.
+All Size is 5353
 Done in 411 ms
 */

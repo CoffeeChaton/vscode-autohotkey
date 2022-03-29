@@ -2,8 +2,9 @@ import * as vscode from 'vscode';
 import { TGetFnDefNeed, TValAnalysis } from '../../../../globalEnum';
 import { wrapFnValDef } from './wrapFnValDef';
 
-// := the walrus operator
-export function walrusOperator({
+// NumGet(varName)
+// NumGet(&varName)
+export function NumGet({
     lStr,
     valMap,
     line,
@@ -11,19 +12,20 @@ export function walrusOperator({
     argMap,
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line no-magic-numbers
-    if (lStr.trim().length < 4) return; // A:= ----> len 3
-    if (lStr.indexOf(':=') === -1) return;
-
+    if (lStr.length < 7) return;
+    if (lStr.indexOf('(') === -1) return;
     // eslint-disable-next-line security/detect-unsafe-regex
-    for (const v of lStr.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gu)) {
-        const character: number | undefined = v.index;
-        if (character === undefined) continue;
+    for (const v of lStr.matchAll(/(?<![.%`])\bNumGet\b\(\s*(?:&)?(\w+)\b(?!\()/gui)) {
+        const ch = v.index;
+        if (ch === undefined) continue;
 
-        const RawName: string = v[1];
-        const UpName: string = RawName.toUpperCase();
+        const RawName = v[1];
+        const UpName = RawName.toUpperCase();
         if (argMap.has(UpName)) continue;
 
-        const defRange: vscode.Range = new vscode.Range(
+        // eslint-disable-next-line no-magic-numbers
+        const character = ch + v[0].search(RawName); // "NumGet(".len ===  7
+        const defRange = new vscode.Range(
             new vscode.Position(line, character),
             new vscode.Position(line, character + RawName.length),
         );
@@ -34,8 +36,6 @@ export function walrusOperator({
             defRange,
             lineType,
         });
-        valMap.set(UpName, value);
+        valMap.set(RawName.toUpperCase(), value);
     }
 }
-// Test OK     text := LT_bgColor_N := set_list := wait_time := Percentage := "Discard" ;clean
-// TODO .= += -=

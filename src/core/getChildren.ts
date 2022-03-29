@@ -33,9 +33,9 @@ export function getChildren(child: ChildType): TAhkSymbolList {
     } = child;
 
     const result: TAhkSymbol[] = [];
-    let Resolved = -2;
+    let Resolved = RangeStartLine; // <--------------------------------------------
     for (let line = RangeStartLine; line < RangeEndLine; line++) {
-        if (line < Resolved) continue;
+        if (line < Resolved) continue; // <------------------------------------
         const { lStr, fistWord } = DocStrMap[line];
         for (const fn of fnList) {
             const DocumentSymbol: null | TAhkSymbol = fn({
@@ -48,7 +48,7 @@ export function getChildren(child: ChildType): TAhkSymbolList {
             });
             if (DocumentSymbol !== null) {
                 result.push(DocumentSymbol);
-                Resolved = DocumentSymbol.range.end.line;
+                Resolved = DocumentSymbol.range.end.line; // <-----------------
                 break;
             }
         }

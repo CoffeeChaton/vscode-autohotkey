@@ -43,7 +43,6 @@ specifiers:
   jest: ^27.5.1
   micromatch: ^4.0.5
   temp: ^0.9.4
-  ts-debounce: ^4.0.0
   ts-jest: ^27.1.4
   ts-node: ^10.7.0
   typescript: ^4.6.3
@@ -59,7 +58,6 @@ dependencies:
   get-port-please: 2.4.3
   micromatch: 4.0.5
   temp: 0.9.4
-  ts-debounce: 4.0.0
   xml2js: 0.4.23
 
 devDependencies:
@@ -4420,10 +4418,6 @@ packages:
     resolution: {integrity: sha512-1m4RA7xVAJrSGrrXGs0L3YTwyvBs2S8PbRHaLZAkFw7JR8oIFwYtysxlBZhYIa7xSyiYJKZ3iGrrk55cGA3i9A==}
     engines: {node: '>=0.6'}
     dev: true
-
-  /ts-debounce/4.0.0:
-    resolution: {integrity: sha512-+1iDGY6NmOGidq7i7xZGA4cm8DAa6fqdYcvO5Z6yBevH++Bdo9Qt/mN0TzHUgcCcKv1gmh9+W5dHqz8pMWbCbg==}
-    dev: false
 
   /ts-jest/27.1.4_94813b11883b5a497b67fd7606667390:
     resolution: {integrity: sha512-qjkZlVPWVctAezwsOD1OPzbZ+k7zA5z3oxII4dGdZo5ggX/PL7kvwTM0pXTr10fAtbiVpJaL3bWd502zAhpgSQ==}

@@ -14,7 +14,30 @@ export function getUnknownTextMap(
     argMap: TArgMap,
     valMap: TValMap,
 ): TTextMap {
-    const ignoreSet = new Set<string>();
+    const ignoreSet = new Set<string>([
+        // DeepAnalysisAllFiles ->Word frequency statistics
+        'RETURN',
+        'IF',
+        'STATIC',
+        'ELSE',
+        'SLEEP',
+        'CASE',
+        'LOCAL',
+        'LOOP',
+        'GLOBAL',
+        'ListVars'.toUpperCase(),
+        'SEND',
+        'SWITCH',
+        'DEFAULT',
+        'IN',
+        'TRUE',
+        'FALSE',
+        'FOR',
+        'BREAK',
+        'CONTINUE',
+        'MOUSEMOVE',
+        'CLICK',
+    ]);
     const textMap: TTextMap = new Map<string, TTextAnalysis>();
     const startLine = ahkSymbol.selectionRange.end.line;
     for (const { lStr, line } of DocStrMap) {

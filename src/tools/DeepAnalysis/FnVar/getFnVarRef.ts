@@ -11,9 +11,9 @@ import { newC502 } from './def/diag/c502';
 function getValRegMap(paramOrValMap: TParamOrValMap): Map<string, RegExp> {
     const regMap: Map<string, RegExp> = new Map<string, RegExp>();
 
-    for (const valName of paramOrValMap.keys()) {
+    for (const valUpName of paramOrValMap.keys()) {
         // eslint-disable-next-line security/detect-non-literal-regexp
-        regMap.set(valName, new RegExp(`(?<![.\`])\\b(${valName})\\b(?!\\()`, 'igu'));
+        regMap.set(valUpName, new RegExp(`(?<![.\`])\\b(${valUpName})\\b(?!\\()`, 'igu'));
     }
     return regMap;
 }
@@ -42,21 +42,22 @@ function getValRef(param: TNeedSetRef, paramOrValMap: TParamOrValMap): void {
         return;
     }
 
-    const Range = new vscode.Range(
-        new vscode.Position(line, character),
+    const startPos: vscode.Position = new vscode.Position(line, character);
+    if (oldVal.defRangeList.some((defRange: vscode.Range): boolean => defRange.contains(startPos))) {
+        return;
+    }
+
+    const Range: vscode.Range = new vscode.Range(
+        startPos,
         new vscode.Position(line, character + newRawName.length),
     );
-    const { refRangeList, c502Array, defRangeList } = oldVal;
 
-    const isDef: boolean = defRangeList.some((defRange: vscode.Range): boolean => defRange.isEqual(Range));
-    if (isDef) return; // is Def
-
-    refRangeList.push(Range);
-    c502Array.push(newC502(oldVal.keyRawName, newRawName));
+    oldVal.refRangeList.push(Range);
+    oldVal.c502Array.push(newC502(oldVal.keyRawName, newRawName));
 }
 
 // eslint-disable-next-line max-params
-export function getFnVarRef(
+export function getDARef(
     ahkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
     paramOrValMap: TParamOrValMap,

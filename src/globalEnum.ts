@@ -97,9 +97,8 @@ export type TRunValType2 = Exclude<TRunValType, EValType.args>;
 export type TAhkValType = EValType.local | EValType.global | EValType.Static;
 
 /**
- * if keyRawName = first def name
- *  -> 0
- *  -> string
+ * if keyRawName = first def name -> 0
+ * ; else -> string
  */
 export type TC502New = (0 | string);
 export type TArgAnalysis = {

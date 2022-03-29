@@ -16,6 +16,7 @@ import {
 import { fnModeToValType } from '../../Func/fnModeToValType';
 import { getFnModeWM } from '../../Func/getFnMode';
 import { forLoop } from './def/forLoop';
+import { NumGet } from './def/NumGet';
 import { varSetCapacityFunc } from './def/varSetCapacityFunc';
 import { walrusOperator } from './def/walrusOperator';
 
@@ -68,6 +69,9 @@ export function getFnVarDef(
         walrusOperator(need); // :=
         varSetCapacityFunc(need); // VarSetCapacity(varName)
         forLoop(need); // for var1 , var2 in
+        NumGet(need); // NumGet(varName)
+        // TODO NumGet(VarOrAddress https://www.autohotkey.com/docs/commands/NumGet.htm
+        // or NumGet(&VarOrAddress
         // TODO just `global variableName`, but not :=
     }
 

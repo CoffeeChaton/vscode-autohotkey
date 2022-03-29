@@ -1,5 +1,3 @@
-/* eslint-disable security/detect-non-literal-regexp */
-/* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 import { getSnippetBlockFilesList } from '../../configUI';
 import { ahkSend } from './ahkSend';
@@ -11,35 +9,39 @@ import { snippetStartWihA } from './json/SnippetStartWihA';
 import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
 import { getStartWithStr } from './util';
 
+async function CompletionItemCore(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+): Promise<vscode.CompletionItem[]> {
+    const completions: vscode.CompletionItem[] = [
+        ...await wrapClass(document, position), // '.'
+        ...ahkSend(document, position), // '{'
+    ];
+
+    if (isNormalPos(document, position)) {
+        const filesBlockList: readonly string[] = getSnippetBlockFilesList();
+        const inputStr: string = getStartWithStr(document, position);
+        completions.push(
+            ...await listAllFuncClass(inputStr, filesBlockList),
+            ...DeepAnalysisToCompletionItem(document, position, inputStr),
+            ...snippetStartWihA(),
+            ...globalValCompletion(document, position, inputStr),
+        );
+    }
+    // TODO #Include list fsPath List && suggest never #include
+    // "./path"
+    return completions;
+}
 // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
 export class CompletionItemProvider implements vscode.CompletionItemProvider {
     // eslint-disable-next-line class-methods-use-this
-    public async provideCompletionItems(
+    public provideCompletionItems(
         document: vscode.TextDocument,
         position: vscode.Position,
         _token: vscode.CancellationToken,
         _context: vscode.CompletionContext,
-    ): Promise<null | vscode.CompletionItem[]> {
-        // TODO wrap vscode.CompletionItem
-        const filesBlockList: readonly string[] = getSnippetBlockFilesList();
-
-        const inputStr = getStartWithStr(document, position);
-        const completions: vscode.CompletionItem[] = [
-            ...await wrapClass(document, position), // '.'
-            ...ahkSend(document, position), // '{'
-        ];
-
-        if (isNormalPos(document, position)) {
-            completions.push(
-                ...await listAllFuncClass(inputStr, filesBlockList),
-                ...DeepAnalysisToCompletionItem(document, position, inputStr),
-                ...snippetStartWihA(),
-                ...globalValCompletion(document, position, inputStr),
-            );
-        }
-        // TODO #Include list fsPath List && suggest never #include
-        // "./path"
-        return completions;
+    ): vscode.ProviderResult<vscode.CompletionItem[]> {
+        return CompletionItemCore(document, position);
     }
 }
 

@@ -3,6 +3,7 @@ import { getCode502Default, getCode503Default } from '../../../configUI';
 import { TAhkSymbolList, TDeepAnalysisMeta } from '../../../globalEnum';
 import { DeepAnalysis } from '../DeepAnalysis';
 import { caseSensitivityVar } from './caseSensitivity';
+import { EPrefixC502 } from './caseSensitivityMagic';
 import { paramNeverUsed } from './param/paramNeverUsed';
 import { paramVariadicErr } from './param/paramVariadicErr';
 
@@ -20,10 +21,11 @@ export function diagDAFile(
     for (const ahkSymbol of AhkSymbolList) {
         const DA: TDeepAnalysisMeta | null = DeepAnalysis(document, ahkSymbol);
         if (DA !== null) {
-            paramNeverUsed(DA.argMap, code501List);
-            caseSensitivityVar('var', DA.valMap, code502List, code502Max); // var case sensitivity
-            caseSensitivityVar('param', DA.argMap, code503List, code503Max);
-            paramVariadicErr(DA.argMap, code504List);
+            const { argMap, valMap } = DA;
+            paramNeverUsed(argMap, code501List);
+            caseSensitivityVar(EPrefixC502.var, valMap, code502List, code502Max); // var case sensitivity
+            caseSensitivityVar(EPrefixC502.param, argMap, code503List, code503Max);
+            paramVariadicErr(argMap, code504List);
         }
     }
 
