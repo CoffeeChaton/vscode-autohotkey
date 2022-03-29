@@ -15,6 +15,7 @@ const filter = (src, _dest) => {
         '.vscode',
         'coverage',
         'image', // vscode plugin readme.md need https:// img now.
+        'jest.config.js',
         'node_modules',
         'out',
         'src',
@@ -22,6 +23,7 @@ const filter = (src, _dest) => {
     const file = [
         '.VSCodeCounter',
         '.cpuprofile',
+        '.cspell',
         '.editorconfig',
         '.eslintcache',
         '.eslintrc.json',

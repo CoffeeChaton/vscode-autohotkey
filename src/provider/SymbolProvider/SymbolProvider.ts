@@ -13,8 +13,8 @@ export class SymBolProvider implements vscode.DocumentSymbolProvider {
         const { uri } = document;
         const { AhkSymbolList } = Detecter.updateDocDef(document);
 
-        const otherDiag = (diagColl.get(uri) || [])
-            .filter((v) => v.source !== EDiagBase.sourceDA);
+        const otherDiag: vscode.Diagnostic[] = (diagColl.get(uri) || [])
+            .filter((v: vscode.Diagnostic): boolean => v.source !== EDiagBase.sourceDA);
         diagColl.set(uri, [...otherDiag, ...diagDAFile(AhkSymbolList, document)]);
 
         return AhkSymbolList as vscode.DocumentSymbol[];

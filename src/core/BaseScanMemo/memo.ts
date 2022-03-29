@@ -8,6 +8,7 @@ import {
     TTokenStream,
     TValUpName,
 } from '../../globalEnum';
+import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
 import { Pretreatment } from '../../tools/Pretreatment';
 import { hashCode } from '../../tools/str/hashCode';
 import { getChildren } from '../getChildren';
@@ -15,38 +16,30 @@ import { ParserBlock } from '../Parser';
 import { ParserLine } from '../ParserTools/ParserLine';
 
 type TFsPath = string; // vscode.uru.fsPath
-type TCache = {
+type TMemo = {
     hash: number;
     AhkSymbolList: TAhkSymbolList;
     gValMapBySelf: TGValMap;
     DocStrMap: TTokenStream;
+    baseDiag: vscode.Diagnostic[];
 };
 
-function cacheFix(fsPath: string, cache: Map<TFsPath, TCache[]>): void {
-    // if (cache.size > 5) {
-    //     cache.clear();
-    // }
+export const BaseScanMemo = {
+    memo: new Map<TFsPath, TMemo[]>(),
 
-    cache.forEach((value: TCache[], key: string): void => {
-        if (value.length === 1 || key === fsPath) {
-            return;
+    memoSizeFix(fsPath: TFsPath): TMemo[] {
+        const oldCache: TMemo[] | undefined = this.memo.get(fsPath);
+
+        for (const [key, value] of this.memo) {
+            if (value.length < 2 || key === fsPath) {
+                continue;
+            }
+            const tempVal: TMemo | undefined = value[value.length - 1]; // last
+            if (tempVal) {
+                value.length = 0;
+                value.push(tempVal);
+            }
         }
-        const tempVal = value.pop(); // last
-        if (tempVal) {
-            // eslint-disable-next-line no-param-reassign
-            value.length = 0;
-            value.push(tempVal);
-        }
-    });
-}
-
-export const BaseScanCache = {
-    cache: new Map<TFsPath, TCache[]>(),
-
-    cacheSizeAutoFix(fsPath: TFsPath): TCache[] {
-        const oldCache: TCache[] | undefined = this.cache.get(fsPath);
-
-        cacheFix(fsPath, this.cache);
 
         if (oldCache === undefined) return [];
 
@@ -55,33 +48,33 @@ export const BaseScanCache = {
             : oldCache;
     },
 
-    setCache(fsPath: TFsPath, AhkCache: TCache): void {
+    setMemo(fsPath: TFsPath, AhkCache: TMemo): void {
         if (!fsPath.endsWith('.ahk')) return;
 
-        const oldCache: TCache[] = this.cacheSizeAutoFix(fsPath);
+        const oldCache: TMemo[] = this.memoSizeFix(fsPath);
         oldCache.push(AhkCache);
-        this.cache.set(fsPath, oldCache);
+        this.memo.set(fsPath, oldCache);
     },
 
-    getCache(fsPath: TFsPath, hash: number): TCache | undefined {
-        return this.cache
+    getMemo(fsPath: TFsPath, hash: number): TMemo | undefined {
+        return this.memo
             .get(fsPath)
-            ?.find((v: TCache): boolean => v.hash === hash);
+            ?.find((v: TMemo): boolean => v.hash === hash);
     },
 
     clear(): void {
-        this.cache.clear();
+        this.memo.clear();
     },
 } as const;
 
 // vscode.window.activeTextEditor
 // vscode.window.visibleTextEditors
 
-export function getBaseData(document: vscode.TextDocument): TCache {
+export function getBaseData(document: vscode.TextDocument): TMemo {
     const fullText: string = document.getText().replaceAll(/\r/gu, '');
     const hash: number = hashCode(fullText);
     const { fsPath } = document.uri;
-    const oldCache: TCache | undefined = BaseScanCache.getCache(fsPath, hash);
+    const oldCache: TMemo | undefined = BaseScanMemo.getMemo(fsPath, hash);
     if (oldCache !== undefined) return oldCache;
 
     const gValMapBySelf: TGValMap = new Map<TValUpName, TGlobalVal[]>();
@@ -99,13 +92,14 @@ export function getBaseData(document: vscode.TextDocument): TCache {
             ParserLine,
         ],
     });
-
-    const AhkCache: TCache = {
+    const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
+    const AhkCache: TMemo = {
         hash,
         gValMapBySelf,
         DocStrMap,
         AhkSymbolList,
+        baseDiag,
     };
-    BaseScanCache.setCache(fsPath, AhkCache);
+    BaseScanMemo.setMemo(fsPath, AhkCache);
     return AhkCache;
 }

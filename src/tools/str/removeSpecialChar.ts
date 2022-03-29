@@ -7,7 +7,7 @@ export function isSetVarTradition(text: string): boolean {
     // a=
     // 01
     if (col0 < 1) return false;
-    if (t[col0 + 1] === '=') return false;
+    if (t[col0 + 1] === '=') return false; // ==
 
     switch (t[col0 - 1]) {
         case ':': // :=

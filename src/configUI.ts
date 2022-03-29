@@ -10,7 +10,7 @@ import { checkDebugFile } from './tools/fsTools/file';
 const id = 'ahk-neko-help';
 export const statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(
     id,
-    vscode.StatusBarAlignment.Left,
+    vscode.StatusBarAlignment.Right,
     0,
 );
 statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';

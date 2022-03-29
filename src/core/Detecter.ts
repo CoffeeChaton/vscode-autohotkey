@@ -6,9 +6,8 @@ import {
     TAhkSymbolList,
     TTokenStream,
 } from '../globalEnum';
-import { baseDiagnostic } from '../provider/Diagnostic/Diagnostic';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
-import { BaseScanCache, getBaseData } from './BaseScanCache/cache';
+import { BaseScanMemo, getBaseData } from './BaseScanMemo/memo';
 import { diagColl } from './diagRoot';
 import { globalValMap } from './Global';
 
@@ -26,7 +25,6 @@ export const Detecter = {
     DocMap: new Map<string, TAhkSymbolList>(),
 
     getDocMapFile(): string[] {
-        // FIXME: check file exit / or change
         const need: string[] = [];
         const keyList: string[] = [...Detecter.DocMap.keys()];
         for (const fsPath of keyList) {
@@ -42,9 +40,11 @@ export const Detecter = {
 
     getDocMap(fsPath: string): undefined | TAhkSymbolList {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
-        return fs.existsSync(fsPath)
-            ? Detecter.DocMap.get(fsPath)
-            : undefined;
+        if (fs.existsSync(fsPath)) {
+            return Detecter.DocMap.get(fsPath);
+        }
+        Detecter.DocMap.delete(fsPath);
+        return undefined;
     },
 
     delMap(e: vscode.FileDeleteEvent): void {
@@ -77,26 +77,24 @@ export const Detecter = {
         }
     },
 
-    // document: vscode.TextDocument
     updateDocDef(document: vscode.TextDocument): TUpdateDocDefReturn {
         const t0: number = Date.now();
         const { uri } = document;
         const { fsPath } = document.uri;
         globalValMap.delete(fsPath);
-        // const document: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
 
         const t1: number = Date.now();
         const {
             gValMapBySelf,
             DocStrMap,
             AhkSymbolList,
+            baseDiag,
         } = getBaseData(document);
 
         const t2: number = Date.now();
         if (fsPath.endsWith('.ahk') && !fsPath.includes(EStr.diff_name_prefix)) {
             Detecter.DocMap.set(fsPath, AhkSymbolList);
             globalValMap.set(fsPath, gValMapBySelf);
-            const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
             diagColl.set(uri, [...baseDiag]);
         }
 
@@ -113,7 +111,7 @@ export const Detecter = {
 export function delOldCache(uri: vscode.Uri): void {
     const { fsPath } = uri;
     Detecter.DocMap.delete(fsPath);
-    BaseScanCache.cache.delete(fsPath);
+    BaseScanMemo.memo.delete(fsPath);
     globalValMap.delete(fsPath);
     diagColl.delete(uri);
 }

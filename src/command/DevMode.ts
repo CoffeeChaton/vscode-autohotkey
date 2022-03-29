@@ -72,7 +72,7 @@ export async function pressureTest(): Promise<null> {
     } = pick;
 
     OutputChannel.appendLine('---------------------------------------------');
-    OutputChannel.appendLine('>> this is Dev tools ,open *vscode-js-profile-flame* to get .cpuprofile');
+    OutputChannel.appendLine('>> this is Dev tools, open "vscode-js-profile-flame" to get ".cpuprofile"');
     OutputChannel.appendLine(`   please wait of [${label}]`);
     OutputChannel.show();
 

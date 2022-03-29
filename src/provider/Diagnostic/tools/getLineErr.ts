@@ -17,12 +17,12 @@ function lineErrDiag(line: number, lineErr: TLineErr): vscode.Diagnostic {
         severity,
         tags,
     } = lineErr;
-    const range = new vscode.Range(line, colL, line, colR);
+    const range: vscode.Range = new vscode.Range(line, colL, line, colR);
     return setDiagnostic(value, range, severity, tags);
 }
 
 function getLineErrCore(lStr: string, fistWord: string): 0 | TLineErr {
-    const lStrTrim = lStr.trim();
+    const lStrTrim: string = lStr.trim();
     if (lStrTrim === '') return 0;
     type TFnLineErr = (lStr: string, lStrTrim: string, fistWord: string) => TLineDiag;
     const fnList: TFnLineErr[] = [getDirectivesErr, getLabelErr, getObjBaseErr, getCommandErr];

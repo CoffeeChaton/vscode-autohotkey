@@ -9,7 +9,7 @@ import {
 import { openDocs, statusBarClick } from './command/Command';
 import { UpdateCacheAsync } from './command/UpdateCache';
 import { configChangEvent, statusBarItem } from './configUI';
-import { BaseScanCache } from './core/BaseScanCache/cache';
+import { BaseScanMemo } from './core/BaseScanMemo/memo';
 import { Detecter } from './core/Detecter';
 import { diagColl } from './core/diagRoot';
 import { globalValMap } from './core/Global';
@@ -74,7 +74,7 @@ export function activate(context: ExtensionContext): void {
 // this method is called when your extension is deactivated
 export function deactive(): void {
     Detecter.DocMap.clear();
-    BaseScanCache.cache.clear();
+    BaseScanMemo.memo.clear();
     globalValMap.clear();
 }
 

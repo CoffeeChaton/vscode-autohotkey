@@ -1,3 +1,5 @@
+/* eslint-disable no-bitwise */
+/* eslint-disable no-mixed-operators */
 /* eslint-disable no-magic-numbers */
 /**
  * Returns a hash code for a string.
@@ -16,11 +18,9 @@
  */
 export function hashCode(str: string): number {
     let hash = 0;
-    const len = str.length;
-    for (let i = 0; i < len; i++) {
-        // eslint-disable-next-line no-bitwise
-        hash = Math.imul(31, hash) + str.charCodeAt(i) | 0;
+    let i = str.length;
+    while (i > 0) {
+        hash = (hash << 5) - hash + str.charCodeAt(--i) | 0;
     }
-
-    return hash;
+    return hash | 0;
 }

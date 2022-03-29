@@ -4,12 +4,13 @@ import { EDiagLine, TLineDiag } from './lineErrTools';
 
 export function getDirectivesErr(lStr: string, lStrTrim: string, _fistWord: string): TLineDiag {
     // err of #Directives
-    const exec = (/^#(\w+)/u).exec(lStrTrim);
-    if (exec === null) return EDiagLine.miss;
 
-    const Directives = exec[1];
-    const colL = lStr.indexOf(Directives);
-    const colR = colL + Directives.length;
+    const match: RegExpMatchArray | null = lStrTrim.match(/^#(\w+)/u);
+    if (match === null) return EDiagLine.miss;
+
+    const Directives: string = match[1];
+    const colL: number = lStr.indexOf(Directives);
+    const colR: number = colL + Directives.length;
     const severity = vscode.DiagnosticSeverity.Error;
 
     // change of ` https://www.autohotkey.com/docs/commands/_EscapeChar.htm

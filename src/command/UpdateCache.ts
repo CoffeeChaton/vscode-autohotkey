@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { BaseScanCache } from '../core/BaseScanCache/cache';
+import { BaseScanMemo } from '../core/BaseScanMemo/memo';
 import { Detecter, TUpdateDocDefReturn } from '../core/Detecter';
 import { globalValMap } from '../core/Global';
 import { getUriList } from '../tools/fsTools/getUriList';
@@ -18,7 +18,7 @@ export async function UpdateCacheAsync(): Promise<null | TUpdateCacheAsyncReturn
 
     Detecter.DocMap.clear();
     globalValMap.clear();
-    BaseScanCache.cache.clear();
+    BaseScanMemo.memo.clear();
 
     const uriList: vscode.Uri[] | null = getUriList();
     if (uriList === null) return null;

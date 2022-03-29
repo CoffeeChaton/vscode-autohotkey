@@ -46,33 +46,18 @@ const Include: LineRulerType = {
     },
 };
 
-const directive: LineRulerType = {
-    detail: 'directive',
-    kind: vscode.SymbolKind.Event,
-    getName(strTrim: string): string | null {
-        const e = (/^(#\w+)/u).exec(strTrim);
-        return e
-            ? e[1]
-            : null;
-    },
-
-    test(strTrim: string): boolean {
-        return (/^#/u).test(strTrim);
-    },
-};
-
 const ahkLabel: LineRulerType = {
     detail: 'label',
     kind: vscode.SymbolKind.Package,
     getName(strTrim: string): string | null {
-        const e = (/^(\w+:)/u).exec(strTrim);
+        const e: RegExpMatchArray | null = strTrim.match(/^(\w+:)/u);
         return e
             ? e[1]
             : null;
     },
 
     test(strTrim: string): boolean {
-        // if (strTrim.indexOf(':') < 1) return false;
+        if (strTrim.indexOf(':') < 1) return false;
         if (!strTrim.endsWith(':')) return false;
         // Generally, aside from whitespace and comments, no other code can be written on the same line as a label.
         return (/^\w+:$/u).test(strTrim);
@@ -84,15 +69,17 @@ const HotString: LineRulerType = {
     detail: 'HotString',
     kind: vscode.SymbolKind.Event,
     getName(strTrim: string): string | null {
-        const e = (/^(:[^:]*?:[^:]+::)/u).exec(strTrim);
+        const e: RegExpMatchArray | null = strTrim.match(/^(:[^:]*?:[^:]+::)/u);
         return e
             ? e[1]
             : null;
     },
 
     test(strTrim: string): boolean {
+        // https://www.autohotkey.com/docs/misc/Labels.htm#syntax-and-usage
         // HotString labels consist of a colon, zero or more options, another colon, an abbreviation and double-colon.
-        if (!strTrim.startsWith(':') && strTrim.indexOf('::') === -1) return false;
+        // if (!strTrim.startsWith(':')) return false;
+        if (strTrim.indexOf('::') === -1) return false;
         return (/^:[^:]*?:[^:]+::/u).test(strTrim);
     },
 };
@@ -109,6 +96,7 @@ const HotKeys: LineRulerType = {
 
     test(strTrim: string): boolean {
         // Hotkey labels consist of a hotkey followed by double-colon.
+        // if (strTrim.startsWith(':')) return false;
         if (strTrim.indexOf('::') === -1) return false;
         return (/^[^:]+::/u).test(strTrim);
     },
@@ -126,7 +114,6 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
     const LineRuler: LineRulerType[] = [
         IncludeAgain,
         Include,
-        directive,
         ahkLabel,
         HotString,
         HotKeys,

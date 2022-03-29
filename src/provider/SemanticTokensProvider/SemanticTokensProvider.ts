@@ -15,6 +15,7 @@ export const legend = new vscode.SemanticTokensLegend(
     TokenModifiers as unknown as string[],
 );
 
+// TODO wm AhkSymbolList -> SemanticTokens
 // core-------------------------------------
 function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticTokens {
     const { AhkSymbolList, t2, t1 } = Detecter.updateDocDef(document);
