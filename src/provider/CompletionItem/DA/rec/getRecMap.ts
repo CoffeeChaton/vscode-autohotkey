@@ -19,7 +19,7 @@ export function getRecMap(
     if (!ahkSymbol.selectionRange.contains(position)) {
         setParaRec(Rec, argMap, inputStr);
 
-        const contextRange = getContextRange(position, ahkSymbol); // +-5 line
+        const contextRange: vscode.Range = getContextRange(position, ahkSymbol); // +-5 line
         setVarRec(Rec, valMap, inputStr, contextRange);
     }
     return Rec;

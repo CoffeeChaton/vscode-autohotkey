@@ -19,11 +19,11 @@ function suggest(
     const { name } = ahkSymbol;
     const recMap: TSnippetRecMap = getRecMap(ed, ahkSymbol, position, inputStr);
 
-    const argCompletion = getParamCompletion(argMap, name, recMap);
-    const valCompletion = getValCompletion(valMap, name, recMap);
-    const textCompletion = getUnknownTextCompletion(textMap, name);
-
-    return [...argCompletion, ...valCompletion, ...textCompletion];
+    return [
+        ...getParamCompletion(argMap, name, recMap),
+        ...getValCompletion(valMap, name, recMap),
+        ...getUnknownTextCompletion(textMap, name),
+    ];
 }
 
 export function DeepAnalysisToCompletionItem(
@@ -36,7 +36,7 @@ export function DeepAnalysisToCompletionItem(
     const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
     if (!ahkSymbol) return [];
 
-    const kindStr = kindPick(ahkSymbol.kind);
+    const kindStr: 'Function' | 'Method' | null = kindPick(ahkSymbol.kind);
     if (!kindStr) return [];
 
     const DA: null | DeepAnalysisResult = DeepAnalysis(document, ahkSymbol);

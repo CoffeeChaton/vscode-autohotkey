@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import {
+    TArgAnalysis,
     TArgMap,
     TSnippetRecMap,
 } from '../../../../globalEnum';
@@ -12,7 +13,7 @@ export function getParamCompletion(
     recMap: TSnippetRecMap,
 ): vscode.CompletionItem[] {
     const need: vscode.CompletionItem[] = [];
-    argMap.forEach((v) => {
+    argMap.forEach((v: TArgAnalysis): void => {
         // dprint-ignore
         const {
             keyRawName, refRangeList, defRangeList, isByRef, isVariadic,

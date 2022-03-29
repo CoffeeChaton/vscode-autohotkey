@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import {
     TSnippetRecMap,
+    TValAnalysis,
     TValMap,
 } from '../../../../globalEnum';
 import { EPrefix } from '../../../../tools/MD/setMD';
@@ -12,7 +13,7 @@ export function getValCompletion(
     recMap: TSnippetRecMap,
 ): vscode.CompletionItem[] {
     const need: vscode.CompletionItem[] = [];
-    valMap.forEach((v) => {
+    valMap.forEach((v: TValAnalysis): void => {
         const {
             keyRawName,
             refRangeList,

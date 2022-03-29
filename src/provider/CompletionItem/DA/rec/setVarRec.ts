@@ -12,8 +12,8 @@ export function getContextRange(position: vscode.Position, ahkSymbol: TAhkSymbol
         up = 5,
         down = 5,
     }
-    const startLine = Math.max(position.line - ERecLine.up, ahkSymbol.range.start.line);
-    const endLine = Math.min(position.line + ERecLine.down, ahkSymbol.range.end.line);
+    const startLine: number = Math.max(position.line - ERecLine.up, ahkSymbol.range.start.line);
+    const endLine: number = Math.min(position.line + ERecLine.down, ahkSymbol.range.end.line);
 
     return new vscode.Range(startLine, 0, endLine, 0);
 }
@@ -27,13 +27,13 @@ export function setVarRec(Rec: TSnippetRecMap, valMap: TValMap, inputStr: string
             continue;
         }
 
-        const defNear = defRangeList.find((range) => contextRange.contains(range));
+        const defNear: vscode.Range | undefined = defRangeList.find((range) => contextRange.contains(range));
         if (defNear) {
             Rec.set(keyRawName, ESnippetRecBecause.varDefNear);
             continue;
         }
 
-        const refNear = refRangeList.find((range) => contextRange.contains(range));
+        const refNear: vscode.Range | undefined = refRangeList.find((range) => contextRange.contains(range));
         if (refNear) {
             Rec.set(keyRawName, ESnippetRecBecause.varRefNear);
         }

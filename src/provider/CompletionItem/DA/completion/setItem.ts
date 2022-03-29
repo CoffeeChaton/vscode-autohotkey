@@ -32,7 +32,7 @@ export function setItemCore(
         description: funcName,
     };
 
-    const item = new vscode.CompletionItem(label);
+    const item: vscode.CompletionItem = new vscode.CompletionItem(label);
     item.kind = kind; // vscode.CompletionItemKind.Variable;
     item.insertText = keyRawName;
     item.detail = `${prefix} (neko-help-DeepAnalysis)`;
