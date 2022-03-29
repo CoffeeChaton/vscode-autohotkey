@@ -1,6 +1,12 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,5] }] */
 import * as vscode from 'vscode';
-import { DeepAnalysisResult, TAhkSymbol } from '../../globalEnum';
+import {
+    DeepAnalysisResult,
+    TAhkSymbol,
+    TArgAnalysis,
+    TTextAnalysis,
+    TValAnalysis,
+} from '../../globalEnum';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import { enumErr } from '../../tools/enumErr';
 import { kindPick } from '../../tools/Func/kindPick';
@@ -24,26 +30,26 @@ function wrapper(
     wordUp: string,
     listAllUsing: boolean,
     position: vscode.Position,
-): vscode.Range[] {
+): vscode.Range[] | null {
     const DA: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
-    if (DA === null) return [];
+    if (DA === null) return null;
 
     const {
         argMap,
         valMap,
         textMap,
     } = DA;
-    const argList = argMap.get(wordUp);
-    if (argList) {
-        const { defRangeList, refRangeList } = argList;
+    const argMeta: TArgAnalysis | undefined = argMap.get(wordUp);
+    if (argMeta !== undefined) {
+        const { defRangeList, refRangeList } = argMeta;
         return listAllUsing
             ? [...defRangeList, ...refRangeList]
             : defRangeList;
     }
 
-    const valList = valMap.get(wordUp);
-    if (valList) {
-        const { defRangeList, refRangeList } = valList;
+    const valMeta: TValAnalysis | undefined = valMap.get(wordUp);
+    if (valMeta !== undefined) {
+        const { defRangeList, refRangeList } = valMeta;
         if (listAllUsing) return [...defRangeList, ...refRangeList];
 
         if (defRangeList[0].contains(position)) {
@@ -59,10 +65,10 @@ function wrapper(
         return defRangeList;
     }
 
-    const textList = textMap.get(wordUp);
+    const textList: TTextAnalysis | undefined = textMap.get(wordUp);
     return textList
         ? textList.refRangeList
-        : [];
+        : null;
 }
 
 function match(
@@ -94,8 +100,8 @@ export function getValDefInFunc(
     wordUp: string,
     listAllUsing: boolean,
 ): null | vscode.Location[] {
-    const ahkSymbol = getFnOfPos(document, position);
-    if (!ahkSymbol) return null;
+    const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
+    if (ahkSymbol === null) return null;
     if (!kindPick(ahkSymbol.kind)) return null;
 
     const rangeList: vscode.Range[] | null = match(ahkSymbol, document, position, wordUp, listAllUsing);

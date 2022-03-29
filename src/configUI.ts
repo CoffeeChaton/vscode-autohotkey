@@ -17,33 +17,39 @@ statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
 statusBarItem.command = 'ahk.bar.click';
 let Configs: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration('AhkNekoHelp');
 
+function getConfigs<T>(section: string): T {
+    const ed: T | undefined = Configs.get<T>(section);
+    if (ed !== undefined) return ed;
+    throw new Error(`${section}, not found err code--40--11--33-- at configUI.ts`);
+}
+
 function getConfig(): TConfigs {
     const ed: TConfigs = {
         statusBar: {
-            displayColor: Configs.get('statusBar.displayColor') as string,
+            displayColor: getConfigs<string>('statusBar.displayColor'),
         },
         format: {
-            textReplace: Configs.get('format.textReplace') as boolean,
+            textReplace: getConfigs<boolean>('format.textReplace'),
         },
         lint: {
-            funcSize: Configs.get('lint.funcSize') as number,
+            funcSize: getConfigs<number>('lint.funcSize'),
         },
         baseScan: {
-            IgnoredList: Configs.get('baseScan.IgnoredList') as readonly string[],
+            IgnoredList: getConfigs<readonly string[]>('baseScan.IgnoredList'),
         },
         Debug: {
-            executePath: Configs.get('Debug.executePath') as string,
+            executePath: getConfigs<string>('Debug.executePath'),
         },
         snippets: {
-            blockFilesList: Configs.get('snippets.blockFilesList') as readonly string[],
+            blockFilesList: getConfigs<readonly string[]>('snippets.blockFilesList'),
         },
         Diag: {
             WarningCap: {
-                code502: Configs.get('Diag.WarningCap.code502') as number ?? 3, // of var
-                code503: Configs.get('Diag.WarningCap.code503') as number ?? 3, // of param
+                code502: getConfigs<number>('Diag.WarningCap.code502'), // of var
+                code503: getConfigs<number>('Diag.WarningCap.code503'), // of param
             },
         },
-        openUriStr: Configs.get('open.Documents.Uri') as string,
+        openUriStr: getConfigs<string>('open.Documents.Uri'),
         // TODO CompletionIgnore
     } as const;
 

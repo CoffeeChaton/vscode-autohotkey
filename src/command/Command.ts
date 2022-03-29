@@ -6,11 +6,11 @@ import { pressureTest } from './DevMode';
 import { FormatAllFile } from './FormatAllFile';
 import { ListAllFunc, ListAllFuncSort } from './ListAllFunc';
 import { ListAllInclude } from './ListAllInclude';
-import { UpdateCacheAsync } from './UpdateCache';
+import { TUpdateCacheAsyncReturn, UpdateCacheAsync } from './UpdateCache';
 
 async function fn0(): Promise<void> {
-    const ed = await UpdateCacheAsync();
-    if (ed) {
+    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync();
+    if (ed !== null) {
         const msg = `Update docFuncMap cash (${ed.timeSpend}ms)`;
         console.log(msg);
         void vscode.window.showInformationMessage(msg);

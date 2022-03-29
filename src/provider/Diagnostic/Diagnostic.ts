@@ -18,8 +18,8 @@ export function baseDiagnostic(
     DocStrMap: TTokenStream,
     AhkSymbolList: TAhkSymbolList,
 ): vscode.Diagnostic[] {
-    const cache = wm.getWm(DocStrMap);
-    if (cache) return cache;
+    const cache: vscode.Diagnostic[] | undefined = wm.getWm(DocStrMap);
+    if (cache !== undefined) return cache;
 
     // const timeStart: number = Date.now();
 
@@ -37,11 +37,11 @@ export function baseDiagnostic(
         IgnoreLine = getIgnore(DocStrMap[line].textRaw, line, IgnoreLine);
 
         displayErr.push(true);
-        const err = getLineErr(DocStrMap, line);
+        const err: vscode.Diagnostic | null = getLineErr(DocStrMap, line);
         if (err !== null) lineDiagS.push(err);
     }
 
-    const diagList = [
+    const diagList: vscode.Diagnostic[] = [
         ...lineDiagS,
         ...getTreeErr(AhkSymbolList, displayErr),
         ...getFuncErr(DocStrMap, AhkSymbolList, displayErr),

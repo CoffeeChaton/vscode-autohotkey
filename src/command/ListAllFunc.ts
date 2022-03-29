@@ -3,15 +3,15 @@ import { Detecter } from '../core/Detecter';
 import { TAhkSymbolList } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 
-function getFnNameLineCol(text: string, fsPath: string, start: vscode.Position): string {
-    const line = start.line + 1;
-    const column = start.character + 1;
-    return `${text} ;${fsPath}:${line}:${column}`;
+function getFnNameLineCol(text: string, fsPath: string, startPos: vscode.Position): string {
+    const line: number = startPos.line + 1;
+    const col: number = startPos.character + 1;
+    return `${text} ;${fsPath}:${line}:${col}`;
 }
 
 export function ListAllFunc(showLink: boolean): null {
-    const t1 = Date.now();
-    const allFsPath = Detecter.getDocMapFile();
+    const t1: number = Date.now();
+    const allFsPath: string[] = Detecter.getDocMapFile();
 
     const AllList: string[] = ['[neko-help] List All Function()'];
     for (const fsPath of allFsPath) {
@@ -42,8 +42,8 @@ export function ListAllFunc(showLink: boolean): null {
 }
 
 export function ListAllFuncSort(reverse: boolean): null {
-    const t1 = Date.now();
-    const allFsPath = Detecter.getDocMapFile();
+    const t1: number = Date.now();
+    const allFsPath: string[] = Detecter.getDocMapFile();
 
     const AllList: string[] = [];
     for (const fsPath of allFsPath) {

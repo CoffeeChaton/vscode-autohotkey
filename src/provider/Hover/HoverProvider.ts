@@ -1,4 +1,3 @@
-/* eslint-disable security/detect-non-literal-regexp */
 import * as vscode from 'vscode';
 import {
     DeepAnalysisResult,
@@ -18,8 +17,9 @@ import { DeepAnalysisHover } from './DeepAnalysisHover';
 const wm = new ClassWm<TAhkSymbol, vscode.Hover>(10 * 60 * 1000, 'HoverFunc', 60);
 
 async function HoverFunc(wordUp: string, textRaw: string): Promise<null | vscode.Hover> {
-    const isFunc = new RegExp(`(?<![.%\`])(${wordUp})\\(`, 'iu'); // not search class.Method()
-    if (!isFunc.test(textRaw)) return null;
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    const testOfFunc = new RegExp(`(?<![.%\`])(${wordUp})\\(`, 'iu'); // not search class.Method()
+    if (!testOfFunc.test(textRaw)) return null;
 
     const data: null | TSymAndFsPath = tryGetSymbol(wordUp, EMode.ahkFunc);
     if (data === null) return null;
@@ -28,8 +28,8 @@ async function HoverFunc(wordUp: string, textRaw: string): Promise<null | vscode
     const cache: vscode.Hover | undefined = wm.getWm(AhkSymbol);
     if (cache !== undefined) return cache;
 
-    const md = await getFuncDocMD(AhkSymbol, fsPath);
-    const hover = new vscode.Hover(md);
+    const md: vscode.MarkdownString = await getFuncDocMD(AhkSymbol, fsPath);
+    const hover: vscode.Hover = new vscode.Hover(md);
 
     return wm.setWm(AhkSymbol, hover);
 }
@@ -43,27 +43,27 @@ export class HoverProvider implements vscode.HoverProvider {
     ): Promise<vscode.Hover | null> {
         const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
         let DA: DeepAnalysisResult | null = null;
-        if (ahkSymbol) {
+        if (ahkSymbol !== null) {
             DA = DeepAnalysis(document, ahkSymbol);
         }
         // eslint-disable-next-line security/detect-unsafe-regex
-        const range = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
+        const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
         if (range === undefined) return null;
 
         if (isPosAtStr(document, position)) return null;
 
-        const wordUp = document.getText(range).toUpperCase();
-        const textRaw = document.lineAt(position).text;
-        const isFunc = await HoverFunc(wordUp, textRaw);
-        if (isFunc) return isFunc;
+        const wordUp: string = document.getText(range).toUpperCase();
+        const textRaw: string = document.lineAt(position).text;
+        const haveFunc: vscode.Hover | null = await HoverFunc(wordUp, textRaw);
+        if (haveFunc !== null) return haveFunc;
 
         // TODO https://www.autohotkey.com/docs/commands/index.htm
         // const commands = getCommandsHover(document, position);
-        // if (commands) return commands;
+        // if (commands !== null) return commands;
 
-        if (DA) {
-            const md = DeepAnalysisHover(DA, wordUp);
-            if (md) return new vscode.Hover(md);
+        if (DA !== null) {
+            const md: vscode.MarkdownString | null = DeepAnalysisHover(DA, wordUp);
+            if (md !== null) return new vscode.Hover(md);
         }
 
         return null;

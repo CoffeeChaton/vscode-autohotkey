@@ -28,13 +28,13 @@ export function setVarRec(Rec: TSnippetRecMap, valMap: TValMap, inputStr: string
         }
 
         const defNear: vscode.Range | undefined = defRangeList.find((range) => contextRange.contains(range));
-        if (defNear) {
+        if (defNear !== undefined) {
             Rec.set(keyRawName, ESnippetRecBecause.varDefNear);
             continue;
         }
 
         const refNear: vscode.Range | undefined = refRangeList.find((range) => contextRange.contains(range));
-        if (refNear) {
+        if (refNear !== undefined) {
             Rec.set(keyRawName, ESnippetRecBecause.varRefNear);
         }
     }

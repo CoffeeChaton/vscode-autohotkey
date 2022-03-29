@@ -9,7 +9,7 @@ function provideWorkspaceSymbolsCore(): vscode.SymbolInformation[] {
 
     for (const fsPath of fsPathList) {
         const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath);
-        if (AhkSymbolList) {
+        if (AhkSymbolList !== undefined) {
             result.push(...DocSymbol2SymbolInfo(fsPath, AhkSymbolList));
         }
     }

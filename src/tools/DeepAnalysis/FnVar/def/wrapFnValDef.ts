@@ -20,13 +20,13 @@ export function wrapFnValDef({
     defRange,
 }: TGetValue): TValAnalysis {
     const oldVal: TValAnalysis | undefined = valMap.get(RawNameNew.toUpperCase());
-    if (oldVal) {
+    if (oldVal !== undefined) {
         oldVal.c502Array.push(newC502(oldVal.keyRawName, RawNameNew));
         oldVal.defRangeList.push(defRange);
         return oldVal;
     }
 
-    const ahkValType = lineType;
+    const ahkValType: TAhkValType = lineType;
     return {
         keyRawName: RawNameNew,
         defRangeList: [defRange],

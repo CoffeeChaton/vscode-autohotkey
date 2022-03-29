@@ -15,17 +15,17 @@ export class ReferenceProvider implements vscode.ReferenceProvider {
         if (isPosAtStr(document, position)) return null;
 
         // eslint-disable-next-line security/detect-unsafe-regex
-        const range = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/ui);
+        const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/ui);
         if (!range) return null;
-        const wordUp = document.getText(range).toUpperCase();
+        const wordUp: string = document.getText(range).toUpperCase();
         // TODO class.Method, this.classVar,GoSub, GoTo, ahk Built-in func
 
         const listAllUsing = true;
         const userDefLink: vscode.Location[] | null = await userDefTopSymbol(document, position, wordUp, listAllUsing);
-        if (userDefLink) return userDefLink;
+        if (userDefLink !== null) return userDefLink;
 
         const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
-        if (valInFunc) return valInFunc;
+        if (valInFunc !== null) return valInFunc;
         return null;
     }
 }

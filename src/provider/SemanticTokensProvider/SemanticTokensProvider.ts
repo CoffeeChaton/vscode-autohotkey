@@ -11,8 +11,8 @@ import {
 // https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers
 
 export const legend = new vscode.SemanticTokensLegend(
-    TokenTypes as unknown as string[],
-    TokenModifiers as unknown as string[],
+    [...TokenTypes],
+    [...TokenModifiers],
 );
 
 // TODO wm AhkSymbolList -> SemanticTokens

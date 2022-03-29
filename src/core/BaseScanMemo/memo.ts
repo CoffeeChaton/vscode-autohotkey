@@ -35,7 +35,7 @@ export const BaseScanMemo = {
                 continue;
             }
             const tempVal: TMemo | undefined = value[value.length - 1]; // last
-            if (tempVal) {
+            if (tempVal !== undefined) {
                 value.length = 0;
                 value.push(tempVal);
             }

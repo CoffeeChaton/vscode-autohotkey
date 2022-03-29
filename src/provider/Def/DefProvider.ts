@@ -55,10 +55,10 @@ async function ahkDef(
         timeStart,
         listAllUsing,
     }: DefObj,
-): Promise<false | vscode.Location[]> {
+): Promise<null | vscode.Location[]> {
     const data: TSymAndFsPath | null = tryGetSymbol(wordUp, Mode);
 
-    if (data === null) return false;
+    if (data === null) return null;
     const { AhkSymbol, fsPath } = data;
 
     if (
@@ -96,20 +96,20 @@ export async function userDefTopSymbol(
         },
         Mode: EMode.ahkFunc,
     };
-    const ahkGlobal: TRule = {
-        refFn: (lineStr: string): number | undefined => {
-            // var_name
-            // eslint-disable-next-line security/detect-non-literal-regexp
-            const reg = new RegExp(`(?<![.\`%])\\b(${wordUp})\\b`, 'iu');
-            return lineStr.match(reg)?.index;
-        },
-        Mode: EMode.ahkGlobal,
-    };
+    // const ahkGlobal: TRule = {
+    //     refFn: (lineStr: string): number | undefined => {
+    //         // var_name
+    //         // eslint-disable-next-line security/detect-non-literal-regexp
+    //         const reg = new RegExp(`(?<![.\`%])\\b(${wordUp})\\b`, 'iu');
+    //         return lineStr.match(reg)?.index;
+    //     },
+    //     Mode: EMode.ahkGlobal,
+    // };
 
-    const matchList: DeepReadonly<TRule[]> = [func, ahkGlobal];
+    const matchList: DeepReadonly<TRule[]> = [func];
     for (const rule of matchList) {
         const { Mode, refFn } = rule;
-        const Location = await ahkDef({
+        const Location: vscode.Location[] | null = await ahkDef({
             document,
             position,
             Mode,
@@ -118,7 +118,7 @@ export async function userDefTopSymbol(
             timeStart,
             listAllUsing,
         });
-        if (Location) return Location;
+        if (Location !== null) return Location;
     }
     return null;
 }
@@ -137,19 +137,19 @@ export class DefProvider implements vscode.DefinitionProvider {
         // if (isPosAtStr(document, position)) return null;
 
         // eslint-disable-next-line security/detect-unsafe-regex
-        const range = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
-        if (!range) return null;
-        const wordUp = document.getText(range).toUpperCase();
-        const fileLink = ahkInclude(document, position);
-        if (fileLink) return fileLink;
+        const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
+        if (range === undefined) return null;
+        const wordUp: string = document.getText(range).toUpperCase();
+        const fileLink: vscode.Location | null = ahkInclude(document, position);
+        if (fileLink !== null) return fileLink;
 
         const listAllUsing = false;
 
-        const userDefLink = await userDefTopSymbol(document, position, wordUp, listAllUsing);
-        if (userDefLink) return userDefLink;
+        const userDefLink: vscode.Location[] | null = await userDefTopSymbol(document, position, wordUp, listAllUsing);
+        if (userDefLink !== null) return userDefLink;
 
-        const valInFunc = getValDefInFunc(document, position, wordUp, listAllUsing);
-        if (valInFunc) return valInFunc;
+        const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
+        if (valInFunc !== null) return valInFunc;
 
         return null;
     }

@@ -187,7 +187,7 @@ export function getCommandErr(lStr: string, _lStrTrim: string, fistWord: string)
     }
     //  _commandHeadStatistics()
     const fnReplaceErr: TLineDiag = getCommandErrFnReplace(fistWord, lStr);
-    if (fnReplaceErr) {
+    if (fnReplaceErr !== EDiagLine.miss) {
         return fnReplaceErr;
     }
     if ((/^LOOP$/ui).test(fistWord)) {

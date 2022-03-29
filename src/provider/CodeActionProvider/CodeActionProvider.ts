@@ -8,19 +8,19 @@ function getFsPath(diag: vscode.Diagnostic): string | null {
     const code = diag?.code;
     if (code === undefined || typeof code === 'string' || typeof code === 'number') return null;
 
-    const d = code.value as EDiagCode;
-    const path = Diags[d]?.path;
-    if (path) {
+    const d: EDiagCode = code.value as EDiagCode;
+    const path: string | undefined = Diags[d]?.path;
+    if (path !== undefined) {
         return path;
     }
     return null;
 }
 
 function setEdit(uri: vscode.Uri, line: number, FsPath: string): vscode.WorkspaceEdit {
-    const position = new vscode.Position(line, 0);
-    const Today = new Date();
+    const position: vscode.Position = new vscode.Position(line, 0);
+    const Today: Date = new Date();
     const newText = `${EDiagBase.ignore} 1 line; at ${Today.toLocaleString()} ; ${FsPath}\n`;
-    const edit = new vscode.WorkspaceEdit();
+    const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
     edit.insert(uri, position, newText);
     return edit;
 }
@@ -29,7 +29,7 @@ function setIgnore(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.Code
     const FsPath: string | null = getFsPath(diag);
     if (FsPath === null) return null;
 
-    const CA = new vscode.CodeAction('ignore line');
+    const CA: vscode.CodeAction = new vscode.CodeAction('ignore line');
     CA.edit = setEdit(uri, diag.range.start.line, FsPath);
     CA.kind = vscode.CodeActionKind.QuickFix;
     //  CA.diagnostics = [diag];
@@ -54,8 +54,8 @@ function CodeActionCore(uri: vscode.Uri, diagnostics: readonly vscode.Diagnostic
     const CAList: vscode.CodeAction[] = [];
     for (const diag of diagnostics) {
         if (diag.source === EDiagBase.source) {
-            const CA = setIgnore(uri, diag);
-            if (CA) CAList.push(CA);
+            const CA: vscode.CodeAction | null = setIgnore(uri, diag);
+            if (CA !== null) CAList.push(CA);
         } else if (diag.source === EDiagBase.sourceDA) {
             CAList.push(...codeActionOfDA(uri, diag));
         }

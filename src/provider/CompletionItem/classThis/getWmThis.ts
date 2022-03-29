@@ -4,9 +4,9 @@ import { Pretreatment } from '../../../tools/Pretreatment';
 import { ClassWm } from '../../../tools/wm';
 
 async function getWmThisCore({ AhkSymbol, fsPath }: TSymAndFsPath): Promise<vscode.CompletionItem[]> {
-    const document = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
+    const document: vscode.TextDocument = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
     const mapStrNumber = new Map<string, number>(); // : Map<string, number>
-    const lineBase = AhkSymbol.range.start.line;
+    const lineBase: number = AhkSymbol.range.start.line;
     Pretreatment(document.getText(AhkSymbol.range).split('\n'), lineBase)
         .forEach((v, index) => {
             [...v.lStr.matchAll(/\bthis\.(\w\w+)\b/gui)]
@@ -16,7 +16,7 @@ async function getWmThisCore({ AhkSymbol, fsPath }: TSymAndFsPath): Promise<vsco
         });
 
     const itemS: vscode.CompletionItem[] = [];
-    mapStrNumber.forEach((value, label) => {
+    mapStrNumber.forEach((value: number, label: string): void => {
         const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Value);
         item.detail = 'neko help : useDefClass';
         item.documentation = new vscode.MarkdownString(AhkSymbol.name, true)
@@ -32,9 +32,9 @@ const wm = new ClassWm<TAhkSymbol, vscode.CompletionItem[]>(10 * 60 * 1000, 'get
 
 export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionItem[]> {
     const { AhkSymbol: ahkSymbol, fsPath } = c0;
-    const cache = wm.getWm(ahkSymbol);
-    if (cache) return cache;
+    const cache: vscode.CompletionItem[] | undefined = wm.getWm(ahkSymbol);
+    if (cache !== undefined) return cache;
 
-    const v = await getWmThisCore({ AhkSymbol: ahkSymbol, fsPath });
+    const v: vscode.CompletionItem[] = await getWmThisCore({ AhkSymbol: ahkSymbol, fsPath });
     return wm.setWm(ahkSymbol, v);
 }

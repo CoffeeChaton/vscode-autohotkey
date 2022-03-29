@@ -5,16 +5,17 @@ import { docCommentBlock, EDocBlock } from '../str/inCommentBlock';
 import { ClassWm } from '../wm';
 
 function getReturnText(lStr: string, textRaw: string): string {
-    const col = lStr.search(/\breturn\b[\s,]+.+/ui);
+    const col: number = lStr.search(/\breturn\b[\s,]+.+/ui);
     if (col === -1) return '';
 
-    let name = textRaw.substring(col).trim();
-    const Func = (/^(\w+)\(/u).exec(name);
-    if (Func) {
+    let name: string = textRaw.substring(col).trim();
+
+    const Func: RegExpMatchArray | null = name.match(/^(\w+)\(/u);
+    if (Func !== null) {
         name = `${Func[1]}(...)`;
     } else if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
-        const returnObj = (/^(\{\s*\w+\s*:)/u).exec(name);
-        if (returnObj) name = `obj ${returnObj[1]}`;
+        const returnObj: RegExpMatchArray | null = name.match(/^(\{\s*\w+\s*:)/u);
+        if (returnObj !== null) name = `obj ${returnObj[1]}`;
     }
     return `    ${name.trim()}\n`;
 }
@@ -23,18 +24,18 @@ function getFuncDocCore(
     AhkSymbol: TAhkSymbol,
     document: vscode.TextDocument,
 ): vscode.MarkdownString {
-    let flag = EDocBlock.other;
+    let flag: EDocBlock = EDocBlock.other;
     const fnDocList: string[] = [];
     let returnList = '';
-    const startLineBaseZero = AhkSymbol.range.start.line;
+    const startLineBaseZero: number = AhkSymbol.range.start.line;
     const DocStrMap: TTokenStream = Pretreatment(document.getText(AhkSymbol.range).split('\n'), startLineBaseZero);
     const starLine = 0;
-    const endLine = DocStrMap.length;
-    for (let line = starLine; line < endLine; line++) {
-        const { textRaw } = DocStrMap[line];
+    const endLine: number = DocStrMap.length;
+    for (let i = starLine; i < endLine; i++) {
+        const { textRaw } = DocStrMap[i];
         flag = docCommentBlock(textRaw, flag);
         if (flag === EDocBlock.inDocCommentBlockMid) {
-            const lineDoc = textRaw.trimStart().substring(1);
+            const lineDoc: string = textRaw.trimStart().substring(1);
             fnDocList.push(
                 lineDoc.trim() === ''
                     ? '\n'
@@ -42,7 +43,7 @@ function getFuncDocCore(
             );
             continue;
         }
-        returnList += getReturnText(DocStrMap[line].lStr, DocStrMap[line].textRaw);
+        returnList += getReturnText(DocStrMap[i].lStr, DocStrMap[i].textRaw);
     }
 
     const kindDetail = `(${EMode.ahkFunc}) ${AhkSymbol.detail}\n`;
@@ -66,8 +67,8 @@ export async function getFuncDocMD(AhkSymbol: TAhkSymbol, fsPath: string): Promi
     if (AhkSymbol.kind !== vscode.SymbolKind.Function && AhkSymbol.kind !== vscode.SymbolKind.Method) {
         return new vscode.MarkdownString('just support Function/Method hover now', true);
     }
-    const cache = wm.getWm(AhkSymbol);
-    if (cache) return cache;
+    const cache: vscode.MarkdownString | undefined = wm.getWm(AhkSymbol);
+    if (cache !== undefined) return cache;
 
     const document: vscode.TextDocument = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
 

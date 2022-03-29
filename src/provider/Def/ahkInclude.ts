@@ -13,20 +13,22 @@ import * as vscode from 'vscode';
 //              A_Startup,A_StartupCommon, A_Temp, A_UserName ,A_WinDir
 //              A_UserName, A_WinDir
 
-export function ahkInclude(document: vscode.TextDocument, position: vscode.Position): false | vscode.Location {
+export function ahkInclude(document: vscode.TextDocument, position: vscode.Position): null | vscode.Location {
     // at #include line
-    const includeExec = (/^\s*#include(?:again)?\s*(?:\*i )?\s*(\S+\.ahk)\s*$/ui).exec(document.lineAt(position).text);
-    if (includeExec === null) return false; //               includeExec[1]
+    const includeExec: RegExpExecArray | null = (/^\s*#include(?:again)?\s*(?:\*i )?\s*(\S+\.ahk)\s*$/ui).exec(
+        document.lineAt(position).text,
+    );
+    if (includeExec === null) return null; //               includeExec[1]
 
-    const length = Math.max(document.uri.path.lastIndexOf('/'), document.uri.path.lastIndexOf('\\'));
-    if (length <= 0) return false;
-    const lPath = path.dirname(document.uri.fsPath);
-    const rPath = includeExec[1].replace(/%A_Space%/ug, ' ').replace(/%A_Tab%/ug, '\t');
+    const length: number = Math.max(document.uri.path.lastIndexOf('/'), document.uri.path.lastIndexOf('\\'));
+    if (length <= 0) return null;
+    const lPath: string = path.dirname(document.uri.fsPath);
+    const rPath: string = includeExec[1].replace(/%A_Space%/ug, ' ').replace(/%A_Tab%/ug, '\t');
     if ((/%A_\w+%/u).test(rPath)) {
         // 'ahkInclude ~ neko-help not support of %A_ScriptDir% or Similar syntax');
-        return false;
+        return null;
     }
     const pathFix = `${lPath}\\${rPath}`;
-    const uri = vscode.Uri.file(pathFix);
+    const uri: vscode.Uri = vscode.Uri.file(pathFix);
     return new vscode.Location(uri, new vscode.Position(0, 0));
 }

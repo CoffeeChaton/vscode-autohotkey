@@ -19,20 +19,20 @@ export function DeepAnalysisHover(
         textMap,
     } = DA;
 
-    const arg: TArgAnalysis | undefined = argMap.get(wordUp);
-    if (arg) {
+    const argMeta: TArgAnalysis | undefined = argMap.get(wordUp);
+    if (argMeta !== undefined) {
         const {
             isByRef,
             isVariadic,
             refRangeList,
             defRangeList,
-        } = arg;
+        } = argMeta;
         const prefix = setPreFix(isByRef, isVariadic);
         return setMD(prefix, refRangeList, defRangeList, funcRawName, '');
     }
 
     const value: TValAnalysis | undefined = valMap.get(wordUp);
-    if (value) {
+    if (value !== undefined) {
         const {
             refRangeList,
             defRangeList,
@@ -43,7 +43,7 @@ export function DeepAnalysisHover(
     }
 
     const unKnownText: TTextAnalysis | undefined = textMap.get(wordUp);
-    if (unKnownText) {
+    if (unKnownText !== undefined) {
         const { refRangeList } = unKnownText;
         const prefix = EPrefix.unKnownText;
         return setMD(prefix, refRangeList, [], funcRawName, '');

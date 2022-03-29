@@ -8,14 +8,14 @@ import { ClassWm } from '../../tools/wm';
 import { pushToken, TSemanticTokensLeaf } from './tools';
 
 // eslint-disable-next-line no-magic-numbers
-const wm = new ClassWm<DeepAnalysisResult, TSemanticTokensLeaf[]>(10 * 60 * 1000, 'DA2SemanticHighlight', 70000);
+const wm = new ClassWm<DeepAnalysisResult, TSemanticTokensLeaf[]>(10 * 60 * 1000, 'DA2SemanticHighlight', 0);
 
 // core -------------------------------
 function DA2SemanticHighlight(
     DA: DeepAnalysisResult,
 ): TSemanticTokensLeaf[] {
     const cache: TSemanticTokensLeaf[] | undefined = wm.getWm(DA);
-    if (cache) return cache;
+    if (cache !== undefined) return cache;
 
     const Tokens: TSemanticTokensLeaf[] = [];
     const { argMap, valMap } = DA;

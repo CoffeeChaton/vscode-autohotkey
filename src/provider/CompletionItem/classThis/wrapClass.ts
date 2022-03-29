@@ -157,8 +157,8 @@ function valTrack(
         const col = lStr.search(reg);
         if (col === -1) continue;
         const strPart = lStr.substring(col + Head.length, lStr.length).replace(/^\s*:=\s*/u, '');
-        const name0 = matchClassName({ ChapterArr, strPart, ahkBaseObj });
-        if (name0) classNameList.add(name0);
+        const name0: string | null = matchClassName({ ChapterArr, strPart, ahkBaseObj });
+        if (name0 !== null) classNameList.add(name0);
     }
 
     return [...classNameList];
@@ -180,8 +180,8 @@ async function triggerClassCore(
     const nameList = valTrack(document, position, ChapterArr, ahkBaseObj);
     for (const name of nameList) {
         const testName = new RegExp(`^${name}$`, 'ui');
-        const c0 = getUserDefClassSymbol(testName);
-        if (c0) {
+        const c0: TSymAndFsPath | null = getUserDefClassSymbol(testName);
+        if (c0 !== null) {
             const ahkThis = ChapterArr.length === 1
                 ? await getWmThis(c0)
                 : [];
@@ -212,8 +212,8 @@ async function triggerClass(
     }
 
     const testName0 = new RegExp(`^${Head}$`, 'ui');
-    const c0 = getUserDefClassSymbol(testName0); // static class / val / Method
-    if (c0) {
+    const c0: TSymAndFsPath | null = getUserDefClassSymbol(testName0); // static class / val / Method
+    if (c0 !== null) {
         const { fsPath } = document.uri;
         const ahkThis = ChapterArr.length === 1
             ? await getWmThis(c0)

@@ -13,12 +13,12 @@ export function setDiagCaseMsg(firstName: string, defPos: vscode.Position, c502N
     return `${prefix} "${c502Name}" is the some variable as "${firstName}" defined earlier (at ${defPosStr})`;
 }
 
-export type TParseDiagCaseMsg = {
+export type TParseDiagCaseMsg = Readonly<{
     defStr: string;
     defRange: vscode.Range;
     refStr: string;
     refRange: vscode.Range;
-};
+}>;
 
 export function ParseDiagCaseMsg(diag: vscode.Diagnostic): TParseDiagCaseMsg {
     const { message } = diag;
@@ -51,5 +51,5 @@ export function ParseDiagCaseMsg(diag: vscode.Diagnostic): TParseDiagCaseMsg {
         refStr,
         defRange,
         refRange,
-    } as const;
+    };
 }

@@ -122,8 +122,8 @@ export function ParserLine(FuncInput: FuncInputType): false | TAhkSymbol {
     for (const ruler of LineRuler) {
         if (ruler.test(strTrim)) {
             const name: string | null = ruler.getName(strTrim);
-            if (name) {
-                const rangeRaw = getRangeOfLine(DocStrMap, line);
+            if (name !== null) {
+                const rangeRaw: vscode.Range = getRangeOfLine(DocStrMap, line);
                 return new vscode.DocumentSymbol(
                     name,
                     ruler.detail,

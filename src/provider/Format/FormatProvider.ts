@@ -214,10 +214,10 @@ export function FormatCore(
             break;
         }
 
-        const switchRange = getSwitchRange(document, DocStrMap, textFix, line, lineMax);
-        if (switchRange) switchRangeArray.push(switchRange);
+        const switchRange: vscode.Range | null = getSwitchRange(document, DocStrMap, textFix, line, lineMax);
+        if (switchRange !== null) switchRangeArray.push(switchRange);
 
-        if (hasHashtag) { // #IF  #hotstring
+        if (hasHashtag !== '') { // #IF  #hotstring
             labDeep = 1;
         }
 

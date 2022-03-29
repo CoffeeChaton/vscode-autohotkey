@@ -9,11 +9,11 @@ export async function insertTextWm(
     fsPath: string,
     AhkSymbol: TAhkSymbol,
 ): Promise<vscode.SnippetString> {
-    const cache = wm.getWm(AhkSymbol);
-    if (cache) return cache;
+    const cache: vscode.SnippetString | undefined = wm.getWm(AhkSymbol);
+    if (cache !== undefined) return cache;
 
-    const document = await vscode.workspace.openTextDocument(fsPath);
-    const insertText = new vscode.SnippetString(document.getText(AhkSymbol.selectionRange));
+    const document: vscode.TextDocument = await vscode.workspace.openTextDocument(fsPath);
+    const insertText: vscode.SnippetString = new vscode.SnippetString(document.getText(AhkSymbol.selectionRange));
 
     return wm.setWm(AhkSymbol, insertText);
 }

@@ -1,7 +1,7 @@
 function calcSize<V>(v: V | undefined): number {
+    if (v === null || v === undefined) return 0;
     if (Array.isArray(v)) return v.length;
     if (v instanceof Map) return v.size;
-    if (v === null || v === undefined) return 0;
     // if (v.value && v.value.length) return v.value.length;
     if (typeof v === 'object') return Object.keys(v).length;
 
@@ -25,6 +25,11 @@ export class ClassWm<T extends TObj | unknown[] | readonly unknown[], V> {
 
     private wm: WeakMap<T, V> = new WeakMap<T, V>();
 
+    /**
+     * @param ms
+     * @param comment
+     * @param wmMaxSize 0 means no limit
+     */
     public constructor(ms: number, comment: string, wmMaxSize: number) {
         this.wmMaxSize = wmMaxSize;
         this.fnName = comment;
@@ -38,7 +43,7 @@ export class ClassWm<T extends TObj | unknown[] | readonly unknown[], V> {
 
     public setWm(t: T, v: V): V {
         this.wmSize -= calcSize<V>(this.wm.get(t));
-        if (this.wmSize > this.wmMaxSize) {
+        if (this.wmMaxSize && this.wmSize > this.wmMaxSize) {
             this.wm = new WeakMap<T, V>();
             this.wmSize = 0;
             console.log(`🚀 wm Clear ${this.fnName} with wmSize ${this.wmSize} > ${this.wmMaxSize} wmMaxSize`);
@@ -49,8 +54,8 @@ export class ClassWm<T extends TObj | unknown[] | readonly unknown[], V> {
     }
 
     public getWm(t: T): V | undefined {
-        const cache = this.wm.get(t);
-        if (cache) {
+        const cache: V | undefined = this.wm.get(t);
+        if (cache !== undefined) {
             this.cacheHits++;
         }
         return cache;

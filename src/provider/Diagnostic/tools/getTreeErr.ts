@@ -73,7 +73,7 @@ function getSwErr(sw: TAhkSymbol, displayErr: readonly boolean[]): vscode.Diagno
         && sw.detail === 'Switch'
     ) {
         [setErrDefault, setErrCase, setErrSwNameNotFind].forEach((fn) => {
-            const err = fn(sw);
+            const err: vscode.Diagnostic | null = fn(sw);
             if (err) digS.push(err);
         });
     }

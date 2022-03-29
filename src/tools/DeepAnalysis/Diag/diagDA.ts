@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { getCode502Default, getCode503Default } from '../../../configUI';
-import { TAhkSymbolList } from '../../../globalEnum';
+import { DeepAnalysisResult, TAhkSymbolList } from '../../../globalEnum';
 import { DeepAnalysis } from '../DeepAnalysis';
 import { caseSensitivityVar } from './caseSensitivity';
 import { paramNeverUsed } from './param/paramNeverUsed';
@@ -18,8 +18,8 @@ export function diagDAFile(
     const code503Max = getCode503Default();
 
     for (const ahkSymbol of AhkSymbolList) {
-        const DA = DeepAnalysis(document, ahkSymbol);
-        if (DA) {
+        const DA: DeepAnalysisResult | null = DeepAnalysis(document, ahkSymbol);
+        if (DA !== null) {
             paramNeverUsed(DA.argMap, code501List);
             caseSensitivityVar('var', DA.valMap, code502List, code502Max); // var case sensitivity
             caseSensitivityVar('param', DA.argMap, code503List, code503Max);

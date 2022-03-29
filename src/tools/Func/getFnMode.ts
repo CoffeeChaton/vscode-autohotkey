@@ -23,10 +23,10 @@ const wm = new ClassWm<TAhkSymbol, EFnMode>(10 * 60 * 1000, 'getFnMode', 20000);
 export function getFnModeWM(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
     if (!kindPick(ahkSymbol.kind)) throw new Error(`kind Error of getFnModeWM of ${ahkSymbol.name}--35--11--66`);
 
-    const cache = wm.getWm(ahkSymbol);
-    if (cache) return cache;
+    const cache: EFnMode | undefined = wm.getWm(ahkSymbol);
+    if (cache !== undefined) return cache;
 
-    const fnMode = getFnMode(ahkSymbol, DocStrMap);
+    const fnMode: EFnMode = getFnMode(ahkSymbol, DocStrMap);
 
     return wm.setWm(ahkSymbol, fnMode);
 }

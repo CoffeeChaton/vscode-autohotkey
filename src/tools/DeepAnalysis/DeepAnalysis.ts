@@ -4,6 +4,7 @@ import {
     TAhkSymbol,
     TArgMap,
     TTextMap,
+    TTokenStream,
     TValMap,
 } from '../../globalEnum';
 import { kindPick } from '../Func/kindPick';
@@ -14,16 +15,17 @@ import { getUnknownTextMap } from './getUnknownTextMap';
 import { getParamMain } from './Param/getParam';
 
 // eslint-disable-next-line no-magic-numbers
-const wm = new ClassWm<TAhkSymbol, DeepAnalysisResult>(10 * 60 * 1000, 'DeepAnalysis', 500000);
+const hr2 = 2 * 60 * 60 * 1000;
+const wm = new ClassWm<TAhkSymbol, DeepAnalysisResult>(hr2, 'DeepAnalysis', 0);
 
 export function DeepAnalysis(document: vscode.TextDocument, ahkSymbol: TAhkSymbol): null | DeepAnalysisResult {
     const kindStr: 'Function' | 'Method' | null = kindPick(ahkSymbol.kind);
     if (kindStr === null) return null;
 
-    const cache = wm.getWm(ahkSymbol);
-    if (cache) return cache;
+    const cache: undefined | DeepAnalysisResult = wm.getWm(ahkSymbol);
+    if (cache !== undefined) return cache;
 
-    const DocStrMap = Pretreatment(
+    const DocStrMap: TTokenStream = Pretreatment(
         document.getText(ahkSymbol.range).split('\n'),
         ahkSymbol.range.start.line,
     );

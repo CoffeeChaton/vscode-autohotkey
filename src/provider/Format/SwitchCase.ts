@@ -8,8 +8,8 @@ export function getSwitchRange(
     textFix: string,
     line: number,
     RangeEnd: number,
-): false | vscode.Range {
-    if (!(/^\s*switch[\s,]/ui).test(textFix)) return false;
+): null | vscode.Range {
+    if (!(/^\s*switch[\s,]/ui).test(textFix)) return null;
 
     const lineFix = textFix.endsWith('{')
         ? line
