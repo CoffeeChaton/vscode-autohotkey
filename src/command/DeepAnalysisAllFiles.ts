@@ -88,8 +88,8 @@ my project:
 Deep Analysis All Files
 Deep Analysis : 809 Symbol <--keep 809!
 argMapSize is 2231 <--keep 2231!
-valMapSize is 2048
-textMapSize is 1074 <- next plan: ignore keyWord.
+valMapSize is 2055
+textMapSize is 1067 <- next plan: ignore keyWord.
 All Size is 5353
 Done in 411 ms
 */
