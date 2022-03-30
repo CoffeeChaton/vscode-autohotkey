@@ -1,4 +1,3 @@
-/* eslint-disable max-statements */
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { diagColl } from '../core/diagRoot';
@@ -44,11 +43,11 @@ function AnalysisResults(need: TDeepAnalysisMeta[]): TAnalysisResults {
     }
     e5.sort((a: TElement, b: TElement): number => b.v - a.v);
     OutputChannel.clear();
-    OutputChannel.appendLine('------>>>------unknown Word frequency statistics----->>>-----');
+    OutputChannel.appendLine('------>>>------this package: unknown Word frequency statistics----->>>-----');
     for (const { k, v } of e5) { //
         OutputChannel.appendLine(`${k}: ${v}`); // TODO: remove global variables of this file / func
     }
-    OutputChannel.appendLine('------<<<------unknown Word frequency statistics-----<<<-----');
+    OutputChannel.appendLine('------<<<------this package: unknown Word frequency statistics-----<<<-----');
 
     return {
         argMapSize,
@@ -77,29 +76,27 @@ function showOutputChannel(results: TAnalysisResults, timeSpend: number): void {
 }
 
 export async function DeepAnalysisAllFiles(): Promise<null> {
-    const t1 = Date.now();
-    const allFsPath = Detecter.getDocMapFile();
+    const t1: number = Date.now();
+    const allFsPath: string[] = Detecter.getDocMapFile();
 
     const need: TDeepAnalysisMeta[] = [];
-    for (const fsPath of allFsPath) {
+    await Promise.all(allFsPath.map(async (fsPath: string): Promise<void> => {
         const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath);
-        if (AhkSymbolList === undefined) continue;
+        if (AhkSymbolList === undefined) return;
 
-        const Uri = vscode.Uri.file(fsPath);
-        // eslint-disable-next-line no-await-in-loop
+        const Uri: vscode.Uri = vscode.Uri.file(fsPath);
         const document: vscode.TextDocument = await vscode.workspace.openTextDocument(Uri);
         for (const ahkSymbol of AhkSymbolList) {
             const DA: TDeepAnalysisMeta | null = DeepAnalysis(document, ahkSymbol);
             if (DA !== null) need.push(DA);
         }
-        const diagnostics = diagDAFile(AhkSymbolList, document);
-        const baseDiag = (diagColl.get(Uri) || [])
-            .filter((v) => v.source !== EDiagBase.sourceDA);
+        const baseDiag: vscode.Diagnostic[] = (diagColl.get(Uri) || [])
+            .filter((diag: vscode.Diagnostic): boolean => diag.source !== EDiagBase.sourceDA);
         diagColl.set(Uri, [
             ...baseDiag,
-            ...diagnostics,
+            ...diagDAFile(AhkSymbolList, document),
         ]);
-    }
+    }));
 
     const t2 = Date.now();
     showOutputChannel(AnalysisResults(need), t2 - t1);
