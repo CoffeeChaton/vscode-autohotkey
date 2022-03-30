@@ -7,7 +7,7 @@ const isDebug = false;
 // not export now
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function _commandHeadStatistics(commandHead: string): void {
-    const hint = DEB.get(commandHead) ?? 0;
+    const hint: number = DEB.get(commandHead) ?? 0;
     DEB.set(commandHead, hint + 1);
 
     if (isDebug) {
@@ -27,6 +27,8 @@ function _commandHeadStatistics(commandHead: string): void {
         for (const { k, v } of e5) { //
             OutputChannel.appendLine(`${k}: ${v}`);
         }
+        OutputChannel.show();
+        console.log('🚀 ~ _commandHeadStatistics ~ e5', e5);
     }
 }
 // const e5 = [

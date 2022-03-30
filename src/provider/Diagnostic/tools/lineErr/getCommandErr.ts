@@ -177,7 +177,7 @@ function getOtherCommandErr(fistWord: string, lStr: string): TLineDiag {
             };
         }
     }
-
+    // _commandHeadStatistics(fistWord);
     return EDiagLine.miss;
 }
 // ---------------------------------------------------------------------------------------------------------------------
@@ -187,11 +187,10 @@ export function getCommandErr(lStr: string, _lStrTrim: string, fistWord: string)
     if (fistWord === '') {
         return EDiagLine.miss;
     }
-    if ((/^(?:SWITCH|CASE|IF|WHILE|ELSE|RETURN|BREAK|FOR|SLEEP|STATIC|GLOBAL)$/ui).test(fistWord)) {
-        return EDiagLine.miss;
+    if ((/^(?:SWITCH|CASE|DEFAULT|IF|WHILE|ELSE|RETURN|BREAK|FOR|SLEEP|STATIC|GLOBAL)$/ui).test(fistWord)) {
+        return EDiagLine.miss; // don't add Loop
     }
 
-    //  _commandHeadStatistics()
     const fnReplaceErr: TLineDiag = getCommandErrFnReplace(fistWord, lStr);
     if (fnReplaceErr !== EDiagLine.miss) {
         return fnReplaceErr;
