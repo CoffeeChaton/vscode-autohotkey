@@ -7,7 +7,20 @@ import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { diagDAFile } from '../tools/DeepAnalysis/Diag/diagDA';
 
-function showOutputChannel(need: TDeepAnalysisMeta[], timeSpend: number): void {
+type TElement = {
+    k: string;
+    v: number;
+};
+
+type TAnalysisResults = {
+    argMapSize: number;
+    valMapSize: number;
+    textMapSize: number;
+    topFuncNum: number; // Deep Analysis : ${need.length} Symbol // 809
+};
+
+function AnalysisResults(need: TDeepAnalysisMeta[]): TAnalysisResults {
+    const topFuncNum = need.length;
     let argMapSize = 0;
     let valMapSize = 0;
     let textMapSize = 0;
@@ -22,10 +35,6 @@ function showOutputChannel(need: TDeepAnalysisMeta[], timeSpend: number): void {
         });
     });
 
-    type TElement = {
-        k: string;
-        v: number;
-    };
     const e5: TElement[] = [];
     for (const [k, v] of DEB) {
         // eslint-disable-next-line no-magic-numbers
@@ -33,28 +42,43 @@ function showOutputChannel(need: TDeepAnalysisMeta[], timeSpend: number): void {
             e5.push({ k, v });
         }
     }
-    DEB.clear();
     e5.sort((a: TElement, b: TElement): number => b.v - a.v);
-
     OutputChannel.clear();
+    OutputChannel.appendLine('------>>>------unknown Word frequency statistics----->>>-----');
+    for (const { k, v } of e5) { //
+        OutputChannel.appendLine(`${k}: ${v}`); // TODO: remove global variables of this file / func
+    }
+    OutputChannel.appendLine('------<<<------unknown Word frequency statistics-----<<<-----');
+
+    return {
+        argMapSize,
+        valMapSize,
+        textMapSize,
+        topFuncNum,
+    };
+}
+
+function showOutputChannel(results: TAnalysisResults, timeSpend: number): void {
+    const {
+        argMapSize,
+        valMapSize,
+        textMapSize,
+        topFuncNum,
+    } = results;
+
     OutputChannel.appendLine('Deep Analysis All Files');
-    OutputChannel.appendLine(`Deep Analysis : ${need.length} Symbol`);
+    OutputChannel.appendLine(`Deep Analysis : ${topFuncNum} Symbol`);
     OutputChannel.appendLine(`argMapSize is ${argMapSize}`);
     OutputChannel.appendLine(`valMapSize is ${valMapSize}`);
     OutputChannel.appendLine(`textMapSize is ${textMapSize}`);
     OutputChannel.appendLine(`All Size is ${argMapSize + valMapSize + textMapSize}`);
     OutputChannel.appendLine(`Done in ${timeSpend} ms`);
-    OutputChannel.appendLine('------>>>------Word frequency statistics----->>>----->>>');
-    for (const { k, v } of e5) { //
-        OutputChannel.appendLine(`${k}: ${v}`);
-    }
-    e5.length = 0; //
     OutputChannel.show();
 }
 
 export async function DeepAnalysisAllFiles(): Promise<null> {
     const t1 = Date.now();
-    const allFsPath = Detecter.getDocMapFile(); // FIX
+    const allFsPath = Detecter.getDocMapFile();
 
     const need: TDeepAnalysisMeta[] = [];
     for (const fsPath of allFsPath) {
@@ -69,7 +93,8 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
             if (DA !== null) need.push(DA);
         }
         const diagnostics = diagDAFile(AhkSymbolList, document);
-        const baseDiag = (diagColl.get(Uri) || []).filter((v) => v.source !== EDiagBase.sourceDA);
+        const baseDiag = (diagColl.get(Uri) || [])
+            .filter((v) => v.source !== EDiagBase.sourceDA);
         diagColl.set(Uri, [
             ...baseDiag,
             ...diagnostics,
@@ -77,7 +102,7 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
     }
 
     const t2 = Date.now();
-    showOutputChannel(need, t2 - t1);
+    showOutputChannel(AnalysisResults(need), t2 - t1);
 
     return null;
 }
