@@ -68,27 +68,25 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
             });
             continue;
         }
-        const lStr = getLStr(textRaw);
 
+        const lStr = getLStr(textRaw);
+        const lStrTrim = lStr.trim();
         const detail: EDetail[] = [];
         if (!lStr.includes('::')) {
             // {$                     || ^{
-            if ((/\{\s*$/u).test(lStr) || (/^\s*\{/u).test(lStr)) {
+            if (lStrTrim.endsWith('{') || lStrTrim.startsWith('{')) {
                 detail.push(EDetail.deepAdd);
                 deep++;
             }
             // ^}
-            if ((/^\s*\}/u).test(lStr)) {
+            if (lStrTrim.startsWith('}')) {
                 detail.push(EDetail.deepSubtract);
                 deep--;
             }
         }
 
-        const exec = (/^(\w+)[\s,]/u).exec(lStr.trim());
-        const fistWord: string = exec?.[1].toUpperCase() ?? '';
-
         result.push({
-            fistWord,
+            fistWord: lStrTrim.match(/^(\w+)[\s,]/u)?.[1].toUpperCase() ?? '',
             lStr,
             deep,
             textRaw,

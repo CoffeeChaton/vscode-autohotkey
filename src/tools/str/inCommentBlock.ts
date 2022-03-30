@@ -2,10 +2,10 @@ import { enumLog } from '../enumErr';
 
 export function inCommentBlock(textRaw: string, CommentBlock: boolean): boolean {
     if (CommentBlock) {
-        if ((/^\s*\*\//u).test(textRaw)) { // textRaw.indexOf('*/') > -1
+        if (textRaw.indexOf('*/') > -1 && (/^\s*\*\//u).test(textRaw)) { // textRaw.indexOf('*/') > -1
             return false;
         }
-    } else if ((/^\s*\/\*/u).test(textRaw)) { // textRaw.indexOf('/*') > -1
+    } else if (textRaw.indexOf('/*') > -1 && (/^\s*\/\*/u).test(textRaw)) { // textRaw.indexOf('/*') > -1
         return true;
     }
     return CommentBlock;
