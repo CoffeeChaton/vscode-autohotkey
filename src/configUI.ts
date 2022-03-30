@@ -82,7 +82,7 @@ export function getFormatConfig(): boolean {
 }
 
 export function getIgnored(fsPath: string): boolean {
-    const blockList = config.baseScan.IgnoredList;
+    const blockList: readonly string[] = config.baseScan.IgnoredList;
     return mm.isMatch(fsPath, blockList);
 }
 

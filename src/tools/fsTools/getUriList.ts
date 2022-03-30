@@ -9,7 +9,7 @@ type TFsPath = string;
 
 export function CollectorFsPath(fsPath: TFsPath, Collector: Set<TFsPath>): void {
     if (fs.statSync(fsPath).isDirectory()) {
-        const files = fs.readdirSync(fsPath);
+        const files: string[] = fs.readdirSync(fsPath);
         for (const file of files) {
             const fsPathNext: TFsPath = path.join(fsPath, file);
             if (!getIgnored(fsPathNext)) {
@@ -26,7 +26,9 @@ export function getUriList(): vscode.Uri[] | null {
     if (WorkspaceFolderList === null) return null;
 
     const Collector: Set<TFsPath> = new Set<TFsPath>();
-    WorkspaceFolderList.forEach((folder): void => CollectorFsPath(folder.uri.fsPath, Collector));
+    WorkspaceFolderList.forEach(
+        (folder: vscode.WorkspaceFolder): void => CollectorFsPath(folder.uri.fsPath, Collector),
+    );
 
-    return [...Collector].map((path0): vscode.Uri => vscode.Uri.file(path0));
+    return [...Collector].map((path0: string): vscode.Uri => vscode.Uri.file(path0));
 }

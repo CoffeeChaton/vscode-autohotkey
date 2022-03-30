@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { getLintConfig } from '../../../configUI';
 import { EDiagCode } from '../../../diag';
 import {
     TAhkSymbol,
@@ -14,8 +13,7 @@ function setFuncErr(func: TAhkSymbol): vscode.Diagnostic {
     return setDiagnostic(value, range, vscode.DiagnosticSeverity.Warning, []);
 }
 
-function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol): boolean {
-    const maxFnSize = getLintConfig().funcSize;
+function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol, maxFnSize: number): boolean {
     let fnSize = 0;
     const st = func.selectionRange.end.line;
     const ed = func.range.end.line;
@@ -33,6 +31,7 @@ export function getFuncErr(
     DocStrMap: TTokenStream,
     funcS: TAhkSymbolList,
     displayErr: readonly boolean[],
+    maxFnSize: number,
 ): vscode.Diagnostic[] {
     const digS: vscode.Diagnostic[] = [];
     for (const func of funcS) {
@@ -41,13 +40,13 @@ export function getFuncErr(
             case vscode.SymbolKind.Function:
                 if (
                     displayErr[func.range.start.line]
-                    && fnErrCheck(DocStrMap, func)
+                    && fnErrCheck(DocStrMap, func, maxFnSize)
                 ) {
                     digS.push(setFuncErr(func));
                 }
                 break;
             case vscode.SymbolKind.Class:
-                digS.push(...getFuncErr(DocStrMap, func.children, displayErr));
+                digS.push(...getFuncErr(DocStrMap, func.children, displayErr, maxFnSize));
                 break;
             default:
                 break;

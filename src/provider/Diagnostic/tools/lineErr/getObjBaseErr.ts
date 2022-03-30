@@ -2,10 +2,16 @@ import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import { EDiagLine, TLineDiag } from './lineErrTools';
 
-export function getObjBaseErr(lStr: string, _lStrTrim: string, _fistWord: string): TLineDiag {
+export function getObjBaseErr(lStr: string, lStrTrim: string, _fistWord: string): TLineDiag {
     // base property
     // Prototype pollution!
     // .base
+
+    const baseLen: number = 'x.base'.length;
+    if (lStrTrim.length < baseLen) return EDiagLine.miss;
+    if (lStrTrim.indexOf('.') === -1) return EDiagLine.miss;
+    // 50~60 ms -> 23ms
+
     const colL = lStr.search(/\.base\b/ui);
     if (colL === -1) { // not find
         return EDiagLine.miss;

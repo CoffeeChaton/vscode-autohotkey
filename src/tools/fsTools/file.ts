@@ -13,3 +13,4 @@ export function checkDebugFile(executePath: string): void {
         void vscode.window.showErrorMessage(msg2);
     });
 }
+// fs.existsSync(fsPath)

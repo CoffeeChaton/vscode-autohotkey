@@ -190,8 +190,8 @@ export type TPick<TNeed> = {
 };
 
 export const enum ETime {
-    SnippetStartWihA = 5000, // delay 5 sec
-    snipSendBigBrackets = 6000, // delay 6 sec
+    SnippetStartWihA = 20, // delay 5 sec
+    snipSendBigBrackets = 30, // delay 6 sec
 }
 
 export const enum ESnippetRecBecause {

@@ -1,3 +1,5 @@
+import { OutputChannel } from '../../../vscWindows/OutputChannel';
+
 const DEB = new Map<string, number>();
 
 const isDebug = false;
@@ -22,6 +24,9 @@ function _commandHeadStatistics(commandHead: string): void {
         }
 
         e5.sort((a: TElement, b: TElement): number => a.v - b.v);
+        for (const { k, v } of e5) { //
+            OutputChannel.appendLine(`${k}: ${v}`);
+        }
     }
 }
 // const e5 = [

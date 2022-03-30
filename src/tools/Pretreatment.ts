@@ -6,25 +6,19 @@ import { inCommentBlock } from './str/inCommentBlock';
 import { inLTrimRange } from './str/inLTrimRange';
 import { getLStr, isSetVarTradition } from './str/removeSpecialChar';
 
-// let lastFsPath = ''; // vscode.Uri.fsPath
-// type THash = number;
-// const cacheMap = new Map<THash, TLineErr | 0>();
-
-// LexicalAnalysisSimple
-// TODO use hash check line Unaffected && -> getChildren
+// self time 520ms~570ms
 export function Pretreatment(strArray: readonly string[], startLineBaseZero: number): TTokenStream {
-    // FIXME this Need cache && use scanner
     const result: TAhkToken = [];
     let CommentBlock = false;
     let inLTrim: 0 | 1 | 2 = 0;
-    const lineMax = strArray.length;
+    const OffsetMax: number = strArray.length;
     let deep = 0;
     //  const timeStart = Date.now();
-    for (let Offset = 0; Offset < lineMax; Offset++) {
-        const line = Offset + startLineBaseZero;
-        const textRaw = strArray[Offset].replace(/\r/ug, '');
+    for (let Offset = 0; Offset < OffsetMax; Offset++) {
+        const line: number = Offset + startLineBaseZero;
+        const textRaw: string = strArray[Offset].replace(/\r/ug, '');
         if (deep < 0) {
-            console.warn(Offset, 'Pretreatment -> line , deep < 0 ');
+            console.warn('Pretreatment -> line , deep < 0 ', Offset);
             // void vscode.window.showWarningMessage
             deep = 0;
         }
@@ -69,10 +63,10 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
             continue;
         }
 
-        const lStr = getLStr(textRaw);
-        const lStrTrim = lStr.trim();
+        const lStr: string = getLStr(textRaw);
+        const lStrTrim: string = lStr.trim();
         const detail: EDetail[] = [];
-        if (!lStr.includes('::')) {
+        if (lStrTrim.indexOf('::') === -1) {
             // {$                     || ^{
             if (lStrTrim.endsWith('{') || lStrTrim.startsWith('{')) {
                 detail.push(EDetail.deepAdd);
@@ -86,7 +80,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
         }
 
         result.push({
-            fistWord: lStrTrim.match(/^(\w+)[\s,]/u)?.[1].toUpperCase() ?? '',
+            fistWord: lStrTrim.match(/^(\w+)[\s,]+(?!:=)/u)?.[1].toUpperCase() ?? '',
             lStr,
             deep,
             textRaw,
@@ -96,3 +90,11 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
     }
     return result;
 }
+
+// let lastFsPath = ''; // vscode.Uri.fsPath
+// type THash = number;
+// const cacheMap = new Map<THash, TLineErr | 0>();
+
+// LexicalAnalysisSimple
+// TODO use hash check line Unaffected && -> getChildren
+// FIXME this Need cache && use scanner

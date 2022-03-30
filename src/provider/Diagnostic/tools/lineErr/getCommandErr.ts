@@ -51,9 +51,11 @@ function getLoopErr(lStr: string): TLineDiag {
 }
 // ---------------------------------------------------------------------------------------------------------------------
 function getCommandErrFnReplace(fistWord: string, lStr: string): TLineDiag {
+    // eslint-disable-next-line no-magic-numbers
+    if (fistWord.length < 3) return EDiagLine.miss;
     // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
     if (
-        (/^(?:File(Append|GetAttrib|Read)|GetKeyState|IfExist|IfInString|IfWin(?:Not)?(?:Active|Exist))$/ui).test(
+        (/^(?:File(Append|GetAttrib|Read)|GetKeyState|If(?:Exist|InString)|IfWin(?:Not)?(?:Active|Exist))$/ui).test(
             fistWord,
         )
         || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/ui).test(fistWord)
@@ -72,6 +74,9 @@ function getCommandErrFnReplace(fistWord: string, lStr: string): TLineDiag {
 
 // ---------------------------------------------------------------------------------------------------------------------
 function getOtherCommandErr(fistWord: string, lStr: string): TLineDiag {
+    // self time 111ms -> 27~35ms
+    // eslint-disable-next-line no-magic-numbers
+    if (fistWord.length < 5) return EDiagLine.miss;
     type TCommandErr = {
         reg: RegExp;
         code: EDiagCode;
@@ -185,6 +190,7 @@ export function getCommandErr(lStr: string, _lStrTrim: string, fistWord: string)
     if ((/^(?:SWITCH|CASE|IF|WHILE|ELSE|RETURN|BREAK|FOR|SLEEP|STATIC|GLOBAL)$/ui).test(fistWord)) {
         return EDiagLine.miss;
     }
+
     //  _commandHeadStatistics()
     const fnReplaceErr: TLineDiag = getCommandErrFnReplace(fistWord, lStr);
     if (fnReplaceErr !== EDiagLine.miss) {

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
+import { getLintConfig } from '../../configUI';
 import {
     TAhkSymbolList,
     TTokenStream,
@@ -44,7 +45,7 @@ export function baseDiagnostic(
     const diagList: vscode.Diagnostic[] = [
         ...lineDiagS,
         ...getTreeErr(AhkSymbolList, displayErr),
-        ...getFuncErr(DocStrMap, AhkSymbolList, displayErr),
+        ...getFuncErr(DocStrMap, AhkSymbolList, displayErr, getLintConfig().funcSize),
     ];
     // 8k lines without hashCache -> 6ms
     // with hashCache -> 2ms
