@@ -1,41 +1,41 @@
 {
     "fileTypes": [
-        "ahk"
+        "log"
     ],
     "name": "AutoHotkey",
     "patterns": [
         {
             "match": "`[,%`;nrbtvaf:]",
-            "name": "constant.character.escape.ahk"
+            "name": "constant.character.escape.log"
         },
         {
             "captures": {
                 "1": {
-                    "name": "punctuation.definition.comment.ahk"
+                    "name": "punctuation.definition.comment.log"
                 }
             },
             "match": "(?:^|\\s+)(;).*",
-            "name": "comment.line.semicolon.ahk"
+            "name": "comment.line.semicolon.log"
         },
         {
             "captures": {
                 "1": {
-                    "name": "string.parameter.import.ahk"
+                    "name": "string.parameter.import.log"
                 }
             },
             "match": "#\\b(?i:include|includeagain)\\b(.*)$",
-            "name": "keyword.control.import.ahk"
+            "name": "keyword.control.import.log"
         },
         {
             "include": "#stringQuotedDouble"
         },
         {
-            "match": "\\w\\w*\\(\\)",
+            "match": "\\w+\\(\\)",
             "name": "entity.name.function.log"
         },
         {
             "match": "(?x) \\b\r\n((0(x|X)[0-9a-fA-F]*)\r\n|(\r\n  ([0-9]+\\.?[0-9]*)\r\n  |(\\.[0-9]+)\r\n )((e|E)(\\+|-)?[0-9]+)?\r\n)\\b\r\n",
-            "name": "constant.numeric.ahk"
+            "name": "constant.numeric.log"
         }
     ],
     "repository": {

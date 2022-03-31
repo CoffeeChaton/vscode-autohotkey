@@ -55,17 +55,16 @@ function getCommandErrFnReplace(fistWord: string, lStr: string): TLineDiag {
     if (fistWord.length < 3) return EDiagLine.miss;
     // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
     if (
-        (/^(?:File(Append|GetAttrib|Read)|GetKeyState|If(?:Exist|InString)|IfWin(?:Not)?(?:Active|Exist))$/ui).test(
-            fistWord,
-        )
+        (/^(?:File(Append|GetAttrib|Read)|GetKeyState|If(?:Not)?(?:Exist|InString)|IfWin(?:Not)?(?:Active|Exist))$/ui)
+            .test(fistWord)
         || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/ui).test(fistWord)
     ) {
-        const colL = lStr.indexOf(fistWord);
+        const colL = lStr.search(/\S/u);
         return {
             colL,
             colR: colL + fistWord.length,
             value: EDiagCode.code700,
-            severity: vscode.DiagnosticSeverity.Information,
+            severity: vscode.DiagnosticSeverity.Warning,
             tags: [vscode.DiagnosticTag.Deprecated],
         };
     }
@@ -73,10 +72,9 @@ function getCommandErrFnReplace(fistWord: string, lStr: string): TLineDiag {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-function getOtherCommandErr(fistWord: string, lStr: string): TLineDiag {
-    // self time 111ms -> 27~35ms
+function getOtherCommandErr(fistWordUp: string, lStr: string): TLineDiag {
     // eslint-disable-next-line no-magic-numbers
-    if (fistWord.length < 5) return EDiagLine.miss;
+    if (fistWordUp.length < 5) return EDiagLine.miss;
     type TCommandErr = {
         reg: RegExp;
         code: EDiagCode;
@@ -91,28 +89,8 @@ function getOtherCommandErr(fistWord: string, lStr: string): TLineDiag {
             code: EDiagCode.code804,
         },
         {
-            reg: /^GetKeyState$/ui,
-            code: EDiagCode.code805,
-        },
-        {
             reg: /^If(?:Equal|NotEqual|Less|LessOrEqual|Greater|GreaterOrEqual)$/ui,
             code: EDiagCode.code806,
-        },
-        {
-            reg: /^If(?:Exist|NotExist)$/ui,
-            code: EDiagCode.code807,
-        },
-        {
-            reg: /^If(?:Not)?InString$/ui,
-            code: EDiagCode.code808,
-        },
-        {
-            reg: /^IfWin(?:Not)?Active$/ui,
-            code: EDiagCode.code809,
-        },
-        {
-            reg: /^IfWin(?:Not)?Exist$/ui,
-            code: EDiagCode.code810,
         },
         {
             reg: /^SplashImage|Progress$/ui,
@@ -131,34 +109,6 @@ function getOtherCommandErr(fistWord: string, lStr: string): TLineDiag {
             code: EDiagCode.code816,
         },
         {
-            reg: /^StringGetPos$/ui,
-            code: EDiagCode.code817,
-        },
-        {
-            reg: /^String(?:Left|Right)/ui,
-            code: EDiagCode.code818,
-        },
-        {
-            reg: /^StringLen/ui,
-            code: EDiagCode.code819,
-        },
-        {
-            reg: /^StringMid$/ui,
-            code: EDiagCode.code820,
-        },
-        {
-            reg: /^StringReplace$/ui,
-            code: EDiagCode.code821,
-        },
-        {
-            reg: /^StringSplit$/ui,
-            code: EDiagCode.code822,
-        },
-        {
-            reg: /^StringTrim(?:Left|Right)$/ui,
-            code: EDiagCode.code823,
-        },
-        {
             reg: /^Transform$/ui,
             code: EDiagCode.code824,
         },
@@ -166,38 +116,58 @@ function getOtherCommandErr(fistWord: string, lStr: string): TLineDiag {
     ];
 
     for (const v of headMatch) {
-        if (v.reg.test(fistWord)) {
+        if (v.reg.test(fistWordUp)) {
             const colL = lStr.search(/\S/ui);
             return {
                 colL,
-                colR: colL + fistWord.length,
+                colR: colL + fistWordUp.length,
                 value: v.code,
                 severity: vscode.DiagnosticSeverity.Warning,
                 tags: [vscode.DiagnosticTag.Deprecated],
             };
         }
     }
-    // _commandHeadStatistics(fistWord);
+
     return EDiagLine.miss;
 }
-// ---------------------------------------------------------------------------------------------------------------------
-export function getCommandErr(lStr: string, _lStrTrim: string, fistWord: string): TLineDiag {
-    // high frequency words && is allowed
-    // don't push gui commands in this line, because not high frequency.
-    if (fistWord === '') {
-        return EDiagLine.miss;
-    }
-    if ((/^(?:SWITCH|CASE|DEFAULT|IF|WHILE|ELSE|RETURN|BREAK|FOR|SLEEP|STATIC|GLOBAL)$/ui).test(fistWord)) {
-        return EDiagLine.miss; // don't add Loop
-    }
 
-    const fnReplaceErr: TLineDiag = getCommandErrFnReplace(fistWord, lStr);
-    if (fnReplaceErr !== EDiagLine.miss) {
-        return fnReplaceErr;
-    }
-    if ((/^LOOP$/ui).test(fistWord)) {
+// ---------------------------------------------------------------------------------------------------------------------
+export function getCommandErr(lStr: string, _lStrTrim: string, fistWordUp: string): TLineDiag {
+    if (fistWordUp.length === 0) return EDiagLine.miss;
+
+    if (fistWordUp === 'LOOP') {
         return getLoopErr(lStr);
     }
 
-    return getOtherCommandErr(fistWord, lStr);
+    if (
+        [
+            'SWITCH',
+            'CASE',
+            'DEFAULT',
+            'IF',
+            'WHILE',
+            'ELSE',
+            'RETURN',
+            'BREAK',
+            'FOR',
+            'SLEEP',
+            'STATIC',
+            'GLOBAL',
+            // SEND ?
+            // FOR ?
+            // MOUSEMOVE ?
+            // don't add Loop
+        ].indexOf(fistWordUp) > -1
+    ) {
+        return EDiagLine.miss;
+    }
+
+    // _commandHeadStatistics(fistWord);
+
+    const fnReplaceErr: TLineDiag = getCommandErrFnReplace(fistWordUp, lStr);
+    if (fnReplaceErr !== EDiagLine.miss) {
+        return fnReplaceErr;
+    }
+
+    return getOtherCommandErr(fistWordUp, lStr);
 }

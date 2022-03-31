@@ -21,13 +21,13 @@ function lineErrDiag(line: number, lineErr: TLineErr): vscode.Diagnostic {
     return setDiagnostic(value, range, severity, tags);
 }
 
-function getLineErrCore(lStr: string, fistWord: string): 0 | TLineErr {
+function getLineErrCore(lStr: string, fistWordUp: string): 0 | TLineErr {
     const lStrTrim: string = lStr.trim();
     if (lStrTrim === '') return 0;
-    type TFnLineErr = (lStr: string, lStrTrim: string, fistWord: string) => TLineDiag;
+    type TFnLineErr = (lStr: string, lStrTrim: string, fistWordUp: string) => TLineDiag;
     const fnList: TFnLineErr[] = [getDirectivesErr, getLabelErr, getObjBaseErr, getCommandErr];
     for (const fn of fnList) {
-        const err: TLineDiag = fn(lStr, lStrTrim, fistWord);
+        const err: TLineDiag = fn(lStr, lStrTrim, fistWordUp);
 
         if (err === EDiagLine.OK) return 0; // OK
 
@@ -44,14 +44,14 @@ export function getLineErr(DocStrMap: TTokenStream, line: number): null | vscode
         textRaw,
         lStr,
         detail,
-        fistWord,
+        fistWordUp,
     } = DocStrMap[line];
     const err0: TLineDiag = assignErr(textRaw, detail);
     if (err0 && err0 !== EDiagLine.OK) {
         return lineErrDiag(line, err0);
     }
 
-    const err1: TLineErr | 0 = getLineErrCore(lStr, fistWord);
+    const err1: TLineErr | 0 = getLineErrCore(lStr, fistWordUp);
 
     if (err1) return lineErrDiag(line, err1);
     // err1 === 0

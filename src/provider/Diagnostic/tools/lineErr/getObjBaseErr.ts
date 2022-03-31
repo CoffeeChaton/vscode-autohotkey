@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import { EDiagLine, TLineDiag } from './lineErrTools';
 
-export function getObjBaseErr(lStr: string, lStrTrim: string, _fistWord: string): TLineDiag {
+export function getObjBaseErr(lStr: string, lStrTrim: string, _fistWordUp: string): TLineDiag {
     // base property
     // Prototype pollution!
     // .base

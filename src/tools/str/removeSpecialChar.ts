@@ -1,15 +1,14 @@
-export function isSetVarTradition(text: string): boolean {
+export function isSetVarTradition(textTrimStart: string): boolean {
     // Var = Value
     // https://www.autohotkey.com/docs/Variables.htm#operators
     // is https://wyagd001.github.io/zh-cn/docs/commands/SetEnv.htm
-    const t: string = text.trim();
-    const col0: number = t.indexOf('=');
+    const col0: number = textTrimStart.indexOf('=');
     // a=
     // 01
     if (col0 < 1) return false;
-    if (t[col0 + 1] === '=') return false; // ==
+    if (textTrimStart[col0 + 1] === '=') return false; // ==
 
-    switch (t[col0 - 1]) {
+    switch (textTrimStart[col0 - 1]) {
         case ':': // :=
         case '<': // <=
         case '>': // >=
@@ -26,7 +25,7 @@ export function isSetVarTradition(text: string): boolean {
         default:
             break;
     }
-    const eqLeftStr: string = t.substring(0, col0).trim();
+    const eqLeftStr: string = textTrimStart.substring(0, col0).trim();
 
     return (/^[%\w.[\]]+$/u).test(eqLeftStr);
     // return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/u).test(t);

@@ -17,15 +17,16 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
     for (let Offset = 0; Offset < OffsetMax; Offset++) {
         const line: number = Offset + startLineBaseZero;
         const textRaw: string = strArray[Offset].replace(/\r/ug, '');
+        const textTrimStart: string = textRaw.trimStart();
         if (deep < 0) {
             console.warn('Pretreatment -> line , deep < 0 ', Offset);
             // void vscode.window.showWarningMessage
             deep = 0;
         }
-        CommentBlock = inCommentBlock(textRaw, CommentBlock);
+        CommentBlock = inCommentBlock(textTrimStart, CommentBlock);
         if (CommentBlock) {
             result.push({
-                fistWord: '',
+                fistWordUp: '',
                 lStr: '',
                 deep,
                 textRaw,
@@ -35,13 +36,13 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
             continue;
         }
 
-        inLTrim = inLTrimRange(textRaw, inLTrim);
+        inLTrim = inLTrimRange(textTrimStart, inLTrim);
         if (inLTrim > 0) {
             const inLTrimLevel = inLTrim === 1
                 ? EDetail.inLTrim1
                 : EDetail.inLTrim2;
             result.push({
-                fistWord: '',
+                fistWordUp: '',
                 lStr: '',
                 deep,
                 textRaw,
@@ -51,9 +52,9 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
             continue;
         }
 
-        if (isSetVarTradition(textRaw)) {
+        if (isSetVarTradition(textTrimStart)) {
             result.push({
-                fistWord: '',
+                fistWordUp: '',
                 lStr: '',
                 deep,
                 textRaw,
@@ -80,7 +81,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
         }
 
         result.push({
-            fistWord: lStrTrim.match(/^(\w+)[\s,]+(?!:=)/u)?.[1].toUpperCase() ?? '',
+            fistWordUp: lStrTrim.match(/^(\w+)[\s,]+(?!:=)/u)?.[1].toUpperCase() ?? '',
             lStr,
             deep,
             textRaw,

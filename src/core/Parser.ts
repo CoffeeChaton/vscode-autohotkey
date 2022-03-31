@@ -54,7 +54,7 @@ export const ParserBlock = {
     },
 
     getSwitchBlock(FuncInput: TFuncInput): null | TAhkSymbol {
-        if (!(/^SWITCH$/ui).test(FuncInput.fistWord)) return null;
+        if (!(/^SWITCH$/ui).test(FuncInput.fistWordUp)) return null;
 
         const {
             DocStrMap,
@@ -121,7 +121,7 @@ export const ParserBlock = {
     },
 
     getClass(FuncInput: TFuncInput): null | TAhkSymbol {
-        if (!(/^CLASS$/ui).test(FuncInput.fistWord)) return null;
+        if (!(/^CLASS$/ui).test(FuncInput.fistWordUp)) return null;
 
         const classExec = (/^\s*\bclass\b\s+(\w+)/ui).exec(FuncInput.lStr);
         if (classExec === null) return null;

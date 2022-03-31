@@ -43,7 +43,7 @@ export const enum EDetail {
 }
 
 export type TAhkToken = {
-    readonly fistWord: string;
+    readonly fistWordUp: string;
     readonly lStr: string;
     readonly textRaw: string;
     readonly deep: number;

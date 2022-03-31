@@ -18,7 +18,7 @@
             "name": "comment.line.semicolon.ahk"
         },
         {
-            "begin": "^\\s*/\\*\\*",
+            "begin": "^\\s*/\\*{2,}?",
             "beginCaptures": {
                 "1": {
                     "name": "comment.block.documentation.start.ahk"
@@ -32,48 +32,6 @@
             },
             "name": "comment.block.documentation.ahk",
             "patterns": [
-                {
-                    "captures": {
-                        "1": {
-                            "name": "storage.type.parameters.comment.block.documentation.ahk"
-                        },
-                        "2": {
-                            "name": "variable.comment.block.documentation.ahk"
-                        },
-                        "3": {
-                            "name": "entity.name.type.instance.comment.block.documentation.ahk"
-                        }
-                    },
-                    "match": "^\\s*\\*\\s+((?i:@param))\\s+(\\w+)\\s+(\\w+)?",
-                    "name": "comment.block.documentation.ahk"
-                },
-                {
-                    "captures": {
-                        "1": {
-                            "name": "storage.type.parameters.comment.block.documentation.ahk"
-                        },
-                        "2": {
-                            "name": "variable.comment.block.documentation.ahk"
-                        }
-                    },
-                    "match": "^\\s*\\*\\s+((?i:@param))\\s+(\\w+)",
-                    "name": "comment.block.documentation.ahk"
-                },
-                {
-                    "captures": {
-                        "1": {
-                            "name": "storage.comment.block.documentation.ahk"
-                        },
-                        "2": {
-                            "name": "variable.comment.block.documentation.ahk"
-                        },
-                        "3": {
-                            "name": "entity.name.type.instance.comment.block.documentation.ahk"
-                        }
-                    },
-                    "match": "^\\s*\\*\\s+((?i:@Return))\\s+(\\w+)\\s+(\\w+)?",
-                    "name": "comment.block.documentation.ahk"
-                },
                 {
                     "captures": {
                         "1": {
@@ -220,54 +178,7 @@
             "include": "#stringQuotedDouble"
         },
         {
-            "captures": {
-                "1": {
-                    "name": "entity.name.function.ahk"
-                },
-                "2": {
-                    "name": "variable.parameter.function.ahk",
-                    "begin": "\\(",
-                    "end": "\\)",
-                    "beginCaptures": {
-                        "0": {
-                            "name": "punctuation.paren.open"
-                        }
-                    },
-                    "endCaptures": {
-                        "0": {
-                            "name": "punctuation.paren.close"
-                        }
-                    },
-                    "patterns": [
-                        {
-                            "include": "#stringQuotedDouble"
-                        },
-                        {
-                            "match": "\\*|,",
-                            "name": "keyword.operator.arithmetic.ahk"
-                        },
-                        {
-                            "match": ":=|=",
-                            "name": "keyword.operator.assignment.ahk"
-                        },
-                        {
-                            "match": "(?i:\\bbyref\\b)",
-                            "name": "keyword.other.byref.ahk"
-                        }
-                    ]
-                },
-                "3": {
-                    "name": "punctuation.bracket.curly.ahk"
-                },
-                "4": {
-                    "name": "comment.line.semicolon.functionline.ahk"
-                }
-            },
-            "match": "^\\s*(\\w\\w*)(\\(.*\\))\\s*({)\\s*(;?.*)$",
-            "name": "functionline.ahk"
-        },
-        {
-            "match": "\\w\\w*\\(",
+            "match": "\\w+\\(",
             "name": "entity.name.function.ahk"
         }
     ],

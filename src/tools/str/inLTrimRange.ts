@@ -2,11 +2,11 @@
 
 import { getLStr } from './removeSpecialChar';
 
-export function inLTrimRange(textRaw: string, LTrim: 0 | 1 | 2): 0 | 1 | 2 {
+export function inLTrimRange(textTrimStart: string, LTrim: 0 | 1 | 2): 0 | 1 | 2 {
     if (LTrim !== 0) {
-        if ((/^\s*\)/u).test(textRaw)) return 0;
-    } else if ((/^\s*\(/u).test(textRaw)) {
-        return (/\bLTrim\b/ui).test(getLStr(textRaw))
+        if (textTrimStart.startsWith(')')) return 0;
+    } else if (textTrimStart.startsWith('(')) {
+        return (/\bLTrim\b/ui).test(getLStr(textTrimStart))
             ? 2
             : 1;
     }

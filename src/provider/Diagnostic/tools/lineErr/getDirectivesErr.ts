@@ -2,14 +2,15 @@ import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import { EDiagLine, TLineDiag } from './lineErrTools';
 
-export function getDirectivesErr(lStr: string, lStrTrim: string, _fistWord: string): TLineDiag {
+export function getDirectivesErr(lStr: string, lStrTrim: string, _fistWordUp: string): TLineDiag {
     // err of #Directives
 
+    if (!lStrTrim.startsWith('#')) return EDiagLine.miss; // 30ms -> 5ms
     const match: RegExpMatchArray | null = lStrTrim.match(/^#(\w+)/u);
     if (match === null) return EDiagLine.miss;
 
     const Directives: string = match[1];
-    const colL: number = lStr.indexOf(Directives);
+    const colL: number = lStr.indexOf('#') + 1;
     const colR: number = colL + Directives.length;
     const severity = vscode.DiagnosticSeverity.Error;
 

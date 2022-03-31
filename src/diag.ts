@@ -48,25 +48,13 @@ export const enum EDiagCode {
     code802 = 802,
     code803 = 803,
     code804 = 804,
-    code805 = 805,
     code806 = 806,
-    code807 = 807,
-    code808 = 808,
-    code809 = 809,
-    code810 = 810,
     code811 = 811,
     code812 = 812,
     code813 = 813,
     code814 = 814,
     code815 = 815,
     code816 = 816,
-    code817 = 817,
-    code818 = 818,
-    code819 = 819,
-    code820 = 820,
-    code821 = 821,
-    code822 = 822,
-    code823 = 823,
     code824 = 824,
     // 901~999 is not recommended
     code901 = 901,
@@ -138,29 +126,9 @@ export const Diags: DeepReadonly<TDiags> = {
         msg: 'Use `Var := Var * Value` or `Var *= Value` instead.',
         path: 'https://www.autohotkey.com/docs/commands/EnvMult.htm',
     },
-    805: {
-        msg: 'Use the `GetKeyState()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/GetKeyState.htm#command',
-    },
     806: {
         msg: 'Use `If (expression)` instead.',
         path: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
-    },
-    807: {
-        msg: 'Use the `FileExist()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/IfExist.htm',
-    },
-    808: {
-        msg: 'Use the `InStr()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/IfInString.htm',
-    },
-    809: {
-        msg: 'Use the `WinActive()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/IfWinActive.htm',
-    },
-    810: {
-        msg: 'Use the `WinExist()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/IfWinExist.htm',
     },
     811: {
         msg: 'Use the `OnClipboardChange()` function instead.',
@@ -185,34 +153,6 @@ export const Diags: DeepReadonly<TDiags> = {
     816: {
         msg: 'Use the `Gui` command instead.',
         path: 'https://www.autohotkey.com/docs/commands/SplashTextOn.htm',
-    },
-    817: {
-        msg: 'Use the `InStr()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/StringGetPos.htm',
-    },
-    818: {
-        msg: 'Use the `SubStr()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
-    },
-    819: {
-        msg: 'Use the `StrLen()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/StringLen.htm',
-    },
-    820: {
-        msg: 'Use the `SubStr()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/StringMid.htm',
-    },
-    821: {
-        msg: 'Use the `StrReplace()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/StringReplace.htm',
-    },
-    822: {
-        msg: 'Use the `StrSplit()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/StringSplit.htm',
-    },
-    823: {
-        msg: 'Use the `SubStr()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/StringTrimLeft.htm',
     },
     824: {
         msg: 'Deprecated: This command is not recommended for use in new scripts.',

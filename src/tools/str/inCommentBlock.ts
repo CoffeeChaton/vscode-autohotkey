@@ -1,11 +1,11 @@
 import { enumLog } from '../enumErr';
 
-export function inCommentBlock(textRaw: string, CommentBlock: boolean): boolean {
+export function inCommentBlock(textTrimStart: string, CommentBlock: boolean): boolean {
     if (CommentBlock) {
-        if (textRaw.indexOf('*/') > -1 && (/^\s*\*\//u).test(textRaw)) { // textRaw.indexOf('*/') > -1
+        if (textTrimStart.startsWith('*/')) {
             return false;
         }
-    } else if (textRaw.indexOf('/*') > -1 && (/^\s*\/\*/u).test(textRaw)) { // textRaw.indexOf('/*') > -1
+    } else if (textTrimStart.startsWith('/*')) {
         return true;
     }
     return CommentBlock;
