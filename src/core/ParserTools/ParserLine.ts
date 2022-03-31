@@ -57,7 +57,6 @@ const ahkLabel: TLineRuler = {
     },
 
     test(strTrim: string): boolean {
-        if (strTrim.indexOf(':') < 1) return false;
         if (!strTrim.endsWith(':')) return false;
         // Generally, aside from whitespace and comments, no other code can be written on the same line as a label.
         return (/^\w+:$/u).test(strTrim);
