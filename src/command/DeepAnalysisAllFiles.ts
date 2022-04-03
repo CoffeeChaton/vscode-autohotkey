@@ -1,9 +1,7 @@
 import * as vscode from 'vscode';
 import { Detecter, TAhkFileData } from '../core/Detecter';
-import { diagColl } from '../core/diagRoot';
-import { EDiagBase } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
-import { diagDAFile } from '../tools/DeepAnalysis/Diag/diagDA';
+import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
 import { getFnMetaList } from '../tools/DeepAnalysis/getFnMetaList';
 import { TDeepAnalysisMeta } from '../tools/DeepAnalysis/TypeFnMeta';
 
@@ -91,9 +89,7 @@ export function DeepAnalysisAllFiles(): null {
         const DAList: TDeepAnalysisMeta[] = getFnMetaList(AhkSymbolList, DocStrMap);
         need.push(...DAList);
 
-        const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) || [])
-            .filter((diag: vscode.Diagnostic): boolean => diag.source !== EDiagBase.sourceDA);
-        diagColl.set(uri, [...baseDiag, ...diagDAFile(DAList)]);
+        digDAFile(AhkSymbolList, DocStrMap, uri);
     });
 
     const t2 = Date.now();

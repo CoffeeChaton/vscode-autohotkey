@@ -1,12 +1,15 @@
 import * as vscode from 'vscode';
 import { getCode502Default, getCode503Default } from '../../../configUI';
+import { diagColl } from '../../../core/diagRoot';
+import { EDiagBase, TAhkSymbolList, TTokenStream } from '../../../globalEnum';
+import { getFnMetaList } from '../getFnMetaList';
 import { TDeepAnalysisMeta } from '../TypeFnMeta';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';
 import { paramNeverUsed } from './param/paramNeverUsed';
 import { paramVariadicErr } from './param/paramVariadicErr';
 
-export function diagDAFile(DAList: TDeepAnalysisMeta[]): readonly vscode.Diagnostic[] {
+function diagDAFileCore(DAList: TDeepAnalysisMeta[]): readonly vscode.Diagnostic[] {
     const code501List = new Set<vscode.Diagnostic>();
     const code502List = new Set<vscode.Diagnostic>();
     const code503List = new Set<vscode.Diagnostic>();
@@ -28,4 +31,15 @@ export function diagDAFile(DAList: TDeepAnalysisMeta[]): readonly vscode.Diagnos
         ...code503List,
         ...code504List,
     ];
+}
+
+export function digDAFile(
+    AhkSymbolList: TAhkSymbolList,
+    DocStrMap: TTokenStream,
+    uri: vscode.Uri,
+): void {
+    const DAList: TDeepAnalysisMeta[] = getFnMetaList(AhkSymbolList, DocStrMap);
+    const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) || [])
+        .filter((diag: vscode.Diagnostic): boolean => diag.source !== EDiagBase.sourceDA);
+    diagColl.set(uri, [...baseDiag, ...diagDAFileCore(DAList)]);
 }
