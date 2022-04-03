@@ -1,10 +1,6 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../diag';
-import {
-    TAhkSymbol,
-    TAhkSymbolList,
-    TTokenStream,
-} from '../../../globalEnum';
+import { TAhkSymbol, TAhkSymbolList, TTokenStream } from '../../../globalEnum';
 import { setDiagnostic } from './setDiagnostic';
 
 function setFuncErr(func: TAhkSymbol): vscode.Diagnostic {

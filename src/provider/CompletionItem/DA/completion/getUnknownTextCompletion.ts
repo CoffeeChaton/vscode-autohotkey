@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TTextAnalysis, TTextMap } from '../../../../tools/DeepAnalysis/FnMetaType';
+import { TTextAnalysis, TTextMap } from '../../../../tools/DeepAnalysis/TypeFnMeta';
 import { EPrefix } from '../../../../tools/MD/setMD';
 import { setItemCore } from './setItem';
 

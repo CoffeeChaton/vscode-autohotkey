@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { DiagsDA, EDiagCodeDA } from '../../../../diag';
 import { setDiagnosticDA } from '../../../../provider/Diagnostic/tools/setDiagnostic';
-import { TArgMap } from '../../FnMetaType';
+import { TArgMap } from '../../TypeFnMeta';
 
 export function paramVariadicErr(argMap: TArgMap, code504List: Set<vscode.Diagnostic>): void {
     const rightIndex = argMap.size - 1;

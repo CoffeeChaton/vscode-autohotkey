@@ -1,5 +1,5 @@
 import { ESnippetRecBecause, TSnippetRecMap } from '../../../../globalEnum';
-import { TArgMap } from '../../../../tools/DeepAnalysis/FnMetaType';
+import { TArgMap } from '../../../../tools/DeepAnalysis/TypeFnMeta';
 
 export function setParaRec(suggestMap: TSnippetRecMap, argMap: TArgMap, inputStr: string): void {
     for (const ArgAnalysis of argMap.values()) {

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { TSnippetRecMap } from '../../../../globalEnum';
-import { TValAnalysis, TValMap } from '../../../../tools/DeepAnalysis/FnMetaType';
+import { TValAnalysis, TValMap } from '../../../../tools/DeepAnalysis/TypeFnMeta';
 import { EPrefix } from '../../../../tools/MD/setMD';
 import { setItemCore } from './setItem';
 

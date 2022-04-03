@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { TAhkSymbol, TTokenStream } from '../../../globalEnum';
-import { TArgAnalysis, TParamOrValMap, TValAnalysis } from '../FnMetaType';
+import { TArgAnalysis, TParamOrValMap, TValAnalysis } from '../TypeFnMeta';
 import { newC502 } from './def/diag/c502';
 
 function getValRegMap(paramOrValMap: TParamOrValMap): Map<string, RegExp> {
@@ -57,11 +57,14 @@ export function getDARef(
     DocStrMap: TTokenStream,
     paramOrValMap: TParamOrValMap,
 ): void {
-    // 969.80 ms
+    // 938 ms
     const regMap: Map<string, RegExp> = getValRegMap(paramOrValMap);
     const startLine: number = ahkSymbol.selectionRange.end.line;
+    const endLine: number = ahkSymbol.range.end.line;
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue;
+        if (line > endLine) break;
+
         const lineStrLen: number = lStr.trim().length;
         if (lineStrLen === 0) continue;
 

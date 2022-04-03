@@ -1,9 +1,7 @@
 import * as vscode from 'vscode';
-import { TAhkSymbol, TSnippetRecMap } from '../../../globalEnum';
-import { DeepAnalysis } from '../../../tools/DeepAnalysis/DeepAnalysis';
-import { TDeepAnalysisMeta } from '../../../tools/DeepAnalysis/FnMetaType';
-import { kindPick } from '../../../tools/Func/kindPick';
-import { getFnOfPos } from '../../../tools/getScopeOfPos';
+import { TSnippetRecMap } from '../../../globalEnum';
+import { getDAWithPos } from '../../../tools/DeepAnalysis/getDAWithPos';
+import { TDeepAnalysisMeta } from '../../../tools/DeepAnalysis/TypeFnMeta';
 import { isPosAtStr } from '../../../tools/isPosAtStr';
 import { getParamCompletion } from './completion/getArgCompletion';
 import { getUnknownTextCompletion } from './completion/getUnknownTextCompletion';
@@ -12,18 +10,17 @@ import { getRecMap } from './rec/getRecMap';
 
 function suggest(
     DA: TDeepAnalysisMeta,
-    ahkSymbol: TAhkSymbol,
     position: vscode.Position,
     inputStr: string,
 ): vscode.CompletionItem[] {
     const { argMap, valMap, textMap } = DA;
-    const { name } = ahkSymbol;
-    const recMap: TSnippetRecMap = getRecMap(DA, ahkSymbol, position, inputStr);
+    const { funcRawName, range } = DA;
+    const recMap: TSnippetRecMap = getRecMap(DA, position, range, inputStr);
 
     return [
-        ...getParamCompletion(argMap, name, recMap),
-        ...getValCompletion(valMap, name, recMap),
-        ...getUnknownTextCompletion(textMap, name),
+        ...getParamCompletion(argMap, funcRawName, recMap),
+        ...getValCompletion(valMap, funcRawName, recMap),
+        ...getUnknownTextCompletion(textMap, funcRawName),
     ];
 }
 
@@ -34,14 +31,8 @@ export function DeepAnalysisToCompletionItem(
 ): vscode.CompletionItem[] {
     if (isPosAtStr(document, position)) return [];
 
-    const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
-    if (!ahkSymbol) return [];
-
-    const kindStr: 'Function' | 'Method' | null = kindPick(ahkSymbol.kind);
-    if (!kindStr) return [];
-
-    const DA: null | TDeepAnalysisMeta = DeepAnalysis(document, ahkSymbol);
+    const DA: null | TDeepAnalysisMeta = getDAWithPos(document, position);
     if (!DA) return [];
 
-    return suggest(DA, ahkSymbol, position, inputStr);
+    return suggest(DA, position, inputStr);
 }

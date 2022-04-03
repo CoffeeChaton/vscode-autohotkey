@@ -1,12 +1,7 @@
 import * as vscode from 'vscode';
-import {
-    EMode,
-    TAhkSymbol,
-    TSymAndFsPath,
-} from '../../globalEnum';
-import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
-import { TDeepAnalysisMeta } from '../../tools/DeepAnalysis/FnMetaType';
-import { getFnOfPos } from '../../tools/getScopeOfPos';
+import { EMode, TAhkSymbol, TSymAndFsPath } from '../../globalEnum';
+import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
+import { TDeepAnalysisMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { getFuncDocMD } from '../../tools/MD/getFuncDocMD';
 import { tryGetSymbol } from '../../tools/tryGetSymbol';
@@ -41,11 +36,6 @@ export class HoverProvider implements vscode.HoverProvider {
         position: vscode.Position,
         _token: vscode.CancellationToken,
     ): Promise<vscode.Hover | null> {
-        const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
-        let DA: TDeepAnalysisMeta | null = null;
-        if (ahkSymbol !== null) {
-            DA = DeepAnalysis(document, ahkSymbol);
-        }
         // eslint-disable-next-line security/detect-unsafe-regex
         const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
         if (range === undefined) return null;
@@ -61,6 +51,7 @@ export class HoverProvider implements vscode.HoverProvider {
         // const commands = getCommandsHover(document, position);
         // if (commands !== null) return commands;
 
+        const DA: TDeepAnalysisMeta | null = getDAWithPos(document, position);
         if (DA !== null) {
             const md: vscode.MarkdownString | null = DeepAnalysisHover(DA, wordUp);
             if (md !== null) return new vscode.Hover(md);

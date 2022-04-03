@@ -4,7 +4,7 @@ import {
     TDeepAnalysisMeta,
     TTextAnalysis,
     TValAnalysis,
-} from '../../tools/DeepAnalysis/FnMetaType';
+} from '../../tools/DeepAnalysis/TypeFnMeta';
 import { EPrefix, setMD } from '../../tools/MD/setMD';
 import { setPreFix } from '../../tools/str/setPreFix';
 

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TGetFnDefNeed, TValAnalysis } from '../../FnMetaType';
+import { TGetFnDefNeed, TValAnalysis } from '../../TypeFnMeta';
 import { wrapFnValDef } from './wrapFnValDef';
 
 // := the walrus operator

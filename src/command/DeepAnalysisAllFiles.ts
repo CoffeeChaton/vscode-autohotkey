@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
-import { Detecter } from '../core/Detecter';
+import { Detecter, TAhkFileData } from '../core/Detecter';
 import { diagColl } from '../core/diagRoot';
-import { EDiagBase, TAhkSymbolList } from '../globalEnum';
+import { EDiagBase } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
-import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { diagDAFile } from '../tools/DeepAnalysis/Diag/diagDA';
-import { TDeepAnalysisMeta } from '../tools/DeepAnalysis/FnMetaType';
+import { getFnMetaList } from '../tools/DeepAnalysis/getFnMetaList';
+import { TDeepAnalysisMeta } from '../tools/DeepAnalysis/TypeFnMeta';
 
 type TElement = {
     k: string;
@@ -76,28 +76,25 @@ function showOutputChannel(results: TAnalysisResults, timeSpend: number): void {
     OutputChannel.show();
 }
 
-export async function DeepAnalysisAllFiles(): Promise<null> {
+export function DeepAnalysisAllFiles(): null {
     const t1: number = Date.now();
     const allFsPath: string[] = Detecter.getDocMapFile();
 
     const need: TDeepAnalysisMeta[] = [];
-    await Promise.all(allFsPath.map(async (fsPath: string): Promise<void> => {
-        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
-        if (AhkSymbolList === undefined) return;
+    allFsPath.forEach((fsPath: string): void => {
+        const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
+        if (AhkFileData === undefined) return;
 
-        const Uri: vscode.Uri = vscode.Uri.file(fsPath);
-        const document: vscode.TextDocument = await vscode.workspace.openTextDocument(Uri);
-        for (const ahkSymbol of AhkSymbolList) {
-            const DA: TDeepAnalysisMeta | null = DeepAnalysis(document, ahkSymbol);
-            if (DA !== null) need.push(DA);
-        }
-        const baseDiag: vscode.Diagnostic[] = (diagColl.get(Uri) || [])
+        const { AhkSymbolList, DocStrMap } = AhkFileData;
+        const uri: vscode.Uri = vscode.Uri.file(fsPath);
+
+        const DAList: TDeepAnalysisMeta[] = getFnMetaList(AhkSymbolList, DocStrMap);
+        need.push(...DAList);
+
+        const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) || [])
             .filter((diag: vscode.Diagnostic): boolean => diag.source !== EDiagBase.sourceDA);
-        diagColl.set(Uri, [
-            ...baseDiag,
-            ...diagDAFile(AhkSymbolList, document),
-        ]);
-    }));
+        diagColl.set(uri, [...baseDiag, ...diagDAFile(DAList)]);
+    });
 
     const t2 = Date.now();
     showOutputChannel(AnalysisResults(need), t2 - t1);

@@ -7,7 +7,7 @@ import { BaseScanMemo, getBaseData } from './BaseScanMemo/memo';
 import { diagColl } from './diagRoot';
 import { globalValMap } from './Global';
 
-export type TUpdateDocDefReturn = {
+export type TAhkFileData = {
     AhkSymbolList: TAhkSymbolList;
     DocStrMap: TTokenStream;
     t0: number;
@@ -18,7 +18,7 @@ export type TUpdateDocDefReturn = {
 export const Detecter = {
     // key : vscode.Uri.fsPath,
     // val : vscode.DocumentSymbol[] -> MyDocSymbolArr
-    DocMap: new Map<string, TUpdateDocDefReturn>(),
+    DocMap: new Map<string, TAhkFileData>(),
 
     getDocMapFile(): string[] {
         const need: string[] = [];
@@ -34,7 +34,7 @@ export const Detecter = {
         return need;
     },
 
-    getDocMap(fsPath: string): undefined | TUpdateDocDefReturn {
+    getDocMap(fsPath: string): undefined | TAhkFileData {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
         if (fs.existsSync(fsPath)) {
             return Detecter.DocMap.get(fsPath);
@@ -54,7 +54,7 @@ export const Detecter = {
             if (uri.fsPath.endsWith('.ahk')) {
                 void vscode.workspace
                     .openTextDocument(uri)
-                    .then((doc: vscode.TextDocument): TUpdateDocDefReturn => Detecter.updateDocDef(doc));
+                    .then((doc: vscode.TextDocument): TAhkFileData => Detecter.updateDocDef(doc));
             }
         }
     },
@@ -66,14 +66,14 @@ export const Detecter = {
                 if (newUri.fsPath.endsWith('.ahk')) {
                     await vscode.workspace
                         .openTextDocument(newUri)
-                        .then((doc: vscode.TextDocument): TUpdateDocDefReturn => Detecter.updateDocDef(doc));
+                        .then((doc: vscode.TextDocument): TAhkFileData => Detecter.updateDocDef(doc));
                     await renameFileNameFunc(oldUri, newUri);
                 } // else EXP : let a.ahk -> a.ahk0 or a.0ahk
             }
         }
     },
 
-    updateDocDef(document: vscode.TextDocument): TUpdateDocDefReturn {
+    updateDocDef(document: vscode.TextDocument): TAhkFileData {
         const t0: number = Date.now();
         const { uri } = document;
         const { fsPath } = document.uri;
@@ -88,7 +88,7 @@ export const Detecter = {
         } = getBaseData(document);
 
         const t2: number = Date.now();
-        const UpDateDocDefReturn: TUpdateDocDefReturn = {
+        const UpDateDocDefReturn: TAhkFileData = {
             AhkSymbolList,
             DocStrMap,
             t0,

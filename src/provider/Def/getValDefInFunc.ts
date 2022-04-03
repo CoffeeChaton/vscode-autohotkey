@@ -1,13 +1,13 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,5] }] */
 import * as vscode from 'vscode';
 import { TAhkSymbol } from '../../globalEnum';
-import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
+import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import {
     TArgAnalysis,
     TDeepAnalysisMeta,
     TTextAnalysis,
     TValAnalysis,
-} from '../../tools/DeepAnalysis/FnMetaType';
+} from '../../tools/DeepAnalysis/TypeFnMeta';
 import { enumErr } from '../../tools/enumErr';
 import { kindPick } from '../../tools/Func/kindPick';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
@@ -26,12 +26,11 @@ function atFunPos(ahkSymbol: TAhkSymbol, position: vscode.Position): EFuncPos {
 
 function wrapper(
     document: vscode.TextDocument,
-    ahkSymbol: TAhkSymbol,
     wordUp: string,
     listAllUsing: boolean,
     position: vscode.Position,
 ): vscode.Range[] | null {
-    const DA: TDeepAnalysisMeta | null = DeepAnalysis(document, ahkSymbol);
+    const DA: TDeepAnalysisMeta | null = getDAWithPos(document, position);
     if (DA === null) return null;
 
     const {
@@ -81,9 +80,9 @@ function match(
     const funcPos: EFuncPos = atFunPos(ahkSymbol, position);
     switch (funcPos) {
         case EFuncPos.isFuncArg:
-            return wrapper(document, ahkSymbol, wordUp, true, position);
+            return wrapper(document, wordUp, true, position);
         case EFuncPos.isInBody:
-            return wrapper(document, ahkSymbol, wordUp, listAllUsing, position);
+            return wrapper(document, wordUp, listAllUsing, position);
         case EFuncPos.isFuncName:
             console.error('EFuncPos.isFuncName', wordUp, position); // is never now
             void vscode.window.showErrorMessage('EFuncPos.isFuncName', wordUp);

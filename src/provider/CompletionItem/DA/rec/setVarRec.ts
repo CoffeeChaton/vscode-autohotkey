@@ -1,16 +1,16 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,5] }] */
 import * as vscode from 'vscode';
-import { ESnippetRecBecause, TAhkSymbol, TSnippetRecMap } from '../../../../globalEnum';
-import { TValMap } from '../../../../tools/DeepAnalysis/FnMetaType';
+import { ESnippetRecBecause, TSnippetRecMap } from '../../../../globalEnum';
+import { TValMap } from '../../../../tools/DeepAnalysis/TypeFnMeta';
 
-export function getContextRange(position: vscode.Position, ahkSymbol: TAhkSymbol): vscode.Range {
+export function getContextRange(position: vscode.Position, DARange: vscode.Range): vscode.Range {
     const enum ERecLine {
         up = 5,
         down = 5,
     }
 
-    const startLine: number = Math.max(position.line - ERecLine.up, ahkSymbol.range.start.line);
-    const endLine: number = Math.min(position.line + ERecLine.down, ahkSymbol.range.end.line);
+    const startLine: number = Math.max(position.line - ERecLine.up, DARange.start.line);
+    const endLine: number = Math.min(position.line + ERecLine.down, DARange.end.line);
 
     return new vscode.Range(startLine, 0, endLine, 0);
 }

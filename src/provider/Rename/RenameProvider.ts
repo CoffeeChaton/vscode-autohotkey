@@ -1,23 +1,14 @@
 /* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
-import { TAhkSymbol } from '../../globalEnum';
-import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
-import {
-    TArgAnalysis,
-    TDeepAnalysisMeta,
-    TValAnalysis,
-} from '../../tools/DeepAnalysis/FnMetaType';
-import { getFnOfPos } from '../../tools/getScopeOfPos';
+import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
+import { TArgAnalysis, TDeepAnalysisMeta, TValAnalysis } from '../../tools/DeepAnalysis/TypeFnMeta';
 
 function DeepAnalysisRename(
     document: vscode.TextDocument,
     position: vscode.Position,
     wordUp: string,
 ): vscode.Range[] {
-    const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
-    if (!ahkSymbol) return [];
-
-    const DA: TDeepAnalysisMeta | null = DeepAnalysis(document, ahkSymbol);
+    const DA: TDeepAnalysisMeta | null = getDAWithPos(document, position);
     if (!DA) return [];
 
     const argMeta: TArgAnalysis | undefined = DA.argMap.get(wordUp);

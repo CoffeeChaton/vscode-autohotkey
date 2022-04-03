@@ -2,11 +2,7 @@
 /* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import {
-    DeepReadonly,
-    EMode,
-    TSymAndFsPath,
-} from '../../globalEnum';
+import { DeepReadonly, EMode, TSymAndFsPath } from '../../globalEnum';
 import { tryGetSymbol } from '../../tools/tryGetSymbol';
 import { ahkInclude } from './ahkInclude';
 import { getValDefInFunc } from './getValDefInFunc';

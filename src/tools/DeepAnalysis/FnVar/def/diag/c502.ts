@@ -1,4 +1,4 @@
-import { TC502New } from '../../../FnMetaType';
+import { TC502New } from '../../../TypeFnMeta';
 
 /**
  * @param oldRawName don't input UpName, and this is first def name

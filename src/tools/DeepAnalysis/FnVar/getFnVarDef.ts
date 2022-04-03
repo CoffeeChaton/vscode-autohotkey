@@ -16,7 +16,7 @@ import {
     TGetFnDefNeed,
     TValAnalysis,
     TValMap,
-} from '../FnMetaType';
+} from '../TypeFnMeta';
 import { forLoop } from './def/forLoop';
 import { NumGet } from './def/NumGet';
 import { varSetCapacityFunc } from './def/varSetCapacityFunc';
@@ -54,9 +54,10 @@ export function getFnVarDef(
     const valMap: TValMap = new Map<string, TValAnalysis>();
 
     const startLine = ahkSymbol.selectionRange.end.line;
+    const endLine = ahkSymbol.range.end.line;
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
-
+        if (line > endLine) break;
         // eslint-disable-next-line no-magic-numbers
         if (lStr.trim().length < 2) continue; // a=b need length >=3
 

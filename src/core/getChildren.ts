@@ -1,8 +1,4 @@
-import {
-    TAhkSymbol,
-    TAhkSymbolList,
-    TTokenStream,
-} from '../globalEnum';
+import { TAhkSymbol, TAhkSymbolList, TTokenStream } from '../globalEnum';
 
 export type TFuncInput = Readonly<{
     fistWordUp: string;

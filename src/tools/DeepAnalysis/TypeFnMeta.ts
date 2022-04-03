@@ -47,4 +47,5 @@ export type TDeepAnalysisMeta = {
     valMap: TValMap;
     textMap: TTextMap;
     funcRawName: string;
+    range: vscode.Range; // copy ?
 };

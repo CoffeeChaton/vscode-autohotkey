@@ -4,6 +4,8 @@ import { Detecter } from '../../core/Detecter';
 import { diagColl } from '../../core/diagRoot';
 import { EDiagBase } from '../../globalEnum';
 import { diagDAFile } from '../../tools/DeepAnalysis/Diag/diagDA';
+import { getFnMetaList } from '../../tools/DeepAnalysis/getFnMetaList';
+import { TDeepAnalysisMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 
 export class SymBolProvider implements vscode.DocumentSymbolProvider {
     public provideDocumentSymbols(
@@ -11,11 +13,12 @@ export class SymBolProvider implements vscode.DocumentSymbolProvider {
         _token: vscode.CancellationToken,
     ): vscode.DocumentSymbol[] | null | undefined {
         const { uri } = document;
-        const { AhkSymbolList } = Detecter.updateDocDef(document);
+        const { AhkSymbolList, DocStrMap } = Detecter.updateDocDef(document);
 
-        const otherDiag: vscode.Diagnostic[] = (diagColl.get(uri) || [])
-            .filter((v: vscode.Diagnostic): boolean => v.source !== EDiagBase.sourceDA);
-        diagColl.set(uri, [...otherDiag, ...diagDAFile(AhkSymbolList, document)]);
+        const DAList: TDeepAnalysisMeta[] = getFnMetaList(AhkSymbolList, DocStrMap);
+        const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) || [])
+            .filter((diag: vscode.Diagnostic): boolean => diag.source !== EDiagBase.sourceDA);
+        diagColl.set(uri, [...baseDiag, ...diagDAFile(DAList)]);
 
         return AhkSymbolList as vscode.DocumentSymbol[];
     }

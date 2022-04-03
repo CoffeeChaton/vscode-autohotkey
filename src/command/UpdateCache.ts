@@ -1,16 +1,12 @@
 import * as vscode from 'vscode';
 import { BaseScanMemo } from '../core/BaseScanMemo/memo';
-import { Detecter, TUpdateDocDefReturn } from '../core/Detecter';
+import { Detecter, TAhkFileData } from '../core/Detecter';
 import { globalValMap } from '../core/Global';
 import { getUriList } from '../tools/fsTools/getUriList';
 
-export type TDocFullData = {
-    nekoData: TUpdateDocDefReturn;
-    vscDoc: vscode.TextDocument;
-};
 export type TUpdateCacheAsyncReturn = {
     timeSpend: number;
-    DocFullData: TDocFullData[];
+    FileListData: TAhkFileData[];
 };
 
 export async function UpdateCacheAsync(): Promise<null | TUpdateCacheAsyncReturn> {
@@ -23,25 +19,22 @@ export async function UpdateCacheAsync(): Promise<null | TUpdateCacheAsyncReturn
     const uriList: vscode.Uri[] | null = getUriList();
     if (uriList === null) return null;
 
-    const waitDocFullData: Thenable<TDocFullData>[] = [];
+    const waitDocFullData: Thenable<TAhkFileData>[] = [];
     for (const uri of uriList) {
         waitDocFullData.push(
             vscode.workspace
                 .openTextDocument(uri)
-                .then((doc: vscode.TextDocument): TDocFullData => ({
-                    vscDoc: doc,
-                    nekoData: Detecter.updateDocDef(doc),
-                })),
+                .then((doc: vscode.TextDocument): TAhkFileData => Detecter.updateDocDef(doc)),
         );
     }
 
-    const DocFullData: TDocFullData[] = await Promise.all(waitDocFullData);
+    const DocFullData: TAhkFileData[] = await Promise.all(waitDocFullData);
 
     const timeSpend: number = Date.now() - timeStart;
 
     return {
         timeSpend,
-        DocFullData,
+        FileListData: DocFullData,
     };
 }
 

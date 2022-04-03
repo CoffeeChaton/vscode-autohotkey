@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,15] }] */
 import * as vscode from 'vscode';
-import { TGetFnDefNeed, TValAnalysis } from '../../FnMetaType';
+import { TGetFnDefNeed, TValAnalysis } from '../../TypeFnMeta';
 import { wrapFnValDef } from './wrapFnValDef';
 
 function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {

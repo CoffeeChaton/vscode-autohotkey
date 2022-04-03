@@ -15,11 +15,16 @@ export const legend = new vscode.SemanticTokensLegend(
 // TODO wm AhkSymbolList -> SemanticTokens
 // core-------------------------------------
 function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticTokens {
-    const { AhkSymbolList, t2, t1 } = Detecter.updateDocDef(document);
+    const {
+        AhkSymbolList,
+        t2,
+        t1,
+        DocStrMap,
+    } = Detecter.updateDocDef(document);
     showTimeSpend(path.basename(document.uri.fsPath), t2 - t1);
 
     const Collector: vscode.SemanticTokensBuilder = new vscode.SemanticTokensBuilder(legend);
-    DAList2SemanticHighlightFull(document, AhkSymbolList, Collector);
+    DAList2SemanticHighlightFull(DocStrMap, AhkSymbolList, Collector);
     return Collector.build();
 }
 

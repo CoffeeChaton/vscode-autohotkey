@@ -5,7 +5,7 @@ import {
     TTextAnalysis,
     TTextMap,
     TValMap,
-} from './FnMetaType';
+} from './TypeFnMeta';
 
 export function getUnknownTextMap(
     ahkSymbol: TAhkSymbol,
@@ -38,10 +38,11 @@ export function getUnknownTextMap(
         'CLICK',
     ];
     const textMap: TTextMap = new Map<string, TTextAnalysis>();
-    const startLine = ahkSymbol.selectionRange.end.line;
+    const startLine: number = ahkSymbol.selectionRange.end.line;
+    const endLine: number = ahkSymbol.range.end.line;
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
-
+        if (line > endLine) break;
         // eslint-disable-next-line security/detect-unsafe-regex
         for (const v of lStr.matchAll(/(?<![.%`])\b(\w+)\b(?!\()/gu)) {
             const keyRawName: string = v[1];

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { TAhkSymbol, TTokenStream } from '../../../globalEnum';
-import { TArgAnalysis, TArgMap } from '../FnMetaType';
+import { TArgAnalysis, TArgMap } from '../TypeFnMeta';
 
 type TParamData = {
     isByRef: boolean;
@@ -60,6 +60,7 @@ export function getParamDef(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TAr
     const endLine: number = ahkSymbol.selectionRange.end.line;
     const funcRawName: string = ahkSymbol.name;
     for (const { lStr, line } of DocStrMap) {
+        if (line < startLine) continue;
         if (line > endLine) break;
         let lStrFix: string = lStr;
         if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w+\(/u, '');

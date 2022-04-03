@@ -1,9 +1,9 @@
-import { TAhkSymbol } from '../globalEnum';
+import { TAhkFileData } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
-import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
+import { getFnMetaList } from '../tools/DeepAnalysis/getFnMetaList';
 import { arrSum, stdDevFn } from './tools/myMath';
 import { EPressureTestMode, pressureTestConfig, TPickReturn } from './tools/pressureTestConfig';
-import { TDocFullData, TUpdateCacheAsyncReturn, UpdateCacheAsync } from './UpdateCache';
+import { TUpdateCacheAsyncReturn, UpdateCacheAsync } from './UpdateCache';
 
 const Data: number[] = [];
 
@@ -18,14 +18,12 @@ async function devTestBase(): Promise<null> {
 async function devTestDA(): Promise<null> {
     const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync();
     if (ed === null) return null;
-    const { timeSpend, DocFullData } = ed;
+    const { timeSpend, FileListData } = ed;
 
     // DA---
     const t1: number = Date.now();
-    DocFullData.forEach(({ nekoData, vscDoc }: TDocFullData): void => {
-        nekoData.AhkSymbolList.forEach((ahkSymbol: TAhkSymbol): void => {
-            DeepAnalysis(vscDoc, ahkSymbol);
-        });
+    FileListData.forEach(({ AhkSymbolList, DocStrMap }: TAhkFileData): void => {
+        getFnMetaList(AhkSymbolList, DocStrMap);
     });
     const t2: number = Date.now();
     // DA---

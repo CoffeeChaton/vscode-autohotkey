@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
-import { TAhkSymbolList } from '../../globalEnum';
-import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
-import { TDeepAnalysisMeta } from '../../tools/DeepAnalysis/FnMetaType';
+import { TAhkSymbolList, TTokenStream } from '../../globalEnum';
+import { getFnMetaList } from '../../tools/DeepAnalysis/getFnMetaList';
+import { TDeepAnalysisMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { ClassWm } from '../../tools/wm';
 import { pushToken, TSemanticTokensLeaf } from './tools';
-
 // eslint-disable-next-line no-magic-numbers
 const wm = new ClassWm<TDeepAnalysisMeta, TSemanticTokensLeaf[]>(10 * 60 * 1000, 'DA2SemanticHighlight', 0);
 
@@ -43,13 +42,12 @@ function DA2SemanticHighlight(
 
 // filter -----------------------------
 export function DAList2SemanticHighlightFull(
-    document: vscode.TextDocument,
+    DocStrMap: TTokenStream,
     AhkSymbolList: TAhkSymbolList,
     Collector: vscode.SemanticTokensBuilder,
 ): void {
-    for (const ahkSymbol of AhkSymbolList) {
-        const DA: TDeepAnalysisMeta | null = DeepAnalysis(document, ahkSymbol);
-        if (DA === null) continue;
+    const DAList: TDeepAnalysisMeta[] = getFnMetaList(AhkSymbolList, DocStrMap);
+    for (const DA of DAList) {
         pushToken(DA2SemanticHighlight(DA), Collector);
     }
 }
