@@ -14,7 +14,7 @@ export function getUnknownTextMap(
     argMap: TArgMap,
     valMap: TValMap,
 ): TTextMap {
-    const ignoreSet = new Set<string>([
+    const ignoreSet: string[] = [
         // DeepAnalysisAllFiles ->Word frequency statistics
         'RETURN',
         'IF',
@@ -37,7 +37,7 @@ export function getUnknownTextMap(
         'CONTINUE',
         'MOUSEMOVE',
         'CLICK',
-    ]);
+    ];
     const textMap: TTextMap = new Map<string, TTextAnalysis>();
     const startLine = ahkSymbol.selectionRange.end.line;
     for (const { lStr, line } of DocStrMap) {
@@ -46,16 +46,17 @@ export function getUnknownTextMap(
         // eslint-disable-next-line security/detect-unsafe-regex
         for (const v of lStr.matchAll(/(?<![.%`])\b(\w+)\b(?!\()/gu)) {
             const keyRawName: string = v[1];
-            const wordUp: string = keyRawName.toLocaleUpperCase();
-            if (ignoreSet.has(wordUp)) continue;
+            const wordUp: string = keyRawName.toUpperCase();
+            if (ignoreSet.indexOf(wordUp) > -1) continue;
             if (!textMap.has(wordUp)) {
                 if (
-                    (/^[A_\d]_/u).test(wordUp) // (A_Variables) or ( _*2 start varName EX: __varName) or (start with number EX: 0_VarName)
-                    || (/^\d+$/ui).test(wordUp) // just number
+                    valMap.has(wordUp)
                     || argMap.has(wordUp)
-                    || valMap.has(wordUp)
+                    || (/^[A_\d]_/u).test(wordUp) // (A_Variables) or ( _*2 start varName EX: __varName) or (start with number EX: 0_VarName)
+                    || (/^\d+$/ui).test(wordUp) // just number
+                    || (/^0x[0-9a-fA-F]+$/u).test(wordUp) // NumHexConst = 0 x [0-9a-fA-F]+
                 ) {
-                    ignoreSet.add(wordUp);
+                    ignoreSet.push(wordUp);
                     continue;
                 }
             }

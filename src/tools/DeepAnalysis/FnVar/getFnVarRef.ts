@@ -62,6 +62,7 @@ export function getDARef(
     DocStrMap: TTokenStream,
     paramOrValMap: TParamOrValMap,
 ): void {
+    // 969.80 ms
     const regMap: Map<string, RegExp> = getValRegMap(paramOrValMap);
     const startLine: number = ahkSymbol.selectionRange.end.line;
     for (const { lStr, line } of DocStrMap) {

@@ -22,7 +22,7 @@ export function varSetCapacityFunc({
         const UpName: string = RawName.toUpperCase();
         if (argMap.has(UpName)) continue;
 
-        const character: number = ch + v[0].search(RawName); // "VarSetCapacity(".len ===  15
+        const character: number = ch + v[0].indexOf(RawName); // "VarSetCapacity(".len ===  15
         const defRange: vscode.Range = new vscode.Range(
             new vscode.Position(line, character),
             new vscode.Position(line, character + RawName.length),
