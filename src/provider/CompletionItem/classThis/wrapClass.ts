@@ -56,7 +56,8 @@ async function wrapItem(
 ): Promise<vscode.CompletionItem> {
     const item = new vscode.CompletionItem(AhkSymbol.name.trim(), getKindOfCh(AhkSymbol));
     if (AhkSymbol.kind === vscode.SymbolKind.Method) {
-        const methodName = await insertTextWm(fsPath, AhkSymbol);
+        const document: vscode.TextDocument = await vscode.workspace.openTextDocument(fsPath);
+        const methodName = insertTextWm(document, AhkSymbol);
         item.label = methodName.value;
         item.insertText = methodName;
     }
