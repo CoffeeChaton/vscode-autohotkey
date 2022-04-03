@@ -2,10 +2,10 @@ import * as vscode from 'vscode';
 import {
     EMode,
     TAhkSymbol,
-    TDeepAnalysisMeta,
     TSymAndFsPath,
 } from '../../globalEnum';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
+import { TDeepAnalysisMeta } from '../../tools/DeepAnalysis/FnMetaType';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { getFuncDocMD } from '../../tools/MD/getFuncDocMD';

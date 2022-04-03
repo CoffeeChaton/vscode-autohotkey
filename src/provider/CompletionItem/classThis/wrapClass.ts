@@ -37,12 +37,15 @@ function getUserDefClassSymbol(testName: RegExp): TSymAndFsPath | null {
 }
 
 function getKindOfCh(ch: TAhkSymbol): vscode.CompletionItemKind {
-    // dprint-ignore
     switch (ch.kind) {
-        case vscode.SymbolKind.Class: return vscode.CompletionItemKind.Class;
-        case vscode.SymbolKind.Method: return vscode.CompletionItemKind.Method;
-        case vscode.SymbolKind.Variable: return vscode.CompletionItemKind.Variable;
-        default: return vscode.CompletionItemKind.User;
+        case vscode.SymbolKind.Class:
+            return vscode.CompletionItemKind.Class;
+        case vscode.SymbolKind.Method:
+            return vscode.CompletionItemKind.Method;
+        case vscode.SymbolKind.Variable:
+            return vscode.CompletionItemKind.Variable;
+        default:
+            return vscode.CompletionItemKind.User;
     }
 }
 
@@ -70,14 +73,18 @@ async function wrapItem(
 }
 
 function getKind(kind: vscode.SymbolKind): string {
-    // dprint-ignore
     switch (kind) {
-        case vscode.SymbolKind.Class: return 'Class';
-        case vscode.SymbolKind.Function: return 'Function';
-        case vscode.SymbolKind.Method: return 'Method';
-        default: return 'Unknown';
+        case vscode.SymbolKind.Class:
+            return 'Class';
+        case vscode.SymbolKind.Function:
+            return 'Function';
+        case vscode.SymbolKind.Method:
+            return 'Method';
+        default:
+            return 'Unknown';
     }
 }
+
 async function parsingUserDefClassRecursive(
     c0: TSymAndFsPath,
     track: readonly string[],
@@ -234,5 +241,6 @@ export async function wrapClass(
     const ahkClassItem: vscode.CompletionItem[] = await triggerClass(document, position, ChapterArr);
     return ahkClassItem;
 }
+
 // WTF...
 // FIXME: split this file

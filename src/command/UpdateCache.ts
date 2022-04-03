@@ -44,5 +44,6 @@ export async function UpdateCacheAsync(): Promise<null | TUpdateCacheAsyncReturn
         DocFullData,
     };
 }
+
 // TODO detail: string -> Enum
 // kind: vscode.SymbolKind; -> myEnum

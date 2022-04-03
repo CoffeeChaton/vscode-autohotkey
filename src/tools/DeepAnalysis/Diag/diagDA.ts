@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import { getCode502Default, getCode503Default } from '../../../configUI';
-import { TAhkSymbolList, TDeepAnalysisMeta } from '../../../globalEnum';
+import { TAhkSymbolList } from '../../../globalEnum';
 import { DeepAnalysis } from '../DeepAnalysis';
+import { TDeepAnalysisMeta } from '../FnMetaType';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';
 import { paramNeverUsed } from './param/paramNeverUsed';

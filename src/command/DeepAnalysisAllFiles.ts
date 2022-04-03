@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { diagColl } from '../core/diagRoot';
-import { EDiagBase, TAhkSymbolList, TDeepAnalysisMeta } from '../globalEnum';
+import { EDiagBase, TAhkSymbolList } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { diagDAFile } from '../tools/DeepAnalysis/Diag/diagDA';
+import { TDeepAnalysisMeta } from '../tools/DeepAnalysis/FnMetaType';
 
 type TElement = {
     k: string;

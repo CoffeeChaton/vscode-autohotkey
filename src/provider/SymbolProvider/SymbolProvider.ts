@@ -19,5 +19,6 @@ export class SymBolProvider implements vscode.DocumentSymbolProvider {
 
         return AhkSymbolList as vscode.DocumentSymbol[];
     }
+
     // May 08 2020, vscode.SymbolInformation  -> vscode.DocumentSymbol[]
 }

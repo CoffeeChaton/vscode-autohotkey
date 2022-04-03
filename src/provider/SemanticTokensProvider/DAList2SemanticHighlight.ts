@@ -1,9 +1,7 @@
 import * as vscode from 'vscode';
-import {
-    TAhkSymbolList,
-    TDeepAnalysisMeta,
-} from '../../globalEnum';
+import { TAhkSymbolList } from '../../globalEnum';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
+import { TDeepAnalysisMeta } from '../../tools/DeepAnalysis/FnMetaType';
 import { ClassWm } from '../../tools/wm';
 import { pushToken, TSemanticTokensLeaf } from './tools';
 

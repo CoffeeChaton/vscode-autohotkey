@@ -56,6 +56,7 @@ function devTestEnd(iMax: number): void {
 }
 
 const c1: NodeJS.Timeout[] = [];
+
 export async function pressureTest(): Promise<null> {
     c1.forEach((timeout: NodeJS.Timeout): void => clearInterval(timeout));
     c1.length = 0;

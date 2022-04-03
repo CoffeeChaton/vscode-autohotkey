@@ -5,16 +5,18 @@ import {
     EFnMode,
     EValType,
     TAhkSymbol,
-    TAhkValType,
-    TArgMap,
-    TGetFnDefNeed,
     TRunValType2,
     TTokenStream,
-    TValAnalysis,
-    TValMap,
 } from '../../../globalEnum';
 import { fnModeToValType } from '../../Func/fnModeToValType';
 import { getFnModeWM } from '../../Func/getFnMode';
+import {
+    TAhkValType,
+    TArgMap,
+    TGetFnDefNeed,
+    TValAnalysis,
+    TValMap,
+} from '../FnMetaType';
 import { forLoop } from './def/forLoop';
 import { NumGet } from './def/NumGet';
 import { varSetCapacityFunc } from './def/varSetCapacityFunc';

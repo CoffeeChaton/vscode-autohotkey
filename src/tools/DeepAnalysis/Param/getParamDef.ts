@@ -1,10 +1,6 @@
 import * as vscode from 'vscode';
-import {
-    TAhkSymbol,
-    TArgAnalysis,
-    TArgMap,
-    TTokenStream,
-} from '../../../globalEnum';
+import { TAhkSymbol, TTokenStream } from '../../../globalEnum';
+import { TArgAnalysis, TArgMap } from '../FnMetaType';
 
 type TParamData = {
     isByRef: boolean;

@@ -3,12 +3,14 @@ export function toArray<T>(arr: T | T[]): T[] {
         ? arr
         : [arr];
 }
+
 /**
  * base64 to string
  */
 export function base64ToStr(base64: string): string {
     return Buffer.from(base64, 'base64').toString();
 }
+
 /**
  * string to base64
  */

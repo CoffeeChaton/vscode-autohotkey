@@ -34,6 +34,7 @@ export function inSwitchBlock(textFix: string, line: number, switchRangeArray: D
     }
     return switchDeep;
 }
+
 /*
 test code
 ```ahk

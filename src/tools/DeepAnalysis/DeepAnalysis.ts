@@ -1,15 +1,14 @@
 import * as vscode from 'vscode';
-import {
-    TAhkSymbol,
-    TArgMap,
-    TDeepAnalysisMeta,
-    TTextMap,
-    TTokenStream,
-    TValMap,
-} from '../../globalEnum';
+import { TAhkSymbol, TTokenStream } from '../../globalEnum';
 import { kindPick } from '../Func/kindPick';
 import { Pretreatment } from '../Pretreatment';
 import { ClassWm } from '../wm';
+import {
+    TArgMap,
+    TDeepAnalysisMeta,
+    TTextMap,
+    TValMap,
+} from './FnMetaType';
 import { getFnVarMain } from './FnVar/getFnVarMain';
 import { getUnknownTextMap } from './getUnknownTextMap';
 import { getParamMain } from './Param/getParam';

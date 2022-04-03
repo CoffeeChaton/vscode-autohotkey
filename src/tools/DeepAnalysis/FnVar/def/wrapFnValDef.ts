@@ -1,9 +1,5 @@
 import * as vscode from 'vscode';
-import {
-    TAhkValType,
-    TValAnalysis,
-    TValMap,
-} from '../../../../globalEnum';
+import { TAhkValType, TValAnalysis, TValMap } from '../../FnMetaType';
 import { newC502 } from './diag/c502';
 
 type TGetValue = {

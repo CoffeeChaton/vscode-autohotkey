@@ -5,6 +5,7 @@ export const enum EDiagLine {
     miss = 0,
     OK = 1,
 }
+
 export type TLineErr = {
     colL: number;
     colR: number;

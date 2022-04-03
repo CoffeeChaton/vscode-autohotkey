@@ -63,6 +63,7 @@ export function configChangEvent(): void {
     Configs = vscode.workspace.getConfiguration('AhkNekoHelp');
     config = getConfig();
 }
+
 /*
     ---set end---
 */

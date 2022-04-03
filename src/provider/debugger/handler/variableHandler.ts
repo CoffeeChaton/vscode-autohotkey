@@ -48,11 +48,14 @@ function formatPropertyValue({
     const str: WithImplicitCoercion<string> = content ?? '';
     const { encoding } = attr;
     const primitive = Buffer.from(str, encoding).toString();
-    // dprint-ignore
+
     switch (aType) {
-        case 'integer': return primitive;
-        case 'float': return primitive;
-        case 'string': return `"${primitive}"`;
+        case 'integer':
+            return primitive;
+        case 'float':
+            return primitive;
+        case 'string':
+            return `"${primitive}"`;
         case 'object': {
             if (isLikeArray) return `Array(${length})`;
 
@@ -132,11 +135,13 @@ export class VariableHandler {
 
     public getScopeByRef(ref: number): number {
         const scopeOrVar: TAhkVariable | EVarScopeStr = this.variableHandles.get(ref);
-        // dprint-ignore
         switch (scopeOrVar) {
-            case EVarScopeStr.Local: return EVarScope.LOCAL;
-            case EVarScopeStr.Global: return EVarScope.GLOBAL;
-            default: return scopeOrVar.scope;
+            case EVarScopeStr.Local:
+                return EVarScope.LOCAL;
+            case EVarScopeStr.Global:
+                return EVarScope.GLOBAL;
+            default:
+                return scopeOrVar.scope;
         }
     }
 

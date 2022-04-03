@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TGetFnDefNeed, TValAnalysis } from '../../../../globalEnum';
+import { TGetFnDefNeed, TValAnalysis } from '../../FnMetaType';
 import { wrapFnValDef } from './wrapFnValDef';
 
 // VarSetCapacity(varName)

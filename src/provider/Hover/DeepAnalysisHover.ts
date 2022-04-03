@@ -4,7 +4,7 @@ import {
     TDeepAnalysisMeta,
     TTextAnalysis,
     TValAnalysis,
-} from '../../globalEnum';
+} from '../../tools/DeepAnalysis/FnMetaType';
 import { EPrefix, setMD } from '../../tools/MD/setMD';
 import { setPreFix } from '../../tools/str/setPreFix';
 

@@ -13,7 +13,7 @@ export function ListAllFunc(showLink: boolean): null {
     const t1: number = Date.now();
     const allFsPath: string[] = Detecter.getDocMapFile();
 
-    const AllList: string[] = ['[neko-help] List All Function()'];
+    const AllList: string[] = [];
     for (const fsPath of allFsPath) {
         const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) continue;
@@ -23,17 +23,17 @@ export function ListAllFunc(showLink: boolean): null {
         for (const DocumentSymbol of AhkSymbolList) {
             if (DocumentSymbol.kind === vscode.SymbolKind.Function) {
                 const text = `${DocumentSymbol.name}()`;
-                if (showLink) {
-                    AllList.push(getFnNameLineCol(text, fsPath, DocumentSymbol.selectionRange.start));
-                } else {
-                    AllList.push(text);
-                }
+                const textShow: string = showLink
+                    ? getFnNameLineCol(text, fsPath, DocumentSymbol.selectionRange.start)
+                    : text;
+                AllList.push(textShow);
             }
         }
         AllList.push('\n');
     }
 
     OutputChannel.clear();
+    OutputChannel.appendLine('[neko-help] List All Function()');
     OutputChannel.append(AllList.join('\n'));
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();
@@ -62,7 +62,7 @@ export function ListAllFuncSort(reverse: boolean): null {
     }
 
     // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
-    AllList.sort();
+    AllList.sort(); // a->z
     const appendText: string = reverse
         ? AllList
             .reverse()
@@ -70,7 +70,7 @@ export function ListAllFuncSort(reverse: boolean): null {
         : AllList.join('\n');
 
     OutputChannel.clear();
-    OutputChannel.appendLine('[neko-help] List All Function()');
+    OutputChannel.appendLine('[neko-help] List All Function() Sort;');
     OutputChannel.appendLine(appendText);
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();

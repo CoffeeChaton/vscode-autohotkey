@@ -2,10 +2,7 @@
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
 import { getLintConfig } from '../../configUI';
-import {
-    TAhkSymbolList,
-    TTokenStream,
-} from '../../globalEnum';
+import { TAhkSymbolList, TTokenStream } from '../../globalEnum';
 import { ClassWm } from '../../tools/wm';
 import { getIgnore } from './getIgnore';
 import { getFuncErr } from './tools/getFuncErr';

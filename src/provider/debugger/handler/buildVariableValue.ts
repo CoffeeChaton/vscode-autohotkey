@@ -48,14 +48,19 @@ function buildVariableValueObj(attr: TDbgpPropertyAttr, property: TDbgpProperty)
 export function buildVariableValue(property: TDbgpProperty, attr: TDbgpPropertyAttr, content: string): string {
     const aType = attr.type;
     const primitive = base64ToStr(content);
-    // dprint-ignore
     switch (aType) {
-        case 'integer': return primitive;
-        case 'float': return primitive;
-        case 'string': return `"${primitive}"`;
-        case 'object': return buildVariableValueObj(attr, property);
-        case 'undefined': return 'type undefined';
-        case undefined: break;
+        case 'integer':
+            return primitive;
+        case 'float':
+            return primitive;
+        case 'string':
+            return `"${primitive}"`;
+        case 'object':
+            return buildVariableValueObj(attr, property);
+        case 'undefined':
+            return 'type undefined';
+        case undefined:
+            break;
         default:
             enumLog(aType);
             break;

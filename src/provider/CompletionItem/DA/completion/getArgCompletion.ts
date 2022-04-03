@@ -1,9 +1,6 @@
 import * as vscode from 'vscode';
-import {
-    TArgAnalysis,
-    TArgMap,
-    TSnippetRecMap,
-} from '../../../../globalEnum';
+import { TSnippetRecMap } from '../../../../globalEnum';
+import { TArgAnalysis, TArgMap } from '../../../../tools/DeepAnalysis/FnMetaType';
 import { setPreFix } from '../../../../tools/str/setPreFix';
 import { setItemCore } from './setItem';
 
@@ -14,9 +11,12 @@ export function getParamCompletion(
 ): vscode.CompletionItem[] {
     const need: vscode.CompletionItem[] = [];
     argMap.forEach((v: TArgAnalysis): void => {
-        // dprint-ignore
         const {
-            keyRawName, refRangeList, defRangeList, isByRef, isVariadic,
+            keyRawName,
+            refRangeList,
+            defRangeList,
+            isByRef,
+            isVariadic,
         } = v;
         const item: vscode.CompletionItem = setItemCore({
             prefix: setPreFix(isByRef, isVariadic),

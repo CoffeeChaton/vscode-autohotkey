@@ -1,13 +1,13 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,5] }] */
 import * as vscode from 'vscode';
+import { TAhkSymbol } from '../../globalEnum';
+import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import {
-    TAhkSymbol,
     TArgAnalysis,
     TDeepAnalysisMeta,
     TTextAnalysis,
     TValAnalysis,
-} from '../../globalEnum';
-import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
+} from '../../tools/DeepAnalysis/FnMetaType';
 import { enumErr } from '../../tools/enumErr';
 import { kindPick } from '../../tools/Func/kindPick';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
@@ -79,10 +79,11 @@ function match(
     listAllUsing: boolean,
 ): null | vscode.Range[] {
     const funcPos: EFuncPos = atFunPos(ahkSymbol, position);
-    // dprint-ignore
     switch (funcPos) {
-        case EFuncPos.isFuncArg: return wrapper(document, ahkSymbol, wordUp, true, position);
-        case EFuncPos.isInBody: return wrapper(document, ahkSymbol, wordUp, listAllUsing, position);
+        case EFuncPos.isFuncArg:
+            return wrapper(document, ahkSymbol, wordUp, true, position);
+        case EFuncPos.isInBody:
+            return wrapper(document, ahkSymbol, wordUp, listAllUsing, position);
         case EFuncPos.isFuncName:
             console.error('EFuncPos.isFuncName', wordUp, position); // is never now
             void vscode.window.showErrorMessage('EFuncPos.isFuncName', wordUp);

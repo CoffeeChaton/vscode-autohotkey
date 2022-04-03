@@ -43,10 +43,13 @@ export function getLStr(textRaw: string): string {
     if ((/^\s*;/u).test(textRaw)) return '';
     const textFix = textRaw.replace(/`./ug, '__').replace(/"[^"]*?"/ug, fnReplacerStr);
     const i = textFix.indexOf(';');
-    // dprint-ignore
+
     switch (i) {
-        case -1: return textFix;
-        case 0: return '';
-        default: return textFix.substring(0, i);
+        case -1:
+            return textFix;
+        case 0:
+            return '';
+        default:
+            return textFix.substring(0, i);
     }
 }

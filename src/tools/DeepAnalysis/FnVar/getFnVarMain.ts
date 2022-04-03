@@ -1,9 +1,5 @@
-import {
-    TAhkSymbol,
-    TArgMap,
-    TTokenStream,
-    TValMap,
-} from '../../../globalEnum';
+import { TAhkSymbol, TTokenStream } from '../../../globalEnum';
+import { TArgMap, TValMap } from '../FnMetaType';
 import { getFnVarDef } from './getFnVarDef';
 import { getDARef } from './getFnVarRef';
 

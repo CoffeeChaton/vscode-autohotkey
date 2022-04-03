@@ -1,12 +1,11 @@
 import * as vscode from 'vscode';
+import { TAhkSymbol, TTokenStream } from '../../globalEnum';
 import {
-    TAhkSymbol,
     TArgMap,
     TTextAnalysis,
     TTextMap,
-    TTokenStream,
     TValMap,
-} from '../../globalEnum';
+} from './FnMetaType';
 
 export function getUnknownTextMap(
     ahkSymbol: TAhkSymbol,
@@ -54,7 +53,7 @@ export function getUnknownTextMap(
                     || argMap.has(wordUp)
                     || (/^[A_\d]_/u).test(wordUp) // (A_Variables) or ( _*2 start varName EX: __varName) or (start with number EX: 0_VarName)
                     || (/^\d+$/ui).test(wordUp) // just number
-                    || (/^0x[0-9a-fA-F]+$/u).test(wordUp) // NumHexConst = 0 x [0-9a-fA-F]+
+                    || (/^0x[\da-fA-F]+$/u).test(wordUp) // NumHexConst = 0 x [0-9a-fA-F]+
                 ) {
                     ignoreSet.push(wordUp);
                     continue;

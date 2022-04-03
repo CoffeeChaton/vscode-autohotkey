@@ -49,6 +49,7 @@ function getLoopErr(lStr: string): TLineDiag {
         tags: [],
     };
 }
+
 // ---------------------------------------------------------------------------------------------------------------------
 function getCommandErrFnReplace(fistWord: string, lStr: string): TLineDiag {
     // eslint-disable-next-line no-magic-numbers

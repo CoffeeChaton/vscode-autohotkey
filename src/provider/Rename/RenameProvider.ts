@@ -1,12 +1,12 @@
 /* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
+import { TAhkSymbol } from '../../globalEnum';
+import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import {
-    TAhkSymbol,
     TArgAnalysis,
     TDeepAnalysisMeta,
     TValAnalysis,
-} from '../../globalEnum';
-import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
+} from '../../tools/DeepAnalysis/FnMetaType';
 import { getFnOfPos } from '../../tools/getScopeOfPos';
 
 function DeepAnalysisRename(

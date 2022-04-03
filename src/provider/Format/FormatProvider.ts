@@ -272,6 +272,7 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         });
     }
 }
+
 /*
 -----------------------------------------------
 TEST OK

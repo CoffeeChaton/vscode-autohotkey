@@ -31,6 +31,7 @@ function _commandHeadStatistics(commandHead: string): void {
         console.log('🚀 ~ _commandHeadStatistics ~ e5', e5);
     }
 }
+
 // const e5 = [
 //     {
 //         k: 'SetTimer',

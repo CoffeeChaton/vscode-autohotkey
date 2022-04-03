@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TGetFnDefNeed, TValAnalysis } from '../../../../globalEnum';
+import { TGetFnDefNeed, TValAnalysis } from '../../FnMetaType';
 import { wrapFnValDef } from './wrapFnValDef';
 
 // NumGet(varName)
@@ -15,7 +15,7 @@ export function NumGet({
     if (lStr.length < 7) return;
     if (lStr.indexOf('(') === -1) return;
     // eslint-disable-next-line security/detect-unsafe-regex
-    for (const v of lStr.matchAll(/(?<![.%`])\bNumGet\b\(\s*(?:&)?(\w+)\b(?!\()/gui)) {
+    for (const v of lStr.matchAll(/(?<![.%`])\bNumGet\b\(\s*&?(\w+)\b(?!\()/gui)) {
         const ch = v.index;
         if (ch === undefined) continue;
 

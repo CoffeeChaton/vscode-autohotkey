@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
-import { TAhkSymbol, TDeepAnalysisMeta, TSnippetRecMap } from '../../../globalEnum';
+import { TAhkSymbol, TSnippetRecMap } from '../../../globalEnum';
 import { DeepAnalysis } from '../../../tools/DeepAnalysis/DeepAnalysis';
+import { TDeepAnalysisMeta } from '../../../tools/DeepAnalysis/FnMetaType';
 import { kindPick } from '../../../tools/Func/kindPick';
 import { getFnOfPos } from '../../../tools/getScopeOfPos';
 import { isPosAtStr } from '../../../tools/isPosAtStr';

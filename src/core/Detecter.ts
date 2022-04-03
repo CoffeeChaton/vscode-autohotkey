@@ -1,11 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import {
-    EStr,
-    TAhkSymbolList,
-    TTokenStream,
-} from '../globalEnum';
+import { EStr, TAhkSymbolList, TTokenStream } from '../globalEnum';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
 import { BaseScanMemo, getBaseData } from './BaseScanMemo/memo';
 import { diagColl } from './diagRoot';

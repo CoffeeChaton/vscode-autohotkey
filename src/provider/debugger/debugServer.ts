@@ -6,6 +6,7 @@ const enum EnumStr {
     END = 0,
     HEADER = '<?xml version="1.0" encoding="UTF-8"?>',
 }
+
 /**
  * Exchange dbgp protocol with ahk debug proxy.
  */

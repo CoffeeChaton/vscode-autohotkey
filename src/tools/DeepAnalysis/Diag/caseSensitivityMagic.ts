@@ -4,6 +4,7 @@ export const enum EPrefixC502 {
     var = 'var',
     param = 'param',
 }
+
 /**
  * // var "A" is the same variable as "a" defined earlier (at [165, 20])
  * // param "dDC" is the some variable as "ddc" defined earlier (at [221, 8])

@@ -18,8 +18,8 @@ export type TLaunchRequestArguments = DeepReadonly<{
     noDebug?: boolean;
 
     /** Optional data from the previous, restarted session.
-         The data is sent as the 'restart' attribute of the 'terminated' event.
-         The client should leave the data intact.
+     The data is sent as the 'restart' attribute of the 'terminated' event.
+     The client should leave the data intact.
      */
     __restart?: unknown;
 
@@ -73,23 +73,23 @@ type TDbgpResponseStack = {
 };
 
 /**
-//  <property>
-//     name="short_name"
-//     fullname="long_name"
-//      type="data_type"
-//     classname="name_of_object_class"
-//     constant="0|1"
-//     children="0|1"
-//     size="{NUM}"
-//     page="{NUM}"
-//     pagesize="{NUM}"
-//     address="{NUM}"
-//     key="language_dependent_key"
-//      encoding="base64|none"
-//      numchildren="{NUM}">
-//     ...encoded Value Data...
-//  </property>
-*/
+ //  <property>
+ //     name="short_name"
+ //     fullname="long_name"
+ //      type="data_type"
+ //     classname="name_of_object_class"
+ //     constant="0|1"
+ //     children="0|1"
+ //     size="{NUM}"
+ //     page="{NUM}"
+ //     pagesize="{NUM}"
+ //     address="{NUM}"
+ //     key="language_dependent_key"
+ //      encoding="base64|none"
+ //      numchildren="{NUM}">
+ //     ...encoded Value Data...
+ //  </property>
+ */
 export type TDbgpPropertyAttr = {
     // type 1
     name?: string;

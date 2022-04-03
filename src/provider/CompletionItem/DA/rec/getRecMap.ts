@@ -1,9 +1,6 @@
 import * as vscode from 'vscode';
-import {
-    TAhkSymbol,
-    TDeepAnalysisMeta,
-    TSnippetRecMap,
-} from '../../../../globalEnum';
+import { TAhkSymbol, TSnippetRecMap } from '../../../../globalEnum';
+import { TDeepAnalysisMeta } from '../../../../tools/DeepAnalysis/FnMetaType';
 import { setParaRec } from './setParaRec';
 import { getContextRange, setVarRec } from './setVarRec';
 

@@ -60,6 +60,7 @@ function getFuncDocCore(
 
     return md;
 }
+
 // eslint-disable-next-line no-magic-numbers
 const wm = new ClassWm<TAhkSymbol, vscode.MarkdownString>(10 * 60 * 1000, 'setFuncHoverMD', 9000);
 

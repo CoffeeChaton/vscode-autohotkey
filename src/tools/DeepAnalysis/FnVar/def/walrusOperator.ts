@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TGetFnDefNeed, TValAnalysis } from '../../../../globalEnum';
+import { TGetFnDefNeed, TValAnalysis } from '../../FnMetaType';
 import { wrapFnValDef } from './wrapFnValDef';
 
 // := the walrus operator
@@ -37,5 +37,6 @@ export function walrusOperator({
         valMap.set(UpName, value);
     }
 }
+
 // Test OK     text := LT_bgColor_N := set_list := wait_time := Percentage := "Discard" ;clean
 // TODO .= += -=

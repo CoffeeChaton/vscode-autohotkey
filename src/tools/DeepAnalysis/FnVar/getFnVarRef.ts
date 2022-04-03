@@ -1,11 +1,6 @@
 import * as vscode from 'vscode';
-import {
-    TAhkSymbol,
-    TArgAnalysis,
-    TParamOrValMap,
-    TTokenStream,
-    TValAnalysis,
-} from '../../../globalEnum';
+import { TAhkSymbol, TTokenStream } from '../../../globalEnum';
+import { TArgAnalysis, TParamOrValMap, TValAnalysis } from '../FnMetaType';
 import { newC502 } from './def/diag/c502';
 
 function getValRegMap(paramOrValMap: TParamOrValMap): Map<string, RegExp> {

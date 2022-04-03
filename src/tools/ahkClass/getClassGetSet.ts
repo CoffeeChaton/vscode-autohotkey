@@ -21,6 +21,7 @@ function getName(FuncInput: TFuncInput): string | null {
     }
     return null;
 }
+
 export function getClassGetSet(FuncInput: TFuncInput): null | TAhkSymbol {
     const {
         line,
@@ -48,6 +49,7 @@ export function getClassGetSet(FuncInput: TFuncInput): null | TAhkSymbol {
     });
     return classSymbol;
 }
+
 //  https://www.autohotkey.com/docs/Objects.htm#Dynamic_Properties
 // class ClassName extends BaseClassName
 // {

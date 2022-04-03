@@ -13,12 +13,16 @@ import { EMode } from '../../globalEnum';
 //     Variable = 12,
 // }
 export function kindCheck(mode: EMode, kind: vscode.SymbolKind): boolean {
-    // dprint-ignore
     switch (mode) {
-        case EMode.ahkClass: return kind === vscode.SymbolKind.Class;
-        case EMode.ahkMethod: return kind === vscode.SymbolKind.Method;
-        case EMode.ahkFunc: return kind === vscode.SymbolKind.Function;
-        case EMode.ahkGlobal: return kind === vscode.SymbolKind.Variable;
-        default: return false;
+        case EMode.ahkClass:
+            return kind === vscode.SymbolKind.Class;
+        case EMode.ahkMethod:
+            return kind === vscode.SymbolKind.Method;
+        case EMode.ahkFunc:
+            return kind === vscode.SymbolKind.Function;
+        case EMode.ahkGlobal:
+            return kind === vscode.SymbolKind.Variable;
+        default:
+            return false;
     }
 }

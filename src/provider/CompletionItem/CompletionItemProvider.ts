@@ -32,6 +32,7 @@ async function CompletionItemCore(
     // "./path"
     return completions;
 }
+
 // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
 export class CompletionItemProvider implements vscode.CompletionItemProvider {
     // eslint-disable-next-line class-methods-use-this

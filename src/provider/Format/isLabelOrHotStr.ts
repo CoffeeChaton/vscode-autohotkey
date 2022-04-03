@@ -2,10 +2,12 @@ export function isHotStr(textFix: string): boolean {
     if (textFix === '') return false;
     return textFix.endsWith('::');
 }
+
 export function isLabel(textFix: string): boolean {
     if (textFix === '') return false;
     return (/^(?!case)\s+\w*\w:$/iu).test(textFix);
 }
+
 /*
 ```ahk
 ::btw::

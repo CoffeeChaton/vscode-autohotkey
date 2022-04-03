@@ -9,6 +9,7 @@ function calcSize<V>(v: V | undefined): number {
 }
 
 type TObj = Record<string, unknown>;
+
 // T === Object has name
 export class ClassWm<T extends TObj | unknown[] | readonly unknown[], V> {
     public cacheHits = 0;
