@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import * as mm from 'micromatch';
 import * as path from 'path';
 import * as vscode from 'vscode';
@@ -21,10 +20,12 @@ export async function listAllFuncClass(
     const itemS: vscode.CompletionItem[] = [];
     for (const fsPath of fsPaths) {
         if (mm.isMatch(fsPath, blockList)) continue;
-        const fileName = path.basename(fsPath);
 
         const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) continue;
+        // eslint-disable-next-line no-await-in-loop
+        const document: vscode.TextDocument = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
+        const fileName = path.basename(fsPath);
         for (const AhkSymbol of AhkSymbolList) {
             if (AhkSymbol.kind === vscode.SymbolKind.Class) {
                 const { name } = AhkSymbol;
@@ -32,7 +33,7 @@ export async function listAllFuncClass(
                     label: getLabel(name, inputStr),
                     description: fileName,
                 }, vscode.CompletionItemKind.Class);
-                item.insertText = await insertTextWm(fsPath, AhkSymbol);
+                item.insertText = insertTextWm(document, AhkSymbol);
                 item.detail = 'neko help';
                 item.documentation = 'user def class';
                 itemS.push(item);
@@ -42,9 +43,9 @@ export async function listAllFuncClass(
                     label: getLabel(name, inputStr),
                     description: fileName,
                 }, vscode.CompletionItemKind.Function);
-                item.insertText = await insertTextWm(fsPath, AhkSymbol);
+                item.insertText = insertTextWm(document, AhkSymbol);
                 item.detail = 'neko help';
-                item.documentation = await getFuncDocMD(AhkSymbol, fsPath);
+                item.documentation = getFuncDocMD(AhkSymbol, fsPath, document);
                 itemS.push(item);
             }
         }

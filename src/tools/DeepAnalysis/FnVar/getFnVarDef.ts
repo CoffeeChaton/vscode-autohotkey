@@ -38,23 +38,23 @@ function getLineType(lStr: string, fnMode: EFnMode): EValType.local | EValType.g
 }
 
 type TFnVarDef = {
-    ahkSymbol: TAhkSymbol;
+    AhkSymbol: TAhkSymbol;
     DocStrMap: TTokenStream;
     argMap: TArgMap;
 };
 
 export function getFnVarDef(
     {
-        ahkSymbol,
+        AhkSymbol,
         DocStrMap,
         argMap,
     }: TFnVarDef,
 ): TValMap {
-    const fnMode = getFnModeWM(ahkSymbol, DocStrMap);
+    const fnMode = getFnModeWM(AhkSymbol, DocStrMap);
     const valMap: TValMap = new Map<string, TValAnalysis>();
 
-    const startLine = ahkSymbol.selectionRange.end.line;
-    const endLine = ahkSymbol.range.end.line;
+    const startLine = AhkSymbol.selectionRange.end.line;
+    const endLine = AhkSymbol.range.end.line;
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;

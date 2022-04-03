@@ -4,11 +4,11 @@ import { TArgMap } from '../TypeFnMeta';
 import { getParamDef } from './getParamDef';
 
 export function getParamMain(
-    ahkSymbol: TAhkSymbol,
+    AhkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
 ): TArgMap {
-    const argMap: TArgMap = getParamDef(ahkSymbol, DocStrMap);
-    getDARef(ahkSymbol, DocStrMap, argMap);
+    const argMap: TArgMap = getParamDef(AhkSymbol, DocStrMap);
+    getDARef(AhkSymbol, DocStrMap, argMap);
 
     return argMap;
 }

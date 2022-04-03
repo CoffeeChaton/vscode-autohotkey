@@ -17,12 +17,12 @@ export function getFnMetaList(AhkSymbolList: TAhkSymbolList, DocStrMap: TTokenSt
     if (cache !== undefined) return cache;
 
     const funcMetaList: TDeepAnalysisMeta[] = [];
-    for (const ahkSymbol of AhkSymbolList) {
-        if (ahkSymbol.kind === vscode.SymbolKind.Class) {
-            funcMetaList.push(...getFnMetaList(ahkSymbol.children, DocStrMap));
+    for (const AhkSymbol of AhkSymbolList) {
+        if (AhkSymbol.kind === vscode.SymbolKind.Class) {
+            funcMetaList.push(...getFnMetaList(AhkSymbol.children, DocStrMap));
             continue;
         }
-        const DA: TDeepAnalysisMeta | null = getFnMeta(ahkSymbol, DocStrMap);
+        const DA: TDeepAnalysisMeta | null = getFnMeta(AhkSymbol, DocStrMap);
         if (DA !== null) funcMetaList.push(DA);
     }
 

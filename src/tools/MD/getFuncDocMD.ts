@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
+import { Detecter } from '../../core/Detecter';
 import { EMode, TAhkSymbol, TTokenStream } from '../../globalEnum';
-import { Pretreatment } from '../Pretreatment';
+import { getDocStrMapMask } from '../getDocStrMapMask';
 import { docCommentBlock, EDocBlock } from '../str/inCommentBlock';
 import { ClassWm } from '../wm';
 
@@ -23,16 +24,14 @@ function getReturnText(lStr: string, textRaw: string): string {
 function getFuncDocCore(
     AhkSymbol: TAhkSymbol,
     document: vscode.TextDocument,
+    DocStrMap: TTokenStream,
 ): vscode.MarkdownString {
     let flag: EDocBlock = EDocBlock.other;
     const fnDocList: string[] = [];
     let returnList = '';
-    const startLineBaseZero: number = AhkSymbol.range.start.line;
-    const DocStrMap: TTokenStream = Pretreatment(document.getText(AhkSymbol.range).split('\n'), startLineBaseZero);
-    const starLine = 0;
-    const endLine: number = DocStrMap.length;
-    for (let i = starLine; i < endLine; i++) {
-        const { textRaw } = DocStrMap[i];
+
+    const AhkTokenList: TTokenStream = getDocStrMapMask(AhkSymbol, DocStrMap);
+    for (const { lStr, textRaw } of AhkTokenList) {
         flag = docCommentBlock(textRaw, flag);
         if (flag === EDocBlock.inDocCommentBlockMid) {
             const lineDoc: string = textRaw.trimStart().substring(1);
@@ -43,7 +42,7 @@ function getFuncDocCore(
             );
             continue;
         }
-        returnList += getReturnText(DocStrMap[i].lStr, DocStrMap[i].textRaw);
+        returnList += getReturnText(lStr, textRaw);
     }
 
     const kindDetail = `(${EMode.ahkFunc}) ${AhkSymbol.detail}\n`;
@@ -64,16 +63,23 @@ function getFuncDocCore(
 // eslint-disable-next-line no-magic-numbers
 const wm = new ClassWm<TAhkSymbol, vscode.MarkdownString>(10 * 60 * 1000, 'setFuncHoverMD', 9000);
 
-export async function getFuncDocMD(AhkSymbol: TAhkSymbol, fsPath: string): Promise<vscode.MarkdownString> {
+export function getFuncDocMD(
+    AhkSymbol: TAhkSymbol,
+    fsPath: string,
+    document: vscode.TextDocument,
+): vscode.MarkdownString {
     if (AhkSymbol.kind !== vscode.SymbolKind.Function && AhkSymbol.kind !== vscode.SymbolKind.Method) {
         return new vscode.MarkdownString('just support Function/Method hover now', true);
     }
     const cache: vscode.MarkdownString | undefined = wm.getWm(AhkSymbol);
     if (cache !== undefined) return cache;
 
-    const document: vscode.TextDocument = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
+    const DocStrMap: TTokenStream | undefined = Detecter.getDocMap(fsPath)?.DocStrMap;
+    if (DocStrMap === undefined) throw new Error('DocStrMap undefined');
 
-    const md: vscode.MarkdownString = getFuncDocCore(AhkSymbol, document);
+    // const document: vscode.TextDocument = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
+
+    const md: vscode.MarkdownString = getFuncDocCore(AhkSymbol, document, DocStrMap);
 
     return wm.setWm(AhkSymbol, md);
 }

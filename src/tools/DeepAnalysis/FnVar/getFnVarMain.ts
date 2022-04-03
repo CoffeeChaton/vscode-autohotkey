@@ -4,17 +4,17 @@ import { getFnVarDef } from './getFnVarDef';
 import { getDARef } from './getFnVarRef';
 
 export function getFnVarMain(
-    ahkSymbol: TAhkSymbol,
+    AhkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
     argMap: TArgMap,
 ): TValMap {
     const valMap: TValMap = getFnVarDef({
-        ahkSymbol,
+        AhkSymbol,
         DocStrMap,
         argMap,
     });
 
-    getDARef(ahkSymbol, DocStrMap, valMap);
+    getDARef(AhkSymbol, DocStrMap, valMap);
 
     return valMap;
 }

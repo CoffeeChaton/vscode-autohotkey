@@ -54,11 +54,11 @@ function getParamDefNeed(param: string, funcRawName: string, line: number, lStr:
     };
 }
 
-export function getParamDef(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TArgMap {
+export function getParamDef(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TArgMap {
     const argMap: TArgMap = new Map<string, TArgAnalysis>();
-    const startLine: number = ahkSymbol.selectionRange.start.line;
-    const endLine: number = ahkSymbol.selectionRange.end.line;
-    const funcRawName: string = ahkSymbol.name;
+    const startLine: number = AhkSymbol.selectionRange.start.line;
+    const endLine: number = AhkSymbol.selectionRange.end.line;
+    const funcRawName: string = AhkSymbol.name;
     for (const { lStr, line } of DocStrMap) {
         if (line < startLine) continue;
         if (line > endLine) break;

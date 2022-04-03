@@ -53,14 +53,14 @@ function getValRef(param: TNeedSetRef, paramOrValMap: TParamOrValMap): void {
 
 // eslint-disable-next-line max-params
 export function getDARef(
-    ahkSymbol: TAhkSymbol,
+    AhkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
     paramOrValMap: TParamOrValMap,
 ): void {
     // 938 ms
     const regMap: Map<string, RegExp> = getValRegMap(paramOrValMap);
-    const startLine: number = ahkSymbol.selectionRange.end.line;
-    const endLine: number = ahkSymbol.range.end.line;
+    const startLine: number = AhkSymbol.selectionRange.end.line;
+    const endLine: number = AhkSymbol.range.end.line;
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue;
         if (line > endLine) break;

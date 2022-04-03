@@ -4,7 +4,7 @@ import { TAhkSymbol, TAhkSymbolList } from '../globalEnum';
 
 type TStackNameSymbol = {
     readonly name: string;
-    readonly ahkSymbol: TAhkSymbol;
+    readonly AhkSymbol: TAhkSymbol;
 };
 
 type TStackPro = Readonly<{
@@ -22,7 +22,7 @@ function dfs(father: TAhkSymbolList, position: vscode.Position, StackPro: TStack
                     ...stack,
                     {
                         name: ch.name,
-                        ahkSymbol: ch,
+                        AhkSymbol: ch,
                     },
                 ],
                 isEnd, // Don't assign
@@ -53,14 +53,14 @@ export function getScopeOfPos(document: vscode.TextDocument, position: vscode.Po
 
     const { stack } = stackPro;
     if (stack.length === 0) return null;
-    if (stack[0].ahkSymbol.kind === vscode.SymbolKind.Function) {
-        return stackPro.stack[0].ahkSymbol.range;
+    if (stack[0].AhkSymbol.kind === vscode.SymbolKind.Function) {
+        return stackPro.stack[0].AhkSymbol.range;
     }
 
     let mayBeRange: vscode.Range | null = null;
-    for (const { ahkSymbol } of stack) {
-        if (ahkSymbol.kind === vscode.SymbolKind.Class || ahkSymbol.kind === vscode.SymbolKind.Method) {
-            mayBeRange = ahkSymbol.range;
+    for (const { AhkSymbol } of stack) {
+        if (AhkSymbol.kind === vscode.SymbolKind.Class || AhkSymbol.kind === vscode.SymbolKind.Method) {
+            mayBeRange = AhkSymbol.range;
         } else {
             return mayBeRange;
         }
@@ -74,14 +74,14 @@ export function getFnOfPos(document: vscode.TextDocument, position: vscode.Posit
 
     const { stack } = stackPro;
     if (stack.length === 0) return null;
-    if (stack[0].ahkSymbol.kind === vscode.SymbolKind.Function) {
-        return stackPro.stack[0].ahkSymbol;
+    if (stack[0].AhkSymbol.kind === vscode.SymbolKind.Function) {
+        return stackPro.stack[0].AhkSymbol;
     }
 
     let ed: TAhkSymbol | null = null;
-    for (const { ahkSymbol } of stack) {
-        if (ahkSymbol.kind === vscode.SymbolKind.Class || ahkSymbol.kind === vscode.SymbolKind.Method) {
-            ed = ahkSymbol;
+    for (const { AhkSymbol } of stack) {
+        if (AhkSymbol.kind === vscode.SymbolKind.Class || AhkSymbol.kind === vscode.SymbolKind.Method) {
+            ed = AhkSymbol;
         } else {
             return ed;
         }

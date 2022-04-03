@@ -31,10 +31,10 @@ async function getWmThisCore({ AhkSymbol, fsPath }: TSymAndFsPath): Promise<vsco
 const wm = new ClassWm<TAhkSymbol, vscode.CompletionItem[]>(10 * 60 * 1000, 'getThisItemOfWm', 700);
 
 export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionItem[]> {
-    const { AhkSymbol: ahkSymbol, fsPath } = c0;
-    const cache: vscode.CompletionItem[] | undefined = wm.getWm(ahkSymbol);
+    const { AhkSymbol, fsPath } = c0;
+    const cache: vscode.CompletionItem[] | undefined = wm.getWm(AhkSymbol);
     if (cache !== undefined) return cache;
 
-    const v: vscode.CompletionItem[] = await getWmThisCore({ AhkSymbol: ahkSymbol, fsPath });
-    return wm.setWm(ahkSymbol, v);
+    const v: vscode.CompletionItem[] = await getWmThisCore({ AhkSymbol, fsPath });
+    return wm.setWm(AhkSymbol, v);
 }

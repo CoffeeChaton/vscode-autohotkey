@@ -18,9 +18,9 @@ const enum EFuncPos {
     isInBody = 3,
 }
 
-function atFunPos(ahkSymbol: TAhkSymbol, position: vscode.Position): EFuncPos {
-    if (ahkSymbol.selectionRange.contains(position)) return EFuncPos.isFuncArg;
-    if (ahkSymbol.range.start.line === position.line) return EFuncPos.isFuncName;
+function atFunPos(AhkSymbol: TAhkSymbol, position: vscode.Position): EFuncPos {
+    if (AhkSymbol.selectionRange.contains(position)) return EFuncPos.isFuncArg;
+    if (AhkSymbol.range.start.line === position.line) return EFuncPos.isFuncName;
     return EFuncPos.isInBody;
 }
 
@@ -71,13 +71,13 @@ function wrapper(
 }
 
 function match(
-    ahkSymbol: TAhkSymbol,
+    AhkSymbol: TAhkSymbol,
     document: vscode.TextDocument,
     position: vscode.Position,
     wordUp: string,
     listAllUsing: boolean,
 ): null | vscode.Range[] {
-    const funcPos: EFuncPos = atFunPos(ahkSymbol, position);
+    const funcPos: EFuncPos = atFunPos(AhkSymbol, position);
     switch (funcPos) {
         case EFuncPos.isFuncArg:
             return wrapper(document, wordUp, true, position);
@@ -100,11 +100,11 @@ export function getValDefInFunc(
     wordUp: string,
     listAllUsing: boolean,
 ): null | vscode.Location[] {
-    const ahkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
-    if (ahkSymbol === null) return null;
-    if (!kindPick(ahkSymbol.kind)) return null;
+    const AhkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
+    if (AhkSymbol === null) return null;
+    if (!kindPick(AhkSymbol.kind)) return null;
 
-    const rangeList: vscode.Range[] | null = match(ahkSymbol, document, position, wordUp, listAllUsing);
+    const rangeList: vscode.Range[] | null = match(AhkSymbol, document, position, wordUp, listAllUsing);
     if (rangeList === null) return null;
 
     const { uri } = document;

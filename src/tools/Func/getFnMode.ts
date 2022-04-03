@@ -3,9 +3,9 @@ import { ClassWm } from '../wm';
 import { kindPick } from './kindPick';
 
 // is https://www.autohotkey.com/docs/Functions.htm#Local
-function getFnMode(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
-    const startLine = ahkSymbol.range.start.line;
-    const endLine = ahkSymbol.range.end.line;
+function getFnMode(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
+    const startLine = AhkSymbol.range.start.line;
+    const endLine = AhkSymbol.range.end.line;
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue;
         if (line > endLine) break;
@@ -20,13 +20,13 @@ function getFnMode(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
 // eslint-disable-next-line no-magic-numbers
 const wm = new ClassWm<TAhkSymbol, EFnMode>(10 * 60 * 1000, 'getFnMode', 20000);
 
-export function getFnModeWM(ahkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
-    if (!kindPick(ahkSymbol.kind)) throw new Error(`kind Error of getFnModeWM of ${ahkSymbol.name}--35--11--66`);
+export function getFnModeWM(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): EFnMode {
+    if (!kindPick(AhkSymbol.kind)) throw new Error(`kind Error of getFnModeWM of ${AhkSymbol.name}--35--11--66`);
 
-    const cache: EFnMode | undefined = wm.getWm(ahkSymbol);
+    const cache: EFnMode | undefined = wm.getWm(AhkSymbol);
     if (cache !== undefined) return cache;
 
-    const fnMode: EFnMode = getFnMode(ahkSymbol, DocStrMap);
+    const fnMode: EFnMode = getFnMode(AhkSymbol, DocStrMap);
 
-    return wm.setWm(ahkSymbol, fnMode);
+    return wm.setWm(AhkSymbol, fnMode);
 }

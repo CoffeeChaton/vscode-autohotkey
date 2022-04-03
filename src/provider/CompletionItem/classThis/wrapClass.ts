@@ -213,9 +213,9 @@ async function triggerClass(
     if ((/^this$/iu).test(Head)) {
         const stackPro = getStack(document, position);
         return (stackPro === null || stackPro.stack.length === 0
-                || stackPro.stack[0].ahkSymbol.kind !== vscode.SymbolKind.Class)
+                || stackPro.stack[0].AhkSymbol.kind !== vscode.SymbolKind.Class)
             ? []
-            : getWmThis({ AhkSymbol: stackPro.stack[0].ahkSymbol, fsPath: document.uri.fsPath });
+            : getWmThis({ AhkSymbol: stackPro.stack[0].AhkSymbol, fsPath: document.uri.fsPath });
     }
 
     const testName0 = new RegExp(`^${Head}$`, 'ui');

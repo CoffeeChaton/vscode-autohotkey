@@ -8,7 +8,7 @@ import {
 } from './TypeFnMeta';
 
 export function getUnknownTextMap(
-    ahkSymbol: TAhkSymbol,
+    AhkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
     argMap: TArgMap,
     valMap: TValMap,
@@ -38,8 +38,8 @@ export function getUnknownTextMap(
         'CLICK',
     ];
     const textMap: TTextMap = new Map<string, TTextAnalysis>();
-    const startLine: number = ahkSymbol.selectionRange.end.line;
-    const endLine: number = ahkSymbol.range.end.line;
+    const startLine: number = AhkSymbol.selectionRange.end.line;
+    const endLine: number = AhkSymbol.range.end.line;
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;
@@ -64,7 +64,7 @@ export function getUnknownTextMap(
             const character: number | undefined = v?.index;
 
             if (character === undefined) {
-                void vscode.window.showErrorMessage(`getUnknownTextMap Error at line ${line} of ${ahkSymbol.name}()`);
+                void vscode.window.showErrorMessage(`getUnknownTextMap Error at line ${line} of ${AhkSymbol.name}()`);
                 continue;
             }
 
