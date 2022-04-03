@@ -23,14 +23,14 @@
                     "name": "string.parameter.import.log"
                 }
             },
-            "match": "#\\b(?i:include|includeagain)\\b(.*)$",
+            "match": "#\\b(?i:include|includeAgain)\\b\\s*(.*)$",
             "name": "keyword.control.import.log"
         },
         {
             "include": "#stringQuotedDouble"
         },
         {
-            "match": "\\w+\\(\\)",
+            "match": "\\b\\w+\\(\\)",
             "name": "entity.name.function.log"
         },
         {

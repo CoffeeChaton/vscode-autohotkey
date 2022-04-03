@@ -81,7 +81,7 @@ export async function DeepAnalysisAllFiles(): Promise<null> {
 
     const need: TDeepAnalysisMeta[] = [];
     await Promise.all(allFsPath.map(async (fsPath: string): Promise<void> => {
-        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath);
+        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) return;
 
         const Uri: vscode.Uri = vscode.Uri.file(fsPath);

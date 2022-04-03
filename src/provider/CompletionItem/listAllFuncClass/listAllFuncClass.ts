@@ -23,7 +23,7 @@ export async function listAllFuncClass(
         if (mm.isMatch(fsPath, blockList)) continue;
         const fileName = path.basename(fsPath);
 
-        const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath);
+        const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) continue;
         for (const AhkSymbol of AhkSymbolList) {
             if (AhkSymbol.kind === vscode.SymbolKind.Class) {

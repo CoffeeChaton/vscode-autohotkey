@@ -15,7 +15,7 @@ export function ListAllFunc(showLink: boolean): null {
 
     const AllList: string[] = ['[neko-help] List All Function()'];
     for (const fsPath of allFsPath) {
-        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath);
+        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) continue;
 
         AllList.push(fsPath);
@@ -47,7 +47,7 @@ export function ListAllFuncSort(reverse: boolean): null {
 
     const AllList: string[] = [];
     for (const fsPath of allFsPath) {
-        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath);
+        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) {
             continue;
         }

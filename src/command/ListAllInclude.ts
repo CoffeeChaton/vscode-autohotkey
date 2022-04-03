@@ -22,7 +22,7 @@ export function ListAllInclude(): null {
 
     const AllList: string[] = [];
     for (const fsPath of allFsPath) {
-        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath);
+        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) continue;
 
         const List: string[] = [];

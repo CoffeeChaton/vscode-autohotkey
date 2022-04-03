@@ -22,7 +22,7 @@ import { insertTextWm } from './insertTextWm';
 function getUserDefClassSymbol(testName: RegExp): TSymAndFsPath | null {
     const fsPaths = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
-        const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath);
+        const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) continue;
         for (const AhkSymbol of AhkSymbolList) {
             if (

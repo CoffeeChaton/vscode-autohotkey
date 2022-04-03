@@ -22,7 +22,7 @@ export type TUpdateDocDefReturn = {
 export const Detecter = {
     // key : vscode.Uri.fsPath,
     // val : vscode.DocumentSymbol[] -> MyDocSymbolArr
-    DocMap: new Map<string, TAhkSymbolList>(),
+    DocMap: new Map<string, TUpdateDocDefReturn>(),
 
     getDocMapFile(): string[] {
         const need: string[] = [];
@@ -38,7 +38,7 @@ export const Detecter = {
         return need;
     },
 
-    getDocMap(fsPath: string): undefined | TAhkSymbolList {
+    getDocMap(fsPath: string): undefined | TUpdateDocDefReturn {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
         if (fs.existsSync(fsPath)) {
             return Detecter.DocMap.get(fsPath);
@@ -92,19 +92,20 @@ export const Detecter = {
         } = getBaseData(document);
 
         const t2: number = Date.now();
-        if (fsPath.endsWith('.ahk') && !fsPath.includes(EStr.diff_name_prefix)) {
-            Detecter.DocMap.set(fsPath, AhkSymbolList);
-            globalValMap.set(fsPath, gValMapBySelf);
-            diagColl.set(uri, [...baseDiag]);
-        }
-
-        return {
+        const UpDateDocDefReturn: TUpdateDocDefReturn = {
             AhkSymbolList,
             DocStrMap,
             t0,
             t1,
             t2,
         };
+        if (fsPath.endsWith('.ahk') && !fsPath.includes(EStr.diff_name_prefix)) {
+            Detecter.DocMap.set(fsPath, UpDateDocDefReturn);
+            globalValMap.set(fsPath, gValMapBySelf);
+            diagColl.set(uri, [...baseDiag]);
+        }
+
+        return UpDateDocDefReturn;
     },
 };
 

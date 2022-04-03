@@ -7,9 +7,9 @@ import {
 import { kindCheck } from '../provider/Def/kindCheck';
 
 export function tryGetSymbol(wordUP: string, mode: EMode): null | TSymAndFsPath {
-    const fsPaths = Detecter.getDocMapFile();
+    const fsPaths: string[] = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
-        const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath);
+        const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) continue;
         for (const AhkSymbol of AhkSymbolList) {
             if (
