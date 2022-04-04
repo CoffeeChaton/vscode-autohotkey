@@ -12,7 +12,6 @@ import { configChangEvent, statusBarItem } from './configUI';
 import { BaseScanMemo } from './core/BaseScanMemo/memo';
 import { Detecter } from './core/Detecter';
 import { diagColl } from './core/diagRoot';
-import { globalValMap } from './core/Global';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
@@ -72,7 +71,6 @@ export function activate(context: ExtensionContext): void {
 export function deactive(): void {
     Detecter.DocMap.clear();
     BaseScanMemo.memo.clear();
-    globalValMap.clear();
 }
 
 /*

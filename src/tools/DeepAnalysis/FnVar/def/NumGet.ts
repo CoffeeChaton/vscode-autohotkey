@@ -24,8 +24,8 @@ export function NumGet({
         if (argMap.has(UpName)) continue;
 
         // eslint-disable-next-line no-magic-numbers
-        const character = ch + v[0].indexOf(RawName); // "NumGet(".len ===  7
-        const defRange = new vscode.Range(
+        const character: number = ch + v[0].indexOf(RawName); // "NumGet(".len ===  7
+        const defRange: vscode.Range = new vscode.Range(
             new vscode.Position(line, character),
             new vscode.Position(line, character + RawName.length),
         );

@@ -19,7 +19,7 @@ type TFsPath = string; // vscode.uru.fsPath
 type TMemo = {
     hash: number;
     AhkSymbolList: TAhkSymbolList;
-    gValMapBySelf: TGValMap;
+    GlobalValMap: TGValMap;
     DocStrMap: TTokenStream;
     baseDiag: vscode.Diagnostic[];
 };
@@ -77,8 +77,8 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
     const oldCache: TMemo | undefined = BaseScanMemo.getMemo(fsPath, hash);
     if (oldCache !== undefined) return oldCache;
 
-    const gValMapBySelf: TGValMap = new Map<TValUpName, TGlobalVal[]>();
     const DocStrMap: TTokenStream = Pretreatment(fullText.split('\n'), 0);
+    const GlobalValMap: TGValMap = new Map<TValUpName, TGlobalVal[]>();
     const AhkSymbolList: TAhkSymbolList = getChildren({
         DocStrMap,
         RangeStartLine: 0,
@@ -92,10 +92,11 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
             ParserLine,
         ],
     });
+
     const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
     const AhkCache: TMemo = {
         hash,
-        gValMapBySelf,
+        GlobalValMap,
         DocStrMap,
         AhkSymbolList,
         baseDiag,

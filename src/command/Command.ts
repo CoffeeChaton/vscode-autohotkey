@@ -34,7 +34,7 @@ export async function statusBarClick(): Promise<void> {
         { label: '8 -> format All File', fn: FormatAllFile },
     ];
 
-    const pick = await vscode.window.showQuickPick<TCommand>(items);
+    const pick: TPick<void> | undefined = await vscode.window.showQuickPick<TCommand>(items);
 
     void pick?.fn();
 }

@@ -1,6 +1,10 @@
 import * as vscode from 'vscode';
 import { TAhkSymbol, TTokenStream } from '../../../globalEnum';
-import { TArgAnalysis, TParamOrValMap, TValAnalysis } from '../TypeFnMeta';
+import {
+    TArgAnalysis,
+    TParamOrValMap,
+    TValAnalysis,
+} from '../TypeFnMeta';
 import { newC502 } from './def/diag/c502';
 
 function getValRegMap(paramOrValMap: TParamOrValMap): Map<string, RegExp> {
@@ -29,7 +33,8 @@ function getValRef(param: TNeedSetRef, paramOrValMap: TParamOrValMap): void {
     const character: number | undefined = o.index;
     const oldVal: TValAnalysis | TArgAnalysis | undefined = paramOrValMap.get(valUpName);
 
-    if (oldVal === undefined || character === undefined) {
+    const { input } = o;
+    if (oldVal === undefined || character === undefined || input === undefined) {
         const msg = '🚀 ~ ERROR OF getValRef--40--71-33 oldVal === undefined || character === undefined';
         console.error('🚀 ~ WTF getValRef ~ valUpName', valUpName, oldVal);
         void vscode.window.showErrorMessage(msg);
@@ -39,6 +44,14 @@ function getValRef(param: TNeedSetRef, paramOrValMap: TParamOrValMap): void {
 
     const startPos: vscode.Position = new vscode.Position(line, character);
     if (oldVal.defRangeList.some((defRange: vscode.Range): boolean => defRange.contains(startPos))) {
+        return;
+    }
+
+    const L: string = input[character - 1];
+    const R: string = input[character + newRawName.length];
+    if (L === '{' && R === '}') {
+        // send {text} <-- text is not variable
+        // console.log('🚀 ~ getValRef ~  o', o);
         return;
     }
 

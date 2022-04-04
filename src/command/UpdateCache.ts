@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { BaseScanMemo } from '../core/BaseScanMemo/memo';
 import { Detecter, TAhkFileData } from '../core/Detecter';
-import { globalValMap } from '../core/Global';
 import { getUriList } from '../tools/fsTools/getUriList';
 
 export type TUpdateCacheAsyncReturn = {
@@ -13,7 +12,6 @@ export async function UpdateCacheAsync(): Promise<null | TUpdateCacheAsyncReturn
     const timeStart: number = Date.now();
 
     Detecter.DocMap.clear();
-    globalValMap.clear();
     BaseScanMemo.memo.clear();
 
     const uriList: vscode.Uri[] | null = getUriList();

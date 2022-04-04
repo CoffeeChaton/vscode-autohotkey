@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { globalValMap } from '../../../core/Global';
+import { Detecter, TAhkFileData } from '../../../core/Detecter';
 
 export function globalValCompletion(
     _document: vscode.TextDocument,
@@ -14,10 +14,16 @@ export function globalValCompletion(
      */
     // TODO weakMap md, and  clone md to .appendMarkdown
     const map = new Map<string, vscode.CompletionItem>();
-    for (const [fsPath, gValMap] of globalValMap) {
-        const fileName = path.basename(fsPath);
 
-        for (const [valUpName, globalValList] of gValMap) {
+    const fsPathList: string[] = Detecter.getDocMapFile();
+    for (const fsPath of fsPathList) {
+        const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
+        if (AhkFileData === undefined) continue;
+
+        const { GlobalValMap } = AhkFileData;
+        const fileName: string = path.basename(fsPath);
+
+        for (const [valUpName, globalValList] of GlobalValMap) {
             if (map.has(valUpName)) continue;
 
             for (const GlobalVal of globalValList) {

@@ -29,7 +29,7 @@ export function getChildren(child: ChildType): TAhkSymbolList {
     } = child;
 
     const result: TAhkSymbol[] = [];
-    let Resolved = RangeStartLine; // <--------------------------------------------
+    let Resolved = RangeStartLine; // <--------------------------------
     for (let line = RangeStartLine; line < RangeEndLine; line++) {
         if (line < Resolved) continue; // <------------------------------------
         const { lStr, fistWordUp } = DocStrMap[line];

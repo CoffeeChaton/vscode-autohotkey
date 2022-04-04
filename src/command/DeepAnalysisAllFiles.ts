@@ -3,7 +3,7 @@ import { Detecter, TAhkFileData } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
 import { getFnMetaList } from '../tools/DeepAnalysis/getFnMetaList';
-import { TDeepAnalysisMeta } from '../tools/DeepAnalysis/TypeFnMeta';
+import { TDeepAnalysisMeta, TTextAnalysis } from '../tools/DeepAnalysis/TypeFnMeta';
 
 type TElement = {
     k: string;
@@ -14,21 +14,20 @@ type TAnalysisResults = {
     argMapSize: number;
     valMapSize: number;
     textMapSize: number;
-    topFuncNum: number; // Deep Analysis : ${need.length} Symbol // 809
+    topFuncNum: number;
 };
 
 function AnalysisResults(need: TDeepAnalysisMeta[]): TAnalysisResults {
-    const topFuncNum = need.length;
     let argMapSize = 0;
     let valMapSize = 0;
     let textMapSize = 0;
-    const DEB = new Map<string, number>();
-    need.forEach((ed) => {
+    const DEB: Map<string, number> = new Map();
+    need.forEach((ed: TDeepAnalysisMeta): void => {
         argMapSize += ed.argMap.size;
         valMapSize += ed.valMap.size;
         textMapSize += ed.textMap.size;
-        ed.textMap.forEach((v, k) => {
-            const oldNum = DEB.get(k) ?? 0;
+        ed.textMap.forEach((v: TTextAnalysis, k: string): void => {
+            const oldNum: number = DEB.get(k) ?? 0;
             DEB.set(k, oldNum + v.refRangeList.length);
         });
     });
@@ -36,7 +35,7 @@ function AnalysisResults(need: TDeepAnalysisMeta[]): TAnalysisResults {
     const e5: TElement[] = [];
     for (const [k, v] of DEB) {
         // eslint-disable-next-line no-magic-numbers
-        if (v > 20) {
+        if (v > 10) {
             e5.push({ k, v });
         }
     }
@@ -52,7 +51,7 @@ function AnalysisResults(need: TDeepAnalysisMeta[]): TAnalysisResults {
         argMapSize,
         valMapSize,
         textMapSize,
-        topFuncNum,
+        topFuncNum: need.length,
     };
 }
 
@@ -104,7 +103,7 @@ Deep Analysis All Files
 Deep Analysis : 828 Symbol <--keep 828!
 argMapSize is 2273 <--keep 2273!
 valMapSize is 2095
-textMapSize is 1162 <- next plan: ignore keyWord.
-All Size is 5572
-Done in 411 ms
+textMapSize is 573 <- next plan: ignore keyWord.
+All Size is 4941
+Done in 5 ms
 */

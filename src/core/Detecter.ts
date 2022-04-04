@@ -1,15 +1,20 @@
 /* eslint-disable no-await-in-loop */
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { EStr, TAhkSymbolList, TTokenStream } from '../globalEnum';
+import {
+    EStr,
+    TAhkSymbolList,
+    TGValMap,
+    TTokenStream,
+} from '../globalEnum';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
 import { BaseScanMemo, getBaseData } from './BaseScanMemo/memo';
 import { diagColl } from './diagRoot';
-import { globalValMap } from './Global';
 
 export type TAhkFileData = {
     AhkSymbolList: TAhkSymbolList;
     DocStrMap: TTokenStream;
+    GlobalValMap: TGValMap;
     t0: number;
     t1: number;
     t2: number;
@@ -72,11 +77,10 @@ export const Detecter = {
         const t0: number = Date.now();
         const { uri } = document;
         const { fsPath } = document.uri;
-        globalValMap.delete(fsPath);
 
         const t1: number = Date.now();
         const {
-            gValMapBySelf,
+            GlobalValMap,
             DocStrMap,
             AhkSymbolList,
             baseDiag,
@@ -86,13 +90,13 @@ export const Detecter = {
         const UpDateDocDefReturn: TAhkFileData = {
             AhkSymbolList,
             DocStrMap,
+            GlobalValMap,
             t0,
             t1,
             t2,
         };
         if (fsPath.endsWith('.ahk') && !fsPath.includes(EStr.diff_name_prefix)) {
             Detecter.DocMap.set(fsPath, UpDateDocDefReturn);
-            globalValMap.set(fsPath, gValMapBySelf);
             diagColl.set(uri, [...baseDiag]);
         }
 
@@ -104,6 +108,5 @@ export function delOldCache(uri: vscode.Uri): void {
     const { fsPath } = uri;
     Detecter.DocMap.delete(fsPath);
     BaseScanMemo.memo.delete(fsPath);
-    globalValMap.delete(fsPath);
     diagColl.delete(uri);
 }

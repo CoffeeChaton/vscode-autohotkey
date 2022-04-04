@@ -41,7 +41,7 @@ async function HoverProviderCore(
 
     const DA: TDeepAnalysisMeta | null = getDAWithPos(document, position);
     if (DA !== null) {
-        const md: vscode.MarkdownString | null = DeepAnalysisHover(DA, wordUp);
+        const md: vscode.MarkdownString | null = DeepAnalysisHover(DA, wordUp, position);
         if (md !== null) return new vscode.Hover(md);
     }
 
@@ -50,6 +50,7 @@ async function HoverProviderCore(
 
     return null;
 }
+
 export class HoverProvider implements vscode.HoverProvider {
     // eslint-disable-next-line class-methods-use-this
     public provideHover(
