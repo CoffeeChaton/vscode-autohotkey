@@ -8,6 +8,10 @@ import {
 import { EPrefix, setMD } from '../../tools/MD/setMD';
 import { setPreFix } from '../../tools/str/setPreFix';
 
+function PosInRange(arr: vscode.Range[], position: vscode.Position): boolean {
+    return arr.some((range: vscode.Range): boolean => range.contains(position));
+}
+
 export function DeepAnalysisHover(
     DA: TDeepAnalysisMeta,
     wordUp: string,
@@ -28,9 +32,8 @@ export function DeepAnalysisHover(
             refRangeList,
             defRangeList,
         } = argMeta;
-        const isPosInRange: boolean = [...refRangeList, ...defRangeList]
-            .some((range: vscode.Range): boolean => range.contains(position));
-        if (!isPosInRange) return null;
+
+        if (!PosInRange([...refRangeList, ...defRangeList], position)) return null;
 
         const prefix = setPreFix(isByRef, isVariadic);
         return setMD(prefix, refRangeList, defRangeList, funcRawName, '');
@@ -42,9 +45,7 @@ export function DeepAnalysisHover(
             refRangeList,
             defRangeList,
         } = value;
-        const isPosInRange: boolean = [...refRangeList, ...defRangeList]
-            .some((range: vscode.Range): boolean => range.contains(position));
-        if (!isPosInRange) return null;
+        if (!PosInRange([...refRangeList, ...defRangeList], position)) return null;
 
         // TODO const typeValType = getAhkTypeName(ahkValType);
         return setMD(EPrefix.var, refRangeList, defRangeList, funcRawName, '');
@@ -53,8 +54,7 @@ export function DeepAnalysisHover(
     const unKnownText: TTextAnalysis | undefined = textMap.get(wordUp);
     if (unKnownText !== undefined) {
         const { refRangeList } = unKnownText;
-        const isPosInRange: boolean = refRangeList.some((range: vscode.Range): boolean => range.contains(position));
-        if (!isPosInRange) return null;
+        if (!PosInRange(refRangeList, position)) return null;
 
         return setMD(EPrefix.unKnownText, refRangeList, [], funcRawName, '');
     }
