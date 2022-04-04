@@ -4,8 +4,10 @@ import { DeepReadonly } from './globalEnum';
 
 export const enum EDiagCodeDA {
     // 501~599 Analysis Func or Method
+    code500 = 500, // var is assigned but never used.
     code501 = 501, // param is assigned but never used.
-    code502 = 502, // var/param case sensitivity
+    code502 = 502, // var case sensitivity
+    // code503 = 503, param case sensitivity
     code504 = 504, // Variadic param * >1
 }
 
@@ -17,9 +19,13 @@ export type TDiagsDA = {
 };
 
 export const DiagsDA: DeepReadonly<TDiagsDA> = {
+    500: {
+        msg: 'var is assigned but never used.',
+        path: 'https://www.autohotkey.com/docs/Variables.htm',
+    },
     501: {
         msg: 'param is assigned but never used.',
-        path: 'https://www.autohotkey.com/docs/Functions.htm',
+        path: 'https://www.autohotkey.com/docs/Functions.htm#optional',
     },
     502: {
         msg: 'case sensitivity',

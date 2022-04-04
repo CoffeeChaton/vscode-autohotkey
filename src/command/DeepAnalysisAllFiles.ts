@@ -86,8 +86,7 @@ export function DeepAnalysisAllFiles(): null {
         const { AhkSymbolList, DocStrMap } = AhkFileData;
         const uri: vscode.Uri = vscode.Uri.file(fsPath);
 
-        const DAList: TDeepAnalysisMeta[] = getFnMetaList(AhkSymbolList, DocStrMap);
-        need.push(...DAList);
+        need.push(...getFnMetaList(AhkSymbolList, DocStrMap));
 
         digDAFile(AhkSymbolList, DocStrMap, uri);
     });

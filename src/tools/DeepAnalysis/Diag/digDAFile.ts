@@ -6,10 +6,11 @@ import { getFnMetaList } from '../getFnMetaList';
 import { TDeepAnalysisMeta } from '../TypeFnMeta';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';
-import { paramNeverUsed } from './param/paramNeverUsed';
+import { paramNeverUsed, varNeverUsed } from './param/paramNeverUsed';
 import { paramVariadicErr } from './param/paramVariadicErr';
 
 function diagDAFileCore(DAList: TDeepAnalysisMeta[]): readonly vscode.Diagnostic[] {
+    const code500List = new Set<vscode.Diagnostic>();
     const code501List = new Set<vscode.Diagnostic>();
     const code502List = new Set<vscode.Diagnostic>();
     const code503List = new Set<vscode.Diagnostic>();
@@ -19,6 +20,7 @@ function diagDAFileCore(DAList: TDeepAnalysisMeta[]): readonly vscode.Diagnostic
 
     for (const DA of DAList) {
         const { argMap, valMap } = DA;
+        varNeverUsed(valMap, code500List);
         paramNeverUsed(argMap, code501List);
         caseSensitivityVar(EPrefixC502.var, valMap, code502List, code502Max); // var case sensitivity
         caseSensitivityVar(EPrefixC502.param, argMap, code503List, code503Max);
@@ -26,6 +28,7 @@ function diagDAFileCore(DAList: TDeepAnalysisMeta[]): readonly vscode.Diagnostic
     }
 
     return [
+        ...code500List,
         ...code501List,
         ...code502List,
         ...code503List,

@@ -35,12 +35,7 @@ export const Detecter = {
     },
 
     getDocMap(fsPath: string): undefined | TAhkFileData {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
-        if (fs.existsSync(fsPath)) {
-            return Detecter.DocMap.get(fsPath);
-        }
-        Detecter.DocMap.delete(fsPath);
-        return undefined;
+        return Detecter.DocMap.get(fsPath);
     },
 
     delMap(e: vscode.FileDeleteEvent): void {
