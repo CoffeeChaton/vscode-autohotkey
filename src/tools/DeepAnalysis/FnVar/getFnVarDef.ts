@@ -18,7 +18,6 @@ import {
     TValMap,
 } from '../TypeFnMeta';
 import { forLoop } from './def/forLoop';
-import { NumGet } from './def/NumGet';
 import { varSetCapacityFunc } from './def/varSetCapacityFunc';
 import { walrusOperator } from './def/walrusOperator';
 
@@ -70,11 +69,8 @@ export function getFnVarDef(
             argMap,
         };
         walrusOperator(need); // :=
-        varSetCapacityFunc(need); // VarSetCapacity(varName)
+        varSetCapacityFunc(need); // VarSetCapacity(varName) or NumGet(varName) or NumGet(&varName)
         forLoop(need); // for var1 , var2 in
-        NumGet(need); // NumGet(varName)
-        // TODO NumGet(VarOrAddress https://www.autohotkey.com/docs/commands/NumGet.htm
-        // or NumGet(&VarOrAddress
         // TODO just `global variableName`, but not :=
     }
 
