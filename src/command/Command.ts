@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { getDocUriStr } from '../configUI';
 import { TPick } from '../globalEnum';
+import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { DeepAnalysisAllFiles } from './DeepAnalysisAllFiles';
 import { pressureTest } from './DevMode';
 import { FormatAllFile } from './FormatAllFile';
@@ -11,9 +12,10 @@ import { TUpdateCacheAsyncReturn, UpdateCacheAsync } from './UpdateCache';
 async function fn0(): Promise<void> {
     const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync();
     if (ed !== null) {
-        const msg = `Update docFuncMap cash (${ed.timeSpend}ms)`;
-        console.log(msg);
-        void vscode.window.showInformationMessage(msg);
+        OutputChannel.appendLine('---------------------------------------------');
+        OutputChannel.appendLine(`Update docFuncMap cash (${ed.timeSpend} ms)`);
+        OutputChannel.appendLine('---------------------------------------------');
+        OutputChannel.show();
     }
 }
 

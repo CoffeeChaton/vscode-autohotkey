@@ -50,10 +50,8 @@ function getConfig(): TConfigs {
             },
         },
         openUriStr: getConfigs<string>('open.Documents.Uri'),
-        // TODO CompletionIgnore
     } as const;
 
-    checkDebugFile(ed.Debug.executePath);
     return ed;
 }
 
@@ -88,6 +86,7 @@ export function getIgnored(fsPath: string): boolean {
 }
 
 export function getDebugPath(): string {
+    checkDebugFile(config.Debug.executePath);
     return config.Debug.executePath;
 }
 

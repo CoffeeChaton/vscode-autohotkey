@@ -4,10 +4,10 @@ import { getFnMetaList } from '../../tools/DeepAnalysis/getFnMetaList';
 import { TDeepAnalysisMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { ClassWm } from '../../tools/wm';
 import { pushToken, TSemanticTokensLeaf } from './tools';
+
 // eslint-disable-next-line no-magic-numbers
 const wm = new ClassWm<TDeepAnalysisMeta, TSemanticTokensLeaf[]>(10 * 60 * 1000, 'DA2SemanticHighlight', 0);
 
-// core -------------------------------
 function DA2SemanticHighlight(
     DA: TDeepAnalysisMeta,
 ): TSemanticTokensLeaf[] {
@@ -40,7 +40,6 @@ function DA2SemanticHighlight(
     return wm.setWm(DA, Tokens);
 }
 
-// filter -----------------------------
 export function DAList2SemanticHighlightFull(
     DocStrMap: TTokenStream,
     AhkSymbolList: TAhkSymbolList,

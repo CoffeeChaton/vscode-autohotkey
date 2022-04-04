@@ -74,7 +74,12 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
     ): vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
         if (context.diagnostics.length === 0) return null;
         const { uri } = document;
-        if (!uri.fsPath.endsWith('.ahk')) return null;
-        return CodeActionCore(uri, context.diagnostics);
+        if (
+            uri.fsPath.endsWith('.ahk')
+            || uri.fsPath.endsWith('.ahk.git')
+        ) {
+            return CodeActionCore(uri, context.diagnostics);
+        }
+        return null;
     }
 }

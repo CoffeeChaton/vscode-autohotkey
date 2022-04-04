@@ -1,9 +1,9 @@
-/* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
 
 export class SymBolProvider implements vscode.DocumentSymbolProvider {
+    // eslint-disable-next-line class-methods-use-this
     public provideDocumentSymbols(
         document: vscode.TextDocument,
         _token: vscode.CancellationToken,
