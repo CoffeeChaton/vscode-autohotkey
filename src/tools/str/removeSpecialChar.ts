@@ -33,7 +33,7 @@ export function isSetVarTradition(textTrimStart: string): boolean {
 
 export const replacerSpace = (match: string): string => ' '.repeat(match.length);
 
-const fnReplacerStr = (match: string): string => '_'.repeat(match.length);
+export const fnReplacerStr = (match: string): string => '_'.repeat(match.length);
 
 // [textFix , '; comment text']
 // total time 490~520ms
