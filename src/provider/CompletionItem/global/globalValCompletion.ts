@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { Detecter, TAhkFileData } from '../../../core/Detecter';
+import { TGValMap } from '../../../globalEnum';
 
 export function globalValCompletion(
     _document: vscode.TextDocument,
@@ -20,10 +21,10 @@ export function globalValCompletion(
         const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
         if (AhkFileData === undefined) continue;
 
-        const { GlobalValMap } = AhkFileData;
+        const glMap: TGValMap = AhkFileData.GlobalValMap;
         const fileName: string = path.basename(fsPath);
 
-        for (const [valUpName, globalValList] of GlobalValMap) {
+        for (const [valUpName, globalValList] of glMap) {
             if (map.has(valUpName)) continue;
 
             for (const GlobalVal of globalValList) {

@@ -63,11 +63,7 @@ function getFuncDocCore(
 // eslint-disable-next-line no-magic-numbers
 const wm = new ClassWm<TAhkSymbol, vscode.MarkdownString>(10 * 60 * 1000, 'setFuncHoverMD', 9000);
 
-export function getFuncDocMD(
-    AhkSymbol: TAhkSymbol,
-    fsPath: string,
-    document: vscode.TextDocument,
-): vscode.MarkdownString {
+export async function getFuncDocMD(AhkSymbol: TAhkSymbol, fsPath: string): Promise<vscode.MarkdownString> {
     if (AhkSymbol.kind !== vscode.SymbolKind.Function && AhkSymbol.kind !== vscode.SymbolKind.Method) {
         throw new Error('just support Function/Method hover now --15--374--065--71');
     }
@@ -75,9 +71,9 @@ export function getFuncDocMD(
     if (cache !== undefined) return cache;
 
     const DocStrMap: TTokenStream | undefined = Detecter.getDocMap(fsPath)?.DocStrMap;
-    if (DocStrMap === undefined) throw new Error('DocStrMap undefined');
+    if (DocStrMap === undefined) throw new Error('DocStrMap undefined---51--77--465--21');
 
-    // const document: vscode.TextDocument = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
+    const document: vscode.TextDocument = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
 
     const md: vscode.MarkdownString = getFuncDocCore(AhkSymbol, document, DocStrMap);
 

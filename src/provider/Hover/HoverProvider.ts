@@ -17,8 +17,7 @@ async function HoverFunc(wordUp: string, textRaw: string): Promise<null | vscode
 
     const { AhkSymbol, fsPath } = data;
 
-    const document: vscode.TextDocument = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
-    const md: vscode.MarkdownString = getFuncDocMD(AhkSymbol, fsPath, document);
+    const md: vscode.MarkdownString = await getFuncDocMD(AhkSymbol, fsPath);
     return new vscode.Hover(md);
 }
 

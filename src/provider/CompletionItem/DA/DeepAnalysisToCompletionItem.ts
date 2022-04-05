@@ -24,6 +24,8 @@ function suggest(
     ];
 }
 
+// don't use weakMap Memo, because position && inputStr
+// && DA is fragile.
 export function DeepAnalysisToCompletionItem(
     document: vscode.TextDocument,
     position: vscode.Position,

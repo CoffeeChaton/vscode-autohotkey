@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { getCode502Default, getCode503Default } from '../../../configUI';
-import { diagColl } from '../../../core/diagRoot';
+import { diagColl } from '../../../core/Detecter';
 import { EDiagBase, TAhkSymbolList, TTokenStream } from '../../../globalEnum';
 import { getFnMetaList } from '../getFnMetaList';
 import { TDAMeta } from '../TypeFnMeta';

@@ -9,7 +9,8 @@ import {
 } from '../globalEnum';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
 import { BaseScanMemo, getBaseData } from './BaseScanMemo/memo';
-import { diagColl } from './diagRoot';
+
+export const diagColl: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('ahk-neko-help');
 
 export type TAhkFileData = {
     AhkSymbolList: TAhkSymbolList;

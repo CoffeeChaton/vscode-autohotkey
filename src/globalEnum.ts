@@ -62,10 +62,12 @@ export type TSymAndFsPath = {
 };
 
 export type TGlobalVal = {
-    lRange: vscode.Range; // left Range
-    rVal: string | null; // Right value is textRaw
-    rawName: string; //
+    // global GVar := fn_Foo(bar)
+    lRange: vscode.Range; // left Range, -> GVar Range
+    rVal: string | null; // Right value is textRaw, -> fn_Foo(bar)
+    rawName: string; // -> GVar
 };
+
 export type TValUpName = string;
 export type TGValMap = Map<TValUpName, TGlobalVal[]>;
 
