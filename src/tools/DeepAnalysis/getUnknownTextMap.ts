@@ -10,6 +10,20 @@ import {
     TValMeta,
 } from './TypeFnMeta';
 
+function pushRef(
+    oldDef: TParamMeta | TValMeta,
+    keyRawName: string,
+    startPos: vscode.Position,
+    range: vscode.Range,
+): void {
+    if (oldDef.defRangeList.some((defRange: vscode.Range): boolean => defRange.contains(startPos))) {
+        return;
+    }
+
+    oldDef.refRangeList.push(range);
+    oldDef.c502Array.push(newC502(oldDef.keyRawName, keyRawName));
+}
+
 function getIgnoreList(): string[] {
     return [
         // DeepAnalysisAllFiles -> Word frequency statistics
@@ -17,13 +31,15 @@ function getIgnoreList(): string[] {
         'ELSE',
         'RETURN',
         'IN',
+        'NOT',
+
         'STATIC',
         'LOCAL',
         'GLOBAL',
 
         'SLEEP',
 
-        'ListVars'.toUpperCase(),
+        'LISTVARS', // 'ListVars'.toUpperCase()
         'SEND',
 
         'SWITCH',
@@ -53,7 +69,7 @@ export function getUnknownTextMap(
     paramMap: TParamMap,
     valMap: TValMap,
 ): TTextMap {
-    // 199 ms
+    // 287 ms
     const ignoreList: string[] = getIgnoreList();
     const textMap: TTextMap = new Map<string, TTextMeta>();
     const startLine: number = AhkSymbol.selectionRange.end.line;
@@ -62,7 +78,7 @@ export function getUnknownTextMap(
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;
         // eslint-disable-next-line security/detect-unsafe-regex
-        for (const v of lStr.matchAll(/(?<![.%`])\b(\w+)\b(?!\()/gu)) {
+        for (const v of lStr.matchAll(/(?<!\.)\b(\w+)\b(?!\()/gu)) {
             const keyRawName: string = v[1];
             const wordUp: string = keyRawName.toUpperCase();
             if (ignoreList.indexOf(wordUp) > -1) continue;
@@ -82,7 +98,7 @@ export function getUnknownTextMap(
             const { input } = v;
 
             if (character === undefined || input === undefined) {
-                void vscode.window.showErrorMessage(`getUnknownTextMap Error at line ${line} of ${AhkSymbol.name}()`);
+                void vscode.window.showErrorMessage(`getUnknown Error at line ${line} of ${AhkSymbol.name}()`);
                 continue;
             }
 
@@ -98,23 +114,16 @@ export function getUnknownTextMap(
                 startPos,
                 new vscode.Position(line, character + wordUp.length),
             );
+
             const oldVal: TValMeta | undefined = valMap.get(wordUp);
             if (oldVal) {
-                if (oldVal.defRangeList.some((defRange: vscode.Range): boolean => defRange.contains(startPos))) {
-                    continue;
-                }
-                oldVal.refRangeList.push(range);
-                oldVal.c502Array.push(newC502(oldVal.keyRawName, keyRawName));
+                pushRef(oldVal, keyRawName, startPos, range);
                 continue;
             }
 
             const oldParam: TParamMeta | undefined = paramMap.get(wordUp);
             if (oldParam) {
-                if (oldParam.defRangeList.some((defRange: vscode.Range): boolean => defRange.contains(startPos))) {
-                    continue;
-                }
-                oldParam.refRangeList.push(range);
-                oldParam.c502Array.push(newC502(oldParam.keyRawName, keyRawName));
+                pushRef(oldParam, keyRawName, startPos, range);
                 continue;
             }
 

@@ -3,59 +3,10 @@ import { Detecter, TAhkFileData } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
 import { getFnMetaList } from '../tools/DeepAnalysis/getFnMetaList';
-import { TDAMeta, TTextMeta } from '../tools/DeepAnalysis/TypeFnMeta';
+import { TDAMeta } from '../tools/DeepAnalysis/TypeFnMeta';
+import { TWordFrequencyStatistics, WordFrequencyStatistics } from './tools/WordFrequencyStatistics';
 
-type TElement = {
-    k: string;
-    v: number;
-};
-
-type TAnalysisResults = {
-    paramMapSize: number;
-    valMapSize: number;
-    textMapSize: number;
-    topFuncNum: number;
-};
-
-function AnalysisResults(need: TDAMeta[]): TAnalysisResults {
-    let paramMapSize = 0;
-    let valMapSize = 0;
-    let textMapSize = 0;
-    const DEB: Map<string, number> = new Map();
-    need.forEach((ed: TDAMeta): void => {
-        paramMapSize += ed.paramMap.size;
-        valMapSize += ed.valMap.size;
-        textMapSize += ed.textMap.size;
-        ed.textMap.forEach((v: TTextMeta, k: string): void => {
-            const oldNum: number = DEB.get(k) ?? 0;
-            DEB.set(k, oldNum + v.refRangeList.length);
-        });
-    });
-
-    const e5: TElement[] = [];
-    for (const [k, v] of DEB) {
-        // eslint-disable-next-line no-magic-numbers
-        if (v > 10) {
-            e5.push({ k, v });
-        }
-    }
-    e5.sort((a: TElement, b: TElement): number => b.v - a.v);
-    OutputChannel.clear();
-    OutputChannel.appendLine('------>>>------this package: unknown Word frequency statistics----->>>-----');
-    for (const { k, v } of e5) { //
-        OutputChannel.appendLine(`${k}: ${v}`); // TODO: remove global variables of this file / func
-    }
-    OutputChannel.appendLine('------<<<------this package: unknown Word frequency statistics-----<<<-----');
-
-    return {
-        paramMapSize,
-        valMapSize,
-        textMapSize,
-        topFuncNum: need.length,
-    };
-}
-
-function showOutputChannel(results: TAnalysisResults, timeSpend: number): void {
+function showOutputChannel(results: TWordFrequencyStatistics, timeSpend: number): void {
     const {
         paramMapSize,
         valMapSize,
@@ -91,7 +42,7 @@ export function DeepAnalysisAllFiles(): null {
     });
 
     const t2 = Date.now();
-    showOutputChannel(AnalysisResults(need), t2 - t1);
+    showOutputChannel(WordFrequencyStatistics(need), t2 - t1);
 
     return null;
 }
@@ -103,7 +54,7 @@ Deep Analysis All Files
 Deep Analysis : 828 Symbol <--keep 828!
 paramMapSize is 2273 <--keep 2273!
 valMapSize is 2095
-textMapSize is 573 <- next plan: ignore keyWord.
-All Size is 4941
+textMapSize is 568 <- next plan: ignore keyWord.
+All Size is 4936
 Done in 8 ms
 */

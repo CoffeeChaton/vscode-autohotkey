@@ -36,6 +36,7 @@
         "Ifmsgbox",
         "ifnotinstring",
         "Listenr",
+        "LISTVARS",
         "LTRB",
         "msgbox",
         "Mult",

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { TAhkSymbol, TTokenStream } from '../../../globalEnum';
+import { replacerSpace } from '../../str/removeSpecialChar';
 import { TParamMap, TParamMeta } from '../TypeFnMeta';
 
 type TParamData = {
@@ -24,9 +25,7 @@ function getKeyRawName(param: string): TParamData {
     };
 }
 
-function getParamDefNeed(param: string, funcRawName: string, line: number, lStr: string): TParamMeta {
-    const data = getKeyRawName(param);
-    const { isByRef, isVariadic, keyRawName } = data;
+function checkParam(keyRawName: string, funcRawName: string, line: number): void {
     if (!(/^\w+$/u).test(keyRawName)) {
         const errCode = '--99--37--21--';
         const errMsg = 'DeepAnalysis NekoHelp Unknown Syntax of ';
@@ -36,13 +35,16 @@ function getParamDefNeed(param: string, funcRawName: string, line: number, lStr:
         void vscode.window.showErrorMessage(message);
         throw new Error(message);
     }
+}
 
-    // eslint-disable-next-line security/detect-non-literal-regexp
-    const character: number = lStr.search(new RegExp(`\\b${keyRawName}\\b`, 'u'));
+function getParamDefNeed(param: string, funcRawName: string, line: number, ch: number): TParamMeta {
+    const data: TParamData = getKeyRawName(param);
+    const { isByRef, isVariadic, keyRawName } = data;
+    checkParam(keyRawName, funcRawName, line);
 
     const range: vscode.Range = new vscode.Range(
-        new vscode.Position(line, character),
-        new vscode.Position(line, character + keyRawName.length),
+        new vscode.Position(line, ch),
+        new vscode.Position(line, ch + keyRawName.length),
     );
     return {
         keyRawName,
@@ -55,6 +57,7 @@ function getParamDefNeed(param: string, funcRawName: string, line: number, lStr:
 }
 
 export function getParamDef(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TParamMap {
+    // 113 ms self time
     const paramMap: TParamMap = new Map<string, TParamMeta>();
     const startLine: number = AhkSymbol.selectionRange.start.line;
     const endLine: number = AhkSymbol.selectionRange.end.line;
@@ -63,17 +66,25 @@ export function getParamDef(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TPa
         if (line < startLine) continue;
         if (line > endLine) break;
         let lStrFix: string = lStr;
-        if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w+\(/u, '');
-        if (endLine === line) lStrFix = lStrFix.replace(/\)\s*\{?\s*$/u, '');
+        if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w+\(/u, replacerSpace);
+        if (endLine === line) lStrFix = lStrFix.replace(/\)\s*\{?\s*$/u, replacerSpace);
 
-        const strList: string[] = lStrFix
-            .replace(/:?=\s*[-+.\w]+/ug, '') // Test 0x00ffffff  , -0.5 , 0.8
-            .split(',')
-            .map((v: string): string => v.trim());
+        if (lStrFix.trim() === '') break;
 
-        for (const param of strList) {
+        const strF: string = lStrFix
+            .replace(/:?=\s*[-+.\w]+/ug, replacerSpace); // Test 0x00ffffff  , -0.5 , 0.8
+
+        const strF2: string = strF.replace(/\bByRef\b/uig, replacerSpace);
+
+        for (const ma of strF.matchAll(/\s*([^,]+),?/uig)) {
+            const param: string = ma[1].trim();
             if (param === '') continue;
-            const ArgAnalysis: TParamMeta = getParamDefNeed(param, funcRawName, line, lStr);
+
+            const find: string = param.replace(/\bByRef\b\s*/ui, '');
+            const ch: number = strF2.indexOf(find, ma.index);
+
+            const ArgAnalysis: TParamMeta = getParamDefNeed(param, funcRawName, line, ch);
+
             const key: string = ArgAnalysis.keyRawName.toUpperCase();
             paramMap.set(key, ArgAnalysis);
         }

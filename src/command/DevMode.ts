@@ -31,10 +31,10 @@ async function devTestDA(): Promise<null> {
     // The task be completed, please confirm!
     // iMax is 20
     // statistics len is 20
-    // sum is 3633
-    // avg is 181.65
-    // stdDev is 18.51019989087098
-    // [242, 206, 204, 191, 192, 182, 168, 169, 166, 168, 171, 185, 186, 178, 167, 170, 169, 167, 166, 186]
+    // sum is 3411
+    // avg is 170.55
+    // stdDev is 9.07455233055604
+    // [208, 174, 170, 169, 169, 169, 167, 167, 165, 166, 167, 178, 168, 170, 167, 166, 166, 170, 167, 168]
     Data.push(t2 - t1 + timeSpend);
     return null;
 }

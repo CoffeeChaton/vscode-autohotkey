@@ -29,6 +29,7 @@ const filter = (src, _dest) => {
         '.eslintrc.json',
         '.gitattributes',
         '.gitignore',
+        '.heapprofile',
         '.heapsnapshot',
         'cspell.json',
         'dprint.json',

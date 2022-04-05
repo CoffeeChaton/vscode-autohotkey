@@ -1,4 +1,5 @@
 *.cpuprofile
+*.heapprofile
 *.heapsnapshot
 .VSCodeCounter/
 .dccache
