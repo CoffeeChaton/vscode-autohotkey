@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { EMode, TSymAndFsPath } from '../../globalEnum';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
-import { TDeepAnalysisMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
+import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { getFuncDocMD } from '../../tools/MD/getFuncDocMD';
 import { tryGetSymbol } from '../../tools/tryGetSymbol';
@@ -39,7 +39,7 @@ async function HoverProviderCore(
     // const commands = getCommandsHover(document, position);
     // if (commands !== null) return commands;
 
-    const DA: TDeepAnalysisMeta | null = getDAWithPos(document, position);
+    const DA: TDAMeta | null = getDAWithPos(document, position);
     if (DA !== null) {
         const md: vscode.MarkdownString | null = DeepAnalysisHover(DA, wordUp, position);
         if (md !== null) return new vscode.Hover(md);

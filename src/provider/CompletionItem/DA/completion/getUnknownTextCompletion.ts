@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TTextAnalysis, TTextMap } from '../../../../tools/DeepAnalysis/TypeFnMeta';
+import { TTextMap, TTextMeta } from '../../../../tools/DeepAnalysis/TypeFnMeta';
 import { EPrefix } from '../../../../tools/MD/setMD';
 import { setItemCore } from './setItem';
 
@@ -8,7 +8,7 @@ export function getUnknownTextCompletion(
     funcName: string,
 ): vscode.CompletionItem[] {
     const need: vscode.CompletionItem[] = [];
-    textMap.forEach((v: TTextAnalysis): void => {
+    textMap.forEach((v: TTextMeta): void => {
         const { keyRawName, refRangeList } = v;
         const item: vscode.CompletionItem = setItemCore({
             prefix: EPrefix.unKnownText,

@@ -1,17 +1,17 @@
 import { ESnippetRecBecause, TSnippetRecMap } from '../../../../globalEnum';
-import { TArgMap } from '../../../../tools/DeepAnalysis/TypeFnMeta';
+import { TParamMap } from '../../../../tools/DeepAnalysis/TypeFnMeta';
 
-export function setParaRec(suggestMap: TSnippetRecMap, argMap: TArgMap, inputStr: string): void {
-    for (const ArgAnalysis of argMap.values()) {
+export function setParaRec(suggestMap: TSnippetRecMap, paramMap: TParamMap, inputStr: string): void {
+    for (const paramMeta of paramMap.values()) {
         // startsWith
-        if (ArgAnalysis.keyRawName.startsWith(inputStr)) {
-            suggestMap.set(ArgAnalysis.keyRawName, ESnippetRecBecause.paramStartWith);
+        if (paramMeta.keyRawName.startsWith(inputStr)) {
+            suggestMap.set(paramMeta.keyRawName, ESnippetRecBecause.paramStartWith);
             continue;
         }
 
         // arg Never user
-        if (ArgAnalysis.refRangeList.length === 0) {
-            suggestMap.set(ArgAnalysis.keyRawName, ESnippetRecBecause.paramNeverUsed);
+        if (paramMeta.refRangeList.length === 0) {
+            suggestMap.set(paramMeta.keyRawName, ESnippetRecBecause.paramNeverUsed);
         }
     }
 }

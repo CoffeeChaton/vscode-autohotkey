@@ -1,24 +1,23 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,15] }] */
 import * as vscode from 'vscode';
-import { TGetFnDefNeed, TValAnalysis } from '../../TypeFnMeta';
+import { TValMeta } from '../../TypeFnMeta';
+import { TGetFnDefNeed } from '../TFnVarDef';
 import { wrapFnValDef } from './wrapFnValDef';
 
 function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {
     const {
         line,
         valMap,
-        lineType,
     } = arg;
     const defRange: vscode.Range = new vscode.Range(
         new vscode.Position(line, character),
         new vscode.Position(line, character + RawName.length),
     );
 
-    const value: TValAnalysis = wrapFnValDef({
+    const value: TValMeta = wrapFnValDef({
         RawNameNew: RawName,
         valMap,
         defRange,
-        lineType,
     });
     valMap.set(RawName.toUpperCase(), value);
 }
@@ -29,7 +28,7 @@ function setV1(
     v0: string,
     v1: string,
 ): void {
-    if (arg.argMap.has(v1.toUpperCase())) return;
+    if (arg.paramMap.has(v1.toUpperCase())) return;
 
     const character: number = ch + v0.indexOf(v1, 3);
     wrap(arg, character, v1);
@@ -41,7 +40,7 @@ function setV2(
     v0: string,
     v2: string,
 ): void {
-    if (arg.argMap.has(v2.toUpperCase())) return;
+    if (arg.paramMap.has(v2.toUpperCase())) return;
 
     const character: number = ch + v0.lastIndexOf(v2);
     wrap(arg, character, v2);

@@ -3,10 +3,10 @@ import * as vscode from 'vscode';
 import { TAhkSymbol } from '../../globalEnum';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import {
-    TArgAnalysis,
-    TDeepAnalysisMeta,
-    TTextAnalysis,
-    TValAnalysis,
+    TDAMeta,
+    TParamMeta,
+    TTextMeta,
+    TValMeta,
 } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { enumErr } from '../../tools/enumErr';
 import { kindPick } from '../../tools/Func/kindPick';
@@ -30,15 +30,15 @@ function wrapper(
     listAllUsing: boolean,
     position: vscode.Position,
 ): vscode.Range[] | null {
-    const DA: TDeepAnalysisMeta | null = getDAWithPos(document, position);
+    const DA: TDAMeta | null = getDAWithPos(document, position);
     if (DA === null) return null;
 
     const {
-        argMap,
+        paramMap,
         valMap,
         textMap,
     } = DA;
-    const argMeta: TArgAnalysis | undefined = argMap.get(wordUp);
+    const argMeta: TParamMeta | undefined = paramMap.get(wordUp);
     if (argMeta !== undefined) {
         const { defRangeList, refRangeList } = argMeta;
         return listAllUsing
@@ -46,7 +46,7 @@ function wrapper(
             : defRangeList;
     }
 
-    const valMeta: TValAnalysis | undefined = valMap.get(wordUp);
+    const valMeta: TValMeta | undefined = valMap.get(wordUp);
     if (valMeta !== undefined) {
         const { defRangeList, refRangeList } = valMeta;
         if (listAllUsing) return [...defRangeList, ...refRangeList];
@@ -64,7 +64,7 @@ function wrapper(
         return defRangeList;
     }
 
-    const textList: TTextAnalysis | undefined = textMap.get(wordUp);
+    const textList: TTextMeta | undefined = textMap.get(wordUp);
     return textList
         ? textList.refRangeList
         : null;

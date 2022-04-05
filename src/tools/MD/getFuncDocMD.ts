@@ -46,7 +46,7 @@ function getFuncDocCore(
     }
 
     const kindDetail = `(${EMode.ahkFunc}) ${AhkSymbol.detail}\n`;
-    const title = `${document.getText(AhkSymbol.selectionRange)}{\n`;
+    const title = `${document.getText(AhkSymbol.selectionRange)}{\n`; // TODO: io ?
 
     const md = new vscode.MarkdownString('', true)
         .appendCodeblock(kindDetail, 'ahk')
@@ -69,7 +69,7 @@ export function getFuncDocMD(
     document: vscode.TextDocument,
 ): vscode.MarkdownString {
     if (AhkSymbol.kind !== vscode.SymbolKind.Function && AhkSymbol.kind !== vscode.SymbolKind.Method) {
-        return new vscode.MarkdownString('just support Function/Method hover now', true);
+        throw new Error('just support Function/Method hover now --15--374--065--71');
     }
     const cache: vscode.MarkdownString | undefined = wm.getWm(AhkSymbol);
     if (cache !== undefined) return cache;

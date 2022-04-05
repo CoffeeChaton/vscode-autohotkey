@@ -39,3 +39,6 @@ export function ahkGlobalDef(FuncInput: TFuncInput, gValMapBySelf: TGValMap): nu
         getSelectionRange(lStr, line, name),
     );
 }
+// just ref; global GLOBAL_VAL
+// def; global GLOBAL_VAL := 0
+// ref && user; -> GLOBAL_VAL := 0

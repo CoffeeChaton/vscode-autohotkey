@@ -16,7 +16,7 @@ export function setGlobalVar(FuncInput: TFuncInput, gValMapBySelf: TGValMap): st
         lStr,
     } = FuncInput;
     const { textRaw } = DocStrMap[line];
-    const lStrFix = removeParentheses(removeBigParentheses(lStr.replace(/^\s*\bglobal\b[,\s]+/ui, fnReplacer)));
+    const lStrFix: string = removeParentheses(removeBigParentheses(lStr.replace(/^\s*\bglobal\b[,\s]+/ui, fnReplacer)));
 
     // can't match global func
     // fn(){

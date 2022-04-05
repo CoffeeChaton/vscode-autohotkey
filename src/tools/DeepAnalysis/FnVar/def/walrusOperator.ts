@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { TGetFnDefNeed, TValAnalysis } from '../../TypeFnMeta';
+import { TValMeta } from '../../TypeFnMeta';
+import { TGetFnDefNeed } from '../TFnVarDef';
 import { wrapFnValDef } from './wrapFnValDef';
 
 // := the walrus operator
@@ -7,8 +8,7 @@ export function walrusOperator({
     lStr,
     valMap,
     line,
-    lineType,
-    argMap,
+    paramMap,
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line no-magic-numbers
     if (lStr.trim().length < 4) return; // A:= ----> len 3
@@ -21,18 +21,17 @@ export function walrusOperator({
 
         const RawName: string = v[1];
         const UpName: string = RawName.toUpperCase();
-        if (argMap.has(UpName)) continue;
+        if (paramMap.has(UpName)) continue;
 
         const defRange: vscode.Range = new vscode.Range(
             new vscode.Position(line, character),
             new vscode.Position(line, character + RawName.length),
         );
 
-        const value: TValAnalysis = wrapFnValDef({
+        const value: TValMeta = wrapFnValDef({
             RawNameNew: RawName,
             valMap,
             defRange,
-            lineType,
         });
         valMap.set(UpName, value);
     }

@@ -1,20 +1,17 @@
 import * as vscode from 'vscode';
 import { TAhkSymbol, TTokenStream } from '../../globalEnum';
+import { newC502 } from './FnVar/def/diag/c502';
 import {
-    TArgMap,
-    TTextAnalysis,
+    TParamMap,
+    TParamMeta,
     TTextMap,
+    TTextMeta,
     TValMap,
+    TValMeta,
 } from './TypeFnMeta';
 
-export function getUnknownTextMap(
-    AhkSymbol: TAhkSymbol,
-    DocStrMap: TTokenStream,
-    argMap: TArgMap,
-    valMap: TValMap,
-): TTextMap {
-    // 199 ms
-    const ignoreList: string[] = [
+function getIgnoreList(): string[] {
+    return [
         // DeepAnalysisAllFiles -> Word frequency statistics
         'IF',
         'ELSE',
@@ -47,7 +44,18 @@ export function getUnknownTextMap(
         'AND',
         'OR',
     ];
-    const textMap: TTextMap = new Map<string, TTextAnalysis>();
+}
+
+// eslint-disable-next-line max-statements
+export function getUnknownTextMap(
+    AhkSymbol: TAhkSymbol,
+    DocStrMap: TTokenStream,
+    paramMap: TParamMap,
+    valMap: TValMap,
+): TTextMap {
+    // 199 ms
+    const ignoreList: string[] = getIgnoreList();
+    const textMap: TTextMap = new Map<string, TTextMeta>();
     const startLine: number = AhkSymbol.selectionRange.end.line;
     const endLine: number = AhkSymbol.range.end.line;
     for (const { lStr, line, fistWordUp } of DocStrMap) {
@@ -59,15 +67,9 @@ export function getUnknownTextMap(
             const wordUp: string = keyRawName.toUpperCase();
             if (ignoreList.indexOf(wordUp) > -1) continue;
             if (!textMap.has(wordUp)) {
+                if (fistWordUp === wordUp) continue;
                 if (
-                    valMap.has(wordUp)
-                    || argMap.has(wordUp)
-                    || fistWordUp === wordUp
-                ) {
-                    continue;
-                }
-                if (
-                    (/^[A_\d]_/u).test(wordUp) // (A_Variables) or ( _*2 start varName EX: __varName) or (start with number EX: 0_VarName)
+                    (/^[A_\d]_/u).test(wordUp) // (A_Variables) or "str" or ( _*2 start varName EX: __varName) or (start with number EX: 0_VarName)
                     || (/^\d+$/u).test(wordUp) // just number
                     || (/^0[xX][\dA-F]+$/u).test(wordUp) // NumHexConst = 0 x [0-9a-fA-F]+
                 ) {
@@ -88,16 +90,35 @@ export function getUnknownTextMap(
             const R: string = input[character + keyRawName.length];
             if (L === '{' && R === '}') {
                 // send {text} <-- text is not variable
-                // console.log('🚀 ~ getValRef ~  o', o);
                 continue;
             }
 
+            const startPos: vscode.Position = new vscode.Position(line, character);
             const range: vscode.Range = new vscode.Range(
-                new vscode.Position(line, character),
+                startPos,
                 new vscode.Position(line, character + wordUp.length),
             );
+            const oldVal: TValMeta | undefined = valMap.get(wordUp);
+            if (oldVal) {
+                if (oldVal.defRangeList.some((defRange: vscode.Range): boolean => defRange.contains(startPos))) {
+                    continue;
+                }
+                oldVal.refRangeList.push(range);
+                oldVal.c502Array.push(newC502(oldVal.keyRawName, keyRawName));
+                continue;
+            }
 
-            const need: TTextAnalysis = {
+            const oldParam: TParamMeta | undefined = paramMap.get(wordUp);
+            if (oldParam) {
+                if (oldParam.defRangeList.some((defRange: vscode.Range): boolean => defRange.contains(startPos))) {
+                    continue;
+                }
+                oldParam.refRangeList.push(range);
+                oldParam.c502Array.push(newC502(oldParam.keyRawName, keyRawName));
+                continue;
+            }
+
+            const need: TTextMeta = {
                 keyRawName,
                 refRangeList: [...textMap.get(wordUp)?.refRangeList ?? [], range],
             };

@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
-import { EValType } from '../../globalEnum';
+import { DeepReadonly } from '../../globalEnum';
 
-export type TAhkValType = EValType.local | EValType.global | EValType.Static;
+type TUpName = string;
 /**
  * if keyRawName = first def name -> 0
  * ; else -> string
  */
 export type TC502New = (0 | string);
-export type TArgAnalysis = {
+export type TParamMeta = {
     keyRawName: string;
     defRangeList: vscode.Range[]; // TODO diags "Duplicate parameter". or TODO no-param-reassign
     refRangeList: vscode.Range[];
@@ -16,36 +16,27 @@ export type TArgAnalysis = {
     isByRef: boolean;
     isVariadic: boolean; // https://www.autohotkey.com/docs/Functions.htm#Variadic
 };
-export type TArgMap = Map<string, TArgAnalysis>; // k = valNameUP
+export type TParamMap = Map<TUpName, TParamMeta>; // k = valNameUP
 
-export type TGetFnDefNeed = {
-    lStr: string;
-    valMap: TValMap;
-    line: number;
-    lineType: TAhkValType;
-    argMap: TArgMap;
-};
-
-export type TValAnalysis = {
+export type TValMeta = {
     keyRawName: string;
     defRangeList: vscode.Range[];
     refRangeList: vscode.Range[];
     c502Array: TC502New[];
-
-    ahkValType: TAhkValType;
 };
-export type TValMap = Map<string, TValAnalysis>; // k = valNameUP
-export type TParamOrValMap = TValMap | TArgMap;
-export type TTextAnalysis = {
+export type TValMap = Map<TUpName, TValMeta>; // k = valNameUP
+
+export type TTextMeta = {
     keyRawName: string;
     refRangeList: vscode.Range[];
 };
 
-export type TTextMap = Map<string, TTextAnalysis>; // k = valNameUP
-export type TDeepAnalysisMeta = {
-    argMap: TArgMap;
+export type TTextMap = Map<TUpName, TTextMeta>; // k = valNameUP
+
+export type TDAMeta = DeepReadonly<{
+    paramMap: TParamMap;
     valMap: TValMap;
     textMap: TTextMap;
     funcRawName: string;
     range: vscode.Range; // copy ?
-};
+}>;

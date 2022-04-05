@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { TGetFnDefNeed, TValAnalysis } from '../../TypeFnMeta';
+import { TValMeta } from '../../TypeFnMeta';
+import { TGetFnDefNeed } from '../TFnVarDef';
 import { wrapFnValDef } from './wrapFnValDef';
 
 // VarSetCapacity(varName)
@@ -7,8 +8,7 @@ export function varSetCapacityFunc({
     lStr,
     valMap,
     line,
-    lineType,
-    argMap,
+    paramMap,
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line no-magic-numbers
     if (lStr.length < 8) return; // 'NumGet('.length
@@ -20,7 +20,7 @@ export function varSetCapacityFunc({
 
         const RawName: string = v[1];
         const UpName: string = RawName.toUpperCase();
-        if (argMap.has(UpName)) continue;
+        if (paramMap.has(UpName)) continue;
 
         const character: number = ch + v[0].indexOf(RawName); // "VarSetCapacity(".len ===  15
         const defRange: vscode.Range = new vscode.Range(
@@ -28,11 +28,10 @@ export function varSetCapacityFunc({
             new vscode.Position(line, character + RawName.length),
         );
 
-        const value: TValAnalysis = wrapFnValDef({
+        const value: TValMeta = wrapFnValDef({
             RawNameNew: RawName,
             valMap,
             defRange,
-            lineType,
         });
         valMap.set(RawName.toUpperCase(), value);
     }

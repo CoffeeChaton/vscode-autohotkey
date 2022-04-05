@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { TAhkSymbol, TTokenStream } from '../../../globalEnum';
-import { TArgAnalysis, TArgMap } from '../TypeFnMeta';
+import { TParamMap, TParamMeta } from '../TypeFnMeta';
 
 type TParamData = {
     isByRef: boolean;
@@ -24,7 +24,7 @@ function getKeyRawName(param: string): TParamData {
     };
 }
 
-function getParamDefNeed(param: string, funcRawName: string, line: number, lStr: string): TArgAnalysis {
+function getParamDefNeed(param: string, funcRawName: string, line: number, lStr: string): TParamMeta {
     const data = getKeyRawName(param);
     const { isByRef, isVariadic, keyRawName } = data;
     if (!(/^\w+$/u).test(keyRawName)) {
@@ -54,8 +54,8 @@ function getParamDefNeed(param: string, funcRawName: string, line: number, lStr:
     };
 }
 
-export function getParamDef(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TArgMap {
-    const argMap: TArgMap = new Map<string, TArgAnalysis>();
+export function getParamDef(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TParamMap {
+    const paramMap: TParamMap = new Map<string, TParamMeta>();
     const startLine: number = AhkSymbol.selectionRange.start.line;
     const endLine: number = AhkSymbol.selectionRange.end.line;
     const funcRawName: string = AhkSymbol.name;
@@ -73,11 +73,11 @@ export function getParamDef(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TAr
 
         for (const param of strList) {
             if (param === '') continue;
-            const ArgAnalysis: TArgAnalysis = getParamDefNeed(param, funcRawName, line, lStr);
+            const ArgAnalysis: TParamMeta = getParamDefNeed(param, funcRawName, line, lStr);
             const key: string = ArgAnalysis.keyRawName.toUpperCase();
-            argMap.set(key, ArgAnalysis);
+            paramMap.set(key, ArgAnalysis);
         }
     }
 
-    return argMap;
+    return paramMap;
 }

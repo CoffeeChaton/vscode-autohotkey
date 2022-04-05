@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import {
-    TArgAnalysis,
-    TDeepAnalysisMeta,
-    TTextAnalysis,
-    TValAnalysis,
+    TDAMeta,
+    TParamMeta,
+    TTextMeta,
+    TValMeta,
 } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { EPrefix, setMD } from '../../tools/MD/setMD';
 import { setPreFix } from '../../tools/str/setPreFix';
@@ -13,18 +13,18 @@ function PosInRange(arr: vscode.Range[], position: vscode.Position): boolean {
 }
 
 export function DeepAnalysisHover(
-    DA: TDeepAnalysisMeta,
+    DA: TDAMeta,
     wordUp: string,
     position: vscode.Position,
 ): vscode.MarkdownString | null {
     const {
         funcRawName,
-        argMap,
+        paramMap,
         valMap,
         textMap,
     } = DA;
 
-    const argMeta: TArgAnalysis | undefined = argMap.get(wordUp);
+    const argMeta: TParamMeta | undefined = paramMap.get(wordUp);
     if (argMeta !== undefined) {
         const {
             isByRef,
@@ -39,7 +39,7 @@ export function DeepAnalysisHover(
         return setMD(prefix, refRangeList, defRangeList, funcRawName, '');
     }
 
-    const value: TValAnalysis | undefined = valMap.get(wordUp);
+    const value: TValMeta | undefined = valMap.get(wordUp);
     if (value !== undefined) {
         const {
             refRangeList,
@@ -51,9 +51,9 @@ export function DeepAnalysisHover(
         return setMD(EPrefix.var, refRangeList, defRangeList, funcRawName, '');
     }
 
-    const unKnownText: TTextAnalysis | undefined = textMap.get(wordUp);
-    if (unKnownText !== undefined) {
-        const { refRangeList } = unKnownText;
+    const textMeta: TTextMeta | undefined = textMap.get(wordUp);
+    if (textMeta !== undefined) {
+        const { refRangeList } = textMeta;
         if (!PosInRange(refRangeList, position)) return null;
 
         return setMD(EPrefix.unKnownText, refRangeList, [], funcRawName, '');

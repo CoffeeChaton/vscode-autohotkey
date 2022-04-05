@@ -2,34 +2,34 @@ import { TAhkSymbol, TTokenStream } from '../../globalEnum';
 import { kindPick } from '../Func/kindPick';
 import { getDocStrMapMask } from '../getDocStrMapMask';
 import { ClassWm } from '../wm';
-import { getFnVarMain } from './FnVar/getFnVarMain';
+import { getFnVarDef } from './FnVar/getFnVarDef';
 import { getUnknownTextMap } from './getUnknownTextMap';
-import { getParamMain } from './Param/getParam';
+import { getParamDef } from './Param/getParamDef';
 import {
-    TArgMap,
-    TDeepAnalysisMeta,
+    TDAMeta,
+    TParamMap,
     TTextMap,
     TValMap,
 } from './TypeFnMeta';
 
 // eslint-disable-next-line no-magic-numbers
 const hr2: number = 2 * 60 * 60 * 1000;
-const wm = new ClassWm<TAhkSymbol, TDeepAnalysisMeta>(hr2, 'FnMeta', 0);
+const wm = new ClassWm<TAhkSymbol, TDAMeta>(hr2, 'FnMeta', 0);
 
-export function getFnMeta(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): null | TDeepAnalysisMeta {
+export function getFnMeta(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): null | TDAMeta {
     const kindStr: 'Function' | 'Method' | null = kindPick(AhkSymbol.kind);
     if (kindStr === null) return null;
 
-    const cache: undefined | TDeepAnalysisMeta = wm.getWm(AhkSymbol);
+    const cache: undefined | TDAMeta = wm.getWm(AhkSymbol);
     if (cache !== undefined) return cache;
 
     const AhkTokenList: TTokenStream = getDocStrMapMask(AhkSymbol, DocStrMap);
 
-    const argMap: TArgMap = getParamMain(AhkSymbol, AhkTokenList);
-    const valMap: TValMap = getFnVarMain(AhkSymbol, AhkTokenList, argMap);
-    const textMap: TTextMap = getUnknownTextMap(AhkSymbol, AhkTokenList, argMap, valMap);
-    const v: TDeepAnalysisMeta = {
-        argMap,
+    const paramMap: TParamMap = getParamDef(AhkSymbol, AhkTokenList);
+    const valMap: TValMap = getFnVarDef(AhkSymbol, AhkTokenList, paramMap);
+    const textMap: TTextMap = getUnknownTextMap(AhkSymbol, AhkTokenList, paramMap, valMap);
+    const v: TDAMeta = {
+        paramMap,
         valMap,
         textMap,
         funcRawName: AhkSymbol.name,

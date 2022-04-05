@@ -3,13 +3,13 @@ import { getCode502Default, getCode503Default } from '../../../configUI';
 import { diagColl } from '../../../core/diagRoot';
 import { EDiagBase, TAhkSymbolList, TTokenStream } from '../../../globalEnum';
 import { getFnMetaList } from '../getFnMetaList';
-import { TDeepAnalysisMeta } from '../TypeFnMeta';
+import { TDAMeta } from '../TypeFnMeta';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';
 import { paramNeverUsed, varNeverUsed } from './param/paramNeverUsed';
 import { paramVariadicErr } from './param/paramVariadicErr';
 
-function diagDAFileCore(DAList: TDeepAnalysisMeta[]): readonly vscode.Diagnostic[] {
+function diagDAFileCore(DAList: TDAMeta[]): readonly vscode.Diagnostic[] {
     const code500List = new Set<vscode.Diagnostic>();
     const code501List = new Set<vscode.Diagnostic>();
     const code502List = new Set<vscode.Diagnostic>();
@@ -19,12 +19,12 @@ function diagDAFileCore(DAList: TDeepAnalysisMeta[]): readonly vscode.Diagnostic
     const code503Max = getCode503Default();
 
     for (const DA of DAList) {
-        const { argMap, valMap } = DA;
+        const { paramMap, valMap } = DA;
         varNeverUsed(valMap, code500List);
-        paramNeverUsed(argMap, code501List);
+        paramNeverUsed(paramMap, code501List);
         caseSensitivityVar(EPrefixC502.var, valMap, code502List, code502Max); // var case sensitivity
-        caseSensitivityVar(EPrefixC502.param, argMap, code503List, code503Max);
-        paramVariadicErr(argMap, code504List);
+        caseSensitivityVar(EPrefixC502.param, paramMap, code503List, code503Max);
+        paramVariadicErr(paramMap, code504List);
     }
 
     return [
@@ -41,7 +41,7 @@ export function digDAFile(
     DocStrMap: TTokenStream,
     uri: vscode.Uri,
 ): void {
-    const DAList: TDeepAnalysisMeta[] = getFnMetaList(AhkSymbolList, DocStrMap);
+    const DAList: TDAMeta[] = getFnMetaList(AhkSymbolList, DocStrMap);
     const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) || [])
         .filter((diag: vscode.Diagnostic): boolean => diag.source !== EDiagBase.sourceDA);
     diagColl.set(uri, [...baseDiag, ...diagDAFileCore(DAList)]);

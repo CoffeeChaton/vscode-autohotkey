@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 import { DiagsDA, EDiagCodeDA } from '../../../../diag';
 import { setDiagnosticDA } from '../../../../provider/Diagnostic/tools/setDiagnostic';
-import { TArgMap } from '../../TypeFnMeta';
+import { TParamMap } from '../../TypeFnMeta';
 
-export function paramVariadicErr(argMap: TArgMap, code504List: Set<vscode.Diagnostic>): void {
-    const rightIndex = argMap.size - 1;
+export function paramVariadicErr(paramMap: TParamMap, code504List: Set<vscode.Diagnostic>): void {
+    const rightIndex = paramMap.size - 1;
     let i = 0;
-    for (const ArgAnalysis of argMap.values()) {
+    for (const ArgAnalysis of paramMap.values()) {
         const { isVariadic, defRangeList } = ArgAnalysis;
         if (isVariadic && (i !== rightIndex)) {
             code504List.add(setDiagnosticDA(

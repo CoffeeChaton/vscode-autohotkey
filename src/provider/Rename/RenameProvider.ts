@@ -1,22 +1,22 @@
 /* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
-import { TArgAnalysis, TDeepAnalysisMeta, TValAnalysis } from '../../tools/DeepAnalysis/TypeFnMeta';
+import { TDAMeta, TParamMeta, TValMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 
 function DeepAnalysisRename(
     document: vscode.TextDocument,
     position: vscode.Position,
     wordUp: string,
 ): vscode.Range[] {
-    const DA: TDeepAnalysisMeta | null = getDAWithPos(document, position);
+    const DA: TDAMeta | null = getDAWithPos(document, position);
     if (!DA) return [];
 
-    const argMeta: TArgAnalysis | undefined = DA.argMap.get(wordUp);
-    if (argMeta !== undefined) {
-        return [...argMeta.defRangeList, ...argMeta.refRangeList];
+    const paramMeta: TParamMeta | undefined = DA.paramMap.get(wordUp);
+    if (paramMeta !== undefined) {
+        return [...paramMeta.defRangeList, ...paramMeta.refRangeList];
     }
 
-    const valMeta: TValAnalysis | undefined = DA.valMap.get(wordUp);
+    const valMeta: TValMeta | undefined = DA.valMap.get(wordUp);
     if (valMeta !== undefined) {
         return [...valMeta.defRangeList, ...valMeta.refRangeList];
     }

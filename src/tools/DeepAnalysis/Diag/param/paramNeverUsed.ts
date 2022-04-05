@@ -2,14 +2,14 @@ import * as vscode from 'vscode';
 import { DiagsDA, EDiagCodeDA } from '../../../../diag';
 import { setDiagnosticDA } from '../../../../provider/Diagnostic/tools/setDiagnostic';
 import {
-    TArgAnalysis,
-    TArgMap,
-    TValAnalysis,
+    TParamMap,
+    TParamMeta,
     TValMap,
+    TValMeta,
 } from '../../TypeFnMeta';
 
-export function paramNeverUsed(argMap: TArgMap, code501List: Set<vscode.Diagnostic>): void {
-    argMap.forEach((v: TArgAnalysis): void => {
+export function paramNeverUsed(paramMap: TParamMap, code501List: Set<vscode.Diagnostic>): void {
+    paramMap.forEach((v: TParamMeta): void => {
         if (v.refRangeList.length > 0) return;
         if (v.keyRawName.startsWith('_')) return;
 
@@ -24,7 +24,7 @@ export function paramNeverUsed(argMap: TArgMap, code501List: Set<vscode.Diagnost
 }
 
 export function varNeverUsed(valMap: TValMap, code500List: Set<vscode.Diagnostic>): void {
-    valMap.forEach((v: TValAnalysis, key: string): void => {
+    valMap.forEach((v: TValMeta, key: string): void => {
         if (v.refRangeList.length > 0) return;
         // if (v.defRangeList.length > 1) return;
         if (
