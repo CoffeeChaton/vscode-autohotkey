@@ -8,6 +8,7 @@ import {
     TTokenStream,
 } from '../globalEnum';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
+import { TDAMeta } from '../tools/DeepAnalysis/TypeFnMeta';
 import { BaseScanMemo, getBaseData } from './BaseScanMemo/memo';
 
 export const diagColl: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('ahk-neko-help');
@@ -19,6 +20,7 @@ export type TAhkFileData = {
     t0: number;
     t1: number;
     t2: number;
+    DAList: TDAMeta[];
 };
 
 export const Detecter = {
@@ -85,6 +87,7 @@ export const Detecter = {
             DocStrMap,
             AhkSymbolList,
             baseDiag,
+            DAList,
         } = getBaseData(document);
 
         const t2: number = Date.now();
@@ -95,6 +98,7 @@ export const Detecter = {
             t0,
             t1,
             t2,
+            DAList,
         };
         if (fsPath.endsWith('.ahk') && !fsPath.includes(EStr.diff_name_prefix)) {
             Detecter.DocMap.set(fsPath, UpDateDocDefReturn);

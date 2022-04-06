@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { Detecter, TAhkFileData } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
-import { getFnMetaList } from '../tools/DeepAnalysis/getFnMetaList';
 import { TDAMeta } from '../tools/DeepAnalysis/TypeFnMeta';
 import { TWordFrequencyStatistics, WordFrequencyStatistics } from './tools/WordFrequencyStatistics';
 
@@ -33,12 +32,12 @@ export function DeepAnalysisAllFiles(): null {
         const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
         if (AhkFileData === undefined) return;
 
-        const { AhkSymbolList, DocStrMap } = AhkFileData;
+        const { DAList } = AhkFileData;
         const uri: vscode.Uri = vscode.Uri.file(fsPath);
 
-        need.push(...getFnMetaList(AhkSymbolList, DocStrMap));
+        need.push(...DAList);
 
-        digDAFile(AhkSymbolList, DocStrMap, uri);
+        digDAFile(DAList, uri);
     });
 
     const t2 = Date.now();
@@ -54,7 +53,7 @@ Deep Analysis All Files
 Deep Analysis : 828 Symbol <--keep 828!
 paramMapSize is 2273 <--keep 2273!
 valMapSize is 2095
-textMapSize is 568 <- next plan: ignore keyWord.
-All Size is 4936
+textMapSize is 491 <- next plan: ignore keyWord.
+All Size is 4859
 Done in 8 ms
 */

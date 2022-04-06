@@ -9,6 +9,8 @@ import {
     TValUpName,
 } from '../../globalEnum';
 import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
+import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
+import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { Pretreatment } from '../../tools/Pretreatment';
 import { hashCode } from '../../tools/str/hashCode';
 import { getChildren } from '../getChildren';
@@ -22,6 +24,7 @@ type TMemo = {
     GValMap: TGValMap;
     DocStrMap: TTokenStream;
     baseDiag: vscode.Diagnostic[];
+    DAList: TDAMeta[];
 };
 
 export const BaseScanMemo = {
@@ -96,12 +99,14 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
     });
 
     const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
+    const DAList: TDAMeta[] = DeepAnalysis(AhkSymbolList, DocStrMap, GValMap);
     const AhkCache: TMemo = {
         hash,
         GValMap,
         DocStrMap,
         AhkSymbolList,
         baseDiag,
+        DAList,
     };
     BaseScanMemo.setMemo(fsPath, AhkCache);
     return AhkCache;

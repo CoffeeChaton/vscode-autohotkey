@@ -1,6 +1,6 @@
 import { TAhkFileData } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
-import { getFnMetaList } from '../tools/DeepAnalysis/getFnMetaList';
+import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { arrSum, stdDevFn } from './tools/myMath';
 import { EPressureTestMode, pressureTestConfig, TPickReturn } from './tools/pressureTestConfig';
 import { TUpdateCacheAsyncReturn, UpdateCacheAsync } from './UpdateCache';
@@ -18,6 +18,7 @@ async function devTestBase(): Promise<null> {
     // sum is 5036
     // avg is 50.36
     // stdDev is 3.6865159703980663
+    // eslint-disable-next-line max-len
     // [77, 69, 57, 53, 51, 55, 53, 54, 52, 52, 51, 53, 51, 50, 50, 54, 51, 51, 53, 50, 51, 51, 49, 51, 51, 50, 50, 50, 50, 49, 48, 50, 50, 50, 51, 49, 48, 50, 52, 50, 49, 51, 50, 50, 48, 51, 48, 50, 50, 50, 48, 50, 50, 48, 49, 49, 50, 49, 49, 48, 49, 49, 49, 49, 49, 49, 54, 50, 50, 49, 49, 49, 48, 49, 48, 50, 49, 49, 49, 48, 49, 49, 49, 49, 49, 49, 50, 49, 49, 48, 47, 48, 49, 49, 50, 50, 48, 50, 48, 48]
 
     return null;
@@ -30,8 +31,8 @@ async function devTestDA(): Promise<null> {
 
     // DA---
     const t1: number = Date.now();
-    FileListData.forEach(({ AhkSymbolList, DocStrMap }: TAhkFileData): void => {
-        getFnMetaList(AhkSymbolList, DocStrMap);
+    FileListData.forEach(({ AhkSymbolList, DocStrMap, GValMap }: TAhkFileData): void => {
+        DeepAnalysis(AhkSymbolList, DocStrMap, GValMap); // FIXME: getDAList
     });
     const t2: number = Date.now();
     // DA---

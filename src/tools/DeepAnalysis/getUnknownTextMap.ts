@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TAhkSymbol, TTokenStream } from '../../globalEnum';
+import { TAhkSymbol, TGlobalVal, TGValMap, TTokenStream } from '../../globalEnum';
 import { newC502 } from './FnVar/def/diag/c502';
 import {
     TParamMap,
@@ -68,6 +68,7 @@ export function getUnknownTextMap(
     DocStrMap: TTokenStream,
     paramMap: TParamMap,
     valMap: TValMap,
+    GValMap?: TGValMap,
 ): TTextMap {
     // 287 ms
     const ignoreList: string[] = getIgnoreList();
@@ -127,6 +128,15 @@ export function getUnknownTextMap(
                 continue;
             }
 
+            if (GValMap) {
+                const GValMapOldVal: TGlobalVal | undefined = GValMap.get(wordUp);
+                if (GValMapOldVal) {
+                    GValMapOldVal.refRangeList.push(range);
+                    continue;
+                }
+            }
+
+            //
             const need: TTextMeta = {
                 keyRawName,
                 refRangeList: [...textMap.get(wordUp)?.refRangeList ?? [], range],

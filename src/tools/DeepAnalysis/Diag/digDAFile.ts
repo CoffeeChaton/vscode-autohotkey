@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
 import { getCode502Default, getCode503Default } from '../../../configUI';
 import { diagColl } from '../../../core/Detecter';
-import { EDiagBase, TAhkSymbolList, TTokenStream } from '../../../globalEnum';
-import { getFnMetaList } from '../getFnMetaList';
+import { EDiagBase } from '../../../globalEnum';
 import { TDAMeta } from '../TypeFnMeta';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';
@@ -37,11 +36,9 @@ function diagDAFileCore(DAList: TDAMeta[]): readonly vscode.Diagnostic[] {
 }
 
 export function digDAFile(
-    AhkSymbolList: TAhkSymbolList,
-    DocStrMap: TTokenStream,
+    DAList: TDAMeta[],
     uri: vscode.Uri,
 ): void {
-    const DAList: TDAMeta[] = getFnMetaList(AhkSymbolList, DocStrMap);
     const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) || [])
         .filter((diag: vscode.Diagnostic): boolean => diag.source !== EDiagBase.sourceDA);
     diagColl.set(uri, [...baseDiag, ...diagDAFileCore(DAList)]);

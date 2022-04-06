@@ -1,6 +1,4 @@
 import * as vscode from 'vscode';
-import { TAhkSymbolList, TTokenStream } from '../../globalEnum';
-import { getFnMetaList } from '../../tools/DeepAnalysis/getFnMetaList';
 import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { ClassWm } from '../../tools/wm';
 import { pushToken, TSemanticTokensLeaf } from './tools';
@@ -39,11 +37,9 @@ function DA2SemanticHighlight(DA: TDAMeta): TSemanticTokensLeaf[] {
 }
 
 export function DAList2SemanticHighlightFull(
-    DocStrMap: TTokenStream,
-    AhkSymbolList: TAhkSymbolList,
+    DAList: TDAMeta[],
     Collector: vscode.SemanticTokensBuilder,
 ): void {
-    const DAList: TDAMeta[] = getFnMetaList(AhkSymbolList, DocStrMap);
     for (const DA of DAList) {
         pushToken(DA2SemanticHighlight(DA), Collector);
     }
