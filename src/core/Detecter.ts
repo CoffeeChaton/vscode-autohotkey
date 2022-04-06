@@ -15,7 +15,7 @@ export const diagColl: vscode.DiagnosticCollection = vscode.languages.createDiag
 export type TAhkFileData = {
     AhkSymbolList: TAhkSymbolList;
     DocStrMap: TTokenStream;
-    GlobalValMap: TGValMap;
+    GValMap: TGValMap;
     t0: number;
     t1: number;
     t2: number;
@@ -81,7 +81,7 @@ export const Detecter = {
 
         const t1: number = Date.now();
         const {
-            GlobalValMap,
+            GValMap,
             DocStrMap,
             AhkSymbolList,
             baseDiag,
@@ -91,7 +91,7 @@ export const Detecter = {
         const UpDateDocDefReturn: TAhkFileData = {
             AhkSymbolList,
             DocStrMap,
-            GlobalValMap,
+            GValMap,
             t0,
             t1,
             t2,

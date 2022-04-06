@@ -62,14 +62,13 @@ export type TSymAndFsPath = {
 };
 
 export type TGlobalVal = {
-    // global GVar := fn_Foo(bar)
-    lRange: vscode.Range; // left Range, -> GVar Range
-    rVal: string | null; // Right value is textRaw, -> fn_Foo(bar)
+    defRangeList: vscode.Range[];
+    refRangeList: vscode.Range[];
     rawName: string; // -> GVar
 };
 
 export type TValUpName = string;
-export type TGValMap = Map<TValUpName, TGlobalVal[]>;
+export type TGValMap = Map<TValUpName, TGlobalVal>;
 
 export const enum EVersion {
     getValDefInFunc = '0.4beta',

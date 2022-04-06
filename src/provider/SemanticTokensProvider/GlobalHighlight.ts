@@ -6,13 +6,22 @@ function GlobalHighlightN3(GlobalValMap: TGValMap): TSemanticTokensLeaf[] {
     const need: TSemanticTokensLeaf[] = [];
 
     for (const GlobalVal of GlobalValMap.values()) {
-        for (const { lRange } of GlobalVal) {
-            const r1: TSemanticTokensLeaf = {
-                range: lRange,
-                tokenType: 'string', // just test
-                tokenModifiers: [],
-            };
-            need.push(r1);
+        const { defRangeList, refRangeList } = GlobalVal;
+
+        for (const range of defRangeList) {
+            need.push({
+                range,
+                tokenType: 'variable',
+                tokenModifiers: ['definition'],
+            });
+        }
+
+        for (const range of refRangeList) {
+            need.push({
+                range,
+                tokenType: 'variable',
+                tokenModifiers: ['declaration'],
+            });
         }
     }
 

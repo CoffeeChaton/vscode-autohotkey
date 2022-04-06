@@ -30,6 +30,7 @@ export const ParserBlock = {
             inClass,
             line,
             DocStrMap,
+            GValMap,
         } = FuncInput;
 
         const caseName: string | null = getCaseDefaultName(DocStrMap[line].textRaw, lStr);
@@ -49,6 +50,7 @@ export const ParserBlock = {
             RangeEndLine: Range.end.line,
             inClass,
             fnList: [ParserBlock.getSwitchBlock, ParserBlock.getComment, ParserLine],
+            GValMap,
         });
         return Block;
     },
@@ -62,6 +64,7 @@ export const ParserBlock = {
             RangeEndLine,
             inClass,
             lStr,
+            GValMap,
         } = FuncInput;
 
         const range = getRange(DocStrMap, line, line, RangeEndLine);
@@ -79,6 +82,7 @@ export const ParserBlock = {
             RangeEndLine: range.end.line,
             inClass,
             fnList: [ParserBlock.getCaseDefaultBlock],
+            GValMap,
         });
         return SwitchBlock;
     },
@@ -90,6 +94,7 @@ export const ParserBlock = {
             RangeEndLine,
             inClass,
             lStr,
+            GValMap,
         } = FuncInput;
 
         if (lStr.length < 1 || lStr.indexOf('(') === -1 || lStr.indexOf('}') > -1) return null;
@@ -116,6 +121,7 @@ export const ParserBlock = {
                 ParserBlock.getSwitchBlock,
                 ParserLine,
             ],
+            GValMap,
         });
         return funcSymbol;
     },
@@ -131,6 +137,7 @@ export const ParserBlock = {
             line,
             RangeEndLine,
             lStr,
+            GValMap,
         } = FuncInput;
         const Range = getRange(DocStrMap, line, line, RangeEndLine);
 
@@ -155,6 +162,7 @@ export const ParserBlock = {
             RangeEndLine: Range.end.line,
             inClass: true,
             fnList: [ParserBlock.getClass, ParserBlock.getFunc, getClassGetSet, ParserLine, getClassInstanceVar],
+            GValMap,
         });
         return classSymbol;
     },
@@ -169,6 +177,7 @@ export const ParserBlock = {
             line,
             RangeEndLine,
             inClass,
+            GValMap,
         } = FuncInput;
         // ;;
         const CommentLine = textRaw.search(/^\s*;;/u);
@@ -200,6 +209,7 @@ export const ParserBlock = {
             RangeEndLine: range.end.line,
             inClass,
             fnList: [ParserBlock.getComment, ParserBlock.getSwitchBlock, ParserLine],
+            GValMap,
         });
         return CommentBlock;
     },

@@ -19,13 +19,13 @@ function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticToken
         t2,
         t1,
         DocStrMap,
-        GlobalValMap,
+        GValMap,
     } = Detecter.updateDocDef(document);
     showTimeSpend(path.basename(document.uri.fsPath), t2 - t1);
 
     const Collector: vscode.SemanticTokensBuilder = new vscode.SemanticTokensBuilder(legend);
     DAList2SemanticHighlightFull(DocStrMap, AhkSymbolList, Collector);
-    GlobalHighlight(GlobalValMap, Collector);
+    GlobalHighlight(GValMap, Collector);
     return Collector.build();
 }
 

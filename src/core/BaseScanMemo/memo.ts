@@ -13,14 +13,13 @@ import { Pretreatment } from '../../tools/Pretreatment';
 import { hashCode } from '../../tools/str/hashCode';
 import { getChildren } from '../getChildren';
 import { ParserBlock } from '../Parser';
-import { ahkGlobalMain } from '../ParserTools/ahkGlobalDef';
 import { ParserLine } from '../ParserTools/ParserLine';
 
 type TFsPath = string; // vscode.uru.fsPath
 type TMemo = {
     hash: number;
     AhkSymbolList: TAhkSymbolList;
-    GlobalValMap: TGValMap;
+    GValMap: TGValMap;
     DocStrMap: TTokenStream;
     baseDiag: vscode.Diagnostic[];
 };
@@ -79,6 +78,8 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
     if (oldCache !== undefined) return oldCache;
 
     const DocStrMap: TTokenStream = Pretreatment(fullText.split('\n'), 0);
+    const GValMap: TGValMap = new Map<TValUpName, TGlobalVal>();
+
     const AhkSymbolList: TAhkSymbolList = getChildren({
         DocStrMap,
         RangeStartLine: 0,
@@ -91,15 +92,13 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
             ParserBlock.getSwitchBlock,
             ParserLine,
         ],
+        GValMap,
     });
-
-    const GlobalValMap: TGValMap = new Map<TValUpName, TGlobalVal[]>();
-    ahkGlobalMain(DocStrMap, GlobalValMap);
 
     const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
     const AhkCache: TMemo = {
         hash,
-        GlobalValMap,
+        GValMap,
         DocStrMap,
         AhkSymbolList,
         baseDiag,

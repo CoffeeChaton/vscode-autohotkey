@@ -28,6 +28,7 @@ export function getClassGetSet(FuncInput: TFuncInput): null | TAhkSymbol {
         lStr,
         DocStrMap,
         RangeEndLine,
+        GValMap,
     } = FuncInput;
     if (lStr.indexOf('(') !== -1 || lStr.indexOf('=') !== -1) return null;
 
@@ -46,6 +47,7 @@ export function getClassGetSet(FuncInput: TFuncInput): null | TAhkSymbol {
         RangeEndLine: range.end.line,
         inClass: true,
         fnList: [getClassGetSet],
+        GValMap,
     });
     return classSymbol;
 }

@@ -1,93 +1,90 @@
 import * as vscode from 'vscode';
-import { TGlobalVal, TGValMap, TTokenStream } from '../../globalEnum';
+import {
+    TGlobalVal,
+    TGValMap,
+} from '../../globalEnum';
 import { replacerSpace } from '../../tools/str/removeSpecialChar';
 
-function defGlobal(gValMapBySelf: TGValMap, strF: string, lStr: string, line: number): void {
+// function getRVal(textRaw: string, ch: number, nameLen: number, ma2Len: number): string {
+//     const position: number = ch + nameLen;
+//     // eslint-disable-next-line no-magic-numbers
+//     const start: number = textRaw.indexOf(':=', position) + 2; // ':='.len === 2
+//     const rVal: string = textRaw.substring(start, start + ma2Len).trim();
+//     return rVal;
+// }
+
+function defGlobal(gValMapBySelf: TGValMap, strF: string, line: number): void {
     // eslint-disable-next-line security/detect-unsafe-regex
     for (const ma of strF.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gu)) {
         const rawName: string = ma[1].trim();
-        if (rawName === '') continue;
-        if ((/^_+$/u).test(rawName)) {
-            // TODO
-            console.log('🚀 ~TODO~ defGlobal ~ lStr', lStr);
-            continue;
-        }
 
         const ch: number = strF.indexOf(rawName, ma.index);
 
-        const GValUpName: string = rawName.toUpperCase();
+        const ValUpName: string = rawName.toUpperCase();
 
-        const lRange: vscode.Range = new vscode.Range(
+        const defRange: vscode.Range = new vscode.Range(
             new vscode.Position(line, ch),
             new vscode.Position(line, ch + rawName.length),
         );
 
-        const GlobalVal: TGlobalVal = {
-            lRange,
-            rVal: null,
-            rawName,
-        };
+        const oldVal: TGlobalVal | undefined = gValMapBySelf.get(ValUpName);
 
-        const oldVal: TGlobalVal[] = gValMapBySelf.get(GValUpName) ?? [];
-        oldVal.push(GlobalVal);
-        gValMapBySelf.set(GValUpName, oldVal);
+        if (oldVal) {
+            oldVal.defRangeList.push(defRange);
+        } else {
+            gValMapBySelf.set(ValUpName, {
+                defRangeList: [defRange],
+                refRangeList: [],
+                rawName,
+            });
+        }
     }
 }
 
-function refGlobal(gValMapBySelf: TGValMap, strF: string, lStr: string, line: number): void {
+function refGlobal(gValMapBySelf: TGValMap, strF: string, line: number): void {
     for (const ma of strF.matchAll(/\s*([^,]+),?/uig)) {
         const rawName: string = ma[1].trim();
         if (rawName === '') continue;
-        if ((/^_+$/u).test(rawName)) {
-            // TODO
-            console.log('🚀 ~TODO~ refGlobal ~ lStr', lStr);
-            continue;
-        }
 
         const ch: number = strF.indexOf(rawName, ma.index);
 
-        const GValUpName: string = rawName.toUpperCase();
+        const ValUpName: string = rawName.toUpperCase();
 
-        const lRange: vscode.Range = new vscode.Range(
+        const refRange: vscode.Range = new vscode.Range(
             new vscode.Position(line, ch),
             new vscode.Position(line, ch + rawName.length),
         );
 
-        const GlobalVal: TGlobalVal = {
-            lRange,
-            rVal: null,
-            rawName,
-        };
+        const oldVal: TGlobalVal | undefined = gValMapBySelf.get(ValUpName);
 
-        const oldVal: TGlobalVal[] = gValMapBySelf.get(GValUpName) ?? [];
-        oldVal.push(GlobalVal);
-        gValMapBySelf.set(GValUpName, oldVal);
+        if (oldVal) {
+            oldVal.refRangeList.push(refRange);
+        } else {
+            gValMapBySelf.set(ValUpName, {
+                defRangeList: [],
+                refRangeList: [refRange],
+                rawName,
+            });
+        }
     }
 }
 
-export function ahkGlobalMain(DocStrMap: TTokenStream, gValMapBySelf: TGValMap): void {
-    for (
-        const {
-            fistWordUp,
-            lStr,
-            line,
-            // textRaw,
-        } of DocStrMap
-    ) {
-        if (fistWordUp !== 'GLOBAL') continue;
-        if (lStr.trim() === 'GLOBAL') {
-            // console.log('🚀 ~TODO~ ahkGlobalDef ~ lStr', lStr);
-            // TODO global fn
-            continue;
-        }
+export function ahkGlobalMain(GValMap: TGValMap, fistWordUp: string, lStr: string, line: number): void {
+    // self time 19ms
+    // total 86 ms
 
-        const strF: string = lStr.replace(/^\s*\bglobal\b[,\s]+/ui, replacerSpace);
+    if (fistWordUp !== 'GLOBAL') return;
+    if (lStr.trim() === 'GLOBAL') {
+        // TODO global fn
+        return;
+    }
 
-        if (strF.indexOf(':=') > -1) {
-            defGlobal(gValMapBySelf, strF, lStr, line);
-        } else {
-            refGlobal(gValMapBySelf, strF, lStr, line);
-        }
+    const strF: string = lStr.replace(/^\s*\bglobal\b[,\s]+/ui, replacerSpace);
+
+    if (strF.indexOf(':=') > -1) {
+        defGlobal(GValMap, strF, line);
+    } else {
+        refGlobal(GValMap, strF, line);
     }
 }
 
