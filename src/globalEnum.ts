@@ -67,6 +67,7 @@ export type TGlobalVal = {
     defRangeList: vscode.Range[];
     refRangeList: vscode.Range[];
     rawName: string; // -> GVar
+    // c502 list ?
 };
 
 export type TValUpName = string;

@@ -1,6 +1,4 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,5] }] */
 import * as vscode from 'vscode';
-import { TAhkSymbol } from '../../globalEnum';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import {
     TDAMeta,
@@ -8,28 +6,44 @@ import {
     TTextMeta,
     TValMeta,
 } from '../../tools/DeepAnalysis/TypeFnMeta';
-import { enumErr } from '../../tools/enumErr';
-import { kindPick } from '../../tools/Func/kindPick';
-import { getFnOfPos } from '../../tools/getScopeOfPos';
 
-const enum EFuncPos {
-    isFuncName = 1,
-    isFuncArg = 2,
-    isInBody = 3,
+function rangeList2LocList(rangeList: vscode.Range[], uri: vscode.Uri): vscode.Location[] {
+    return rangeList.map((range) => new vscode.Location(uri, range));
 }
 
-function atFunPos(AhkSymbol: TAhkSymbol, position: vscode.Position): EFuncPos {
-    if (AhkSymbol.selectionRange.contains(position)) return EFuncPos.isFuncArg;
-    if (AhkSymbol.range.start.line === position.line) return EFuncPos.isFuncName;
-    return EFuncPos.isInBody;
-}
-
-function wrapper(
-    document: vscode.TextDocument,
-    wordUp: string,
+function metaRangeList(
+    defRangeList: vscode.Range[],
+    refRangeList: vscode.Range[],
     listAllUsing: boolean,
     position: vscode.Position,
-): vscode.Range[] | null {
+    uri: vscode.Uri,
+): vscode.Location[] {
+    if (listAllUsing) {
+        return rangeList2LocList([...defRangeList, ...refRangeList], uri);
+    }
+
+    if (defRangeList[0].contains(position)) {
+        // <
+        // when I open "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
+        // why vscode can't Identify range.contains(position)
+        //      , and auto let F12 -> shift F12 ?
+        //           (auto let goto Def -> Ref)
+        // What else I need to read/Do?
+        // return [...defRangeList, ...refRangeList];
+        // >
+        // OK..i know who to go to References...
+        return [new vscode.Location(uri, position)];
+    }
+    return rangeList2LocList(defRangeList, uri);
+}
+
+export function getValDefInFunc(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    wordUp: string,
+    listAllUsing: boolean,
+): null | vscode.Location[] {
+    const { uri } = document;
     const DA: TDAMeta | null = getDAWithPos(document, position);
     if (DA === null) return null;
 
@@ -41,72 +55,18 @@ function wrapper(
     const argMeta: TParamMeta | undefined = paramMap.get(wordUp);
     if (argMeta !== undefined) {
         const { defRangeList, refRangeList } = argMeta;
-        return listAllUsing
-            ? [...defRangeList, ...refRangeList]
-            : defRangeList;
+        return metaRangeList(defRangeList, refRangeList, listAllUsing, position, uri);
     }
 
     const valMeta: TValMeta | undefined = valMap.get(wordUp);
     if (valMeta !== undefined) {
         const { defRangeList, refRangeList } = valMeta;
-        if (listAllUsing) return [...defRangeList, ...refRangeList];
-
-        if (defRangeList[0].contains(position)) {
-            // <
-            // when I open "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
-            // why vscode can't Identify range.contains(position)
-            //      , and auto let F12 -> shift F12 ?
-            //           (auto let goto Def -> Ref)
-            // What else I need to read/Do?
-            return [...defRangeList, ...refRangeList];
-            // >
-        }
-        return defRangeList;
+        return metaRangeList(defRangeList, refRangeList, listAllUsing, position, uri);
     }
 
     const textList: TTextMeta | undefined = textMap.get(wordUp);
+
     return textList
-        ? textList.refRangeList
+        ? rangeList2LocList(textList.refRangeList, uri)
         : null;
-}
-
-function match(
-    AhkSymbol: TAhkSymbol,
-    document: vscode.TextDocument,
-    position: vscode.Position,
-    wordUp: string,
-    listAllUsing: boolean,
-): null | vscode.Range[] {
-    const funcPos: EFuncPos = atFunPos(AhkSymbol, position);
-    switch (funcPos) {
-        case EFuncPos.isFuncArg:
-            return wrapper(document, wordUp, true, position);
-        case EFuncPos.isInBody:
-            return wrapper(document, wordUp, listAllUsing, position);
-        case EFuncPos.isFuncName:
-            console.error('EFuncPos.isFuncName', wordUp, position); // is never now
-            void vscode.window.showErrorMessage('EFuncPos.isFuncName', wordUp);
-            return null;
-        default:
-            console.error('EFuncPos.isFuncName', wordUp, position); // is never now
-            void vscode.window.showErrorMessage('EFuncPos.isFuncName', wordUp);
-            return enumErr(funcPos);
-    }
-}
-
-export function getValDefInFunc(
-    document: vscode.TextDocument,
-    position: vscode.Position,
-    wordUp: string,
-    listAllUsing: boolean,
-): null | vscode.Location[] {
-    const AhkSymbol: TAhkSymbol | null = getFnOfPos(document, position);
-    if (AhkSymbol === null) return null;
-    if (!kindPick(AhkSymbol.kind)) return null;
-
-    const rangeList: vscode.Range[] | null = match(AhkSymbol, document, position, wordUp, listAllUsing);
-    if (rangeList === null) return null;
-
-    const { uri } = document;
-    return rangeList.map((range) => new vscode.Location(uri, range));
 }

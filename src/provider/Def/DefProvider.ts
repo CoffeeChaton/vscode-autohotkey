@@ -1,10 +1,7 @@
-/* eslint-disable max-lines */
-/* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { DeepReadonly, EMode, TSymAndFsPath } from '../../globalEnum';
 import { tryGetSymbol } from '../../tools/tryGetSymbol';
-import { ahkInclude } from './ahkInclude';
 import { getValDefInFunc } from './getValDefInFunc';
 
 type TFnFindCol = (lineStr: string) => undefined | number;
@@ -22,8 +19,13 @@ async function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string
     const List: vscode.Location[] = [];
     const fsPathList: string[] = Detecter.getDocMapFile();
     for (const fsPath of fsPathList) {
+        // use-await-in-loop jest 20ms, but Promise.all need 30ms+
+        // eslint-disable-next-line no-await-in-loop
         const document = await vscode.workspace.openTextDocument(fsPath);
         const textRawList = document.getText().split('\n');
+
+        // const dc5: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
+
         const lineCount = textRawList.length;
         for (let line = 0; line < lineCount; line++) {
             const textRaw = textRawList[line].trim();
@@ -57,13 +59,19 @@ async function ahkDef(
     if (data === null) return null;
     const { AhkSymbol, fsPath } = data;
 
-    if (
-        listAllUsing
-        || (fsPath === document.uri.fsPath
-            && AhkSymbol.selectionRange.start.line === position.line)
-    ) {
+    if (listAllUsing) {
         const ref = await getReference(refFn, timeStart, wordUp);
         return ref;
+    }
+
+    if (
+        (fsPath === document.uri.fsPath
+            && AhkSymbol.selectionRange.start.line === position.line)
+    ) {
+        return [new vscode.Location(document.uri, AhkSymbol.selectionRange)];
+        // return [new vscode.Location(document.uri, position)];
+        // const ref = await getReference(refFn, timeStart, wordUp);
+        // return ref;
     }
 
     console.log(`🚀 goto def of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 1~3ms
@@ -92,19 +100,10 @@ export async function userDefTopSymbol(
         },
         Mode: EMode.ahkFunc,
     };
-    // const ahkGlobal: TRule = {
-    //     refFn: (lineStr: string): number | undefined => {
-    //         // var_name
-    //         // eslint-disable-next-line security/detect-non-literal-regexp
-    //         const reg = new RegExp(`(?<![.\`%])\\b(${wordUp})\\b`, 'iu');
-    //         return lineStr.match(reg)?.index;
-    //     },
-    //     Mode: EMode.ahkGlobal,
-    // };
 
     const matchList: DeepReadonly<TRule[]> = [func];
-    for (const rule of matchList) {
-        const { Mode, refFn } = rule;
+    for (const { Mode, refFn } of matchList) {
+        // eslint-disable-next-line no-await-in-loop
         const Location: vscode.Location[] | null = await ahkDef({
             document,
             position,
@@ -136,8 +135,8 @@ export class DefProvider implements vscode.DefinitionProvider {
         const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
         if (range === undefined) return null;
         const wordUp: string = document.getText(range).toUpperCase();
-        const fileLink: vscode.Location | null = ahkInclude(document, position);
-        if (fileLink !== null) return fileLink;
+        // const fileLink: vscode.Location | null = ahkInclude(document, position);
+        // if (fileLink !== null) return fileLink;
 
         const listAllUsing = false;
 
