@@ -8,7 +8,7 @@ export class SymBolProvider implements vscode.DocumentSymbolProvider {
         document: vscode.TextDocument,
         _token: vscode.CancellationToken,
     ): vscode.DocumentSymbol[] | null | undefined {
-        const { AhkSymbolList, DocStrMap, DAList } = Detecter.updateDocDef(document);
+        const { AhkSymbolList, DAList } = Detecter.updateDocDef(document);
 
         digDAFile(DAList, document.uri);
 

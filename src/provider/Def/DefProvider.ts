@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Detecter } from '../../core/Detecter';
+import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { DeepReadonly, EMode, TSymAndFsPath } from '../../globalEnum';
 import { tryGetSymbol } from '../../tools/tryGetSymbol';
 import { getValDefInFunc } from './getValDefInFunc';
@@ -15,24 +15,19 @@ type TDefObj = Readonly<{
     listAllUsing: boolean;
 }>;
 
-async function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): Promise<vscode.Location[]> {
+function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vscode.Location[] {
     const List: vscode.Location[] = [];
     const fsPathList: string[] = Detecter.getDocMapFile();
     for (const fsPath of fsPathList) {
-        // use-await-in-loop jest 20ms, but Promise.all need 30ms+
-        // eslint-disable-next-line no-await-in-loop
-        const document = await vscode.workspace.openTextDocument(fsPath);
-        const textRawList = document.getText().split('\n');
+        const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
 
-        // const dc5: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
-
-        const lineCount = textRawList.length;
-        for (let line = 0; line < lineCount; line++) {
-            const textRaw = textRawList[line].trim();
-            const col = refFn(textRaw);
+        if (AhkFileData === undefined) continue;
+        const uri: vscode.Uri = vscode.Uri.file(fsPath);
+        for (const { textRaw, line } of AhkFileData.DocStrMap) {
+            const col: number | undefined = refFn(textRaw);
             if (col !== undefined) {
-                const Location = new vscode.Location(
-                    document.uri,
+                const Location: vscode.Location = new vscode.Location(
+                    uri,
                     new vscode.Position(line, col),
                 );
                 List.push(Location);
@@ -43,7 +38,7 @@ async function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string
     return List;
 }
 
-async function ahkDef(
+function ahkDef(
     {
         document,
         position,
@@ -53,39 +48,34 @@ async function ahkDef(
         timeStart,
         listAllUsing,
     }: TDefObj,
-): Promise<null | vscode.Location[]> {
+): null | vscode.Location[] {
     const data: TSymAndFsPath | null = tryGetSymbol(wordUp, Mode);
 
     if (data === null) return null;
     const { AhkSymbol, fsPath } = data;
 
     if (listAllUsing) {
-        const ref = await getReference(refFn, timeStart, wordUp);
-        return ref;
+        return getReference(refFn, timeStart, wordUp);
     }
 
     if (
         (fsPath === document.uri.fsPath
             && AhkSymbol.selectionRange.start.line === position.line)
     ) {
-        return [new vscode.Location(document.uri, AhkSymbol.selectionRange)];
-        // return [new vscode.Location(document.uri, position)];
-        // const ref = await getReference(refFn, timeStart, wordUp);
-        // return ref;
+        return [new vscode.Location(document.uri, AhkSymbol.selectionRange)]; // let auto use getReference
     }
 
     console.log(`🚀 goto def of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 1~3ms
     return [new vscode.Location(vscode.Uri.file(fsPath), AhkSymbol.selectionRange)];
 }
 
-// FIXME goto func Def
-export async function userDefTopSymbol(
+export function userDefTopSymbol(
     document: vscode.TextDocument,
     position: vscode.Position,
     wordUp: string,
     listAllUsing: boolean,
-): Promise<null | vscode.Location[]> {
-    const timeStart = Date.now();
+): null | vscode.Location[] {
+    const timeStart: number = Date.now();
     type TRule = {
         refFn: TFnFindCol;
         Mode: EMode;
@@ -103,8 +93,7 @@ export async function userDefTopSymbol(
 
     const matchList: DeepReadonly<TRule[]> = [func];
     for (const { Mode, refFn } of matchList) {
-        // eslint-disable-next-line no-await-in-loop
-        const Location: vscode.Location[] | null = await ahkDef({
+        const Location: vscode.Location[] | null = ahkDef({
             document,
             position,
             Mode,
@@ -118,34 +107,43 @@ export async function userDefTopSymbol(
     return null;
 }
 
+function DefProviderCore(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+): null | vscode.Location[] {
+    //  Definition | DefinitionLink[]
+    // if (isPosAtStr(document, position)) return null;
+
+    // eslint-disable-next-line security/detect-unsafe-regex
+    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
+    if (range === undefined) return null;
+    const wordUp: string = document.getText(range).toUpperCase();
+    // const fileLink: vscode.Location | null = ahkInclude(document, position);
+    // if (fileLink !== null) return fileLink;
+
+    const listAllUsing = false;
+
+    const userDefLink: vscode.Location[] | null = userDefTopSymbol(document, position, wordUp, listAllUsing);
+    if (userDefLink !== null) return userDefLink;
+
+    const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
+    if (valInFunc !== null) return valInFunc;
+
+    return null;
+}
+
 // Go to Definition (via F12 || Ctrl+Click)
 // open the definition to the side with ( via Ctrl+Alt+Click )
 // Peek Definition (via Alt+F12)
 export class DefProvider implements vscode.DefinitionProvider {
     // eslint-disable-next-line class-methods-use-this
-    public async provideDefinition(
+    public provideDefinition(
         document: vscode.TextDocument,
         position: vscode.Position,
         _token: vscode.CancellationToken,
-    ): Promise<null | vscode.Location | vscode.Location[]> {
+    ): null | vscode.Location | vscode.Location[] {
         //  Definition | DefinitionLink[]
-        // if (isPosAtStr(document, position)) return null;
 
-        // eslint-disable-next-line security/detect-unsafe-regex
-        const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
-        if (range === undefined) return null;
-        const wordUp: string = document.getText(range).toUpperCase();
-        // const fileLink: vscode.Location | null = ahkInclude(document, position);
-        // if (fileLink !== null) return fileLink;
-
-        const listAllUsing = false;
-
-        const userDefLink: vscode.Location[] | null = await userDefTopSymbol(document, position, wordUp, listAllUsing);
-        if (userDefLink !== null) return userDefLink;
-
-        const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
-        if (valInFunc !== null) return valInFunc;
-
-        return null;
+        return DefProviderCore(document, position);
     }
 }
