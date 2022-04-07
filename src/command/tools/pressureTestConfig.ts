@@ -15,17 +15,17 @@ export type TPickReturn = {
 
 export async function pressureTestConfig(): Promise<TPickReturn | null> {
     const items: TPickReturn[] = [
+        // {
+        //     label: '10 sec (base)',
+        //     delay: 400, // 173~250
+        //     maxTime: 30, // 12 * 1000 / 600
+        //     //              sec   ms    delay
+        //     mode: EPressureTestMode.justBase,
+        // },
         {
-            label: '10 sec (base)',
-            delay: 100, // my test pack time 50~70
-            maxTime: 100, // 10 * 1000 / 100
-            //               sec   ms    delay
-            mode: EPressureTestMode.justBase,
-        },
-        {
-            label: '12 sec (base + DA)',
-            delay: 600, // base 50~70 , DA 450~500 ms -> 70 + 500 -> 600
-            maxTime: 20, // 12 * 1000 / 600
+            label: '8 sec (base + DA)',
+            delay: 400, // 173~250
+            maxTime: 20, // 8 * 1000 / 400
             //              sec   ms    delay
             mode: EPressureTestMode.baseAndDA,
         },

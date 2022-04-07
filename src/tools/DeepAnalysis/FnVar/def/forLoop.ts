@@ -56,7 +56,7 @@ export function forLoop(arg: TGetFnDefNeed): void {
     if (lStr.trim().length < 10) return; // for a in b ----> len 10
 
     // eslint-disable-next-line security/detect-unsafe-regex
-    for (const v of lStr.matchAll(/(?:\s|^)\bFor\b\s+(\w+)\s*(?:,\s*(\w+))?\s+in\s/giu)) {
+    for (const v of lStr.matchAll(/\bFor\b\s+(\w+)\s*(?:,\s*(\w+))?\s+in\s/giu)) {
         const ch: number | undefined = v.index;
         if (ch === undefined) continue;
         const v0: string = v[0];

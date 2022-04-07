@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { ETime } from '../../../globalEnum';
 import { A_Variables } from '../../../tools/Built-in/Variables';
 
 const snippetList: vscode.CompletionItem[] = [];
@@ -31,5 +30,6 @@ export function snippetStartWihA(): vscode.CompletionItem[] {
     return snippetList;
 }
 
-// Delay loading
-setTimeout(snippetStartWihA, ETime.SnippetStartWihA);
+// // Delay loading
+// setTimeout(snippetStartWihA, ETime.SnippetStartWihA);
+snippetStartWihA();

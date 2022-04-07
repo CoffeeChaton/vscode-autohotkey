@@ -14,14 +14,12 @@ export const legend = new vscode.SemanticTokensLegend(
 );
 
 function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticTokens {
+    const t1: number = Date.now();
     const {
-        AhkSymbolList,
-        t2,
-        t1,
-        DocStrMap,
         GValMap,
         DAList,
     } = Detecter.updateDocDef(document);
+    const t2: number = Date.now();
     showTimeSpend(path.basename(document.uri.fsPath), t2 - t1);
 
     const Collector: vscode.SemanticTokensBuilder = new vscode.SemanticTokensBuilder(legend);

@@ -1,32 +1,19 @@
-/* eslint-disable no-await-in-loop */
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 import {
     EStr,
-    TAhkSymbolList,
-    TGValMap,
-    TTokenStream,
+    TFsPath,
 } from '../globalEnum';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
-import { TDAMeta } from '../tools/DeepAnalysis/TypeFnMeta';
-import { BaseScanMemo, getBaseData } from './BaseScanMemo/memo';
+import { BaseScanMemo, getBaseData, TMemo } from './BaseScanMemo/memo';
+
+export type TAhkFileData = Omit<TMemo, 'hash'>;
 
 export const diagColl: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('ahk-neko-help');
 
-export type TAhkFileData = {
-    AhkSymbolList: TAhkSymbolList;
-    DocStrMap: TTokenStream;
-    GValMap: TGValMap;
-    t0: number;
-    t1: number;
-    t2: number;
-    DAList: TDAMeta[];
-};
-
 export const Detecter = {
     // key : vscode.Uri.fsPath,
-    // val : vscode.DocumentSymbol[] -> MyDocSymbolArr
-    DocMap: new Map<string, TAhkFileData>(),
+    DocMap: new Map<TFsPath, TAhkFileData>(),
 
     getDocMapFile(): string[] {
         const need: string[] = [];
@@ -67,9 +54,11 @@ export const Detecter = {
             if (oldUri.fsPath.endsWith('.ahk')) {
                 delOldCache(oldUri);
                 if (newUri.fsPath.endsWith('.ahk')) {
+                    // eslint-disable-next-line no-await-in-loop
                     await vscode.workspace
                         .openTextDocument(newUri)
                         .then((doc: vscode.TextDocument): TAhkFileData => Detecter.updateDocDef(doc));
+                    // eslint-disable-next-line no-await-in-loop
                     await renameFileNameFunc(oldUri, newUri);
                 } // else EXP : let a.ahk -> a.ahk0 or a.0ahk
             }
@@ -77,32 +66,13 @@ export const Detecter = {
     },
 
     updateDocDef(document: vscode.TextDocument): TAhkFileData {
-        const t0: number = Date.now();
+        const UpDateDocDefReturn: TAhkFileData = getBaseData(document);
+
         const { uri } = document;
         const { fsPath } = document.uri;
-
-        const t1: number = Date.now();
-        const {
-            GValMap,
-            DocStrMap,
-            AhkSymbolList,
-            baseDiag,
-            DAList,
-        } = getBaseData(document);
-
-        const t2: number = Date.now();
-        const UpDateDocDefReturn: TAhkFileData = {
-            AhkSymbolList,
-            DocStrMap,
-            GValMap,
-            t0,
-            t1,
-            t2,
-            DAList,
-        };
-        if (fsPath.endsWith('.ahk') && !fsPath.includes(EStr.diff_name_prefix)) {
+        if (fsPath.endsWith('.ahk') && fsPath.indexOf(EStr.diff_name_prefix) === -1) {
             Detecter.DocMap.set(fsPath, UpDateDocDefReturn);
-            diagColl.set(uri, [...baseDiag]);
+            diagColl.set(uri, [...UpDateDocDefReturn.baseDiag]);
         }
 
         return UpDateDocDefReturn;

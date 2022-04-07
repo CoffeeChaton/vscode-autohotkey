@@ -1,8 +1,8 @@
 /* eslint-disable no-magic-numbers */
-/* eslint-disable @typescript-eslint/member-ordering */
 import * as vscode from 'vscode';
 import {
     TAhkSymbolList,
+    TFsPath,
     TGlobalVal,
     TGValMap,
     TTokenStream,
@@ -17,8 +17,7 @@ import { getChildren } from '../getChildren';
 import { ParserBlock } from '../Parser';
 import { ParserLine } from '../ParserTools/ParserLine';
 
-type TFsPath = string; // vscode.uru.fsPath
-type TMemo = {
+export type TMemo = {
     hash: number;
     AhkSymbolList: TAhkSymbolList;
     GValMap: TGValMap;

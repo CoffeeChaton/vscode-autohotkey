@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { ETime } from '../../globalEnum';
 import { A_Send } from '../../tools/Built-in/sendSpecialKeys';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { getLStr } from '../../tools/str/removeSpecialChar';
@@ -37,7 +36,7 @@ function ahkSendLazy(): vscode.CompletionItem[] {
 }
 
 // Delay loading
-setTimeout(ahkSendLazy, ETime.snipSendBigBrackets);
+ahkSendLazy();
 
 export function ahkSend(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
     const textRaw = document.lineAt(position).text;

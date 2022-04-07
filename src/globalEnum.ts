@@ -56,9 +56,11 @@ export type TTokenStream = DeepReadonly<TAhkToken>;
 export type TAhkSymbol = DeepReadonly<vscode.DocumentSymbol>;
 export type TAhkSymbolList = DeepReadonly<TAhkSymbol[]>;
 
+export type TFsPath = string; // vscode.uru.fsPath
+
 export type TSymAndFsPath = {
     AhkSymbol: TAhkSymbol;
-    fsPath: string;
+    fsPath: TFsPath;
 };
 
 export type TGlobalVal = {
@@ -145,11 +147,6 @@ export type TPick<TNeed> = {
     label: string;
     fn: () => TNeed;
 };
-
-export const enum ETime {
-    SnippetStartWihA = 20, // delay 5 sec
-    snipSendBigBrackets = 30, // delay 6 sec
-}
 
 export const enum ESnippetRecBecause {
     paramNeverUsed = 'param is assigned but never used.\n\n',

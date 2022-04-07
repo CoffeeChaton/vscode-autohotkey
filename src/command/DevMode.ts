@@ -1,50 +1,23 @@
-import { TAhkFileData } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
-import { DeepAnalysis } from '../tools/DeepAnalysis/DeepAnalysis';
 import { arrSum, stdDevFn } from './tools/myMath';
-import { EPressureTestMode, pressureTestConfig, TPickReturn } from './tools/pressureTestConfig';
+import { pressureTestConfig, TPickReturn } from './tools/pressureTestConfig';
 import { TUpdateCacheAsyncReturn, UpdateCacheAsync } from './UpdateCache';
 
 const Data: number[] = [];
 
-async function devTestBase(): Promise<null> {
-    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync();
-    if (ed === null) return null;
-
-    Data.push(ed.timeSpend);
-
-    // iMax is 100
-    // statistics len is 100
-    // sum is 5036
-    // avg is 50.36
-    // stdDev is 3.6865159703980663
-    // eslint-disable-next-line max-len
-    // [77, 69, 57, 53, 51, 55, 53, 54, 52, 52, 51, 53, 51, 50, 50, 54, 51, 51, 53, 50, 51, 51, 49, 51, 51, 50, 50, 50, 50, 49, 48, 50, 50, 50, 51, 49, 48, 50, 52, 50, 49, 51, 50, 50, 48, 51, 48, 50, 50, 50, 48, 50, 50, 48, 49, 49, 50, 49, 49, 48, 49, 49, 49, 49, 49, 49, 54, 50, 50, 49, 49, 49, 48, 49, 48, 50, 49, 49, 49, 48, 49, 49, 49, 49, 49, 49, 50, 49, 49, 48, 47, 48, 49, 49, 50, 50, 48, 50, 48, 48]
-
-    return null;
-}
-
 async function devTestDA(): Promise<null> {
     const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync();
     if (ed === null) return null;
-    const { timeSpend, FileListData } = ed;
-
-    // DA---
-    const t1: number = Date.now();
-    FileListData.forEach(({ AhkSymbolList, DocStrMap, GValMap }: TAhkFileData): void => {
-        DeepAnalysis(AhkSymbolList, DocStrMap, GValMap); // FIXME: getDAList
-    });
-    const t2: number = Date.now();
-    // DA---
-
+    // ---------------------------------------------
     // The task be completed, please confirm!
     // iMax is 20
     // statistics len is 20
-    // sum is 3411
-    // avg is 170.55
-    // stdDev is 9.07455233055604
-    // [208, 174, 170, 169, 169, 169, 167, 167, 165, 166, 167, 178, 168, 170, 167, 166, 166, 170, 167, 168]
-    Data.push(t2 - t1 + timeSpend);
+    // sum is 3437
+    // avg is 171.85
+    // stdDev is 14.199559852333453
+    // [227, 188, 173, 169, 167, 171, 166, 165, 164, 166, 182, 164, 163, 165, 166, 168, 166, 178, 165, 164]
+    // ---------------------------------------------
+    Data.push(ed.timeSpend);
     return null;
 }
 
@@ -83,7 +56,6 @@ export async function pressureTest(): Promise<null> {
         maxTime,
         delay,
         label,
-        mode,
     } = pick;
 
     OutputChannel.appendLine('---------------------------------------------');
@@ -91,12 +63,12 @@ export async function pressureTest(): Promise<null> {
     OutputChannel.appendLine(`   please wait of [${label}]`);
     OutputChannel.show();
 
-    const fn: () => Promise<null> = mode === EPressureTestMode.baseAndDA
-        ? devTestDA
-        : devTestBase;
+    // const fn: () => Promise<null> = mode === EPressureTestMode.baseAndDA
+    //     ? devTestDA
+    //     : devTestBase;
 
     for (let i = 1; i <= maxTime; i++) {
-        c1.push(setTimeout(fn, i * delay));
+        c1.push(setTimeout(devTestDA, i * delay));
     }
 
     // eslint-disable-next-line no-magic-numbers
