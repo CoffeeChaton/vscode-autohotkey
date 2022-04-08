@@ -14,23 +14,21 @@ export async function renameFileNameFunc(oldUri: vscode.Uri, newUri: vscode.Uri)
     const oldFileName: string = path.basename(oldUri.fsPath, '.ahk');
     const newFileName: string = path.basename(newUri.fsPath, '.ahk');
     const RegexInclude = /^\s*#Include(?:Again)?\s+/ui;
-    const edit = new vscode.WorkspaceEdit();
+    const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
     const editUriList: vscode.Uri[] = [];
 
     for (const uri of UriList) {
-        const document = await vscode.workspace.openTextDocument(uri);
+        const document: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
 
         const DocStrMap: TTokenStream = Pretreatment(document.getText().split('\n'), 0, document.fileName);
-        const lineCount = DocStrMap.length;
-        for (let line = 0; line < lineCount; line++) {
-            const { textRaw, lStr } = DocStrMap[line];
+        for (const { textRaw, lStr, line } of DocStrMap) {
             if (
                 RegexInclude.test(lStr)
                 && textRaw.includes(oldFileName)
             ) {
-                const Remarks = `\n;;${oldFileName} -> ${newFileName} ; at ${new Date().toLocaleString()}`;
-                const newText = textRaw.replace(oldFileName, newFileName) + Remarks;
-                const newPos = new vscode.Position(line, 0);
+                const Remarks = `\n;;${oldFileName} -> ${newFileName} ; at ${new Date().toISOString()}`;
+                const newText: string = textRaw.replace(oldFileName, newFileName) + Remarks;
+                const newPos: vscode.Position = new vscode.Position(line, 0);
                 edit.insert(uri, newPos, newText);
                 editUriList.push(uri);
             }

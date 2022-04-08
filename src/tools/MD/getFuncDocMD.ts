@@ -35,7 +35,7 @@ function getReturnText(lStr: string, textRaw: string): string {
 }
 
 export function getFuncDocCore(
-    kindStr: string, // TODO: remove AhkSymbol just need kind && selectionRange
+    kindStr: string,
     fileName: string,
     AhkTokenList: TTokenStream,
     selectionRangeText: string,

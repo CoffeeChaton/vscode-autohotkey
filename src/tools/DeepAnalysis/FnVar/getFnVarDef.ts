@@ -29,7 +29,6 @@ export function getFnVarDef(
         walrusOperator(need); // :=
         varSetCapacityFunc(need); // VarSetCapacity(varName) or NumGet(varName) or NumGet(&varName)
         forLoop(need); // for var1 , var2 in
-        // TODO just `global variableName`, but not :=
     }
 
     return valMap;

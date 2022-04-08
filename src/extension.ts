@@ -72,10 +72,9 @@ export function deactive(): void {
     BaseScanMemo.memo.clear();
 }
 
+// TODO i18n of diag
 /*
-TODO
-i18n of diag
-    https://github.com/microsoft/vscode-extension-samples/tree/main/i18n-sample
+https://github.com/microsoft/vscode-extension-samples/tree/main/i18n-sample
 
 createTextEditorDecorationType
 vscode.Progress

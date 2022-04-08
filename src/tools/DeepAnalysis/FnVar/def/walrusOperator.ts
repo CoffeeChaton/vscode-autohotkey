@@ -28,4 +28,3 @@ export function walrusOperator({
 }
 
 // Test OK     text := LT_bgColor_N := set_list := wait_time := Percentage := "Discard" ;clean
-// TODO .= += -=

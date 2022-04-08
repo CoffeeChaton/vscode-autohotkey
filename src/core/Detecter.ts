@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as vscode from 'vscode';
 import { EStr, TFsPath } from '../globalEnum';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
@@ -13,17 +12,21 @@ export const Detecter = {
     DocMap: new Map<TFsPath, TAhkFileData>(),
 
     getDocMapFile(): string[] {
-        const need: string[] = [];
-        const keyList: string[] = [...Detecter.DocMap.keys()];
-        for (const fsPath of keyList) {
-            // eslint-disable-next-line security/detect-non-literal-fs-filename
-            if (fs.existsSync(fsPath)) {
-                need.push(fsPath);
-            } else {
-                Detecter.DocMap.delete(fsPath);
-            }
-        }
-        return need;
+        return [...Detecter.DocMap.keys()];
+        // TODO check...but not this way.
+        // await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
+
+        // const need: string[] = [];
+        // const keyList: string[] = [...Detecter.DocMap.keys()];
+        // for (const fsPath of keyList) {
+        //     // eslint-disable-next-line security/detect-non-literal-fs-filename
+        //     if (fs.existsSync(fsPath)) {
+        //         need.push(fsPath);
+        //     } else {
+        //         Detecter.DocMap.delete(fsPath);
+        //     }
+        // }
+        // return need;
     },
 
     getDocMap(fsPath: string): undefined | TAhkFileData {

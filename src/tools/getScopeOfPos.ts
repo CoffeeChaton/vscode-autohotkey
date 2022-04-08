@@ -67,24 +67,3 @@ export function getScopeOfPos(document: vscode.TextDocument, position: vscode.Po
     }
     return mayBeRange;
 }
-
-export function getFnOfPos(document: vscode.TextDocument, position: vscode.Position): TAhkSymbol | null {
-    const stackPro = getStack(document, position);
-    if (stackPro === null) return null;
-
-    const { stack } = stackPro;
-    if (stack.length === 0) return null;
-    if (stack[0].AhkSymbol.kind === vscode.SymbolKind.Function) {
-        return stackPro.stack[0].AhkSymbol;
-    }
-
-    let ed: TAhkSymbol | null = null;
-    for (const { AhkSymbol } of stack) {
-        if (AhkSymbol.kind === vscode.SymbolKind.Class || AhkSymbol.kind === vscode.SymbolKind.Method) {
-            ed = AhkSymbol;
-        } else {
-            return ed;
-        }
-    }
-    return ed;
-}

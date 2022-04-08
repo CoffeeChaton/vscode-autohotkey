@@ -42,7 +42,6 @@ export async function listAllFuncClass(
         if (AhkFileData === undefined) continue;
 
         const { AhkSymbolList, DAList } = AhkFileData;
-        // always need IO <-> const document = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
         const fileName: string = path.basename(fsPath);
         for (const AhkSymbol of AhkSymbolList) {
             if (AhkSymbol.kind === vscode.SymbolKind.Class) {

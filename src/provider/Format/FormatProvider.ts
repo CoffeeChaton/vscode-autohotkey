@@ -1,7 +1,5 @@
-/* eslint-disable max-lines */
 /* eslint-disable max-statements */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
-import * as path from 'path';
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { EDetail, EFormatChannel, EStr } from '../../globalEnum';
@@ -57,7 +55,7 @@ export function FormatCore(
         from,
     }: TFmtCoreArgs,
 ): vscode.ProviderResult<vscode.TextEdit[]> {
-    if (path.basename(document.uri.fsPath, '.ahk').startsWith(EStr.diff_name_prefix)) {
+    if (document.uri.fsPath.indexOf(EStr.diff_name_prefix) > -1) {
         const message = 'Don\'t Format the TEMP file!';
         void vscode.window.showWarningMessage(message);
         return [];

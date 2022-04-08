@@ -237,7 +237,7 @@ export async function wrapClass(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): Promise<vscode.CompletionItem[]> {
-    const ChapterArr: readonly string[] | null = getObjChapterArr(document, position); // TODO [].
+    const ChapterArr: readonly string[] | null = getObjChapterArr(document, position);
     if (ChapterArr === null) return [];
 
     const ahkClassItem: vscode.CompletionItem[] = await triggerClass(document, position, ChapterArr);
