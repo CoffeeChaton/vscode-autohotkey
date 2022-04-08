@@ -13,7 +13,7 @@ import * as vscode from 'vscode';
 //              A_Startup,A_StartupCommon, A_Temp, A_UserName ,A_WinDir
 //              A_UserName, A_WinDir
 
-export function ahkInclude(document: vscode.TextDocument, position: vscode.Position): null | vscode.Location {
+function ahkInclude(document: vscode.TextDocument, position: vscode.Position): null | vscode.Location {
     // at #include line
     const includeExec: RegExpExecArray | null = (/^\s*#include(?:again)?\s*(?:\*i )?\s*(\S+\.ahk)\s*$/ui).exec(
         document.lineAt(position).text,

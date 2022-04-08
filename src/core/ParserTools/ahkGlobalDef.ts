@@ -7,7 +7,6 @@ import { replacerSpace } from '../../tools/str/removeSpecialChar';
 
 // function getRVal(textRaw: string, ch: number, nameLen: number, ma2Len: number): string {
 //     const position: number = ch + nameLen;
-//     // eslint-disable-next-line no-magic-numbers
 //     const start: number = textRaw.indexOf(':=', position) + 2; // ':='.len === 2
 //     const rVal: string = textRaw.substring(start, start + ma2Len).trim();
 //     return rVal;

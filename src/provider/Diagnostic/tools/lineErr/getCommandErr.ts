@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import { EDiagLine, TLineDiag } from './lineErrTools';
@@ -15,8 +14,8 @@ function getLoopErr(lStr: string): TLineDiag {
     }
 
     // eslint-disable-next-line no-magic-numbers
-    const position = Math.max(0, lStr.search(/\bloop\b/iu)) + 4;
-    const colL = Math.max(0, lStr.indexOf(SecondSection, position));
+    const position = lStr.search(/\bloop\b/iu) + 4;
+    const colL = lStr.indexOf(SecondSection, position);
     const colR = colL + SecondSection.length;
     if ((/^RootKey$/ui).test(SecondSection)) {
         // https://www.autohotkey.com/docs/commands/LoopReg.htm#old

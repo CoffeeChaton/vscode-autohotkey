@@ -1,4 +1,3 @@
-/* eslint-disable security/detect-non-literal-fs-filename */
 import * as temp from 'temp';
 import * as vscode from 'vscode';
 import { EStr } from '../globalEnum';
@@ -16,7 +15,9 @@ export async function callDiff({ leftText, rightText, fileName: basename }: TDif
         suffix: '.ahk',
         // dir?: string,
     };
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const left = temp.createWriteStream(affixes);
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const right = temp.createWriteStream(affixes);
 
     if (typeof left.path !== 'string' || typeof right.path !== 'string') return;

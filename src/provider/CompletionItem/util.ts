@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 
 export function getStartWithStr(document: vscode.TextDocument, position: vscode.Position): string {

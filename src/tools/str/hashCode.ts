@@ -1,6 +1,4 @@
 /* eslint-disable no-bitwise */
-/* eslint-disable no-mixed-operators */
-
 /* eslint-disable no-magic-numbers */
 /**
  * Returns a hash code for a string.

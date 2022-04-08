@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import * as vscode from 'vscode';
 import { DeepReadonly, TAhkSymbol } from '../../globalEnum';
 import { getRangeOfLine } from '../../tools/range/getRangeOfLine';

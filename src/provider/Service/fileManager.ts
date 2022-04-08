@@ -1,11 +1,10 @@
-/* eslint-disable security/detect-non-literal-fs-filename */
-/* eslint-disable no-magic-numbers */
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
 export const enum EFileModel {
     WRITE = 1,
+    // eslint-disable-next-line no-magic-numbers
     APPEND = 2,
 }
 
@@ -31,8 +30,10 @@ export function FileManagerRecord(fileName: string, content: string, model: EFil
     checkAndMkdir(path.resolve(recordPath, '..'));
 
     if (model === EFileModel.WRITE) {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         fs.writeFileSync(recordPath, content, { encoding: 'utf8' });
     } else {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         fs.appendFileSync(recordPath, content, { encoding: 'utf8' });
     }
     return recordPath;

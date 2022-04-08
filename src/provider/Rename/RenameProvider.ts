@@ -24,6 +24,36 @@ function DeepAnalysisRename(
     return [];
 }
 
+function RenameProviderCore(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    newName: string,
+): vscode.WorkspaceEdit | null {
+    // eslint-disable-next-line security/detect-unsafe-regex
+    const wordRange: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b(?!\()/u);
+    if (wordRange === undefined) return null;
+    const word: string = document.getText(wordRange);
+
+    const rangeList: vscode.Range[] = DeepAnalysisRename(document, position, word.toUpperCase());
+
+    const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
+    for (const range of rangeList) {
+        edit.replace(
+            document.uri,
+            range,
+            newName,
+            {
+                needsConfirmation: true,
+                label: 'test',
+                description: 'test-description',
+            },
+        );
+    }
+    // const fnRenameList = fnRename()
+    console.log('🚀 ~ edit', edit);
+    return edit;
+}
+
 export class RenameProvider implements vscode.RenameProvider {
     public provideRenameEdits(
         document: vscode.TextDocument,
@@ -31,17 +61,6 @@ export class RenameProvider implements vscode.RenameProvider {
         newName: string,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.WorkspaceEdit> {
-        // eslint-disable-next-line security/detect-unsafe-regex
-        const wordRange: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
-        if (wordRange !== undefined) return null;
-        const word: string = document.getText(wordRange);
-
-        const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
-        const rangeList: vscode.Range[] = DeepAnalysisRename(document, position, word.toUpperCase());
-        for (const range of rangeList) {
-            edit.replace(document.uri, range, newName);
-        }
-        // const fnRenameList = fnRename()
-        return edit;
+        return RenameProviderCore(document, position, newName);
     }
 }

@@ -49,8 +49,8 @@ export async function pressureTest(): Promise<null> {
     c1.length = 0;
     Data.length = 0;
 
-    const pick: TPickReturn | null = await pressureTestConfig();
-    if (pick === null) return null;
+    const pick: TPickReturn | undefined = await pressureTestConfig();
+    if (pick === undefined) return null;
 
     const {
         maxTime,

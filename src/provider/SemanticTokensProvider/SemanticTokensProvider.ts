@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { showTimeSpend } from '../../configUI';
@@ -31,6 +30,7 @@ function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticToken
 // semantic token type
 export class AhkFullSemanticHighlight implements vscode.DocumentSemanticTokensProvider {
     // onDidChangeSemanticTokens?: vscode.Event<void> | undefined;
+    // eslint-disable-next-line class-methods-use-this
     public provideDocumentSemanticTokens(
         document: vscode.TextDocument,
         _token: vscode.CancellationToken,

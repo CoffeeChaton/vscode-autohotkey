@@ -112,7 +112,6 @@ function DefProviderCore(
     position: vscode.Position,
 ): null | vscode.Location[] {
     //  Definition | DefinitionLink[]
-    // if (isPosAtStr(document, position)) return null;
 
     // eslint-disable-next-line security/detect-unsafe-regex
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);

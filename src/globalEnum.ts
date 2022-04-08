@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
 

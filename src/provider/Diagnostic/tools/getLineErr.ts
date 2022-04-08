@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import * as vscode from 'vscode';
 import { TTokenStream } from '../../../globalEnum';
 import { assignErr } from './lineErr/assignErr';

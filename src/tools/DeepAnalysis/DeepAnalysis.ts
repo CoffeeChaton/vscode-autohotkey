@@ -18,8 +18,8 @@ import {
 } from './TypeFnMeta';
 
 function getFnMeta(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream, GValMap: TGValMap): null | TDAMeta {
-    const kindStr: 'Function' | 'Method' | null = kindPick(AhkSymbol.kind);
-    if (kindStr === null) return null;
+    const kind: vscode.SymbolKind.Method | vscode.SymbolKind.Function | null = kindPick(AhkSymbol.kind);
+    if (kind === null) return null;
 
     const AhkTokenList: TTokenStream = getDocStrMapMask(AhkSymbol, DocStrMap);
 
@@ -27,6 +27,7 @@ function getFnMeta(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream, GValMap: TGVa
     const valMap: TValMap = getFnVarDef(AhkSymbol, AhkTokenList, paramMap);
     const textMap: TTextMap = getUnknownTextMap(AhkSymbol, AhkTokenList, paramMap, valMap, GValMap);
     const v: TDAMeta = {
+        kind,
         paramMap,
         valMap,
         textMap,

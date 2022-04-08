@@ -6,13 +6,13 @@ import { getUriList } from '../../tools/fsTools/getUriList';
 import { Pretreatment } from '../../tools/Pretreatment';
 
 export async function renameFileNameFunc(oldUri: vscode.Uri, newUri: vscode.Uri): Promise<void> {
-    const UriList = getUriList();
+    const UriList: vscode.Uri[] | null = getUriList();
     if (UriList === null) {
         return;
     }
 
-    const oldFileName = path.basename(oldUri.fsPath, '.ahk');
-    const newFileName = path.basename(newUri.fsPath, '.ahk');
+    const oldFileName: string = path.basename(oldUri.fsPath, '.ahk');
+    const newFileName: string = path.basename(newUri.fsPath, '.ahk');
     const RegexInclude = /^\s*#Include(?:Again)?\s+/ui;
     const edit = new vscode.WorkspaceEdit();
     const editUriList: vscode.Uri[] = [];

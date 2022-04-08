@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable max-lines */
 import * as vscode from 'vscode';
 import { getLintConfig } from '../../configUI';
 import { TAhkSymbolList, TTokenStream } from '../../globalEnum';

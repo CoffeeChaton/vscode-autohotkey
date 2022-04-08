@@ -1,6 +1,6 @@
 import { TAhkSymbol, TAhkToken, TTokenStream } from '../globalEnum';
 
-export function getDocStrMapMask(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TTokenStream {
+function getDocStrMapMaskSlowMode(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TTokenStream {
     const startLine: number = AhkSymbol.range.start.line;
     const endLine: number = AhkSymbol.range.end.line;
     const AhkTokenList: TAhkToken = [];
@@ -10,4 +10,12 @@ export function getDocStrMapMask(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream)
         AhkTokenList.push(e);
     }
     return AhkTokenList;
+}
+
+export function getDocStrMapMask(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TTokenStream {
+    if (DocStrMap[0].line === 0 && DocStrMap[DocStrMap.length - 1].line === (DocStrMap.length - 1)) {
+        return DocStrMap.slice(AhkSymbol.range.start.line, AhkSymbol.range.end.line + 1);
+    }
+    console.log('🚀 ~ getDocStrMapMask ~ SlowMode, AhkSymbol is ', AhkSymbol);
+    return getDocStrMapMaskSlowMode(AhkSymbol, DocStrMap);
 }

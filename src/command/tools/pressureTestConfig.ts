@@ -13,7 +13,7 @@ export type TPickReturn = {
     mode: EPressureTestMode; // 1 is base , 2 is base+DA
 };
 
-export async function pressureTestConfig(): Promise<TPickReturn | null> {
+export function pressureTestConfig(): Thenable<TPickReturn | undefined> {
     const items: TPickReturn[] = [
         // {
         //     label: '10 sec (base)',
@@ -31,8 +31,5 @@ export async function pressureTestConfig(): Promise<TPickReturn | null> {
         },
     ];
 
-    const pick = await vscode.window.showQuickPick<TPickReturn>(items);
-    if (pick === undefined) return null;
-
-    return pick;
+    return vscode.window.showQuickPick<TPickReturn>(items);
 }

@@ -168,49 +168,24 @@ export const ParserBlock = {
     },
 
     getComment(FuncInput: TFuncInput): null | TAhkSymbol {
-        const { textRaw } = FuncInput.DocStrMap[FuncInput.line];
+        const {
+            line,
+            lStr,
+            DocStrMap,
+        } = FuncInput;
+        if (lStr.trim().length !== 0) return null;
+        const { textRaw } = DocStrMap[line];
         const doubleSemicolon = textRaw.indexOf(';;');
         if (doubleSemicolon === -1) return null;
-        const kind = vscode.SymbolKind.Package;
-        const {
-            DocStrMap,
-            line,
-            RangeEndLine,
-            inClass,
-            GValMap,
-        } = FuncInput;
         // ;;
-        const CommentLine = textRaw.search(/^\s*;;/u);
-        if (CommentLine > -1) {
-            const name = textRaw.substring(CommentLine + 2).trimEnd();
-            const Range = new vscode.Range(new vscode.Position(line, 0), new vscode.Position(line, textRaw.length));
-            return new vscode.DocumentSymbol(name, '', kind, Range, Range);
+        if ((/^\s*;;/u).test(textRaw)) {
+            const name: string = textRaw.substring(doubleSemicolon + 2).trimEnd();
+            const Range: vscode.Range = new vscode.Range(
+                new vscode.Position(line, doubleSemicolon + 2),
+                new vscode.Position(line, textRaw.length),
+            );
+            return new vscode.DocumentSymbol(name, '', vscode.SymbolKind.Package, Range, Range);
         }
-
-        // { ;;
-        if (textRaw.indexOf('{') >= doubleSemicolon) return null;
-        const Comments = (/^\s*\{\s+;;/u).test(textRaw);
-        if (!Comments) return null;
-
-        const range = getRange(DocStrMap, line, line, RangeEndLine);
-        const name = textRaw.substring(doubleSemicolon + 2).trimEnd();
-        const selectionRange = new vscode.Range(line, 0, line, textRaw.length);
-        const CommentBlock: TAhkSymbol = new vscode.DocumentSymbol(
-            name,
-            '',
-            vscode.SymbolKind.Package,
-            range,
-            selectionRange,
-        );
-
-        CommentBlock.children = getChildren({
-            DocStrMap,
-            RangeStartLine: range.start.line + 1,
-            RangeEndLine: range.end.line,
-            inClass,
-            fnList: [ParserBlock.getComment, ParserBlock.getSwitchBlock, ParserLine],
-            GValMap,
-        });
-        return CommentBlock;
+        return null;
     },
 } as const;

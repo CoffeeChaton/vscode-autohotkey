@@ -34,6 +34,7 @@ export type TTextMeta = {
 export type TTextMap = Map<TUpName, TTextMeta>; // k = valNameUP
 
 export type TDAMeta = DeepReadonly<{
+    kind: vscode.SymbolKind.Method | vscode.SymbolKind.Function;
     paramMap: TParamMap;
     valMap: TValMap;
     textMap: TTextMap;
