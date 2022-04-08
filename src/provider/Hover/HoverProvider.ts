@@ -38,8 +38,8 @@ async function HoverProviderCore(
     // const commands = getCommandsHover(document, position);
     // if (commands !== null) return commands;
 
-    const DA: TDAMeta | null = getDAWithPos(document, position);
-    if (DA !== null) {
+    const DA: TDAMeta | undefined = getDAWithPos(document, position);
+    if (DA !== undefined) {
         const md: vscode.MarkdownString | null = DeepAnalysisHover(DA, wordUp, position);
         if (md !== null) return new vscode.Hover(md);
     }

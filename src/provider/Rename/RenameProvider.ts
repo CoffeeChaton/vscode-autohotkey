@@ -8,8 +8,8 @@ function DeepAnalysisRename(
     position: vscode.Position,
     wordUp: string,
 ): vscode.Range[] {
-    const DA: TDAMeta | null = getDAWithPos(document, position);
-    if (!DA) return [];
+    const DA: TDAMeta | undefined = getDAWithPos(document, position);
+    if (DA === undefined) return [];
 
     const paramMeta: TParamMeta | undefined = DA.paramMap.get(wordUp);
     if (paramMeta !== undefined) {

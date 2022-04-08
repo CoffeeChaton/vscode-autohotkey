@@ -4,6 +4,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { getFormatConfig } from '../../configUI';
+import { Detecter } from '../../core/Detecter';
 import {
     DeepReadonly,
     EDetail,
@@ -12,8 +13,6 @@ import {
     TTokenStream,
 } from '../../globalEnum';
 import { callDiff, TDiff } from '../../tools/Diff';
-import { Pretreatment } from '../../tools/Pretreatment';
-import { inLTrimRange } from '../../tools/str/inLTrimRange';
 import { lineReplace } from './fmtReplace';
 import { fmtReplaceWarn } from './fmtReplaceWarn';
 import { getDeepKeywords } from './getDeepKeywords';
@@ -150,6 +149,12 @@ type TFmtCoreArgs = {
     needDiff: boolean;
 };
 
+function detail2LTrim(detail: readonly EDetail[]): 0 | 1 | 2 {
+    if (detail.indexOf(EDetail.inLTrim1) > -1) return 1;
+    if (detail.indexOf(EDetail.inLTrim2) > -1) return 2;
+    return 0;
+}
+
 export function FormatCore(
     {
         document,
@@ -166,22 +171,31 @@ export function FormatCore(
         return [];
     }
     const timeStart = Date.now();
-    const AllDoc = document.getText();
-    const DocStrMap = Pretreatment(AllDoc.split('\n'), 0);
+
+    const { DocStrMap } = Detecter.updateDocDef(document);
     let deep = 0;
     let tagDeep = 0;
     let labDeep: 0 | 1 = 0;
     let occ = 0;
 
-    let inLTrim: 0 | 1 | 2 = 0; // ( LTrim
     const switchRangeArray: vscode.Range[] = [];
     const newTextList: vscode.TextEdit[] = [];
     const lineMax = document.lineCount;
     const hasDiff: [boolean] = [false];
-    for (let line = 0; line < lineMax; line++) {
-        const { textRaw } = DocStrMap[line];
-        inLTrim = inLTrimRange(textRaw, inLTrim);
-        const textFix = DocStrMap[line].lStr.trim();
+    for (
+        const {
+            line,
+            textRaw,
+            lStr,
+            detail,
+        } of DocStrMap
+    ) {
+        const inLTrim: 0 | 1 | 2 = detail2LTrim(detail);
+        // // eslint-disable-next-line no-magic-numbers
+        // if (line > 8610 && line < 8700) {
+        //     console.log('🚀 ~ line', line, ' <---> ', detail);
+        // }
+        const textFix = lStr.trim();
         const hasHashtag = Hashtag(textFix);
         const HotStr = isHotStr(textFix);
         const Label = isLabel(textFix);
@@ -235,13 +249,14 @@ export function FormatCore(
 
     // TODO return have Diff
     if (needDiff && hasDiff[0]) {
-        const fileName = path.basename(document.uri.fsPath);
+        const fileName: string = path.basename(document.uri.fsPath);
         fmtReplaceWarn(timeStart, from, fileName);
 
         const rTextList: string[] = [];
         newTextList.forEach((v: vscode.TextEdit) => rTextList.push(v.newText));
 
         const rightText: string = rTextList.join('\n');
+        const AllDoc: string = document.getText();
         const diffVar: TDiff = {
             leftText: AllDoc,
             rightText,

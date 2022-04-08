@@ -44,8 +44,8 @@ export function getValDefInFunc(
     listAllUsing: boolean,
 ): null | vscode.Location[] {
     const { uri } = document;
-    const DA: TDAMeta | null = getDAWithPos(document, position);
-    if (DA === null) return null;
+    const DA: TDAMeta | undefined = getDAWithPos(document, position);
+    if (DA === undefined) return null;
 
     const {
         paramMap,

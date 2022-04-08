@@ -33,8 +33,8 @@ export function DeepAnalysisToCompletionItem(
 ): vscode.CompletionItem[] {
     if (isPosAtStr(document, position)) return [];
 
-    const DA: null | TDAMeta = getDAWithPos(document, position);
-    if (!DA) return [];
+    const DA: undefined | TDAMeta = getDAWithPos(document, position);
+    if (DA === undefined) return [];
 
     return suggest(DA, position, inputStr);
 }
