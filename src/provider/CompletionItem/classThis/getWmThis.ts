@@ -1,30 +1,33 @@
 // import * as path from 'path';
 import * as vscode from 'vscode';
+import { Detecter, TAhkFileData } from '../../../core/Detecter';
 import {
     TAhkSymbol,
     TFsPath,
     TSymAndFsPath,
     TTokenStream,
 } from '../../../globalEnum';
-import { Pretreatment } from '../../../tools/Pretreatment';
+import { getDocStrMapMask } from '../../../tools/getDocStrMapMask';
 import { ClassWm } from '../../../tools/wm';
 
-async function getWmThisCore(
+function getWmThisCore(
     AhkSymbol: TAhkSymbol,
     fsPath: TFsPath,
-): Promise<vscode.CompletionItem[]> {
-    const document: vscode.TextDocument = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
+): vscode.CompletionItem[] {
+    const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
+    if (AhkFileData === undefined) return [];
+    const { DocStrMap } = AhkFileData;
+    const AhkTokenList: TTokenStream = getDocStrMapMask(AhkSymbol, DocStrMap);
+
     const mapStrNumber = new Map<string, number>(); // : Map<string, number>
-    const lineBase: number = AhkSymbol.range.start.line;
 
-    const C: TTokenStream = Pretreatment(document.getText(AhkSymbol.range).split('\n'), lineBase, document.fileName);
-
-    C.forEach((v, index) => {
-        [...v.lStr.matchAll(/\bthis\.(\w\w+)\b/gui)]
-            .forEach((name) => {
-                if (!mapStrNumber.has(name[1])) mapStrNumber.set(name[1], index + lineBase);
-            });
-    });
+    for (const { lStr, line } of AhkTokenList) {
+        for (const ma of lStr.matchAll(/\bthis\.(\w+)\b/gui)) {
+            if (!mapStrNumber.has(ma[1])) {
+                mapStrNumber.set(ma[1], line);
+            }
+        }
+    }
 
     const itemS: vscode.CompletionItem[] = [];
     mapStrNumber.forEach((value: number, label: string): void => {
@@ -41,11 +44,11 @@ async function getWmThisCore(
 // eslint-disable-next-line no-magic-numbers
 const wm = new ClassWm<TAhkSymbol, vscode.CompletionItem[]>(10 * 60 * 1000, 'getThisItemOfWm', 700);
 
-export async function getWmThis(c0: TSymAndFsPath): Promise<vscode.CompletionItem[]> {
+export function getWmThis(c0: TSymAndFsPath): vscode.CompletionItem[] {
     const { AhkSymbol, fsPath } = c0;
     const cache: vscode.CompletionItem[] | undefined = wm.getWm(AhkSymbol);
     if (cache !== undefined) return cache;
 
-    const v: vscode.CompletionItem[] = await getWmThisCore(AhkSymbol, fsPath);
+    const v: vscode.CompletionItem[] = getWmThisCore(AhkSymbol, fsPath);
     return wm.setWm(AhkSymbol, v);
 }

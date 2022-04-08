@@ -20,7 +20,7 @@ import { ahkBaseWrap } from '../ahkObj/ahkBaseWrap';
 import { getWmThis } from './getWmThis';
 import { insertTextWm } from './insertTextWm';
 
-function getUserDefClassSymbol(testName: RegExp): TSymAndFsPath | null {
+function getUserDefClassSymbol(keyUpName: string): TSymAndFsPath | null {
     const fsPaths = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
         const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath)?.AhkSymbolList;
@@ -28,7 +28,7 @@ function getUserDefClassSymbol(testName: RegExp): TSymAndFsPath | null {
         for (const AhkSymbol of AhkSymbolList) {
             if (
                 kindCheck(EMode.ahkClass, AhkSymbol.kind)
-                && testName.test(AhkSymbol.name)
+                && keyUpName === AhkSymbol.name.toUpperCase()
             ) {
                 return { AhkSymbol, fsPath };
             }
@@ -110,8 +110,7 @@ async function parsingUserDefClassRecursive(
     if (AhkSymbol.kind === vscode.SymbolKind.Class) {
         const ahkExtends = AhkSymbol.detail;
         if (ahkExtends !== '') {
-            const testName = new RegExp(`^${ahkExtends}$`, 'iu');
-            const c1 = getUserDefClassSymbol(testName);
+            const c1 = getUserDefClassSymbol(ahkExtends.toUpperCase());
             if (c1 && c1.AhkSymbol.kind === vscode.SymbolKind.Class) {
                 itemS.push(...await parsingUserDefClassRecursive(c1, newTrack, ChapterArr, deep));
             }
@@ -191,11 +190,10 @@ async function triggerClassCore(
     const itemS: vscode.CompletionItem[] = [];
     const nameList = valTrack(document, position, ChapterArr, ahkBaseObj);
     for (const name of nameList) {
-        const testName = new RegExp(`^${name}$`, 'ui');
-        const c0: TSymAndFsPath | null = getUserDefClassSymbol(testName);
+        const c0: TSymAndFsPath | null = getUserDefClassSymbol(name.toUpperCase());
         if (c0 !== null) {
             const ahkThis = ChapterArr.length === 1
-                ? await getWmThis(c0)
+                ? getWmThis(c0)
                 : [];
             itemS.push(...ahkThis, ...await parsingUserDefClassRecursive(c0, [fsPath], ChapterArr, 1));
         }
@@ -223,12 +221,11 @@ async function triggerClass(
             : getWmThis({ AhkSymbol: stackPro.stack[0].AhkSymbol, fsPath: document.uri.fsPath });
     }
 
-    const testName0 = new RegExp(`^${Head}$`, 'ui');
-    const c0: TSymAndFsPath | null = getUserDefClassSymbol(testName0); // static class / val / Method
+    const c0: TSymAndFsPath | null = getUserDefClassSymbol(Head.toUpperCase()); // static class / val / Method
     if (c0 !== null) {
         const { fsPath } = document.uri;
         const ahkThis = ChapterArr.length === 1
-            ? await getWmThis(c0)
+            ? getWmThis(c0)
             : [];
         return [...await parsingUserDefClassRecursive(c0, [fsPath], ChapterArr, 1), ...ahkThis];
     }
