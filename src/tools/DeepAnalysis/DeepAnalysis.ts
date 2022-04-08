@@ -51,7 +51,7 @@ function getDACore(
 }
 
 export function DeepAnalysis(
-    document: vscode.TextDocument,
+    document: vscode.TextDocument, // TODO remove this...
     AhkSymbolList: TAhkSymbolList,
     DocStrMap: TTokenStream,
     GValMap: TGValMap,

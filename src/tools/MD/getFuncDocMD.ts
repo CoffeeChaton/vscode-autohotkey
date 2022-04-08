@@ -3,22 +3,35 @@ import { EMode, TAhkSymbol, TTokenStream } from '../../globalEnum';
 import { docCommentBlock, EDocBlock } from '../str/inCommentBlock';
 
 function getReturnText(lStr: string, textRaw: string): string {
-    const col: number = lStr.search(/\breturn\b[\s,]+.{1,20}/ui);
+    const col: number = lStr.search(/\breturn\b[\s,]+\S/ui);
     if (col === -1) return '';
 
-    const name: string = textRaw.substring(col).trim();
+    const name: string = textRaw
+        .substring(col)
+        .replace(/^\s*Return\b[\s,]+/ui, '')
+        .trim();
 
+    // func
     const Func: RegExpMatchArray | null = name.match(/^(\w+)\(/u);
     if (Func !== null) {
-        const fnName = `${Func[1]}(...)`;
-        return `    ${fnName.trim()}\n`;
+        return `    Return ${Func[1]}(...)}\n`;
     }
 
-    // if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
-    //     const returnObj: RegExpMatchArray | null = name.match(/^(\{\s*\w+\s*:)/u);
-    //     if (returnObj !== null) name = `obj ${returnObj[1]}`;
-    // }
-    return `    ${name.trim()}\n`;
+    // obj
+    if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
+        const returnObj: RegExpMatchArray | null = name.match(/^(\{\s*\w+\s*:\s*\S{0,20})/u);
+        if (returnObj !== null) {
+            return `    Return ${returnObj[1].trim()} ; (obj) ...\n`;
+        }
+    }
+
+    // too long
+    const maxLen = 30;
+    if (name.length > maxLen) {
+        return `    Return ${name.substring(0, maxLen)} ;...\n`;
+    }
+    // else
+    return `    Return ${name.trim()}\n`;
 }
 
 export function getFuncDocCore(
@@ -45,8 +58,8 @@ export function getFuncDocCore(
         returnList += getReturnText(lStr, textRaw);
     }
 
-    const kindDetail = `(${EMode.ahkFunc}) \n`;
-    const title = `${document.getText(AhkSymbol.selectionRange)}{\n`; // TODO: io ?
+    const kindDetail = `(${EMode.ahkFunc}) of ${document.fileName}\n`;
+    const title = `${document.getText(AhkSymbol.selectionRange)}{\n`; // TODO: remove document
 
     const md = new vscode.MarkdownString('', true)
         .appendCodeblock(kindDetail, 'ahk')
