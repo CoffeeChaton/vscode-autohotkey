@@ -1,5 +1,7 @@
+import * as path from 'path';
 import * as vscode from 'vscode';
 import {
+    EMode,
     TAhkSymbol,
     TAhkSymbolList,
     TGValMap,
@@ -22,7 +24,7 @@ function getDACore(
     document: vscode.TextDocument,
     AhkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
-    GValMap: TGValMap,
+    GValMap: TGValMap, // eval!!
 ): null | TDAMeta {
     const kind: vscode.SymbolKind.Method | vscode.SymbolKind.Function | null = kindPick(AhkSymbol.kind);
     if (kind === null) return null;
@@ -31,10 +33,16 @@ function getDACore(
 
     const paramMap: TParamMap = getParamDef(AhkSymbol, AhkTokenList);
     const valMap: TValMap = getFnVarDef(AhkSymbol, AhkTokenList, paramMap);
-    const textMap: TTextMap = getUnknownTextMap(AhkSymbol, AhkTokenList, paramMap, valMap, GValMap);
+    const textMap: TTextMap = getUnknownTextMap(AhkSymbol, AhkTokenList, paramMap, valMap, GValMap); // eval!!
     const funcRawName: string = AhkSymbol.name;
 
-    const md: vscode.MarkdownString = getFuncDocCore(AhkSymbol, document, AhkTokenList); // TODO emmt
+    const selectionRangeText: string = document.getText(AhkSymbol.selectionRange);
+    const fileName: string = path.basename(document.uri.fsPath);
+    const kindStr: string = kind === vscode.SymbolKind.Function
+        ? EMode.ahkFunc
+        : EMode.ahkMethod;
+    const md: vscode.MarkdownString = getFuncDocCore(kindStr, fileName, AhkTokenList, selectionRangeText); // TODO emmt
+
     const v: TDAMeta = {
         kind,
         paramMap,
@@ -42,7 +50,7 @@ function getDACore(
         textMap,
         funcRawName,
         upName: funcRawName.toUpperCase(),
-        selectionRangeText: document.getText(AhkSymbol.selectionRange),
+        selectionRangeText,
         range: AhkSymbol.range,
         md,
     };

@@ -19,12 +19,12 @@ export const enum EDocBlock {
     inDocCommentBlockEnd = 3, // */
 }
 
-export function docCommentBlock(textRaw: string, flag: EDocBlock): EDocBlock {
+export function docCommentBlock(textRawTrim: string, flag: EDocBlock): EDocBlock {
     if (
         flag === EDocBlock.other
         || flag === EDocBlock.inDocCommentBlockEnd
     ) {
-        return (/^\s*\/\*{2}/u).test(textRaw) // textRaw.indexOf('/**') > -1
+        return textRawTrim.startsWith('/**') // textRaw.indexOf('/**') > -1
             ? EDocBlock.inDocCommentBlockStart
             : EDocBlock.other;
     }
@@ -33,7 +33,7 @@ export function docCommentBlock(textRaw: string, flag: EDocBlock): EDocBlock {
         flag === EDocBlock.inDocCommentBlockStart
         || flag === EDocBlock.inDocCommentBlockMid
     ) {
-        return (/^\s*\*\//u).test(textRaw) // textRaw.indexOf('*/') > -1
+        return textRawTrim.startsWith('*/') // textRaw.indexOf('*/') > -1
             ? EDocBlock.inDocCommentBlockEnd
             : EDocBlock.inDocCommentBlockMid;
     }

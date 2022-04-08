@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { EMode, TAhkSymbol, TTokenStream } from '../../globalEnum';
+import { TTokenStream } from '../../globalEnum';
 import { docCommentBlock, EDocBlock } from '../str/inCommentBlock';
 
 function getReturnText(lStr: string, textRaw: string): string {
@@ -35,19 +35,22 @@ function getReturnText(lStr: string, textRaw: string): string {
 }
 
 export function getFuncDocCore(
-    AhkSymbol: TAhkSymbol,
-    document: vscode.TextDocument,
+    kindStr: string, // TODO: remove AhkSymbol just need kind && selectionRange
+    fileName: string,
     AhkTokenList: TTokenStream,
+    selectionRangeText: string,
 ): vscode.MarkdownString {
     let flag: EDocBlock = EDocBlock.other;
     const fnDocList: string[] = [];
     let returnList = '';
 
     for (const { lStr, textRaw } of AhkTokenList) {
-        flag = docCommentBlock(textRaw, flag);
+        const textRawTrim: string = textRaw.trimStart(); // **** MD ****** sensitive of \s && \n
+        flag = docCommentBlock(textRawTrim, flag);
         if (flag === EDocBlock.inDocCommentBlockMid) {
-            // TODO ...start with '*' or ;
-            const lineDoc: string = textRaw.trimStart().substring(1);
+            if (!textRawTrim.startsWith('*')) continue;
+
+            const lineDoc: string = textRawTrim.substring(1); // **** MD ****** sensitive of \s && \n
             fnDocList.push(
                 lineDoc.trim() === ''
                     ? '\n'
@@ -58,15 +61,20 @@ export function getFuncDocCore(
         returnList += getReturnText(lStr, textRaw);
     }
 
-    const kindDetail = `(${EMode.ahkFunc}) of ${document.fileName}\n`;
-    const title = `${document.getText(AhkSymbol.selectionRange)}{\n`; // TODO: remove document
+    const kindDetail = `(${kindStr})     of     ${fileName}\n`;
 
-    const md = new vscode.MarkdownString('', true)
-        .appendCodeblock(kindDetail, 'ahk')
-        .appendCodeblock(title, 'ahk')
+    const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
+        .appendMarkdown(kindDetail)
+        .appendCodeblock(selectionRangeText, 'ahk')
         .appendCodeblock(returnList, 'ahk')
-        .appendCodeblock('}\n\n', 'ahk')
-        .appendMarkdown(fnDocList.join('\n'));
+        .appendCodeblock('}', 'ahk');
+
+    const fnFullDoc: string = fnDocList.join('\n'); // **** MD ****** sensitive of \s && \n
+    if (fnFullDoc.trim().length > 0) {
+        md
+            .appendMarkdown('\n\n***\n\n')
+            .appendMarkdown(fnFullDoc);
+    }
 
     md.supportHtml = true;
 
