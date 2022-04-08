@@ -39,5 +39,8 @@ export type TDAMeta = DeepReadonly<{
     valMap: TValMap;
     textMap: TTextMap;
     funcRawName: string;
+    upName: string;
+    selectionRangeText: string;
     range: vscode.Range; // copy ?
+    md: vscode.MarkdownString;
 }>;

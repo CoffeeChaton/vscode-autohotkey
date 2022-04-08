@@ -98,7 +98,7 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
     });
 
     const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
-    const DAList: TDAMeta[] = DeepAnalysis(AhkSymbolList, DocStrMap, GValMap);
+    const DAList: TDAMeta[] = DeepAnalysis(document, AhkSymbolList, DocStrMap, GValMap);
     const AhkCache: TMemo = {
         hash,
         GValMap,

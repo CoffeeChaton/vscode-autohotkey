@@ -2,10 +2,10 @@
 import * as mm from 'micromatch';
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { Detecter } from '../../../core/Detecter';
-import { EStr, TAhkSymbol, TAhkSymbolList } from '../../../globalEnum';
-import { getFuncDocMD } from '../../../tools/MD/getFuncDocMD';
+import { Detecter, TAhkFileData } from '../../../core/Detecter';
+import { EStr, TAhkSymbol } from '../../../globalEnum';
 import { insertTextWm } from '../classThis/insertTextWm';
+import { fnDAList2Completion } from './DAList2Completion';
 
 async function setLabel(
     inputStr: string,
@@ -30,7 +30,7 @@ async function setLabel(
 }
 
 export async function listAllFuncClass(
-    inputStr: string,
+    inputStr: string, // <------------------------------------ don't use wm because inputStr
     blockList: readonly string[],
 ): Promise<vscode.CompletionItem[]> {
     const fsPaths: string[] = Detecter.getDocMapFile();
@@ -38,9 +38,10 @@ export async function listAllFuncClass(
     for (const fsPath of fsPaths) {
         if (mm.isMatch(fsPath, blockList)) continue;
 
-        const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath)?.AhkSymbolList;
-        if (AhkSymbolList === undefined) continue;
+        const AhkFileData: undefined | TAhkFileData = Detecter.getDocMap(fsPath);
+        if (AhkFileData === undefined) continue;
 
+        const { AhkSymbolList, DAList } = AhkFileData;
         // always need IO <-> const document = await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
         const fileName: string = path.basename(fsPath);
         for (const AhkSymbol of AhkSymbolList) {
@@ -49,13 +50,10 @@ export async function listAllFuncClass(
                 item.kind = vscode.CompletionItemKind.Class;
                 item.documentation = 'user def class';
                 itemS.push(item);
-            } else if (AhkSymbol.kind === vscode.SymbolKind.Function) {
-                const item: vscode.CompletionItem = await setLabel(inputStr, fileName, fsPath, AhkSymbol);
-                item.kind = vscode.CompletionItemKind.Function;
-                item.documentation = await getFuncDocMD(AhkSymbol, fsPath); // 90% not need IO // have weakMap to memo
-                itemS.push(item);
             }
         }
+
+        itemS.push(...fnDAList2Completion(inputStr, fileName, DAList));
     }
     return itemS;
 }

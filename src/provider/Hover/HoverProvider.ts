@@ -1,30 +1,27 @@
 import * as vscode from 'vscode';
-import { EMode, TSymAndFsPath } from '../../globalEnum';
+import { EMode } from '../../globalEnum';
+import { getDAWithName } from '../../tools/DeepAnalysis/getDAWithName';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { isPosAtStr } from '../../tools/isPosAtStr';
-import { getFuncDocMD } from '../../tools/MD/getFuncDocMD';
-import { tryGetSymbol } from '../../tools/tryGetSymbol';
 import { DeepAnalysisHover } from './DeepAnalysisHover';
 
-async function HoverFunc(wordUp: string, textRaw: string): Promise<null | vscode.Hover> {
+function HoverFunc(wordUp: string, textRaw: string): null | vscode.Hover {
     // eslint-disable-next-line security/detect-non-literal-regexp
     const testOfFunc = new RegExp(`(?<![.%\`])(${wordUp})\\(`, 'iu'); // not search class.Method()
     if (!testOfFunc.test(textRaw)) return null;
 
-    const data: null | TSymAndFsPath = tryGetSymbol(wordUp, EMode.ahkFunc);
-    if (data === null) return null;
+    const DA: TDAMeta | null = getDAWithName(wordUp, EMode.ahkFunc);
 
-    const { AhkSymbol, fsPath } = data;
+    if (DA === null) return null;
 
-    const md: vscode.MarkdownString = await getFuncDocMD(AhkSymbol, fsPath);
-    return new vscode.Hover(md);
+    return new vscode.Hover(DA.md);
 }
 
-async function HoverProviderCore(
+function HoverProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
-): Promise<vscode.Hover | null> {
+): vscode.Hover | null {
     // eslint-disable-next-line security/detect-unsafe-regex
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
     if (range === undefined) return null;
@@ -44,7 +41,7 @@ async function HoverProviderCore(
         if (md !== null) return new vscode.Hover(md);
     }
 
-    const haveFunc: vscode.Hover | null = await HoverFunc(wordUp, textRaw);
+    const haveFunc: vscode.Hover | null = HoverFunc(wordUp, textRaw);
     if (haveFunc !== null) return haveFunc;
 
     return null;
