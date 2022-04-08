@@ -7,7 +7,7 @@ import { inLTrimRange } from './str/inLTrimRange';
 import { getLStr, isSetVarTradition } from './str/removeSpecialChar';
 
 // self time 520ms~570ms
-export function Pretreatment(strArray: readonly string[], startLineBaseZero: number): TTokenStream {
+export function Pretreatment(strArray: readonly string[], startLineBaseZero: number, fileName: string): TTokenStream {
     const result: TAhkToken = [];
     let CommentBlock = false;
     let inLTrim: 0 | 1 | 2 = 0;
@@ -19,7 +19,9 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
         const textRaw: string = strArray[Offset].replace(/\r/ug, '');
         const textTrimStart: string = textRaw.trimStart();
         if (deep < 0) {
-            console.warn('Pretreatment -> line , deep < 0 ', Offset);
+            console.warn('Pretreatment -> line , deep < 0, fsPath ', fileName);
+            console.warn('Pretreatment -> line , deep < 0, line ', line);
+            console.warn('Pretreatment -> line , deep < 0, textTrimStart ', textTrimStart);
             // void vscode.window.showWarningMessage
             deep = 0;
         }

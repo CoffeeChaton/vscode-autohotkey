@@ -79,7 +79,7 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
     const oldCache: TMemo | undefined = BaseScanMemo.getMemo(fsPath, hash);
     if (oldCache !== undefined) return oldCache;
 
-    const DocStrMap: TTokenStream = Pretreatment(fullText.split('\n'), 0);
+    const DocStrMap: TTokenStream = Pretreatment(fullText.split('\n'), 0, document.fileName);
     const GValMap: TGValMap = new Map<TValUpName, TGlobalVal>();
 
     const AhkSymbolList: TAhkSymbolList = getChildren({

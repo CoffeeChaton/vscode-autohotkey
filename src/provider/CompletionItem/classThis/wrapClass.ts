@@ -8,6 +8,7 @@ import {
     TAhkSymbol,
     TAhkSymbolList,
     TSymAndFsPath,
+    TTokenStream,
 } from '../../../globalEnum';
 import { getScopeOfPos, getStack } from '../../../tools/getScopeOfPos';
 import { getObjChapterArr } from '../../../tools/Obj/getObjChapterArr';
@@ -154,7 +155,11 @@ function valTrack(
 
     const reg = ahkValDefRegex(Head);
     const startLineBaseZero = stackRange.start.line;
-    const DocStrMap = Pretreatment(document.getText(stackRange).split('\n'), startLineBaseZero);
+    const DocStrMap: TTokenStream = Pretreatment(
+        document.getText(stackRange).split('\n'),
+        startLineBaseZero,
+        document.fileName,
+    );
     // const lineStart = stackRange.start.line + 0;
     const linePosMax = DocStrMap.length;
     const classNameList = new Set<string>(); // value name

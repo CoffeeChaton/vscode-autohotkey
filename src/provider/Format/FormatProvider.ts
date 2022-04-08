@@ -3,23 +3,18 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { getFormatConfig } from '../../configUI';
 import { Detecter } from '../../core/Detecter';
 import {
-    DeepReadonly,
     EDetail,
     EFormatChannel,
     EStr,
-    TTokenStream,
 } from '../../globalEnum';
-import { callDiff, TDiff } from '../../tools/Diff';
-import { lineReplace } from './fmtReplace';
-import { fmtReplaceWarn } from './fmtReplaceWarn';
+import { fmtDiffInfo } from './fmtDiffInfo';
 import { getDeepKeywords } from './getDeepKeywords';
-import { getDeepLTrim } from './getDeepLTrim';
 import { isHotStr, isLabel } from './isLabelOrHotStr';
-import { getSwitchRange, inSwitchBlock } from './SwitchCase';
-import { thisLineDeep } from './thisLineDeep';
+import { getSwitchRange } from './SwitchCase';
+import { TDiffMap } from './TFormat';
+import { fn_Warn_thisLineText_WARN } from './TWarnUse';
 
 function Hashtag(textFix: string): '#if' | '#HotString' | '' {
     if (textFix === '') return '';
@@ -42,102 +37,10 @@ function isReturn(tagDeep: number, deep: number, textFix: string): boolean {
     return (tagDeep === deep && (/^\s*return\s*$/iu).test(textFix));
 }
 
-type TWarnUse =
-    & DeepReadonly<{
-        DocStrMap: TTokenStream;
-        textFix: string;
-        line: number;
-        occ: number;
-        deep: number;
-        labDeep: 0 | 1;
-        inLTrim: 0 | 1 | 2;
-        textRaw: string;
-        switchRangeArray: vscode.Range[];
-        document: vscode.TextDocument;
-        options: vscode.FormattingOptions;
-    }>
-    & {
-        hasDiff: [boolean];
-    };
-
-function wrap(args: TWarnUse, text: string): vscode.TextEdit {
-    const {
-        DocStrMap,
-        textFix,
-        line,
-        inLTrim,
-        textRaw,
-        hasDiff,
-    } = args;
-    const { detail } = DocStrMap[line];
-
-    const CommentBlock: boolean = detail.includes(EDetail.inComment);
-    const newText: string = getFormatConfig()
-        ? lineReplace(text, textFix, CommentBlock, inLTrim)
-        : text;
-
-    if (newText !== text) {
-        hasDiff[0] = true;
-    }
-
-    const endCharacter: number = Math.max(newText.length, textRaw.length);
-    const range = new vscode.Range(line, 0, line, endCharacter);
-    return new vscode.TextEdit(range, newText); // FIXME some time, we don't need new TextEdit. but callDiff need this...
-}
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
-function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
-    const {
-        textFix,
-        line,
-        occ,
-        deep,
-        labDeep,
-        inLTrim,
-        textRaw,
-        switchRangeArray,
-        document,
-        options, // by self
-    } = args;
-
-    if (
-        inLTrim === 1
-        && !(/^\s\(/iu).test(textRaw)
-    ) {
-        return wrap(args, document.lineAt(line).text);
-        //    return wrap(args, textRaw.replace(/\r$/u, ''));
-    }
-
-    // const WarnLineBodyWarn: string = textRaw.replace(/\r$/u, '').trimStart();
-    const WarnLineBodyWarn = document.lineAt(line).text.trimStart();
-    if (WarnLineBodyWarn === '') {
-        return wrap(args, WarnLineBodyWarn);
-    }
-
-    const switchDeep = inSwitchBlock(textFix, line, switchRangeArray);
-    const LineDeep: 0 | 1 = (occ !== 0)
-        ? 0
-        : thisLineDeep(textFix);
-
-    const curlyBracketsChange: 0 | -1 = textFix.startsWith('}') || (occ > 0 && textFix.startsWith('{'))
-        ? -1
-        : 0;
-
-    const deepFix = Math.max(
-        0,
-        deep + labDeep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(inLTrim, textRaw),
-    );
-
-    const TabSpaces = options.insertSpaces
-        ? ' '
-        : '\t';
-
-    const TabSize = options.insertSpaces
-        ? options.tabSize
-        : 1;
-
-    const DeepStr = TabSpaces.repeat(deepFix * TabSize);
-    return wrap(args, `${DeepStr}${WarnLineBodyWarn}`);
+function detail2LTrim(detail: readonly EDetail[]): 0 | 1 | 2 {
+    if (detail.indexOf(EDetail.inLTrim1) > -1) return 1;
+    if (detail.indexOf(EDetail.inLTrim2) > -1) return 2;
+    return 0;
 }
 
 type TFmtCoreArgs = {
@@ -149,12 +52,6 @@ type TFmtCoreArgs = {
     needDiff: boolean;
 };
 
-function detail2LTrim(detail: readonly EDetail[]): 0 | 1 | 2 {
-    if (detail.indexOf(EDetail.inLTrim1) > -1) return 1;
-    if (detail.indexOf(EDetail.inLTrim2) > -1) return 2;
-    return 0;
-}
-
 export function FormatCore(
     {
         document,
@@ -162,7 +59,6 @@ export function FormatCore(
         fmtStart,
         fmtEnd,
         from,
-        needDiff,
     }: TFmtCoreArgs,
 ): vscode.ProviderResult<vscode.TextEdit[]> {
     if (path.basename(document.uri.fsPath, '.ahk').startsWith(EStr.diff_name_prefix)) {
@@ -170,7 +66,7 @@ export function FormatCore(
         void vscode.window.showWarningMessage(message);
         return [];
     }
-    const timeStart = Date.now();
+    const timeStart: number = Date.now();
 
     const { DocStrMap } = Detecter.updateDocDef(document);
     let deep = 0;
@@ -180,8 +76,8 @@ export function FormatCore(
 
     const switchRangeArray: vscode.Range[] = [];
     const newTextList: vscode.TextEdit[] = [];
-    const lineMax = document.lineCount;
-    const hasDiff: [boolean] = [false];
+
+    const DiffMap: TDiffMap = new Map();
     for (
         const {
             line,
@@ -190,11 +86,6 @@ export function FormatCore(
             detail,
         } of DocStrMap
     ) {
-        const inLTrim: 0 | 1 | 2 = detail2LTrim(detail);
-        // // eslint-disable-next-line no-magic-numbers
-        // if (line > 8610 && line < 8700) {
-        //     console.log('🚀 ~ line', line, ' <---> ', detail);
-        // }
         const textFix = lStr.trim();
         const hasHashtag = Hashtag(textFix);
         const HotStr = isHotStr(textFix);
@@ -210,8 +101,9 @@ export function FormatCore(
         }
 
         if (line >= fmtStart && line <= fmtEnd) {
+            const inLTrim: 0 | 1 | 2 = detail2LTrim(detail);
             newTextList.push(fn_Warn_thisLineText_WARN({
-                DocStrMap,
+                detail,
                 textFix,
                 line,
                 occ,
@@ -222,13 +114,13 @@ export function FormatCore(
                 switchRangeArray,
                 document,
                 options,
-                hasDiff,
+                DiffMap,
             }));
         } else if (line > fmtEnd) {
             break;
         }
 
-        const switchRange: vscode.Range | null = getSwitchRange(document, DocStrMap, textFix, line, lineMax);
+        const switchRange: vscode.Range | null = getSwitchRange(document, DocStrMap, textFix, line);
         if (switchRange !== null) switchRangeArray.push(switchRange);
 
         if (hasHashtag !== '') { // #IF  #hotstring
@@ -247,25 +139,7 @@ export function FormatCore(
             : getDeepKeywords(textFix, occ); // TODO fmt_a1
     }
 
-    // TODO return have Diff
-    if (needDiff && hasDiff[0]) {
-        const fileName: string = path.basename(document.uri.fsPath);
-        fmtReplaceWarn(timeStart, from, fileName);
-
-        const rTextList: string[] = [];
-        newTextList.forEach((v: vscode.TextEdit) => rTextList.push(v.newText));
-
-        const rightText: string = rTextList.join('\n');
-        const AllDoc: string = document.getText();
-        const diffVar: TDiff = {
-            leftText: AllDoc,
-            rightText,
-            fileName,
-        };
-        setTimeout(callDiff, 100, diffVar);
-        // do not callDiff(diffVar);
-        // using setTimeout call.
-    }
+    fmtDiffInfo(DiffMap, document, timeStart, from, newTextList);
 
     return newTextList;
 }
@@ -287,35 +161,3 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
         });
     }
 }
-
-/*
------------------------------------------------
-TEST OK
-
-for k,v in Monitors
-    if (v.Num = MonitorNum)
-        return v
------------------------------------------------
-TEST NOT well
-
-if (ggc()
-    && bbc()
-    && dd()
-    || fff() and feg()) {
-
-}
------------------------------------------------
-TEST NOT well
-
-for k,v in Monitors
-    for k,v in Monitors
-        for k,v in Monitors
-            if gg(){
-                d:=g
-                for k,v in Monitors
-                    for k,v in Monitors
-                        if dd()
-                            bbb :=ddd()
-            }
-----------------------------------------------
-*/
