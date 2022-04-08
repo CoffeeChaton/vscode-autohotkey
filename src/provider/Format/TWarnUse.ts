@@ -1,9 +1,6 @@
 import * as vscode from 'vscode';
 import { getFormatConfig } from '../../configUI';
-import {
-    DeepReadonly,
-    EDetail,
-} from '../../globalEnum';
+import { DeepReadonly, EDetail } from '../../globalEnum';
 import { lineReplace } from './fmtReplace';
 import { getDeepLTrim } from './getDeepLTrim';
 import { inSwitchBlock } from './SwitchCase';

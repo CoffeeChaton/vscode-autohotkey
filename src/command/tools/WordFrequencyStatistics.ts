@@ -7,6 +7,7 @@ export type TWordFrequencyStatistics = {
     textMapSize: number;
     topFuncNum: number;
 };
+
 // WordFrequencyStatistics
 export function WordFrequencyStatistics(need: TDAMeta[]): TWordFrequencyStatistics {
     let paramMapSize = 0;

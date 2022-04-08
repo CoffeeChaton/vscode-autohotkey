@@ -1,8 +1,5 @@
 import * as vscode from 'vscode';
-import {
-    TGlobalVal,
-    TGValMap,
-} from '../../globalEnum';
+import { TGlobalVal, TGValMap } from '../../globalEnum';
 import { replacerSpace } from '../../tools/str/removeSpecialChar';
 
 // function getRVal(textRaw: string, ch: number, nameLen: number, ma2Len: number): string {

@@ -1,12 +1,5 @@
-import {
-    TAhkSymbol,
-    TTokenStream,
-} from '../../../globalEnum';
-import {
-    TParamMap,
-    TValMap,
-    TValMeta,
-} from '../TypeFnMeta';
+import { TAhkSymbol, TTokenStream } from '../../../globalEnum';
+import { TParamMap, TValMap, TValMeta } from '../TypeFnMeta';
 import { forLoop } from './def/forLoop';
 import { varSetCapacityFunc } from './def/varSetCapacityFunc';
 import { walrusOperator } from './def/walrusOperator';

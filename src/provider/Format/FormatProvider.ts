@@ -4,11 +4,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import {
-    EDetail,
-    EFormatChannel,
-    EStr,
-} from '../../globalEnum';
+import { EDetail, EFormatChannel, EStr } from '../../globalEnum';
 import { fmtDiffInfo } from './fmtDiffInfo';
 import { getDeepKeywords } from './getDeepKeywords';
 import { isHotStr, isLabel } from './isLabelOrHotStr';

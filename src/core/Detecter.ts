@@ -1,9 +1,6 @@
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import {
-    EStr,
-    TFsPath,
-} from '../globalEnum';
+import { EStr, TFsPath } from '../globalEnum';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
 import { BaseScanMemo, getBaseData, TMemo } from './BaseScanMemo/memo';
 
