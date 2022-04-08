@@ -1,10 +1,7 @@
 import * as vscode from 'vscode';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import {
-    TDAMeta,
-    TParamMeta,
-    TTextMeta,
-    TValMeta,
+    TDAMeta, TParamMeta, TTextMeta, TValMeta,
 } from '../../tools/DeepAnalysis/TypeFnMeta';
 
 function rangeList2LocList(rangeList: vscode.Range[], uri: vscode.Uri): vscode.Location[] {

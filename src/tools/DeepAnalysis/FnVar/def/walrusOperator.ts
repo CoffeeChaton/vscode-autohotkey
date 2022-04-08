@@ -1,7 +1,6 @@
-import * as vscode from 'vscode';
 import { TValMeta } from '../../TypeFnMeta';
 import { TGetFnDefNeed } from '../TFnVarDef';
-import { wrapFnValDef } from './wrapFnValDef';
+import { getValMeta } from './getValMeta';
 
 // := the walrus operator
 export function walrusOperator({
@@ -23,16 +22,7 @@ export function walrusOperator({
         const UpName: string = RawName.toUpperCase();
         if (paramMap.has(UpName)) continue;
 
-        const defRange: vscode.Range = new vscode.Range(
-            new vscode.Position(line, character),
-            new vscode.Position(line, character + RawName.length),
-        );
-
-        const value: TValMeta = wrapFnValDef({
-            RawNameNew: RawName,
-            valMap,
-            defRange,
-        });
+        const value: TValMeta = getValMeta(line, character, RawName, valMap);
         valMap.set(UpName, value);
     }
 }

@@ -1,7 +1,6 @@
-import * as vscode from 'vscode';
 import { TValMeta } from '../../TypeFnMeta';
 import { TGetFnDefNeed } from '../TFnVarDef';
-import { wrapFnValDef } from './wrapFnValDef';
+import { getValMeta } from './getValMeta';
 
 // VarSetCapacity(varName)
 export function varSetCapacityFunc({
@@ -23,16 +22,8 @@ export function varSetCapacityFunc({
         if (paramMap.has(UpName)) continue;
 
         const character: number = ch + v[0].indexOf(RawName); // "VarSetCapacity(".len ===  15
-        const defRange: vscode.Range = new vscode.Range(
-            new vscode.Position(line, character),
-            new vscode.Position(line, character + RawName.length),
-        );
 
-        const value: TValMeta = wrapFnValDef({
-            RawNameNew: RawName,
-            valMap,
-            defRange,
-        });
+        const value: TValMeta = getValMeta(line, character, RawName, valMap);
         valMap.set(RawName.toUpperCase(), value);
     }
 }

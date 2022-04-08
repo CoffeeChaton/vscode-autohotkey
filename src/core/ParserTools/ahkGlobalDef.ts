@@ -9,20 +9,23 @@ import { replacerSpace } from '../../tools/str/removeSpecialChar';
 //     return rVal;
 // }
 
+function getGRange(strF: string, rawName: string, ma: RegExpMatchArray, line: number): vscode.Range {
+    const ch: number = strF.indexOf(rawName, ma.index);
+    const refRange: vscode.Range = new vscode.Range(
+        new vscode.Position(line, ch),
+        new vscode.Position(line, ch + rawName.length),
+    );
+    return refRange;
+}
+
 function defGlobal(gValMapBySelf: TGValMap, strF: string, line: number): void {
     // eslint-disable-next-line security/detect-unsafe-regex
-    for (const ma of strF.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gu)) {
+    for (const ma of strF.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gui)) {
         const rawName: string = ma[1].trim();
-
-        const ch: number = strF.indexOf(rawName, ma.index);
+        if (rawName === '') continue;
 
         const ValUpName: string = rawName.toUpperCase();
-
-        const defRange: vscode.Range = new vscode.Range(
-            new vscode.Position(line, ch),
-            new vscode.Position(line, ch + rawName.length),
-        );
-
+        const defRange: vscode.Range = getGRange(strF, rawName, ma, line);
         const oldVal: TGlobalVal | undefined = gValMapBySelf.get(ValUpName);
 
         if (oldVal) {
@@ -42,15 +45,8 @@ function refGlobal(gValMapBySelf: TGValMap, strF: string, line: number): void {
         const rawName: string = ma[1].trim();
         if (rawName === '') continue;
 
-        const ch: number = strF.indexOf(rawName, ma.index);
-
         const ValUpName: string = rawName.toUpperCase();
-
-        const refRange: vscode.Range = new vscode.Range(
-            new vscode.Position(line, ch),
-            new vscode.Position(line, ch + rawName.length),
-        );
-
+        const refRange: vscode.Range = getGRange(strF, rawName, ma, line);
         const oldVal: TGlobalVal | undefined = gValMapBySelf.get(ValUpName);
 
         if (oldVal) {
