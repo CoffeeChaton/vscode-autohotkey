@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { getDocUriStr } from '../configUI';
+import { TAhkFileData } from '../core/Detecter';
 import { TPick } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { DeepAnalysisAllFiles } from './DeepAnalysisAllFiles';
@@ -7,13 +8,15 @@ import { pressureTest } from './DevMode';
 import { FormatAllFile } from './FormatAllFile';
 import { ListAllFunc, ListAllFuncSort } from './ListAllFunc';
 import { ListAllInclude } from './ListAllInclude';
-import { TUpdateCacheAsyncReturn, UpdateCacheAsync } from './UpdateCache';
+import { UpdateCacheAsync } from './UpdateCache';
 
 async function fn0(): Promise<void> {
-    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync(true);
+    const t1: number = Date.now();
+    const ed: TAhkFileData[] | null = await UpdateCacheAsync(true);
+    const t2: number = Date.now();
     if (ed !== null) {
         OutputChannel.appendLine('---------------------------------------------');
-        OutputChannel.appendLine(`Update docFuncMap cash (${ed.timeSpend} ms)`);
+        OutputChannel.appendLine(`Update docFuncMap cash (${t2 - t1} ms)`);
         OutputChannel.appendLine('---------------------------------------------');
         OutputChannel.show();
     }

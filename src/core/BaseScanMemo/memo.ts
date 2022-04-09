@@ -78,11 +78,7 @@ export const BaseScanMemo = {
     },
 } as const;
 
-// vscode.window.activeTextEditor
-// vscode.window.visibleTextEditors
-
 export function getBaseData(document: vscode.TextDocument): TMemo {
-    //  document.version;
     const fullText: string = document.getText();
     const fullTextList: string[] = fullText
         .replaceAll(/\r/gu, '')

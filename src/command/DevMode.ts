@@ -1,13 +1,16 @@
+import { TAhkFileData } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { arrSum, stdDevFn } from './tools/myMath';
 import { pressureTestConfig, TPickReturn } from './tools/pressureTestConfig';
-import { TUpdateCacheAsyncReturn, UpdateCacheAsync } from './UpdateCache';
+import { UpdateCacheAsync } from './UpdateCache';
 
 const Data: number[] = [];
 
 async function devTestDA(): Promise<null> {
-    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync(true);
+    const t1: number = Date.now();
+    const ed: TAhkFileData[] | null = await UpdateCacheAsync(true);
     if (ed === null) return null;
+    const t2: number = Date.now();
     // ---------------------------------------------
     // The task be completed, please confirm!
     // iMax is 20
@@ -17,7 +20,7 @@ async function devTestDA(): Promise<null> {
     // stdDev is 13.097614286579065
     // [245, 203, 184, 193, 195, 183, 193, 187, 191, 194, 191, 186, 188, 187, 197, 185, 184, 193, 190, 182]
     // ---------------------------------------------
-    Data.push(ed.timeSpend);
+    Data.push(t2 - t1);
     return null;
 }
 

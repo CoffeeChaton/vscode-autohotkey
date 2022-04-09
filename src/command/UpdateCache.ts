@@ -3,14 +3,7 @@ import { BaseScanMemo } from '../core/BaseScanMemo/memo';
 import { Detecter, TAhkFileData } from '../core/Detecter';
 import { getUriList } from '../tools/fsTools/getUriList';
 
-export type TUpdateCacheAsyncReturn = {
-    timeSpend: number;
-    FileListData: TAhkFileData[];
-};
-
-export async function UpdateCacheAsync(clearCache: boolean): Promise<null | TUpdateCacheAsyncReturn> {
-    const timeStart: number = Date.now();
-
+export async function UpdateCacheAsync(clearCache: boolean): Promise<null | TAhkFileData[]> {
     Detecter.DocMap.clear();
     if (clearCache) {
         BaseScanMemo.memo.clear();
@@ -28,14 +21,9 @@ export async function UpdateCacheAsync(clearCache: boolean): Promise<null | TUpd
         );
     }
 
-    const DocFullData: TAhkFileData[] = await Promise.all(waitDocFullData);
+    const FileListData: TAhkFileData[] = await Promise.all(waitDocFullData);
 
-    const timeSpend: number = Date.now() - timeStart;
-
-    return {
-        timeSpend,
-        FileListData: DocFullData,
-    };
+    return FileListData;
 }
 
 // TODO detail: string -> Enum

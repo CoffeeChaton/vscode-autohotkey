@@ -5,7 +5,7 @@ import { EStr, TFsPath } from '../globalEnum';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
 import { BaseScanMemo, getBaseData, TMemo } from './BaseScanMemo/memo';
 
-export type TAhkFileData = TMemo;
+export type TAhkFileData = Readonly<TMemo>;
 
 export const diagColl: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('ahk-neko-help');
 

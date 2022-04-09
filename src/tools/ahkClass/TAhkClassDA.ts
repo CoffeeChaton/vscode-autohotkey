@@ -4,12 +4,15 @@ import { DeepReadonly } from '../../globalEnum';
 type TUpName = string;
 type TRefRange = vscode.Range[];
 type TThisMap = Map<TUpName, TRefRange>;
+
+export type TNode = string[];
 export type TClassMeta = DeepReadonly<{
     kind: vscode.SymbolKind.Class;
     thisMap: TThisMap;
-    funcRawName: string;
+    rawName: string;
     upName: string;
     selectionRangeText: string;
     range: vscode.Range; // copy ?
+    node: TNode;
     // md: vscode.MarkdownString;
 }>;
