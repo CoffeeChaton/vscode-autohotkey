@@ -50,7 +50,9 @@ function codeActionOfDA(uri: vscode.Uri, diag: vscode.Diagnostic): vscode.CodeAc
     return [];
 }
 
-function CodeActionCore(uri: vscode.Uri, diagnostics: readonly vscode.Diagnostic[]): vscode.CodeAction[] {
+function fixDiag(uri: vscode.Uri, diagnostics: readonly vscode.Diagnostic[]): vscode.CodeAction[] {
+    if (!uri.fsPath.endsWith('.ahk')) return [];
+
     const CAList: vscode.CodeAction[] = [];
     for (const diag of diagnostics) {
         if (diag.source === EDiagBase.source) {
@@ -72,14 +74,6 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
         context: vscode.CodeActionContext,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
-        if (context.diagnostics.length === 0) return null;
-        const { uri } = document;
-        if (
-            uri.fsPath.endsWith('.ahk')
-            || uri.fsPath.endsWith('.ahk.git')
-        ) {
-            return CodeActionCore(uri, context.diagnostics);
-        }
-        return null;
+        return fixDiag(document.uri, context.diagnostics);
     }
 }

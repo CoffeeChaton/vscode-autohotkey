@@ -1,8 +1,9 @@
-import { TAhkSymbol, TAhkToken, TTokenStream } from '../globalEnum';
+import * as vscode from 'vscode';
+import { TAhkToken, TTokenStream } from '../globalEnum';
 
-function getDocStrMapMaskSlowMode(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TTokenStream {
-    const startLine: number = AhkSymbol.range.start.line;
-    const endLine: number = AhkSymbol.range.end.line;
+function getDocStrMapMaskSlowMode(range: vscode.Range, DocStrMap: TTokenStream): TTokenStream {
+    const startLine: number = range.start.line;
+    const endLine: number = range.end.line;
     const AhkTokenList: TAhkToken = [];
     for (const e of DocStrMap) {
         if (e.line < startLine) continue;
@@ -12,10 +13,10 @@ function getDocStrMapMaskSlowMode(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream
     return AhkTokenList;
 }
 
-export function getDocStrMapMask(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TTokenStream {
+export function getDocStrMapMask(range: vscode.Range, DocStrMap: TTokenStream): TTokenStream {
     if (DocStrMap[0].line === 0 && DocStrMap[DocStrMap.length - 1].line === (DocStrMap.length - 1)) {
-        return DocStrMap.slice(AhkSymbol.range.start.line, AhkSymbol.range.end.line + 1);
+        return DocStrMap.slice(range.start.line, range.end.line + 1);
     }
-    console.log('🚀 ~ getDocStrMapMask ~ SlowMode, AhkSymbol is ', AhkSymbol);
-    return getDocStrMapMaskSlowMode(AhkSymbol, DocStrMap);
+    console.log('🚀 ~ getDocStrMapMask ~ range', range);
+    return getDocStrMapMaskSlowMode(range, DocStrMap);
 }

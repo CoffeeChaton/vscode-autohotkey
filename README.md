@@ -14,6 +14,7 @@ AutoHotKey language support for VS Code
   - [IntelliSense](#intellisense)
   - [ListAllFunctions](#listallfunctions)
   - [Credits](#credits)
+  - [otherSuggest](#othersuggest)
 
 ## FunctionSymbol
 
@@ -120,3 +121,7 @@ Previous extensions:
 
 - [AutoHotkey Plus by cweijan](https://github.com/cweijan/vscode-autohotkey)
 - [AutoHotkey by stef-levesque](https://github.com/stef-levesque/vscode-autohotkey)
+
+## otherSuggest
+
+- [Path Autocomplete](https://marketplace.visualstudio.com/items?itemName=ionutvmi.path-autocomplete)

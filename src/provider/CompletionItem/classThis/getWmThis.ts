@@ -16,7 +16,7 @@ function getWmThisCore(
     const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
     if (AhkFileData === undefined) return [];
     const { DocStrMap } = AhkFileData;
-    const AhkTokenList: TTokenStream = getDocStrMapMask(AhkSymbol, DocStrMap);
+    const AhkTokenList: TTokenStream = getDocStrMapMask(AhkSymbol.range, DocStrMap);
 
     const mapStrNumber = new Map<string, number>(); // : Map<string, number>
 

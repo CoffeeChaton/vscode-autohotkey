@@ -21,6 +21,7 @@
         "sburg.vscode-javascript-booster",
         "eamodio.gitlens",
         "donjayamanne.githistory",
-        "mhutchie.git-graph"
+        "mhutchie.git-graph",
+        "ionutvmi.path-autocomplete"
     ]
 }

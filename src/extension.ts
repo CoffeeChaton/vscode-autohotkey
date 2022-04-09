@@ -12,6 +12,8 @@ import { configChangEvent, statusBarItem } from './configUI';
 import { BaseScanMemo } from './core/BaseScanMemo/memo';
 import { Detecter, diagColl } from './core/Detecter';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
+import { AhkCodeLens, ECommand } from './provider/CodeLens/CodeLensProvider';
+import { showFuncAnalyze, TShowAnalyze } from './provider/CodeLens/showFuncAnalyze';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
 import { DefProvider } from './provider/Def/DefProvider';
@@ -45,6 +47,7 @@ export function activate(context: ExtensionContext): void {
         languages.registerReferenceProvider(selector, new ReferenceProvider()),
         languages.registerRenameProvider(selector, new RenameProvider()),
         languages.registerWorkspaceSymbolProvider(new WorkspaceSymbolProvider()),
+        languages.registerCodeLensProvider(selector, new AhkCodeLens()),
         // workspace-------------------
         workspace.onDidChangeConfiguration((): void => configChangEvent()),
         workspace.onDidCloseTextDocument(ahkOnDidCloseTextDoc),
@@ -55,6 +58,7 @@ export function activate(context: ExtensionContext): void {
         // commands--------------------
         commands.registerCommand('ahk.bar.click', (): void => void statusBarClick()),
         commands.registerCommand('ahk.nekoHelp.openDoc', (): void => openDocs()),
+        commands.registerCommand(ECommand.ShowFuncAnalyze, (...args: TShowAnalyze): void => showFuncAnalyze(args)),
         // debug
         debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
         // root dispose

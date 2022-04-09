@@ -29,7 +29,7 @@ function getDACore(
     const kind: vscode.SymbolKind.Method | vscode.SymbolKind.Function | null = kindPick(AhkSymbol.kind);
     if (kind === null) return null;
 
-    const AhkTokenList: TTokenStream = getDocStrMapMask(AhkSymbol, DocStrMap);
+    const AhkTokenList: TTokenStream = getDocStrMapMask(AhkSymbol.range, DocStrMap);
 
     const paramMap: TParamMap = getParamDef(AhkSymbol, AhkTokenList);
     const valMap: TValMap = getFnVarDef(AhkSymbol, AhkTokenList, paramMap);
