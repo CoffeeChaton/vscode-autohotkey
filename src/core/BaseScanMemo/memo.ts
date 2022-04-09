@@ -42,7 +42,7 @@ export const BaseScanMemo = {
         const oldCache: TMemo[] | undefined = this.memo.get(fsPath);
 
         for (const [key, value] of this.memo) {
-            if (value.length < 2 || key === fsPath) {
+            if (value.length <= 1 || key === fsPath) {
                 continue;
             }
             const tempVal: TMemo | undefined = value[value.length - 1]; // last

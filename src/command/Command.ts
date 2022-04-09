@@ -10,7 +10,7 @@ import { ListAllInclude } from './ListAllInclude';
 import { TUpdateCacheAsyncReturn, UpdateCacheAsync } from './UpdateCache';
 
 async function fn0(): Promise<void> {
-    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync();
+    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync(true);
     if (ed !== null) {
         OutputChannel.appendLine('---------------------------------------------');
         OutputChannel.appendLine(`Update docFuncMap cash (${ed.timeSpend} ms)`);

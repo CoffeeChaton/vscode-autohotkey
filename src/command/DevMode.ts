@@ -6,7 +6,7 @@ import { TUpdateCacheAsyncReturn, UpdateCacheAsync } from './UpdateCache';
 const Data: number[] = [];
 
 async function devTestDA(): Promise<null> {
-    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync();
+    const ed: TUpdateCacheAsyncReturn | null = await UpdateCacheAsync(true);
     if (ed === null) return null;
     // ---------------------------------------------
     // The task be completed, please confirm!

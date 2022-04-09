@@ -8,11 +8,13 @@ export type TUpdateCacheAsyncReturn = {
     FileListData: TAhkFileData[];
 };
 
-export async function UpdateCacheAsync(): Promise<null | TUpdateCacheAsyncReturn> {
+export async function UpdateCacheAsync(clearCache: boolean): Promise<null | TUpdateCacheAsyncReturn> {
     const timeStart: number = Date.now();
 
     Detecter.DocMap.clear();
-    BaseScanMemo.memo.clear();
+    if (clearCache) {
+        BaseScanMemo.memo.clear();
+    }
 
     const uriList: vscode.Uri[] | null = getUriList();
     if (uriList === null) return null;
