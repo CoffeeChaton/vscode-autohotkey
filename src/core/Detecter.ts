@@ -1,9 +1,11 @@
+import * as path from 'path';
 import * as vscode from 'vscode';
+import { showTimeSpend } from '../configUI';
 import { EStr, TFsPath } from '../globalEnum';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
 import { BaseScanMemo, getBaseData, TMemo } from './BaseScanMemo/memo';
 
-export type TAhkFileData = Omit<TMemo, 'hash'>;
+export type TAhkFileData = TMemo;
 
 export const diagColl: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('ahk-neko-help');
 
@@ -14,12 +16,11 @@ export const Detecter = {
     getDocMapFile(): string[] {
         return [...Detecter.DocMap.keys()];
         // TODO check...but not this way.
-        // await vscode.workspace.openTextDocument(vscode.Uri.file(fsPath));
+        // await openTextDocument(fsPath);
 
         // const need: string[] = [];
         // const keyList: string[] = [...Detecter.DocMap.keys()];
         // for (const fsPath of keyList) {
-        //     // eslint-disable-next-line security/detect-non-literal-fs-filename
         //     if (fs.existsSync(fsPath)) {
         //         need.push(fsPath);
         //     } else {
@@ -52,12 +53,12 @@ export const Detecter = {
     async renameFileName(e: vscode.FileRenameEvent): Promise<void> {
         for (const { oldUri, newUri } of e.files) {
             if (oldUri.fsPath.endsWith('.ahk')) {
-                delOldCache(oldUri);
+                delOldCache(oldUri); // ...not't open old .ahk
                 if (newUri.fsPath.endsWith('.ahk')) {
                     // eslint-disable-next-line no-await-in-loop
-                    await vscode.workspace
-                        .openTextDocument(newUri)
-                        .then((doc: vscode.TextDocument): TAhkFileData => Detecter.updateDocDef(doc));
+                    const document: vscode.TextDocument = await vscode.workspace.openTextDocument(newUri);
+                    void Detecter.updateDocDef(document);
+
                     // eslint-disable-next-line no-await-in-loop
                     await renameFileNameFunc(oldUri, newUri);
                 } // else EXP : let a.ahk -> a.ahk0 or a.0ahk
@@ -74,6 +75,9 @@ export const Detecter = {
             Detecter.DocMap.set(fsPath, UpDateDocDefReturn);
             diagColl.set(uri, [...UpDateDocDefReturn.baseDiag]);
         }
+
+        const fileName: string = path.basename(document.uri.fsPath);
+        showTimeSpend(fileName);
 
         return UpDateDocDefReturn;
     },

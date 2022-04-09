@@ -5,15 +5,14 @@ import {
     TParamMap,
     TParamMeta,
     TValMap,
-    TValMeta,
 } from '../../TypeFnMeta';
 
-export function paramNeverUsed(paramMap: TParamMap, code501List: Set<vscode.Diagnostic>): void {
+export function NeverUsedParam(paramMap: TParamMap, code501List: vscode.Diagnostic[]): void {
     paramMap.forEach((v: TParamMeta): void => {
         if (v.refRangeList.length > 0) return;
         if (v.keyRawName.startsWith('_')) return;
 
-        code501List.add(setDiagnosticDA(
+        code501List.push(setDiagnosticDA(
             EDiagCodeDA.code501,
             v.defRangeList[0],
             vscode.DiagnosticSeverity.Warning,
@@ -23,9 +22,12 @@ export function paramNeverUsed(paramMap: TParamMap, code501List: Set<vscode.Diag
     });
 }
 
-export function varNeverUsed(valMap: TValMap, code500List: Set<vscode.Diagnostic>): void {
-    valMap.forEach((v: TValMeta, key: string): void => {
-        if (v.refRangeList.length > 0) return;
+export function NeverUsedVar(valMap: TValMap, code500List: vscode.Diagnostic[]): void {
+    const c500Max = 20;
+    if (code500List.length > c500Max) return;
+
+    for (const [key, v] of valMap) {
+        if (v.refRangeList.length > 0) continue;
         // if (v.defRangeList.length > 1) return;
         if (
             key.startsWith('A_')
@@ -34,14 +36,16 @@ export function varNeverUsed(valMap: TValMap, code500List: Set<vscode.Diagnostic
             || key === 'ClipboardAll'.toUpperCase()
             || key === 'ErrorLevel'.toUpperCase()
         ) {
-            return;
+            continue;
         }
-        code500List.add(setDiagnosticDA(
+
+        code500List.push(setDiagnosticDA(
             EDiagCodeDA.code500,
             v.defRangeList[0],
             vscode.DiagnosticSeverity.Warning,
             [vscode.DiagnosticTag.Unnecessary],
             DiagsDA[EDiagCodeDA.code500].msg,
         ));
-    });
+        if (code500List.length > c500Max) break;
+    }
 }

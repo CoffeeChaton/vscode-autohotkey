@@ -1,6 +1,4 @@
-import * as path from 'path';
 import * as vscode from 'vscode';
-import { showTimeSpend } from '../../configUI';
 import { Detecter } from '../../core/Detecter';
 import { DAList2SemanticHighlightFull } from './DAList2SemanticHighlight';
 import { GlobalHighlight } from './GlobalHighlight';
@@ -13,13 +11,10 @@ export const legend = new vscode.SemanticTokensLegend(
 );
 
 function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticTokens {
-    const t1: number = Date.now();
     const {
         GValMap,
         DAList,
     } = Detecter.updateDocDef(document);
-    const t2: number = Date.now();
-    showTimeSpend(path.basename(document.uri.fsPath), t2 - t1);
 
     const Collector: vscode.SemanticTokensBuilder = new vscode.SemanticTokensBuilder(legend);
     DAList2SemanticHighlightFull(DAList, Collector);

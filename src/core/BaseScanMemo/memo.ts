@@ -12,19 +12,28 @@ import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
 import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { Pretreatment } from '../../tools/Pretreatment';
-import { hashCode } from '../../tools/str/hashCode';
 import { getChildren } from '../getChildren';
 import { ParserBlock } from '../Parser';
 import { ParserLine } from '../ParserTools/ParserLine';
 
 export type TMemo = {
-    hash: number;
     AhkSymbolList: TAhkSymbolList;
     GValMap: TGValMap;
     DocStrMap: TTokenStream;
+    DocFullSize: number;
     baseDiag: vscode.Diagnostic[];
     DAList: TDAMeta[];
 };
+
+function strListDeepEq(DocStrMap: TTokenStream, fullTextList: string[]): boolean {
+    const len: number = DocStrMap.length;
+    if (len !== fullTextList.length) return false;
+    for (let i = 0; i < len; i++) {
+        if (fullTextList[i].length !== DocStrMap[i].textRaw.length) return false;
+        if (fullTextList[i] !== DocStrMap[i].textRaw) return false;
+    }
+    return true;
+}
 
 export const BaseScanMemo = {
     memo: new Map<TFsPath, TMemo[]>(),
@@ -45,8 +54,8 @@ export const BaseScanMemo = {
 
         if (oldCache === undefined) return [];
 
-        return oldCache.length > 20
-            ? oldCache.slice(-10)
+        return oldCache.length > 10
+            ? oldCache.slice(-5)
             : oldCache;
     },
 
@@ -58,10 +67,10 @@ export const BaseScanMemo = {
         this.memo.set(fsPath, oldCache);
     },
 
-    getMemo(fsPath: TFsPath, hash: number): TMemo | undefined {
+    getMemo(fsPath: TFsPath, fullTextList: string[], DocFullSize: number): TMemo | undefined {
         return this.memo
             .get(fsPath)
-            ?.find((v: TMemo): boolean => v.hash === hash);
+            ?.find((v: TMemo): boolean => v.DocFullSize === DocFullSize && strListDeepEq(v.DocStrMap, fullTextList));
     },
 
     clear(): void {
@@ -73,13 +82,17 @@ export const BaseScanMemo = {
 // vscode.window.visibleTextEditors
 
 export function getBaseData(document: vscode.TextDocument): TMemo {
-    const fullText: string = document.getText().replaceAll(/\r/gu, '');
-    const hash: number = hashCode(fullText);
+    //  document.version;
+    const fullText: string = document.getText();
+    const fullTextList: string[] = fullText
+        .replaceAll(/\r/gu, '')
+        .split('\n');
+    const DocFullSize: number = fullText.length;
     const { fsPath } = document.uri;
-    const oldCache: TMemo | undefined = BaseScanMemo.getMemo(fsPath, hash);
+    const oldCache: TMemo | undefined = BaseScanMemo.getMemo(fsPath, fullTextList, DocFullSize);
     if (oldCache !== undefined) return oldCache;
 
-    const DocStrMap: TTokenStream = Pretreatment(fullText.split('\n'), 0, document.fileName);
+    const DocStrMap: TTokenStream = Pretreatment(fullTextList, 0, document.fileName);
     const GValMap: TGValMap = new Map<TValUpName, TGlobalVal>();
 
     const AhkSymbolList: TAhkSymbolList = getChildren({
@@ -100,12 +113,12 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
     const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
     const DAList: TDAMeta[] = DeepAnalysis(document, AhkSymbolList, DocStrMap, GValMap);
     const AhkCache: TMemo = {
-        hash,
         GValMap,
         DocStrMap,
         AhkSymbolList,
         baseDiag,
         DAList,
+        DocFullSize,
     };
     BaseScanMemo.setMemo(fsPath, AhkCache);
     return AhkCache;

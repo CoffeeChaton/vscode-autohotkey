@@ -66,8 +66,8 @@ export function configChangEvent(): void {
     ---set end---
 */
 
-export function showTimeSpend(showText: string, time: number): void {
-    statusBarItem.text = `$(heart) ${time} ms of ${showText}`;
+export function showTimeSpend(showText: string): void {
+    statusBarItem.text = `$(heart) ${showText}`;
     statusBarItem.color = config.statusBar.displayColor;
     statusBarItem.show();
 }

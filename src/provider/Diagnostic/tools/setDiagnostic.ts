@@ -1,6 +1,9 @@
 import * as vscode from 'vscode';
 import {
-    Diags, DiagsDA, EDiagCode, EDiagCodeDA,
+    Diags,
+    DiagsDA,
+    EDiagCode,
+    EDiagCodeDA,
 } from '../../../diag';
 import { EDiagBase } from '../../../globalEnum';
 

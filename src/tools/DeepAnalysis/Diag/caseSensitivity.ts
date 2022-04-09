@@ -15,10 +15,10 @@ function getRangeOfC502(defRangeList: vscode.Range[], refRangeList: vscode.Range
 export function caseSensitivityVar(
     prefix: EPrefixC502,
     paramOrValMap: TValMap | TParamMap,
-    code502or503List: Set<vscode.Diagnostic>,
+    code502or503List: vscode.Diagnostic[],
     maxDiag: number,
 ): void {
-    if (code502or503List.size >= maxDiag) {
+    if (code502or503List.length >= maxDiag) {
         return;
     }
 
@@ -39,8 +39,8 @@ export function caseSensitivityVar(
                 setDiagCaseMsg(ValAnalysis.keyRawName, defPos, C502, prefix),
             );
 
-            code502or503List.add(diag);
-            if (code502or503List.size >= maxDiag) {
+            code502or503List.push(diag);
+            if (code502or503List.length >= maxDiag) {
                 return;
             }
             break; // of  for (let i

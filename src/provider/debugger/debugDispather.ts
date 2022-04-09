@@ -16,7 +16,10 @@ import { startDebugger } from '../Service/Service';
 import { OutputChannel } from '../vscWindows/OutputChannel';
 import { DebugServer } from './debugServer';
 import {
-    EVarScope, EVarScopeStr, TDbgpResponse, TLaunchRequestArguments,
+    EVarScope,
+    EVarScopeStr,
+    TDbgpResponse,
+    TLaunchRequestArguments,
 } from './DebugTypeEnum';
 import { BreakPointHandler } from './handler/breakpointHandler';
 import { CommandHandler } from './handler/commandHandler';

@@ -74,5 +74,6 @@
             "addWords": true,
             "scope": "workspace"
         }
-    }
+    },
+    "workbench.localHistory.enabled": false
 }

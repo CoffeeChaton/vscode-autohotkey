@@ -7,7 +7,11 @@ import { Handles, Scope, Variable } from '@vscode/debugadapter';
 import { enumLog } from '../../../tools/enumErr';
 import { toArray } from '../Base64';
 import {
-    EVarScope, EVarScopeStr, TAhkVariable, TDbgpProperty, TDbgpPropertyAttr,
+    EVarScope,
+    EVarScopeStr,
+    TAhkVariable,
+    TDbgpProperty,
+    TDbgpPropertyAttr,
 } from '../DebugTypeEnum';
 import { buildVariableValue } from './buildVariableValue';
 import { likeArray } from './likeArray';

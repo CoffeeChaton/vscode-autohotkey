@@ -8,7 +8,7 @@ import { getLineErr } from './tools/getLineErr';
 import { getTreeErr } from './tools/getTreeErr';
 
 // eslint-disable-next-line no-magic-numbers
-const wm = new ClassWm<TTokenStream, vscode.Diagnostic[]>(10 * 60 * 1000, 'baseDiagnostic', 3000);
+const wm = new ClassWm<TTokenStream, vscode.Diagnostic[]>(10 * 60 * 1000, 'baseDiagnostic', 0);
 
 export function baseDiagnostic(
     DocStrMap: TTokenStream,
