@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { msgWithPos } from '../../command/ListAllFunc';
-import { EMode, TFsPath, TTokenStream } from '../../globalEnum';
-import { getDAWithName } from '../../tools/DeepAnalysis/getDAWithName';
+import { TFsPath, TTokenStream } from '../../globalEnum';
 import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
+import { TFullFuncMap } from '../../tools/Func/getAllFunc';
 import { OutputChannel as out } from '../vscWindows/OutputChannel';
 
 function getIgnoreList(): string[] {
@@ -72,9 +72,9 @@ function printCommandList(fsPath: string, MsgList: TMsg[]): void {
     }
 }
 
-function splitLine(keyUp: string): void {
-    const DA: TDAMeta | null = getDAWithName(keyUp, EMode.ahkFunc);
-    if (DA === null) {
+function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): void {
+    const DA: TDAMeta | undefined = fullFuncMap.get(keyUp);
+    if (DA === undefined) {
         out.appendLine(`"${keyUp}"`);
     } else {
         const funcSplitLine = `${DA.funcRawName}(...) vs Command "${keyUp}" `;
@@ -82,7 +82,7 @@ function splitLine(keyUp: string): void {
     }
 }
 
-export function commandAnalyze(AhkTokenList: TTokenStream, fsPath: TFsPath): void {
+export function commandAnalyze(AhkTokenList: TTokenStream, fsPath: TFsPath, fullFuncMap: TFullFuncMap): void {
     const commandMap: TCommandInfoMap = getCommandMap(AhkTokenList);
 
     if (commandMap.size === 0) return;
@@ -90,7 +90,7 @@ export function commandAnalyze(AhkTokenList: TTokenStream, fsPath: TFsPath): voi
     out.appendLine('"--- command Analyze Start ---"');
     out.appendLine('');
     for (const [keyUp, MsgList] of commandMap) {
-        splitLine(keyUp);
+        splitLine(keyUp, fullFuncMap);
         printCommandList(fsPath, MsgList);
         out.appendLine('');
     }

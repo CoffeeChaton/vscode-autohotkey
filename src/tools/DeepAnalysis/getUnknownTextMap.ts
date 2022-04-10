@@ -40,6 +40,8 @@ function getIgnoreList(): string[] {
         'LOCAL',
         'GLOBAL',
 
+        'SETBATCHLINES',
+        'SETTIMER',
         'SLEEP',
 
         'LISTVARS', // 'ListVars'.toUpperCase()
@@ -53,8 +55,10 @@ function getIgnoreList(): string[] {
         'FALSE',
 
         'FOR',
+        'IN',
         'LOOP',
         'WHILE',
+        'UNTIL',
         'BREAK',
         'CONTINUE',
 
@@ -67,6 +71,19 @@ function getIgnoreList(): string[] {
         'AND',
         'OR',
 
+        'TRY',
+        'THROW',
+        'CATCH',
+        'FINALLY',
+
+        'GOSUB',
+        'GOTO',
+
+        'CRITICAL',
+        'SUSPEND',
+        'THREAD',
+        'PAUSE',
+        'RELOAD',
         // 'CLASS',
         'NEW',
     ];

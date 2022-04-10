@@ -50,6 +50,8 @@
         "refrence",
         "resmon",
         "rslintrc",
+        "SETBATCHLINES",
+        "SETTIMER",
         "struct",
         "Subcommand",
         "sukka",
