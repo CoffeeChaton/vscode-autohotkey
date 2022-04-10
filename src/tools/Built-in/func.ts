@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 /* eslint-disable max-lines */
 /* eslint-disable max-len */
 /* cSpell:disable */
@@ -11,6 +12,8 @@ export type TBuiltInFuncElement = {
     readonly group: string;
     readonly link: string;
     readonly msg: string;
+    readonly insert?: string; // TODO <--------
+    readonly exp?: string[]; // <-------
 };
 
 export const BuiltInFunctionMap: ReadonlyMap<string, TBuiltInFuncElement> = Object.freeze(
@@ -21,10 +24,16 @@ export const BuiltInFunctionMap: ReadonlyMap<string, TBuiltInFuncElement> = Obje
         // ------------------------------------------------------------------------------------------------------------------
         ['FILEEXIST', {
             keyRawName: 'FileExist',
+            insert: 'FileExist("${1:C:\\My File.txt}")',
             group: 'Frequently-used',
             link: 'https://www.autohotkey.com/docs/commands/FileExist.htm',
             msg: 'Checks for the existence of a file or folder and returns its attributes.',
+            exp: [
+                'if FileExist("D:\\")',
+                '    MsgBox, % "The drive exists."',
+            ],
         }],
+        // TODO insert && EXP >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         ['GETKEYSTATE', {
             keyRawName: 'GetKeyState',
             group: 'Frequently-used',
@@ -561,13 +570,20 @@ export const BuiltInFunctionMap: ReadonlyMap<string, TBuiltInFuncElement> = Obje
 );
 
 function Bif2Md(BiFunc: TBuiltInFuncElement): vscode.MarkdownString {
-    const label = `${BiFunc.keyRawName}()`;
-    const md = new vscode.MarkdownString('', true)
+    const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
         .appendMarkdown(`Built-in Function (${BiFunc.group})`)
-        .appendCodeblock(label, 'ahk')
+        .appendCodeblock(`${BiFunc.keyRawName}()`, 'ahk')
         .appendMarkdown(BiFunc.msg)
-        .appendMarkdown('\n\n')
-        .appendMarkdown(`[Read Doc](${BiFunc.link})`);
+        .appendMarkdown('\n')
+        .appendMarkdown(`[(Read Doc)](${BiFunc.link})`);
+
+    const exp: string[] | undefined = BiFunc?.exp;
+    if (exp && exp.length > 0) {
+        md.appendMarkdown('\n\n*exp:*');
+        for (const ex of exp) {
+            md.appendCodeblock(ex);
+        }
+    }
     md.supportHtml = true;
     return md;
 }
@@ -579,15 +595,15 @@ export const BuiltInFuncMDMap: ReadonlyMap<string, vscode.MarkdownString> = new 
 
 export const BiFuncSnippetList: readonly vscode.CompletionItem[] = [...BuiltInFunctionMap]
     .map(([ukName, BiFunc]: [string, TBuiltInFuncElement]): vscode.CompletionItem => {
-        const label = `${BiFunc.keyRawName}()`;
         const item: vscode.CompletionItem = new vscode.CompletionItem({
-            label, // Left
+            label: `${BiFunc.keyRawName}()`, // Left
             //  detail: v.class, // mid
             description: BiFunc.group, // Right
         });
         item.kind = vscode.CompletionItemKind.Function;
-        item.insertText = label;
-        item.detail = 'Built-in Function (neko-help)'; // description
+        item.insertText = new vscode.SnippetString(BiFunc?.insert ?? `${BiFunc.keyRawName}($1)`);
+
+        item.detail = 'Built-in Function (neko-help)';
         item.documentation = BuiltInFuncMDMap.get(ukName) ?? Bif2Md(BiFunc);
         return item;
     });
