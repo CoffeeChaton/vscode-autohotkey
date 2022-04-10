@@ -42,9 +42,9 @@ function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): void {
         out.appendLine(msgWithPos(`${DA.funcRawName}(...)`, DA.uri.fsPath, DA.range.start));
         return;
     }
-    const BuiltInFunc: TBuiltInFuncElement | undefined = BuiltInFunctionMap[keyUp];
+    const BuiltInFunc: TBuiltInFuncElement | undefined = BuiltInFunctionMap.get(keyUp);
     if (BuiltInFunc !== undefined) {
-        out.appendLine(`${BuiltInFunc.keyRawName}(...) of Built In Func function ; ${BuiltInFunc.link}`);
+        out.appendLine(`${BuiltInFunc.keyRawName}(...) of "Built-in Functions" ; ${BuiltInFunc.link}`);
         return;
     }
     // else
@@ -53,9 +53,8 @@ function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): void {
 
 function printRefFunc(fsPath: string, MsgList: TMsg[]): void {
     for (const Msg of MsgList) {
-        const text1 = `    ${Msg.textRaw.trim()}`;
         const startPos: vscode.Position = new vscode.Position(Msg.line, 0);
-        out.appendLine(msgWithPos(text1, fsPath, startPos));
+        out.appendLine(msgWithPos(`    ${Msg.textRaw.trim()}`, fsPath, startPos));
     }
 }
 
@@ -64,7 +63,7 @@ export function refFuncAnalyze(AhkTokenList: TTokenStream, fsPath: TFsPath, full
 
     if (refFuncMap.size === 0) return;
 
-    const arrayObj = Array.from(refFuncMap);
+    const arrayObj: [string, TMsg[]][] = Array.from(refFuncMap);
     // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
     arrayObj.sort();
 

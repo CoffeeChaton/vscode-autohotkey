@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { getSnippetBlockFilesList } from '../../configUI';
+import { BiFuncSnippetList } from '../../tools/Built-in/func';
 import { ahkSend } from './ahkSend';
 import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
@@ -25,6 +26,7 @@ async function CompletionItemCore(
             ...await listAllFuncClass(inputStr, filesBlockList),
             ...DeepAnalysisToCompletionItem(document, position, inputStr),
             ...snippetStartWihA(),
+            ...BiFuncSnippetList,
             ...globalValCompletion(document, position, inputStr),
         );
     }

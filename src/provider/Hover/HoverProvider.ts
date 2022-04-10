@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { EMode } from '../../globalEnum';
+import { BuiltInFuncMDMap } from '../../tools/Built-in/func';
 import { getDAWithName } from '../../tools/DeepAnalysis/getDAWithName';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
@@ -12,10 +13,14 @@ function HoverFunc(wordUp: string, textRaw: string): null | vscode.Hover {
     if (!testOfFunc.test(textRaw)) return null;
 
     const DA: TDAMeta | null = getDAWithName(wordUp, EMode.ahkFunc);
+    if (DA !== null) return new vscode.Hover(DA.md);
 
-    if (DA === null) return null;
+    const BuiltInFuncMD: vscode.MarkdownString | undefined = BuiltInFuncMDMap.get(wordUp);
+    if (BuiltInFuncMD !== undefined) {
+        return new vscode.Hover(BuiltInFuncMD);
+    }
 
-    return new vscode.Hover(DA.md);
+    return null;
 }
 
 function HoverProviderCore(
