@@ -3,7 +3,7 @@ import { Detecter } from '../../core/Detecter';
 import { TAhkSymbolList } from '../../globalEnum';
 import { DocSymbol2SymbolInfo } from './DocSymbol2SymbolInfo';
 
-function provideWorkspaceSymbolsCore(): vscode.SymbolInformation[] {
+export function WorkspaceSymbolCore(): vscode.SymbolInformation[] {
     const result: vscode.SymbolInformation[] = [];
     const fsPathList: string[] = Detecter.getDocMapFile();
 
@@ -26,7 +26,7 @@ export class WorkspaceSymbolProvider implements vscode.WorkspaceSymbolProvider {
         _query: string,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.SymbolInformation[]> {
-        return provideWorkspaceSymbolsCore();
+        return WorkspaceSymbolCore();
     }
 
     // resolveWorkspaceSymbol?(symbol: T, token: vscodeCancellationToken): vscode.ProviderResult<T> {

@@ -30,6 +30,10 @@
             "include": "#stringQuotedDouble"
         },
         {
+            "match": "\\b\\w+\\(\\.+\\)",
+            "name": "entity.name.function.log"
+        },
+        {
             "match": "\\b\\w+\\(\\)",
             "name": "entity.name.function.log"
         },

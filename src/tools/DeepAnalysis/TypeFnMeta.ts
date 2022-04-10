@@ -42,5 +42,6 @@ export type TDAMeta = DeepReadonly<{
     upName: string;
     selectionRangeText: string;
     range: vscode.Range; // copy ?
+    uri: vscode.Uri;
     md: vscode.MarkdownString;
 }>;

@@ -52,6 +52,7 @@ function getDACore(
         upName: funcRawName.toUpperCase(),
         selectionRangeText,
         range: AhkSymbol.range,
+        uri: document.uri,
         md,
     };
 

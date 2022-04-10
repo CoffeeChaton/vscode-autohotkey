@@ -31,7 +31,7 @@ export function WordFrequencyStatistics(need: TDAMeta[]): TWordFrequencyStatisti
     const e5: TElement[] = [];
     for (const [k, v] of DEB) {
         // eslint-disable-next-line no-magic-numbers
-        if (v > 20) {
+        if (v > 10) {
             e5.push({ k, v });
         }
     }

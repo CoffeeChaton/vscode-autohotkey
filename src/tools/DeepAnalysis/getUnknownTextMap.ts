@@ -35,8 +35,6 @@ function getIgnoreList(): string[] {
         'IF',
         'ELSE',
         'RETURN',
-        'IN',
-        'NOT',
 
         'STATIC',
         'LOCAL',
@@ -56,14 +54,21 @@ function getIgnoreList(): string[] {
 
         'FOR',
         'LOOP',
+        'WHILE',
         'BREAK',
         'CONTINUE',
 
         'MOUSEMOVE',
         'CLICK',
         'THIS',
+
+        'IN',
+        'NOT',
         'AND',
         'OR',
+
+        // 'CLASS',
+        'NEW',
     ];
 }
 

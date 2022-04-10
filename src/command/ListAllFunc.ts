@@ -3,7 +3,7 @@ import { Detecter } from '../core/Detecter';
 import { TAhkSymbolList } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 
-function getFnNameLineCol(text: string, fsPath: string, startPos: vscode.Position): string {
+export function msgWithPos(text: string, fsPath: string, startPos: vscode.Position): string {
     const line: number = startPos.line + 1;
     const col: number = startPos.character + 1;
     return `${text} ;${fsPath}:${line}:${col}`;
@@ -24,7 +24,7 @@ export function ListAllFunc(showLink: boolean): null {
             if (DocumentSymbol.kind === vscode.SymbolKind.Function) {
                 const text = `${DocumentSymbol.name}()`;
                 const textShow: string = showLink
-                    ? getFnNameLineCol(text, fsPath, DocumentSymbol.selectionRange.start)
+                    ? msgWithPos(text, fsPath, DocumentSymbol.selectionRange.start)
                     : text;
                 AllList.push(textShow);
             }
@@ -56,7 +56,7 @@ export function ListAllFuncSort(reverse: boolean): null {
             if (DocumentSymbol.kind === vscode.SymbolKind.Function) {
                 const text = `${DocumentSymbol.name}()`;
 
-                AllList.push(getFnNameLineCol(text, fsPath, DocumentSymbol.selectionRange.start));
+                AllList.push(msgWithPos(text, fsPath, DocumentSymbol.selectionRange.start));
             }
         }
     }

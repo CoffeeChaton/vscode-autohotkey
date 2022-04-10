@@ -1,11 +1,18 @@
+import { msgWithPos } from '../../command/ListAllFunc';
 import {
     TFsPath,
     TTokenStream,
 } from '../../globalEnum';
-import { TDAMeta, TParamMap, TValMap } from '../../tools/DeepAnalysis/TypeFnMeta';
+import {
+    TDAMeta,
+    TParamMap,
+    TTextMap,
+    TValMap,
+} from '../../tools/DeepAnalysis/TypeFnMeta';
 import { OutputChannel as out } from '../vscWindows/OutputChannel';
+import { commandAnalyze } from './commandAnalyze';
 
-function showElement(map: TValMap | TParamMap): string {
+function showElement(map: TValMap | TParamMap | TTextMap): string {
     if (map.size === 0) return '';
 
     const arr: string[] = [];
@@ -14,41 +21,23 @@ function showElement(map: TValMap | TParamMap): string {
     }
     return arr.join(', ');
 }
-// function commandAnalyze(params: type) {
-// }
-
 // --------
 export type TShowAnalyze = [TDAMeta, TFsPath, TTokenStream];
 
 export function showFuncAnalyze(a: TShowAnalyze): void {
     const DA: TDAMeta = a[0];
     const fsPath: string = a[1];
-    // eslint-disable-next-line no-magic-numbers
     const AhkTokenList: TTokenStream = a[2];
-    console.log('🚀 ~ showDA ~ DA', DA);
-    console.log('🚀 ~ showFuncAnalyze ~ fsPath', fsPath);
-    console.log('🚀 ~ showFuncAnalyze ~ AhkTokenList', AhkTokenList);
 
     out.clear();
-    out.appendLine('---------------- Base Data Start-----------------------------');
-    out.appendLine(`About ${DA.selectionRangeText}`);
+    out.appendLine('"---------------- Base Data Start -----------------------------"');
+    out.appendLine(msgWithPos(`About ${DA.funcRawName}(...)`, fsPath, DA.range.start));
     out.appendLine(`param : ${DA.paramMap.size} of [${showElement(DA.paramMap)}]`);
     out.appendLine(`value : ${DA.valMap.size} of [${showElement(DA.valMap)}]`);
-    out.appendLine('---------------- Base Data End-----------------------------');
-    out.appendLine('---------------- showAnalyze Start ---------------------');
-    out.appendLine('---------------- TODO ---------------------');
-    out.appendLine('---------------- showAnalyze End -----------------------');
+    out.appendLine(`unknownText : ${DA.textMap.size} of [${showElement(DA.textMap)}]`);
+    out.appendLine('"---------------- Base Data End -----------------------------"');
+    out.appendLine('"---------------- showAnalyze Start -------------------------"');
+    commandAnalyze(AhkTokenList, fsPath);
+    out.appendLine('"---------------- showAnalyze End ---------------------------"');
     out.show();
 }
-
-// {
-//     kind: vscode.SymbolKind.Method | vscode.SymbolKind.Function;
-//     paramMap: TParamMap;
-//     valMap: TValMap;
-//     textMap: TTextMap;
-//     funcRawName: string;
-//     upName: string;
-//     selectionRangeText: string;
-//     range: vscode.Range; // copy ?
-//     md: vscode.MarkdownString;
-// }
