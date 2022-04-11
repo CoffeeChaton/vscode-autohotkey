@@ -19,6 +19,7 @@ import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
 import { DefProvider } from './provider/Def/DefProvider';
 import { ahkOnDidCloseTextDoc } from './provider/event/ahkOnDidCloseTextDoc';
 import { ahkRenameFiles } from './provider/event/ahkRenameFiles';
+import { FoldingRangeProvider } from './provider/FoldingRange/FoldingRangeProvider';
 import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
@@ -47,7 +48,8 @@ export function activate(context: ExtensionContext): void {
         languages.registerReferenceProvider(selector, new ReferenceProvider()),
         languages.registerRenameProvider(selector, new RenameProvider()),
         languages.registerWorkspaceSymbolProvider(new WorkspaceSymbolProvider()),
-        languages.registerCodeLensProvider(selector, new AhkCodeLens()),
+        languages.registerCodeLensProvider(selector, AhkCodeLens),
+        languages.registerFoldingRangeProvider(selector, FoldingRangeProvider),
         // workspace-------------------
         workspace.onDidChangeConfiguration((): void => configChangEvent()),
         workspace.onDidCloseTextDocument(ahkOnDidCloseTextDoc),
@@ -55,6 +57,7 @@ export function activate(context: ExtensionContext): void {
         workspace.onDidDeleteFiles((e): void => Detecter.delMap(e)),
         workspace.onDidRenameFiles(ahkRenameFiles),
         // workspace.onDidChangeTextDocument((e) => d(e)),
+        // workspace.registerTextDocumentContentProvider(selector, e),
         // commands--------------------
         commands.registerCommand('ahk.bar.click', (): void => void statusBarClick()),
         commands.registerCommand('ahk.nekoHelp.openDoc', (): void => openDocs()),

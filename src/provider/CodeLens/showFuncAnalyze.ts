@@ -44,3 +44,4 @@ export function showFuncAnalyze(a: TShowAnalyze): void {
     out.appendLine('"---------------- showAnalyze End ---------------------------"');
     out.show();
 }
+// [c](file:\\c:\DEV\dev_main_P7\Lib\Gdip_All_2020.ahk#330,1)

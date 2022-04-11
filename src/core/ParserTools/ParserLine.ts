@@ -16,7 +16,7 @@ type TLineRuler = DeepReadonly<{
 
 const IncludeAgain: TLineRuler = {
     detail: '#IncludeAgain',
-    kind: vscode.SymbolKind.Event,
+    kind: vscode.SymbolKind.Module,
     getName(strTrim: string): string | null {
         return strTrim.replace(/^#IncludeAgain\s+/ui, '#IncludeAgain ');
         // const e = (/^#IncludeAgain\s+?(\.+)/ui).exec(strTrim);
@@ -32,7 +32,7 @@ const IncludeAgain: TLineRuler = {
 
 const Include: TLineRuler = {
     detail: '#Include',
-    kind: vscode.SymbolKind.Event,
+    kind: vscode.SymbolKind.Module,
     getName(strTrim: string): string | null {
         return strTrim.replace(/^#Include\s+/ui, '#Include ');
         // const e = (/^#Include\s+?(\.+)/iu).exec(strTrim);

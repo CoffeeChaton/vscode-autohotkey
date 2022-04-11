@@ -35,10 +35,10 @@ function CodeLensCore(document: TextDocument): CodeLens[] {
         });
 }
 
-export class AhkCodeLens implements CodeLensProvider {
+export const AhkCodeLens: CodeLensProvider = {
     // onDidChangeCodeLenses?: Event<void> | undefined;
     // eslint-disable-next-line class-methods-use-this
-    public provideCodeLenses(document: TextDocument, _token: CancellationToken): ProviderResult<CodeLens[]> {
+    provideCodeLenses(document: TextDocument, _token: CancellationToken): ProviderResult<CodeLens[]> {
         return CodeLensCore(document);
-    }
-}
+    },
+};
