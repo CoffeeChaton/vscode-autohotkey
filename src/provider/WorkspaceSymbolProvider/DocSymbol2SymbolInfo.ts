@@ -3,7 +3,7 @@ import { TAhkSymbol, TAhkSymbolList } from '../../globalEnum';
 import { ClassWm } from '../../tools/wm';
 
 // eslint-disable-next-line no-magic-numbers
-const wm = new ClassWm<TAhkSymbolList, vscode.SymbolInformation[]>(10 * 60 * 1000, 'DocSymbol2SymbolInfo', 0);
+const wm: ClassWm<TAhkSymbolList, vscode.SymbolInformation[]> = new ClassWm(10 * 60 * 1000, 'DocSymbol2SymbolInfo', 0);
 
 export function DocSymbol2SymbolInfo(fsPath: string, AhkSymbolList: TAhkSymbolList): vscode.SymbolInformation[] {
     const cache: vscode.SymbolInformation[] | undefined = wm.getWm(AhkSymbolList);

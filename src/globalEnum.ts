@@ -131,8 +131,6 @@ type TempConfigs = {
 };
 export type TConfigs = DeepReadonly<TempConfigs>;
 
-// foo<T>(a: NonNullable<T>)
-
 export const enum EFormatChannel {
     byFormatAllFile = 'Format File',
     byFormatRange = 'Format Range',

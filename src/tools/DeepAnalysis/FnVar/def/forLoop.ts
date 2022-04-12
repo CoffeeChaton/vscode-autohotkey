@@ -52,8 +52,11 @@ export function forLoop(arg: TGetFnDefNeed): void {
         lStr,
     } = arg;
 
+    const lStrTrim: string = lStr.trim();
     // eslint-disable-next-line no-magic-numbers
-    if (lStr.trim().length < 10) return; // for a in b ----> len 10
+    if (lStrTrim.trim().length < 10) return; // for a in b ----> len 10
+
+    if (!(/\bFor\b\s/ui).test(lStrTrim)) return;
 
     // eslint-disable-next-line security/detect-unsafe-regex
     for (const v of lStr.matchAll(/\bFor\b\s+(\w+)\s*(?:,\s*(\w+))?\s+in\s/giu)) {

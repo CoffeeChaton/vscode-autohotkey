@@ -33,21 +33,22 @@ import { WorkspaceSymbolProvider } from './provider/WorkspaceSymbolProvider/Work
 
 // main
 export function activate(context: ExtensionContext): void {
+    // TODO class \w+ implements
     const selector: DocumentSelector = { language: 'ahk' };
     context.subscriptions.push(
         // languages-------------------
-        languages.registerCodeActionsProvider(selector, new CodeActionProvider()),
-        languages.registerCompletionItemProvider(selector, new CompletionItemProvider(), 'A_', '', '.', '{'),
-        languages.registerDefinitionProvider(selector, new DefProvider()),
-        languages.registerDocumentFormattingEditProvider(selector, new FormatProvider()),
-        languages.registerDocumentRangeFormattingEditProvider(selector, new RangeFormatProvider()),
-        languages.registerDocumentSemanticTokensProvider(selector, new AhkFullSemanticHighlight(), legend),
-        languages.registerDocumentSymbolProvider(selector, new SymBolProvider()),
-        languages.registerHoverProvider(selector, new HoverProvider()),
-        languages.registerOnTypeFormattingEditProvider(selector, new OnTypeFormattingEditProvider(), '\n'),
-        languages.registerReferenceProvider(selector, new ReferenceProvider()),
-        languages.registerRenameProvider(selector, new RenameProvider()),
-        languages.registerWorkspaceSymbolProvider(new WorkspaceSymbolProvider()),
+        languages.registerCodeActionsProvider(selector, CodeActionProvider),
+        languages.registerCompletionItemProvider(selector, CompletionItemProvider, 'A_', '', '.', '{'),
+        languages.registerDefinitionProvider(selector, DefProvider),
+        languages.registerDocumentFormattingEditProvider(selector, FormatProvider),
+        languages.registerDocumentRangeFormattingEditProvider(selector, RangeFormatProvider),
+        languages.registerDocumentSemanticTokensProvider(selector, AhkFullSemanticHighlight, legend),
+        languages.registerDocumentSymbolProvider(selector, SymBolProvider),
+        languages.registerHoverProvider(selector, HoverProvider),
+        languages.registerOnTypeFormattingEditProvider(selector, OnTypeFormattingEditProvider, '\n'),
+        languages.registerReferenceProvider(selector, ReferenceProvider),
+        languages.registerRenameProvider(selector, RenameProvider),
+        languages.registerWorkspaceSymbolProvider(WorkspaceSymbolProvider),
         languages.registerCodeLensProvider(selector, AhkCodeLens),
         languages.registerFoldingRangeProvider(selector, FoldingRangeProvider),
         // workspace-------------------
@@ -63,7 +64,7 @@ export function activate(context: ExtensionContext): void {
         commands.registerCommand('ahk.nekoHelp.openDoc', (): void => openDocs()),
         commands.registerCommand(ECommand.ShowFuncAnalyze, (...args: TShowAnalyze): void => showFuncAnalyze(args)),
         // debug
-        debug.registerDebugAdapterDescriptorFactory('ahk', new NekoDebugMain()),
+        debug.registerDebugAdapterDescriptorFactory('ahk', NekoDebugMain),
         // root dispose
         OutputChannel,
         statusBarItem,

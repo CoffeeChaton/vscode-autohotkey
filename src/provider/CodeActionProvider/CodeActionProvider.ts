@@ -66,14 +66,13 @@ function fixDiag(uri: vscode.Uri, diagnostics: readonly vscode.Diagnostic[]): vs
     return CAList;
 }
 
-export class CodeActionProvider implements vscode.CodeActionProvider {
-    // eslint-disable-next-line class-methods-use-this
-    public provideCodeActions(
+export const CodeActionProvider: vscode.CodeActionProvider = {
+    provideCodeActions(
         document: vscode.TextDocument,
         _range: vscode.Range | vscode.Selection,
         context: vscode.CodeActionContext,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
         return fixDiag(document.uri, context.diagnostics);
-    }
-}
+    },
+};

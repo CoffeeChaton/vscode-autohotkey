@@ -52,13 +52,12 @@ function HoverProviderCore(
     return null;
 }
 
-export class HoverProvider implements vscode.HoverProvider {
-    // eslint-disable-next-line class-methods-use-this
-    public provideHover(
+export const HoverProvider: vscode.HoverProvider = {
+    provideHover(
         document: vscode.TextDocument,
         position: vscode.Position,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.Hover> {
         return HoverProviderCore(document, position);
-    }
-}
+    },
+};

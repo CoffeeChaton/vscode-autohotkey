@@ -10,7 +10,6 @@ import {
 import { Detecter } from '../../core/Detecter';
 import { TTokenStream } from '../../globalEnum';
 import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
-import { getDocStrMapMask } from '../../tools/getDocStrMapMask';
 import { TShowAnalyze } from './showFuncAnalyze';
 
 export const enum ECommand {
@@ -24,7 +23,7 @@ function CodeLensCore(document: TextDocument): CodeLens[] {
     return DAList
         .filter((DA: TDAMeta): boolean => DA.kind === SymbolKind.Function)
         .map((DA: TDAMeta): CodeLens => {
-            const AhkTokenList: TTokenStream = getDocStrMapMask(DA.range, DocStrMap);
+            const AhkTokenList: TTokenStream = DocStrMap.slice(DA.selectionRange.start.line + 1, DA.range.end.line + 1);
             const ahkCommand: Command = {
                 title: 'Analyze',
                 command: ECommand.ShowFuncAnalyze,
@@ -37,7 +36,6 @@ function CodeLensCore(document: TextDocument): CodeLens[] {
 
 export const AhkCodeLens: CodeLensProvider = {
     // onDidChangeCodeLenses?: Event<void> | undefined;
-    // eslint-disable-next-line class-methods-use-this
     provideCodeLenses(document: TextDocument, _token: CancellationToken): ProviderResult<CodeLens[]> {
         return CodeLensCore(document);
     },

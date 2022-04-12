@@ -2,9 +2,8 @@ import * as vscode from 'vscode';
 import { EFormatChannel } from '../../globalEnum';
 import { FormatCore } from '../Format/FormatProvider';
 
-export class RangeFormatProvider implements vscode.DocumentRangeFormattingEditProvider {
-    // eslint-disable-next-line class-methods-use-this
-    public provideDocumentRangeFormattingEdits(
+export const RangeFormatProvider: vscode.DocumentRangeFormattingEditProvider = {
+    provideDocumentRangeFormattingEdits(
         document: vscode.TextDocument,
         range: vscode.Range,
         options: vscode.FormattingOptions,
@@ -18,5 +17,5 @@ export class RangeFormatProvider implements vscode.DocumentRangeFormattingEditPr
             from: EFormatChannel.byFormatRange,
             needDiff: true,
         });
-    }
-}
+    },
+};

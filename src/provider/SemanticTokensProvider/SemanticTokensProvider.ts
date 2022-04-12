@@ -23,13 +23,12 @@ function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticToken
 }
 
 // semantic token type
-export class AhkFullSemanticHighlight implements vscode.DocumentSemanticTokensProvider {
+export const AhkFullSemanticHighlight: vscode.DocumentSemanticTokensProvider = {
     // onDidChangeSemanticTokens?: vscode.Event<void> | undefined;
-    // eslint-disable-next-line class-methods-use-this
-    public provideDocumentSemanticTokens(
+    provideDocumentSemanticTokens(
         document: vscode.TextDocument,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.SemanticTokens> {
         return SemanticTokensCore(document);
-    }
-}
+    },
+};

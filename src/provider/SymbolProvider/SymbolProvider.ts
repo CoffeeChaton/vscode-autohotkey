@@ -9,14 +9,12 @@ function SymBolProviderCore(document: vscode.TextDocument): vscode.DocumentSymbo
 
     return AhkSymbolList as vscode.DocumentSymbol[];
 }
-export class SymBolProvider implements vscode.DocumentSymbolProvider {
-    // eslint-disable-next-line class-methods-use-this
-    public provideDocumentSymbols(
+export const SymBolProvider: vscode.DocumentSymbolProvider = {
+    provideDocumentSymbols(
         document: vscode.TextDocument,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.DocumentSymbol[]> {
         return SymBolProviderCore(document);
-    }
-
+    },
     // May 08 2020, vscode.SymbolInformation  -> vscode.DocumentSymbol[]
-}
+};

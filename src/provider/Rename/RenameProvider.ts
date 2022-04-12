@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import * as vscode from 'vscode';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { TDAMeta, TParamMeta, TValMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
@@ -54,13 +53,13 @@ function RenameProviderCore(
     return edit;
 }
 
-export class RenameProvider implements vscode.RenameProvider {
-    public provideRenameEdits(
+export const RenameProvider: vscode.RenameProvider = {
+    provideRenameEdits(
         document: vscode.TextDocument,
         position: vscode.Position,
         newName: string,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.WorkspaceEdit> {
         return RenameProviderCore(document, position, newName);
-    }
-}
+    },
+};

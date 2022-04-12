@@ -36,17 +36,16 @@ async function CompletionItemCore(
 }
 
 // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
-export class CompletionItemProvider implements vscode.CompletionItemProvider {
-    // eslint-disable-next-line class-methods-use-this
-    public provideCompletionItems(
+export const CompletionItemProvider: vscode.CompletionItemProvider = {
+    provideCompletionItems(
         document: vscode.TextDocument,
         position: vscode.Position,
         _token: vscode.CancellationToken,
         _context: vscode.CompletionContext,
     ): vscode.ProviderResult<vscode.CompletionItem[]> {
         return CompletionItemCore(document, position);
-    }
-}
+    },
+};
 
 /*
 Functions are assume-local by default. Variables accessed or created inside an assume-local function are local by default,

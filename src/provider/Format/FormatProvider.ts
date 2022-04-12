@@ -138,9 +138,8 @@ export function FormatCore(
     return newTextList;
 }
 
-export class FormatProvider implements vscode.DocumentFormattingEditProvider {
-    // eslint-disable-next-line class-methods-use-this
-    public provideDocumentFormattingEdits(
+export const FormatProvider: vscode.DocumentFormattingEditProvider = {
+    provideDocumentFormattingEdits(
         document: vscode.TextDocument,
         options: vscode.FormattingOptions,
         _token: vscode.CancellationToken,
@@ -153,5 +152,5 @@ export class FormatProvider implements vscode.DocumentFormattingEditProvider {
             from: EFormatChannel.byFormatAllFile,
             needDiff: true,
         });
-    }
-}
+    },
+};

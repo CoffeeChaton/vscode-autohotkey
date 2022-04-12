@@ -41,7 +41,7 @@ function getWmThisCore(
 }
 
 // eslint-disable-next-line no-magic-numbers
-const wm = new ClassWm<TAhkSymbol, vscode.CompletionItem[]>(10 * 60 * 1000, 'getThisItemOfWm', 700);
+const wm: ClassWm<TAhkSymbol, vscode.CompletionItem[]> = new ClassWm(10 * 60 * 1000, 'getThisItemOfWm', 700);
 
 export function getWmThis(c0: TSymAndFsPath): vscode.CompletionItem[] {
     const { AhkSymbol, fsPath } = c0;

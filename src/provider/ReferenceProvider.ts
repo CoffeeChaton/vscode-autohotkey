@@ -25,14 +25,13 @@ function ReferenceProviderCore(
 }
 
 //  Go to References search (via Shift+F12),
-export class ReferenceProvider implements vscode.ReferenceProvider {
-    // eslint-disable-next-line class-methods-use-this
-    public provideReferences(
+export const ReferenceProvider: vscode.ReferenceProvider = {
+    provideReferences(
         document: vscode.TextDocument,
         position: vscode.Position,
         _context: vscode.ReferenceContext,
         _token: vscode.CancellationToken,
-    ): vscode.Location[] | null {
+    ): vscode.ProviderResult<vscode.Location[]> {
         return ReferenceProviderCore(document, position);
-    }
-}
+    },
+};

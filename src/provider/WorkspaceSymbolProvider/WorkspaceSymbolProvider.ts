@@ -20,16 +20,14 @@ export function WorkspaceSymbolCore(): vscode.SymbolInformation[] {
 /**
  * ctrl + T, list All Symbol
  */
-export class WorkspaceSymbolProvider implements vscode.WorkspaceSymbolProvider {
-    // eslint-disable-next-line class-methods-use-this
-    public provideWorkspaceSymbols(
+export const WorkspaceSymbolProvider: vscode.WorkspaceSymbolProvider = {
+    provideWorkspaceSymbols(
         _query: string,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.SymbolInformation[]> {
         return WorkspaceSymbolCore();
-    }
-
+    },
     // resolveWorkspaceSymbol?(symbol: T, token: vscodeCancellationToken): vscode.ProviderResult<T> {
     //     return [];
     // }
-}
+};

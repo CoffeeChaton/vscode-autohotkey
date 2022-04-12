@@ -3,7 +3,7 @@ import { TAhkSymbol } from '../../../globalEnum';
 import { ClassWm } from '../../../tools/wm';
 
 // eslint-disable-next-line no-magic-numbers
-const wm = new ClassWm<TAhkSymbol, vscode.SnippetString>(10 * 60 * 1000, 'insertTextWm', 3000);
+const wm: ClassWm<TAhkSymbol, vscode.SnippetString> = new ClassWm(10 * 60 * 1000, 'insertTextWm', 3000);
 
 export async function insertTextWm(
     fsPath: string,

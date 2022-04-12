@@ -21,7 +21,7 @@ export function varSetCapacityFunc({
         const UpName: string = RawName.toUpperCase();
         if (paramMap.has(UpName)) continue;
 
-        const character: number = ch + v[0].indexOf(RawName); // "VarSetCapacity(".len ===  15
+        const character: number = ch + v[0].indexOf(RawName);
 
         const value: TValMeta = getValMeta(line, character, RawName, valMap);
         valMap.set(RawName.toUpperCase(), value);

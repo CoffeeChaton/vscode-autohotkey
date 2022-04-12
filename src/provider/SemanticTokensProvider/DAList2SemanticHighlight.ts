@@ -4,7 +4,7 @@ import { ClassWm } from '../../tools/wm';
 import { pushToken, TSemanticTokensLeaf } from './tools';
 
 // eslint-disable-next-line no-magic-numbers
-const wm = new ClassWm<TDAMeta, TSemanticTokensLeaf[]>(10 * 60 * 1000, 'DA2SemanticHighlight', 0);
+const wm: ClassWm<TDAMeta, TSemanticTokensLeaf[]> = new ClassWm(10 * 60 * 1000, 'DA2SemanticHighlight', 0);
 
 function DA2SemanticHighlight(DA: TDAMeta): TSemanticTokensLeaf[] {
     const cache: TSemanticTokensLeaf[] | undefined = wm.getWm(DA);

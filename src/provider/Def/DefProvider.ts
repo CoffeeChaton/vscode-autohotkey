@@ -134,15 +134,12 @@ function DefProviderCore(
 // Go to Definition (via F12 || Ctrl+Click)
 // open the definition to the side with ( via Ctrl+Alt+Click )
 // Peek Definition (via Alt+F12)
-export class DefProvider implements vscode.DefinitionProvider {
-    // eslint-disable-next-line class-methods-use-this
-    public provideDefinition(
+export const DefProvider: vscode.DefinitionProvider = {
+    provideDefinition(
         document: vscode.TextDocument,
         position: vscode.Position,
         _token: vscode.CancellationToken,
-    ): null | vscode.Location | vscode.Location[] {
-        //  Definition | DefinitionLink[]
-
+    ): vscode.ProviderResult<vscode.Definition | vscode.DefinitionLink[]> {
         return DefProviderCore(document, position);
-    }
-}
+    },
+};

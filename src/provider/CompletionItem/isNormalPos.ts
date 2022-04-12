@@ -17,6 +17,5 @@ export function isNormalPos(document: vscode.TextDocument, position: vscode.Posi
         Range.start.character,
     );
     const newStr: string = document.getText(newRange);
-    const blockList = new Set<string>(['.', '`', '{', '}']);
-    return !blockList.has(newStr);
+    return !['.', '`', '{', '}'].includes(newStr);
 }
