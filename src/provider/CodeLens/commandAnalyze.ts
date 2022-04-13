@@ -1,9 +1,6 @@
-import * as vscode from 'vscode';
-import { msgWithPos } from '../../command/ListAllFunc';
-import { TFsPath, TTokenStream } from '../../globalEnum';
+import { TTokenStream } from '../../globalEnum';
 import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { TFullFuncMap } from '../../tools/Func/getAllFunc';
-import { OutputChannel as out } from '../vscWindows/OutputChannel';
 
 function getIgnoreList(): string[] {
     return [
@@ -64,38 +61,42 @@ function getCommandMap(AhkTokenList: TTokenStream): TCommandInfoMap {
     return commandMap;
 }
 
-function printCommandList(fsPath: string, MsgList: TMsg[]): void {
+function printCommandList(MsgList: TMsg[], ed: string[]): void {
     for (const Msg of MsgList) {
-        const text1 = `    ${Msg.textRaw.trim()}`;
-        const startPos: vscode.Position = new vscode.Position(Msg.line, 0);
-        out.appendLine(msgWithPos(text1, fsPath, startPos));
+        ed.push(`    ${Msg.textRaw.trim()} ; line ${Msg.line}`);
     }
 }
 
-function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): void {
+function splitLine(keyUp: string, fullFuncMap: TFullFuncMap, ed: string[]): void {
     const DA: TDAMeta | undefined = fullFuncMap.get(keyUp);
     if (DA === undefined) {
-        out.appendLine(`"${keyUp}"`);
+        ed.push(`${keyUp} ; "Command"`);
     } else {
-        const funcSplitLine = `${DA.funcRawName}(...) vs Command "${keyUp}" `;
-        out.appendLine(msgWithPos(funcSplitLine, DA.uri.fsPath, DA.range.start));
+        ed.push(`${DA.funcRawName}(...) vs "Command" ${keyUp} ; `);
     }
 }
 
-export function commandAnalyze(AhkTokenList: TTokenStream, fsPath: TFsPath, fullFuncMap: TFullFuncMap): void {
+export function commandAnalyze(AhkTokenList: TTokenStream, fullFuncMap: TFullFuncMap): string[] {
     const commandMap: TCommandInfoMap = getCommandMap(AhkTokenList);
 
-    if (commandMap.size === 0) return;
+    if (commandMap.size === 0) return [];
 
-    out.appendLine('"--- command Analyze Start ---"');
-    out.appendLine('');
+    const ed: string[] = [
+        '/**',
+        '* @Analyze of command',
+        '* ',
+        '* Commands vs Functions -> https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
+        '* if you what to user function replace command, you can use Functions.ahk',
+        '* Functions.ahk -> https://www.autohotkey.com/docs/Functions.htm#Other_Functions',
+        '* ',
+        '*/',
+    ];
+
     for (const [keyUp, MsgList] of commandMap) {
-        splitLine(keyUp, fullFuncMap);
-        printCommandList(fsPath, MsgList);
-        out.appendLine('');
+        splitLine(keyUp, fullFuncMap, ed);
+        printCommandList(MsgList, ed);
+        ed.push('');
     }
 
-    out.appendLine('; if you what to user function replace command, you can use this.');
-    out.appendLine('; https://www.autohotkey.com/docs/Functions.htm#Other_Functions');
-    out.appendLine('"--- command Analyze End ---"');
+    return ed;
 }

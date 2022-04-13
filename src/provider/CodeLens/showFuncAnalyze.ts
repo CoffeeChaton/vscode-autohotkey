@@ -1,4 +1,4 @@
-import { msgWithPos } from '../../command/ListAllFunc';
+import * as vscode from 'vscode';
 import {
     TFsPath,
     TTokenStream,
@@ -10,7 +10,6 @@ import {
     TValMap,
 } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { getAllFunc, TFullFuncMap } from '../../tools/Func/getAllFunc';
-import { OutputChannel as out } from '../vscWindows/OutputChannel';
 import { commandAnalyze } from './commandAnalyze';
 import { refFuncAnalyze } from './refFuncAnalyze';
 
@@ -19,29 +18,34 @@ function showElement(map: TValMap | TParamMap | TTextMap): string {
 
     const arr: string[] = [];
     for (const { keyRawName } of map.values()) {
-        arr.push(`"${keyRawName}"`);
+        arr.push(keyRawName);
     }
     return arr.join(', ');
 }
 // --------
 export type TShowAnalyze = [TDAMeta, TFsPath, TTokenStream];
 
-export function showFuncAnalyze(a: TShowAnalyze): void {
-    const DA: TDAMeta = a[0];
-    const fsPath: string = a[1];
-    const AhkTokenList: TTokenStream = a[2];
+export async function showFuncAnalyze(DA: TDAMeta, fsPath: string, AhkTokenList: TTokenStream): Promise<void> {
     const fullFuncMap: TFullFuncMap = getAllFunc();
-    out.clear();
-    out.appendLine('"---------------- Base Data Start -----------------------------"');
-    out.appendLine(msgWithPos(`About ${DA.funcRawName}(...)`, fsPath, DA.range.start));
-    out.appendLine(`param : ${DA.paramMap.size} of [${showElement(DA.paramMap)}]`);
-    out.appendLine(`value : ${DA.valMap.size} of [${showElement(DA.valMap)}]`);
-    out.appendLine(`unknownText : ${DA.textMap.size} of [${showElement(DA.textMap)}]`);
-    out.appendLine('"---------------- Base Data End -----------------------------"');
-    out.appendLine('"---------------- showAnalyze Start -------------------------"');
-    commandAnalyze(AhkTokenList, fsPath, fullFuncMap);
-    refFuncAnalyze(AhkTokenList, fsPath, fullFuncMap);
-    out.appendLine('"---------------- showAnalyze End ---------------------------"');
-    out.show();
+
+    const ed: string[] = [
+        `Analyze_of_${DA.funcRawName}() {`,
+        '/**',
+        '* Base Data',
+        `* @param : ${DA.paramMap.size} of [${showElement(DA.paramMap)}]`,
+        `* @value : ${DA.valMap.size} of [${showElement(DA.valMap)}]`,
+        `* @unknownText : ${DA.textMap.size} of [${showElement(DA.textMap)}]`,
+        '*/',
+        '',
+        ...commandAnalyze(AhkTokenList, fullFuncMap),
+        ...refFuncAnalyze(AhkTokenList, fullFuncMap),
+        '}',
+        ';; Analyze End',
+    ];
+
+    const myDoc: vscode.TextDocument = await vscode.workspace.openTextDocument({
+        language: 'ahk',
+        content: ed.join('\n'),
+    });
+    await vscode.window.showTextDocument(myDoc);
 }
-// [c](file:\\c:\DEV\dev_main_P7\Lib\Gdip_All_2020.ahk#330,1)

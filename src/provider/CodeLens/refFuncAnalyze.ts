@@ -1,10 +1,8 @@
-import * as vscode from 'vscode';
-import { msgWithPos } from '../../command/ListAllFunc';
-import { TFsPath, TTokenStream } from '../../globalEnum';
+import * as path from 'path';
+import { TTokenStream } from '../../globalEnum';
 import { BuiltInFunctionMap, TBuiltInFuncElement } from '../../tools/Built-in/func';
 import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { TFullFuncMap } from '../../tools/Func/getAllFunc';
-import { OutputChannel as out } from '../vscWindows/OutputChannel';
 
 type TMsg = {
     line: number;
@@ -36,46 +34,53 @@ function getRefFuncMap(AhkTokenList: TTokenStream): TRefFuncInfoMap {
     return refFuncMap;
 }
 
-function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): void {
+function splitLine(keyUp: string, fullFuncMap: TFullFuncMap, ed: string[]): void {
     const DA: TDAMeta | undefined = fullFuncMap.get(keyUp);
     if (DA !== undefined) {
-        out.appendLine(msgWithPos(`${DA.funcRawName}(...)`, DA.uri.fsPath, DA.range.start));
+        const fileName: string = path.basename(DA.uri.fsPath);
+        ed.push(`${DA.funcRawName}(...) ; ${fileName}`);
         return;
     }
     const BuiltInFunc: TBuiltInFuncElement | undefined = BuiltInFunctionMap.get(keyUp);
     if (BuiltInFunc !== undefined) {
-        out.appendLine(`${BuiltInFunc.keyRawName}(...) of "Built-in Functions" ; ${BuiltInFunc.link}`);
+        ed.push(
+            `${BuiltInFunc.keyRawName}(...) ; "Built-in Functions"`,
+        );
+
         return;
     }
     // else
-    out.appendLine(`${keyUp}(...) of unknown function`);
+    ed.push(`${keyUp}(...) ; >>>>>>>>>>>>>> unknown function <<<<<<<<<<<<<<<<<<<`);
 }
 
-function printRefFunc(fsPath: string, MsgList: TMsg[]): void {
+function printRefFunc(MsgList: TMsg[], ed: string[]): void {
     for (const Msg of MsgList) {
-        const startPos: vscode.Position = new vscode.Position(Msg.line, 0);
-        out.appendLine(msgWithPos(`    ${Msg.textRaw.trim()}`, fsPath, startPos));
+        ed.push(`    ${Msg.textRaw.trim()} ;`);
     }
 }
 
-export function refFuncAnalyze(AhkTokenList: TTokenStream, fsPath: TFsPath, fullFuncMap: TFullFuncMap): void {
+export function refFuncAnalyze(AhkTokenList: TTokenStream, fullFuncMap: TFullFuncMap): string[] {
     const refFuncMap: TRefFuncInfoMap = getRefFuncMap(AhkTokenList);
 
-    if (refFuncMap.size === 0) return;
+    if (refFuncMap.size === 0) return [];
 
     const arrayObj: [string, TMsg[]][] = Array.from(refFuncMap);
     // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
     arrayObj.sort();
 
-    out.appendLine('"--- ref Function Analyze Start ---"');
-    out.appendLine('');
+    const ed: string[] = [
+        '/**',
+        '* @Analyze of ref Function',
+        '* read more of [Built-in Functions](https://www.autohotkey.com/docs/Functions.htm#BuiltIn)',
+        '* ',
+        '*/',
+    ];
+
     for (const [keyUp, MsgList] of arrayObj) {
-        splitLine(keyUp, fullFuncMap);
-        printRefFunc(fsPath, MsgList);
-        out.appendLine('');
+        splitLine(keyUp, fullFuncMap, ed);
+        printRefFunc(MsgList, ed);
+        ed.push('');
     }
 
-    out.appendLine('; Built-in Functions');
-    out.appendLine('; https://www.autohotkey.com/docs/Functions.htm#BuiltIn');
-    out.appendLine('"--- ref Function Analyze End ---"');
+    return ed;
 }

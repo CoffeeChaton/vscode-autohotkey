@@ -13,7 +13,7 @@ import { BaseScanMemo } from './core/BaseScanMemo/memo';
 import { Detecter, diagColl } from './core/Detecter';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { AhkCodeLens, ECommand } from './provider/CodeLens/CodeLensProvider';
-import { showFuncAnalyze, TShowAnalyze } from './provider/CodeLens/showFuncAnalyze';
+import { showFuncAnalyze } from './provider/CodeLens/showFuncAnalyze';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
 import { DefProvider } from './provider/Def/DefProvider';
@@ -33,24 +33,23 @@ import { WorkspaceSymbolProvider } from './provider/WorkspaceSymbolProvider/Work
 
 // main
 export function activate(context: ExtensionContext): void {
-    // TODO class \w+ implements
     const selector: DocumentSelector = { language: 'ahk' };
     context.subscriptions.push(
         // languages-------------------
         languages.registerCodeActionsProvider(selector, CodeActionProvider),
+        languages.registerCodeLensProvider(selector, AhkCodeLens),
         languages.registerCompletionItemProvider(selector, CompletionItemProvider, 'A_', '', '.', '{'),
         languages.registerDefinitionProvider(selector, DefProvider),
         languages.registerDocumentFormattingEditProvider(selector, FormatProvider),
         languages.registerDocumentRangeFormattingEditProvider(selector, RangeFormatProvider),
         languages.registerDocumentSemanticTokensProvider(selector, AhkFullSemanticHighlight, legend),
         languages.registerDocumentSymbolProvider(selector, SymBolProvider),
+        languages.registerFoldingRangeProvider(selector, FoldingRangeProvider),
         languages.registerHoverProvider(selector, HoverProvider),
         languages.registerOnTypeFormattingEditProvider(selector, OnTypeFormattingEditProvider, '\n'),
         languages.registerReferenceProvider(selector, ReferenceProvider),
         languages.registerRenameProvider(selector, RenameProvider),
         languages.registerWorkspaceSymbolProvider(WorkspaceSymbolProvider),
-        languages.registerCodeLensProvider(selector, AhkCodeLens),
-        languages.registerFoldingRangeProvider(selector, FoldingRangeProvider),
         // workspace-------------------
         workspace.onDidChangeConfiguration((): void => configChangEvent()),
         workspace.onDidCloseTextDocument(ahkOnDidCloseTextDoc),
@@ -62,7 +61,7 @@ export function activate(context: ExtensionContext): void {
         // commands--------------------
         commands.registerCommand('ahk.bar.click', (): void => void statusBarClick()),
         commands.registerCommand('ahk.nekoHelp.openDoc', (): void => openDocs()),
-        commands.registerCommand(ECommand.ShowFuncAnalyze, (...args: TShowAnalyze): void => showFuncAnalyze(args)),
+        commands.registerCommand(ECommand.ShowFuncAnalyze, showFuncAnalyze),
         // debug
         debug.registerDebugAdapterDescriptorFactory('ahk', NekoDebugMain),
         // root dispose
