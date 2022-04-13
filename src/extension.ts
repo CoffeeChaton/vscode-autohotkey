@@ -19,7 +19,7 @@ import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
 import { DefProvider } from './provider/Def/DefProvider';
 import { ahkOnDidCloseTextDoc } from './provider/event/ahkOnDidCloseTextDoc';
 import { ahkRenameFiles } from './provider/event/ahkRenameFiles';
-import { FoldingRangeProvider } from './provider/FoldingRange/FoldingRangeProvider';
+// import { FoldingRangeProvider } from './provider/FoldingRange/FoldingRangeProvider';
 import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
@@ -44,7 +44,7 @@ export function activate(context: ExtensionContext): void {
         languages.registerDocumentRangeFormattingEditProvider(selector, RangeFormatProvider),
         languages.registerDocumentSemanticTokensProvider(selector, AhkFullSemanticHighlight, legend),
         languages.registerDocumentSymbolProvider(selector, SymBolProvider),
-        languages.registerFoldingRangeProvider(selector, FoldingRangeProvider),
+        // languages.registerFoldingRangeProvider(selector, FoldingRangeProvider), // FIXME FoldingRangeProvider
         languages.registerHoverProvider(selector, HoverProvider),
         languages.registerOnTypeFormattingEditProvider(selector, OnTypeFormattingEditProvider, '\n'),
         languages.registerReferenceProvider(selector, ReferenceProvider),

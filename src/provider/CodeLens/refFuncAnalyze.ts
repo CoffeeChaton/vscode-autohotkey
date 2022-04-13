@@ -55,7 +55,7 @@ function splitLine(keyUp: string, fullFuncMap: TFullFuncMap, ed: string[]): void
 
 function printRefFunc(MsgList: TMsg[], ed: string[]): void {
     for (const Msg of MsgList) {
-        ed.push(`    ${Msg.textRaw.trim()} ;`);
+        ed.push(`; ln ${Msg.line + 1} ;    ${Msg.textRaw.trim()}`);
     }
 }
 
@@ -66,14 +66,15 @@ export function refFuncAnalyze(AhkTokenList: TTokenStream, fullFuncMap: TFullFun
 
     const arrayObj: [string, TMsg[]][] = Array.from(refFuncMap);
     // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
-    arrayObj.sort();
+    arrayObj.sort(); // TODO sort by Built-in `1st`, useDef `2nd`, && sort by filename sort by funcName
 
     const ed: string[] = [
         '/**',
-        '* @Analyze of ref Function',
+        '* @Analyze Function',
         '* read more of [Built-in Functions](https://www.autohotkey.com/docs/Functions.htm#BuiltIn)',
         '* ',
         '*/',
+        'loop, 0 {',
     ];
 
     for (const [keyUp, MsgList] of arrayObj) {
@@ -82,5 +83,8 @@ export function refFuncAnalyze(AhkTokenList: TTokenStream, fullFuncMap: TFullFun
         ed.push('');
     }
 
+    ed.pop();
+    ed.push('}');
+    ed.push('');
     return ed;
 }

@@ -63,7 +63,7 @@ function getCommandMap(AhkTokenList: TTokenStream): TCommandInfoMap {
 
 function printCommandList(MsgList: TMsg[], ed: string[]): void {
     for (const Msg of MsgList) {
-        ed.push(`    ${Msg.textRaw.trim()} ; line ${Msg.line}`);
+        ed.push(`; ln ${Msg.line + 1} ;    ${Msg.textRaw.trim()}`);
     }
 }
 
@@ -83,13 +83,14 @@ export function commandAnalyze(AhkTokenList: TTokenStream, fullFuncMap: TFullFun
 
     const ed: string[] = [
         '/**',
-        '* @Analyze of command',
+        '* @Analyze Command',
         '* ',
         '* Commands vs Functions -> https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
         '* if you what to user function replace command, you can use Functions.ahk',
         '* Functions.ahk -> https://www.autohotkey.com/docs/Functions.htm#Other_Functions',
         '* ',
         '*/',
+        'loop, 0 {',
     ];
 
     for (const [keyUp, MsgList] of commandMap) {
@@ -98,5 +99,8 @@ export function commandAnalyze(AhkTokenList: TTokenStream, fullFuncMap: TFullFun
         ed.push('');
     }
 
+    ed.pop();
+    ed.push('}');
+    ed.push('');
     return ed;
 }
