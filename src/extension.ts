@@ -19,7 +19,6 @@ import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
 import { DefProvider } from './provider/Def/DefProvider';
 import { ahkOnDidCloseTextDoc } from './provider/event/ahkOnDidCloseTextDoc';
 import { ahkRenameFiles } from './provider/event/ahkRenameFiles';
-// import { FoldingRangeProvider } from './provider/FoldingRange/FoldingRangeProvider';
 import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
@@ -44,7 +43,6 @@ export function activate(context: ExtensionContext): void {
         languages.registerDocumentRangeFormattingEditProvider(selector, RangeFormatProvider),
         languages.registerDocumentSemanticTokensProvider(selector, AhkFullSemanticHighlight, legend),
         languages.registerDocumentSymbolProvider(selector, SymBolProvider),
-        // languages.registerFoldingRangeProvider(selector, FoldingRangeProvider), // FIXME FoldingRangeProvider
         languages.registerHoverProvider(selector, HoverProvider),
         languages.registerOnTypeFormattingEditProvider(selector, OnTypeFormattingEditProvider, '\n'),
         languages.registerReferenceProvider(selector, ReferenceProvider),
@@ -59,8 +57,8 @@ export function activate(context: ExtensionContext): void {
         // workspace.onDidChangeTextDocument((e) => d(e)),
         // workspace.registerTextDocumentContentProvider(selector, e),
         // commands--------------------
-        commands.registerCommand('ahk.bar.click', (): void => void statusBarClick()),
-        commands.registerCommand('ahk.nekoHelp.openDoc', (): void => openDocs()),
+        commands.registerCommand('ahk.bar.click', statusBarClick),
+        commands.registerCommand('ahk.nekoHelp.openDoc', openDocs),
         commands.registerCommand(ECommand.ShowFuncAnalyze, showFuncAnalyze),
         // debug
         debug.registerDebugAdapterDescriptorFactory('ahk', NekoDebugMain),

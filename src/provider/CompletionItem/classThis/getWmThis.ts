@@ -18,10 +18,10 @@ function getWmThisCore(
     const { DocStrMap } = AhkFileData;
     const AhkTokenList: TTokenStream = getDocStrMapMask(AhkSymbol.range, DocStrMap);
 
-    const mapStrNumber = new Map<string, number>(); // : Map<string, number>
+    const mapStrNumber: Map<string, number> = new Map();
 
     for (const { lStr, line } of AhkTokenList) {
-        for (const ma of lStr.matchAll(/\bthis\.(\w+)\b/gui)) {
+        for (const ma of lStr.matchAll(/\bthis\.(\w+)\b(?!\()/gui)) {
             if (!mapStrNumber.has(ma[1])) {
                 mapStrNumber.set(ma[1], line);
             }
@@ -41,7 +41,7 @@ function getWmThisCore(
 }
 
 // eslint-disable-next-line no-magic-numbers
-const wm: ClassWm<TAhkSymbol, vscode.CompletionItem[]> = new ClassWm(10 * 60 * 1000, 'getThisItemOfWm', 700);
+const wm: ClassWm<TAhkSymbol, vscode.CompletionItem[]> = new ClassWm(20 * 60 * 1000, 'getThisItemOfWm', 0);
 
 export function getWmThis(c0: TSymAndFsPath): vscode.CompletionItem[] {
     const { AhkSymbol, fsPath } = c0;

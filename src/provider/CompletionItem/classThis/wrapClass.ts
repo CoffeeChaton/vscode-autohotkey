@@ -12,7 +12,6 @@ import {
 } from '../../../globalEnum';
 import { getScopeOfPos, getStack } from '../../../tools/getScopeOfPos';
 import { getObjChapterArr } from '../../../tools/Obj/getObjChapterArr';
-import { Pretreatment } from '../../../tools/Pretreatment';
 import { ahkValDefRegex } from '../../../tools/regexTools';
 import { kindCheck } from '../../Def/kindCheck';
 import { ahkBaseUp, TAhkBaseObj } from '../ahkObj/ahkBase';
@@ -55,13 +54,13 @@ async function wrapItem(
     AhkSymbol: TAhkSymbol,
     track: string[],
 ): Promise<vscode.CompletionItem> {
-    const item = new vscode.CompletionItem(AhkSymbol.name.trim(), getKindOfCh(AhkSymbol));
+    const item: vscode.CompletionItem = new vscode.CompletionItem(AhkSymbol.name.trim(), getKindOfCh(AhkSymbol));
     if (AhkSymbol.kind === vscode.SymbolKind.Method) {
-        const methodName = await insertTextWm(fsPath, AhkSymbol);
+        const methodName = await insertTextWm(fsPath, AhkSymbol); // FIXME: await
         item.label = methodName.value;
         item.insertText = methodName;
     }
-    item.detail = 'neko help';
+    item.detail = 'neko help; (wrapClass)';
     const md = new vscode.MarkdownString('', true);
     if (AhkSymbol.detail.trim()) {
         md.appendMarkdown('\n\ndetail: ')
@@ -142,37 +141,27 @@ function valTrack(
     ChapterArr: readonly string[],
     ahkBaseObj: TAhkBaseObj,
 ): string[] {
-    const Head = ChapterArr[0];
+    const Head: string = ChapterArr[0];
     const stackRangeRaw = getScopeOfPos(document, position)
         || new vscode.Range(0, 0, position.line, position.character);
-    const stackRange = new vscode.Range(
-        stackRangeRaw.start.line,
-        stackRangeRaw.start.character,
-        position.line,
-        position.character,
-    );
 
-    const reg = ahkValDefRegex(Head);
-    const startLineBaseZero = stackRange.start.line;
-    const DocStrMap: TTokenStream = Pretreatment(
-        document.getText(stackRange).split('\n'),
-        startLineBaseZero,
-        document.fileName,
-    );
-    // const lineStart = stackRange.start.line + 0;
-    const linePosMax = DocStrMap.length;
-    const classNameList = new Set<string>(); // value name
-    for (let linePos = 0; linePos < linePosMax; linePos++) {
-        // const line = lineStart + linePos;
-        const { lStr } = DocStrMap[linePos];
-        const col = lStr.search(reg);
+    const AhkTokenList: TTokenStream = Detecter.updateDocDef(document)
+        .DocStrMap.slice(
+            stackRangeRaw.start.line,
+            position.line + 1,
+        );
+    const reg: RegExp = ahkValDefRegex(Head);
+
+    const classNameList: string[] = []; // value name
+    for (const { lStr } of AhkTokenList) {
+        const col: number = lStr.search(reg);
         if (col === -1) continue;
-        const strPart = lStr.substring(col + Head.length, lStr.length).replace(/^\s*:=\s*/u, '');
+        const strPart: string = lStr.substring(col + Head.length, lStr.length).replace(/^\s*:=\s*/u, '');
         const name0: string | null = matchClassName({ ChapterArr, strPart, ahkBaseObj });
-        if (name0 !== null) classNameList.add(name0);
+        if (name0 !== null) classNameList.push(name0);
     }
 
-    return [...classNameList];
+    return classNameList;
 }
 
 async function triggerClassCore(
@@ -188,11 +177,11 @@ async function triggerClassCore(
     };
     const { fsPath } = document.uri;
     const itemS: vscode.CompletionItem[] = [];
-    const nameList = valTrack(document, position, ChapterArr, ahkBaseObj);
+    const nameList: string[] = valTrack(document, position, ChapterArr, ahkBaseObj);
     for (const name of nameList) {
         const c0: TSymAndFsPath | null = getUserDefClassSymbol(name.toUpperCase());
         if (c0 !== null) {
-            const ahkThis = ChapterArr.length === 1
+            const ahkThis: vscode.CompletionItem[] = ChapterArr.length === 1
                 ? getWmThis(c0)
                 : [];
             itemS.push(...ahkThis, ...await parsingUserDefClassRecursive(c0, [fsPath], ChapterArr, 1));

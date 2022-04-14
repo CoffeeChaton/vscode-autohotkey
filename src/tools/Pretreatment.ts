@@ -6,7 +6,6 @@ import { inCommentBlock } from './str/inCommentBlock';
 import { inLTrimRange } from './str/inLTrimRange';
 import { getLStr, isSetVarTradition } from './str/removeSpecialChar';
 
-// self time 520ms~570ms
 export function Pretreatment(strArray: readonly string[], startLineBaseZero: number, fileName: string): TTokenStream {
     const result: TAhkToken = [];
     let CommentBlock = false;
