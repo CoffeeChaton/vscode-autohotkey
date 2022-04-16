@@ -25,7 +25,7 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
         const uri: vscode.Uri = vscode.Uri.file(fsPath);
         for (const { textRaw, line, lStr } of AhkFileData.DocStrMap) {
             if (lStr.trim().length === 0) continue;
-            const text2: string = textRaw.substring(0, lStr.length);
+            const text2: string = textRaw.substring(0, lStr.length); // if toUpperCase can let 5~7ms -> 3~4ms...but i don't like it
             const col: number | undefined = refFn(text2);
             if (col !== undefined) {
                 const Location: vscode.Location = new vscode.Location(

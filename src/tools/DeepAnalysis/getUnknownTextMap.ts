@@ -144,7 +144,12 @@ export function getUnknownTextMap(
 
             const GValMapOldVal: TGlobalVal | undefined = GValMap.get(wordUp);
             if (GValMapOldVal) {
-                GValMapOldVal.refRangeList.push(range);
+                if (
+                    !GValMapOldVal.defRangeList.some((r: vscode.Range): boolean => r.contains(range))
+                    && !GValMapOldVal.refRangeList.some((r: vscode.Range): boolean => r.contains(range))
+                ) {
+                    GValMapOldVal.refRangeList.push(range);
+                }
                 continue;
             } // keep before valMap && paramMap
 

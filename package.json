@@ -243,7 +243,8 @@
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "test": "jest",
-        "test_vsc": "pnpm run compile && node ./node_modules/vscode/bin/test"
+        "test_vsc": "pnpm run compile && node ./node_modules/vscode/bin/test",
+        "up": "pnpm up -L"
     },
     "devDependencies": {
         "@jest/globals": "^27.5.1",
@@ -255,7 +256,7 @@
         "@types/node": "^17.0.24",
         "@types/temp": "^0.9.1",
         "@types/vscode": "^1.66.0",
-        "@types/xml2js": "^0.4.10",
+        "@types/xml2js": "^0.4.11",
         "@typescript-eslint/eslint-plugin": "^5.19.0",
         "@typescript-eslint/parser": "^5.19.0",
         "@typescript/analyze-trace": "^0.9.0",

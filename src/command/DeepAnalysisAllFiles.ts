@@ -52,8 +52,8 @@ my project:
 Deep Analysis All Files
 Deep Analysis : 859 Symbol <--keep 859!
 paramMapSize is 2320 <--keep 2320!
-valMapSize is 2164
+valMapSize is 261
 textMapSize is 477 <- next plan: ignore keyWord.
-All Size is 4961
-Done in 8 ms
+All Size is 4958
+Done in 5 ms
 */
