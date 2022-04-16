@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { globalVal2Msg, TGlobalVal } from '../../core/ParserTools/ahkGlobalDef';
+import { globalVal2Msg, TGlobalValReadonly } from '../../core/ParserTools/ahkGlobalDef';
 
 export function getGlobalMarkdown(wordUp: string): vscode.MarkdownString | null {
     const msgList: string[] = [];
     const fsPathList: string[] = Detecter.getDocMapFile();
     for (const fsPath of fsPathList) {
-        const GlobalVal: TGlobalVal | undefined = Detecter
+        const GlobalVal: TGlobalValReadonly | undefined = Detecter
             .getDocMap(fsPath)
             ?.GValMap
             ?.get(wordUp);

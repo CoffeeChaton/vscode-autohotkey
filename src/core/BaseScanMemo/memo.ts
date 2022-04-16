@@ -11,12 +11,12 @@ import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { Pretreatment } from '../../tools/Pretreatment';
 import { getChildren } from '../getChildren';
 import { ParserBlock } from '../Parser';
-import { ahkGlobalMain, TGValMap } from '../ParserTools/ahkGlobalDef';
+import { ahkGlobalMain, TGValMap, TGValMapReadOnly } from '../ParserTools/ahkGlobalDef';
 import { ParserLine } from '../ParserTools/ParserLine';
 
 export type TMemo = {
     AhkSymbolList: TAhkSymbolList;
-    GValMap: TGValMap;
+    GValMap: TGValMapReadOnly;
     DocStrMap: TTokenStream;
     DocFullSize: number;
     baseDiag: vscode.Diagnostic[];
@@ -105,7 +105,7 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
     const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
     const DAList: TDAMeta[] = DeepAnalysis(document, AhkSymbolList, DocStrMap, GValMap, []);
     const AhkCache: TMemo = {
-        GValMap,
+        GValMap, // TGValMapReadOnly
         DocStrMap,
         AhkSymbolList,
         baseDiag,

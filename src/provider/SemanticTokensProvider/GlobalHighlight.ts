@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import { TGValMap } from '../../core/ParserTools/ahkGlobalDef';
+import { TGValMapReadOnly } from '../../core/ParserTools/ahkGlobalDef';
 import { pushToken, TSemanticTokensLeaf } from './tools';
 
-function GlobalHighlightN3(GlobalValMap: TGValMap): TSemanticTokensLeaf[] {
+function GlobalHighlightN3(GlobalValMap: TGValMapReadOnly): TSemanticTokensLeaf[] {
     const need: TSemanticTokensLeaf[] = [];
 
     for (const GlobalVal of GlobalValMap.values()) {
@@ -28,6 +28,6 @@ function GlobalHighlightN3(GlobalValMap: TGValMap): TSemanticTokensLeaf[] {
     return need;
 }
 
-export function GlobalHighlight(GlobalValMap: TGValMap, Collector: vscode.SemanticTokensBuilder): void {
+export function GlobalHighlight(GlobalValMap: TGValMapReadOnly, Collector: vscode.SemanticTokensBuilder): void {
     pushToken(GlobalHighlightN3(GlobalValMap), Collector);
 }

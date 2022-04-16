@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import {
+    DeepReadonly,
     TTokenStream,
 } from '../../globalEnum';
 import { replacerSpace } from '../../tools/str/removeSpecialChar';
@@ -22,6 +23,9 @@ export type TGlobalVal = {
 export type TValUpName = string;
 type TGValMapPrivacy = Map<TValUpName, TGlobalVal>;
 export type TGValMap = ReadonlyMap<TValUpName, TGlobalVal>;
+
+export type TGlobalValReadonly = DeepReadonly<TGlobalVal>;
+export type TGValMapReadOnly = ReadonlyMap<TValUpName, TGlobalValReadonly>;
 
 function getGRange(strF: string, rawName: string, ma: RegExpMatchArray, line: number): vscode.Range {
     const ch: number = strF.indexOf(rawName, ma.index);
@@ -100,7 +104,7 @@ function range2Str(range: vscode.Range): string {
     return `    ln ${line}, ch ${character}`; // -> md to ahk-lang
 }
 
-export function globalVal2Msg(fsPath: string, GlobalVal: TGlobalVal): string {
+export function globalVal2Msg(fsPath: string, GlobalVal: TGlobalValReadonly): string {
     const fileName: string = path.basename(fsPath);
     const msg: string[] = [fileName];
     msg.push('- def');
