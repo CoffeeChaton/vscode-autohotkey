@@ -4,7 +4,6 @@ import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 // import { removeBigParentheses } from '../tools/removeBigParentheses';
 // import { removeParentheses } from '../tools/removeParentheses';
 import { TFuncInput } from '../getChildren';
-import { ahkGlobalMain } from './ahkGlobalDef';
 
 type TLineRuler = DeepReadonly<{
     detail: string;
@@ -107,13 +106,11 @@ export function ParserLine(FuncInput: TFuncInput): null | TAhkSymbol {
         DocStrMap,
         line,
         lStr,
-        GValMap,
     } = FuncInput;
     const strTrim: string = lStr.trim();
     if (strTrim === '') return null;
 
-    if (fistWordUp) {
-        ahkGlobalMain(GValMap, fistWordUp, lStr, line);
+    if (fistWordUp.length > 0) {
         return null;
     }
 

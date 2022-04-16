@@ -1,10 +1,10 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import {
     EMode,
     TAhkSymbol,
     TAhkSymbolList,
-    TGValMap,
     TTokenStream,
 } from '../../globalEnum';
 import { kindPick } from '../Func/kindPick';
@@ -33,7 +33,7 @@ function getDACore(
     const AhkTokenList: TTokenStream = getDocStrMapMask(AhkSymbol.range, DocStrMap);
 
     const paramMap: TParamMap = getParamDef(AhkSymbol, AhkTokenList);
-    const valMap: TValMap = getFnVarDef(AhkSymbol, AhkTokenList, paramMap);
+    const valMap: TValMap = getFnVarDef(AhkSymbol, AhkTokenList, paramMap, GValMap);
     const textMap: TTextMap = getUnknownTextMap(AhkSymbol, AhkTokenList, paramMap, valMap, GValMap); // eval!!
     const funcRawName: string = AhkSymbol.name;
 

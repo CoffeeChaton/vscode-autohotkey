@@ -3,10 +3,7 @@ import * as vscode from 'vscode';
 import {
     TAhkSymbolList,
     TFsPath,
-    TGlobalVal,
-    TGValMap,
     TTokenStream,
-    TValUpName,
 } from '../../globalEnum';
 import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
 import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
@@ -14,6 +11,7 @@ import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { Pretreatment } from '../../tools/Pretreatment';
 import { getChildren } from '../getChildren';
 import { ParserBlock } from '../Parser';
+import { ahkGlobalMain, TGValMap } from '../ParserTools/ahkGlobalDef';
 import { ParserLine } from '../ParserTools/ParserLine';
 
 export type TMemo = {
@@ -89,8 +87,7 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
     if (oldCache !== undefined) return oldCache;
 
     const DocStrMap: TTokenStream = Pretreatment(fullTextList, 0, document.fileName);
-    const GValMap: TGValMap = new Map<TValUpName, TGlobalVal>();
-    //  ahkGlobalMain(GValMap, fistWordUp, lStr, line);
+    const GValMap: TGValMap = ahkGlobalMain(DocStrMap);
     const AhkSymbolList: TAhkSymbolList = getChildren({
         DocStrMap,
         RangeStartLine: 0,
@@ -103,7 +100,6 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
             ParserBlock.getSwitchBlock,
             ParserLine,
         ],
-        GValMap,
     });
 
     const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);

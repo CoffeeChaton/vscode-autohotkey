@@ -71,7 +71,7 @@ export const Detecter = {
 
         const { uri } = document;
         const { fsPath } = document.uri;
-        if (fsPath.endsWith('.ahk') && fsPath.indexOf(EStr.diff_name_prefix) === -1) {
+        if (!fsPath.startsWith('\\') && fsPath.endsWith('.ahk') && fsPath.indexOf(EStr.diff_name_prefix) === -1) {
             Detecter.DocMap.set(fsPath, UpDateDocDefReturn);
             diagColl.set(uri, [...UpDateDocDefReturn.baseDiag]);
         }

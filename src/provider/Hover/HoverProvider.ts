@@ -5,6 +5,7 @@ import { getDAWithName } from '../../tools/DeepAnalysis/getDAWithName';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { isPosAtStr } from '../../tools/isPosAtStr';
+import { getGlobalMarkdown } from '../../tools/MD/getGlobalMarkdown';
 import { DeepAnalysisHover } from './DeepAnalysisHover';
 
 function HoverFunc(wordUp: string, textRaw: string): null | vscode.Hover {
@@ -48,6 +49,9 @@ function HoverProviderCore(
 
     const haveFunc: vscode.Hover | null = HoverFunc(wordUp, textRaw);
     if (haveFunc !== null) return haveFunc;
+
+    const global: vscode.MarkdownString | null = getGlobalMarkdown(wordUp);
+    if (global !== null) return new vscode.Hover(global);
 
     return null;
 }

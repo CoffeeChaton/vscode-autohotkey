@@ -1,3 +1,4 @@
+import { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
 import { TAhkSymbol, TTokenStream } from '../../../globalEnum';
 import { TParamMap, TValMap, TValMeta } from '../TypeFnMeta';
 import { forLoop } from './def/forLoop';
@@ -9,6 +10,7 @@ export function getFnVarDef(
     AhkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
     paramMap: TParamMap,
+    GValMap: TGValMap,
 ): TValMap {
     const valMap: TValMap = new Map<string, TValMeta>();
 
@@ -25,6 +27,7 @@ export function getFnVarDef(
             valMap,
             line,
             paramMap,
+            GValMap,
         };
         walrusOperator(need); // :=
         varSetCapacityFunc(need); // VarSetCapacity(varName) or NumGet(varName) or NumGet(&varName)

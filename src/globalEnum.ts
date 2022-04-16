@@ -61,16 +61,6 @@ export type TSymAndFsPath = {
     fsPath: TFsPath;
 };
 
-export type TGlobalVal = {
-    defRangeList: vscode.Range[];
-    refRangeList: vscode.Range[];
-    rawName: string; // -> GVar
-    // c502 list ?
-};
-
-export type TValUpName = string;
-export type TGValMap = Map<TValUpName, TGlobalVal>;
-
 export const enum EVersion {
     getValDefInFunc = '0.4beta',
     format = 'v0.5',

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TGValMap } from '../../globalEnum';
+import { TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import { pushToken, TSemanticTokensLeaf } from './tools';
 
 function GlobalHighlightN3(GlobalValMap: TGValMap): TSemanticTokensLeaf[] {

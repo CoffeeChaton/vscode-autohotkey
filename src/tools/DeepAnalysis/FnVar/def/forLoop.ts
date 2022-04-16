@@ -28,7 +28,12 @@ function setV1(
     v0: string,
     v1: string,
 ): void {
-    if (arg.paramMap.has(v1.toUpperCase())) return;
+    const {
+        paramMap,
+        GValMap,
+    } = arg;
+    const UpName: string = v1.toUpperCase();
+    if (paramMap.has(UpName) || GValMap.has(UpName)) return;
 
     const character: number = ch + v0.indexOf(v1, 3);
     wrap(arg, character, v1);
@@ -40,7 +45,12 @@ function setV2(
     v0: string,
     v2: string,
 ): void {
-    if (arg.paramMap.has(v2.toUpperCase())) return;
+    const {
+        paramMap,
+        GValMap,
+    } = arg;
+    const UpName: string = v2.toUpperCase();
+    if (paramMap.has(UpName) || GValMap.has(UpName)) return;
 
     const character: number = ch + v0.lastIndexOf(v2);
     wrap(arg, character, v2);

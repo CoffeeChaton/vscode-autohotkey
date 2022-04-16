@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
+import { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import {
     TAhkSymbol,
-    TGlobalVal,
-    TGValMap,
     TTokenStream,
 } from '../../globalEnum';
 import { newC502 } from './FnVar/def/diag/c502';
