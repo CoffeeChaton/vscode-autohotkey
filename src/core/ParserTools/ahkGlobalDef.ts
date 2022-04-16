@@ -107,10 +107,11 @@ export function globalVal2Msg(fsPath: string, GlobalVal: TGlobalVal): string {
     for (const range of GlobalVal.defRangeList) {
         msg.push(range2Str(range));
     }
-    msg.push('- ref');
-    for (const range of GlobalVal.refRangeList) {
-        msg.push(range2Str(range));
-    }
+    // don't show ref, because sometimes ref is not defined at this file...
+    // msg.push('- ref');
+    // for (const range of GlobalVal.refRangeList) {
+    //     msg.push(range2Str(range));
+    // }
     return msg.join('\n\n');
 }
 // just ref; global GLOBAL_VAL

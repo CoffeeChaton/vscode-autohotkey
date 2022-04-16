@@ -23,21 +23,23 @@ function metaRangeList(
     }
 
     if (defRangeList[0].contains(position)) {
-        // <
-        // when I open "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
-        // why vscode can't Identify range.contains(position)
-        //      , and auto let F12 -> shift F12 ?
-        //           (auto let goto Def -> Ref)
-        // What else I need to read/Do?
-        // return [...defRangeList, ...refRangeList];
-        // >
+        // // <
+        // // when I open "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
+        // // why vscode can't Identify range.contains(position)
+        // //      , and auto let F12 -> shift F12 ?
+        // //           (auto let goto Def -> Ref)
+        // // What else I need to read/Do?
+        // // return [...defRangeList, ...refRangeList];
+        // // >
         // OK..i know who to go to References...
+        // keep uri as old uri && return old pos/range
+        // don't new vscode.Uri.file()
         return [new vscode.Location(uri, position)];
     }
     return rangeList2LocList(defRangeList, uri);
 }
 
-export function getValDefInFunc(
+export function getValWithDA(
     document: vscode.TextDocument,
     position: vscode.Position,
     wordUp: string,

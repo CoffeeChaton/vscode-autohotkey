@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { DeepReadonly, EMode, TSymAndFsPath } from '../../globalEnum';
 import { tryGetSymbol } from '../../tools/tryGetSymbol';
-import { getValDefInFunc } from './getValDefInFunc';
+import { getValWithDA } from './getValDefInFunc';
 
 type TFnFindCol = (lineStr: string) => undefined | number;
 type TDefObj = Readonly<{
@@ -23,8 +23,10 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
 
         if (AhkFileData === undefined) continue;
         const uri: vscode.Uri = vscode.Uri.file(fsPath);
-        for (const { textRaw, line } of AhkFileData.DocStrMap) {
-            const col: number | undefined = refFn(textRaw);
+        for (const { textRaw, line, lStr } of AhkFileData.DocStrMap) {
+            if (lStr.trim().length === 0) continue;
+            const text2: string = textRaw.substring(0, lStr.length);
+            const col: number | undefined = refFn(text2);
             if (col !== undefined) {
                 const Location: vscode.Location = new vscode.Location(
                     uri,
@@ -34,7 +36,7 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
             }
         }
     }
-    console.log(`🚀 list all using of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 20ms
+    console.log(`🚀 list all using of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 5~7ms (if not gc)
     return List;
 }
 
@@ -62,10 +64,13 @@ function ahkDef(
         (fsPath === document.uri.fsPath
             && AhkSymbol.selectionRange.start.line === position.line)
     ) {
+        // OK..i know who to go to References...
+        // keep uri as old uri && return old pos/range
+        // don't new vscode.Uri.file()
         return [new vscode.Location(document.uri, AhkSymbol.selectionRange)]; // let auto use getReference
     }
 
-    console.log(`🚀 goto def of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 1~3ms
+    console.log(`🚀 goto def of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 0~1ms
     return [new vscode.Location(vscode.Uri.file(fsPath), AhkSymbol.selectionRange)];
 }
 
@@ -81,17 +86,15 @@ export function userDefTopSymbol(
         Mode: EMode;
     };
 
-    const func: TRule = {
-        refFn: (lineStr: string): number | undefined => {
-            // funcName( | "funcName"
-            // eslint-disable-next-line security/detect-non-literal-regexp
-            const reg = new RegExp(`(?:(?<![.\`%])\\b(${wordUp})\\b\\()|(?:"(${wordUp})")`, 'iu');
-            return lineStr.match(reg)?.index;
-        },
+    const ahkFunc = {
+        // funcName( | "funcName"
+        // eslint-disable-next-line security/detect-non-literal-regexp
+        reg: new RegExp(`(?:(?<![.\`%])\\b(${wordUp})\\b\\()|(?:"(${wordUp})")`, 'iu'),
+        refFn: (lineStr: string): number | undefined => lineStr.match(ahkFunc.reg)?.index,
         Mode: EMode.ahkFunc,
-    };
+    } as const;
 
-    const matchList: DeepReadonly<TRule[]> = [func];
+    const matchList: DeepReadonly<TRule[]> = [ahkFunc];
     for (const { Mode, refFn } of matchList) {
         const Location: vscode.Location[] | null = ahkDef({
             document,
@@ -125,7 +128,7 @@ function DefProviderCore(
     const userDefLink: vscode.Location[] | null = userDefTopSymbol(document, position, wordUp, listAllUsing);
     if (userDefLink !== null) return userDefLink;
 
-    const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
+    const valInFunc: vscode.Location[] | null = getValWithDA(document, position, wordUp, listAllUsing);
     if (valInFunc !== null) return valInFunc;
 
     return null;
