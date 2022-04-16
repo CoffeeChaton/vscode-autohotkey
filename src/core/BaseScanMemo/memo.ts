@@ -90,7 +90,7 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
 
     const DocStrMap: TTokenStream = Pretreatment(fullTextList, 0, document.fileName);
     const GValMap: TGValMap = new Map<TValUpName, TGlobalVal>();
-
+    //  ahkGlobalMain(GValMap, fistWordUp, lStr, line);
     const AhkSymbolList: TAhkSymbolList = getChildren({
         DocStrMap,
         RangeStartLine: 0,
@@ -107,7 +107,7 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
     });
 
     const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
-    const DAList: TDAMeta[] = DeepAnalysis(document, AhkSymbolList, DocStrMap, GValMap);
+    const DAList: TDAMeta[] = DeepAnalysis(document, AhkSymbolList, DocStrMap, GValMap, []);
     const AhkCache: TMemo = {
         GValMap,
         DocStrMap,

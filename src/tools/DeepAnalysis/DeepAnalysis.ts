@@ -25,6 +25,7 @@ function getDACore(
     AhkSymbol: TAhkSymbol,
     DocStrMap: TTokenStream,
     GValMap: TGValMap, // eval!!
+    defStack: string[],
 ): null | TDAMeta {
     const kind: vscode.SymbolKind.Method | vscode.SymbolKind.Function | null = kindPick(AhkSymbol.kind);
     if (kind === null) return null;
@@ -44,6 +45,7 @@ function getDACore(
     const md: vscode.MarkdownString = getFuncDocCore(kindStr, fileName, AhkTokenList, selectionRangeText); // TODO emmt
 
     const v: TDAMeta = {
+        defStack,
         kind,
         paramMap,
         valMap,
@@ -65,14 +67,17 @@ export function DeepAnalysis(
     AhkSymbolList: TAhkSymbolList,
     DocStrMap: TTokenStream,
     GValMap: TGValMap,
+    defStack: string[], // := []
 ): TDAMeta[] {
     const funcMetaList: TDAMeta[] = [];
     for (const AhkSymbol of AhkSymbolList) {
         if (AhkSymbol.kind === vscode.SymbolKind.Class) {
-            funcMetaList.push(...DeepAnalysis(document, AhkSymbol.children, DocStrMap, GValMap));
+            funcMetaList.push(
+                ...DeepAnalysis(document, AhkSymbol.children, DocStrMap, GValMap, [...defStack, AhkSymbol.name]),
+            );
             continue;
         }
-        const DA: TDAMeta | null = getDACore(document, AhkSymbol, DocStrMap, GValMap);
+        const DA: TDAMeta | null = getDACore(document, AhkSymbol, DocStrMap, GValMap, defStack);
         if (DA !== null) funcMetaList.push(DA);
     }
 

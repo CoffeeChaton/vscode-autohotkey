@@ -16,8 +16,8 @@ type TDaDiagCache = {
 };
 
 // eslint-disable-next-line no-magic-numbers
-const min10 = 10 * 60 * 1000;
-const wm: ClassWm<TDAMeta[], TDaDiagCache> = new ClassWm(min10, 'diagDAFileCore', 0);
+const min3 = 3 * 60 * 1000;
+const wm: ClassWm<TDAMeta[], TDaDiagCache> = new ClassWm(min3, 'diagDAFileCore', 0);
 
 function diagDAFileCore(DAList: TDAMeta[]): readonly vscode.Diagnostic[] {
     const code502Max = getCode502Default();

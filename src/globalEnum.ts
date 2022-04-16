@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
 
@@ -52,8 +53,6 @@ export type TAhkToken = {
     // I know this is not Complete and correct Token.
 }[];
 export type TTokenStream = DeepReadonly<TAhkToken>;
-export type TAhkSymbol = DeepReadonly<vscode.DocumentSymbol>;
-export type TAhkSymbolList = DeepReadonly<TAhkSymbol[]>;
 
 export type TFsPath = string; // vscode.uru.fsPath
 
@@ -156,3 +155,76 @@ export const enum ESnippetRecBecause {
 
 export type TKeyRawName = string;
 export type TSnippetRecMap = Map<TKeyRawName, ESnippetRecBecause>;
+
+type TUpName = string;
+/**
+ * if keyRawName = first def name -> 0
+ * ; else -> string
+ */
+export type TC502New = (0 | string);
+export type TParamMeta = {
+    keyRawName: string;
+    defRangeList: vscode.Range[]; // TODO diags "Duplicate parameter". or TODO no-param-reassign
+    refRangeList: vscode.Range[];
+    c502Array: TC502New[];
+
+    isByRef: boolean;
+    isVariadic: boolean; // https://www.autohotkey.com/docs/Functions.htm#Variadic
+};
+export type TParamMap = Map<TUpName, TParamMeta>; // k = valNameUP
+
+export type TValMeta = {
+    keyRawName: string;
+    defRangeList: vscode.Range[];
+    refRangeList: vscode.Range[];
+    c502Array: TC502New[];
+};
+export type TValMap = Map<TUpName, TValMeta>; // k = valNameUP
+
+export type TTextMeta = {
+    keyRawName: string;
+    refRangeList: vscode.Range[];
+};
+
+export type TTextMap = Map<TUpName, TTextMeta>; // k = valNameUP
+export class MyClassDoc extends vscode.DocumentSymbol {
+    public selectionRangeText: string;
+    public md: vscode.MarkdownString;
+    public uri: vscode.Uri;
+    public upName: string;
+    public paramMap: TParamMap;
+    public valMap: TValMap;
+    public textMap: TTextMap;
+    public defStack: string[];
+    declare public children: vscode.DocumentSymbol[];
+    // eslint-disable-next-line max-params
+    public constructor(
+        name: string,
+        detail: string,
+        kind: vscode.SymbolKind,
+        range: vscode.Range,
+        selectionRange: vscode.Range,
+        //
+        selectionRangeText: string,
+        md: vscode.MarkdownString,
+        uri: vscode.Uri,
+        defStack: string[],
+        paramMap: TParamMap,
+        valMap: TValMap,
+        textMap: TTextMap,
+        children: vscode.DocumentSymbol[],
+    ) {
+        super(name, detail, kind, range, selectionRange);
+        this.selectionRangeText = selectionRangeText;
+        this.upName = name.toUpperCase();
+        this.md = md;
+        this.uri = uri;
+        this.defStack = defStack;
+        this.paramMap = paramMap;
+        this.valMap = valMap;
+        this.textMap = textMap;
+        this.children = children;
+    }
+}
+export type TAhkSymbol = DeepReadonly<vscode.DocumentSymbol | MyClassDoc>;
+export type TAhkSymbolList = DeepReadonly<TAhkSymbol[]>;

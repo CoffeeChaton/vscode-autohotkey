@@ -62,11 +62,11 @@ async function wrapItem(
     }
     item.detail = 'neko help; (wrapClass)';
     const md = new vscode.MarkdownString('', true);
-    if (AhkSymbol.detail.trim()) {
-        md.appendMarkdown('\n\ndetail: ')
-            .appendMarkdown(AhkSymbol.detail.trim())
-            .appendMarkdown('\n\n');
-    }
+    // if (AhkSymbol.detail.trim()) {
+    //     md.appendMarkdown('\n\ndetail: ')
+    //         .appendMarkdown(AhkSymbol.detail.trim())
+    //         .appendMarkdown('\n\n');
+    // }
     md.appendMarkdown([...track].reverse().join('   \n'));
     item.documentation = md;
     return item;
@@ -201,7 +201,7 @@ async function triggerClass(
     a common trigger character is . to trigger member completions.
     */
 
-    const Head = ChapterArr[0];
+    const Head: string = ChapterArr[0];
     if ((/^this$/iu).test(Head)) {
         const stackPro = getStack(document, position);
         return (stackPro === null || stackPro.stack.length === 0
