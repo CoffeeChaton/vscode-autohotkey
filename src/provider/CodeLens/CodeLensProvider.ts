@@ -10,9 +10,11 @@ import {
 import { Detecter } from '../../core/Detecter';
 import { CAhkFuncSymbol, TTokenStream } from '../../globalEnum';
 import { TShowAnalyze } from './showFuncAnalyze';
+import { TShowUnknownAnalyze } from './showUnknownAnalyze';
 
 export const enum ECommand {
-    ShowFuncAnalyze = 'ahk.nekoHelp.showFuncAnalyze',
+    showFuncAnalyze = 'ahk.nekoHelp.showFuncAnalyze',
+    showUnknownAnalyze = 'ahk.nekoHelp.showUnknownAnalyze',
 }
 
 function CodeLensCore(document: TextDocument): CodeLens[] {
@@ -25,11 +27,20 @@ function CodeLensCore(document: TextDocument): CodeLens[] {
             const AhkTokenList: TTokenStream = DocStrMap.slice(DA.selectionRange.start.line + 1, DA.range.end.line + 1);
             const ahkCommand: Command = {
                 title: 'Analyze',
-                command: ECommand.ShowFuncAnalyze,
+                command: ECommand.showFuncAnalyze,
                 tooltip: 'by neko-help dev tools',
                 arguments: [DA, fsPath, AhkTokenList] as TShowAnalyze,
             };
             need.push(new CodeLens(DA.range, ahkCommand));
+            if (DA.textMap.size > 0) {
+                const unknownTextCommand: Command = {
+                    title: 'unknownText',
+                    command: ECommand.showUnknownAnalyze,
+                    tooltip: 'by neko-help dev tools',
+                    arguments: [DA.textMap, fsPath] as TShowUnknownAnalyze,
+                };
+                need.push(new CodeLens(DA.range, unknownTextCommand));
+            }
         }
     }
 

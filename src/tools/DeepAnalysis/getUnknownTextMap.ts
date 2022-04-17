@@ -58,6 +58,7 @@ function getIgnoreList(): string[] {
         'UNTIL',
         'BREAK',
         'CONTINUE',
+        'BETWEEN',
 
         'MOUSEMOVE',
         'CLICK',
@@ -83,6 +84,8 @@ function getIgnoreList(): string[] {
         'RELOAD',
         // 'CLASS',
         'NEW',
+
+        'MSGBOX',
     ];
 }
 

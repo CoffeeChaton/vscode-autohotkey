@@ -14,6 +14,7 @@ import { Detecter, diagColl } from './core/Detecter';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { AhkCodeLens, ECommand } from './provider/CodeLens/CodeLensProvider';
 import { showFuncAnalyze } from './provider/CodeLens/showFuncAnalyze';
+import { showUnknownAnalyze } from './provider/CodeLens/showUnknownAnalyze';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
 import { DefProvider } from './provider/Def/DefProvider';
@@ -59,7 +60,8 @@ export function activate(context: ExtensionContext): void {
         // commands--------------------
         commands.registerCommand('ahk.bar.click', statusBarClick),
         commands.registerCommand('ahk.nekoHelp.openDoc', openDocs),
-        commands.registerCommand(ECommand.ShowFuncAnalyze, showFuncAnalyze),
+        commands.registerCommand(ECommand.showFuncAnalyze, showFuncAnalyze),
+        commands.registerCommand(ECommand.showUnknownAnalyze, showUnknownAnalyze),
         // debug
         debug.registerDebugAdapterDescriptorFactory('ahk', NekoDebugMain),
         // root dispose
