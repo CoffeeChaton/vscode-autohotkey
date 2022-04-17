@@ -6,8 +6,6 @@ import {
     TTokenStream,
 } from '../../globalEnum';
 import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
-import { DeepAnalysis } from '../../tools/DeepAnalysis/DeepAnalysis';
-import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { Pretreatment } from '../../tools/Pretreatment';
 import { getChildren } from '../getChildren';
 import { ParserBlock } from '../Parser';
@@ -20,7 +18,6 @@ export type TMemo = {
     DocStrMap: TTokenStream;
     DocFullSize: number;
     baseDiag: vscode.Diagnostic[];
-    DAList: TDAMeta[];
 };
 
 function strListDeepEq(DocStrMap: TTokenStream, fullTextList: string[]): boolean {
@@ -100,16 +97,16 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
             ParserBlock.getSwitchBlock,
             ParserLine,
         ],
+        document,
+        GValMap,
     });
 
     const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
-    const DAList: TDAMeta[] = DeepAnalysis(document, AhkSymbolList, DocStrMap, GValMap, []);
     const AhkCache: TMemo = {
         GValMap, // TGValMapReadOnly
         DocStrMap,
         AhkSymbolList,
         baseDiag,
-        DAList,
         DocFullSize,
     };
     BaseScanMemo.setMemo(fsPath, AhkCache);

@@ -1,9 +1,8 @@
 import * as vscode from 'vscode';
 import { getCode502Default, getCode503Default } from '../../../configUI';
 import { diagColl } from '../../../core/Detecter';
-import { EDiagBase } from '../../../globalEnum';
+import { CAhkFuncSymbol, EDiagBase, TAhkSymbolList } from '../../../globalEnum';
 import { ClassWm } from '../../wm';
-import { TDAMeta } from '../TypeFnMeta';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';
 import { NeverUsedParam, NeverUsedVar } from './param/paramNeverUsed';
@@ -17,9 +16,9 @@ type TDaDiagCache = {
 
 // eslint-disable-next-line no-magic-numbers
 const min3 = 3 * 60 * 1000;
-const wm: ClassWm<TDAMeta[], TDaDiagCache> = new ClassWm(min3, 'diagDAFileCore', 0);
+const wm: ClassWm<TAhkSymbolList, TDaDiagCache> = new ClassWm(min3, 'diagDAFileCore', 0);
 
-function diagDAFileCore(DAList: TDAMeta[]): readonly vscode.Diagnostic[] {
+function diagDAFileCore(DAList: TAhkSymbolList): readonly vscode.Diagnostic[] {
     const code502Max = getCode502Default();
     const code503Max = getCode503Default();
 
@@ -36,6 +35,7 @@ function diagDAFileCore(DAList: TDAMeta[]): readonly vscode.Diagnostic[] {
     const code504List: vscode.Diagnostic[] = [];
 
     for (const DA of DAList) {
+        if (!(DA instanceof CAhkFuncSymbol)) continue;
         const { paramMap, valMap } = DA;
         NeverUsedVar(valMap, code500List);
         NeverUsedParam(paramMap, code501List);
@@ -61,7 +61,7 @@ function diagDAFileCore(DAList: TDAMeta[]): readonly vscode.Diagnostic[] {
 }
 
 export function digDAFile(
-    DAList: TDAMeta[],
+    DAList: TAhkSymbolList,
     uri: vscode.Uri,
 ): void {
     const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) || [])

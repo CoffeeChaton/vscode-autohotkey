@@ -1,10 +1,14 @@
 import * as vscode from 'vscode';
 import { EDiagCodeDA } from '../../../diag';
+import { TC502New, TParamMapOut, TValMapOut } from '../../../globalEnum';
 import { setDiagnosticDA } from '../../../provider/Diagnostic/tools/setDiagnostic';
-import { TC502New, TParamMap, TValMap } from '../TypeFnMeta';
 import { EPrefixC502, setDiagCaseMsg } from './caseSensitivityMagic';
 
-function getRangeOfC502(defRangeList: vscode.Range[], refRangeList: vscode.Range[], i: number): vscode.Range {
+function getRangeOfC502(
+    defRangeList: readonly vscode.Range[],
+    refRangeList: readonly vscode.Range[],
+    i: number,
+): vscode.Range {
     const defRangeListLen: number = defRangeList.length;
     if (defRangeListLen > i) {
         return defRangeList[i];
@@ -14,7 +18,7 @@ function getRangeOfC502(defRangeList: vscode.Range[], refRangeList: vscode.Range
 
 export function caseSensitivityVar(
     prefix: EPrefixC502,
-    paramOrValMap: TValMap | TParamMap,
+    paramOrValMap: TValMapOut | TParamMapOut,
     code502or503List: vscode.Diagnostic[],
     maxDiag: number,
 ): void {

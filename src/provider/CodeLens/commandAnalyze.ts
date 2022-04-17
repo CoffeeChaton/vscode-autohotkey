@@ -1,5 +1,4 @@
-import { TTokenStream } from '../../globalEnum';
-import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
+import { CAhkFuncSymbol, TTokenStream } from '../../globalEnum';
 import { TFullFuncMap } from '../../tools/Func/getAllFunc';
 
 function getIgnoreList(): string[] {
@@ -68,11 +67,11 @@ function printCommandList(MsgList: TMsg[], ed: string[]): void {
 }
 
 function splitLine(keyUp: string, fullFuncMap: TFullFuncMap, ed: string[]): void {
-    const DA: TDAMeta | undefined = fullFuncMap.get(keyUp);
+    const DA: CAhkFuncSymbol | undefined = fullFuncMap.get(keyUp);
     if (DA === undefined) {
         ed.push(`${keyUp} ; "Command"`);
     } else {
-        ed.push(`${DA.funcRawName}(...) vs "Command" ${keyUp} ; `);
+        ed.push(`${DA.name}(...) vs "Command" ${keyUp} ; `);
     }
 }
 

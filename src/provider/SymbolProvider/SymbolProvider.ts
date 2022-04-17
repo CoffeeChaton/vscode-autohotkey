@@ -3,9 +3,9 @@ import { Detecter } from '../../core/Detecter';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
 
 function SymBolProviderCore(document: vscode.TextDocument): vscode.DocumentSymbol[] {
-    const { AhkSymbolList, DAList } = Detecter.updateDocDef(document);
+    const { AhkSymbolList } = Detecter.updateDocDef(document);
 
-    digDAFile(DAList, document.uri); // FIXME debounce
+    digDAFile(AhkSymbolList, document.uri); // FIXME debounce
 
     return AhkSymbolList as vscode.DocumentSymbol[];
 }

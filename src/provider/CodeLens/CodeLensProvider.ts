@@ -8,8 +8,7 @@ import {
     TextDocument,
 } from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { TTokenStream } from '../../globalEnum';
-import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
+import { CAhkFuncSymbol, TTokenStream } from '../../globalEnum';
 import { TShowAnalyze } from './showFuncAnalyze';
 
 export const enum ECommand {
@@ -17,12 +16,12 @@ export const enum ECommand {
 }
 
 function CodeLensCore(document: TextDocument): CodeLens[] {
-    const { DAList, DocStrMap } = Detecter.updateDocDef(document);
+    const { AhkSymbolList, DocStrMap } = Detecter.updateDocDef(document);
     const { fsPath } = document.uri;
 
-    return DAList
-        .filter((DA: TDAMeta): boolean => DA.kind === SymbolKind.Function)
-        .map((DA: TDAMeta): CodeLens => {
+    const need: CodeLens[] = [];
+    for (const DA of AhkSymbolList) {
+        if (DA instanceof CAhkFuncSymbol && DA.kind === SymbolKind.Function) {
             const AhkTokenList: TTokenStream = DocStrMap.slice(DA.selectionRange.start.line + 1, DA.range.end.line + 1);
             const ahkCommand: Command = {
                 title: 'Analyze',
@@ -30,8 +29,11 @@ function CodeLensCore(document: TextDocument): CodeLens[] {
                 tooltip: 'by neko-help dev tools',
                 arguments: [DA, fsPath, AhkTokenList] as TShowAnalyze,
             };
-            return new CodeLens(DA.range, ahkCommand);
-        });
+            need.push(new CodeLens(DA.range, ahkCommand));
+        }
+    }
+
+    return need;
 }
 
 export const AhkCodeLens: CodeLensProvider = {

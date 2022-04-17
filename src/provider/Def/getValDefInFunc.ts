@@ -1,19 +1,19 @@
 import * as vscode from 'vscode';
-import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import {
-    TDAMeta,
-    TParamMeta,
-    TTextMeta,
-    TValMeta,
-} from '../../tools/DeepAnalysis/TypeFnMeta';
+    CAhkFuncSymbol,
+    TParamMetaOut,
+    TTextMetaOut,
+    TValMetaOut,
+} from '../../globalEnum';
+import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 
-function rangeList2LocList(rangeList: vscode.Range[], uri: vscode.Uri): vscode.Location[] {
+function rangeList2LocList(rangeList: readonly vscode.Range[], uri: vscode.Uri): vscode.Location[] {
     return rangeList.map((range) => new vscode.Location(uri, range));
 }
 
 function metaRangeList(
-    defRangeList: vscode.Range[],
-    refRangeList: vscode.Range[],
+    defRangeList: readonly vscode.Range[],
+    refRangeList: readonly vscode.Range[],
     listAllUsing: boolean,
     position: vscode.Position,
     uri: vscode.Uri,
@@ -46,7 +46,7 @@ export function getValWithDA(
     listAllUsing: boolean,
 ): null | vscode.Location[] {
     const { uri } = document;
-    const DA: TDAMeta | undefined = getDAWithPos(document, position);
+    const DA: CAhkFuncSymbol | undefined = getDAWithPos(document, position);
     if (DA === undefined) return null;
 
     const {
@@ -54,19 +54,19 @@ export function getValWithDA(
         valMap,
         textMap,
     } = DA;
-    const argMeta: TParamMeta | undefined = paramMap.get(wordUp);
+    const argMeta: TParamMetaOut | undefined = paramMap.get(wordUp);
     if (argMeta !== undefined) {
         const { defRangeList, refRangeList } = argMeta;
         return metaRangeList(defRangeList, refRangeList, listAllUsing, position, uri);
     }
 
-    const valMeta: TValMeta | undefined = valMap.get(wordUp);
+    const valMeta: TValMetaOut | undefined = valMap.get(wordUp);
     if (valMeta !== undefined) {
         const { defRangeList, refRangeList } = valMeta;
         return metaRangeList(defRangeList, refRangeList, listAllUsing, position, uri);
     }
 
-    const textList: TTextMeta | undefined = textMap.get(wordUp);
+    const textList: TTextMetaOut | undefined = textMap.get(wordUp);
 
     return textList
         ? rangeList2LocList(textList.refRangeList, uri)

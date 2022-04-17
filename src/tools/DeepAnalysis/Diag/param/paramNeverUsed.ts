@@ -1,14 +1,10 @@
 import * as vscode from 'vscode';
 import { DiagsDA, EDiagCodeDA } from '../../../../diag';
+import { TParamMapOut, TValMapOut } from '../../../../globalEnum';
 import { setDiagnosticDA } from '../../../../provider/Diagnostic/tools/setDiagnostic';
-import {
-    TParamMap,
-    TParamMeta,
-    TValMap,
-} from '../../TypeFnMeta';
 
-export function NeverUsedParam(paramMap: TParamMap, code501List: vscode.Diagnostic[]): void {
-    paramMap.forEach((v: TParamMeta): void => {
+export function NeverUsedParam(paramMap: TParamMapOut, code501List: vscode.Diagnostic[]): void {
+    paramMap.forEach((v): void => {
         if (v.refRangeList.length > 0) return;
         if (v.keyRawName.startsWith('_')) return;
 
@@ -22,7 +18,7 @@ export function NeverUsedParam(paramMap: TParamMap, code501List: vscode.Diagnost
     });
 }
 
-export function NeverUsedVar(valMap: TValMap, code500List: vscode.Diagnostic[]): void {
+export function NeverUsedVar(valMap: TValMapOut, code500List: vscode.Diagnostic[]): void {
     const c500Max = 20;
     if (code500List.length > c500Max) return;
 

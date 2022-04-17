@@ -1,7 +1,6 @@
-import { ESnippetRecBecause, TSnippetRecMap } from '../../../../globalEnum';
-import { TParamMap } from '../../../../tools/DeepAnalysis/TypeFnMeta';
+import { ESnippetRecBecause, TParamMapOut, TSnippetRecMap } from '../../../../globalEnum';
 
-export function setParaRec(suggestMap: TSnippetRecMap, paramMap: TParamMap, inputStr: string): void {
+export function setParaRec(suggestMap: TSnippetRecMap, paramMap: TParamMapOut, inputStr: string): void {
     for (const paramMeta of paramMap.values()) {
         // startsWith
         if (paramMeta.keyRawName.startsWith(inputStr)) {

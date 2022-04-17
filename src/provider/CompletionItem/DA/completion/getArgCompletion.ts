@@ -1,16 +1,15 @@
 import * as vscode from 'vscode';
-import { TSnippetRecMap } from '../../../../globalEnum';
-import { TParamMap, TParamMeta } from '../../../../tools/DeepAnalysis/TypeFnMeta';
+import { TParamMapOut, TParamMetaOut, TSnippetRecMap } from '../../../../globalEnum';
 import { setPreFix } from '../../../../tools/str/setPreFix';
 import { setItemCore } from './setItem';
 
 export function getParamCompletion(
-    paramMap: TParamMap,
+    paramMap: TParamMapOut,
     funcName: string,
     recMap: TSnippetRecMap,
 ): vscode.CompletionItem[] {
     const need: vscode.CompletionItem[] = [];
-    paramMap.forEach((v: TParamMeta): void => {
+    paramMap.forEach((v: TParamMetaOut): void => {
         const {
             keyRawName,
             refRangeList,

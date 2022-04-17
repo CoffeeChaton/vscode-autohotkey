@@ -1,21 +1,19 @@
 import * as vscode from 'vscode';
 import {
+    CAhkFuncSymbol,
     EFormatChannel,
     TFsPath,
+    TParamMapOut,
+    TTextMapOut,
     TTokenStream,
+    TValMapOut,
 } from '../../globalEnum';
-import {
-    TDAMeta,
-    TParamMap,
-    TTextMap,
-    TValMap,
-} from '../../tools/DeepAnalysis/TypeFnMeta';
 import { getAllFunc, TFullFuncMap } from '../../tools/Func/getAllFunc';
 import { FormatCore } from '../Format/FormatProvider';
 import { commandAnalyze } from './commandAnalyze';
 import { refFuncAnalyze } from './refFuncAnalyze';
 
-function showElement(map: TValMap | TParamMap | TTextMap): string {
+function showElement(map: TValMapOut | TParamMapOut | TTextMapOut): string {
     if (map.size === 0) return '';
 
     const arr: string[] = [];
@@ -46,11 +44,11 @@ async function fmtAnalyze(document: vscode.TextDocument): Promise<void> {
     }
 }
 
-function baseDataAnalyze(DA: TDAMeta): string[] {
+function baseDataAnalyze(DA: CAhkFuncSymbol): string[] {
     return [
-        `${DA.funcRawName}() ;`,
+        `${DA.name}() ;`,
         '/**',
-        `* @Analyze ${DA.funcRawName}`,
+        `* @Analyze ${DA.name}`,
         '* ',
         '* @Base Data',
         '* ',
@@ -61,13 +59,13 @@ function baseDataAnalyze(DA: TDAMeta): string[] {
     ];
 }
 
-export type TShowAnalyze = [TDAMeta, TFsPath, TTokenStream];
+export type TShowAnalyze = [CAhkFuncSymbol, TFsPath, TTokenStream];
 
-export async function showFuncAnalyze(DA: TDAMeta, fsPath: string, AhkTokenList: TTokenStream): Promise<void> {
+export async function showFuncAnalyze(DA: CAhkFuncSymbol, fsPath: string, AhkTokenList: TTokenStream): Promise<void> {
     const fullFuncMap: TFullFuncMap = getAllFunc();
 
     const ed: string[] = [
-        `Analyze_Results_of_${DA.funcRawName}() {`,
+        `Analyze_Results_of_${DA.name}() {`,
         ...baseDataAnalyze(DA),
         '',
         ...commandAnalyze(AhkTokenList, fullFuncMap),

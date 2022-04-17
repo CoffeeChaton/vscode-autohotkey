@@ -609,3 +609,4 @@ export const BiFuncSnippetList: readonly vscode.CompletionItem[] = [...BuiltInFu
     });
 
 // https://www.autohotkey.com/docs/Functions.htm#BuiltIn
+// TODO Object("KeyA", ValueA, "KeyB", ValueB, ..., "KeyZ", ValueZ) https://www.autohotkey.com/docs/Objects.htm#Usage_Associative_Arrays=

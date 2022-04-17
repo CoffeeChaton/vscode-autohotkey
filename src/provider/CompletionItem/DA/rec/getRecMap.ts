@@ -1,11 +1,10 @@
 import * as vscode from 'vscode';
-import { TSnippetRecMap } from '../../../../globalEnum';
-import { TDAMeta } from '../../../../tools/DeepAnalysis/TypeFnMeta';
+import { CAhkFuncSymbol, TSnippetRecMap } from '../../../../globalEnum';
 import { setParaRec } from './setParaRec';
 import { getContextRange, setVarRec } from './setVarRec';
 
 export function getRecMap(
-    ed: TDAMeta,
+    ed: CAhkFuncSymbol,
     position: vscode.Position,
     RARange: vscode.Range,
     inputStr: string,

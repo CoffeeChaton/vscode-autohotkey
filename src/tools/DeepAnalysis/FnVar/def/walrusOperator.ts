@@ -1,4 +1,4 @@
-import { TValMeta } from '../../TypeFnMeta';
+import { TValMetaIn } from '../../../../globalEnum';
 import { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
 
@@ -23,7 +23,7 @@ export function walrusOperator({
         const UpName: string = RawName.toUpperCase();
         if (paramMap.has(UpName) || GValMap.has(UpName)) continue;
 
-        const value: TValMeta = getValMeta(line, character, RawName, valMap);
+        const value: TValMetaIn = getValMeta(line, character, RawName, valMap);
         valMap.set(UpName, value);
     }
 }

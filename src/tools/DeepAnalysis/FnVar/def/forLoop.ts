@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,15] }] */
 import * as vscode from 'vscode';
-import { TValMeta } from '../../TypeFnMeta';
+import { TValMetaIn } from '../../../../globalEnum';
 import { TGetFnDefNeed } from '../TFnVarDef';
 import { wrapFnValDef } from './wrapFnValDef';
 
@@ -14,7 +14,7 @@ function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {
         new vscode.Position(line, character + RawName.length),
     );
 
-    const value: TValMeta = wrapFnValDef({
+    const value: TValMetaIn = wrapFnValDef({
         RawNameNew: RawName,
         valMap,
         defRange,

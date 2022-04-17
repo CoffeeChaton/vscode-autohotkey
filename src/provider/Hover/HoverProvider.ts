@@ -1,9 +1,8 @@
 import * as vscode from 'vscode';
-import { EMode } from '../../globalEnum';
+import { CAhkFuncSymbol, EMode } from '../../globalEnum';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func';
 import { getDAWithName } from '../../tools/DeepAnalysis/getDAWithName';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
-import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { getGlobalMarkdown } from '../../tools/MD/getGlobalMarkdown';
 import { DeepAnalysisHover } from './DeepAnalysisHover';
@@ -13,7 +12,7 @@ function HoverFunc(wordUp: string, textRaw: string): null | vscode.Hover {
     const testOfFunc = new RegExp(`(?<![.%\`])(${wordUp})\\(`, 'iu'); // not search class.Method()
     if (!testOfFunc.test(textRaw)) return null;
 
-    const DA: TDAMeta | null = getDAWithName(wordUp, EMode.ahkFunc);
+    const DA: CAhkFuncSymbol | null = getDAWithName(wordUp, EMode.ahkFunc);
     if (DA !== null) return new vscode.Hover(DA.md);
 
     const BuiltInFuncMD: vscode.MarkdownString | undefined = BuiltInFuncMDMap.get(wordUp);
@@ -41,7 +40,7 @@ function HoverProviderCore(
     // const commands = getCommandsHover(document, position);
     // if (commands !== null) return commands;
 
-    const DA: TDAMeta | undefined = getDAWithPos(document, position);
+    const DA: CAhkFuncSymbol | undefined = getDAWithPos(document, position);
     if (DA !== undefined) {
         const md: vscode.MarkdownString | null = DeepAnalysisHover(DA, wordUp, position);
         if (md !== null) return new vscode.Hover(md);

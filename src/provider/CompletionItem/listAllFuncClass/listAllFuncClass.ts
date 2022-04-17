@@ -3,7 +3,7 @@ import * as mm from 'micromatch';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { Detecter, TAhkFileData } from '../../../core/Detecter';
-import { EStr, TAhkSymbol } from '../../../globalEnum';
+import { CAhkFuncSymbol, EStr, TAhkSymbol } from '../../../globalEnum';
 import { insertTextWm } from '../classThis/insertTextWm';
 import { fnDAList2Completion } from './DAList2Completion';
 
@@ -41,14 +41,17 @@ export async function listAllFuncClass(
         const AhkFileData: undefined | TAhkFileData = Detecter.getDocMap(fsPath);
         if (AhkFileData === undefined) continue;
 
-        const { AhkSymbolList, DAList } = AhkFileData;
+        const { AhkSymbolList } = AhkFileData;
         const fileName: string = path.basename(fsPath);
+        const DAList: CAhkFuncSymbol[] = [];
         for (const AhkSymbol of AhkSymbolList) {
             if (AhkSymbol.kind === vscode.SymbolKind.Class) {
                 const item: vscode.CompletionItem = await setLabel(inputStr, fileName, fsPath, AhkSymbol);
                 item.kind = vscode.CompletionItemKind.Class;
                 item.documentation = 'user def class';
                 itemS.push(item);
+            } else if (AhkSymbol instanceof CAhkFuncSymbol) {
+                DAList.push(AhkSymbol);
             }
         }
 

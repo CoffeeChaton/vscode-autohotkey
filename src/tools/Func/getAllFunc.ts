@@ -1,10 +1,8 @@
-import * as vscode from 'vscode';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
-import { DeepReadonly } from '../../globalEnum';
-import { TDAMeta } from '../DeepAnalysis/TypeFnMeta';
+import { CAhkFuncSymbol, DeepReadonly } from '../../globalEnum';
 
 type TKeyUpName = string;
-type TMap = Map<TKeyUpName, TDAMeta>;
+type TMap = Map<TKeyUpName, CAhkFuncSymbol>;
 
 export type TFullFuncMap = DeepReadonly<TMap>;
 
@@ -16,10 +14,10 @@ export function getAllFunc(): TFullFuncMap {
         const AhkFileData: undefined | TAhkFileData = Detecter.getDocMap(fsPath);
         if (AhkFileData === undefined) continue;
 
-        const { DAList } = AhkFileData;
-        for (const DA of DAList) {
-            if (DA.kind === vscode.SymbolKind.Function) {
-                funcMap.set(DA.upName, DA);
+        const { AhkSymbolList } = AhkFileData;
+        for (const AhkSymbol of AhkSymbolList) {
+            if (AhkSymbol instanceof CAhkFuncSymbol) {
+                funcMap.set(AhkSymbol.upName, AhkSymbol);
             }
         }
     }

@@ -1,4 +1,4 @@
-import { TC502New } from '../../../TypeFnMeta';
+import { TC502New } from '../../../../../globalEnum';
 
 /**
  * @param oldRawName don't input UpName, and this is first def name

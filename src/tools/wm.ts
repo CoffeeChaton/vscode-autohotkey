@@ -1,3 +1,5 @@
+import { CAhkFuncSymbol } from '../globalEnum';
+
 function calcSize<V>(v: V | undefined): number {
     if (v === null || v === undefined) return 0;
     if (Array.isArray(v)) return v.length;
@@ -11,7 +13,7 @@ function calcSize<V>(v: V | undefined): number {
 type TObj = Record<string, unknown>;
 
 // T === Object has name
-export class ClassWm<T extends TObj | unknown[] | readonly unknown[], V> {
+export class ClassWm<T extends TObj | unknown[] | readonly unknown[] | CAhkFuncSymbol, V> {
     public cacheHits = 0;
 
     public wmSize = 0;

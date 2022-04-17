@@ -1,10 +1,10 @@
 import { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
-import { TParamMap, TValMap } from '../TypeFnMeta';
+import { TParamMapIn, TValMapIn } from '../../../globalEnum';
 
 export type TGetFnDefNeed = {
     lStr: string;
-    valMap: TValMap;
+    valMap: TValMapIn;
     line: number;
-    paramMap: TParamMap;
+    paramMap: TParamMapIn;
     GValMap: TGValMap;
 };

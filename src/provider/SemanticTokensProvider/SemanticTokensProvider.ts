@@ -13,11 +13,11 @@ export const legend = new vscode.SemanticTokensLegend(
 function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticTokens {
     const {
         GValMap,
-        DAList,
+        AhkSymbolList,
     } = Detecter.updateDocDef(document);
 
     const Collector: vscode.SemanticTokensBuilder = new vscode.SemanticTokensBuilder(legend);
-    DAList2SemanticHighlightFull(DAList, Collector);
+    DAList2SemanticHighlightFull(AhkSymbolList, Collector);
     GlobalHighlight(GValMap, Collector);
     return Collector.build();
 }

@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
 import { Detecter, TAhkFileData } from '../core/Detecter';
+import { CAhkFuncSymbol } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
-import { TDAMeta } from '../tools/DeepAnalysis/TypeFnMeta';
+import { getDAList } from '../tools/DeepAnalysis/getDAList';
 import { TWordFrequencyStatistics, WordFrequencyStatistics } from './tools/WordFrequencyStatistics';
 
 function showOutputChannel(results: TWordFrequencyStatistics, timeSpend: number): void {
@@ -27,17 +28,18 @@ export function DeepAnalysisAllFiles(): null {
     const t1: number = Date.now();
     const allFsPath: string[] = Detecter.getDocMapFile();
 
-    const need: TDAMeta[] = [];
+    const need: CAhkFuncSymbol[] = [];
     allFsPath.forEach((fsPath: string): void => {
         const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
         if (AhkFileData === undefined) return;
 
-        const { DAList } = AhkFileData;
-        const uri: vscode.Uri = vscode.Uri.file(fsPath);
+        const { AhkSymbolList } = AhkFileData;
+
+        const DAList: CAhkFuncSymbol[] = [];
+        getDAList(AhkSymbolList, DAList);
 
         need.push(...DAList);
-
-        digDAFile(DAList, uri);
+        digDAFile(DAList, vscode.Uri.file(fsPath));
     });
 
     const t2 = Date.now();
@@ -52,7 +54,7 @@ my project:
 Deep Analysis All Files
 Deep Analysis : 859 Symbol <--keep 859!
 paramMapSize is 2320 <--keep 2320!
-valMapSize is 261
+valMapSize is 2161
 textMapSize is 477 <- next plan: ignore keyWord.
 All Size is 4958
 Done in 5 ms

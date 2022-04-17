@@ -1,7 +1,10 @@
 import * as vscode from 'vscode';
-import { TAhkSymbol, TTokenStream } from '../../../globalEnum';
-import { replacerSpace } from '../../str/removeSpecialChar';
-import { TParamMap, TParamMeta } from '../TypeFnMeta';
+import {
+    TParamMapIn,
+    TParamMetaIn,
+    TTokenStream,
+} from '../../globalEnum';
+import { replacerSpace } from '../str/removeSpecialChar';
 
 type TParamData = {
     isByRef: boolean;
@@ -37,7 +40,7 @@ function checkParam(keyRawName: string, funcRawName: string, line: number): void
     }
 }
 
-function getParamDefNeed(param: string, funcRawName: string, line: number, ch: number): TParamMeta {
+function getParamDefNeed(param: string, funcRawName: string, line: number, ch: number): TParamMetaIn {
     const data: TParamData = getKeyRawName(param);
     const { isByRef, isVariadic, keyRawName } = data;
     checkParam(keyRawName, funcRawName, line);
@@ -56,12 +59,11 @@ function getParamDefNeed(param: string, funcRawName: string, line: number, ch: n
     };
 }
 
-export function getParamDef(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TParamMap {
+export function getParamDef(fnName: string, selectionRange: vscode.Range, DocStrMap: TTokenStream): TParamMapIn {
     // 113 ms self time
-    const paramMap: TParamMap = new Map<string, TParamMeta>();
-    const startLine: number = AhkSymbol.selectionRange.start.line;
-    const endLine: number = AhkSymbol.selectionRange.end.line;
-    const funcRawName: string = AhkSymbol.name;
+    const paramMap: TParamMapIn = new Map<string, TParamMetaIn>();
+    const startLine: number = selectionRange.start.line;
+    const endLine: number = selectionRange.end.line;
     for (const { lStr, line } of DocStrMap) {
         if (line < startLine) continue;
         if (line > endLine) break;
@@ -83,7 +85,7 @@ export function getParamDef(AhkSymbol: TAhkSymbol, DocStrMap: TTokenStream): TPa
             const find: string = param.replace(/\bByRef\b\s*/ui, '');
             const ch: number = strF2.indexOf(find, ma.index);
 
-            const ArgAnalysis: TParamMeta = getParamDefNeed(param, funcRawName, line, ch);
+            const ArgAnalysis: TParamMetaIn = getParamDefNeed(param, fnName, line, ch);
 
             const key: string = ArgAnalysis.keyRawName.toUpperCase();
             paramMap.set(key, ArgAnalysis);

@@ -10,7 +10,7 @@ export const enum EPrefix {
     unKnownText = 'unKnownText',
 }
 
-function RangeList2Str(RangeList: vscode.Range[]): string {
+function RangeList2Str(RangeList: readonly vscode.Range[]): string {
     return RangeList
         .map((range: vscode.Range): string => `line ${range.start.line + 1}, col ${range.start.character + 1}  `)
         .join('\n');
@@ -18,8 +18,8 @@ function RangeList2Str(RangeList: vscode.Range[]): string {
 
 export function setMD(
     prefix: EPrefix,
-    refRangeList: vscode.Range[],
-    defRangeList: vscode.Range[],
+    refRangeList: readonly vscode.Range[],
+    defRangeList: readonly vscode.Range[],
     funcName: string,
     recStr: ESnippetRecBecause | '',
 ): vscode.MarkdownString {

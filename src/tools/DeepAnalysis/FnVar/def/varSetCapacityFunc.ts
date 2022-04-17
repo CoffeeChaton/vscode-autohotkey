@@ -1,4 +1,4 @@
-import { TValMeta } from '../../TypeFnMeta';
+import { TValMetaIn } from '../../../../globalEnum';
 import { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
 
@@ -24,7 +24,7 @@ export function varSetCapacityFunc({
 
         const character: number = ch + v[0].indexOf(RawName);
 
-        const value: TValMeta = getValMeta(line, character, RawName, valMap);
+        const value: TValMetaIn = getValMeta(line, character, RawName, valMap);
         valMap.set(RawName.toUpperCase(), value);
     }
 }

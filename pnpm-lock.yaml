@@ -17,7 +17,7 @@ specifiers:
   '@vscode/debugadapter': ^1.55.1
   '@vscode/debugprotocol': ^1.55.1
   '@vscode/test-electron': ^2.1.3
-  dprint: ^0.24.4
+  dprint: ^0.25.0
   esbuild: ^0.14.36
   esbuild-copy-static-files: ^0.1.0
   eslint: ^8.13.0
@@ -75,7 +75,7 @@ devDependencies:
   '@typescript-eslint/parser': 5.19.0_eslint@8.13.0+typescript@4.6.3
   '@typescript/analyze-trace': 0.9.0
   '@vscode/test-electron': 2.1.3
-  dprint: 0.24.4
+  dprint: 0.25.0
   esbuild: 0.14.36
   esbuild-copy-static-files: 0.1.0
   eslint: 8.13.0
@@ -1061,8 +1061,8 @@ packages:
       - supports-color
     dev: true
 
-  /abab/2.0.5:
-    resolution: {integrity: sha512-9IK9EadsbHo6jLWIpxpR6pL0sazTXV6+SQv25ZB+F7Bj9mJNaOc4nCRabwd5M/JwmUa8idz6Eci6eKfJryPs6Q==}
+  /abab/2.0.6:
+    resolution: {integrity: sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==}
     dev: true
 
   /acorn-globals/6.0.0:
@@ -1553,7 +1553,7 @@ packages:
     resolution: {integrity: sha512-X5eWTSXO/BJmpdIKCRuKUgSCgAN0OwliVK3yPKbwIWU1Tdw5BRajxlzMidvh+gwko9AfQ9zIj52pzF91Q3YAvQ==}
     engines: {node: '>=10'}
     dependencies:
-      abab: 2.0.5
+      abab: 2.0.6
       whatwg-mimetype: 2.3.0
       whatwg-url: 8.7.0
     dev: true
@@ -1655,8 +1655,8 @@ packages:
       webidl-conversions: 5.0.0
     dev: true
 
-  /dprint/0.24.4:
-    resolution: {integrity: sha512-Kt88R/6AeLIu/lIQS3VnWkzC8qdyiX3qxuFwLuF8nvfO06C9UAA8EUZ9n1yDhWLpafisdvyKE1ybeCmPsb2xPg==}
+  /dprint/0.25.0:
+    resolution: {integrity: sha512-ISJu3EOYz9W24jMkBTotxdsSg4bvYhndaF+fvI9FzXjoT24WARCchcWf95IwCHMcHZVDd6gNoPfgGqzCpuT8Zg==}
     hasBin: true
     requiresBuild: true
     dev: true
@@ -3435,7 +3435,7 @@ packages:
       canvas:
         optional: true
     dependencies:
-      abab: 2.0.5
+      abab: 2.0.6
       acorn: 8.7.0
       acorn-globals: 6.0.0
       cssom: 0.4.4

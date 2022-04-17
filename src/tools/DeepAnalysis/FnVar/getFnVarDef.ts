@@ -1,21 +1,23 @@
 import { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
-import { TAhkSymbol, TTokenStream } from '../../../globalEnum';
-import { TParamMap, TValMap, TValMeta } from '../TypeFnMeta';
+import {
+    TParamMapIn,
+    TTokenStream,
+    TValMapIn,
+    TValMetaIn,
+} from '../../../globalEnum';
 import { forLoop } from './def/forLoop';
 import { varSetCapacityFunc } from './def/varSetCapacityFunc';
 import { walrusOperator } from './def/walrusOperator';
 import { TGetFnDefNeed } from './TFnVarDef';
 
 export function getFnVarDef(
-    AhkSymbol: TAhkSymbol,
+    startLine: number,
+    endLine: number,
     DocStrMap: TTokenStream,
-    paramMap: TParamMap,
+    paramMap: TParamMapIn,
     GValMap: TGValMap,
-): TValMap {
-    const valMap: TValMap = new Map<string, TValMeta>();
-
-    const startLine = AhkSymbol.selectionRange.end.line;
-    const endLine = AhkSymbol.range.end.line;
+): TValMapIn {
+    const valMap: TValMapIn = new Map<string, TValMetaIn>();
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;

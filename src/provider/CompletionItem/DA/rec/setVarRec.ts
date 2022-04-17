@@ -1,7 +1,10 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,5] }] */
 import * as vscode from 'vscode';
-import { ESnippetRecBecause, TSnippetRecMap } from '../../../../globalEnum';
-import { TValMap } from '../../../../tools/DeepAnalysis/TypeFnMeta';
+import {
+    ESnippetRecBecause,
+    TSnippetRecMap,
+    TValMapOut,
+} from '../../../../globalEnum';
 
 export function getContextRange(position: vscode.Position, DARange: vscode.Range): vscode.Range {
     const enum ERecLine {
@@ -15,7 +18,7 @@ export function getContextRange(position: vscode.Position, DARange: vscode.Range
     return new vscode.Range(startLine, 0, endLine, 0);
 }
 
-export function setVarRec(Rec: TSnippetRecMap, valMap: TValMap, inputStr: string, contextRange: vscode.Range): void {
+export function setVarRec(Rec: TSnippetRecMap, valMap: TValMapOut, inputStr: string, contextRange: vscode.Range): void {
     for (const ValAnalysis of valMap.values()) {
         const { defRangeList, refRangeList, keyRawName } = ValAnalysis;
 

@@ -7,8 +7,8 @@ type TSetItem = {
     recMap: TSnippetRecMap;
     keyRawName: string;
     funcName: string;
-    refRangeList: vscode.Range[];
-    defRangeList: vscode.Range[];
+    refRangeList: readonly vscode.Range[];
+    defRangeList: readonly vscode.Range[];
     kind: vscode.CompletionItemKind;
 };
 

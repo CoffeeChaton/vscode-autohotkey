@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import { DiagsDA, EDiagCodeDA } from '../../../../diag';
+import { TParamMapOut } from '../../../../globalEnum';
 import { setDiagnosticDA } from '../../../../provider/Diagnostic/tools/setDiagnostic';
-import { TParamMap } from '../../TypeFnMeta';
 
-export function paramVariadicErr(paramMap: TParamMap, code504List: vscode.Diagnostic[]): void {
+export function paramVariadicErr(paramMap: TParamMapOut, code504List: vscode.Diagnostic[]): void {
     const rightIndex = paramMap.size - 1;
     let i = 0;
     for (const ArgAnalysis of paramMap.values()) {

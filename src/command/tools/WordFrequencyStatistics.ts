@@ -1,5 +1,5 @@
+import { CAhkFuncSymbol, TTextMetaOut } from '../../globalEnum';
 import { OutputChannel } from '../../provider/vscWindows/OutputChannel';
-import { TDAMeta, TTextMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 
 export type TWordFrequencyStatistics = {
     paramMapSize: number;
@@ -9,16 +9,16 @@ export type TWordFrequencyStatistics = {
 };
 
 // WordFrequencyStatistics
-export function WordFrequencyStatistics(need: TDAMeta[]): TWordFrequencyStatistics {
+export function WordFrequencyStatistics(need: CAhkFuncSymbol[]): TWordFrequencyStatistics {
     let paramMapSize = 0;
     let valMapSize = 0;
     let textMapSize = 0;
     const DEB: Map<string, number> = new Map();
-    need.forEach((ed: TDAMeta): void => {
+    need.forEach((ed: CAhkFuncSymbol): void => {
         paramMapSize += ed.paramMap.size;
         valMapSize += ed.valMap.size;
         textMapSize += ed.textMap.size;
-        ed.textMap.forEach((v: TTextMeta, k: string): void => {
+        ed.textMap.forEach((v: TTextMetaOut, k: string): void => {
             const oldNum: number = DEB.get(k) ?? 0;
             DEB.set(k, oldNum + v.refRangeList.length);
         });

@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
-import { TSnippetRecMap } from '../../../globalEnum';
+import { CAhkFuncSymbol, TSnippetRecMap } from '../../../globalEnum';
 import { getDAWithPos } from '../../../tools/DeepAnalysis/getDAWithPos';
-import { TDAMeta } from '../../../tools/DeepAnalysis/TypeFnMeta';
 import { isPosAtStr } from '../../../tools/isPosAtStr';
 import { getParamCompletion } from './completion/getArgCompletion';
 import { getUnknownTextCompletion } from './completion/getUnknownTextCompletion';
@@ -9,18 +8,18 @@ import { getValCompletion } from './completion/getValCompletion';
 import { getRecMap } from './rec/getRecMap';
 
 function suggest(
-    DA: TDAMeta,
+    DA: CAhkFuncSymbol,
     position: vscode.Position,
     inputStr: string,
 ): vscode.CompletionItem[] {
     const { paramMap, valMap, textMap } = DA;
-    const { funcRawName, range } = DA;
+    const { name, range } = DA;
     const recMap: TSnippetRecMap = getRecMap(DA, position, range, inputStr);
 
     return [
-        ...getParamCompletion(paramMap, funcRawName, recMap),
-        ...getValCompletion(valMap, funcRawName, recMap),
-        ...getUnknownTextCompletion(textMap, funcRawName),
+        ...getParamCompletion(paramMap, name, recMap),
+        ...getValCompletion(valMap, name, recMap),
+        ...getUnknownTextCompletion(textMap, name),
     ];
 }
 
@@ -33,7 +32,7 @@ export function DeepAnalysisToCompletionItem(
 ): vscode.CompletionItem[] {
     if (isPosAtStr(document, position)) return [];
 
-    const DA: undefined | TDAMeta = getDAWithPos(document, position);
+    const DA: undefined | CAhkFuncSymbol = getDAWithPos(document, position);
     if (DA === undefined) return [];
 
     return suggest(DA, position, inputStr);

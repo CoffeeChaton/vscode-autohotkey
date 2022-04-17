@@ -1,21 +1,21 @@
 import * as vscode from 'vscode';
+import { CAhkFuncSymbol, TParamMetaOut, TValMetaOut } from '../../globalEnum';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
-import { TDAMeta, TParamMeta, TValMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 
 function DeepAnalysisRename(
     document: vscode.TextDocument,
     position: vscode.Position,
     wordUp: string,
 ): vscode.Range[] {
-    const DA: TDAMeta | undefined = getDAWithPos(document, position);
+    const DA: CAhkFuncSymbol | undefined = getDAWithPos(document, position);
     if (DA === undefined) return [];
 
-    const paramMeta: TParamMeta | undefined = DA.paramMap.get(wordUp);
+    const paramMeta: TParamMetaOut | undefined = DA.paramMap.get(wordUp);
     if (paramMeta !== undefined) {
         return [...paramMeta.defRangeList, ...paramMeta.refRangeList];
     }
 
-    const valMeta: TValMeta | undefined = DA.valMap.get(wordUp);
+    const valMeta: TValMetaOut | undefined = DA.valMap.get(wordUp);
     if (valMeta !== undefined) {
         return [...valMeta.defRangeList, ...valMeta.refRangeList];
     }

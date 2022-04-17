@@ -1,8 +1,10 @@
+import * as vscode from 'vscode';
 import {
     TAhkSymbol,
     TAhkSymbolList,
     TTokenStream,
 } from '../globalEnum';
+import { TGValMap } from './ParserTools/ahkGlobalDef';
 
 export type TFuncInput = Readonly<{
     fistWordUp: string;
@@ -11,6 +13,8 @@ export type TFuncInput = Readonly<{
     RangeEndLine: number;
     inClass: boolean;
     DocStrMap: TTokenStream;
+    document: vscode.TextDocument;
+    GValMap: TGValMap;
 }>;
 
 export type TFuncLimit = (FuncInput: TFuncInput) => null | TAhkSymbol;
@@ -21,6 +25,8 @@ type ChildType = Readonly<{
     RangeStartLine: number;
     RangeEndLine: number;
     DocStrMap: TTokenStream;
+    document: vscode.TextDocument;
+    GValMap: TGValMap;
 }>;
 
 export function getChildren(child: ChildType): TAhkSymbolList {
@@ -30,6 +36,8 @@ export function getChildren(child: ChildType): TAhkSymbolList {
         RangeEndLine,
         inClass,
         fnList,
+        document,
+        GValMap,
     } = child;
 
     const result: TAhkSymbol[] = [];
@@ -45,6 +53,8 @@ export function getChildren(child: ChildType): TAhkSymbolList {
                 line,
                 RangeEndLine,
                 inClass,
+                document,
+                GValMap,
             });
             if (DocumentSymbol !== null) {
                 result.push(DocumentSymbol);

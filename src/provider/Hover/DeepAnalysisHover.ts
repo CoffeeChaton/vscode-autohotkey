@@ -1,30 +1,30 @@
 import * as vscode from 'vscode';
 import {
-    TDAMeta,
-    TParamMeta,
-    TTextMeta,
-    TValMeta,
-} from '../../tools/DeepAnalysis/TypeFnMeta';
+    CAhkFuncSymbol,
+    TParamMetaOut,
+    TTextMetaOut,
+    TValMetaOut,
+} from '../../globalEnum';
 import { EPrefix, setMD } from '../../tools/MD/setMD';
 import { setPreFix } from '../../tools/str/setPreFix';
 
-function PosInRange(arr: vscode.Range[], position: vscode.Position): boolean {
+function PosInRange(arr: readonly vscode.Range[], position: vscode.Position): boolean {
     return arr.some((range: vscode.Range): boolean => range.contains(position));
 }
 
 export function DeepAnalysisHover(
-    DA: TDAMeta,
+    DA: CAhkFuncSymbol,
     wordUp: string,
     position: vscode.Position,
 ): vscode.MarkdownString | null {
     const {
-        funcRawName,
+        name,
         paramMap,
         valMap,
         textMap,
     } = DA;
 
-    const argMeta: TParamMeta | undefined = paramMap.get(wordUp);
+    const argMeta: TParamMetaOut | undefined = paramMap.get(wordUp);
     if (argMeta !== undefined) {
         const {
             isByRef,
@@ -36,10 +36,10 @@ export function DeepAnalysisHover(
         if (!PosInRange([...refRangeList, ...defRangeList], position)) return null;
 
         const prefix = setPreFix(isByRef, isVariadic);
-        return setMD(prefix, refRangeList, defRangeList, funcRawName, '');
+        return setMD(prefix, refRangeList, defRangeList, name, '');
     }
 
-    const value: TValMeta | undefined = valMap.get(wordUp);
+    const value: TValMetaOut | undefined = valMap.get(wordUp);
     if (value !== undefined) {
         const {
             refRangeList,
@@ -48,15 +48,15 @@ export function DeepAnalysisHover(
         if (!PosInRange([...refRangeList, ...defRangeList], position)) return null;
 
         // TODO const typeValType = getAhkTypeName(ahkValType);
-        return setMD(EPrefix.var, refRangeList, defRangeList, funcRawName, '');
+        return setMD(EPrefix.var, refRangeList, defRangeList, name, '');
     }
 
-    const textMeta: TTextMeta | undefined = textMap.get(wordUp);
+    const textMeta: TTextMetaOut | undefined = textMap.get(wordUp);
     if (textMeta !== undefined) {
         const { refRangeList } = textMeta;
         if (!PosInRange(refRangeList, position)) return null;
 
-        return setMD(EPrefix.unKnownText, refRangeList, [], funcRawName, '');
+        return setMD(EPrefix.unKnownText, refRangeList, [], name, '');
     }
 
     return null;

@@ -1,16 +1,19 @@
 import * as vscode from 'vscode';
-import { TSnippetRecMap } from '../../../../globalEnum';
-import { TValMap, TValMeta } from '../../../../tools/DeepAnalysis/TypeFnMeta';
+import {
+    TSnippetRecMap,
+    TValMapOut,
+    TValMetaOut,
+} from '../../../../globalEnum';
 import { EPrefix } from '../../../../tools/MD/setMD';
 import { setItemCore } from './setItem';
 
 export function getValCompletion(
-    valMap: TValMap,
+    valMap: TValMapOut,
     funcName: string,
     recMap: TSnippetRecMap,
 ): vscode.CompletionItem[] {
     const need: vscode.CompletionItem[] = [];
-    valMap.forEach((v: TValMeta): void => {
+    valMap.forEach((v: TValMetaOut): void => {
         const {
             keyRawName,
             refRangeList,

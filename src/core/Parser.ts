@@ -1,7 +1,10 @@
 /* eslint-disable max-lines */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,20] }] */
 import * as vscode from 'vscode';
-import { TAhkSymbol, TTokenStream } from '../globalEnum';
+import {
+    CAhkFuncSymbol,
+    TAhkSymbolIn,
+} from '../globalEnum';
 import { getCaseDefaultName, getSwitchName } from '../provider/SymbolProvider/getSwitchCaseName';
 import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
@@ -11,18 +14,11 @@ import { getRange } from '../tools/range/getRange';
 import { getRangeCaseBlock } from '../tools/range/getRangeCaseBlock';
 import { getRangeOfLine } from '../tools/range/getRangeOfLine';
 import { getChildren, TFuncInput } from './getChildren';
+import { getFuncCore } from './ParserFunc';
 import { ParserLine } from './ParserTools/ParserLine';
 
-function getFuncDetail(line: number, DocStrMap: TTokenStream): string {
-    if (line === 0) return '';
-    const PreviousLineText = DocStrMap[line - 1].textRaw.trimStart();
-    return PreviousLineText.startsWith(';@')
-        ? PreviousLineText.substring(2) // 2=== ';@'.len
-        : '';
-}
-
 export const ParserBlock = {
-    getCaseDefaultBlock(FuncInput: TFuncInput): null | TAhkSymbol {
+    getCaseDefaultBlock(FuncInput: TFuncInput): null | TAhkSymbolIn {
         const { lStr } = FuncInput;
         if (lStr === '' || lStr.indexOf(':') === -1) return null;
         const {
@@ -30,13 +26,15 @@ export const ParserBlock = {
             inClass,
             line,
             DocStrMap,
+            document,
+            GValMap,
         } = FuncInput;
 
         const caseName: string | null = getCaseDefaultName(DocStrMap[line].textRaw, lStr);
         if (caseName === null) return null;
 
         const Range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
-        const Block: TAhkSymbol = new vscode.DocumentSymbol(
+        const Block: TAhkSymbolIn = new vscode.DocumentSymbol(
             caseName,
             '',
             vscode.SymbolKind.EnumMember,
@@ -49,11 +47,13 @@ export const ParserBlock = {
             RangeEndLine: Range.end.line,
             inClass,
             fnList: [ParserBlock.getSwitchBlock, ParserBlock.getComment, ParserLine],
+            document,
+            GValMap,
         });
         return Block;
     },
 
-    getSwitchBlock(FuncInput: TFuncInput): null | TAhkSymbol {
+    getSwitchBlock(FuncInput: TFuncInput): null | TAhkSymbolIn {
         if (!(/^SWITCH$/ui).test(FuncInput.fistWordUp)) return null;
 
         const {
@@ -62,11 +62,13 @@ export const ParserBlock = {
             RangeEndLine,
             inClass,
             lStr,
+            document,
+            GValMap,
         } = FuncInput;
 
         const range = getRange(DocStrMap, line, line, RangeEndLine);
         const selectionRange = getRangeOfLine(DocStrMap, line);
-        const SwitchBlock: TAhkSymbol = new vscode.DocumentSymbol(
+        const SwitchBlock: TAhkSymbolIn = new vscode.DocumentSymbol(
             getSwitchName(lStr),
             'Switch',
             vscode.SymbolKind.Enum,
@@ -79,17 +81,21 @@ export const ParserBlock = {
             RangeEndLine: range.end.line,
             inClass,
             fnList: [ParserBlock.getCaseDefaultBlock],
+            document,
+            GValMap,
         });
         return SwitchBlock;
     },
 
-    getFunc(FuncInput: TFuncInput): null | TAhkSymbol {
+    getFunc(FuncInput: TFuncInput): null | CAhkFuncSymbol {
         const {
             DocStrMap,
             line,
             RangeEndLine,
             inClass,
             lStr,
+            document,
+            GValMap,
         } = FuncInput;
 
         if (lStr.length < 1 || lStr.indexOf('(') === -1 || lStr.indexOf('}') > -1) return null;
@@ -97,30 +103,32 @@ export const ParserBlock = {
         if (isFunc === null) return null;
         const { name, selectionRange } = isFunc;
 
-        const searchLine = selectionRange.end.line;
-        const range = getRange(DocStrMap, line, searchLine, RangeEndLine);
-        const kind = inClass
-            ? vscode.SymbolKind.Method
-            : vscode.SymbolKind.Function;
-        const detail = getFuncDetail(line, DocStrMap);
-
-        const funcSymbol: TAhkSymbol = new vscode.DocumentSymbol(name, detail, kind, range, selectionRange);
-        funcSymbol.children = getChildren({
+        const range = getRange(DocStrMap, line, selectionRange.end.line, RangeEndLine);
+        const children: vscode.DocumentSymbol[] = getChildren({
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
             inClass,
             fnList: [
-                ParserBlock.getFunc,
+                // ParserBlock.getFunc,
                 ParserBlock.getComment,
                 ParserBlock.getSwitchBlock,
                 ParserLine,
             ],
+            document,
+            GValMap,
         });
-        return funcSymbol;
+
+        return getFuncCore({
+            FuncInput,
+            name,
+            selectionRange,
+            range,
+            children,
+        });
     },
 
-    getClass(FuncInput: TFuncInput): null | TAhkSymbol {
+    getClass(FuncInput: TFuncInput): null | TAhkSymbolIn {
         if (!(/^CLASS$/ui).test(FuncInput.fistWordUp)) return null;
 
         const classExec = (/^\s*\bclass\b\s+(\w+)/ui).exec(FuncInput.lStr);
@@ -131,18 +139,17 @@ export const ParserBlock = {
             line,
             RangeEndLine,
             lStr,
+            document,
+            GValMap,
         } = FuncInput;
         const Range = getRange(DocStrMap, line, line, RangeEndLine);
 
         const name = classExec[1];
 
         const col = lStr.indexOf(name);
-        const colFix = col === -1
-            ? lStr.length
-            : col;
-        const selectionRange = new vscode.Range(line, colFix, line, colFix + name.length);
-        const detail = getClassDetail(lStr, colFix, name);
-        const classSymbol: TAhkSymbol = new vscode.DocumentSymbol(
+        const selectionRange = new vscode.Range(line, col, line, col + name.length);
+        const detail = getClassDetail(lStr, col, name);
+        const classSymbol: TAhkSymbolIn = new vscode.DocumentSymbol(
             name,
             detail,
             vscode.SymbolKind.Class,
@@ -155,11 +162,13 @@ export const ParserBlock = {
             RangeEndLine: Range.end.line,
             inClass: true,
             fnList: [ParserBlock.getClass, ParserBlock.getFunc, getClassGetSet, ParserLine, getClassInstanceVar],
+            document,
+            GValMap,
         });
         return classSymbol;
     },
 
-    getComment(FuncInput: TFuncInput): null | TAhkSymbol {
+    getComment(FuncInput: TFuncInput): null | TAhkSymbolIn {
         const {
             line,
             lStr,

@@ -1,7 +1,6 @@
 import * as path from 'path';
-import { TTokenStream } from '../../globalEnum';
+import { CAhkFuncSymbol, TTokenStream } from '../../globalEnum';
 import { BuiltInFunctionMap, TBuiltInFuncElement } from '../../tools/Built-in/func';
-import { TDAMeta } from '../../tools/DeepAnalysis/TypeFnMeta';
 import { TFullFuncMap } from '../../tools/Func/getAllFunc';
 
 type TMsg = {
@@ -35,10 +34,10 @@ function getRefFuncMap(AhkTokenList: TTokenStream): TRefFuncInfoMap {
 }
 
 function splitLine(keyUp: string, fullFuncMap: TFullFuncMap, ed: string[]): void {
-    const DA: TDAMeta | undefined = fullFuncMap.get(keyUp);
+    const DA: CAhkFuncSymbol | undefined = fullFuncMap.get(keyUp);
     if (DA !== undefined) {
         const fileName: string = path.basename(DA.uri.fsPath);
-        ed.push(`${DA.funcRawName}(...) ; ${fileName}`);
+        ed.push(`${DA.name}(...) ; ${fileName}`);
         return;
     }
     const BuiltInFunc: TBuiltInFuncElement | undefined = BuiltInFunctionMap.get(keyUp);

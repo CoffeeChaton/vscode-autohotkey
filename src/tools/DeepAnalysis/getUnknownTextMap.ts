@@ -1,21 +1,19 @@
+/* eslint-disable max-statements */
 import * as vscode from 'vscode';
 import { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import {
-    TAhkSymbol,
+    TParamMapIn,
+    TParamMetaIn,
+    TTextMapIn,
+    TTextMetaIn,
     TTokenStream,
+    TValMapIn,
+    TValMetaIn,
 } from '../../globalEnum';
 import { newC502 } from './FnVar/def/diag/c502';
-import {
-    TParamMap,
-    TParamMeta,
-    TTextMap,
-    TTextMeta,
-    TValMap,
-    TValMeta,
-} from './TypeFnMeta';
 
 function pushRef(
-    oldDef: TParamMeta | TValMeta,
+    oldDef: TParamMetaIn | TValMetaIn,
     keyRawName: string,
     startPos: vscode.Position,
     range: vscode.Range,
@@ -89,18 +87,21 @@ function getIgnoreList(): string[] {
 }
 
 // eslint-disable-next-line max-statements
+// eslint-disable-next-line max-params
 export function getUnknownTextMap(
-    AhkSymbol: TAhkSymbol,
+    startLine: number,
+    endLine: number,
     DocStrMap: TTokenStream,
-    paramMap: TParamMap,
-    valMap: TValMap,
+    paramMap: TParamMapIn,
+    valMap: TValMapIn,
     GValMap: TGValMap,
-): TTextMap {
+    name: string,
+): TTextMapIn {
     // 287 ms
     const ignoreList: string[] = getIgnoreList();
-    const textMap: TTextMap = new Map<string, TTextMeta>();
-    const startLine: number = AhkSymbol.selectionRange.end.line;
-    const endLine: number = AhkSymbol.range.end.line;
+    const textMap: TTextMapIn = new Map<string, TTextMetaIn>();
+    // const startLine: number = AhkSymbol.selectionRange.end.line;
+    // const endLine: number = AhkSymbol.range.end.line;
     for (const { lStr, line, fistWordUp } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;
@@ -125,7 +126,7 @@ export function getUnknownTextMap(
             const { input } = v;
 
             if (character === undefined || input === undefined) {
-                void vscode.window.showErrorMessage(`getUnknown Error at line ${line} of ${AhkSymbol.name}()`);
+                void vscode.window.showErrorMessage(`getUnknown Error at line ${line} of ${name}()`);
                 continue;
             }
 
@@ -153,20 +154,20 @@ export function getUnknownTextMap(
                 continue;
             } // keep before valMap && paramMap
 
-            const oldVal: TValMeta | undefined = valMap.get(wordUp);
+            const oldVal: TValMetaIn | undefined = valMap.get(wordUp);
             if (oldVal) {
                 pushRef(oldVal, keyRawName, startPos, range);
                 continue;
             }
 
-            const oldParam: TParamMeta | undefined = paramMap.get(wordUp);
+            const oldParam: TParamMetaIn | undefined = paramMap.get(wordUp);
             if (oldParam) {
                 pushRef(oldParam, keyRawName, startPos, range);
                 continue;
             }
 
             //
-            const need: TTextMeta = {
+            const need: TTextMetaIn = {
                 keyRawName,
                 refRangeList: [...textMap.get(wordUp)?.refRangeList ?? [], range],
             };
