@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [4,5,11,12] }] */
 import * as vscode from 'vscode';
-import { EMode } from '../../globalEnum';
+import { EMode } from '../../Enum/EMode';
 // const enum EMode {
 //     ahkFunc = 'Function',
 //     ahkClass = 'Class',

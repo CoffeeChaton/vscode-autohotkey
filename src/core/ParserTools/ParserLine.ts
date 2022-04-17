@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
-import { DeepReadonly, TAhkSymbol } from '../../globalEnum';
+import { DeepReadonly, TAhkSymbolIn } from '../../globalEnum';
 import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
-// import { removeBigParentheses } from '../tools/removeBigParentheses';
-// import { removeParentheses } from '../tools/removeParentheses';
 import { TFuncInput } from '../getChildren';
 
 type TLineRuler = DeepReadonly<{
@@ -18,10 +16,6 @@ const IncludeAgain: TLineRuler = {
     kind: vscode.SymbolKind.Module,
     getName(strTrim: string): string | null {
         return strTrim.replace(/^#IncludeAgain\s+/ui, '#IncludeAgain ');
-        // const e = (/^#IncludeAgain\s+?(\.+)/ui).exec(strTrim);
-        // return e
-        //     ? `#IncludeAgain ${e[1]}`
-        //     : null;
     },
 
     test(strTrim: string): boolean {
@@ -34,10 +28,6 @@ const Include: TLineRuler = {
     kind: vscode.SymbolKind.Module,
     getName(strTrim: string): string | null {
         return strTrim.replace(/^#Include\s+/ui, '#Include ');
-        // const e = (/^#Include\s+?(\.+)/iu).exec(strTrim);
-        // return e
-        //     ? `#Include ${e[1]}`
-        //     : null;
     },
 
     test(strTrim: string): boolean {
@@ -100,7 +90,7 @@ const HotKeys: TLineRuler = {
     },
 };
 
-export function ParserLine(FuncInput: TFuncInput): null | TAhkSymbol {
+export function ParserLine(FuncInput: TFuncInput): null | TAhkSymbolIn {
     const {
         fistWordUp,
         DocStrMap,

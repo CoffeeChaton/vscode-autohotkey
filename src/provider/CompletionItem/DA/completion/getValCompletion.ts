@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
 import {
-    TSnippetRecMap,
     TValMapOut,
     TValMetaOut,
 } from '../../../../globalEnum';
 import { EPrefix } from '../../../../tools/MD/setMD';
+import { TSnippetRecMap } from '../ESnippetRecBecause';
 import { setItemCore } from './setItem';
 
 export function getValCompletion(

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ESnippetRecBecause } from '../../globalEnum';
+import { ESnippetRecBecause } from '../../provider/CompletionItem/DA/ESnippetRecBecause';
 
 export const enum EPrefix {
     var = 'var',

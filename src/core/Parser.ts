@@ -34,7 +34,7 @@ export const ParserBlock = {
         if (caseName === null) return null;
 
         const Range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
-        const Block: TAhkSymbolIn = new vscode.DocumentSymbol(
+        const Block: vscode.DocumentSymbol = new vscode.DocumentSymbol(
             caseName,
             '',
             vscode.SymbolKind.EnumMember,
@@ -49,7 +49,7 @@ export const ParserBlock = {
             fnList: [ParserBlock.getSwitchBlock, ParserBlock.getComment, ParserLine],
             document,
             GValMap,
-        });
+        }) as vscode.DocumentSymbol[];
         return Block;
     },
 
@@ -68,7 +68,7 @@ export const ParserBlock = {
 
         const range = getRange(DocStrMap, line, line, RangeEndLine);
         const selectionRange = getRangeOfLine(DocStrMap, line);
-        const SwitchBlock: TAhkSymbolIn = new vscode.DocumentSymbol(
+        const SwitchBlock: vscode.DocumentSymbol = new vscode.DocumentSymbol(
             getSwitchName(lStr),
             'Switch',
             vscode.SymbolKind.Enum,
@@ -83,7 +83,7 @@ export const ParserBlock = {
             fnList: [ParserBlock.getCaseDefaultBlock],
             document,
             GValMap,
-        });
+        }) as vscode.DocumentSymbol[];
         return SwitchBlock;
     },
 
@@ -117,7 +117,7 @@ export const ParserBlock = {
             ],
             document,
             GValMap,
-        });
+        }) as vscode.DocumentSymbol[];
 
         return getFuncCore({
             FuncInput,
@@ -149,7 +149,7 @@ export const ParserBlock = {
         const col = lStr.indexOf(name);
         const selectionRange = new vscode.Range(line, col, line, col + name.length);
         const detail = getClassDetail(lStr, col, name);
-        const classSymbol: TAhkSymbolIn = new vscode.DocumentSymbol(
+        const classSymbol = new vscode.DocumentSymbol(
             name,
             detail,
             vscode.SymbolKind.Class,
@@ -164,7 +164,8 @@ export const ParserBlock = {
             fnList: [ParserBlock.getClass, ParserBlock.getFunc, getClassGetSet, ParserLine, getClassInstanceVar],
             document,
             GValMap,
-        });
+        }) as vscode.DocumentSymbol[];
+
         return classSymbol;
     },
 

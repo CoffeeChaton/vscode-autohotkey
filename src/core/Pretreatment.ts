@@ -2,9 +2,9 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 
 import { EDetail, TAhkToken, TTokenStream } from '../globalEnum';
-import { inCommentBlock } from './str/inCommentBlock';
-import { inLTrimRange } from './str/inLTrimRange';
-import { getLStr, isSetVarTradition } from './str/removeSpecialChar';
+import { inCommentBlock } from '../tools/str/inCommentBlock';
+import { inLTrimRange } from '../tools/str/inLTrimRange';
+import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
 
 export function Pretreatment(strArray: readonly string[], startLineBaseZero: number, fileName: string): TTokenStream {
     const result: TAhkToken = [];

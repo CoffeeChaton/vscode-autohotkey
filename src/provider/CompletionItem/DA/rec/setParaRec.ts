@@ -1,4 +1,5 @@
-import { ESnippetRecBecause, TParamMapOut, TSnippetRecMap } from '../../../../globalEnum';
+import { TParamMapOut } from '../../../../globalEnum';
+import { ESnippetRecBecause, TSnippetRecMap } from '../ESnippetRecBecause';
 
 export function setParaRec(suggestMap: TSnippetRecMap, paramMap: TParamMapOut, inputStr: string): void {
     for (const paramMeta of paramMap.values()) {

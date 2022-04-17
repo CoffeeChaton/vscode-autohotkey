@@ -1,6 +1,6 @@
 import * as temp from 'temp';
 import * as vscode from 'vscode';
-import { EStr } from '../globalEnum';
+import { EStr } from '../Enum/EStr';
 
 export type TDiff = {
     leftText: string;

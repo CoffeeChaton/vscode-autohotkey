@@ -1,9 +1,9 @@
 /* eslint-disable no-await-in-loop */
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { Pretreatment } from '../../core/Pretreatment';
 import { TTokenStream } from '../../globalEnum';
 import { getUriList } from '../../tools/fsTools/getUriList';
-import { Pretreatment } from '../../tools/Pretreatment';
 
 export async function renameFileNameFunc(oldUri: vscode.Uri, newUri: vscode.Uri): Promise<void> {
     const UriList: vscode.Uri[] | null = getUriList();

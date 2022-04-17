@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import { getCode502Default, getCode503Default } from '../../../configUI';
 import { diagColl } from '../../../core/Detecter';
-import { CAhkFuncSymbol, EDiagBase, TAhkSymbolList } from '../../../globalEnum';
+import { EDiagBase } from '../../../Enum/EDiagBase';
+import { CAhkFuncSymbol, TAhkSymbolList } from '../../../globalEnum';
 import { ClassWm } from '../../wm';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';

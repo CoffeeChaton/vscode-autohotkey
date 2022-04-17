@@ -1,10 +1,11 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [1,2,3,4,5,6,7,8] }] */
 
 import * as vscode from 'vscode';
-import { EFormatChannel, TPick } from '../globalEnum';
+import { EFormatChannel } from '../globalEnum';
 import { FormatCore } from '../provider/Format/FormatProvider';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { getUriList } from '../tools/fsTools/getUriList';
+import { TPick } from './TPick';
 import { UpdateCacheAsync } from './UpdateCache';
 
 async function formatByPathAsync(

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { Diags, EDiagCode, EDiagCodeDA } from '../../diag';
-import { EDiagBase } from '../../globalEnum';
+import { EDiagBase } from '../../Enum/EDiagBase';
 import { c501ignoreArgNeverUsed } from './c501ignoreArgNeverUsed';
 import { c502c503CodeAction } from './c502c503CodeAction';
 

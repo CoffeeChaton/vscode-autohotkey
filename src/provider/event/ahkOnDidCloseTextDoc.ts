@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { diagColl } from '../../core/Detecter';
-import { EDiagBase } from '../../globalEnum';
+import { EDiagBase } from '../../Enum/EDiagBase';
 
 function clearNekoDA(uri: vscode.Uri): null {
     const isVisible: boolean = vscode.window.visibleTextEditors

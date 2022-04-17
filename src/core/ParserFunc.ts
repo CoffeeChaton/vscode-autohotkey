@@ -1,8 +1,8 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { EMode } from '../Enum/EMode';
 import {
     CAhkFuncSymbol,
-    EMode,
     TParamMapIn,
     TTextMapIn,
     TTokenStream,

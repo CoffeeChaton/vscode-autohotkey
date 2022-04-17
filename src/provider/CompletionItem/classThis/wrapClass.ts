@@ -3,8 +3,8 @@
 /* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 import { Detecter } from '../../../core/Detecter';
+import { EMode } from '../../../Enum/EMode';
 import {
-    EMode,
     TAhkSymbol,
     TAhkSymbolList,
     TSymAndFsPath,

@@ -1,10 +1,12 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,5] }] */
 import * as vscode from 'vscode';
 import {
-    ESnippetRecBecause,
-    TSnippetRecMap,
     TValMapOut,
 } from '../../../../globalEnum';
+import {
+    ESnippetRecBecause,
+    TSnippetRecMap,
+} from '../ESnippetRecBecause';
 
 export function getContextRange(position: vscode.Position, DARange: vscode.Range): vscode.Range {
     const enum ERecLine {

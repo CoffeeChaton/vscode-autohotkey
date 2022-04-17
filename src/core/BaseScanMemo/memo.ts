@@ -6,11 +6,11 @@ import {
     TTokenStream,
 } from '../../globalEnum';
 import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
-import { Pretreatment } from '../../tools/Pretreatment';
 import { getChildren } from '../getChildren';
 import { ParserBlock } from '../Parser';
 import { ahkGlobalMain, TGValMap, TGValMapReadOnly } from '../ParserTools/ahkGlobalDef';
 import { ParserLine } from '../ParserTools/ParserLine';
+import { Pretreatment } from '../Pretreatment';
 
 export type TMemo = {
     AhkSymbolList: TAhkSymbolList;

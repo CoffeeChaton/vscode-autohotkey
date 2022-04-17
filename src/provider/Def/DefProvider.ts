@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
-import { DeepReadonly, EMode, TSymAndFsPath } from '../../globalEnum';
+import { EMode } from '../../Enum/EMode';
+import { DeepReadonly, TSymAndFsPath } from '../../globalEnum';
 import { tryGetSymbol } from '../../tools/tryGetSymbol';
 import { getValWithDA } from './getValDefInFunc';
 

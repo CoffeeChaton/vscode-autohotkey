@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { CAhkFuncSymbol, EStr } from '../../../globalEnum';
+import { EStr } from '../../../Enum/EStr';
+import { CAhkFuncSymbol } from '../../../globalEnum';
 
 export function fnDAList2Completion(
     inputStr: string,

@@ -3,7 +3,8 @@ import * as mm from 'micromatch';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { Detecter, TAhkFileData } from '../../../core/Detecter';
-import { CAhkFuncSymbol, EStr, TAhkSymbol } from '../../../globalEnum';
+import { EStr } from '../../../Enum/EStr';
+import { CAhkFuncSymbol, TAhkSymbol } from '../../../globalEnum';
 import { insertTextWm } from '../classThis/insertTextWm';
 import { fnDAList2Completion } from './DAList2Completion';
 

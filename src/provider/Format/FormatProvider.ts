@@ -2,7 +2,8 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { EDetail, EFormatChannel, EStr } from '../../globalEnum';
+import { EStr } from '../../Enum/EStr';
+import { EDetail, EFormatChannel } from '../../globalEnum';
 import { fmtDiffInfo } from './fmtDiffInfo';
 import { getDeepKeywords } from './getDeepKeywords';
 import { isHotStr, isLabel } from './isLabelOrHotStr';

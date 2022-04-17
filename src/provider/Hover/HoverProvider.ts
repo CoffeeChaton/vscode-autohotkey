@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { CAhkFuncSymbol, EMode } from '../../globalEnum';
+import { EMode } from '../../Enum/EMode';
+import { CAhkFuncSymbol } from '../../globalEnum';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func';
 import { getDAWithName } from '../../tools/DeepAnalysis/getDAWithName';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';

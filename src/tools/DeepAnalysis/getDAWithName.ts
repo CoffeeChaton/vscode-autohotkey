@@ -1,5 +1,6 @@
 import { Detecter, TAhkFileData } from '../../core/Detecter';
-import { CAhkFuncSymbol, EMode } from '../../globalEnum';
+import { EMode } from '../../Enum/EMode';
+import { CAhkFuncSymbol } from '../../globalEnum';
 import { kindCheck } from '../../provider/Def/kindCheck';
 
 export function getDAWithName(wordUP: string, mode: EMode): null | CAhkFuncSymbol {

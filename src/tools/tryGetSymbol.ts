@@ -1,5 +1,6 @@
 import { Detecter, TAhkFileData } from '../core/Detecter';
-import { EMode, TSymAndFsPath } from '../globalEnum';
+import { EMode } from '../Enum/EMode';
+import { TSymAndFsPath } from '../globalEnum';
 import { kindCheck } from '../provider/Def/kindCheck';
 
 export function tryGetSymbol(wordUP: string, mode: EMode): null | TSymAndFsPath {

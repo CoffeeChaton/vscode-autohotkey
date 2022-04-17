@@ -1,4 +1,4 @@
-import { EDiagBase } from '../../globalEnum';
+import { EDiagBase } from '../../Enum/EDiagBase';
 
 export function getIgnore(textRaw: string, line: number, IgnoreLine: number): number {
     // ;@ahk-ignore 30 line.

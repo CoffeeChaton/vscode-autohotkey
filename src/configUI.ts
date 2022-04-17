@@ -1,7 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,10] }] */
-import * as mm from 'micromatch';
 import * as vscode from 'vscode';
-import { TConfigs } from './globalEnum';
+import { TConfigs } from './configType';
 import { checkDebugFile } from './tools/fsTools/file';
 
 /*
@@ -80,9 +79,10 @@ export function getFormatConfig(): boolean {
     return config.format.textReplace;
 }
 
-export function getIgnored(fsPath: string): boolean {
-    const blockList: readonly string[] = config.baseScan.IgnoredList;
-    return mm.isMatch(fsPath, blockList);
+export function getIgnoredList(): readonly string[] {
+    return config.baseScan.IgnoredList;
+    // const blockList: readonly string[] = config.baseScan.IgnoredList;
+    // return mm.isMatch(fsPath, blockList);
 }
 
 export function getDebugPath(): string {

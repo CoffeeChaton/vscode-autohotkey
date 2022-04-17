@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { EFormatChannel, EVersion } from '../../globalEnum';
+import { EVersion } from '../../Enum/EVersion';
+import { EFormatChannel } from '../../globalEnum';
 
 export function fmtReplaceWarn(timeStart: number, from: EFormatChannel, fileName: string): void {
     const time = Date.now() - timeStart;

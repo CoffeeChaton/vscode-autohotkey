@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
-import { CAhkFuncSymbol, TSnippetRecMap } from '../../../globalEnum';
+import { CAhkFuncSymbol } from '../../../globalEnum';
 import { getDAWithPos } from '../../../tools/DeepAnalysis/getDAWithPos';
 import { isPosAtStr } from '../../../tools/isPosAtStr';
 import { getParamCompletion } from './completion/getArgCompletion';
 import { getUnknownTextCompletion } from './completion/getUnknownTextCompletion';
 import { getValCompletion } from './completion/getValCompletion';
+import { TSnippetRecMap } from './ESnippetRecBecause';
 import { getRecMap } from './rec/getRecMap';
 
 function suggest(

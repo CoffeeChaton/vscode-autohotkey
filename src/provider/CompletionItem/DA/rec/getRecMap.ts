@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { CAhkFuncSymbol, TSnippetRecMap } from '../../../../globalEnum';
+import { CAhkFuncSymbol } from '../../../../globalEnum';
+import { TSnippetRecMap } from '../ESnippetRecBecause';
 import { setParaRec } from './setParaRec';
 import { getContextRange, setVarRec } from './setVarRec';
 

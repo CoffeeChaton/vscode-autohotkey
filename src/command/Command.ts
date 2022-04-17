@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
 import { getDocUriStr } from '../configUI';
 import { TAhkFileData } from '../core/Detecter';
-import { TPick } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { DeepAnalysisAllFiles } from './DeepAnalysisAllFiles';
 import { pressureTest } from './DevMode';
 import { FormatAllFile } from './FormatAllFile';
 import { ListAllFunc, ListAllFuncSort } from './ListAllFunc';
 import { ListAllInclude } from './ListAllInclude';
+import { TPick } from './TPick';
 import { UpdateCacheAsync } from './UpdateCache';
 
 async function fn0(): Promise<void> {

@@ -2,29 +2,6 @@
 /* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
 
-export const enum EMode {
-    // ahkVoid = 'void',
-    ahkFunc = 'Function', // vscode.SymbolKind.Function
-    ahkClass = 'Class', // vscode.SymbolKind.Class
-    ahkMethod = 'Method', // vscode.SymbolKind.Method
-    // ahkAll = 'ahkAll',
-    ahkGlobal = 'global', // vscode.SymbolKind.Variable
-}
-
-// vscode.SymbolKind
-// enum ESymbolKind {
-//     Class = 4,
-//     Method = 5,
-//     Function = 11,
-//     Variable = 12,
-// }
-
-export const enum EStr {
-    diff_name_prefix = '_diff_temp_',
-    suggestStr = '✿',
-    // neverStr = '▽',
-}
-
 // export const enum EUri {
 //     ahkDoc = 'https://www.autohotkey.com/docs/',
 //     nekoHelpHome = 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp',
@@ -61,65 +38,6 @@ export type TSymAndFsPath = {
     fsPath: TFsPath;
 };
 
-export const enum EVersion {
-    getValDefInFunc = '0.4beta',
-    format = 'v0.5',
-    formatRange = ' v0.4b',
-}
-
-export const enum EDiagBase {
-    ignore = ';@ahk-ignore ', // ;@ahk-ignore 30 line.
-    source = 'neko help',
-    sourceDA = 'neko help(DA)',
-}
-
-export const enum EFnMode {
-    normal = 1,
-    local = 2,
-    global = 3,
-    Static = 4,
-}
-
-export const enum EValType {
-    normal = 1,
-    local = 2,
-    global = 3,
-    Static = 4,
-    args = 5,
-}
-
-export type TRunValType = Exclude<EValType, EValType.normal>;
-export type TRunValType2 = Exclude<TRunValType, EValType.args>;
-
-type TempConfigs = {
-    statusBar: {
-        displayColor: string;
-    };
-    format: {
-        textReplace: boolean;
-    };
-    lint: {
-        funcSize: number;
-    };
-    baseScan: {
-        IgnoredList: readonly string[];
-    };
-    Debug: {
-        executePath: string;
-    };
-    snippets: {
-        blockFilesList: readonly string[];
-    };
-    Diag: {
-        WarningCap: {
-            code502: number; // of var
-            code503: number; // of param
-        };
-    };
-    openUriStr: string; //
-};
-export type TConfigs = DeepReadonly<TempConfigs>;
-
 export const enum EFormatChannel {
     byFormatAllFile = 'Format File',
     byFormatRange = 'Format Range',
@@ -127,25 +45,9 @@ export const enum EFormatChannel {
     // byDev = 'wait for dev',
 }
 
-export type TPick<TNeed> = {
-    label: string;
-    fn: () => Promise<TNeed>;
-} | {
-    label: string;
-    fn: () => TNeed;
-};
-
-export const enum ESnippetRecBecause {
-    paramNeverUsed = 'param is assigned but never used.\n\n',
-    paramStartWith = 'param start with(Case Sensitive)\n\n',
-    varDefNear = 'Def within the 5 lines\n\n',
-    varRefNear = 'Ref within the 5 lines\n\n',
-    varStartWith = 'var start with(Case Sensitive)\n\n',
-}
-
-export type TKeyRawName = string;
-export type TSnippetRecMap = Map<TKeyRawName, ESnippetRecBecause>;
-
+// ---------------------------------------------------------------------------
+// WTF
+// ---------------------------------------------------------------------------
 type TUpName = string;
 /**
  * if keyRawName = first def name -> 0

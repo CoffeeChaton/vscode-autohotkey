@@ -1,7 +1,8 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { showTimeSpend } from '../configUI';
-import { EStr, TFsPath } from '../globalEnum';
+import { EStr } from '../Enum/EStr';
+import { TFsPath } from '../globalEnum';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
 import { BaseScanMemo, getBaseData, TMemo } from './BaseScanMemo/memo';
 

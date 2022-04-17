@@ -5,7 +5,7 @@ import {
     EDiagCode,
     EDiagCodeDA,
 } from '../../../diag';
-import { EDiagBase } from '../../../globalEnum';
+import { EDiagBase } from '../../../Enum/EDiagBase';
 
 export function setDiagnostic(
     value: EDiagCode,
