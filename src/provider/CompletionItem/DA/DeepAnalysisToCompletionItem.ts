@@ -33,7 +33,7 @@ export function DeepAnalysisToCompletionItem(
 ): vscode.CompletionItem[] {
     if (isPosAtStr(document, position)) return [];
 
-    const DA: undefined | CAhkFuncSymbol = getDAWithPos(document, position);
+    const DA: undefined | CAhkFuncSymbol = getDAWithPos(document.uri.fsPath, position);
     if (DA === undefined) return [];
 
     return suggest(DA, position, inputStr);

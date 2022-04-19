@@ -107,6 +107,7 @@ type MyDocArg = {
 };
 
 export class CAhkFuncSymbol extends vscode.DocumentSymbol {
+    public readonly nameRange: vscode.Range;
     public readonly selectionRangeText: string;
     public readonly md: vscode.MarkdownString;
     public readonly uri: vscode.Uri;
@@ -145,6 +146,14 @@ export class CAhkFuncSymbol extends vscode.DocumentSymbol {
         this.valMap = valMap;
         this.textMap = textMap;
         this.children = children;
+
+        this.nameRange = new vscode.Range(
+            selectionRange.start,
+            new vscode.Position(
+                selectionRange.start.line,
+                selectionRangeText.indexOf('('),
+            ),
+        );
     }
 }
 export type TAhkSymbolIn = DeepReadonly<vscode.DocumentSymbol>;

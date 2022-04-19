@@ -35,8 +35,7 @@ export function DeepAnalysisAllFiles(): null {
 
         const { AhkSymbolList } = AhkFileData;
 
-        const DAList: CAhkFuncSymbol[] = [];
-        getDAList(AhkSymbolList, DAList);
+        const DAList: CAhkFuncSymbol[] = getDAList(AhkSymbolList);
 
         need.push(...DAList);
         digDAFile(DAList, vscode.Uri.file(fsPath));

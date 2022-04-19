@@ -7,12 +7,13 @@ import {
     workspace,
 } from 'vscode';
 import { openDocs, statusBarClick } from './command/Command';
+import { ECommand } from './command/ECommand';
 import { UpdateCacheAsync } from './command/UpdateCache';
 import { configChangEvent, statusBarItem } from './configUI';
 import { BaseScanMemo } from './core/BaseScanMemo/memo';
 import { Detecter, diagColl } from './core/Detecter';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
-import { AhkCodeLens, ECommand } from './provider/CodeLens/CodeLensProvider';
+import { AhkCodeLens } from './provider/CodeLens/CodeLensProvider';
 import { showFuncAnalyze } from './provider/CodeLens/showFuncAnalyze';
 import { showUnknownAnalyze } from './provider/CodeLens/showUnknownAnalyze';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';

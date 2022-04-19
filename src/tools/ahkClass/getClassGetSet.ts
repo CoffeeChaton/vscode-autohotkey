@@ -41,7 +41,7 @@ export function getClassGetSet(FuncInput: TFuncInput): null | TAhkSymbol {
     const detail = '';
     const kind = vscode.SymbolKind.Property;
     const selectionRange = range;
-    const classSymbol: TAhkSymbol = new vscode.DocumentSymbol(name, detail, kind, range, selectionRange);
+    const classSymbol: vscode.DocumentSymbol = new vscode.DocumentSymbol(name, detail, kind, range, selectionRange);
     classSymbol.children = getChildren({
         DocStrMap,
         RangeStartLine: range.start.line + 1,
@@ -50,7 +50,7 @@ export function getClassGetSet(FuncInput: TFuncInput): null | TAhkSymbol {
         fnList: [getClassGetSet],
         document,
         GValMap,
-    });
+    }) as vscode.DocumentSymbol[];
     return classSymbol;
 }
 

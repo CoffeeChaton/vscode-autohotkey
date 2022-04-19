@@ -41,7 +41,7 @@ function HoverProviderCore(
     // const commands = getCommandsHover(document, position);
     // if (commands !== null) return commands;
 
-    const DA: CAhkFuncSymbol | undefined = getDAWithPos(document, position);
+    const DA: CAhkFuncSymbol | undefined = getDAWithPos(document.uri.fsPath, position);
     if (DA !== undefined) {
         const md: vscode.MarkdownString | null = DeepAnalysisHover(DA, wordUp, position);
         if (md !== null) return new vscode.Hover(md);

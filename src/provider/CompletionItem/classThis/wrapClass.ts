@@ -145,11 +145,12 @@ function valTrack(
     const stackRangeRaw = getScopeOfPos(document, position)
         || new vscode.Range(0, 0, position.line, position.character);
 
-    const AhkTokenList: TTokenStream = Detecter.updateDocDef(document)
-        .DocStrMap.slice(
+    const AhkTokenList: TTokenStream | undefined = Detecter.getDocMap(document.uri.fsPath)
+        ?.DocStrMap.slice(
             stackRangeRaw.start.line,
             position.line + 1,
         );
+    if (AhkTokenList === undefined) return [];
     const reg: RegExp = ahkValDefRegex(Head);
 
     const classNameList: string[] = []; // value name

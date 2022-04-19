@@ -3,6 +3,7 @@ import { Diags, EDiagCode, EDiagCodeDA } from '../../diag';
 import { EDiagBase } from '../../Enum/EDiagBase';
 import { c501ignoreArgNeverUsed } from './c501ignoreArgNeverUsed';
 import { c502c503CodeAction } from './c502c503CodeAction';
+import { DependencyAnalysis } from './DependencyAnalysis';
 
 function getFsPath(diag: vscode.Diagnostic): string | null {
     const code = diag?.code;
@@ -69,10 +70,13 @@ function fixDiag(uri: vscode.Uri, diagnostics: readonly vscode.Diagnostic[]): vs
 export const CodeActionProvider: vscode.CodeActionProvider = {
     provideCodeActions(
         document: vscode.TextDocument,
-        _range: vscode.Range | vscode.Selection,
+        range: vscode.Range | vscode.Selection,
         context: vscode.CodeActionContext,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
-        return fixDiag(document.uri, context.diagnostics);
+        return [
+            ...fixDiag(document.uri, context.diagnostics),
+            ...DependencyAnalysis(document, range),
+        ];
     },
 };

@@ -4,43 +4,30 @@ import {
     CodeLensProvider,
     Command,
     ProviderResult,
-    SymbolKind,
     TextDocument,
 } from 'vscode';
+import { ECommand } from '../../command/ECommand';
 import { Detecter } from '../../core/Detecter';
-import { CAhkFuncSymbol, TTokenStream } from '../../globalEnum';
-import { TShowAnalyze } from './showFuncAnalyze';
+import { CAhkFuncSymbol, TAhkSymbolList } from '../../globalEnum';
+import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { TShowUnknownAnalyze } from './showUnknownAnalyze';
 
-export const enum ECommand {
-    showFuncAnalyze = 'ahk.nekoHelp.showFuncAnalyze',
-    showUnknownAnalyze = 'ahk.nekoHelp.showUnknownAnalyze',
-}
-
 function CodeLensCore(document: TextDocument): CodeLens[] {
-    const { AhkSymbolList, DocStrMap } = Detecter.updateDocDef(document);
     const { fsPath } = document.uri;
+    const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
+    if (AhkSymbolList === undefined) return [];
 
     const need: CodeLens[] = [];
-    for (const DA of AhkSymbolList) {
-        if (DA instanceof CAhkFuncSymbol && DA.kind === SymbolKind.Function) {
-            const AhkTokenList: TTokenStream = DocStrMap.slice(DA.selectionRange.start.line + 1, DA.range.end.line + 1);
-            const ahkCommand: Command = {
-                title: 'Analyze',
-                command: ECommand.showFuncAnalyze,
+    const DAList: CAhkFuncSymbol[] = getDAList(AhkSymbolList);
+    for (const DA of DAList) {
+        if (DA.textMap.size > 0) {
+            const unknownTextCommand: Command = {
+                title: 'unknownText',
+                command: ECommand.showUnknownAnalyze,
                 tooltip: 'by neko-help dev tools',
-                arguments: [DA, fsPath, AhkTokenList] as TShowAnalyze,
+                arguments: [DA.textMap, fsPath] as TShowUnknownAnalyze,
             };
-            need.push(new CodeLens(DA.range, ahkCommand));
-            if (DA.textMap.size > 0) {
-                const unknownTextCommand: Command = {
-                    title: 'unknownText',
-                    command: ECommand.showUnknownAnalyze,
-                    tooltip: 'by neko-help dev tools',
-                    arguments: [DA.textMap, fsPath] as TShowUnknownAnalyze,
-                };
-                need.push(new CodeLens(DA.range, unknownTextCommand));
-            }
+            need.push(new CodeLens(DA.range, unknownTextCommand));
         }
     }
 

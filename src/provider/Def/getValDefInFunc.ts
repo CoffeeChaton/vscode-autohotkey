@@ -46,7 +46,7 @@ export function getValWithDA(
     listAllUsing: boolean,
 ): null | vscode.Location[] {
     const { uri } = document;
-    const DA: CAhkFuncSymbol | undefined = getDAWithPos(document, position);
+    const DA: CAhkFuncSymbol | undefined = getDAWithPos(document.uri.fsPath, position);
     if (DA === undefined) return null;
 
     const {
