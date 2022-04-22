@@ -107,12 +107,12 @@ export async function FormatAllFile(): Promise<null> {
 
     const t2: number = Date.now();
     OutputChannel.appendLine('-----------------------------------------------');
-    OutputChannel.appendLine(`FormatAllFile ${t2 - t1} ms`);
+    OutputChannel.appendLine(`FormatAllFile -> ${t2 - t1} ms`);
     OutputChannel.show();
 
     await UpdateCacheAsync(false);
     const t3: number = Date.now();
-    OutputChannel.appendLine(`FormatAllFile -> UpdateCacheAsync ${t3 - t2} ms`);
+    OutputChannel.appendLine(`UpdateCacheAsync -> ${t3 - t2} ms`);
     OutputChannel.appendLine('-----------------------------------------------');
     OutputChannel.show();
     return null;

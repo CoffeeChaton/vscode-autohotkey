@@ -9,7 +9,7 @@ import {
 import { AnalyzeFuncMain } from './command/AnalyzeFunc/AnalyzeThisFunc';
 import { openDocs, statusBarClick } from './command/Command';
 import { ECommand } from './command/ECommand';
-import { UpdateCacheAsync } from './command/UpdateCache';
+import { fnRefreshResource, UpdateCacheAsync } from './command/UpdateCache';
 import { configChangEvent, statusBarItem } from './configUI';
 import { BaseScanMemo } from './core/BaseScanMemo/memo';
 import { Detecter, diagColl } from './core/Detecter';
@@ -61,6 +61,7 @@ export function activate(context: ExtensionContext): void {
         // commands--------------------
         commands.registerCommand('ahk.bar.click', statusBarClick),
         commands.registerCommand('ahk.nekoHelp.openDoc', openDocs),
+        commands.registerCommand('ahk.nekoHelp.refreshResource', fnRefreshResource),
         commands.registerCommand(ECommand.showFuncAnalyze, AnalyzeFuncMain),
         commands.registerCommand(ECommand.showUnknownAnalyze, showUnknownAnalyze),
         // debug

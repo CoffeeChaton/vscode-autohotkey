@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { BaseScanMemo } from '../core/BaseScanMemo/memo';
 import { Detecter, TAhkFileData } from '../core/Detecter';
+import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { getUriList } from '../tools/fsTools/getUriList';
 
 export async function UpdateCacheAsync(clearCache: boolean): Promise<null | TAhkFileData[]> {
@@ -26,5 +27,12 @@ export async function UpdateCacheAsync(clearCache: boolean): Promise<null | TAhk
     return FileListData;
 }
 
+export async function fnRefreshResource(): Promise<void> {
+    const t1: number = Date.now();
+    await UpdateCacheAsync(true);
+    const t2: number = Date.now();
+    OutputChannel.appendLine(`Refresh Resource ${t2 - t1} ms`);
+    OutputChannel.show();
+}
 // TODO detail: string -> Enum
 // kind: vscode.SymbolKind; -> myEnum

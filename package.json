@@ -2,7 +2,7 @@
     "name": "vscode-autohotkey-neko-help",
     "displayName": "AutoHotkeyNekoHelp",
     "description": "AutoHotkey help of VSCode",
-    "version": "2.4.0",
+    "version": "2.5.0",
     "publisher": "CoffeeChaton",
     "engines": {
         "vscode": "^1.66.0"
@@ -123,6 +123,10 @@
             {
                 "command": "ahk.nekoHelp.openDoc",
                 "title": "open docs"
+            },
+            {
+                "command": "ahk.nekoHelp.refreshResource",
+                "title": "Refresh Resource (nekoHelp)"
             }
         ],
         "configuration": {
@@ -234,7 +238,15 @@
                 "key": "ctrl+f1",
                 "when": "editorLangId == ahk"
             }
-        ]
+        ],
+        "menus": {
+            "explorer/context": [
+                {
+                    "command": "ahk.nekoHelp.refreshResource",
+                    "when": "explorerViewletVisible"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "node esbuild.config.js",
