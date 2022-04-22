@@ -60,22 +60,14 @@ function getCommandMap(AhkTokenList: TTokenStream): TCommandInfoMap {
     return commandMap;
 }
 
-function printCommandList(MsgList: TMsg[], ed: string[]): void {
-    for (const Msg of MsgList) {
-        ed.push(`; ln ${Msg.line + 1} ;    ${Msg.textRaw.trim()}`);
-    }
-}
-
-function splitLine(keyUp: string, fullFuncMap: TFullFuncMap, ed: string[]): void {
+function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): string {
     const DA: CAhkFuncSymbol | undefined = fullFuncMap.get(keyUp);
-    if (DA === undefined) {
-        ed.push(`${keyUp} ; "Command"`);
-    } else {
-        ed.push(`${DA.name}(...) vs "Command" ${keyUp} ; `);
-    }
+    return DA === undefined
+        ? `${keyUp} ; "Command"`
+        : `${DA.name}(...) vs "Command" ${keyUp} ; `;
 }
 
-export function commandAnalyze(AhkTokenList: TTokenStream, fullFuncMap: TFullFuncMap): string[] {
+export function AnalyzeCommand(AhkTokenList: TTokenStream, fullFuncMap: TFullFuncMap): string[] {
     const commandMap: TCommandInfoMap = getCommandMap(AhkTokenList);
 
     if (commandMap.size === 0) return [];
@@ -83,19 +75,19 @@ export function commandAnalyze(AhkTokenList: TTokenStream, fullFuncMap: TFullFun
     const ed: string[] = [
         '/**',
         '* @Analyze Command',
-        '* ',
-        '* Commands vs Functions -> https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
-        '* if you what to user function replace command, you can use Functions.ahk',
-        '* Functions.ahk -> https://www.autohotkey.com/docs/Functions.htm#Other_Functions',
-        '* ',
+        '*   Commands vs Functions -> https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
+        '*   if you what to user function replace command, you can use Functions.ahk',
+        '*   Functions.ahk -> https://www.autohotkey.com/docs/Functions.htm#Other_Functions',
         '*/',
         'loop, 0 {',
     ];
 
     for (const [keyUp, MsgList] of commandMap) {
-        splitLine(keyUp, fullFuncMap, ed);
-        printCommandList(MsgList, ed);
-        ed.push('');
+        ed.push(
+            splitLine(keyUp, fullFuncMap),
+            ...MsgList.map((Msg: TMsg): string => `; ln ${Msg.line + 1} ;    ${Msg.textRaw.trim()}`),
+            '',
+        );
     }
 
     ed.pop();

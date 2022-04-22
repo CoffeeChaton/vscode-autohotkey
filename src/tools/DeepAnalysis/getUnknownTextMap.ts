@@ -108,7 +108,7 @@ export function getUnknownTextMap(
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;
         // eslint-disable-next-line security/detect-unsafe-regex
-        for (const v of lStr.matchAll(/(?<!\.)\b(\w+)\b(?!\()/gu)) {
+        for (const v of lStr.matchAll(/(?<![.#])\b(\w+)\b(?!\()/gu)) {
             const keyRawName: string = v[1];
             const wordUp: string = keyRawName.toUpperCase();
             if (ignoreList.indexOf(wordUp) > -1) continue;

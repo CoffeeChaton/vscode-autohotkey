@@ -33,53 +33,43 @@ function getRefFuncMap(AhkTokenList: TTokenStream): TRefFuncInfoMap {
     return refFuncMap;
 }
 
-function splitLine(keyUp: string, fullFuncMap: TFullFuncMap, ed: string[]): void {
+function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): string {
     const DA: CAhkFuncSymbol | undefined = fullFuncMap.get(keyUp);
     if (DA !== undefined) {
         const fileName: string = path.basename(DA.uri.fsPath);
-        ed.push(`${DA.name}(...) ; ${fileName}`);
-        return;
+        return `${DA.name}(...) ; ${fileName}`;
     }
     const BuiltInFunc: TBuiltInFuncElement | undefined = BuiltInFunctionMap.get(keyUp);
     if (BuiltInFunc !== undefined) {
-        ed.push(
-            `${BuiltInFunc.keyRawName}(...) ; "Built-in Functions"`,
-        );
-
-        return;
+        return `${BuiltInFunc.keyRawName}(...) ; "Built-in Functions"`;
     }
     // else
-    ed.push(`${keyUp}(...) ; >>>>>>>>>>>>>> unknown function <<<<<<<<<<<<<<<<<<<`);
+    return `${keyUp}(...) ; >>>>>>>>>>>>>> unknown function <<<<<<<<<<<<<<<<<<<`;
 }
 
-function printRefFunc(MsgList: TMsg[], ed: string[]): void {
-    for (const Msg of MsgList) {
-        ed.push(`; ln ${Msg.line + 1} ;    ${Msg.textRaw.trim()}`);
-    }
-}
-
-export function refFuncAnalyze(AhkTokenList: TTokenStream, fullFuncMap: TFullFuncMap): string[] {
+export function AnalyzeRefFunc(AhkTokenList: TTokenStream, fullFuncMap: TFullFuncMap): string[] {
     const refFuncMap: TRefFuncInfoMap = getRefFuncMap(AhkTokenList);
 
     if (refFuncMap.size === 0) return [];
+
+    const ed: string[] = [
+        '/**',
+        '* @Analyze Function',
+        '* > read more of [Built-in Functions](https://www.autohotkey.com/docs/Functions.htm#BuiltIn)',
+        '*/',
+        'loop, 0 {',
+    ];
 
     const arrayObj: [string, TMsg[]][] = Array.from(refFuncMap);
     // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
     arrayObj.sort(); // TODO sort by Built-in `1st`, useDef `2nd`, && sort by filename sort by funcName
 
-    const ed: string[] = [
-        '/**',
-        '* @Analyze Function',
-        '* read more of [Built-in Functions](https://www.autohotkey.com/docs/Functions.htm#BuiltIn)',
-        '* ',
-        '*/',
-        'loop, 0 {',
-    ];
-
     for (const [keyUp, MsgList] of arrayObj) {
-        splitLine(keyUp, fullFuncMap, ed);
-        printRefFunc(MsgList, ed);
-        ed.push('');
+        ed.push(
+            splitLine(keyUp, fullFuncMap),
+            ...MsgList.map((Msg: TMsg): string => `; ln ${Msg.line + 1} ;    ${Msg.textRaw.trim()}`),
+            '',
+        );
     }
 
     ed.pop();

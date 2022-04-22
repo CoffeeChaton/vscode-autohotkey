@@ -8,10 +8,10 @@ import {
     TTokenStream,
     TValMapOut,
 } from '../../globalEnum';
+import { FormatCore } from '../../provider/Format/FormatProvider';
 import { getAllFunc, TFullFuncMap } from '../../tools/Func/getAllFunc';
-import { FormatCore } from '../Format/FormatProvider';
-import { commandAnalyze } from './commandAnalyze';
-import { refFuncAnalyze } from './refFuncAnalyze';
+import { AnalyzeCommand } from './AnalyzeCommand';
+import { AnalyzeRefFunc } from './AnalyzeRefFunc';
 
 function showElement(map: TValMapOut | TParamMapOut | TTextMapOut): string {
     if (map.size === 0) return '';
@@ -61,15 +61,16 @@ function baseDataAnalyze(DA: CAhkFuncSymbol): string[] {
 
 export type TShowAnalyze = [CAhkFuncSymbol, TFsPath, TTokenStream];
 
-export async function showFuncAnalyze(DA: CAhkFuncSymbol, fsPath: string, AhkTokenList: TTokenStream): Promise<void> {
+export async function AnalyzeFuncMain(DA: CAhkFuncSymbol, fsPath: string, AhkTokenList: TTokenStream): Promise<void> {
     const fullFuncMap: TFullFuncMap = getAllFunc();
 
     const ed: string[] = [
         `Analyze_Results_of_${DA.name}() {`,
+        'throw, "this is Analyze Results, not .ahk"',
         ...baseDataAnalyze(DA),
         '',
-        ...commandAnalyze(AhkTokenList, fullFuncMap),
-        ...refFuncAnalyze(AhkTokenList, fullFuncMap),
+        ...AnalyzeCommand(AhkTokenList, fullFuncMap),
+        ...AnalyzeRefFunc(AhkTokenList, fullFuncMap),
         '}',
         ';; Analyze End',
     ];

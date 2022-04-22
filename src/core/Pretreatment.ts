@@ -82,7 +82,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
         }
 
         result.push({
-            fistWordUp: lStrTrim.match(/^(\w+)[\s,]+(?!:=)/u)?.[1].toUpperCase() ?? '',
+            fistWordUp: lStrTrim.match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1].toUpperCase() ?? '',
             lStr,
             deep,
             textRaw,
