@@ -1,32 +1,18 @@
 import * as vscode from 'vscode';
 import { getDocUriStr } from '../configUI';
-import { TAhkFileData } from '../core/Detecter';
-import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { DeepAnalysisAllFiles } from './DeepAnalysisAllFiles';
 import { pressureTest } from './DevMode';
 import { FormatAllFile } from './FormatAllFile';
 import { ListAllFunc, ListAllFuncSort } from './ListAllFunc';
 import { ListAllInclude } from './ListAllInclude';
 import { TPick } from './TPick';
-import { UpdateCacheAsync } from './UpdateCache';
-
-async function fn0(): Promise<void> {
-    const t1: number = Date.now();
-    const ed: TAhkFileData[] | null = await UpdateCacheAsync(true);
-    const t2: number = Date.now();
-    if (ed !== null) {
-        OutputChannel.appendLine('---------------------------------------------');
-        OutputChannel.appendLine(`Update docFuncMap cash (${t2 - t1} ms)`);
-        OutputChannel.appendLine('---------------------------------------------');
-        OutputChannel.show();
-    }
-}
+import { fnRefreshResource } from './UpdateCache';
 
 export async function statusBarClick(): Promise<void> {
     type TCommand = TPick<void>;
 
     const items: TCommand[] = [
-        { label: '0 -> update Cache', fn: fn0 },
+        { label: '0 -> Refresh Resource', fn: fnRefreshResource },
         { label: '1 -> dev tools', fn: pressureTest },
         { label: '2 -> list all #Include', fn: ListAllInclude },
         { label: '3 -> list all Function()', fn: (): null => ListAllFunc(false) },
