@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-export function globalValCompletion(
+function globalValCompletion(
     _document: vscode.TextDocument,
     _position: vscode.Position,
     _inputStr: string,

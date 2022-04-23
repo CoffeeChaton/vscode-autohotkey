@@ -31,7 +31,6 @@ function DependencyAnalysis(
         tooltip: 'by neko-help dev tools',
         arguments: [
             DA,
-            fsPath,
             DocStrMap.slice(DA.selectionRange.start.line + 1, DA.range.end.line + 1),
         ] as TShowAnalyze,
     };

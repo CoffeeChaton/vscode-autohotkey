@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import {
     CAhkFuncSymbol,
     EFormatChannel,
-    TFsPath,
     TParamMapOut,
     TTextMapOut,
     TTokenStream,
@@ -11,6 +10,7 @@ import {
 import { FormatCore } from '../../provider/Format/FormatProvider';
 import { getAllFunc, TFullFuncMap } from '../../tools/Func/getAllFunc';
 import { AnalyzeCommand } from './AnalyzeCommand';
+import { AnalyzeGlobalVal } from './AnalyzeGlobalVal';
 import { AnalyzeRefFunc } from './AnalyzeRefFunc';
 
 function showElement(map: TValMapOut | TParamMapOut | TTextMapOut): string {
@@ -59,11 +59,12 @@ function baseDataAnalyze(DA: CAhkFuncSymbol): string[] {
     ];
 }
 
-export type TShowAnalyze = [CAhkFuncSymbol, TFsPath, TTokenStream];
+export type TShowAnalyze = [CAhkFuncSymbol, TTokenStream];
 
-export async function AnalyzeFuncMain(DA: CAhkFuncSymbol, fsPath: string, AhkTokenList: TTokenStream): Promise<void> {
+export async function AnalyzeFuncMain(DA: CAhkFuncSymbol, AhkTokenList: TTokenStream): Promise<void> {
     const fullFuncMap: TFullFuncMap = getAllFunc();
 
+    const t1 = Date.now();
     const ed: string[] = [
         `Analyze_Results_of_${DA.name}() {`,
         'throw, "this is Analyze Results, not .ahk"',
@@ -71,8 +72,10 @@ export async function AnalyzeFuncMain(DA: CAhkFuncSymbol, fsPath: string, AhkTok
         '',
         ...AnalyzeCommand(AhkTokenList, fullFuncMap),
         ...AnalyzeRefFunc(AhkTokenList, fullFuncMap),
+        ...AnalyzeGlobalVal(AhkTokenList),
         '}',
-        ';; Analyze End',
+        '; Analyze End',
+        `; use ${Date.now() - t1} ms`,
     ];
 
     const document: vscode.TextDocument = await vscode.workspace.openTextDocument({

@@ -94,3 +94,4 @@ registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', '
 CodeLensProvider -> run this func/command DA
 FoldingRangeProvider
 */
+// TODO https://www.autohotkey.com/docs/Functions.htm#lib

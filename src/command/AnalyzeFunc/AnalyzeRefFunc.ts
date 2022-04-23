@@ -60,11 +60,7 @@ export function AnalyzeRefFunc(AhkTokenList: TTokenStream, fullFuncMap: TFullFun
         'loop, 0 {',
     ];
 
-    const arrayObj: [string, TMsg[]][] = Array.from(refFuncMap);
-    // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
-    arrayObj.sort(); // TODO sort by Built-in `1st`, useDef `2nd`, && sort by filename sort by funcName
-
-    for (const [keyUp, MsgList] of arrayObj) {
+    for (const [keyUp, MsgList] of refFuncMap) {
         ed.push(
             splitLine(keyUp, fullFuncMap),
             ...MsgList.map((Msg: TMsg): string => `; ln ${Msg.line + 1} ;    ${Msg.textRaw.trim()}`),

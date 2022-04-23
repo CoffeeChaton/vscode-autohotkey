@@ -57,6 +57,10 @@ export function getFuncCore(
     const paramMap: TParamMapIn = getParamDef(name, selectionRange, AhkTokenList);
     const startLine = selectionRange.end.line;
     const endLine = range.end.line;
+    // normal mode OK!
+    // if is global mode
+    // if is local mode
+    // if is static mode
     const valMap: TValMapIn = getFnVarDef(startLine, endLine, AhkTokenList, paramMap, GValMap);
     const textMap: TTextMapIn = getUnknownTextMap(startLine, endLine, AhkTokenList, paramMap, valMap, GValMap, name); // eval!!
 

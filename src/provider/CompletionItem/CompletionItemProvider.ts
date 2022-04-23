@@ -4,7 +4,7 @@ import { BiFuncSnippetList } from '../../tools/Built-in/func';
 import { ahkSend } from './ahkSend';
 import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
-import { globalValCompletion } from './global/globalValCompletion';
+// import { globalValCompletion } from './global/globalValCompletion';
 import { isNormalPos } from './isNormalPos';
 import { snippetStartWihA } from './json/SnippetStartWihA';
 import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
@@ -27,7 +27,7 @@ async function CompletionItemCore(
             ...DeepAnalysisToCompletionItem(document, position, inputStr),
             ...snippetStartWihA(),
             ...BiFuncSnippetList,
-            ...globalValCompletion(document, position, inputStr),
+            // ...globalValCompletion(document, position, inputStr),
         );
     }
     // TODO #Include list fsPath List && suggest never #include
