@@ -40,7 +40,10 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
             if (col !== undefined) {
                 const Location: vscode.Location = new vscode.Location(
                     uri,
-                    new vscode.Position(line, col),
+                    new vscode.Range(
+                        new vscode.Position(line, col),
+                        new vscode.Position(line, col + wordUp.length),
+                    ),
                 );
                 List.push(Location);
             }
