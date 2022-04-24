@@ -83,13 +83,11 @@ function refGlobal(gValMapBySelf: TGValMapPrivacy, strF: string, line: number): 
 export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
     const GValMap: TGValMapPrivacy = new Map<TValUpName, TGlobalVal>();
     let lastLineIsGlobal = false;
-    let lastDeep = -1;
     for (
         const {
             lStr,
             line,
             detail,
-            deep,
             cll,
         } of DocStrMap
     ) {
@@ -101,9 +99,8 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
             lastLineIsGlobal = false;
             continue;
         }
-        if (lStr.trim() === 'GLOBAL') {
-            lastDeep = deep;
-            continue;
+        if (lStr.trim().toUpperCase() === 'GLOBAL') {
+            continue; // TODO
         }
 
         const strF: string = lStr.replace(/^\s*\bglobal\b[,\s]+/ui, replacerSpace);
@@ -126,15 +123,21 @@ function range2Str(range: vscode.Range): string {
 export function globalVal2Msg(fsPath: string, GlobalVal: TGlobalValReadonly): string {
     const fileName: string = path.basename(fsPath);
     const msg: string[] = [fileName];
-    msg.push('- def');
-    for (const range of GlobalVal.defRangeList) {
-        msg.push(range2Str(range));
+    const { defRangeList, refRangeList } = GlobalVal;
+    if (defRangeList.length > 0) {
+        msg.push('- def');
+        for (const range of defRangeList) {
+            msg.push(range2Str(range));
+        }
     }
-    // don't show ref, because sometimes ref is not defined at this file...
-    // msg.push('- ref');
-    // for (const range of GlobalVal.refRangeList) {
-    //     msg.push(range2Str(range));
-    // }
+    if (refRangeList.length > 0) {
+        // don't show ref, because sometimes ref is not defined at this file...
+        msg.push('- ref');
+        for (const range of GlobalVal.refRangeList) {
+            msg.push(range2Str(range));
+        }
+    }
+
     return msg.join('\n\n');
 }
 // just ref; global GLOBAL_VAL

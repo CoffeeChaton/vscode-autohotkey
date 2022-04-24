@@ -48,6 +48,7 @@ export function getValWithDA(
     const { uri } = document;
     const DA: CAhkFuncSymbol | undefined = getDAWithPos(document.uri.fsPath, position);
     if (DA === undefined) return null;
+    if (DA.nameRange.contains(position)) return null; // fnName === val
 
     const {
         paramMap,

@@ -1,7 +1,9 @@
 import * as vscode from 'vscode';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { EMode } from '../../Enum/EMode';
-import { DeepReadonly, TSymAndFsPath } from '../../globalEnum';
+import { CAhkFuncSymbol, DeepReadonly, TSymAndFsPath } from '../../globalEnum';
+import { getDAList } from '../../tools/DeepAnalysis/getDAList';
+import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { tryGetSymbol } from '../../tools/tryGetSymbol';
 import { getValWithDA } from './getValDefInFunc';
 
@@ -23,9 +25,16 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
         const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
 
         if (AhkFileData === undefined) continue;
+        const { DocStrMap, AhkSymbolList } = AhkFileData;
+
         const uri: vscode.Uri = vscode.Uri.file(fsPath);
-        for (const { textRaw, line, lStr } of AhkFileData.DocStrMap) {
-            if (lStr.trim().length === 0) continue;
+
+        const filterLineList: number[] = getDAList(AhkSymbolList)
+            .filter((DA: CAhkFuncSymbol) => DA.kind === vscode.SymbolKind.Method)
+            .map((DA: CAhkFuncSymbol) => DA.selectionRange.start.line);
+
+        for (const { textRaw, line, lStr } of DocStrMap) {
+            if (lStr.trim().length === 0 || filterLineList.indexOf(line) !== -1) continue;
             const text2: string = textRaw.substring(0, lStr.length); // if toUpperCase can let 5~7ms -> 3~4ms...but i don't like it
             const col: number | undefined = refFn(text2);
             if (col !== undefined) {
@@ -55,6 +64,15 @@ function ahkDef(
     const data: TSymAndFsPath | null = tryGetSymbol(wordUp, Mode);
 
     if (data === null) return null;
+    const DA: CAhkFuncSymbol | undefined = getDAWithPos(document.uri.fsPath, position);
+    if (
+        DA !== undefined
+        && DA.kind === vscode.SymbolKind.Method
+        && DA.selectionRange.contains(position)
+    ) {
+        return null;
+    }
+
     const { AhkSymbol, fsPath } = data;
 
     if (listAllUsing) {
