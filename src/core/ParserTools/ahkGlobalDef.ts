@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import {
     DeepReadonly,
+    EDetail,
     TTokenStream,
 } from '../../globalEnum';
 import { replacerSpace } from '../../tools/str/removeSpecialChar';
@@ -81,10 +82,27 @@ function refGlobal(gValMapBySelf: TGValMapPrivacy, strF: string, line: number): 
 
 export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
     const GValMap: TGValMapPrivacy = new Map<TValUpName, TGlobalVal>();
-    for (const { lStr, line, fistWordUp } of DocStrMap) {
-        if (fistWordUp !== 'GLOBAL') continue;
+    let lastLineIsGlobal = false;
+    let lastDeep = -1;
+    for (
+        const {
+            lStr,
+            line,
+            detail,
+            deep,
+            cll,
+        } of DocStrMap
+    ) {
+        if (detail.indexOf(EDetail.isGlobalLine) > -1) {
+            lastLineIsGlobal = true;
+        } else if (lastLineIsGlobal && cll === 1) {
+            lastLineIsGlobal = true;
+        } else {
+            lastLineIsGlobal = false;
+            continue;
+        }
         if (lStr.trim() === 'GLOBAL') {
-            // TODO global fn
+            lastDeep = deep;
             continue;
         }
 
@@ -96,6 +114,7 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
             refGlobal(GValMap, strF, line);
         }
     }
+
     return GValMap;
 }
 

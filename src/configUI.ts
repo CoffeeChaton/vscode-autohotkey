@@ -81,8 +81,6 @@ export function getFormatConfig(): boolean {
 
 export function getIgnoredList(): readonly string[] {
     return config.baseScan.IgnoredList;
-    // const blockList: readonly string[] = config.baseScan.IgnoredList;
-    // return mm.isMatch(fsPath, blockList);
 }
 
 export function getDebugPath(): string {

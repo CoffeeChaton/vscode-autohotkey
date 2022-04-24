@@ -49,26 +49,35 @@ const filter = (src, _dest) => {
     return true;
 };
 
-const config = {
-    entryPoints: ['./src/extension.ts', './src/debugEntrance.ts'],
-    bundle: true,
-    outdir: 'dict',
-    external: ['vscode', '@vscode/debugprotocol'], // not bundle 'vscode'
-    format: 'cjs',
-    platform: 'node',
-    sourcemap: true,
-    watch: false,
-    logLevel: 'info',
-    // minify: true, //
-    treeShaking: true,
-    // define:DEBUG=false
-    plugins: [
-        copyStaticFiles({
-            src: './',
-            dest: esbuildTarget, // 'C:/Users/<useName>/.vscode/extensions/cz00',
-            filter,
-            preserveTimestamps: true,
-        }),
-    ],
-};
-esbuild.build(config);
+const plugins = [
+    copyStaticFiles({
+        src: './',
+        dest: esbuildTarget, // 'C:/Users/<useName>/.vscode/extensions/cz00',
+        filter,
+        preserveTimestamps: true,
+    }),
+];
+
+esbuild
+    .build({
+        bundle: true,
+        entryPoints: ['./src/extension.ts', './src/debugEntrance.ts'],
+        // entryNames: '[dir]/neko',
+        external: ['vscode', '@vscode/debugprotocol'], // not bundle 'vscode'
+        format: 'cjs',
+        // keepNames: true,
+        logLevel: 'info',
+        // mainFields: ['module', 'main'],
+        minify: false, //
+        outdir: 'dict',
+        platform: 'node',
+        sourcemap: true,
+        // splitting: true,
+        target: ['es2021', 'chrome98', 'node16.13'],
+        treeShaking: true,
+        // tsconfig
+        // watch: false,
+        // define:DEBUG=false
+        plugins,
+    })
+    .catch(() => process.exit(1));

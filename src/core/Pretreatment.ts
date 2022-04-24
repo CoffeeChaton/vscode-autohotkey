@@ -2,6 +2,7 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 
 import { EDetail, TAhkToken, TTokenStream } from '../globalEnum';
+import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
 import { inLTrimRange } from '../tools/str/inLTrimRange';
 import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
@@ -33,6 +34,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
                 textRaw,
                 detail: [EDetail.inComment],
                 line,
+                cll: 0,
             });
             continue;
         }
@@ -49,6 +51,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
                 textRaw,
                 detail: [inLTrimLevel],
                 line,
+                cll: 0,
             });
             continue;
         }
@@ -61,10 +64,12 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
                 textRaw,
                 detail: [EDetail.inSkipSign2],
                 line,
+                cll: 0,
             });
             continue;
         }
 
+        // ---------
         const lStr: string = getLStr(textRaw);
         const lStrTrim: string = lStr.trim();
         const detail: EDetail[] = [];
@@ -81,13 +86,21 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
             }
         }
 
+        const fistWordUp: string = lStrTrim.match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1].toUpperCase() ?? '';
+        if (fistWordUp === 'GLOBAL') {
+            detail.push(EDetail.isGlobalLine);
+        } // TODO: else   if (fistWordUp === '...') {
+
+        const cll: 0 | 1 = ContinueLongLine(lStrTrim); // ex: line start with ","
+
         result.push({
-            fistWordUp: lStrTrim.match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1].toUpperCase() ?? '',
+            fistWordUp,
             lStr,
             deep,
             textRaw,
             detail,
             line,
+            cll,
         });
     }
     return result;

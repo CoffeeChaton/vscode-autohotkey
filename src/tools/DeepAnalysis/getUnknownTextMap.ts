@@ -104,7 +104,7 @@ export function getUnknownTextMap(
     const textMap: TTextMapIn = new Map<string, TTextMetaIn>();
     // const startLine: number = AhkSymbol.selectionRange.end.line;
     // const endLine: number = AhkSymbol.range.end.line;
-    for (const { lStr, line } of DocStrMap) {
+    for (const { lStr, line, fistWordUp } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;
         // eslint-disable-next-line security/detect-unsafe-regex
@@ -113,7 +113,7 @@ export function getUnknownTextMap(
             const wordUp: string = keyRawName.toUpperCase();
             if (ignoreList.indexOf(wordUp) > -1) continue;
             if (!textMap.has(wordUp)) {
-                // if (fistWordUp === wordUp) continue;
+                if (fistWordUp === wordUp) continue;
                 if (
                     (/^[A_\d]_/u).test(wordUp) // (A_Variables) or "str" or ( _*2 start varName EX: __varName) or (start with number EX: 0_VarName)
                     || (/^\d+$/u).test(wordUp) // just number

@@ -7,6 +7,9 @@ function DeepAnalysisRename(
     position: vscode.Position,
     wordUp: string,
 ): vscode.Range[] {
+    const isDebug = true;
+    if (isDebug) return [];
+
     const DA: CAhkFuncSymbol | undefined = getDAWithPos(document.uri.fsPath, position);
     if (DA === undefined) return [];
 

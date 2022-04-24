@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 import { getFormatConfig } from '../../configUI';
 import { DeepReadonly, EDetail } from '../../globalEnum';
+import { ContinueLongLine } from './ContinueLongLine';
 import { lineReplace } from './fmtReplace';
 import { getDeepLTrim } from './getDeepLTrim';
 import { inSwitchBlock } from './SwitchCase';
 import { TDiffMap } from './TFormat';
-import { thisLineDeep } from './thisLineDeep';
 
 type TWarnUse =
     & DeepReadonly<{
@@ -82,7 +82,7 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
     const switchDeep = inSwitchBlock(textFix, line, switchRangeArray);
     const LineDeep: 0 | 1 = (occ !== 0)
         ? 0
-        : thisLineDeep(textFix);
+        : ContinueLongLine(textFix);
 
     const curlyBracketsChange: 0 | -1 = textFix.startsWith('}') || (occ > 0 && textFix.startsWith('{'))
         ? -1

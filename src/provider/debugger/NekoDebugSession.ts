@@ -54,7 +54,7 @@ export class NekoDebugSession extends LoggingDebugSession {
             });
     }
 
-    protected initializeRequest(
+    protected override initializeRequest(
         response: DebugProtocol.InitializeResponse,
         _args: DebugProtocol.InitializeRequestArguments,
     ): void {
@@ -76,7 +76,7 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendEvent(new InitializedEvent());
     }
 
-    protected restartRequest(
+    protected override restartRequest(
         response: DebugProtocol.RestartResponse,
         _args: DebugProtocol.RestartArguments,
         _request?: DebugProtocol.Request,
@@ -85,7 +85,10 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected launchRequest(response: DebugProtocol.LaunchResponse, args: DebugProtocol.LaunchRequestArguments): void {
+    protected override launchRequest(
+        response: DebugProtocol.LaunchResponse,
+        args: DebugProtocol.LaunchRequestArguments,
+    ): void {
         const ab: TLaunchRequestArguments = {
             name: 'Autohotkey Debugger',
             program: getPathByActive(),
@@ -107,7 +110,7 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected disconnectRequest(
+    protected override disconnectRequest(
         response: DebugProtocol.DisconnectResponse,
         _args: DebugProtocol.DisconnectArguments,
         _request?: DebugProtocol.Request,
@@ -116,7 +119,7 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected setBreakPointsRequest(
+    protected override setBreakPointsRequest(
         response: DebugProtocol.SetBreakpointsResponse,
         args: DebugProtocol.SetBreakpointsArguments,
     ): void {
@@ -131,7 +134,7 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected async stackTraceRequest(
+    protected override async stackTraceRequest(
         response: DebugProtocol.StackTraceResponse,
         args: DebugProtocol.StackTraceArguments,
     ): Promise<void> {
@@ -139,13 +142,16 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected scopesRequest(response: DebugProtocol.ScopesResponse, args: DebugProtocol.ScopesArguments): void {
+    protected override scopesRequest(
+        response: DebugProtocol.ScopesResponse,
+        args: DebugProtocol.ScopesArguments,
+    ): void {
         const ID: number = args.frameId;
         response.body = { scopes: this.dispather.scopes(ID) };
         this.sendResponse(response);
     }
 
-    protected async variablesRequest(
+    protected override async variablesRequest(
         response: DebugProtocol.VariablesResponse,
         args: DebugProtocol.VariablesArguments,
         _request?: DebugProtocol.Request,
@@ -154,7 +160,7 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected async setVariableRequest(
+    protected override async setVariableRequest(
         response: DebugProtocol.SetVariableResponse,
         args: DebugProtocol.SetVariableArguments,
         _request?: DebugProtocol.Request,
@@ -177,7 +183,7 @@ export class NekoDebugSession extends LoggingDebugSession {
         }
     }
 
-    protected pauseRequest(
+    protected override pauseRequest(
         response: DebugProtocol.PauseResponse,
         _args: DebugProtocol.PauseArguments,
         _request?: DebugProtocol.Request,
@@ -186,17 +192,20 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected continueRequest(response: DebugProtocol.ContinueResponse, _args: DebugProtocol.ContinueArguments): void {
+    protected override continueRequest(
+        response: DebugProtocol.ContinueResponse,
+        _args: DebugProtocol.ContinueArguments,
+    ): void {
         this.dispather.sendComand(EContinue.RUN);
         this.sendResponse(response);
     }
 
-    protected nextRequest(response: DebugProtocol.NextResponse, _args: DebugProtocol.NextArguments): void {
+    protected override nextRequest(response: DebugProtocol.NextResponse, _args: DebugProtocol.NextArguments): void {
         this.dispather.sendComand(EContinue.STEP_OVER);
         this.sendResponse(response);
     }
 
-    protected stepInRequest(
+    protected override stepInRequest(
         response: DebugProtocol.StepInResponse,
         _args: DebugProtocol.StepInArguments,
         _request?: DebugProtocol.Request,
@@ -205,7 +214,7 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected stepOutRequest(
+    protected override stepOutRequest(
         response: DebugProtocol.StepOutResponse,
         _args: DebugProtocol.StepOutArguments,
         _request?: DebugProtocol.Request,
@@ -214,12 +223,12 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected threadsRequest(response: DebugProtocol.ThreadsResponse): void {
+    protected override threadsRequest(response: DebugProtocol.ThreadsResponse): void {
         response.body = { threads: [new Thread(Enum.THREAD_ID, 'main thread')] };
         this.sendResponse(response);
     }
 
-    protected async completionsRequest(
+    protected override async completionsRequest(
         response: DebugProtocol.CompletionsResponse,
         _args: DebugProtocol.CompletionsArguments,
     ): Promise<void> {
@@ -237,7 +246,7 @@ export class NekoDebugSession extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
-    protected async evaluateRequest(
+    protected override async evaluateRequest(
         response: DebugProtocol.EvaluateResponse,
         args: DebugProtocol.EvaluateArguments,
     ): Promise<void> {
