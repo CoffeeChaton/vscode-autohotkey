@@ -14,21 +14,18 @@ export const Detecter = {
     // key : vscode.Uri.fsPath,
     DocMap: new Map<TFsPath, TAhkFileData>(),
 
-    getDocMapFile(): string[] {
-        return [...Detecter.DocMap.keys()];
-        // TODO check...but not this way.
-        // await openTextDocument(fsPath);
+    needReverse: false,
 
-        // const need: string[] = [];
-        // const keyList: string[] = [...Detecter.DocMap.keys()];
-        // for (const fsPath of keyList) {
-        //     if (fs.existsSync(fsPath)) {
-        //         need.push(fsPath);
-        //     } else {
-        //         Detecter.DocMap.delete(fsPath);
-        //     }
-        // }
-        // return need;
+    getDocMapFile(): string[] {
+        const need = [...Detecter.DocMap.keys()];
+        // eslint-disable-next-line no-magic-numbers
+        if (Math.random() > 0.3) { // 1/3 -> .reverse() exp, funcName double def at 2 files
+            need.reverse();
+        }
+        return need;
+        // TODO check fs.existsSync(fsPath), but not this way.
+        // Detecter.DocMap.delete(fsPath);
+        // await openTextDocument(fsPath);
     },
 
     getDocMap(fsPath: string): undefined | TAhkFileData {

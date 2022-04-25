@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { isPosAtStr } from '../tools/isPosAtStr';
-import { userDefTopSymbol } from './Def/DefProvider';
+import { userDefFunc } from './Def/DefProvider';
 import { getValWithDA } from './Def/getValDefInFunc';
 
 function ReferenceProviderCore(
@@ -16,7 +16,7 @@ function ReferenceProviderCore(
     // TODO class.Method, this.classVar,GoSub, GoTo, ahk Built-in func
 
     const listAllUsing = true;
-    const userDefLink: vscode.Location[] | null = userDefTopSymbol(document, position, wordUp, listAllUsing);
+    const userDefLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
     if (userDefLink !== null) return userDefLink;
 
     const valInFunc: vscode.Location[] | null = getValWithDA(document, position, wordUp, listAllUsing);

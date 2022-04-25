@@ -1,22 +1,13 @@
 import * as vscode from 'vscode';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { EMode } from '../../Enum/EMode';
-import { CAhkFuncSymbol, DeepReadonly, TSymAndFsPath } from '../../globalEnum';
+import { CAhkFuncSymbol, TSymAndFsPath } from '../../globalEnum';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { tryGetSymbol } from '../../tools/tryGetSymbol';
 import { getValWithDA } from './getValDefInFunc';
 
-type TFnFindCol = (lineStr: string) => undefined | number;
-type TDefObj = Readonly<{
-    document: vscode.TextDocument;
-    position: vscode.Position;
-    Mode: EMode;
-    wordUp: string;
-    refFn: TFnFindCol;
-    timeStart: number;
-    listAllUsing: boolean;
-}>;
+type TFnFindCol = (lineStr: string) => IterableIterator<RegExpMatchArray>;
 
 function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vscode.Location[] {
     const List: vscode.Location[] = [];
@@ -35,9 +26,11 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
 
         for (const { textRaw, line, lStr } of DocStrMap) {
             if (lStr.trim().length === 0 || filterLineList.indexOf(line) !== -1) continue;
-            const text2: string = textRaw.substring(0, lStr.length); // if toUpperCase can let 5~7ms -> 3~4ms...but i don't like it
-            const col: number | undefined = refFn(text2);
-            if (col !== undefined) {
+            const text2: string = textRaw.substring(0, lStr.length);
+            for (const ma of refFn(text2)) {
+                const col: number | undefined = ma.index;
+                if (col === undefined) continue;
+
                 const Location: vscode.Location = new vscode.Location(
                     uri,
                     new vscode.Range(
@@ -49,37 +42,39 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
             }
         }
     }
-    console.log(`🚀 list all using of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 5~7ms (if not gc)
+    console.log(`🚀 list all using of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 9~11ms (if not gc)
     return List;
 }
 
-function ahkDef(
-    {
-        document,
-        position,
-        Mode,
-        wordUp,
-        refFn,
-        timeStart,
-        listAllUsing,
-    }: TDefObj,
-): null | vscode.Location[] {
-    const data: TSymAndFsPath | null = tryGetSymbol(wordUp, Mode);
-
-    if (data === null) return null;
-    const DA: CAhkFuncSymbol | undefined = getDAWithPos(document.uri.fsPath, position);
-    if (
-        DA !== undefined
+function isMethod(fsPath: string, position: vscode.Position): boolean {
+    const DA: CAhkFuncSymbol | undefined = getDAWithPos(fsPath, position);
+    return DA !== undefined
         && DA.kind === vscode.SymbolKind.Method
-        && DA.selectionRange.contains(position)
-    ) {
-        return null;
-    }
+        && DA.selectionRange.contains(position);
+}
+
+export function userDefFunc(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    wordUp: string,
+    listAllUsing: boolean,
+): null | vscode.Location[] {
+    const timeStart: number = Date.now();
+
+    const data: TSymAndFsPath | null = tryGetSymbol(wordUp, EMode.ahkFunc);
+    if (data === null || isMethod(document.uri.fsPath, position)) return null;
 
     const { AhkSymbol, fsPath } = data;
 
+    const ahkFunc = {
+        // funcName( | "funcName"
+        // eslint-disable-next-line security/detect-non-literal-regexp
+        reg: new RegExp(`(?:(?<![.\`%])\\b(${wordUp})\\b\\()|(?:(?<=")(${wordUp})")`, 'iug'),
+        refFn: (lineStr: string): IterableIterator<RegExpMatchArray> => lineStr.matchAll(ahkFunc.reg),
+    } as const;
+
     if (listAllUsing) {
-        return getReference(refFn, timeStart, wordUp);
+        return getReference(ahkFunc.refFn, timeStart, wordUp);
     }
 
     if (
@@ -96,42 +91,6 @@ function ahkDef(
     return [new vscode.Location(vscode.Uri.file(fsPath), AhkSymbol.selectionRange)];
 }
 
-export function userDefTopSymbol(
-    document: vscode.TextDocument,
-    position: vscode.Position,
-    wordUp: string,
-    listAllUsing: boolean,
-): null | vscode.Location[] {
-    const timeStart: number = Date.now();
-    type TRule = {
-        refFn: TFnFindCol;
-        Mode: EMode;
-    };
-
-    const ahkFunc = {
-        // funcName( | "funcName"
-        // eslint-disable-next-line security/detect-non-literal-regexp
-        reg: new RegExp(`(?:(?<![.\`%])\\b(${wordUp})\\b\\()|(?:"(${wordUp})")`, 'iu'),
-        refFn: (lineStr: string): number | undefined => lineStr.match(ahkFunc.reg)?.index,
-        Mode: EMode.ahkFunc,
-    } as const;
-
-    const matchList: DeepReadonly<TRule[]> = [ahkFunc];
-    for (const { Mode, refFn } of matchList) {
-        const Location: vscode.Location[] | null = ahkDef({
-            document,
-            position,
-            Mode,
-            wordUp,
-            refFn,
-            timeStart,
-            listAllUsing,
-        });
-        if (Location !== null) return Location;
-    }
-    return null;
-}
-
 function DefProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
@@ -139,7 +98,7 @@ function DefProviderCore(
     //  Definition | DefinitionLink[]
 
     // eslint-disable-next-line security/detect-unsafe-regex
-    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
+    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`#])\b\w+\b/u);
     if (range === undefined) return null;
     const wordUp: string = document.getText(range).toUpperCase();
     // const fileLink: vscode.Location | null = ahkInclude(document, position);
@@ -147,7 +106,7 @@ function DefProviderCore(
 
     const listAllUsing = false;
 
-    const userDefLink: vscode.Location[] | null = userDefTopSymbol(document, position, wordUp, listAllUsing);
+    const userDefLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
     if (userDefLink !== null) return userDefLink;
 
     const valInFunc: vscode.Location[] | null = getValWithDA(document, position, wordUp, listAllUsing);

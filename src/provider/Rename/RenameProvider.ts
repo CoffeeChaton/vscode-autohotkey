@@ -1,17 +1,22 @@
 import * as vscode from 'vscode';
-import { userDefTopSymbol } from '../Def/DefProvider';
+import { CAhkFuncSymbol } from '../../globalEnum';
+import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
+import { userDefFunc } from '../Def/DefProvider';
 
 function RenameProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
     newName: string,
 ): vscode.WorkspaceEdit | null {
-    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/ui);
-    if (!range) return null;
-    const wordUp: string = document.getText(range).toUpperCase();
+    const DA: undefined | CAhkFuncSymbol = getDAWithPos(document.uri.fsPath, position);
+    if (DA === undefined || !DA.nameRange.contains(position)) {
+        void vscode.window.showInformationMessage('please use rename at function def range');
+        return null;
+    }
 
+    const wordUp: string = document.getText(DA.nameRange).toUpperCase();
     const listAllUsing = true;
-    const userDefLink: vscode.Location[] | null = userDefTopSymbol(document, position, wordUp, listAllUsing);
+    const userDefLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
     if (userDefLink === null) return null;
 
     const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
@@ -37,6 +42,19 @@ export const RenameProvider: vscode.RenameProvider = {
         newName: string,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.WorkspaceEdit> {
+        if (!(/^\w+$/u).test(newName)) {
+            void vscode.window.showInformationMessage('just support rename to "[A-Za-z0-9_]"');
+            return null;
+        }
+
+        if ((/^\d/u).test(newName) || (/^_+$/u).test(newName)) {
+            void vscode.window.showInformationMessage(`Please use normal newName, not support of "${newName}"`);
+            return null;
+        }
+
         return RenameProviderCore(document, position, newName);
     },
 };
+
+// fn_img_m() && "fn_img_m" && fn_img_m() && fn_img_m() && fn_img_m && fn_img_m && "fn_img_m"
+//     O             O            O              O            X          X              O
