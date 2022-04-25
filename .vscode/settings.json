@@ -6,7 +6,7 @@
         "editor.defaultFormatter": "dprint.dprint"
     },
     "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
+        "editor.defaultFormatter": "dprint.dprint"
     },
     "[markdown]": {
         "editor.defaultFormatter": "dprint.dprint"

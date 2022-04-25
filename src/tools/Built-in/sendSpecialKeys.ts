@@ -63,3 +63,4 @@ export const A_Send: TA_Send = {
 };
 
 // TODO send https://www.autohotkey.com/docs/commands/Send.htm#keynames
+// https://www.autohotkey.com/docs/commands/Send.htm#vk
