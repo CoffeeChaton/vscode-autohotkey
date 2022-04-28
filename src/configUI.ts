@@ -1,7 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,10] }] */
 import * as vscode from 'vscode';
 import { TConfigs } from './configType';
-import { checkDebugFile } from './tools/fsTools/file';
 
 /*
     ---set start---
@@ -35,9 +34,6 @@ function getConfig(): TConfigs {
         },
         baseScan: {
             IgnoredList: getConfigs<readonly string[]>('baseScan.IgnoredList'),
-        },
-        Debug: {
-            executePath: getConfigs<string>('Debug.executePath'),
         },
         snippets: {
             blockFilesList: getConfigs<readonly string[]>('snippets.blockFilesList'),
@@ -81,11 +77,6 @@ export function getFormatConfig(): boolean {
 
 export function getIgnoredList(): readonly string[] {
     return config.baseScan.IgnoredList;
-}
-
-export function getDebugPath(): string {
-    checkDebugFile(config.Debug.executePath);
-    return config.Debug.executePath;
 }
 
 export function getSnippetBlockFilesList(): readonly string[] {

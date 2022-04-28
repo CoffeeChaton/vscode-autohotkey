@@ -8,8 +8,7 @@
         "vscode": "^1.66.0"
     },
     "activationEvents": [
-        "onLanguage:ahk",
-        "onDebug"
+        "onLanguage:ahk"
     ],
     "main": "./dict/extension",
     "homepage": "https://github.com/CoffeeChaton/vscode-ahk-outline/blob/master/README.md",
@@ -20,7 +19,6 @@
         "Programming Languages",
         "Snippets",
         "Linters",
-        "Debuggers",
         "Formatters"
     ],
     "license": "SEE LICENSE IN LICENSE.md",
@@ -38,81 +36,6 @@
         "breakpoints": [
             {
                 "language": "ahk"
-            }
-        ],
-        "debuggers": [
-            {
-                "type": "ahk",
-                "label": "AutoHotkey",
-                "program": "./out/debugEntrance.js",
-                "runtime": "\"C:\\Program Files\\AutoHotkey\\AutoHotkeyU64.exe\"",
-                "configurationAttributes": {
-                    "launch": {
-                        "required": [
-                            "program"
-                        ],
-                        "properties": {
-                            "program": {
-                                "type": "string",
-                                "description": "Absolute path to a text file.",
-                                "default": "${file}"
-                            },
-                            "runtime": {
-                                "type": "string",
-                                "description": "Absolute path to a AutoHotkey.exe file.",
-                                "default": "C:\\Program Files\\AutoHotkey\\AutoHotkeyU64.exe"
-                            },
-                            "stopOnEntry": {
-                                "type": "boolean",
-                                "description": "Automatically stop after launch.",
-                                "default": true
-                            },
-                            "trace": {
-                                "type": "boolean",
-                                "description": "Enable logging of the Debug Adapter Protocol.",
-                                "default": true
-                            },
-                            "dbgpSettings": {
-                                "type": "object",
-                                "properties": {
-                                    "max_children": {
-                                        "type": "integer",
-                                        "description": "max number of array or object children to initially retrieve",
-                                        "default": 300
-                                    },
-                                    "max_data": {
-                                        "type": "integer",
-                                        "description": "max amount of variable data to initially retrieve.",
-                                        "default": 131072
-                                    }
-                                },
-                                "description": "Dbgp settings. See https://xdebug.org/docs-dbgp.php#feature-names",
-                                "default": {}
-                            }
-                        }
-                    }
-                },
-                "initialConfigurations": [
-                    {
-                        "type": "ahk",
-                        "request": "launch",
-                        "name": "AutoHotkey Debugger",
-                        "program": "${file}",
-                        "stopOnEntry": true
-                    }
-                ],
-                "configurationSnippets": [
-                    {
-                        "label": "AutoHotkey Debug: Launch",
-                        "body": {
-                            "type": "ahk",
-                            "request": "launch",
-                            "name": "AutoHotkey Debugger",
-                            "program": "${file}",
-                            "stopOnEntry": true
-                        }
-                    }
-                ]
             }
         ],
         "commands": [
@@ -133,11 +56,6 @@
             "type": "object",
             "title": "AhkNekoHelp",
             "properties": {
-                "AhkNekoHelp.Debug.executePath": {
-                    "type": "string",
-                    "default": "C:/Program Files/AutoHotkey/AutoHotkeyU64.exe",
-                    "description": "Execute path of autohotkey."
-                },
                 "AhkNekoHelp.open.Documents.Uri": {
                     "type": "string",
                     "default": "https://www.autohotkey.com/docs/AutoHotkey.htm",
@@ -264,7 +182,6 @@
         "@types/node": "^17.0.29",
         "@types/temp": "^0.9.1",
         "@types/vscode": "^1.66.0",
-        "@types/xml2js": "^0.4.11",
         "@typescript-eslint/eslint-plugin": "^5.21.0",
         "@typescript-eslint/parser": "^5.21.0",
         "@typescript/analyze-trace": "^0.9.0",
@@ -293,11 +210,7 @@
         "typescript": "^4.6.3"
     },
     "dependencies": {
-        "@vscode/debugadapter": "^1.55.1",
-        "@vscode/debugprotocol": "^1.55.1",
-        "get-port-please": "^2.5.0",
         "micromatch": "^4.0.5",
-        "temp": "^0.9.4",
-        "xml2js": "^0.4.23"
+        "temp": "^0.9.4"
     }
 }

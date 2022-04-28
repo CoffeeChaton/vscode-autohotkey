@@ -13,9 +13,6 @@ type TempConfigs = {
     baseScan: {
         IgnoredList: readonly string[];
     };
-    Debug: {
-        executePath: string;
-    };
     snippets: {
         blockFilesList: readonly string[];
     };

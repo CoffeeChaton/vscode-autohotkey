@@ -1,6 +1,5 @@
 import {
     commands,
-    debug,
     DocumentSelector,
     ExtensionContext,
     languages,
@@ -17,7 +16,6 @@ import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProv
 import { AhkCodeLens } from './provider/CodeLens/CodeLensProvider';
 import { showUnknownAnalyze } from './provider/CodeLens/showUnknownAnalyze';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
-import { NekoDebugMain } from './provider/debugger/NekoDebugMain';
 import { DefProvider } from './provider/Def/DefProvider';
 import { ahkOnDidCloseTextDoc } from './provider/event/ahkOnDidCloseTextDoc';
 import { ahkRenameFiles } from './provider/event/ahkRenameFiles';
@@ -64,8 +62,6 @@ export function activate(context: ExtensionContext): void {
         commands.registerCommand('ahk.nekoHelp.refreshResource', fnRefreshResource),
         commands.registerCommand(ECommand.showFuncAnalyze, AnalyzeFuncMain),
         commands.registerCommand(ECommand.showUnknownAnalyze, showUnknownAnalyze),
-        // debug
-        debug.registerDebugAdapterDescriptorFactory('ahk', NekoDebugMain),
         // root dispose
         OutputChannel,
         statusBarItem,

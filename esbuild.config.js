@@ -61,9 +61,9 @@ const plugins = [
 esbuild
     .build({
         bundle: true,
-        entryPoints: ['./src/extension.ts', './src/debugEntrance.ts'],
+        entryPoints: ['./src/extension.ts'],
         // entryNames: '[dir]/neko',
-        external: ['vscode', '@vscode/debugprotocol'], // not bundle 'vscode'
+        external: ['vscode'], // not bundle 'vscode'
         format: 'cjs',
         // keepNames: true,
         logLevel: 'info',
