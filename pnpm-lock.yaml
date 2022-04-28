@@ -7,12 +7,9 @@ specifiers:
   '@types/node': ^17.0.29
   '@types/temp': ^0.9.1
   '@types/vscode': ^1.66.0
-  '@types/xml2js': ^0.4.11
   '@typescript-eslint/eslint-plugin': ^5.21.0
   '@typescript-eslint/parser': ^5.21.0
   '@typescript/analyze-trace': ^0.9.0
-  '@vscode/debugadapter': ^1.55.1
-  '@vscode/debugprotocol': ^1.55.1
   '@vscode/test-electron': ^2.1.3
   dprint: ^0.27.0
   esbuild: ^0.14.38
@@ -34,20 +31,14 @@ specifiers:
   eslint-plugin-react-hooks: ^4.5.0
   eslint-plugin-security: ^1.5.0
   fs: 0.0.1-security
-  get-port-please: ^2.5.0
   micromatch: ^4.0.5
   temp: ^0.9.4
   ts-node: ^10.7.0
   typescript: ^4.6.3
-  xml2js: ^0.4.23
 
 dependencies:
-  '@vscode/debugadapter': 1.55.1
-  '@vscode/debugprotocol': 1.55.1
-  get-port-please: 2.5.0
   micromatch: 4.0.5
   temp: 0.9.4
-  xml2js: 0.4.23
 
 devDependencies:
   '@types/assert': 1.5.6
@@ -56,7 +47,6 @@ devDependencies:
   '@types/node': 17.0.29
   '@types/temp': 0.9.1
   '@types/vscode': 1.66.0
-  '@types/xml2js': 0.4.11
   '@typescript-eslint/eslint-plugin': 5.21.0_829e74f28e9c9eb05edda582d47d45b8
   '@typescript-eslint/parser': 5.21.0_eslint@8.14.0+typescript@4.6.3
   '@typescript/analyze-trace': 0.9.0
@@ -234,12 +224,6 @@ packages:
     resolution: {integrity: sha512-ZfJck4M7nrGasfs4A4YbUoxis3Vu24cETw3DERsNYtDZmYSYtk6ljKexKFKhImO/ZmY6ZMsmegu2FPkXoUFImA==}
     dev: true
 
-  /@types/xml2js/0.4.11:
-    resolution: {integrity: sha512-JdigeAKmCyoJUiQljjr7tQG3if9NkqGUgwEUqBvV0N7LM4HyQk7UXCnusRa1lnvXAEYJ8mw8GtZWioagNztOwA==}
-    dependencies:
-      '@types/node': 17.0.29
-    dev: true
-
   /@typescript-eslint/eslint-plugin/5.21.0_829e74f28e9c9eb05edda582d47d45b8:
     resolution: {integrity: sha512-fTU85q8v5ZLpoZEyn/u1S2qrFOhi33Edo2CZ0+q1gDaWWm0JuPh3bgOyU8lM0edIEYgKLDkPFiZX2MOupgjlyg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -378,17 +362,6 @@ packages:
       treeify: 1.1.0
       yargs: 16.2.0
     dev: true
-
-  /@vscode/debugadapter/1.55.1:
-    resolution: {integrity: sha512-UeiEpSVNZSeRvLWluaJ+Qo2el/QD2o3t7JSQBu/0TEG3s98Ib3ihYaFk5uGugmITNTSBClMMs7UXieACRcOFlA==}
-    engines: {node: '>=14'}
-    dependencies:
-      '@vscode/debugprotocol': 1.55.1
-    dev: false
-
-  /@vscode/debugprotocol/1.55.1:
-    resolution: {integrity: sha512-tEOY1KxSACd77JFfoipYvLZdVdrTnXBiVgS7zKDmAQxxmVsKPERB6HOXDijoWi1wUjFx+K7plXCtweX+k5Fc/g==}
-    dev: false
 
   /@vscode/test-electron/2.1.3:
     resolution: {integrity: sha512-ps/yJ/9ToUZtR1dHfWi1mDXtep1VoyyrmGKC3UnIbScToRQvbUjyy1VMqnMEW3EpMmC3g7+pyThIPtPyCLHyow==}
@@ -1423,10 +1396,6 @@ packages:
     resolution: {integrity: sha512-WIWGi2L3DyTUvUrwRKgGi9TwxQMUEqPOPQBVi71R96jZXJdFskXEmf54BoZaS1kknGODoIGASGEzBUYdyMCBJg==}
     dev: true
 
-  /fs-memo/1.2.0:
-    resolution: {integrity: sha512-YEexkCpL4j03jn5SxaMHqcO6IuWuqm8JFUYhyCep7Ao89JIYmB8xoKhK7zXXJ9cCaNXpyNH5L3QtAmoxjoHW2w==}
-    dev: false
-
   /fs.realpath/1.0.0:
     resolution: {integrity: sha1-FQStJSMVjKpA20onh8sBQRmU6k8=}
 
@@ -1468,12 +1437,6 @@ packages:
       has: 1.0.3
       has-symbols: 1.0.3
     dev: true
-
-  /get-port-please/2.5.0:
-    resolution: {integrity: sha512-NblPebBznYARC1R2r1qmusbJAAgBr954gWhEZgwTerzR8r3ud6U5PI1SG4Lue43r87aikPPjObs85VieIDK99A==}
-    dependencies:
-      fs-memo: 1.2.0
-    dev: false
 
   /get-symbol-description/1.0.0:
     resolution: {integrity: sha512-2EmdH1YvIQiZpltCNgkuiUnyukzxM/R6NDJX31Ke3BG1Nq5b0S2PhX59UKi9vZpPDQVdqn+1IcaAwnzTT5vCjw==}
@@ -2173,10 +2136,6 @@ packages:
       regexp-tree: 0.1.24
     dev: true
 
-  /sax/1.2.4:
-    resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
-    dev: false
-
   /semver/6.3.0:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
     hasBin: true
@@ -2483,19 +2442,6 @@ packages:
 
   /wrappy/1.0.2:
     resolution: {integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=}
-
-  /xml2js/0.4.23:
-    resolution: {integrity: sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug==}
-    engines: {node: '>=4.0.0'}
-    dependencies:
-      sax: 1.2.4
-      xmlbuilder: 11.0.1
-    dev: false
-
-  /xmlbuilder/11.0.1:
-    resolution: {integrity: sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==}
-    engines: {node: '>=4.0'}
-    dev: false
 
   /y18n/5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}

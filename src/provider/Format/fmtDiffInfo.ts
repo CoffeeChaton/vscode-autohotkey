@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { EFormatChannel } from '../../globalEnum';
-import { callDiff, TDiff } from '../../tools/Diff';
 import { OutputChannel } from '../vscWindows/OutputChannel';
 import { fmtReplaceWarn } from './fmtReplaceWarn';
 import { TDiffMap } from './TFormat';
@@ -23,15 +22,8 @@ export function fmtDiffInfo(
     const rTextList: string[] = [];
     newTextList.forEach((v: vscode.TextEdit) => rTextList.push(v.newText));
 
-    const rightText: string = rTextList.join('\n');
-    const AllDoc: string = document.getText();
-    const diffVar: TDiff = {
-        leftText: AllDoc,
-        rightText,
-        fileName,
-    };
     // eslint-disable-next-line no-magic-numbers
-    setTimeout(callDiff, 100, diffVar);
+
     OutputChannel.appendLine('-----------Format Diff Start--------------------------------');
     for (const [ln, [oldStr, newStr]] of DiffMap) {
         OutputChannel.appendLine(`line : ${ln}`);
