@@ -51,10 +51,10 @@ export function activate(context: ExtensionContext): void {
         languages.registerRenameProvider(selector, RenameProvider),
         languages.registerWorkspaceSymbolProvider(WorkspaceSymbolProvider),
         // workspace-------------------
-        workspace.onDidChangeConfiguration((): void => configChangEvent()),
+        workspace.onDidChangeConfiguration(configChangEvent),
         workspace.onDidCloseTextDocument(ahkOnDidCloseTextDoc),
-        workspace.onDidCreateFiles((e): void => Detecter.createMap(e)),
-        workspace.onDidDeleteFiles((e): void => Detecter.delMap(e)),
+        workspace.onDidCreateFiles(Detecter.createMap),
+        workspace.onDidDeleteFiles(Detecter.delMap),
         workspace.onDidRenameFiles(ahkRenameFiles),
         // workspace.onDidChangeTextDocument((e) => d(e)),
         // workspace.registerTextDocumentContentProvider(selector, e),
