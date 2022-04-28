@@ -50,8 +50,7 @@
         "forceConsistentCasingInFileNames": true,
         "esModuleInterop": true,
         "types": [
-            "@types/node",
-            "jest"
+            "@types/node"
         ],
         "useUnknownInCatchVariables": false
     },

@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { CAhkFuncSymbol, TTokenStream } from '../../globalEnum';
-import { BuiltInFunctionObj, TBuiltInFuncElement } from '../../tools/Built-in/func';
+import { BuiltInFunctionObj, TBuiltInFuncElement, TUPKey } from '../../tools/Built-in/func';
 import { TFullFuncMap } from '../../tools/Func/getAllFunc';
 
 type TMsg = {
@@ -40,7 +40,7 @@ function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): string {
         return `${DA.name}(...) ; ${fileName}`;
     }
 
-    const BuiltInFunc: TBuiltInFuncElement | undefined = BuiltInFunctionObj[keyUp];
+    const BuiltInFunc: TBuiltInFuncElement | undefined = BuiltInFunctionObj[keyUp as TUPKey];
     if (BuiltInFunc !== undefined) {
         return `${BuiltInFunc.keyRawName}(...) ; "Built-in Functions"`;
     }

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable max-statements */
 /* eslint-disable no-template-curly-in-string */
 /* eslint-disable max-lines */
 /* eslint-disable max-len */
@@ -8,21 +10,184 @@ import { DeepReadonly } from '../../globalEnum';
 
 // https://www.autohotkey.com/docs/Functions.htm#BuiltIn
 
+type TElementGroup =
+    | 'Math'
+    | '△Math'
+    | 'Str'
+    | 'COM' // COM
+    | 'Lib'
+    | 'Error'
+    | 'File'
+    | 'Misc.'
+    | 'Keyboard'
+    | 'ImageLists' // IL_XX
+    | 'Func'
+    | 'GUI'
+    | 'ListView' // LV_XX
+    | 'Env'
+    | 'Control'
+    | 'StatusBar' // SB_XX
+    | 'TreeView' // TV_XX
+    | 'Window'
+    | 'Object'; // OBJ_XX
+
 export type TBuiltInFuncElement = DeepReadonly<{
     keyRawName: string;
-    group: string;
+    group: TElementGroup;
     link: string;
     msg: string;
     insert: string;
     exp: string[];
 }>;
 
-// △
-type TBuiltInFunctionObj = {
-    [k in string]: TBuiltInFuncElement;
+type TCOM_XX = // COM
+    // 14 elements
+    | 'COMOBJACTIVE'
+    | 'COMOBJARRAY'
+    | 'COMOBJCONNECT'
+    | 'COMOBJCREATE'
+    | 'COMOBJECT'
+    | 'COMOBJENWRAP'
+    | 'COMOBJERROR'
+    | 'COMOBJFLAGS'
+    | 'COMOBJGET'
+    | 'COMOBJMISSING'
+    | 'COMOBJQUERY'
+    | 'COMOBJTYPE'
+    | 'COMOBJUNWRAP'
+    | 'COMOBJVALUE';
+
+type TIL_XX = // ImageLists
+    // IL_
+    // 3 element
+    | 'IL_ADD'
+    | 'IL_CREATE'
+    | 'IL_DESTROY';
+
+type TLV_XX = // ListView
+    // LV_
+    // 11 elements
+    | 'LV_ADD'
+    | 'LV_DELETE'
+    | 'LV_DELETECOL'
+    | 'LV_GETCOUNT'
+    | 'LV_GETNEXT'
+    | 'LV_GETTEXT'
+    | 'LV_INSERT'
+    | 'LV_INSERTCOL'
+    | 'LV_MODIFY'
+    | 'LV_MODIFYCOL'
+    | 'LV_SETIMAGELIST';
+
+type TOBJ_XX = // Object
+    // OBJ
+    // 7 elements
+    | 'OBJADDREF'
+    | 'OBJBINDMETHOD'
+    | 'OBJGETBASE'
+    | 'OBJRAWGET'
+    | 'OBJRAWSET'
+    | 'OBJRELEASE'
+    | 'OBJSETBASE';
+
+type TSB_XX = // StatusBar
+    // SB_
+    // 3 element
+    | 'SB_SETICON'
+    | 'SB_SETPARTS'
+    | 'SB_SETTEXT';
+
+type TTV_XX = // TreeView
+    // TL_
+    // 12 element
+    | 'TV_ADD'
+    | 'TV_DELETE'
+    | 'TV_GET'
+    | 'TV_GETCHILD'
+    | 'TV_GETCOUNT'
+    | 'TV_GETNEXT'
+    | 'TV_GETPARENT'
+    | 'TV_GETPREV'
+    | 'TV_GETSELECTION'
+    | 'TV_GETTEXT'
+    | 'TV_MODIFY'
+    | 'TV_SETIMAGELIST';
+
+export type TUPKey =
+    | TCOM_XX
+    | TIL_XX
+    | TLV_XX
+    | TOBJ_XX
+    | TSB_XX
+    | TTV_XX
+    // 61 elements
+    | 'ABS'
+    | 'ACOS'
+    | 'ASC'
+    | 'ASIN'
+    | 'ATAN'
+    | 'CEIL'
+    | 'CHR'
+    | 'COS'
+    | 'DLLCALL'
+    | 'EXCEPTION'
+    | 'EXP'
+    | 'FILEEXIST'
+    | 'FILEOPEN'
+    | 'FLOOR'
+    | 'FORMAT'
+    | 'FUNC'
+    | 'GETKEYNAME'
+    | 'GETKEYSC'
+    | 'GETKEYSTATE'
+    | 'GETKEYVK'
+    | 'HOTSTRING'
+    | 'INPUTHOOK'
+    | 'INSTR'
+    | 'ISBYREF'
+    | 'ISFUNC'
+    | 'ISLABEL'
+    | 'ISOBJECT'
+    | 'LN'
+    | 'LOADPICTURE'
+    | 'LOG'
+    | 'LTRIM'
+    | 'MAX'
+    | 'MENUGETHANDLE'
+    | 'MENUGETNAME'
+    | 'MIN'
+    | 'MOD'
+    | 'NUMGET'
+    | 'NUMPUT'
+    | 'ONCLIPBOARDCHANGE'
+    | 'ONERROR'
+    | 'ONEXIT'
+    | 'ONMESSAGE'
+    | 'ORD'
+    | 'REGEXMATCH'
+    | 'REGEXREPLACE'
+    | 'REGISTERCALLBACK'
+    | 'ROUND'
+    | 'RTRIM'
+    | 'SIN'
+    | 'SQRT'
+    | 'STRGET'
+    | 'STRLEN'
+    | 'STRPUT'
+    | 'STRREPLACE'
+    | 'STRSPLIT'
+    | 'SUBSTR'
+    | 'TAN'
+    | 'TRIM'
+    | 'VARSETCAPACITY'
+    | 'WINACTIVE'
+    | 'WINEXIST';
+
+type TBuiltInFuncbj = {
+    [k in TUPKey]: TBuiltInFuncElement;
 };
 
-export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
+export const BuiltInFunctionObj: DeepReadonly<TBuiltInFuncbj> = {
     ABS: {
         group: 'Math',
         keyRawName: 'Abs',
@@ -54,7 +219,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     ASC: {
-        group: 'Str - > number',
+        group: 'Str',
         keyRawName: 'Asc',
         link: 'https://www.autohotkey.com/docs/commands/Asc.htm',
         msg: 'Returns the numeric value of the first byte or UTF-16 code unit in the specified string.\n\n This function returns a numeric value in the range 0 to 255 (for ANSI) or 0 to 0xFFFF (for Unicode). See [Unicode vs ANSI](https://www.autohotkey.com/docs/Compat.htm#Format) for details. If _String_ is empty, it returns 0.',
@@ -111,7 +276,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     CHR: {
-        group: 'str -> number',
+        group: 'Str',
         keyRawName: 'Chr',
         link: 'https://www.autohotkey.com/docs/commands/Chr.htm',
         msg: 'Returns the string (usually a single character) corresponding to the character code indicated by the specified number.',
@@ -298,7 +463,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     EXCEPTION: {
-        group: 'try',
+        group: 'Error',
         keyRawName: 'Exception',
         link: 'https://www.autohotkey.com/docs/commands/Throw.htm#Exception',
         msg: 'Creates an object which can be used to throw a custom exception.',
@@ -349,7 +514,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     FORMAT: {
-        group: 'str',
+        group: 'Str',
         keyRawName: 'Format',
         link: 'https://www.autohotkey.com/docs/commands/Format.htm',
         msg: 'Formats a variable number of input values according to a format string.',
@@ -488,7 +653,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     INPUTHOOK: {
-        group: 'Mouse Keyboard',
+        group: 'Keyboard',
         keyRawName: 'InputHook',
         link: 'https://www.autohotkey.com/docs/commands/InputHook.htm',
         msg: 'Creates an object which can be used to collect or intercept keyboard input.',
@@ -498,7 +663,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     INSTR: {
-        group: 'str',
+        group: 'Str',
         keyRawName: 'InStr',
         link: 'https://www.autohotkey.com/docs/commands/InStr.htm',
         msg: 'Searches for a given occurrence of a string, from the left or the right.',
@@ -510,7 +675,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     ISBYREF: {
-        group: 'func',
+        group: 'Func',
         keyRawName: 'IsByRef',
         link: 'https://www.autohotkey.com/docs/commands/IsByRef.htm',
         msg: 'Returns a non-zero number if the specified [ByRef parameter](https://www.autohotkey.com/docs/Functions.htm#ByRef) was supplied with a variable.',
@@ -531,7 +696,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     ISFUNC: {
-        group: 'func',
+        group: 'Func',
         keyRawName: 'IsFunc',
         link: 'https://www.autohotkey.com/docs/commands/IsFunc.htm',
         msg: 'Returns a non-zero number if the specified function exists in the script.',
@@ -604,7 +769,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         exp: ['MsgBox, % Log(1.2) ; Returns 0.079181'],
     },
     LTRIM: {
-        group: 'str',
+        group: 'Str',
         keyRawName: 'LTrim',
         link: 'https://www.autohotkey.com/docs/commands/Trim.htm',
         msg: 'Trims characters from the beginning and/or end of a string.',
@@ -783,7 +948,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     NUMGET: {
-        group: 'External Lib',
+        group: 'Lib',
         keyRawName: 'NumGet',
         link: 'https://www.autohotkey.com/docs/commands/NumGet.htm',
         msg: 'Returns the binary number stored at the specified address+offset.',
@@ -803,7 +968,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     OBJADDREF: {
-        group: 'Misc',
+        group: 'Object',
         keyRawName: 'ObjAddRef',
         link: 'https://www.autohotkey.com/docs/commands/ObjAddRef.htm',
         msg: 'Increments or decrements an object\'s [reference count](https://www.autohotkey.com/docs/Objects.htm#Reference_Counting).',
@@ -811,7 +976,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         exp: ['ObjAddRef(Ptr)'],
     },
     OBJBINDMETHOD: {
-        group: 'Misc',
+        group: 'Object',
         keyRawName: 'ObjBindMethod',
         link: 'https://www.autohotkey.com/docs/commands/ObjBindMethod.htm',
         msg: 'Creates a [BoundFunc object](https://www.autohotkey.com/docs/objects/Functor.htm#BoundFunc) which calls a method of a given object.',
@@ -819,7 +984,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         exp: ['BoundFunc := ObjBindMethod(Obj, Method, Params)'],
     },
     OBJGETBASE: {
-        group: 'Misc',
+        group: 'Object',
         keyRawName: 'ObjGetBase',
         link: 'https://www.autohotkey.com/docs/objects/Object.htm#GetBase',
         msg: 'Retrieves an object\'s [base object](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects).',
@@ -827,7 +992,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         exp: ['BaseObject := ObjGetBase(Object)'],
     },
     OBJRAWGET: {
-        group: 'Misc',
+        group: 'Object',
         keyRawName: 'ObjRawGet',
         link: 'https://www.autohotkey.com/docs/objects/Object.htm#RawGet',
         msg: 'Retrieves a key-value pair from an object, bypassing the object\'s [meta-functions](https://www.autohotkey.com/docs/Objects.htm#Meta_Functions).',
@@ -835,7 +1000,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         exp: ['Value := ObjRawGet(Object, Key)'],
     },
     OBJRAWSET: {
-        group: 'Misc',
+        group: 'Object',
         keyRawName: 'ObjRawSet',
         link: 'https://www.autohotkey.com/docs/objects/Object.htm#RawSet',
         msg: 'Stores or overwrites a key-value pair in an object, bypassing the object\'s [meta-functions](https://www.autohotkey.com/docs/Objects.htm#Meta_Functions).',
@@ -846,7 +1011,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     OBJRELEASE: {
-        group: 'Misc',
+        group: 'Object',
         keyRawName: 'ObjRelease',
         link: 'https://www.autohotkey.com/docs/commands/ObjAddRef.htm',
         msg: 'Increments or decrements an object\'s [reference count](https://www.autohotkey.com/docs/Objects.htm#Reference_Counting).',
@@ -854,7 +1019,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         exp: ['ObjRelease(Ptr)'],
     },
     OBJSETBASE: {
-        group: 'Misc',
+        group: 'Object',
         keyRawName: 'ObjSetBase',
         link: 'https://www.autohotkey.com/docs/objects/Object.htm#SetBase',
         msg: 'Sets an object\'s [base object](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects).',
@@ -880,7 +1045,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ], // <-------
     },
     ONERROR: {
-        group: 'control',
+        group: 'Control',
         keyRawName: 'OnError',
         link: 'https://www.autohotkey.com/docs/commands/OnError.htm',
         msg: 'Specifies a function to run automatically when an unhandled error occurs.',
@@ -897,7 +1062,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     ONEXIT: {
-        group: 'control',
+        group: 'Control',
         keyRawName: 'OnExit',
         link: 'https://www.autohotkey.com/docs/commands/OnExit.htm#function',
         msg: 'Specifies a function to run automatically when the script exits.',
@@ -938,7 +1103,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     ORD: {
-        group: 'str',
+        group: 'Str',
         keyRawName: 'Ord',
         link: 'https://www.autohotkey.com/docs/commands/Ord.htm',
         msg: 'Returns the ordinal value (numeric character code) of the first character in the specified string.\n\nApart from the Unicode supplementary character detection, this function is identical to [Asc()](https://www.autohotkey.com/docs/commands/Asc.htm).',
@@ -950,7 +1115,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     REGEXMATCH: {
-        group: 'str',
+        group: 'Str',
         keyRawName: 'RegExMatch',
         link: 'https://www.autohotkey.com/docs/commands/RegExMatch.htm',
         msg: 'Determines whether a string contains a pattern , link: "regular expression",.',
@@ -961,7 +1126,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     REGEXREPLACE: {
-        group: 'str',
+        group: 'Str',
         keyRawName: 'RegExReplace',
         link: 'https://www.autohotkey.com/docs/commands/RegExReplace.htm',
         msg: 'Replaces occurrences of a pattern , link: "regular expression", inside a string.',
@@ -1004,7 +1169,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     RTRIM: {
-        group: 'str',
+        group: 'Str',
         keyRawName: 'RTrim',
         link: 'https://www.autohotkey.com/docs/commands/Trim.htm',
         msg: 'Trims characters from the beginning and/or end of a string.',
@@ -1085,7 +1250,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     STRLEN: {
-        group: 'str',
+        group: 'Str',
         keyRawName: 'StrLen',
         link: 'https://www.autohotkey.com/docs/commands/StrLen.htm',
         msg: 'Retrieves the count of how many characters are in a string.',
@@ -1107,7 +1272,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     STRREPLACE: {
-        group: 'str',
+        group: 'Str',
         keyRawName: 'StrReplace',
         link: 'https://www.autohotkey.com/docs/commands/StrReplace.htm',
         msg: 'Replaces occurrences of the specified substring with a new string.',
@@ -1118,7 +1283,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     STRSPLIT: {
-        group: 'str',
+        group: 'Str',
         keyRawName: 'StrSplit',
         link: 'https://www.autohotkey.com/docs/commands/StrSplit.htm',
         msg: 'Separates a string into an array of substrings using the specified delimiters.',
@@ -1129,7 +1294,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     SUBSTR: {
-        group: 'str',
+        group: 'Str',
         keyRawName: 'SubStr',
         link: 'https://www.autohotkey.com/docs/commands/SubStr.htm',
         msg: 'Retrieves one or more characters from the specified position in a string.',
@@ -1154,7 +1319,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
         ],
     },
     TRIM: {
-        group: 'str',
+        group: 'Str',
         keyRawName: 'Trim',
         link: 'https://www.autohotkey.com/docs/commands/Trim.htm',
         msg: 'Trims characters from the beginning and/or end of a string.',
@@ -1317,7 +1482,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFunctionObj> = {
     },
 };
 
-function Bif2Md(BiFunc: TBuiltInFuncElement): vscode.MarkdownString {
+export function Bif2Md(BiFunc: TBuiltInFuncElement): vscode.MarkdownString {
     const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
         .appendMarkdown(`Built-in Function (${BiFunc.group})`)
         .appendCodeblock(`${BiFunc.keyRawName}()`, 'ahk')
@@ -1338,19 +1503,3 @@ export const BuiltInFuncMDMap: ReadonlyMap<string, vscode.MarkdownString> = new 
     [...Object.entries(BuiltInFunctionObj)]
         .map(([ukName, BiFunc]: [string, TBuiltInFuncElement]) => [ukName, Bif2Md(BiFunc)]),
 );
-
-export const BiFuncSnippetList: readonly vscode.CompletionItem[] = [...Object.entries(BuiltInFunctionObj)]
-    .map(([ukName, BiFunc]: [string, TBuiltInFuncElement]): vscode.CompletionItem => {
-        const { keyRawName, group, insert } = BiFunc;
-
-        const item: vscode.CompletionItem = new vscode.CompletionItem({
-            label: `${keyRawName}()`, // Left
-            description: group, // Right
-        });
-        item.kind = vscode.CompletionItemKind.Function;
-        item.insertText = new vscode.SnippetString(insert);
-
-        item.detail = 'Built-in Function (neko-help)';
-        item.documentation = BuiltInFuncMDMap.get(ukName) ?? Bif2Md(BiFunc);
-        return item;
-    });
