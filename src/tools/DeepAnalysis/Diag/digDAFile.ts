@@ -65,7 +65,7 @@ export function digDAFile(
     DAList: TAhkSymbolList,
     uri: vscode.Uri,
 ): void {
-    const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) || [])
+    const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) ?? [])
         .filter((diag: vscode.Diagnostic): boolean => diag.source !== EDiagBase.sourceDA);
     diagColl.set(uri, [...baseDiag, ...diagDAFileCore(DAList)]);
 }

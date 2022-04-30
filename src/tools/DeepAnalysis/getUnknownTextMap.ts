@@ -124,7 +124,7 @@ export function getUnknownTextMap(
                 }
             }
 
-            const character: number | undefined = v?.index;
+            const character: number | undefined = v.index;
             const { input } = v;
 
             if (character === undefined || input === undefined) {
@@ -146,7 +146,7 @@ export function getUnknownTextMap(
             );
 
             const GValMapOldVal: TGlobalVal | undefined = GValMap.get(wordUp);
-            if (GValMapOldVal) {
+            if (GValMapOldVal !== undefined) {
                 if (
                     !GValMapOldVal.defRangeList.some((r: vscode.Range): boolean => r.contains(range))
                     && !GValMapOldVal.refRangeList.some((r: vscode.Range): boolean => r.contains(range))
@@ -157,13 +157,13 @@ export function getUnknownTextMap(
             } // keep before valMap && paramMap
 
             const oldVal: TValMetaIn | undefined = valMap.get(wordUp);
-            if (oldVal) {
+            if (oldVal !== undefined) {
                 pushRef(oldVal, keyRawName, startPos, range);
                 continue;
             }
 
             const oldParam: TParamMetaIn | undefined = paramMap.get(wordUp);
-            if (oldParam) {
+            if (oldParam !== undefined) {
                 pushRef(oldParam, keyRawName, startPos, range);
                 continue;
             }

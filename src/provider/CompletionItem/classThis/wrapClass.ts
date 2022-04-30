@@ -92,9 +92,8 @@ async function parsingUserDefClassRecursive(
     deep: number,
 ): Promise<vscode.CompletionItem[]> {
     const { fsPath, AhkSymbol } = c0;
-    const fnStrEq = ChapterArr[deep]
-        ? new RegExp(`^${ChapterArr[deep]}$`, 'iu')
-        : /^$/u;
+    const fnStrEq = new RegExp(`^${ChapterArr[deep]}$`, 'iu');
+
     const itemS: vscode.CompletionItem[] = [];
     const strKind = getKind(AhkSymbol.kind);
     const newTrack = [...track, `${strKind}  ${AhkSymbol.name}`];
@@ -110,7 +109,7 @@ async function parsingUserDefClassRecursive(
         const ahkExtends = AhkSymbol.detail;
         if (ahkExtends !== '') {
             const c1 = getUserDefClassSymbol(ahkExtends.toUpperCase());
-            if (c1 && c1.AhkSymbol.kind === vscode.SymbolKind.Class) {
+            if ((c1 !== null) && c1.AhkSymbol.kind === vscode.SymbolKind.Class) {
                 itemS.push(...await parsingUserDefClassRecursive(c1, newTrack, ChapterArr, deep));
             }
         }
@@ -143,7 +142,7 @@ function valTrack(
 ): string[] {
     const Head: string = ChapterArr[0];
     const stackRangeRaw = getScopeOfPos(document, position)
-        || new vscode.Range(0, 0, position.line, position.character);
+        ?? new vscode.Range(0, 0, position.line, position.character);
 
     const AhkTokenList: TTokenStream | undefined = Detecter.getDocMap(document.uri.fsPath)
         ?.DocStrMap.slice(

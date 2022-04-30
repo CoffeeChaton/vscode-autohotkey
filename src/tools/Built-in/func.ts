@@ -40,148 +40,128 @@ export type TBuiltInFuncElement = DeepReadonly<{
     exp: string[];
 }>;
 
-type TCOM_XX = // COM
-    // 14 elements
-    | 'COMOBJACTIVE'
-    | 'COMOBJARRAY'
-    | 'COMOBJCONNECT'
-    | 'COMOBJCREATE'
-    | 'COMOBJECT'
-    | 'COMOBJENWRAP'
-    | 'COMOBJERROR'
-    | 'COMOBJFLAGS'
-    | 'COMOBJGET'
-    | 'COMOBJMISSING'
-    | 'COMOBJQUERY'
-    | 'COMOBJTYPE'
-    | 'COMOBJUNWRAP'
-    | 'COMOBJVALUE';
+export const UPKeyList = [
+    //
+    'COMOBJACTIVE',
+    'COMOBJARRAY',
+    'COMOBJCONNECT',
+    'COMOBJCREATE',
+    'COMOBJECT',
+    'COMOBJENWRAP',
+    'COMOBJERROR',
+    'COMOBJFLAGS',
+    'COMOBJGET',
+    'COMOBJMISSING',
+    'COMOBJQUERY',
+    'COMOBJTYPE',
+    'COMOBJUNWRAP',
+    'COMOBJVALUE',
+    //
+    'IL_ADD',
+    'IL_CREATE',
+    'IL_DESTROY',
+    //
+    'LV_ADD',
+    'LV_DELETE',
+    'LV_DELETECOL',
+    'LV_GETCOUNT',
+    'LV_GETNEXT',
+    'LV_GETTEXT',
+    'LV_INSERT',
+    'LV_INSERTCOL',
+    'LV_MODIFY',
+    'LV_MODIFYCOL',
+    'LV_SETIMAGELIST',
+    //
+    'OBJADDREF',
+    'OBJBINDMETHOD',
+    'OBJGETBASE',
+    'OBJRAWGET',
+    'OBJRAWSET',
+    'OBJRELEASE',
+    'OBJSETBASE',
+    //
+    'SB_SETICON',
+    'SB_SETPARTS',
+    'SB_SETTEXT',
+    //
+    'TV_ADD',
+    'TV_DELETE',
+    'TV_GET',
+    'TV_GETCHILD',
+    'TV_GETCOUNT',
+    'TV_GETNEXT',
+    'TV_GETPARENT',
+    'TV_GETPREV',
+    'TV_GETSELECTION',
+    'TV_GETTEXT',
+    'TV_MODIFY',
+    'TV_SETIMAGELIST',
+    //
+    'ABS',
+    'ACOS',
+    'ASC',
+    'ASIN',
+    'ATAN',
+    'CEIL',
+    'CHR',
+    'COS',
+    'DLLCALL',
+    'EXCEPTION',
+    'EXP',
+    'FILEEXIST',
+    'FILEOPEN',
+    'FLOOR',
+    'FORMAT',
+    'FUNC',
+    'GETKEYNAME',
+    'GETKEYSC',
+    'GETKEYSTATE',
+    'GETKEYVK',
+    'HOTSTRING',
+    'INPUTHOOK',
+    'INSTR',
+    'ISBYREF',
+    'ISFUNC',
+    'ISLABEL',
+    'ISOBJECT',
+    'LN',
+    'LOADPICTURE',
+    'LOG',
+    'LTRIM',
+    'MAX',
+    'MENUGETHANDLE',
+    'MENUGETNAME',
+    'MIN',
+    'MOD',
+    'NUMGET',
+    'NUMPUT',
+    'ONCLIPBOARDCHANGE',
+    'ONERROR',
+    'ONEXIT',
+    'ONMESSAGE',
+    'ORD',
+    'REGEXMATCH',
+    'REGEXREPLACE',
+    'REGISTERCALLBACK',
+    'ROUND',
+    'RTRIM',
+    'SIN',
+    'SQRT',
+    'STRGET',
+    'STRLEN',
+    'STRPUT',
+    'STRREPLACE',
+    'STRSPLIT',
+    'SUBSTR',
+    'TAN',
+    'TRIM',
+    'VARSETCAPACITY',
+    'WINACTIVE',
+    'WINEXIST',
+] as const;
 
-type TIL_XX = // ImageLists
-    // IL_
-    // 3 element
-    | 'IL_ADD'
-    | 'IL_CREATE'
-    | 'IL_DESTROY';
-
-type TLV_XX = // ListView
-    // LV_
-    // 11 elements
-    | 'LV_ADD'
-    | 'LV_DELETE'
-    | 'LV_DELETECOL'
-    | 'LV_GETCOUNT'
-    | 'LV_GETNEXT'
-    | 'LV_GETTEXT'
-    | 'LV_INSERT'
-    | 'LV_INSERTCOL'
-    | 'LV_MODIFY'
-    | 'LV_MODIFYCOL'
-    | 'LV_SETIMAGELIST';
-
-type TOBJ_XX = // Object
-    // OBJ
-    // 7 elements
-    | 'OBJADDREF'
-    | 'OBJBINDMETHOD'
-    | 'OBJGETBASE'
-    | 'OBJRAWGET'
-    | 'OBJRAWSET'
-    | 'OBJRELEASE'
-    | 'OBJSETBASE';
-
-type TSB_XX = // StatusBar
-    // SB_
-    // 3 element
-    | 'SB_SETICON'
-    | 'SB_SETPARTS'
-    | 'SB_SETTEXT';
-
-type TTV_XX = // TreeView
-    // TL_
-    // 12 element
-    | 'TV_ADD'
-    | 'TV_DELETE'
-    | 'TV_GET'
-    | 'TV_GETCHILD'
-    | 'TV_GETCOUNT'
-    | 'TV_GETNEXT'
-    | 'TV_GETPARENT'
-    | 'TV_GETPREV'
-    | 'TV_GETSELECTION'
-    | 'TV_GETTEXT'
-    | 'TV_MODIFY'
-    | 'TV_SETIMAGELIST';
-
-export type TUPKey =
-    | TCOM_XX
-    | TIL_XX
-    | TLV_XX
-    | TOBJ_XX
-    | TSB_XX
-    | TTV_XX
-    // 61 elements
-    | 'ABS'
-    | 'ACOS'
-    | 'ASC'
-    | 'ASIN'
-    | 'ATAN'
-    | 'CEIL'
-    | 'CHR'
-    | 'COS'
-    | 'DLLCALL'
-    | 'EXCEPTION'
-    | 'EXP'
-    | 'FILEEXIST'
-    | 'FILEOPEN'
-    | 'FLOOR'
-    | 'FORMAT'
-    | 'FUNC'
-    | 'GETKEYNAME'
-    | 'GETKEYSC'
-    | 'GETKEYSTATE'
-    | 'GETKEYVK'
-    | 'HOTSTRING'
-    | 'INPUTHOOK'
-    | 'INSTR'
-    | 'ISBYREF'
-    | 'ISFUNC'
-    | 'ISLABEL'
-    | 'ISOBJECT'
-    | 'LN'
-    | 'LOADPICTURE'
-    | 'LOG'
-    | 'LTRIM'
-    | 'MAX'
-    | 'MENUGETHANDLE'
-    | 'MENUGETNAME'
-    | 'MIN'
-    | 'MOD'
-    | 'NUMGET'
-    | 'NUMPUT'
-    | 'ONCLIPBOARDCHANGE'
-    | 'ONERROR'
-    | 'ONEXIT'
-    | 'ONMESSAGE'
-    | 'ORD'
-    | 'REGEXMATCH'
-    | 'REGEXREPLACE'
-    | 'REGISTERCALLBACK'
-    | 'ROUND'
-    | 'RTRIM'
-    | 'SIN'
-    | 'SQRT'
-    | 'STRGET'
-    | 'STRLEN'
-    | 'STRPUT'
-    | 'STRREPLACE'
-    | 'STRSPLIT'
-    | 'SUBSTR'
-    | 'TAN'
-    | 'TRIM'
-    | 'VARSETCAPACITY'
-    | 'WINACTIVE'
-    | 'WINEXIST';
+export type TUPKey = typeof UPKeyList[number];
 
 type TBuiltInFuncbj = {
     [k in TUPKey]: TBuiltInFuncElement;

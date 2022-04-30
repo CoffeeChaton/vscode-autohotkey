@@ -31,7 +31,8 @@ export function docCommentBlock(textRawTrim: string, flag: EDocBlock): EDocBlock
 
     if (
         flag === EDocBlock.inDocCommentBlockStart
-        || flag === EDocBlock.inDocCommentBlockMid
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        || flag === EDocBlock.inDocCommentBlockMid // i know this always true
     ) {
         return textRawTrim.startsWith('*/') // textRaw.indexOf('*/') > -1
             ? EDocBlock.inDocCommentBlockEnd

@@ -2,13 +2,13 @@ import * as vscode from 'vscode';
 import { EFormatChannel } from '../../globalEnum';
 import { FormatCore } from '../Format/FormatProvider';
 
-async function chIsNextLine(
+function chIsNextLine(
     document: vscode.TextDocument,
     position: vscode.Position,
     options: vscode.FormattingOptions,
     _token: vscode.CancellationToken,
-): Promise<vscode.TextEdit[]> {
-    const array = await FormatCore({
+): vscode.TextEdit[] {
+    const array: vscode.TextEdit[] = FormatCore({
         document,
         options,
         fmtStart: 0,
@@ -16,7 +16,6 @@ async function chIsNextLine(
         from: EFormatChannel.byFormatOnType,
         needDiff: false,
     });
-    if (!array) return [];
 
     return [array[position.line - 1]];
 }

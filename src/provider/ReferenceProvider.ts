@@ -11,7 +11,7 @@ function ReferenceProviderCore(
 
     // eslint-disable-next-line security/detect-unsafe-regex
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/ui);
-    if (!range) return null;
+    if (range === undefined) return null;
     const wordUp: string = document.getText(range).toUpperCase();
     // TODO class.Method, this.classVar,GoSub, GoTo, ahk Built-in func
 

@@ -47,7 +47,7 @@ function defGlobal(gValMapBySelf: TGValMapPrivacy, strF: string, line: number): 
         const defRange: vscode.Range = getGRange(strF, rawName, ma, line);
         const oldVal: TGlobalVal | undefined = gValMapBySelf.get(ValUpName);
 
-        if (oldVal) {
+        if (oldVal !== undefined) {
             oldVal.defRangeList.push(defRange);
         } else {
             gValMapBySelf.set(ValUpName, {
@@ -68,7 +68,7 @@ function refGlobal(gValMapBySelf: TGValMapPrivacy, strF: string, line: number): 
         const refRange: vscode.Range = getGRange(strF, rawName, ma, line);
         const oldVal: TGlobalVal | undefined = gValMapBySelf.get(ValUpName);
 
-        if (oldVal) {
+        if (oldVal !== undefined) {
             oldVal.refRangeList.push(refRange);
         } else {
             gValMapBySelf.set(ValUpName, {

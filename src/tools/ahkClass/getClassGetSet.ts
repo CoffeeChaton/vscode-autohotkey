@@ -15,7 +15,7 @@ function getName(FuncInput: TFuncInput): string | null {
     if (exec === null) return null;
     if (lStrTrim.endsWith('{')) return exec[0];
 
-    if ((line + 1 < RangeEndLine) && DocStrMap[line + 1]) {
+    if ((line + 1 < RangeEndLine) && line + 1 <= DocStrMap.length) {
         const nextLStr = DocStrMap[line + 1].lStr.trim();
         if (nextLStr.startsWith('{')) return exec[0];
     }

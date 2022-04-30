@@ -55,7 +55,7 @@ export function FormatCore(
         fmtEnd,
         from,
     }: TFmtCoreArgs,
-): vscode.ProviderResult<vscode.TextEdit[]> {
+): vscode.TextEdit[] {
     if (document.uri.fsPath.indexOf(EStr.diff_name_prefix) > -1) {
         const message = 'Don\'t Format the TEMP file!';
         void vscode.window.showWarningMessage(message);
@@ -88,7 +88,7 @@ export function FormatCore(
         if (
             isReturn(tagDeep, deep, textFix)
             // Return
-            || hasHashtag
+            || hasHashtag !== ''
             // #if #hotstring
             || (tagDeep > 0 && tagDeep === deep && (HotStr || Label)) // `::btw::\n` //  `label:`
         ) {

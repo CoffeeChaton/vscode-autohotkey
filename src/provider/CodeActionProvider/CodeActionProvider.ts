@@ -3,17 +3,14 @@ import { Diags, EDiagCode, EDiagCodeDA } from '../../diag';
 import { EDiagBase } from '../../Enum/EDiagBase';
 import { c501ignoreArgNeverUsed } from './c501ignoreArgNeverUsed';
 import { c502c503CodeAction } from './c502c503CodeAction';
+import { DependencyAnalysis } from './DependencyAnalysis';
 
 function getFsPath(diag: vscode.Diagnostic): string | null {
-    const code = diag?.code;
+    const { code } = diag;
     if (code === undefined || typeof code === 'string' || typeof code === 'number') return null;
 
     const d: EDiagCode = code.value as EDiagCode;
-    const path: string | undefined = Diags[d]?.path;
-    if (path !== undefined) {
-        return path;
-    }
-    return null;
+    return Diags[d].path;
 }
 
 function setEdit(uri: vscode.Uri, line: number, FsPath: string): vscode.WorkspaceEdit {
@@ -37,7 +34,7 @@ function setIgnore(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.Code
 }
 
 function codeActionOfDA(uri: vscode.Uri, diag: vscode.Diagnostic): vscode.CodeAction[] {
-    const code = diag?.code;
+    const { code } = diag;
     if (code === undefined || typeof code === 'string' || typeof code === 'number') return [];
     const { value } = code;
     if (value === EDiagCodeDA.code501) {
@@ -73,6 +70,9 @@ export const CodeActionProvider: vscode.CodeActionProvider = {
         context: vscode.CodeActionContext,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
-        return fixDiag(document.uri, context.diagnostics);
+        return [
+            ...fixDiag(document.uri, context.diagnostics),
+            ...DependencyAnalysis(document, range),
+        ];
     },
 };

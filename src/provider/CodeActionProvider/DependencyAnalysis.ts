@@ -3,9 +3,9 @@ import { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
 import { Detecter } from '../../core/Detecter';
 import { CAhkFuncSymbol, TTokenStream } from '../../globalEnum';
-import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
+import { getFuncWithPos } from '../../tools/DeepAnalysis/getFuncWithPos';
 
-function DependencyAnalysis(
+export function DependencyAnalysis(
     document: vscode.TextDocument,
     selection: vscode.Range | vscode.Selection,
 ): vscode.Command[] {
@@ -13,10 +13,9 @@ function DependencyAnalysis(
 
     const { fsPath } = document.uri;
     const { active } = selection;
-    const DA: CAhkFuncSymbol | undefined = getDAWithPos(fsPath, active);
+    const DA: CAhkFuncSymbol | undefined = getFuncWithPos(fsPath, active);
     if (
         DA === undefined
-        || DA.kind !== vscode.SymbolKind.Function
         || !DA.nameRange.contains(active)
     ) {
         return [];

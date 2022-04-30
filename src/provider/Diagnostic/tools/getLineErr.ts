@@ -46,13 +46,13 @@ export function getLineErr(DocStrMap: TTokenStream, line: number): null | vscode
         fistWordUp,
     } = DocStrMap[line];
     const err0: TLineDiag = assignErr(textRaw, detail);
-    if (err0 && err0 !== EDiagLine.OK) {
+    if (err0 !== 0 && err0 !== EDiagLine.OK) {
         return lineErrDiag(line, err0);
     }
 
     const err1: TLineErr | 0 = getLineErrCore(lStr, fistWordUp);
 
-    if (err1) return lineErrDiag(line, err1);
+    if (err1 !== 0) return lineErrDiag(line, err1);
     // err1 === 0
     return null;
 }

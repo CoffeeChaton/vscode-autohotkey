@@ -69,7 +69,7 @@ export function getValWithDA(
 
     const textList: TTextMetaOut | undefined = textMap.get(wordUp);
 
-    return textList
+    return textList !== undefined
         ? rangeList2LocList(textList.refRangeList, uri)
         : null;
 }

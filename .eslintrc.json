@@ -110,6 +110,13 @@
         ],
         "@typescript-eslint/no-this-alias": "warn",
         "@typescript-eslint/no-type-alias": "off",
+        "@typescript-eslint/no-unnecessary-condition": [
+            "error",
+            {
+                "allowConstantLoopConditions": false,
+                "allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing": false
+            }
+        ],
         "@typescript-eslint/no-unnecessary-qualifier": "warn",
         "@typescript-eslint/no-unnecessary-type-assertion": "warn",
         "@typescript-eslint/no-unsafe-assignment": "warn",
@@ -131,6 +138,18 @@
         "@typescript-eslint/promise-function-async": "warn",
         "@typescript-eslint/require-array-sort-compare": "warn",
         "@typescript-eslint/restrict-plus-operands": "warn",
+        "@typescript-eslint/strict-boolean-expressions": [
+            "error",
+            {
+                "allowString": false,
+                "allowNumber": false,
+                "allowNullableObject": false,
+                "allowNullableBoolean": false,
+                "allowNullableString": false,
+                "allowNullableNumber": false,
+                "allowAny": false
+            }
+        ],
         "array-bracket-newline": "warn",
         "array-bracket-spacing": "warn",
         "array-callback-return": "error",

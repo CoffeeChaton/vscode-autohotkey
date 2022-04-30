@@ -10,6 +10,8 @@ function _commandHeadStatistics(commandHead: string): void {
     const hint: number = DEB.get(commandHead) ?? 0;
     DEB.set(commandHead, hint + 1);
 
+    // for debugging
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (isDebug) {
         type TElement = {
             k: string;

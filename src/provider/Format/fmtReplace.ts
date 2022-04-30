@@ -43,7 +43,7 @@ function fnLR(strElement: string): string {
     if (LR === 0) return strElement;
     if (LR > 0) {
         const Left = strElement.substring(0, LR + 1);
-        const Right = strElement.substring(LR + 1, strElement.length) || '';
+        const Right = strElement.substring(LR + 1, strElement.length); // || '';
         return textReplace(Left) + Right;
     }
     return strElement;

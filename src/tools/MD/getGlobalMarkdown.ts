@@ -9,7 +9,7 @@ export function getGlobalMarkdown(wordUp: string): vscode.MarkdownString | null 
         const GlobalVal: TGlobalValReadonly | undefined = Detecter
             .getDocMap(fsPath)
             ?.GValMap
-            ?.get(wordUp);
+            .get(wordUp);
         if (GlobalVal === undefined) continue;
         msgList.push(globalVal2Msg(fsPath, GlobalVal));
     }

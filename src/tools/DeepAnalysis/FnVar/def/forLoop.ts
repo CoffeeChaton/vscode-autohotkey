@@ -74,9 +74,9 @@ export function forLoop(arg: TGetFnDefNeed): void {
         if (ch === undefined) continue;
         const v0: string = v[0];
         const v1: string = v[1];
-        if (v1) setV1(arg, ch, v0, v1);
+        if (v1 !== '') setV1(arg, ch, v0, v1);
 
         const v2: string = v[2];
-        if (v2) setV2(arg, ch, v0, v2);
+        if (v2 !== '') setV2(arg, ch, v0, v2);
     }
 }

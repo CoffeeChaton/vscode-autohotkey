@@ -15,7 +15,7 @@ async function formatByPathAsync(
 ): Promise<void> {
     const document: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
 
-    const edits: vscode.TextEdit[] | null | undefined = await FormatCore({
+    const edits: vscode.TextEdit[] = FormatCore({
         document,
         options,
         fmtStart: 0,
@@ -23,7 +23,7 @@ async function formatByPathAsync(
         from: EFormatChannel.byFormatAllFile,
         needDiff: true,
     });
-    if (!jestTest && edits) {
+    if (!jestTest) {
         const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
         edit.set(uri, edits);
         await vscode.workspace.applyEdit(edit);

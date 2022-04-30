@@ -27,7 +27,7 @@ export function setItemCore(
     const recStr: ESnippetRecBecause | undefined = recMap.get(keyRawName);
 
     const label: vscode.CompletionItemLabel = {
-        label: recStr
+        label: recStr !== undefined
             ? `${EStr.suggestStr} ${keyRawName}`
             : keyRawName,
         description: funcName,

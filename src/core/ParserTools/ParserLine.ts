@@ -40,7 +40,7 @@ const ahkLabel: TLineRuler = {
     kind: vscode.SymbolKind.Package,
     getName(strTrim: string): string | null {
         const e: RegExpMatchArray | null = strTrim.match(/^(\w+:)/u);
-        return e
+        return (e !== null)
             ? e[1]
             : null;
     },
@@ -58,7 +58,7 @@ const HotString: TLineRuler = {
     kind: vscode.SymbolKind.Event,
     getName(strTrim: string): string | null {
         const e: RegExpMatchArray | null = strTrim.match(/^(:[^:]*?:[^:]+::)/u);
-        return e
+        return (e !== null)
             ? e[1]
             : null;
     },
@@ -76,8 +76,8 @@ const HotKeys: TLineRuler = {
     detail: 'HotKeys',
     kind: vscode.SymbolKind.Event,
     getName(strTrim: string): string | null {
-        const e = (/^([^:]+::)/u).exec(strTrim);
-        return e
+        const e: RegExpExecArray | null = (/^([^:]+::)/u).exec(strTrim);
+        return (e !== null)
             ? e[1]
             : null;
     },

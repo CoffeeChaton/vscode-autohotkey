@@ -44,7 +44,7 @@ const SnippetObj: TSnip = ((): TSnip => {
 
         const head = ukName.substring(0, EMagic.len);
 
-        const index: TrGroup = baseGroup.find((v: TrGroup): v is TrGroup => v === head) || '_';
+        const index: TrGroup = baseGroup.find((v: TrGroup) => v === head) ?? '_';
         SnipTempObj[index].push(item);
     }
 
@@ -62,7 +62,7 @@ export function BuiltInFunc2Completion(inputStr: string): readonly vscode.Comple
 
     const head: string = inputStr.substring(0, EMagic.len).toUpperCase();
     // head.len is 3 !== '_'
-    const index: TrGroup = baseGroup.find((v: TrGroup): v is TrGroup => v === head) || '_';
+    const index: TrGroup = baseGroup.find((v: TrGroup) => v === head) ?? '_';
 
     return SnippetObj[index];
 }

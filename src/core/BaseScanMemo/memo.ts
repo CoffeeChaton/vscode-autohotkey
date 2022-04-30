@@ -40,11 +40,9 @@ export const BaseScanMemo = {
             if (value.length <= 1 || key === fsPath) {
                 continue;
             }
-            const tempVal: TMemo | undefined = value[value.length - 1]; // last
-            if (tempVal !== undefined) {
-                value.length = 0;
-                value.push(tempVal);
-            }
+            const tempVal: TMemo = value[value.length - 1]; // last
+            value.length = 0;
+            value.push(tempVal);
         }
 
         if (oldCache === undefined) return [];

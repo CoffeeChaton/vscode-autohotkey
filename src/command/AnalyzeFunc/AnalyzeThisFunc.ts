@@ -25,7 +25,7 @@ function showElement(map: TValMapOut | TParamMapOut | TTextMapOut): string {
 // --------
 
 async function fmtAnalyze(document: vscode.TextDocument): Promise<void> {
-    const TextEdit: vscode.TextEdit[] | null | undefined = await FormatCore({
+    const TextEdit: vscode.TextEdit[] = FormatCore({
         document,
         options: {
             tabSize: 4,
@@ -37,11 +37,9 @@ async function fmtAnalyze(document: vscode.TextDocument): Promise<void> {
         needDiff: true,
     });
 
-    if (TextEdit) {
-        const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
-        edit.set(document.uri, TextEdit);
-        await vscode.workspace.applyEdit(edit);
-    }
+    const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
+    edit.set(document.uri, TextEdit);
+    await vscode.workspace.applyEdit(edit);
 }
 
 function baseDataAnalyze(DA: CAhkFuncSymbol): string[] {
