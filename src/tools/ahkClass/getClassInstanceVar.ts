@@ -15,7 +15,7 @@ export function getClassInstanceVar(FuncInput: TFuncInput): null | TAhkSymbol {
         .join(', ');
 
     const detail = 'Instance Var';
-    const kind = vscode.SymbolKind.Property;
+    const kind = vscode.SymbolKind.Variable;
     const range = new vscode.Range(line, 0, line + 1, 0);
 
     return new vscode.DocumentSymbol(

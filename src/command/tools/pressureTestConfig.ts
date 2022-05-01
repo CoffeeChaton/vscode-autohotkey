@@ -15,17 +15,17 @@ export type TPickReturn = {
 
 export function pressureTestConfig(): Thenable<TPickReturn | undefined> {
     const items: TPickReturn[] = [
-        // {
-        //     label: '10 sec (base)',
-        //     delay: 400, // 173~250
-        //     maxTime: 30, // 12 * 1000 / 600
-        //     //              sec   ms    delay
-        //     mode: EPressureTestMode.justBase,
-        // },
         {
             label: '8 sec (base + DA)',
             delay: 400, // 173~250
             maxTime: 20, // 8 * 1000 / 400
+            //              sec   ms    delay
+            mode: EPressureTestMode.baseAndDA,
+        },
+        {
+            label: '32 sec (base + DA)',
+            delay: 400,
+            maxTime: 80,
             //              sec   ms    delay
             mode: EPressureTestMode.baseAndDA,
         },

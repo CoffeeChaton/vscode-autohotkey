@@ -1,15 +1,13 @@
-import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { TAhkSymbolList } from '../TAhkSymbolIn';
 
 function collectInclude(List: string[], AhkSymbolList: TAhkSymbolList): void {
     for (const AhkSymbol of AhkSymbolList) {
-        if (AhkSymbol.kind === vscode.SymbolKind.Event) {
-            const { detail } = AhkSymbol;
-            if (detail === '#IncludeAgain' || detail === '#Include') {
-                List.push(AhkSymbol.name);
-            }
+        const { detail } = AhkSymbol;
+
+        if (detail === '#IncludeAgain' || detail === '#Include') {
+            List.push(AhkSymbol.name);
         } else {
             collectInclude(List, AhkSymbol.children);
         }
