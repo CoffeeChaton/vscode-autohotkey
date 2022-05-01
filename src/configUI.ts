@@ -13,7 +13,9 @@ export const statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBar
 );
 statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
 statusBarItem.command = 'ahk.bar.click';
-let Configs: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration('AhkNekoHelp');
+
+const Config = 'AhkNekoHelp';
+let Configs: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration(Config);
 
 function getConfigs<T>(section: string): T {
     const ed: T | undefined = Configs.get<T>(section);
@@ -23,12 +25,8 @@ function getConfigs<T>(section: string): T {
 
 function getConfig(): TConfigs {
     const ed: TConfigs = {
-        statusBar: {
-            displayColor: getConfigs<string>('statusBar.displayColor'),
-        },
-        format: {
-            textReplace: getConfigs<boolean>('format.textReplace'),
-        },
+        statusBarDisplayColor: getConfigs<string>('statusBar.displayColor'),
+        formatTextReplace: getConfigs<boolean>('format.textReplace'),
         lint: {
             funcSize: getConfigs<number>('lint.funcSize'),
         },
@@ -45,6 +43,7 @@ function getConfig(): TConfigs {
             },
         },
         openUriStr: getConfigs<string>('open.Documents.Uri'),
+        useCodeLens: getConfigs<boolean>('useCodeLens'),
     } as const;
 
     return ed;
@@ -53,7 +52,7 @@ function getConfig(): TConfigs {
 let config: TConfigs = getConfig();
 
 export function configChangEvent(): void {
-    Configs = vscode.workspace.getConfiguration('AhkNekoHelp');
+    Configs = vscode.workspace.getConfiguration(Config);
     config = getConfig();
 }
 
@@ -63,7 +62,7 @@ export function configChangEvent(): void {
 
 export function showTimeSpend(showText: string): void {
     statusBarItem.text = `$(heart) ${showText}`;
-    statusBarItem.color = config.statusBar.displayColor;
+    statusBarItem.color = config.statusBarDisplayColor;
     statusBarItem.show();
 }
 
@@ -71,8 +70,12 @@ export function getLintConfig(): { funcSize: number } {
     return config.lint;
 }
 
+export function getCodeLenConfig(): boolean {
+    return config.useCodeLens;
+}
+
 export function getFormatConfig(): boolean {
-    return config.format.textReplace;
+    return config.formatTextReplace;
 }
 
 export function getIgnoredList(): readonly string[] {

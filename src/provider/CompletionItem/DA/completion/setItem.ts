@@ -37,10 +37,6 @@ export function setItemCore(
     item.kind = kind; // vscode.CompletionItemKind.Variable;
     item.insertText = keyRawName;
     item.detail = `${prefix} (neko-help-DeepAnalysis)`;
-    if (recStr !== undefined) {
-        item.sortText = String.fromCharCode(0) + String.fromCharCode(1);
-        item.preselect = true;
-    }
 
     item.documentation = setMD(prefix, refRangeList, defRangeList, funcName, recStr ?? '');
     return item;

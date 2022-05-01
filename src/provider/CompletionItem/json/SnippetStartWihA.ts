@@ -1,12 +1,8 @@
 import * as vscode from 'vscode';
 import { A_Variables } from '../../../tools/Built-in/Variables';
 
-const snippetList: vscode.CompletionItem[] = [];
-
-export function snippetStartWihA(): vscode.CompletionItem[] {
-    // normal
-    if (snippetList.length > 0) return snippetList;
-    // First loading
+export const snippetStartWihA: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
+    const tempList: vscode.CompletionItem[] = [];
     for (const [k, v] of Object.entries(A_Variables)) {
         const label: vscode.CompletionItemLabel = {
             label: k, // Left
@@ -24,12 +20,10 @@ export function snippetStartWihA(): vscode.CompletionItem[] {
             .appendMarkdown(v.class)
             .appendMarkdown('\n\n')
             .appendMarkdown(`[Read Doc](${v.uri})`);
-        snippetList.push(item);
+        tempList.push(item);
     }
-    Object.freeze(snippetList);
-    return snippetList;
-}
+    return tempList;
+})();
 
 // // Delay loading
 // setTimeout(snippetStartWihA, ETime.SnippetStartWihA);
-snippetStartWihA();

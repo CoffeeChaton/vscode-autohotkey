@@ -8,13 +8,13 @@ import {
 } from 'vscode';
 import { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
+import { getCodeLenConfig } from '../../configUI';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { CAhkFuncSymbol } from '../../globalEnum';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { TShowUnknownAnalyze } from './showUnknownAnalyze';
 
-function CodeLensCore(document: TextDocument): CodeLens[] {
-    const { fsPath } = document.uri;
+function CodeLensCore(fsPath: string): CodeLens[] {
     const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
     if (AhkFileData === undefined) return [];
 
@@ -51,6 +51,8 @@ function CodeLensCore(document: TextDocument): CodeLens[] {
 export const AhkCodeLens: CodeLensProvider = {
     // onDidChangeCodeLenses?: Event<void> | undefined;
     provideCodeLenses(document: TextDocument, _token: CancellationToken): ProviderResult<CodeLens[]> {
-        return CodeLensCore(document);
+        return getCodeLenConfig()
+            ? CodeLensCore(document.uri.fsPath)
+            : null;
     },
 };

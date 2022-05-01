@@ -17,5 +17,5 @@ export function isNormalPos(document: vscode.TextDocument, position: vscode.Posi
         Range.start.character,
     );
     const newStr: string = document.getText(newRange);
-    return !['.', '`', '{', '}'].includes(newStr);
+    return ['.', '`', '{', '}', '#'].indexOf(newStr) === -1;
 }

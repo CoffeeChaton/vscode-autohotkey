@@ -25,7 +25,7 @@ async function CompletionItemCore(
         completions.push(
             ...await listAllFuncClass(inputStr, filesBlockList),
             ...DeepAnalysisToCompletionItem(document, position, inputStr),
-            ...snippetStartWihA(),
+            ...snippetStartWihA,
             ...BuiltInFunc2Completion(inputStr),
             // ...globalValCompletion(document, position, inputStr),
         );

@@ -118,6 +118,10 @@ export function getUnknownTextMap(
                     (/^[A_\d]_/u).test(wordUp) // (A_Variables) or "str" or ( _*2 start varName EX: __varName) or (start with number EX: 0_VarName)
                     || (/^\d+$/u).test(wordUp) // just number
                     || (/^0X[\dA-F]+$/u).test(wordUp) // NumHexConst = 0 x [0-9a-fA-F]+
+                    // let decLiteral: number = 6;
+                    // let hexLiteral: number = 0xf00d;
+                    // let binaryLiteral: number = 0b1010;
+                    // let octalLiteral: number = 0o744;
                 ) {
                     ignoreList.push(wordUp);
                     continue;

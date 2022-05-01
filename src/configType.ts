@@ -1,12 +1,8 @@
 import { DeepReadonly } from './globalEnum';
 
 type TempConfigs = {
-    statusBar: {
-        displayColor: string;
-    };
-    format: {
-        textReplace: boolean;
-    };
+    statusBarDisplayColor: string;
+    formatTextReplace: boolean;
     lint: {
         funcSize: number;
     };
@@ -23,5 +19,6 @@ type TempConfigs = {
         };
     };
     openUriStr: string; //
+    useCodeLens: boolean;
 };
 export type TConfigs = DeepReadonly<TempConfigs>;
