@@ -30,6 +30,7 @@ type TGetFuncCore = {
     range: vscode.Range;
     children: vscode.DocumentSymbol[];
 };
+
 export function getFuncCore(
     {
         FuncInput,
@@ -40,14 +41,14 @@ export function getFuncCore(
     }: TGetFuncCore,
 ): CAhkFunc {
     const {
-        inClass,
+        classStack,
         line,
         DocStrMap,
         document,
         GValMap,
     } = FuncInput;
 
-    const kind = inClass
+    const kind = classStack.length > 0
         ? vscode.SymbolKind.Method
         : vscode.SymbolKind.Function;
     const detail: string = getFuncDetail(line, DocStrMap);
@@ -66,9 +67,6 @@ export function getFuncCore(
 
     const selectionRangeText: string = document.getText(selectionRange);
     const fileName: string = path.basename(document.uri.fsPath);
-    const kindStr: string = kind === vscode.SymbolKind.Function
-        ? EMode.ahkFunc
-        : EMode.ahkMethod;
 
     const myFn2: CAhkFunc = new CAhkFunc({
         name,
@@ -77,9 +75,9 @@ export function getFuncCore(
         range,
         selectionRange,
         selectionRangeText,
-        md: getFuncDocCore(kindStr, fileName, AhkTokenList, selectionRangeText), // TODO emmt,
+        md: getFuncDocCore(kind, fileName, AhkTokenList, selectionRangeText, classStack), // TODO emmt,
         uri: document.uri,
-        defStack: [''], // TODO ---
+        defStack: classStack,
         paramMap,
         valMap,
         textMap,

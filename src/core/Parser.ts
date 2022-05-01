@@ -23,7 +23,7 @@ export const ParserBlock = {
         if (lStr === '' || lStr.indexOf(':') === -1) return null;
         const {
             RangeEndLine,
-            inClass,
+            classStack,
             line,
             DocStrMap,
             document,
@@ -45,7 +45,7 @@ export const ParserBlock = {
             DocStrMap,
             RangeStartLine: Range.start.line + 1,
             RangeEndLine: Range.end.line,
-            inClass,
+            classStack,
             fnList: [ParserBlock.getSwitchBlock, ParserBlock.getComment, ParserLine],
             document,
             GValMap,
@@ -60,7 +60,7 @@ export const ParserBlock = {
             DocStrMap,
             line,
             RangeEndLine,
-            inClass,
+            classStack,
             lStr,
             document,
             GValMap,
@@ -79,7 +79,7 @@ export const ParserBlock = {
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
-            inClass,
+            classStack,
             fnList: [ParserBlock.getCaseDefaultBlock],
             document,
             GValMap,
@@ -92,7 +92,7 @@ export const ParserBlock = {
             DocStrMap,
             line,
             RangeEndLine,
-            inClass,
+            classStack,
             lStr,
             document,
             GValMap,
@@ -108,9 +108,8 @@ export const ParserBlock = {
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
-            inClass,
+            classStack,
             fnList: [
-                // ParserBlock.getFunc,
                 ParserBlock.getComment,
                 ParserBlock.getSwitchBlock,
                 ParserLine,
@@ -141,6 +140,7 @@ export const ParserBlock = {
             lStr,
             document,
             GValMap,
+            classStack,
         } = FuncInput;
         const range = getRange(DocStrMap, line, line, RangeEndLine);
 
@@ -156,7 +156,7 @@ export const ParserBlock = {
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
-            inClass: true,
+            classStack: [...classStack, name],
             fnList: [ParserBlock.getClass, ParserBlock.getFunc, getClassGetSet, ParserLine, getClassInstanceVar],
             document,
             GValMap,

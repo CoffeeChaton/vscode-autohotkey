@@ -1,8 +1,4 @@
-import {
-    TParamMapIn,
-    TValMapIn,
-    TValMetaIn,
-} from '../../../CAhkFunc';
+import { TParamMapIn, TValMapIn, TValMetaIn } from '../../../CAhkFunc';
 import { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
 import { TTokenStream } from '../../../globalEnum';
 import { forLoop } from './def/forLoop';

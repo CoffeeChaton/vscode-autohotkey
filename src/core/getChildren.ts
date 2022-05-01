@@ -8,7 +8,7 @@ export type TFuncInput = Readonly<{
     lStr: string;
     line: number;
     RangeEndLine: number;
-    inClass: boolean;
+    classStack: string[];
     DocStrMap: TTokenStream;
     document: vscode.TextDocument;
     GValMap: TGValMap;
@@ -17,7 +17,7 @@ export type TFuncInput = Readonly<{
 export type TFuncLimit = (FuncInput: TFuncInput) => null | TAhkSymbol;
 
 type ChildType = Readonly<{
-    inClass: boolean;
+    classStack: string[];
     fnList: TFuncLimit[];
     RangeStartLine: number;
     RangeEndLine: number;
@@ -31,7 +31,7 @@ export function getChildren(child: ChildType): TAhkSymbolList {
         DocStrMap,
         RangeStartLine,
         RangeEndLine,
-        inClass,
+        classStack,
         fnList,
         document,
         GValMap,
@@ -49,7 +49,7 @@ export function getChildren(child: ChildType): TAhkSymbolList {
                 DocStrMap,
                 line,
                 RangeEndLine,
-                inClass,
+                classStack,
                 document,
                 GValMap,
             });

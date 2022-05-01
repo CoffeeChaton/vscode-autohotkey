@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { EMode } from '../../Enum/EMode';
 import { TTokenStream } from '../../globalEnum';
 import { docCommentBlock, EDocBlock } from '../str/inCommentBlock';
 
@@ -35,10 +36,11 @@ function getReturnText(lStr: string, textRaw: string): string {
 }
 
 export function getFuncDocCore(
-    kindStr: string,
+    kind: vscode.SymbolKind.Method | vscode.SymbolKind.Function,
     fileName: string,
     AhkTokenList: TTokenStream,
     selectionRangeText: string,
+    classStack: string[],
 ): vscode.MarkdownString {
     let flag: EDocBlock = EDocBlock.other;
     const fnDocList: string[] = [];
@@ -61,10 +63,18 @@ export function getFuncDocCore(
         returnList += getReturnText(lStr, textRaw);
     }
 
+    const kindStr: string = kind === vscode.SymbolKind.Function
+        ? EMode.ahkFunc
+        : EMode.ahkMethod;
     const kindDetail = `(${kindStr})     of     ${fileName}\n`;
+
+    const classStackStr = classStack.length === 0
+        ? ''
+        : `class ${classStack.join('.')}\n\n`;
 
     const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
         .appendMarkdown(kindDetail)
+        .appendMarkdown(classStackStr)
         .appendCodeblock(selectionRangeText, 'ahk')
         .appendCodeblock(returnList, 'ahk')
         .appendCodeblock('}', 'ahk');

@@ -84,7 +84,7 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
         DocStrMap,
         RangeStartLine: 0,
         RangeEndLine: DocStrMap.length,
-        inClass: false,
+        classStack: [],
         fnList: [
             ParserBlock.getClass,
             ParserBlock.getFunc,
