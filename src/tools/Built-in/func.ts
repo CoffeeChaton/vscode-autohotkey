@@ -1458,6 +1458,23 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFuncbj> = {
         insert: 'WinExist($1)',
         exp: [
             'UniqueID := WinExist(WinTitle, WinText, ExcludeTitle, ExcludeText)',
+            '',
+            'SetTitleMatchMode, 1',
+            'SetTitleMatchMode, Fast',
+            '',
+            '~F10:: fn_f10()',
+            '',
+            'fn_f10() {',
+            '    title := "Google"',
+            '    Hwnd := WinExist(title " ahk_exe firefox.exe")',
+            '    if (Hwnd == 0x0) {',
+            '        MsgBox, % "not find fireFox"',
+            '    } else {',
+            '        MsgBox, % "find fireFox"',
+            '    }',
+            '    MsgBox, % Hwnd',
+            '}',
+            '',
         ],
     },
 };
@@ -1468,12 +1485,10 @@ export function Bif2Md(BiFunc: TBuiltInFuncElement): vscode.MarkdownString {
         .appendCodeblock(`${BiFunc.keyRawName}()`, 'ahk')
         .appendMarkdown(BiFunc.msg)
         .appendMarkdown('\n')
-        .appendMarkdown(`[(Read Doc)](${BiFunc.link})`);
-
-    md.appendMarkdown('\n\n*exp:*');
-    for (const ex of BiFunc.exp) {
-        md.appendCodeblock(ex);
-    }
+        .appendMarkdown(`[(Read Doc)](${BiFunc.link})`)
+        .appendMarkdown('\n\n***')
+        .appendMarkdown('\n\n*exp:*')
+        .appendCodeblock(BiFunc.exp.join('\n'));
 
     md.supportHtml = true;
     return md;
