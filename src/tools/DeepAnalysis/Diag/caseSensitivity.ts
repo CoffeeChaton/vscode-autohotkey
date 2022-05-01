@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
+import { TC502New, TParamMapOut, TValMapOut } from '../../../CAhkFunc';
 import { EDiagCodeDA } from '../../../diag';
-import { TC502New, TParamMapOut, TValMapOut } from '../../../globalEnum';
 import { setDiagnosticDA } from '../../../provider/Diagnostic/tools/setDiagnostic';
 import { EPrefixC502, setDiagCaseMsg } from './caseSensitivityMagic';
 

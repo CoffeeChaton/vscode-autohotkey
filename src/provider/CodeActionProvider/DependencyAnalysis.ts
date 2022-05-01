@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
+import { CAhkFunc } from '../../CAhkFunc';
 import { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
 import { Detecter } from '../../core/Detecter';
-import { CAhkFuncSymbol, TTokenStream } from '../../globalEnum';
+import { TTokenStream } from '../../globalEnum';
 import { getFuncWithPos } from '../../tools/DeepAnalysis/getFuncWithPos';
 
 export function DependencyAnalysis(
@@ -13,7 +14,7 @@ export function DependencyAnalysis(
 
     const { fsPath } = document.uri;
     const { active } = selection;
-    const DA: CAhkFuncSymbol | undefined = getFuncWithPos(fsPath, active);
+    const DA: CAhkFunc | undefined = getFuncWithPos(fsPath, active);
     if (
         DA === undefined
         || !DA.nameRange.contains(active)

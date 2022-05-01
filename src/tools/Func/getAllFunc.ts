@@ -1,8 +1,9 @@
+import { CAhkFunc } from '../../CAhkFunc';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
-import { CAhkFuncSymbol, DeepReadonly } from '../../globalEnum';
+import { DeepReadonly } from '../../globalEnum';
 
 type TKeyUpName = string;
-type TMap = Map<TKeyUpName, CAhkFuncSymbol>;
+type TMap = Map<TKeyUpName, CAhkFunc>;
 
 export type TFullFuncMap = DeepReadonly<TMap>;
 
@@ -16,7 +17,7 @@ export function getAllFunc(): TFullFuncMap {
 
         const { AhkSymbolList } = AhkFileData;
         for (const AhkSymbol of AhkSymbolList) {
-            if (AhkSymbol instanceof CAhkFuncSymbol) {
+            if (AhkSymbol instanceof CAhkFunc) {
                 funcMap.set(AhkSymbol.upName, AhkSymbol);
             }
         }

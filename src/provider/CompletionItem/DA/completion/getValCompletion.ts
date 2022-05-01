@@ -1,8 +1,5 @@
 import * as vscode from 'vscode';
-import {
-    TValMapOut,
-    TValMetaOut,
-} from '../../../../globalEnum';
+import { TValMapOut, TValMetaOut } from '../../../../CAhkFunc';
 import { EPrefix } from '../../../../tools/MD/setMD';
 import { TSnippetRecMap } from '../ESnippetRecBecause';
 import { setItemCore } from './setItem';

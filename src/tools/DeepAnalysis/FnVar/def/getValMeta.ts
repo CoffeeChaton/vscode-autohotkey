@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TValMapIn, TValMetaIn } from '../../../../globalEnum';
+import { TValMapIn, TValMetaIn } from '../../../../CAhkFunc';
 import { wrapFnValDef } from './wrapFnValDef';
 
 export function getValMeta(line: number, character: number, RawName: string, valMap: TValMapIn): TValMetaIn {

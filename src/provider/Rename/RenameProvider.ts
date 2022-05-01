@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkFuncSymbol } from '../../globalEnum';
+import { CAhkFunc } from '../../CAhkFunc';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { userDefFunc } from '../Def/DefProvider';
 
@@ -8,7 +8,7 @@ function RenameProviderCore(
     position: vscode.Position,
     newName: string,
 ): vscode.WorkspaceEdit | null {
-    const DA: undefined | CAhkFuncSymbol = getDAWithPos(document.uri.fsPath, position);
+    const DA: undefined | CAhkFunc = getDAWithPos(document.uri.fsPath, position);
     if (DA === undefined || !DA.nameRange.contains(position)) {
         void vscode.window.showInformationMessage('please use rename at function def range');
         return null;

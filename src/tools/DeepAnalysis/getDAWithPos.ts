@@ -1,16 +1,17 @@
 import * as vscode from 'vscode';
+import { CAhkFunc } from '../../CAhkFunc';
 import { Detecter } from '../../core/Detecter';
-import { CAhkFuncSymbol, TAhkSymbolList } from '../../globalEnum';
+import { TAhkSymbolList } from '../../TAhkSymbolIn';
 import { getDAList } from './getDAList';
 
 export function getDAWithPos(
     fsPath: string,
     position: vscode.Position,
-): undefined | CAhkFuncSymbol {
+): undefined | CAhkFunc {
     const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
     if (AhkSymbolList === undefined) return undefined;
 
-    const DAList: CAhkFuncSymbol[] = getDAList(AhkSymbolList);
+    const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
 
     for (const DA of DAList) {
         if (DA.range.contains(position)) return DA;

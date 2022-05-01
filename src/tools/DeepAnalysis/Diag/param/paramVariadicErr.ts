@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
+import { TParamMapOut } from '../../../../CAhkFunc';
 import { DiagsDA, EDiagCodeDA } from '../../../../diag';
-import { TParamMapOut } from '../../../../globalEnum';
 import { setDiagnosticDA } from '../../../../provider/Diagnostic/tools/setDiagnostic';
 
 export function paramVariadicErr(paramMap: TParamMapOut, code504List: vscode.Diagnostic[]): void {

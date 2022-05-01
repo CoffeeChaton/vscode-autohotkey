@@ -1,4 +1,4 @@
-import { TTextMapOut } from '../../globalEnum';
+import { TTextMapOut } from '../../CAhkFunc';
 import { OutputChannel as Out } from '../vscWindows/OutputChannel';
 
 export type TShowUnknownAnalyze = [TTextMapOut, string];

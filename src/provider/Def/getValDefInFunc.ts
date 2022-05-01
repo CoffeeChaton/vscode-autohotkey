@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
 import {
-    CAhkFuncSymbol,
+    CAhkFunc,
     TParamMetaOut,
     TTextMetaOut,
     TValMetaOut,
-} from '../../globalEnum';
+} from '../../CAhkFunc';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 
 function rangeList2LocList(rangeList: readonly vscode.Range[], uri: vscode.Uri): vscode.Location[] {
@@ -46,7 +46,7 @@ export function getValWithDA(
     listAllUsing: boolean,
 ): null | vscode.Location[] {
     const { uri } = document;
-    const DA: CAhkFuncSymbol | undefined = getDAWithPos(document.uri.fsPath, position);
+    const DA: CAhkFunc | undefined = getDAWithPos(document.uri.fsPath, position);
     if (DA === undefined) return null;
     if (DA.nameRange.contains(position)) return null; // fnName === val
 

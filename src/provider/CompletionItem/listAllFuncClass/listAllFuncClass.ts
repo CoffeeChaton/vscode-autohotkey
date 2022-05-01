@@ -2,21 +2,19 @@
 import * as mm from 'micromatch';
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { CAhkClass } from '../../../CAhkClass';
+import { CAhkFunc } from '../../../CAhkFunc';
 import { Detecter, TAhkFileData } from '../../../core/Detecter';
 import { EStr } from '../../../Enum/EStr';
-import { CAhkFuncSymbol, TAhkSymbol } from '../../../globalEnum';
-import { insertTextWm } from '../classThis/insertTextWm';
-import { fnDAList2Completion } from './DAList2Completion';
 
-async function setLabel(
+function setClassSnip(
     inputStr: string,
     fileName: string,
-    fsPath: string,
-    AhkSymbol: TAhkSymbol,
-): Promise<vscode.CompletionItem> {
-    const { name } = AhkSymbol;
+    AC: CAhkClass,
+): vscode.CompletionItem {
+    const { name, insertText } = AC;
 
-    const label: string = name.startsWith(inputStr) // <----- don't use wm because inputStr
+    const label: string = name.startsWith(inputStr) // <----- don't use memo because inputStr
         ? `${EStr.suggestStr} ${name}`
         : name;
 
@@ -25,15 +23,42 @@ async function setLabel(
         description: fileName,
     });
 
-    item.insertText = await insertTextWm(fsPath, AhkSymbol); // have weakMap to memo
+    item.insertText = insertText;
     item.detail = 'neko help';
+
+    item.kind = vscode.CompletionItemKind.Class;
+    item.documentation = 'user def class';
     return item;
 }
 
-export async function listAllFuncClass(
+function setFuncSnip(
+    inputStr: string,
+    fileName: string,
+    DA: CAhkFunc,
+): vscode.CompletionItem {
+    const { md, name, selectionRangeText } = DA;
+
+    const label: string = name.startsWith(inputStr) // <----- don't use memo because inputStr
+        ? `${EStr.suggestStr} ${name}`
+        : name;
+
+    const item: vscode.CompletionItem = new vscode.CompletionItem({
+        label,
+        description: fileName,
+    });
+
+    item.insertText = selectionRangeText;
+    item.detail = 'neko help';
+
+    item.kind = vscode.CompletionItemKind.Function;
+    item.documentation = md;
+    return item;
+}
+
+export function listAllFuncClass(
     inputStr: string, // <------------------------------------ don't use wm because inputStr
     blockList: readonly string[],
-): Promise<vscode.CompletionItem[]> {
+): vscode.CompletionItem[] {
     const fsPaths: string[] = Detecter.getDocMapFile();
     const itemS: vscode.CompletionItem[] = [];
     for (const fsPath of fsPaths) {
@@ -44,19 +69,16 @@ export async function listAllFuncClass(
 
         const { AhkSymbolList } = AhkFileData;
         const fileName: string = path.basename(fsPath);
-        const DAList: CAhkFuncSymbol[] = [];
-        for (const AhkSymbol of AhkSymbolList) {
-            if (AhkSymbol.kind === vscode.SymbolKind.Class) {
-                const item: vscode.CompletionItem = await setLabel(inputStr, fileName, fsPath, AhkSymbol);
-                item.kind = vscode.CompletionItemKind.Class;
-                item.documentation = 'user def class';
-                itemS.push(item);
-            } else if (AhkSymbol instanceof CAhkFuncSymbol) {
-                DAList.push(AhkSymbol);
+
+        for (const AH of AhkSymbolList) {
+            if (AH instanceof CAhkClass) {
+                // is Class
+                itemS.push(setClassSnip(inputStr, fileName, AH));
+            } else if (AH instanceof CAhkFunc && AH.kind === vscode.SymbolKind.Function) {
+                // is Func
+                itemS.push(setFuncSnip(inputStr, fileName, AH));
             }
         }
-
-        itemS.push(...fnDAList2Completion(inputStr, fileName, DAList));
     }
     return itemS;
 }

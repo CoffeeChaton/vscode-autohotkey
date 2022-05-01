@@ -1,12 +1,13 @@
 import * as vscode from 'vscode';
-import { CAhkFuncSymbol, TAhkSymbolList } from '../../globalEnum';
+import { CAhkFunc } from '../../CAhkFunc';
+import { TAhkSymbolList } from '../../TAhkSymbolIn';
 import { ClassWm } from '../../tools/wm';
 import { pushToken, TSemanticTokensLeaf } from './tools';
 
 // eslint-disable-next-line no-magic-numbers
-const wm: ClassWm<CAhkFuncSymbol, TSemanticTokensLeaf[]> = new ClassWm(10 * 60 * 1000, 'DA2SemanticHighlight', 0);
+const wm: ClassWm<CAhkFunc, TSemanticTokensLeaf[]> = new ClassWm(10 * 60 * 1000, 'DA2SemanticHighlight', 0);
 
-function DA2SemanticHighlight(DA: CAhkFuncSymbol): TSemanticTokensLeaf[] {
+function DA2SemanticHighlight(DA: CAhkFunc): TSemanticTokensLeaf[] {
     const cache: TSemanticTokensLeaf[] | undefined = wm.getWm(DA);
     if (cache !== undefined) return cache;
 
@@ -41,7 +42,7 @@ export function DAList2SemanticHighlightFull(
     Collector: vscode.SemanticTokensBuilder,
 ): void {
     for (const DA of AhkSymbolList) {
-        if (DA instanceof CAhkFuncSymbol) {
+        if (DA instanceof CAhkFunc) {
             pushToken(DA2SemanticHighlight(DA), Collector);
         } else if (DA.kind === vscode.SymbolKind.Class) {
             DAList2SemanticHighlightFull(DA.children, Collector);

@@ -1,11 +1,8 @@
 /* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
-import {
-    TAhkSymbolList,
-    TFsPath,
-    TTokenStream,
-} from '../../globalEnum';
+import { TFsPath, TTokenStream } from '../../globalEnum';
 import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
+import { TAhkSymbolList } from '../../TAhkSymbolIn';
 import { getChildren } from '../getChildren';
 import { ParserBlock } from '../Parser';
 import { ahkGlobalMain, TGValMap, TGValMapReadOnly } from '../ParserTools/ahkGlobalDef';

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TParamMapOut, TParamMetaOut } from '../../../../globalEnum';
+import { TParamMapOut, TParamMetaOut } from '../../../../CAhkFunc';
 import { setPreFix } from '../../../../tools/str/setPreFix';
 import { TSnippetRecMap } from '../ESnippetRecBecause';
 import { setItemCore } from './setItem';

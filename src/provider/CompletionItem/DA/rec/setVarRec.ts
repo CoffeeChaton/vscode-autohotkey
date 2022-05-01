@@ -1,8 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,5] }] */
 import * as vscode from 'vscode';
-import {
-    TValMapOut,
-} from '../../../../globalEnum';
+import { TValMapOut } from '../../../../CAhkFunc';
 import {
     ESnippetRecBecause,
     TSnippetRecMap,

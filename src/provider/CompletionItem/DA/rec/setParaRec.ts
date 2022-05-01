@@ -1,4 +1,4 @@
-import { TParamMapOut } from '../../../../globalEnum';
+import { TParamMapOut } from '../../../../CAhkFunc';
 import { ESnippetRecBecause, TSnippetRecMap } from '../ESnippetRecBecause';
 
 export function setParaRec(suggestMap: TSnippetRecMap, paramMap: TParamMapOut, inputStr: string): void {

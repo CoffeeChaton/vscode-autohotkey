@@ -1,4 +1,4 @@
-import { TC502New } from '../../../../../globalEnum';
+import { TC502New } from '../../../../../CAhkFunc';
 
 /**
  * @param oldRawName don't input UpName, and this is first def name

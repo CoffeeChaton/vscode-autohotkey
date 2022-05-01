@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { TAhkSymbolList } from '../../globalEnum';
+import { TAhkSymbolList } from '../../TAhkSymbolIn';
 import { DocSymbol2SymbolInfo } from './DocSymbol2SymbolInfo';
 
 export function WorkspaceSymbolCore(): vscode.SymbolInformation[] {

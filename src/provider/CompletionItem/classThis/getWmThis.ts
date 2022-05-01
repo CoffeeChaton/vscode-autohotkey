@@ -1,11 +1,7 @@
 import * as vscode from 'vscode';
 import { Detecter, TAhkFileData } from '../../../core/Detecter';
-import {
-    TAhkSymbol,
-    TFsPath,
-    TSymAndFsPath,
-    TTokenStream,
-} from '../../../globalEnum';
+import { TFsPath, TTokenStream } from '../../../globalEnum';
+import { TAhkSymbol } from '../../../TAhkSymbolIn';
 import { getDocStrMapMask } from '../../../tools/getDocStrMapMask';
 import { ClassWm } from '../../../tools/wm';
 
@@ -43,8 +39,12 @@ function getWmThisCore(
 // eslint-disable-next-line no-magic-numbers
 const wm: ClassWm<TAhkSymbol, vscode.CompletionItem[]> = new ClassWm(20 * 60 * 1000, 'getThisItemOfWm', 0);
 
-export function getWmThis(c0: TSymAndFsPath): vscode.CompletionItem[] {
-    const { AhkSymbol, fsPath } = c0;
+type TSymAndFsPath = {
+    AhkSymbol: TAhkSymbol;
+    fsPath: TFsPath;
+};
+
+export function getWmThis({ AhkSymbol, fsPath }: TSymAndFsPath): vscode.CompletionItem[] {
     const cache: vscode.CompletionItem[] | undefined = wm.getWm(AhkSymbol);
     if (cache !== undefined) return cache;
 

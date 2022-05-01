@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TAhkSymbol, TAhkSymbolList } from '../../globalEnum';
+import { TAhkSymbol, TAhkSymbolList } from '../../TAhkSymbolIn';
 import { ClassWm } from '../../tools/wm';
 
 // eslint-disable-next-line no-magic-numbers

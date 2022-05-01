@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
+import { TParamMapOut, TValMapOut } from '../../../../CAhkFunc';
 import { DiagsDA, EDiagCodeDA } from '../../../../diag';
-import { TParamMapOut, TValMapOut } from '../../../../globalEnum';
 import { setDiagnosticDA } from '../../../../provider/Diagnostic/tools/setDiagnostic';
 
 export function NeverUsedParam(paramMap: TParamMapOut, code501List: vscode.Diagnostic[]): void {

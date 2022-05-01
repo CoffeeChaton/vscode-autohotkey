@@ -1,4 +1,4 @@
-import { TValMetaIn } from '../../../../globalEnum';
+import { TValMetaIn } from '../../../../CAhkFunc';
 import { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
 

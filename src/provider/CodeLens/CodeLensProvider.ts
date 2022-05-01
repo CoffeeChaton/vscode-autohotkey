@@ -6,11 +6,11 @@ import {
     ProviderResult,
     TextDocument,
 } from 'vscode';
+import { CAhkFunc } from '../../CAhkFunc';
 import { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
 import { getCodeLenConfig } from '../../configUI';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
-import { CAhkFuncSymbol } from '../../globalEnum';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { TShowUnknownAnalyze } from './showUnknownAnalyze';
 
@@ -21,7 +21,7 @@ function CodeLensCore(fsPath: string): CodeLens[] {
     const { AhkSymbolList, DocStrMap } = AhkFileData;
 
     const need: CodeLens[] = [];
-    const DAList: CAhkFuncSymbol[] = getDAList(AhkSymbolList);
+    const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
     for (const DA of DAList) {
         const CommandAnalyze: Command = {
             title: 'Analyze',

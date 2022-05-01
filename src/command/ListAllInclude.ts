@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
-import { TAhkSymbolList } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { TAhkSymbolList } from '../TAhkSymbolIn';
 
 function collectInclude(List: string[], AhkSymbolList: TAhkSymbolList): void {
     for (const AhkSymbol of AhkSymbolList) {

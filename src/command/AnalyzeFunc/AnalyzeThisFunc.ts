@@ -1,12 +1,11 @@
 import * as vscode from 'vscode';
 import {
-    CAhkFuncSymbol,
-    EFormatChannel,
+    CAhkFunc,
     TParamMapOut,
     TTextMapOut,
-    TTokenStream,
     TValMapOut,
-} from '../../globalEnum';
+} from '../../CAhkFunc';
+import { EFormatChannel, TTokenStream } from '../../globalEnum';
 import { FormatCore } from '../../provider/Format/FormatProvider';
 import { getAllFunc, TFullFuncMap } from '../../tools/Func/getAllFunc';
 import { AnalyzeCommand } from './AnalyzeCommand';
@@ -42,7 +41,7 @@ async function fmtAnalyze(document: vscode.TextDocument): Promise<void> {
     await vscode.workspace.applyEdit(edit);
 }
 
-function baseDataAnalyze(DA: CAhkFuncSymbol): string[] {
+function baseDataAnalyze(DA: CAhkFunc): string[] {
     return [
         `${DA.name}() ;`,
         '/**',
@@ -57,9 +56,9 @@ function baseDataAnalyze(DA: CAhkFuncSymbol): string[] {
     ];
 }
 
-export type TShowAnalyze = [CAhkFuncSymbol, TTokenStream];
+export type TShowAnalyze = [CAhkFunc, TTokenStream];
 
-export async function AnalyzeFuncMain(DA: CAhkFuncSymbol, AhkTokenList: TTokenStream): Promise<void> {
+export async function AnalyzeFuncMain(DA: CAhkFunc, AhkTokenList: TTokenStream): Promise<void> {
     const fullFuncMap: TFullFuncMap = getAllFunc();
 
     const t1 = Date.now();

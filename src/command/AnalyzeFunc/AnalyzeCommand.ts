@@ -1,4 +1,5 @@
-import { CAhkFuncSymbol, TTokenStream } from '../../globalEnum';
+import { CAhkFunc } from '../../CAhkFunc';
+import { TTokenStream } from '../../globalEnum';
 import { TFullFuncMap } from '../../tools/Func/getAllFunc';
 
 function getIgnoreList(): string[] {
@@ -61,7 +62,7 @@ function getCommandMap(AhkTokenList: TTokenStream): TCommandInfoMap {
 }
 
 function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): string {
-    const DA: CAhkFuncSymbol | undefined = fullFuncMap.get(keyUp);
+    const DA: CAhkFunc | undefined = fullFuncMap.get(keyUp);
     return DA === undefined
         ? `${keyUp} ; "Command"`
         : `${DA.name}(...) vs "Command" ${keyUp} ; `;

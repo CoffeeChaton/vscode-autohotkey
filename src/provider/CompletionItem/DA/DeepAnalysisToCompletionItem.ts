@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkFuncSymbol } from '../../../globalEnum';
+import { CAhkFunc } from '../../../CAhkFunc';
 import { getDAWithPos } from '../../../tools/DeepAnalysis/getDAWithPos';
 import { isPosAtStr } from '../../../tools/isPosAtStr';
 import { getParamCompletion } from './completion/getArgCompletion';
@@ -9,7 +9,7 @@ import { TSnippetRecMap } from './ESnippetRecBecause';
 import { getRecMap } from './rec/getRecMap';
 
 function suggest(
-    DA: CAhkFuncSymbol,
+    DA: CAhkFunc,
     position: vscode.Position,
     inputStr: string,
 ): vscode.CompletionItem[] {
@@ -33,7 +33,7 @@ export function DeepAnalysisToCompletionItem(
 ): vscode.CompletionItem[] {
     if (isPosAtStr(document, position)) return [];
 
-    const DA: undefined | CAhkFuncSymbol = getDAWithPos(document.uri.fsPath, position);
+    const DA: undefined | CAhkFunc = getDAWithPos(document.uri.fsPath, position);
     if (DA === undefined) return [];
 
     return suggest(DA, position, inputStr);

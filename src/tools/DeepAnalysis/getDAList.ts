@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
-import { CAhkFuncSymbol, TAhkSymbolList } from '../../globalEnum';
+import { CAhkFunc } from '../../CAhkFunc';
+import { TAhkSymbolList } from '../../TAhkSymbolIn';
 
-export function getDAList(AhkSymbolList: TAhkSymbolList): CAhkFuncSymbol[] {
-    const result: CAhkFuncSymbol[] = [];
+export function getDAList(AhkSymbolList: TAhkSymbolList): CAhkFunc[] {
+    const result: CAhkFunc[] = [];
     for (const DA of AhkSymbolList) {
-        if (DA instanceof CAhkFuncSymbol) {
+        if (DA instanceof CAhkFunc) {
             result.push(DA);
         } else if (DA.kind === vscode.SymbolKind.Class) {
             result.push(...getDAList(DA.children));

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TValMapIn, TValMetaIn } from '../../../../globalEnum';
+import { TValMapIn, TValMetaIn } from '../../../../CAhkFunc';
 import { newC502 } from './diag/c502';
 
 type TGetValue = {

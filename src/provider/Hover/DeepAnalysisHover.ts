@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
 import {
-    CAhkFuncSymbol,
+    CAhkFunc,
     TParamMetaOut,
     TTextMetaOut,
     TValMetaOut,
-} from '../../globalEnum';
+} from '../../CAhkFunc';
 import { EPrefix, setMD } from '../../tools/MD/setMD';
 import { setPreFix } from '../../tools/str/setPreFix';
 
@@ -13,7 +13,7 @@ function PosInRange(arr: readonly vscode.Range[], position: vscode.Position): bo
 }
 
 export function DeepAnalysisHover(
-    DA: CAhkFuncSymbol,
+    DA: CAhkFunc,
     wordUp: string,
     position: vscode.Position,
 ): vscode.MarkdownString | null {

@@ -1,4 +1,4 @@
-import { CAhkFuncSymbol, TTextMetaOut } from '../../globalEnum';
+import { CAhkFunc, TTextMetaOut } from '../../CAhkFunc';
 import { OutputChannel } from '../../provider/vscWindows/OutputChannel';
 
 export type TWordFrequencyStatistics = {
@@ -9,12 +9,12 @@ export type TWordFrequencyStatistics = {
 };
 
 // WordFrequencyStatistics
-export function WordFrequencyStatistics(need: CAhkFuncSymbol[]): TWordFrequencyStatistics {
+export function WordFrequencyStatistics(need: CAhkFunc[]): TWordFrequencyStatistics {
     let paramMapSize = 0;
     let valMapSize = 0;
     let textMapSize = 0;
     const DEB: Map<string, number> = new Map();
-    need.forEach((ed: CAhkFuncSymbol): void => {
+    need.forEach((ed: CAhkFunc): void => {
         paramMapSize += ed.paramMap.size;
         valMapSize += ed.valMap.size;
         textMapSize += ed.textMap.size;

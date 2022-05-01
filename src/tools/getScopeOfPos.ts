@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../core/Detecter';
-import { TAhkSymbol, TAhkSymbolList } from '../globalEnum';
+import { TAhkSymbol, TAhkSymbolList } from '../TAhkSymbolIn';
 
 type TStackNameSymbol = {
     readonly name: string;

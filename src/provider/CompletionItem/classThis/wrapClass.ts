@@ -4,12 +4,8 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../../../core/Detecter';
 import { EMode } from '../../../Enum/EMode';
-import {
-    TAhkSymbol,
-    TAhkSymbolList,
-    TSymAndFsPath,
-    TTokenStream,
-} from '../../../globalEnum';
+import { TFsPath, TTokenStream } from '../../../globalEnum';
+import { TAhkSymbol, TAhkSymbolList } from '../../../TAhkSymbolIn';
 import { getScopeOfPos, getStack } from '../../../tools/getScopeOfPos';
 import { getObjChapterArr } from '../../../tools/Obj/getObjChapterArr';
 import { ahkValDefRegex } from '../../../tools/regexTools';
@@ -18,6 +14,11 @@ import { ahkBaseUp, TAhkBaseObj } from '../ahkObj/ahkBase';
 import { ahkBaseWrap } from '../ahkObj/ahkBaseWrap';
 import { getWmThis } from './getWmThis';
 import { insertTextWm } from './insertTextWm';
+
+type TSymAndFsPath = {
+    AhkSymbol: TAhkSymbol;
+    fsPath: TFsPath;
+};
 
 function getUserDefClassSymbol(keyUpName: string): TSymAndFsPath | null {
     const fsPaths = Detecter.getDocMapFile();

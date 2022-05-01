@@ -1,9 +1,6 @@
 import * as vscode from 'vscode';
-import {
-    TParamMapIn,
-    TParamMetaIn,
-    TTokenStream,
-} from '../../globalEnum';
+import { TParamMapIn, TParamMetaIn } from '../../CAhkFunc';
+import { TTokenStream } from '../../globalEnum';
 import { replacerSpace } from '../str/removeSpecialChar';
 
 type TParamData = {

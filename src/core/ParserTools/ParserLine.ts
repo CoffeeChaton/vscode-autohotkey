@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { DeepReadonly, TAhkSymbolIn } from '../../globalEnum';
+import { DeepReadonly } from '../../globalEnum';
+import { TAhkSymbolIn } from '../../TAhkSymbolIn';
 import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 import { TFuncInput } from '../getChildren';
 

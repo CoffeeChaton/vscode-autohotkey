@@ -1,5 +1,6 @@
 import * as path from 'path';
-import { CAhkFuncSymbol, TTokenStream } from '../../globalEnum';
+import { CAhkFunc } from '../../CAhkFunc';
+import { TTokenStream } from '../../globalEnum';
 import {
     BuiltInFunctionObj,
     TBuiltInFuncElement,
@@ -39,7 +40,7 @@ function getRefFuncMap(AhkTokenList: TTokenStream): TRefFuncInfoMap {
 }
 
 function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): string {
-    const DA: CAhkFuncSymbol | undefined = fullFuncMap.get(keyUp);
+    const DA: CAhkFunc | undefined = fullFuncMap.get(keyUp);
     if (DA !== undefined) {
         const fileName: string = path.basename(DA.uri.fsPath);
         return `${DA.name}(...) ; ${fileName}`;

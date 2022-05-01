@@ -1,9 +1,8 @@
+import * as vscode from 'vscode';
+import { CAhkFunc } from '../../CAhkFunc';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
-import { EMode } from '../../Enum/EMode';
-import { CAhkFuncSymbol } from '../../globalEnum';
-import { kindCheck } from '../../provider/Def/kindCheck';
 
-export function getDAWithName(wordUP: string, mode: EMode): null | CAhkFuncSymbol {
+export function getFuncWithName(wordUP: string): null | CAhkFunc {
     const fsPaths: string[] = Detecter.getDocMapFile();
 
     for (const fsPath of fsPaths) {
@@ -13,8 +12,8 @@ export function getDAWithName(wordUP: string, mode: EMode): null | CAhkFuncSymbo
         const { AhkSymbolList } = AhkFileData;
         for (const DA of AhkSymbolList) {
             if (
-                kindCheck(mode, DA.kind)
-                && DA instanceof CAhkFuncSymbol
+                DA instanceof CAhkFunc
+                && DA.kind === vscode.SymbolKind.Function
                 && DA.upName === wordUP
             ) {
                 return DA;

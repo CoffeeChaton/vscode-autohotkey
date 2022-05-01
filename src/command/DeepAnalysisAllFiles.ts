@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
+import { CAhkFunc } from '../CAhkFunc';
 import { Detecter, TAhkFileData } from '../core/Detecter';
-import { CAhkFuncSymbol } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAList } from '../tools/DeepAnalysis/getDAList';
@@ -28,14 +28,14 @@ export function DeepAnalysisAllFiles(): null {
     const t1: number = Date.now();
     const allFsPath: string[] = Detecter.getDocMapFile();
 
-    const need: CAhkFuncSymbol[] = [];
+    const need: CAhkFunc[] = [];
     allFsPath.forEach((fsPath: string): void => {
         const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
         if (AhkFileData === undefined) return;
 
         const { AhkSymbolList } = AhkFileData;
 
-        const DAList: CAhkFuncSymbol[] = getDAList(AhkSymbolList);
+        const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
 
         need.push(...DAList);
         digDAFile(DAList, vscode.Uri.file(fsPath));

@@ -6,7 +6,7 @@ export const snippetStartWihA: readonly vscode.CompletionItem[] = ((): vscode.Co
     for (const [k, v] of Object.entries(A_Variables)) {
         const label: vscode.CompletionItemLabel = {
             label: k, // Left
-            //  detail: v.class, // mid
+            //  detail: '', // mid
             description: v.class, // Right
         };
         const item = new vscode.CompletionItem(label);

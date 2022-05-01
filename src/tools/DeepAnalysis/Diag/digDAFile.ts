@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
+import { CAhkFunc } from '../../../CAhkFunc';
 import { getCode502Default, getCode503Default } from '../../../configUI';
 import { diagColl } from '../../../core/Detecter';
 import { EDiagBase } from '../../../Enum/EDiagBase';
-import { CAhkFuncSymbol, TAhkSymbolList } from '../../../globalEnum';
+import { TAhkSymbolList } from '../../../TAhkSymbolIn';
 import { ClassWm } from '../../wm';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';
@@ -36,7 +37,7 @@ function diagDAFileCore(DAList: TAhkSymbolList): readonly vscode.Diagnostic[] {
     const code504List: vscode.Diagnostic[] = [];
 
     for (const DA of DAList) {
-        if (!(DA instanceof CAhkFuncSymbol)) continue;
+        if (!(DA instanceof CAhkFunc)) continue;
         const { paramMap, valMap } = DA;
         NeverUsedVar(valMap, code500List);
         NeverUsedParam(paramMap, code501List);

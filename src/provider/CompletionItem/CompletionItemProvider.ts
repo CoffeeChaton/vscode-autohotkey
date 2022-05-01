@@ -23,7 +23,7 @@ async function CompletionItemCore(
         const filesBlockList: readonly string[] = getSnippetBlockFilesList();
         const inputStr: string = getStartWithStr(document, position);
         completions.push(
-            ...await listAllFuncClass(inputStr, filesBlockList),
+            ...listAllFuncClass(inputStr, filesBlockList),
             ...DeepAnalysisToCompletionItem(document, position, inputStr),
             ...snippetStartWihA,
             ...BuiltInFunc2Completion(inputStr),

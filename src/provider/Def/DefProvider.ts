@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
+import { CAhkFunc } from '../../CAhkFunc';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
-import { EMode } from '../../Enum/EMode';
-import { CAhkFuncSymbol, TSymAndFsPath } from '../../globalEnum';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
-import { tryGetSymbol } from '../../tools/tryGetSymbol';
+import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { getValWithDA } from './getValDefInFunc';
 
 type TFnFindCol = (lineStr: string) => IterableIterator<RegExpMatchArray>;
@@ -21,8 +20,8 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
         const uri: vscode.Uri = vscode.Uri.file(fsPath);
 
         const filterLineList: number[] = getDAList(AhkSymbolList)
-            .filter((DA: CAhkFuncSymbol) => DA.kind === vscode.SymbolKind.Method)
-            .map((DA: CAhkFuncSymbol) => DA.selectionRange.start.line);
+            .filter((DA: CAhkFunc) => DA.kind === vscode.SymbolKind.Method)
+            .map((DA: CAhkFunc) => DA.selectionRange.start.line);
 
         for (const { textRaw, line, lStr } of DocStrMap) {
             if (lStr.trim().length === 0 || filterLineList.indexOf(line) !== -1) continue;
@@ -46,8 +45,8 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
     return List;
 }
 
-function isMethod(fsPath: string, position: vscode.Position): boolean {
-    const DA: CAhkFuncSymbol | undefined = getDAWithPos(fsPath, position);
+function isPosAtMethodName(fsPath: string, position: vscode.Position): boolean {
+    const DA: CAhkFunc | undefined = getDAWithPos(fsPath, position);
     return DA !== undefined
         && DA.kind === vscode.SymbolKind.Method
         && DA.selectionRange.contains(position);
@@ -61,10 +60,10 @@ export function userDefFunc(
 ): null | vscode.Location[] {
     const timeStart: number = Date.now();
 
-    const data: TSymAndFsPath | null = tryGetSymbol(wordUp, EMode.ahkFunc);
-    if (data === null || isMethod(document.uri.fsPath, position)) return null;
+    const funcSymbol: CAhkFunc | null = getFuncWithName(wordUp);
+    if (funcSymbol === null || isPosAtMethodName(document.uri.fsPath, position)) return null;
 
-    const { AhkSymbol, fsPath } = data;
+    const { fsPath } = funcSymbol.uri;
 
     const ahkFunc = {
         // funcName( | "funcName"
@@ -79,16 +78,16 @@ export function userDefFunc(
 
     if (
         (fsPath === document.uri.fsPath
-            && AhkSymbol.selectionRange.start.line === position.line)
+            && funcSymbol.selectionRange.start.line === position.line)
     ) {
         // OK..i know who to go to References...
         // keep uri as old uri && return old pos/range
         // don't new vscode.Uri.file()
-        return [new vscode.Location(document.uri, AhkSymbol.selectionRange)]; // let auto use getReference
+        return [new vscode.Location(document.uri, funcSymbol.selectionRange)]; // let auto use getReference
     }
 
     console.log(`🚀 goto def of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 0~1ms
-    return [new vscode.Location(vscode.Uri.file(fsPath), AhkSymbol.selectionRange)];
+    return [new vscode.Location(funcSymbol.uri, funcSymbol.selectionRange)];
 }
 
 function DefProviderCore(

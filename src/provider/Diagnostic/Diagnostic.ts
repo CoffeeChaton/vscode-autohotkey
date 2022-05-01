@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { getLintConfig } from '../../configUI';
-import { TAhkSymbolList, TTokenStream } from '../../globalEnum';
+import { TTokenStream } from '../../globalEnum';
+import { TAhkSymbolList } from '../../TAhkSymbolIn';
 import { ClassWm } from '../../tools/wm';
 import { getIgnore } from './getIgnore';
 import { getFuncErr } from './tools/getFuncErr';
@@ -47,3 +48,4 @@ export function baseDiagnostic(
     // I think this way, complexity && ram >> 4ms
     return wm.setWm(DocStrMap, diagList);
 }
+// TODO {base: GMem} https://www.autohotkey.com/docs/Objects.htm#Custom_Objects

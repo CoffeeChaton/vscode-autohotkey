@@ -1,2 +1,0 @@
-[rules]
-allow = ["no-await-in-loop"]

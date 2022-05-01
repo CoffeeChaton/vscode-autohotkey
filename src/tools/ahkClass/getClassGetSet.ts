@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { getChildren, TFuncInput } from '../../core/getChildren';
-import { TAhkSymbol } from '../../globalEnum';
+import { TAhkSymbol } from '../../TAhkSymbolIn';
 import { getRange } from '../range/getRange';
 
 function getName(FuncInput: TFuncInput): string | null {

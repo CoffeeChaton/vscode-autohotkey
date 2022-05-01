@@ -1,25 +1,22 @@
 import * as vscode from 'vscode';
-import { EMode } from '../../Enum/EMode';
-import { CAhkFuncSymbol } from '../../globalEnum';
+import { CAhkFunc } from '../../CAhkFunc';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func';
-import { getDAWithName } from '../../tools/DeepAnalysis/getDAWithName';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
+import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { getGlobalMarkdown } from '../../tools/MD/getGlobalMarkdown';
 import { DeepAnalysisHover } from './DeepAnalysisHover';
 
-function HoverFunc(wordUp: string, textRaw: string): null | vscode.Hover {
+function HoverOfFunc(wordUp: string, textRaw: string): null | vscode.Hover {
     // eslint-disable-next-line security/detect-non-literal-regexp
-    const testOfFunc = new RegExp(`(?<![.%\`])(${wordUp})\\(`, 'iu'); // not search class.Method()
+    const testOfFunc = new RegExp(`(?<![.%\`#])(${wordUp})\\(`, 'iu'); // not search class.Method()
     if (!testOfFunc.test(textRaw)) return null;
 
-    const DA: CAhkFuncSymbol | null = getDAWithName(wordUp, EMode.ahkFunc);
+    const DA: CAhkFunc | null = getFuncWithName(wordUp);
     if (DA !== null) return new vscode.Hover(DA.md);
 
     const BuiltInFuncMD: vscode.MarkdownString | undefined = BuiltInFuncMDMap.get(wordUp);
-    if (BuiltInFuncMD !== undefined) {
-        return new vscode.Hover(BuiltInFuncMD);
-    }
+    if (BuiltInFuncMD !== undefined) return new vscode.Hover(BuiltInFuncMD);
 
     return null;
 }
@@ -41,13 +38,13 @@ function HoverProviderCore(
     // const commands = getCommandsHover(document, position);
     // if (commands !== null) return commands;
 
-    const DA: CAhkFuncSymbol | undefined = getDAWithPos(document.uri.fsPath, position);
+    const DA: CAhkFunc | undefined = getDAWithPos(document.uri.fsPath, position);
     if (DA !== undefined) {
         const md: vscode.MarkdownString | null = DeepAnalysisHover(DA, wordUp, position);
         if (md !== null) return new vscode.Hover(md);
     }
 
-    const haveFunc: vscode.Hover | null = HoverFunc(wordUp, textRaw);
+    const haveFunc: vscode.Hover | null = HoverOfFunc(wordUp, textRaw);
     if (haveFunc !== null) return haveFunc;
 
     const global: vscode.MarkdownString | null = getGlobalMarkdown(wordUp);

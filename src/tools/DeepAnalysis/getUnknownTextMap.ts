@@ -1,15 +1,15 @@
 /* eslint-disable max-statements */
 import * as vscode from 'vscode';
-import { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import {
     TParamMapIn,
     TParamMetaIn,
     TTextMapIn,
     TTextMetaIn,
-    TTokenStream,
     TValMapIn,
     TValMetaIn,
-} from '../../globalEnum';
+} from '../../CAhkFunc';
+import { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
+import { TTokenStream } from '../../globalEnum';
 import { newC502 } from './FnVar/def/diag/c502';
 
 function pushRef(

@@ -1,10 +1,10 @@
-import { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
 import {
     TParamMapIn,
-    TTokenStream,
     TValMapIn,
     TValMetaIn,
-} from '../../../globalEnum';
+} from '../../../CAhkFunc';
+import { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
+import { TTokenStream } from '../../../globalEnum';
 import { forLoop } from './def/forLoop';
 import { varSetCapacityFunc } from './def/varSetCapacityFunc';
 import { walrusOperator } from './def/walrusOperator';

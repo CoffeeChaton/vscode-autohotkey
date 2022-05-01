@@ -1,13 +1,13 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { EMode } from '../Enum/EMode';
 import {
-    CAhkFuncSymbol,
+    CAhkFunc,
     TParamMapIn,
     TTextMapIn,
-    TTokenStream,
     TValMapIn,
-} from '../globalEnum';
+} from '../CAhkFunc';
+import { EMode } from '../Enum/EMode';
+import { TTokenStream } from '../globalEnum';
 import { getFnVarDef } from '../tools/DeepAnalysis/FnVar/getFnVarDef';
 import { getParamDef } from '../tools/DeepAnalysis/getParamDef';
 import { getUnknownTextMap } from '../tools/DeepAnalysis/getUnknownTextMap';
@@ -38,7 +38,7 @@ export function getFuncCore(
         range,
         children,
     }: TGetFuncCore,
-): CAhkFuncSymbol {
+): CAhkFunc {
     const {
         inClass,
         line,
@@ -70,16 +70,14 @@ export function getFuncCore(
         ? EMode.ahkFunc
         : EMode.ahkMethod;
 
-    const md: vscode.MarkdownString = getFuncDocCore(kindStr, fileName, AhkTokenList, selectionRangeText); // TODO emmt
-
-    const myFn2: CAhkFuncSymbol = new CAhkFuncSymbol({
+    const myFn2: CAhkFunc = new CAhkFunc({
         name,
         detail,
         kind,
         range,
         selectionRange,
         selectionRangeText,
-        md,
+        md: getFuncDocCore(kindStr, fileName, AhkTokenList, selectionRangeText), // TODO emmt,
         uri: document.uri,
         defStack: [''], // TODO ---
         paramMap,
