@@ -22,7 +22,6 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
             console.warn('Pretreatment -> line , deep < 0, fsPath ', fileName);
             console.warn('Pretreatment -> line , deep < 0, line ', line);
             console.warn('Pretreatment -> line , deep < 0, textTrimStart ', textTrimStart);
-            // void vscode.window.showWarningMessage
             deep = 0;
         }
         CommentBlock = inCommentBlock(textTrimStart, CommentBlock);

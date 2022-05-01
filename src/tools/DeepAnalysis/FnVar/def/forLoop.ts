@@ -76,7 +76,8 @@ export function forLoop(arg: TGetFnDefNeed): void {
         const v1: string = v[1];
         if (v1 !== '') setV1(arg, ch, v0, v1);
 
-        const v2: string = v[2];
-        if (v2 !== '') setV2(arg, ch, v0, v2);
+        const v2: string | undefined = v[2];
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (v2 !== undefined && v2 !== '') setV2(arg, ch, v0, v2);
     }
 }

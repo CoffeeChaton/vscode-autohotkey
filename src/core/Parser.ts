@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import { CAhkClass } from '../CAhkClass';
 import { CAhkFunc } from '../CAhkFunc';
 import { getCaseDefaultName, getSwitchName } from '../provider/SymbolProvider/getSwitchCaseName';
-import { TAhkSymbolIn } from '../TAhkSymbolIn';
+import { TAhkSymbolIn, TAhkSymbolList } from '../TAhkSymbolIn';
 import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
@@ -16,6 +16,7 @@ import { replacerSpace } from '../tools/str/removeSpecialChar';
 import { getChildren, TFuncInput } from './getChildren';
 import { getFuncCore } from './ParserFunc';
 import { ParserLine } from './ParserTools/ParserLine';
+import { setClassInsertText } from './ParserTools/setClassInsertText';
 
 export const ParserBlock = {
     getCaseDefaultBlock(FuncInput: TFuncInput): null | TAhkSymbolIn {
@@ -142,8 +143,8 @@ export const ParserBlock = {
             GValMap,
             classStack,
         } = FuncInput;
-        const range = getRange(DocStrMap, line, line, RangeEndLine);
 
+        const range = getRange(DocStrMap, line, line, RangeEndLine);
         const name = ma[1];
 
         const col = ma.index ?? lStr.replace(/^\s*Class\s+/ui, replacerSpace).indexOf(name);
@@ -152,7 +153,7 @@ export const ParserBlock = {
             return null;
         }
 
-        const children = getChildren({
+        const children: TAhkSymbolList = getChildren({
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
@@ -160,19 +161,17 @@ export const ParserBlock = {
             fnList: [ParserBlock.getClass, ParserBlock.getFunc, getClassGetSet, ParserLine, getClassInstanceVar],
             document,
             GValMap,
-        }) as vscode.DocumentSymbol[];
+        });
 
-        const selectionRange = new vscode.Range(line, col, line, col + name.length);
-        const insertText: string = document.getText(selectionRange); // FIXME to __new
         const AhkClassSymbol: CAhkClass = new CAhkClass({
             name,
             detail: getClassDetail(lStr, col, name),
             kind: vscode.SymbolKind.Class,
             range,
-            selectionRange,
-            insertText,
+            selectionRange: new vscode.Range(line, col, line, col + name.length),
+            insertText: `${name}${setClassInsertText(children)}`,
             uri: document.uri,
-            children,
+            children: children as vscode.DocumentSymbol[],
         });
         return AhkClassSymbol;
     },

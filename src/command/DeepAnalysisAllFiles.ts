@@ -51,10 +51,10 @@ export function DeepAnalysisAllFiles(): null {
 my project:
 
 Deep Analysis All Files
-Deep Analysis : 706 Symbol <--keep 708!
-paramMapSize is 1871 <--keep 1871!
-valMapSize is 1859
-textMapSize is 438 <- next plan: ignore keyWord.
-All Size is 4168
-Done in 3 ms
+Deep Analysis : 744 Symbol
+paramMapSize is 1922
+valMapSize is 1960
+textMapSize is 521
+All Size is 4403
+Done in 6 ms
 */

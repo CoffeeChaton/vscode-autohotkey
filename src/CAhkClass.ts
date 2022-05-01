@@ -13,7 +13,7 @@ type MyDocArg = {
     selectionRange: vscode.Range;
     //
     //  md: vscode.MarkdownString
-    insertText: string; // __New(...) // TODO:NEW
+    insertText: string;
     uri: vscode.Uri;
     children: vscode.DocumentSymbol[]; // ... CAhkFuncSymbol CAhkClassSymbol vscode.DocumentSymbol
 };
@@ -48,9 +48,9 @@ export class CAhkClass extends vscode.DocumentSymbol {
 }
 
 // https://www.autohotkey.com/docs/Objects.htm#Custom_NewDelete
-// TODO __new
-// m1 := new GMem(0, 20)
-// m2 := {base: GMem}.__New(0, 30)
+
+// m1 := new GMem(0, 20) ; OK!
+// m2 := {base: GMem}.__New(0, 30) ; no support
 
 // class GMem
 // {
