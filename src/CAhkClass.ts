@@ -18,6 +18,8 @@ type MyDocArg = {
     children: vscode.DocumentSymbol[]; // ... CAhkFuncSymbol CAhkClassSymbol vscode.DocumentSymbol
 };
 
+// AH instanceof CAhkClass
+
 export class CAhkClass extends vscode.DocumentSymbol {
     public readonly insertText: string;
     public readonly uri: vscode.Uri;

@@ -10,12 +10,12 @@ import { snippetStartWihA } from './json/SnippetStartWihA';
 import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
 import { getStartWithStr } from './util';
 
-async function CompletionItemCore(
+function CompletionItemCore(
     document: vscode.TextDocument,
     position: vscode.Position,
-): Promise<vscode.CompletionItem[]> {
+): vscode.CompletionItem[] {
     const completions: vscode.CompletionItem[] = [
-        ...await wrapClass(document, position), // '.'
+        ...wrapClass(document, position), // '.'
         ...ahkSend(document, position), // '{'
     ];
 

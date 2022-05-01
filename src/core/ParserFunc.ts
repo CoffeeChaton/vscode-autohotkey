@@ -6,7 +6,6 @@ import {
     TTextMapIn,
     TValMapIn,
 } from '../CAhkFunc';
-import { EMode } from '../Enum/EMode';
 import { TTokenStream } from '../globalEnum';
 import { getFnVarDef } from '../tools/DeepAnalysis/FnVar/getFnVarDef';
 import { getParamDef } from '../tools/DeepAnalysis/getParamDef';

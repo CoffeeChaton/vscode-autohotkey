@@ -1,18 +1,16 @@
 import * as vscode from 'vscode';
+import { CAhkClass } from '../../../CAhkClass';
 import { Detecter, TAhkFileData } from '../../../core/Detecter';
-import { TFsPath, TTokenStream } from '../../../globalEnum';
-import { TAhkSymbol } from '../../../TAhkSymbolIn';
+import { TTokenStream } from '../../../globalEnum';
 import { getDocStrMapMask } from '../../../tools/getDocStrMapMask';
 import { ClassWm } from '../../../tools/wm';
 
-function getWmThisCore(
-    AhkSymbol: TAhkSymbol,
-    fsPath: TFsPath,
-): vscode.CompletionItem[] {
+function getWmThisCore(AhkClassSymbol: CAhkClass): vscode.CompletionItem[] {
+    const { fsPath } = AhkClassSymbol.uri;
     const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
     if (AhkFileData === undefined) return [];
     const { DocStrMap } = AhkFileData;
-    const AhkTokenList: TTokenStream = getDocStrMapMask(AhkSymbol.range, DocStrMap);
+    const AhkTokenList: TTokenStream = getDocStrMapMask(AhkClassSymbol.range, DocStrMap);
 
     const mapStrNumber: Map<string, number> = new Map();
 
@@ -28,7 +26,7 @@ function getWmThisCore(
     mapStrNumber.forEach((value: number, label: string): void => {
         const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Value);
         item.detail = 'neko help : useDefClass';
-        item.documentation = new vscode.MarkdownString(AhkSymbol.name, true)
+        item.documentation = new vscode.MarkdownString(AhkClassSymbol.name, true)
             .appendMarkdown(`\n\n    this.${label}\n\n`)
             .appendMarkdown(`line   ${value + 1}  of  ${fsPath}`);
         itemS.push(item);
@@ -37,17 +35,12 @@ function getWmThisCore(
 }
 
 // eslint-disable-next-line no-magic-numbers
-const wm: ClassWm<TAhkSymbol, vscode.CompletionItem[]> = new ClassWm(20 * 60 * 1000, 'getThisItemOfWm', 0);
+const wm: ClassWm<CAhkClass, vscode.CompletionItem[]> = new ClassWm(20 * 60 * 1000, 'getThisItemOfWm', 0);
 
-type TSymAndFsPath = {
-    AhkSymbol: TAhkSymbol;
-    fsPath: TFsPath;
-};
-
-export function getWmThis({ AhkSymbol, fsPath }: TSymAndFsPath): vscode.CompletionItem[] {
-    const cache: vscode.CompletionItem[] | undefined = wm.getWm(AhkSymbol);
+export function getWmThis(AhkClassSymbol: CAhkClass): vscode.CompletionItem[] {
+    const cache: vscode.CompletionItem[] | undefined = wm.getWm(AhkClassSymbol);
     if (cache !== undefined) return cache;
 
-    const v: vscode.CompletionItem[] = getWmThisCore(AhkSymbol, fsPath);
-    return wm.setWm(AhkSymbol, v);
+    const v: vscode.CompletionItem[] = getWmThisCore(AhkClassSymbol);
+    return wm.setWm(AhkClassSymbol, v);
 }

@@ -65,6 +65,8 @@ type MyDocArg = {
     children: vscode.DocumentSymbol[];
 };
 
+// AH instanceof CAhkFunc
+
 export class CAhkFunc extends vscode.DocumentSymbol {
     public readonly nameRange: vscode.Range;
     public readonly selectionRangeText: string;

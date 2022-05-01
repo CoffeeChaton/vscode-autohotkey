@@ -1,3 +1,4 @@
+import { CAhkClass } from '../CAhkClass';
 import { CAhkFunc } from '../CAhkFunc';
 
 function calcSize<V>(v: V | undefined): number {
@@ -13,7 +14,7 @@ function calcSize<V>(v: V | undefined): number {
 type TObj = Record<string, unknown>;
 
 // T === Object has name
-export class ClassWm<T extends TObj | unknown[] | readonly unknown[] | CAhkFunc, V> {
+export class ClassWm<T extends TObj | unknown[] | readonly unknown[] | CAhkFunc | CAhkClass, V> {
     public cacheHits = 0;
 
     public wmSize = 0;
