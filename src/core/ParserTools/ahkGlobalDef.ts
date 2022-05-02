@@ -100,7 +100,7 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
             continue;
         }
         if (lStr.trim().toUpperCase() === 'GLOBAL') {
-            continue; // TODO
+            continue; // TODO GLOBAL && nextLine
         }
 
         const strF: string = lStr.replace(/^\s*\bglobal\b[,\s]+/ui, replacerSpace);

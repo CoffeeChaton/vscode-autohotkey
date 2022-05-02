@@ -24,7 +24,7 @@ export function setMD(
     recStr: ESnippetRecBecause | '',
 ): vscode.MarkdownString {
     return new vscode.MarkdownString('', true)
-        .appendCodeblock(`${prefix} of ${funcName}()`) // TODO ahk_Hover_Doc_First_Line.tmLanguage.json ex param/local var
+        .appendCodeblock(`${prefix} of ${funcName}()`)
         .appendMarkdown(recStr)
         .appendMarkdown('use`f12` goto def    \n')
         .appendMarkdown(RangeList2Str(defRangeList))

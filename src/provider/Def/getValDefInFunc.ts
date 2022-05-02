@@ -39,7 +39,7 @@ function metaRangeList(
     return rangeList2LocList(defRangeList, uri);
 }
 
-export function getValWithDA(
+export function getValDefInFunc(
     document: vscode.TextDocument,
     position: vscode.Position,
     wordUp: string,

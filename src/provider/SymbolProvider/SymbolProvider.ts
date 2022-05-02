@@ -1,14 +1,18 @@
 import * as vscode from 'vscode';
+import { CAhkFunc } from '../../CAhkFunc';
 import { Detecter } from '../../core/Detecter';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
+import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 
 function SymBolProviderCore(document: vscode.TextDocument): vscode.DocumentSymbol[] {
     const { AhkSymbolList } = Detecter.updateDocDef(document);
 
-    digDAFile(AhkSymbolList, document.uri); // FIXME debounce
+    const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
+    digDAFile(DAList, document.uri);
 
     return AhkSymbolList as vscode.DocumentSymbol[];
 }
+
 export const SymBolProvider: vscode.DocumentSymbolProvider = {
     provideDocumentSymbols(
         document: vscode.TextDocument,

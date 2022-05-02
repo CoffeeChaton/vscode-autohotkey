@@ -1,14 +1,13 @@
 import * as vscode from 'vscode';
 import { CAhkFunc } from '../../CAhkFunc';
 import { TAhkSymbolList } from '../../TAhkSymbolIn';
-import { ClassWm } from '../../tools/wm';
+import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { pushToken, TSemanticTokensLeaf } from './tools';
 
-// eslint-disable-next-line no-magic-numbers
-const wm: ClassWm<CAhkFunc, TSemanticTokensLeaf[]> = new ClassWm(10 * 60 * 1000, 'DA2SemanticHighlight', 0);
+const wm: WeakMap<CAhkFunc, TSemanticTokensLeaf[]> = new WeakMap();
 
 function DA2SemanticHighlight(DA: CAhkFunc): TSemanticTokensLeaf[] {
-    const cache: TSemanticTokensLeaf[] | undefined = wm.getWm(DA);
+    const cache: TSemanticTokensLeaf[] | undefined = wm.get(DA);
     if (cache !== undefined) return cache;
 
     const Tokens: TSemanticTokensLeaf[] = [];
@@ -33,19 +32,16 @@ function DA2SemanticHighlight(DA: CAhkFunc): TSemanticTokensLeaf[] {
             });
         });
     }
-
-    return wm.setWm(DA, Tokens);
+    wm.set(DA, Tokens);
+    return Tokens;
 }
 
 export function DAList2SemanticHighlightFull(
     AhkSymbolList: TAhkSymbolList,
     Collector: vscode.SemanticTokensBuilder,
 ): void {
-    for (const DA of AhkSymbolList) {
-        if (DA instanceof CAhkFunc) {
-            pushToken(DA2SemanticHighlight(DA), Collector);
-        } else if (DA.kind === vscode.SymbolKind.Class) {
-            DAList2SemanticHighlightFull(DA.children, Collector);
-        }
+    const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
+    for (const DA of DAList) {
+        pushToken(DA2SemanticHighlight(DA), Collector);
     }
 }

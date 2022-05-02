@@ -74,7 +74,7 @@ export function getFuncCore(
         range,
         selectionRange,
         selectionRangeText,
-        md: getFuncDocCore(kind, fileName, AhkTokenList, selectionRangeText, classStack), // TODO emmt,
+        md: getFuncDocCore(kind, fileName, AhkTokenList, selectionRangeText, classStack),
         uri: document.uri,
         defStack: classStack,
         paramMap,

@@ -3,8 +3,6 @@ import { CAhkFunc } from '../../../CAhkFunc';
 import { getCode502Default, getCode503Default } from '../../../configUI';
 import { diagColl } from '../../../core/Detecter';
 import { EDiagBase } from '../../../Enum/EDiagBase';
-import { TAhkSymbolList } from '../../../TAhkSymbolIn';
-import { ClassWm } from '../../wm';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';
 import { NeverUsedParam, NeverUsedVar } from './param/paramNeverUsed';
@@ -16,15 +14,13 @@ type TDaDiagCache = {
     code503Max: number;
 };
 
-// eslint-disable-next-line no-magic-numbers
-const min3 = 3 * 60 * 1000;
-const wm: ClassWm<TAhkSymbolList, TDaDiagCache> = new ClassWm(min3, 'diagDAFileCore', 0);
+const wm: WeakMap<CAhkFunc[], TDaDiagCache> = new WeakMap();
 
-function diagDAFileCore(DAList: TAhkSymbolList): readonly vscode.Diagnostic[] {
+function diagDAFileCore(DAList: CAhkFunc[]): readonly vscode.Diagnostic[] {
     const code502Max = getCode502Default();
     const code503Max = getCode503Default();
 
-    const cache: TDaDiagCache | undefined = wm.getWm(DAList);
+    const cache: TDaDiagCache | undefined = wm.get(DAList);
     if (cache !== undefined) {
         if (cache.code502Max === code502Max && cache.code503Max === code503Max) {
             return cache.DADiagList;
@@ -54,7 +50,7 @@ function diagDAFileCore(DAList: TAhkSymbolList): readonly vscode.Diagnostic[] {
         ...code504List,
     ];
 
-    wm.setWm(DAList, {
+    wm.set(DAList, {
         DADiagList,
         code502Max,
         code503Max,
@@ -62,10 +58,7 @@ function diagDAFileCore(DAList: TAhkSymbolList): readonly vscode.Diagnostic[] {
     return DADiagList;
 }
 
-export function digDAFile(
-    DAList: TAhkSymbolList,
-    uri: vscode.Uri,
-): void {
+export function digDAFile(DAList: CAhkFunc[], uri: vscode.Uri): void {
     const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) ?? [])
         .filter((diag: vscode.Diagnostic): boolean => diag.source !== EDiagBase.sourceDA);
     diagColl.set(uri, [...baseDiag, ...diagDAFileCore(DAList)]);

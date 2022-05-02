@@ -47,7 +47,6 @@ export function DeepAnalysisHover(
         } = value;
         if (!PosInRange([...refRangeList, ...defRangeList], position)) return null;
 
-        // TODO const typeValType = getAhkTypeName(ahkValType);
         return setMD(EPrefix.var, refRangeList, defRangeList, name, '');
     }
 

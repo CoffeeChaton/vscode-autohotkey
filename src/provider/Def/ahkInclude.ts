@@ -1,6 +1,3 @@
-import * as path from 'path';
-import * as vscode from 'vscode';
-
 //   OK      #Include FileOrDirName
 //           #IncludeAgain FileOrDirName
 //           \*i\s
@@ -12,23 +9,3 @@ import * as vscode from 'vscode';
 //              A_ScriptFullPath, A_ScriptName, A_StartMenu,A_StartMenuCommon
 //              A_Startup,A_StartupCommon, A_Temp, A_UserName ,A_WinDir
 //              A_UserName, A_WinDir
-
-function ahkInclude(document: vscode.TextDocument, position: vscode.Position): null | vscode.Location {
-    // at #include line
-    const includeExec: RegExpExecArray | null = (/^\s*#include(?:again)?\s*(?:\*i )?\s*(\S+\.ahk)\s*$/ui).exec(
-        document.lineAt(position).text,
-    );
-    if (includeExec === null) return null; //               includeExec[1]
-
-    const length: number = Math.max(document.uri.path.lastIndexOf('/'), document.uri.path.lastIndexOf('\\'));
-    if (length <= 0) return null;
-    const lPath: string = path.dirname(document.uri.fsPath);
-    const rPath: string = includeExec[1].replace(/%A_Space%/ug, ' ').replace(/%A_Tab%/ug, '\t');
-    if ((/%A_\w+%/u).test(rPath)) {
-        // 'ahkInclude ~ neko-help not support of %A_ScriptDir% or Similar syntax');
-        return null;
-    }
-    const pathFix = `${lPath}\\${rPath}`;
-    const uri: vscode.Uri = vscode.Uri.file(pathFix);
-    return new vscode.Location(uri, new vscode.Position(0, 0));
-}

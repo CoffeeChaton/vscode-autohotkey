@@ -227,5 +227,4 @@ export function wrapClass(
     return ahkClassItem;
 }
 
-// WTF...
-// FIXME: split this file
+// FIXME: split this WTF file

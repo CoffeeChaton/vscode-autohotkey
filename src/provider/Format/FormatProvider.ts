@@ -134,7 +134,13 @@ export function FormatCore(
             : getDeepKeywords(textFix, occ); // TODO fmt_a1
     }
 
-    fmtDiffInfo(DiffMap, document, timeStart, from, newTextList);
+    fmtDiffInfo({
+        DiffMap,
+        document,
+        timeStart,
+        from,
+        newTextList,
+    });
 
     return newTextList;
 }

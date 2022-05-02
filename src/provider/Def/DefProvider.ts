@@ -4,7 +4,7 @@ import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
-import { getValWithDA } from './getValDefInFunc';
+import { getValDefInFunc } from './getValDefInFunc';
 
 type TFnFindCol = (lineStr: string) => IterableIterator<RegExpMatchArray>;
 
@@ -108,7 +108,7 @@ function DefProviderCore(
     const userDefLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
     if (userDefLink !== null) return userDefLink;
 
-    const valInFunc: vscode.Location[] | null = getValWithDA(document, position, wordUp, listAllUsing);
+    const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
     if (valInFunc !== null) return valInFunc;
 
     return null;

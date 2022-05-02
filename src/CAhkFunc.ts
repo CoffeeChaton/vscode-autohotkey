@@ -13,7 +13,7 @@ export type TC502New = (0 | string);
 
 export type TParamMetaIn = {
     keyRawName: string;
-    defRangeList: vscode.Range[]; // TODO diags "Duplicate parameter". or TODO no-param-reassign
+    defRangeList: vscode.Range[];
     refRangeList: vscode.Range[];
     c502Array: TC502New[];
 
@@ -58,7 +58,7 @@ type MyDocArg = {
     selectionRangeText: string;
     md: vscode.MarkdownString;
     uri: vscode.Uri;
-    defStack: string[]; // TODO method defStack
+    defStack: string[];
     paramMap: TParamMapOut;
     valMap: TValMapOut;
     textMap: TTextMapOut;

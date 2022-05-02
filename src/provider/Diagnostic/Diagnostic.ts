@@ -2,20 +2,19 @@ import * as vscode from 'vscode';
 import { getLintConfig } from '../../configUI';
 import { TTokenStream } from '../../globalEnum';
 import { TAhkSymbolList } from '../../TAhkSymbolIn';
-import { ClassWm } from '../../tools/wm';
 import { getIgnore } from './getIgnore';
 import { getFuncErr } from './tools/getFuncErr';
 import { getLineErr } from './tools/getLineErr';
 import { getTreeErr } from './tools/getTreeErr';
 
 // eslint-disable-next-line no-magic-numbers
-const wm: ClassWm<TTokenStream, vscode.Diagnostic[]> = new ClassWm(10 * 60 * 1000, 'baseDiagnostic', 0);
+const wm: WeakMap<TTokenStream, vscode.Diagnostic[]> = new WeakMap();
 
 export function baseDiagnostic(
     DocStrMap: TTokenStream,
     AhkSymbolList: TAhkSymbolList,
 ): vscode.Diagnostic[] {
-    const cache: vscode.Diagnostic[] | undefined = wm.getWm(DocStrMap);
+    const cache: vscode.Diagnostic[] | undefined = wm.get(DocStrMap);
     if (cache !== undefined) return cache;
 
     // const timeStart: number = Date.now();
@@ -46,6 +45,7 @@ export function baseDiagnostic(
     // 8k lines without hashCache -> 6ms
     // with hashCache -> 2ms
     // I think this way, complexity && ram >> 4ms
-    return wm.setWm(DocStrMap, diagList);
+    wm.set(DocStrMap, diagList);
+    return diagList;
 }
 // TODO {base: GMem} https://www.autohotkey.com/docs/Objects.htm#Custom_Objects

@@ -5,14 +5,22 @@ import { OutputChannel } from '../vscWindows/OutputChannel';
 import { fmtReplaceWarn } from './fmtReplaceWarn';
 import { TDiffMap } from './TFormat';
 
-// TODO return have Diff
+type TDiffParm = {
+    DiffMap: TDiffMap;
+    document: vscode.TextDocument;
+    timeStart: number;
+    from: EFormatChannel;
+    newTextList: vscode.TextEdit[];
+};
 // eslint-disable-next-line max-params
 export function fmtDiffInfo(
-    DiffMap: TDiffMap,
-    document: vscode.TextDocument,
-    timeStart: number,
-    from: EFormatChannel,
-    newTextList: vscode.TextEdit[],
+    {
+        DiffMap,
+        document,
+        timeStart,
+        from,
+        newTextList,
+    }: TDiffParm,
 ): void {
     if (DiffMap.size === 0) return;
 

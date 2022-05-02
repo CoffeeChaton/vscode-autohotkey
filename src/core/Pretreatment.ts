@@ -111,4 +111,3 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
 
 // LexicalAnalysisSimple
 // TODO use hash check line Unaffected && -> getChildren
-// FIXME this Need cache && use scanner

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { isPosAtStr } from '../tools/isPosAtStr';
 import { userDefFunc } from './Def/DefProvider';
-import { getValWithDA } from './Def/getValDefInFunc';
+import { getValDefInFunc } from './Def/getValDefInFunc';
 
 function ReferenceProviderCore(
     document: vscode.TextDocument,
@@ -19,7 +19,7 @@ function ReferenceProviderCore(
     const userDefLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
     if (userDefLink !== null) return userDefLink;
 
-    const valInFunc: vscode.Location[] | null = getValWithDA(document, position, wordUp, listAllUsing);
+    const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
     if (valInFunc !== null) return valInFunc;
     return null;
 }

@@ -47,7 +47,7 @@ function wrap(args: TWarnUse, text: string): vscode.TextEdit {
 
     const endCharacter: number = Math.max(newText.length, textRaw.length);
     const range = new vscode.Range(line, 0, line, endCharacter);
-    return new vscode.TextEdit(range, newText); // FIXME some time, we don't need new TextEdit. but callDiff need this...
+    return new vscode.TextEdit(range, newText);
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention

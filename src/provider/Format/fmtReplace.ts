@@ -34,7 +34,7 @@ function textReplace(textElement: string): string {
         .replace(/\bWHILE\s*\(/ug, 'WHILE (')
         .replace(/ *;/ug, ' ;');
     // \s === [ \f\n\r\t\v]
-    // TODO more TEST & options
+    // need more TEST & options
 }
 
 function fnLR(strElement: string): string {
