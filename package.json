@@ -10,6 +10,7 @@
     "activationEvents": [
         "onLanguage:ahk"
     ],
+    "author": "Coffee Chaton(https://github.com/CoffeeChaton)",
     "main": "./dict/extension",
     "homepage": "https://github.com/CoffeeChaton/vscode-ahk-outline/blob/master/README.md",
     "bugs": {

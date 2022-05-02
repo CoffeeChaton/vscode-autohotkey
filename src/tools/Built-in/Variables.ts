@@ -361,7 +361,443 @@ export const A_Variables: TA_Variables = {
         class: 'Script Settings',
         uri: 'https://www.autohotkey.com/docs/Variables.htm#settings',
     },
-    // TODO
+    A_TimeIdle: {
+        body: 'A_TimeIdle',
+        class: 'User Idle Time',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#User_Idle_Time',
+    },
+    A_TimeIdlePhysical: {
+        body: 'A_TimeIdlePhysical',
+        class: 'User Idle Time',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#User_Idle_Time',
+    },
+    A_TimeIdleKeyboard: {
+        body: 'A_TimeIdleKeyboard',
+        class: 'User Idle Time',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#User_Idle_Time',
+    },
+    A_TimeIdleMouse: {
+        body: 'A_TimeIdleMouse',
+        class: 'User Idle Time',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#User_Idle_Time',
+    },
+    A_DefaultGui: {
+        body: 'A_DefaultGui',
+        class: 'GUI',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#gui',
+    },
+    A_DefaultListView: {
+        body: 'A_DefaultListView',
+        class: 'GUI',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#gui',
+    },
+    A_DefaultTreeView: {
+        body: 'A_DefaultTreeView',
+        class: 'GUI',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#gui',
+    },
+    A_Gui: {
+        body: 'A_Gui',
+        class: 'GUI',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#gui',
+    },
+    A_GuiControl: {
+        body: 'A_GuiControl',
+        class: 'GUI',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#gui',
+    },
+    A_GuiWidth: {
+        body: 'A_GuiWidth',
+        class: 'GUI',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#gui',
+    },
+    A_GuiHeight: {
+        body: 'A_GuiHeight',
+        class: 'GUI',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#gui',
+    },
+    A_GuiX: {
+        body: 'A_GuiX',
+        class: 'GUI',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#gui',
+    },
+    A_GuiY: {
+        body: 'A_GuiY',
+        class: 'GUI',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#gui',
+    },
+    A_GuiEvent: {
+        body: 'A_GuiEvent',
+        class: 'GUI',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#gui',
+    },
+    A_GuiControlEvent: {
+        body: 'A_GuiControlEvent',
+        class: 'GUI',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#gui',
+    },
+    A_EventInfo: {
+        body: 'A_EventInfo',
+        class: 'GUI',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#gui',
+    },
+    A_ThisMenuItem: {
+        body: 'A_ThisMenuItem',
+        class: 'Hotkeys',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#h',
+    },
+    A_ThisMenu: {
+        body: 'A_ThisMenu',
+        class: 'Hotkeys',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#h',
+    },
+    A_ThisMenuItemPos: {
+        body: 'A_ThisMenuItemPos',
+        class: 'Hotkeys',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#h',
+    },
+    A_ThisHotkey: {
+        body: 'A_ThisHotkey',
+        class: 'Hotkeys',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#h',
+    },
+    A_PriorHotkey: {
+        body: 'A_PriorHotkey',
+        class: 'Hotkeys',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#h',
+    },
+    A_PriorKey: {
+        body: 'A_PriorKey',
+        class: 'Hotkeys',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#h',
+    },
+    A_TimeSinceThisHotkey: {
+        body: 'A_TimeSinceThisHotkey',
+        class: 'Hotkeys',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#h',
+    },
+    A_TimeSincePriorHotkey: {
+        body: 'A_TimeSincePriorHotkey',
+        class: 'Hotkeys',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#h',
+    },
+    A_EndChar: {
+        body: 'A_EndChar',
+        class: 'Hotkeys',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#h',
+    },
+    A_ComSpec: {
+        body: 'A_ComSpec',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_Temp: {
+        body: 'A_Temp',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_OSType: {
+        body: 'A_OSType',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_OSVersion: {
+        body: 'A_OSVersion',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_Is64bitOS: {
+        body: 'A_Is64bitOS',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_PtrSize: {
+        body: 'A_PtrSize',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_Language: {
+        body: 'A_Language',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_ComputerName: {
+        body: 'A_ComputerName',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_UserName: {
+        body: 'A_UserName',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_WinDir: {
+        body: 'A_WinDir',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_ProgramFiles: {
+        body: 'A_ProgramFiles',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_AppData: {
+        body: 'A_AppData',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_AppDataCommon: {
+        body: 'A_AppDataCommon',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_Desktop: {
+        body: 'A_Desktop',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_DesktopCommon: {
+        body: 'A_DesktopCommon',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_StartMenu: {
+        body: 'A_StartMenu',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_StartMenuCommon: {
+        body: 'A_StartMenuCommon',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_Programs: {
+        body: 'A_Programs',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_ProgramsCommon: {
+        body: 'A_ProgramsCommon',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_Startup: {
+        body: 'A_Startup',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_StartupCommon: {
+        body: 'A_StartupCommon',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_MyDocuments: {
+        body: 'A_MyDocuments',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_IsAdmin: {
+        body: 'A_IsAdmin',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_ScreenWidth: {
+        body: 'A_ScreenWidth',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_ScreenHeight: {
+        body: 'A_ScreenHeight',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_ScreenDPI: {
+        body: 'A_ScreenDPI',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_IPAddress1: {
+        body: 'A_IPAddress1',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_IPAddress2: {
+        body: 'A_IPAddress2',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_IPAddress3: {
+        body: 'A_IPAddress3',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_IPAddress4: {
+        body: 'A_IPAddress4',
+        class: 'OS',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#os',
+    },
+    A_Cursor: {
+        body: 'A_Cursor',
+        class: 'Misc.',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
+    },
+    A_CaretX: {
+        body: 'A_CaretX',
+        class: 'Misc.',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
+    },
+    A_CaretY: {
+        body: 'A_CaretY',
+        class: 'Misc.',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
+    },
+    // ....
+    Clipboard: {
+        body: 'Clipboard',
+        class: 'Misc.',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
+    },
+    ClipboardAll: {
+        body: 'ClipboardAll',
+        class: 'Misc.',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
+    },
+    ErrorLevel: {
+        body: 'ErrorLevel',
+        class: 'Misc.',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
+    },
+    A_LastError: {
+        body: 'A_LastError',
+        class: 'Misc.',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
+    },
+    True: {
+        body: 'True',
+        class: 'Misc.',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
+    },
+    False: {
+        body: 'False',
+        class: 'Misc.',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
+    },
+    A_Index: {
+        body: 'A_Index',
+        class: 'Loop',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileName: {
+        body: 'A_LoopFileName',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileExt: {
+        body: 'A_LoopFileExt',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileFullPath: {
+        body: 'A_LoopFileFullPath',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFilePath: {
+        body: 'A_LoopFilePath',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileLongPath: {
+        body: 'A_LoopFileLongPath',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileShortPath: {
+        body: 'A_LoopFileShortPath',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileShortName: {
+        body: 'A_LoopFileShortName',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileDir: {
+        body: 'A_LoopFileDir',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileTimeModified: {
+        body: 'A_LoopFileTimeModified',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileTimeCreated: {
+        body: 'A_LoopFileTimeCreated',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileTimeAccessed: {
+        body: 'A_LoopFileTimeAccessed',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileAttrib: {
+        body: 'A_LoopFileAttrib',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileSize: {
+        body: 'A_LoopFileSize',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileSizeKB: {
+        body: 'A_LoopFileSizeKB',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopFileSizeMB: {
+        body: 'A_LoopFileSizeMB',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/Variables.htm#loop',
+    },
+    A_LoopRegName: {
+        body: 'A_LoopRegName',
+        class: 'Loop-Registry',
+        uri: 'https://www.autohotkey.com/docs/commands/LoopReg.htm#Remarks',
+    },
+    A_LoopRegType: {
+        body: 'A_LoopRegType',
+        class: 'Loop-Registry',
+        uri: 'https://www.autohotkey.com/docs/commands/LoopReg.htm#Remarks',
+    },
+    A_LoopRegKey: {
+        body: 'A_LoopRegKey',
+        class: 'Loop-Registry',
+        uri: 'https://www.autohotkey.com/docs/commands/LoopReg.htm#Remarks',
+    },
+    A_LoopRegSubKey: {
+        body: 'A_LoopRegSubKey',
+        class: 'Loop-Registry',
+        uri: 'https://www.autohotkey.com/docs/commands/LoopReg.htm#Remarks',
+    },
+    A_LoopRegTimeModified: {
+        body: 'A_LoopRegTimeModified',
+        class: 'Loop-Registry',
+        uri: 'https://www.autohotkey.com/docs/commands/LoopReg.htm#Remarks',
+    },
+    A_LoopReadLine: {
+        body: 'A_LoopReadLine',
+        class: 'Loop-File',
+        uri: 'https://www.autohotkey.com/docs/commands/LoopReadFile.htm',
+    },
+    A_LoopField: {
+        body: 'A_LoopField',
+        class: 'Loop-Parsing',
+        uri: 'https://www.autohotkey.com/docs/commands/LoopParse.htm',
+    },
 };
+
 // if this object size > 1k line, should use JSON.parse replace object literal,
 // but I need tsc && Syntax Highlight.

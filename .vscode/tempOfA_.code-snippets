@@ -8,13 +8,13 @@
 	// Example:
 	"Print to console": {
 		"scope": "javascript,typescript",
-		"prefix": "#.00",
+		"prefix": ".00",
 		"body": [
 			"$CLIPBOARD : {",
-            "body: '$CLIPBOARD',",
-            "class : 'User Idle Time',",
-            "uri : 'https://www.autohotkey.com/docs/Variables.htm#User_Idle_Time',",
-            "},"
+			"    body: '$CLIPBOARD',",
+			"    class : 'Loop-Registry',",
+			"    uri : 'https://www.autohotkey.com/docs/commands/LoopReg.htm#Remarks',",
+			"},"
 		],
 		"description": "just a temp snippets"
 	}
