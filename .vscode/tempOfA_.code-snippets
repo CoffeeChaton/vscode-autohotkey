@@ -8,7 +8,7 @@
 	// Example:
 	"Print to console": {
 		"scope": "javascript,typescript",
-		"prefix": ".00",
+		"prefix": "##.00",
 		"body": [
 			"$CLIPBOARD : {",
 			"    body: '$CLIPBOARD',",

@@ -48,26 +48,28 @@ export type TTextMapIn = Map<TUpName, TTextMetaIn>; // k = valNameUP
 
 export type TTextMapOut = ReadonlyMap<TUpName, TTextMetaOut>; // k = valNameUP
 
-type MyDocArg = {
+type TCAhkFuncParam = {
     name: string;
     detail: string;
-    kind: vscode.SymbolKind;
+
     range: vscode.Range;
     selectionRange: vscode.Range;
     //
     selectionRangeText: string;
     md: vscode.MarkdownString;
     uri: vscode.Uri;
-    defStack: string[];
+    classStack: string[];
     paramMap: TParamMapOut;
     valMap: TValMapOut;
     textMap: TTextMapOut;
     children: vscode.DocumentSymbol[];
+    nameRange: vscode.Range;
 };
 
-// AH instanceof CAhkFunc
+// AhkSymbol instanceof CAhkFunc
 
 export class CAhkFunc extends vscode.DocumentSymbol {
+    // readonly name...
     public readonly nameRange: vscode.Range;
     public readonly selectionRangeText: string;
     public readonly md: vscode.MarkdownString;
@@ -78,43 +80,40 @@ export class CAhkFunc extends vscode.DocumentSymbol {
     public readonly textMap: TTextMapOut;
     public readonly defStack: string[];
     //
-    declare public kind: vscode.SymbolKind.Function | vscode.SymbolKind.Method;
-    declare public children: vscode.DocumentSymbol[];
+    declare public readonly kind: vscode.SymbolKind.Function | vscode.SymbolKind.Method;
+    declare public readonly children: vscode.DocumentSymbol[];
 
     public constructor(
         {
             name,
             detail,
-            kind,
             range,
             selectionRange,
             selectionRangeText,
             md,
             uri,
-            defStack,
+            classStack,
             paramMap,
             valMap,
             textMap,
             children,
-        }: MyDocArg,
+            nameRange,
+        }: TCAhkFuncParam,
     ) {
+        const kind = classStack.length === 0
+            ? vscode.SymbolKind.Function
+            : vscode.SymbolKind.Method;
         super(name, detail, kind, range, selectionRange);
         this.selectionRangeText = selectionRangeText;
         this.upName = name.toUpperCase();
         this.md = md;
         this.uri = uri;
-        this.defStack = defStack;
+        this.defStack = classStack;
         this.paramMap = paramMap;
         this.valMap = valMap;
         this.textMap = textMap;
         this.children = children;
 
-        this.nameRange = new vscode.Range(
-            selectionRange.start,
-            new vscode.Position(
-                selectionRange.start.line,
-                selectionRangeText.indexOf('('),
-            ),
-        );
+        this.nameRange = nameRange;
     }
 }

@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import * as mm from 'micromatch';
 import * as path from 'path';
 import * as vscode from 'vscode';

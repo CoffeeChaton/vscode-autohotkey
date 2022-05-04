@@ -1,7 +1,7 @@
 export function isSetVarTradition(textTrimStart: string): boolean {
     // Var = Value
     // https://www.autohotkey.com/docs/Variables.htm#operators
-    // is https://wyagd001.github.io/zh-cn/docs/commands/SetEnv.htm
+    // is https://www.autohotkey.com/docs/commands/SetEnv.htm
     const col0: number = textTrimStart.indexOf('=');
     // a=
     // 01

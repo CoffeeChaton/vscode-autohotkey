@@ -5,10 +5,9 @@ import * as vscode from 'vscode';
 // ---------------------------------------------------------------------------
 type TUpName = string;
 
-type MyDocArg = {
+type TCAhkClassParam = {
     name: string;
     detail: string;
-    kind: vscode.SymbolKind;
     range: vscode.Range;
     selectionRange: vscode.Range;
     //
@@ -18,28 +17,27 @@ type MyDocArg = {
     children: vscode.DocumentSymbol[]; // ... CAhkFuncSymbol CAhkClassSymbol vscode.DocumentSymbol
 };
 
-// AH instanceof CAhkClass
+// AhkSymbol instanceof CAhkClass
 
 export class CAhkClass extends vscode.DocumentSymbol {
     public readonly insertText: string;
     public readonly uri: vscode.Uri;
     public readonly upName: TUpName;
-    declare public kind: vscode.SymbolKind.Class;
-    declare public children: vscode.DocumentSymbol[];
+    declare public readonly kind: vscode.SymbolKind.Class;
+    declare public readonly children: vscode.DocumentSymbol[];
 
     public constructor(
         {
             name,
             detail,
-            kind,
             range,
             selectionRange,
             insertText,
             uri,
             children,
-        }: MyDocArg,
+        }: TCAhkClassParam,
     ) {
-        super(name, detail, kind, range, selectionRange);
+        super(name, detail, vscode.SymbolKind.Class, range, selectionRange);
         this.insertText = insertText;
         this.upName = name.toUpperCase();
         this.uri = uri;

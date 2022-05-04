@@ -95,7 +95,7 @@
                     "name": "string.parameter.import.ahk"
                 }
             },
-            "match": "#\\b(?i:include|includeagain)\\b(.*)$",
+            "match": "#\\b(?i:include|includeAgain)\\b(.*)$",
             "name": "keyword.control.import.ahk"
         },
         {

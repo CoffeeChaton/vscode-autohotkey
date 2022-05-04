@@ -1,13 +1,12 @@
+import { CAhkInclude } from '../AhkSymbol/CAhkInclude';
 import { Detecter } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { TAhkSymbolList } from '../TAhkSymbolIn';
 
 function collectInclude(List: string[], AhkSymbolList: TAhkSymbolList): void {
     for (const AhkSymbol of AhkSymbolList) {
-        const { detail } = AhkSymbol;
-
-        if (detail === '#IncludeAgain' || detail === '#Include') {
-            List.push(AhkSymbol.name);
+        if (AhkSymbol instanceof CAhkInclude) {
+            List.push(AhkSymbol.name.trim());
         } else {
             collectInclude(List, AhkSymbol.children);
         }

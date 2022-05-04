@@ -197,7 +197,7 @@ const ItemOfFileOpen: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => 
             documentation: [
                 'Reads a string of characters from the file and advances the file pointer.',
                 '*Characters*:The maximum number of characters to read. If omitted, the rest of the file is read and returned as one string. If the File object was created from a handle to a non-seeking device such as a console buffer or pipe, omitting this parameter may cause the method to fail or return only what data is currently available.',
-                'https://wyagd001.github.io/zh-cn/docs/objects/File.htm#Read',
+                'https://www.autohotkey.com/docs/objects/File.htm#Read',
             ],
         },
         {

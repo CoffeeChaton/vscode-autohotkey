@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 /* eslint-disable security/detect-non-literal-regexp */
-/* eslint-disable no-await-in-loop */
 import * as vscode from 'vscode';
 import { CAhkClass } from '../../../CAhkClass';
 import { CAhkFunc } from '../../../CAhkFunc';

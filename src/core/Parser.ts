@@ -166,7 +166,6 @@ export const ParserBlock = {
         const AhkClassSymbol: CAhkClass = new CAhkClass({
             name,
             detail: getClassDetail(lStr, col, name),
-            kind: vscode.SymbolKind.Class,
             range,
             selectionRange: new vscode.Range(line, col, line, col + name.length),
             insertText: `${name}${setClassInsertText(children)}`,

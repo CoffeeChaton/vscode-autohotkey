@@ -47,9 +47,6 @@ export function getFuncCore(
         GValMap,
     } = FuncInput;
 
-    const kind = classStack.length > 0
-        ? vscode.SymbolKind.Method
-        : vscode.SymbolKind.Function;
     const detail: string = getFuncDetail(line, DocStrMap);
 
     const AhkTokenList: TTokenStream = getDocStrMapMask(range, DocStrMap);
@@ -67,20 +64,28 @@ export function getFuncCore(
     const selectionRangeText: string = document.getText(selectionRange);
     const fileName: string = path.basename(document.uri.fsPath);
 
+    const nameRange = new vscode.Range(
+        selectionRange.start,
+        new vscode.Position(
+            selectionRange.start.line,
+            selectionRangeText.indexOf('('),
+        ),
+    );
+
     const myFn2: CAhkFunc = new CAhkFunc({
         name,
         detail,
-        kind,
         range,
         selectionRange,
         selectionRangeText,
-        md: getFuncDocCore(kind, fileName, AhkTokenList, selectionRangeText, classStack),
+        md: getFuncDocCore(fileName, AhkTokenList, selectionRangeText, classStack),
         uri: document.uri,
-        defStack: classStack,
+        classStack,
         paramMap,
         valMap,
         textMap,
         children,
+        nameRange,
     });
     return myFn2;
 }

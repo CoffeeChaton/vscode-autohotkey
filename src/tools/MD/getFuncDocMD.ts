@@ -36,7 +36,6 @@ function getReturnText(lStr: string, textRaw: string): string {
 }
 
 export function getFuncDocCore(
-    kind: vscode.SymbolKind.Method | vscode.SymbolKind.Function,
     fileName: string,
     AhkTokenList: TTokenStream,
     selectionRangeText: string,
@@ -63,7 +62,7 @@ export function getFuncDocCore(
         returnList += getReturnText(lStr, textRaw);
     }
 
-    const kindStr: string = kind === vscode.SymbolKind.Function
+    const kindStr: string = classStack.length === 0
         ? EMode.ahkFunc
         : EMode.ahkMethod;
     const kindDetail = `(${kindStr})     of     ${fileName}\n`;
