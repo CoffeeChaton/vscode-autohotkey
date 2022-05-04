@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { DeepReadonly } from './globalEnum';
+import { DeepReadonly } from '../globalEnum';
 
 // ---------------------------------------------------------------------------
 // WTF

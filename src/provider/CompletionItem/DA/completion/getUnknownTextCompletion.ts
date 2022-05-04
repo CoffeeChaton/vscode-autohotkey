@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TTextMapOut, TTextMetaOut } from '../../../../CAhkFunc';
+import { TTextMapOut, TTextMetaOut } from '../../../../AhkSymbol/CAhkFunc';
 import { EPrefix } from '../../../../tools/MD/setMD';
 import { setItemCore } from './setItem';
 

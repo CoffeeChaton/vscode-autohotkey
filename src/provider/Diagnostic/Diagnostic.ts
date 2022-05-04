@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
+import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 import { getLintConfig } from '../../configUI';
 import { TTokenStream } from '../../globalEnum';
-import { TAhkSymbolList } from '../../TAhkSymbolIn';
 import { getIgnore } from './getIgnore';
 import { getFuncErr } from './tools/getFuncErr';
 import { getLineErr } from './tools/getLineErr';

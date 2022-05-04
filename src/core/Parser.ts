@@ -1,10 +1,10 @@
 /* eslint-disable max-lines */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,20] }] */
 import * as vscode from 'vscode';
-import { CAhkClass } from '../CAhkClass';
-import { CAhkFunc } from '../CAhkFunc';
+import { CAhkClass } from '../AhkSymbol/CAhkClass';
+import { CAhkFunc } from '../AhkSymbol/CAhkFunc';
+import { TAhkSymbolIn, TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
 import { getCaseDefaultName, getSwitchName } from '../provider/SymbolProvider/getSwitchCaseName';
-import { TAhkSymbolIn, TAhkSymbolList } from '../TAhkSymbolIn';
 import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';

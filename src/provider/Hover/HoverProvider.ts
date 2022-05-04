@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../CAhkFunc';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';

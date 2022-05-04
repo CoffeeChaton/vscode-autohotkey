@@ -7,7 +7,7 @@ import {
     TTextMetaIn,
     TValMapIn,
     TValMetaIn,
-} from '../../CAhkFunc';
+} from '../../AhkSymbol/CAhkFunc';
 import { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import { TTokenStream } from '../../globalEnum';
 import { newC502 } from './FnVar/def/diag/c502';

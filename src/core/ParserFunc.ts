@@ -5,7 +5,7 @@ import {
     TParamMapIn,
     TTextMapIn,
     TValMapIn,
-} from '../CAhkFunc';
+} from '../AhkSymbol/CAhkFunc';
 import { TTokenStream } from '../globalEnum';
 import { getFnVarDef } from '../tools/DeepAnalysis/FnVar/getFnVarDef';
 import { getParamDef } from '../tools/DeepAnalysis/getParamDef';

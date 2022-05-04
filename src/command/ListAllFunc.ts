@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
+import { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
-import { TAhkSymbolList } from '../TAhkSymbolIn';
 
 export function msgWithPos(text: string, fsPath: string, startPos: vscode.Position): string {
     const line: number = startPos.line + 1;

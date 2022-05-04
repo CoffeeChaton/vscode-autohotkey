@@ -1,4 +1,4 @@
-import { CAhkFunc } from '../../CAhkFunc';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { TTokenStream } from '../../globalEnum';
 import { TFullFuncMap } from '../../tools/Func/getAllFunc';
 

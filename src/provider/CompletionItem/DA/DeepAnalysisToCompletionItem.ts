@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../../CAhkFunc';
+import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { getDAWithPos } from '../../../tools/DeepAnalysis/getDAWithPos';
 import { isPosAtStr } from '../../../tools/isPosAtStr';
 import { getParamCompletion } from './completion/getArgCompletion';

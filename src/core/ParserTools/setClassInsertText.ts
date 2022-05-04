@@ -1,5 +1,5 @@
-import { CAhkFunc } from '../../CAhkFunc';
-import { TAhkSymbolList } from '../../TAhkSymbolIn';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 
 export function setClassInsertText(children: TAhkSymbolList): '' | string {
     for (const ch of children) {

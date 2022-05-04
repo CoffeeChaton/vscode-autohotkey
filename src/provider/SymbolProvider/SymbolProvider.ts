@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../CAhkFunc';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { Detecter } from '../../core/Detecter';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';

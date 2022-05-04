@@ -4,7 +4,7 @@ import {
     TParamMetaOut,
     TTextMetaOut,
     TValMetaOut,
-} from '../../CAhkFunc';
+} from '../../AhkSymbol/CAhkFunc';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 
 function rangeList2LocList(rangeList: readonly vscode.Range[], uri: vscode.Uri): vscode.Location[] {

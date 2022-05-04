@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,5] }] */
 import * as vscode from 'vscode';
-import { TValMapOut } from '../../../../CAhkFunc';
+import { TValMapOut } from '../../../../AhkSymbol/CAhkFunc';
 import {
     ESnippetRecBecause,
     TSnippetRecMap,

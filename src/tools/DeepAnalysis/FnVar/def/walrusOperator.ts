@@ -1,4 +1,4 @@
-import { TValMetaIn } from '../../../../CAhkFunc';
+import { TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
 import { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
 

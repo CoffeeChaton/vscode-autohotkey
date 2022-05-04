@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,15] }] */
 import * as vscode from 'vscode';
-import { TValMetaIn } from '../../../../CAhkFunc';
+import { TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
 import { TGetFnDefNeed } from '../TFnVarDef';
 import { wrapFnValDef } from './wrapFnValDef';
 

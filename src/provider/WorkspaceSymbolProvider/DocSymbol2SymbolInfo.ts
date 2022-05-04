@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TAhkSymbol, TAhkSymbolList } from '../../TAhkSymbolIn';
+import { TAhkSymbol, TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 
 const wm: WeakMap<TAhkSymbolList, vscode.SymbolInformation[]> = new WeakMap();
 

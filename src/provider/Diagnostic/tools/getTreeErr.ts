@@ -1,7 +1,7 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,20] }] */
 import * as vscode from 'vscode';
+import { TAhkSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../diag';
-import { TAhkSymbol } from '../../../TAhkSymbolIn';
 import { setDiagnostic } from './setDiagnostic';
 
 function getDefaultNumber(swChildren: Readonly<TAhkSymbol[]>): number {

@@ -1,11 +1,11 @@
 /* eslint-disable max-lines */
 /* eslint-disable security/detect-non-literal-regexp */
 import * as vscode from 'vscode';
-import { CAhkClass } from '../../../CAhkClass';
-import { CAhkFunc } from '../../../CAhkFunc';
+import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
+import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
+import { TAhkSymbol, TAhkSymbolList } from '../../../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../../../core/Detecter';
 import { TTokenStream } from '../../../globalEnum';
-import { TAhkSymbol, TAhkSymbolList } from '../../../TAhkSymbolIn';
 import { getScopeOfPos, getStack } from '../../../tools/getScopeOfPos';
 import { getObjChapterArr } from '../../../tools/Obj/getObjChapterArr';
 import { ahkValDefRegex } from '../../../tools/regexTools';

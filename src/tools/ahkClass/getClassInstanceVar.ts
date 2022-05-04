@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
+import { TAhkSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { TFuncInput } from '../../core/getChildren';
-import { TAhkSymbol } from '../../TAhkSymbolIn';
 import { removeParentheses } from '../str/removeParentheses';
 
 export function getClassInstanceVar(FuncInput: TFuncInput): null | TAhkSymbol {

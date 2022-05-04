@@ -1,8 +1,8 @@
 import * as mm from 'micromatch';
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { CAhkClass } from '../../../CAhkClass';
-import { CAhkFunc } from '../../../CAhkFunc';
+import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
+import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { Detecter, TAhkFileData } from '../../../core/Detecter';
 import { EStr } from '../../../Enum/EStr';
 

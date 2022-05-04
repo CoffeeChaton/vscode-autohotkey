@@ -1,4 +1,4 @@
-import { CAhkFunc, TTextMetaOut } from '../../CAhkFunc';
+import { CAhkFunc, TTextMetaOut } from '../../AhkSymbol/CAhkFunc';
 import { OutputChannel } from '../../provider/vscWindows/OutputChannel';
 
 export type TWordFrequencyStatistics = {

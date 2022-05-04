@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TParamMapOut, TValMapOut } from '../../../../CAhkFunc';
+import { TParamMapOut, TValMapOut } from '../../../../AhkSymbol/CAhkFunc';
 import { DiagsDA, EDiagCodeDA } from '../../../../diag';
 import { setDiagnosticDA } from '../../../../provider/Diagnostic/tools/setDiagnostic';
 

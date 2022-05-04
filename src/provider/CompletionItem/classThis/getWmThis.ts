@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkClass } from '../../../CAhkClass';
+import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
 import { Detecter, TAhkFileData } from '../../../core/Detecter';
 import { TTokenStream } from '../../../globalEnum';
 import { getDocStrMapMask } from '../../../tools/getDocStrMapMask';

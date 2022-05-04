@@ -4,7 +4,7 @@ import {
     TParamMetaOut,
     TTextMetaOut,
     TValMetaOut,
-} from '../../CAhkFunc';
+} from '../../AhkSymbol/CAhkFunc';
 import { EPrefix, setMD } from '../../tools/MD/setMD';
 import { setPreFix } from '../../tools/str/setPreFix';
 

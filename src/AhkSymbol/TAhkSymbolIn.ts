@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
-import { CAhkHotKeys } from './AhkSymbol/CAhkHotKeys';
-import { CAhkHotString } from './AhkSymbol/CAhkHotString';
-import { CAhkInclude } from './AhkSymbol/CAhkInclude';
-import { CAhkLabel } from './AhkSymbol/CAhkLabel';
+import { DeepReadonly } from '../globalEnum';
 import { CAhkClass } from './CAhkClass';
 import { CAhkFunc } from './CAhkFunc';
-import { DeepReadonly } from './globalEnum';
+import { CAhkHotKeys } from './CAhkHotKeys';
+import { CAhkHotString } from './CAhkHotString';
+import { CAhkInclude } from './CAhkInclude';
+import { CAhkLabel } from './CAhkLabel';
 
 export type TAhkSymbolIn = DeepReadonly<vscode.DocumentSymbol>; // TODO: remove this
 type TList =

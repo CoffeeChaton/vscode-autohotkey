@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../CAhkFunc';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../../core/Detecter';
-import { TAhkSymbolList } from '../../TAhkSymbolIn';
 
 export function getFuncWithPos(
     fsPath: string,

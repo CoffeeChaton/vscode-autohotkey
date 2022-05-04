@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../../CAhkFunc';
+import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { getCode502Default, getCode503Default } from '../../../configUI';
 import { diagColl } from '../../../core/Detecter';
 import { EDiagBase } from '../../../Enum/EDiagBase';

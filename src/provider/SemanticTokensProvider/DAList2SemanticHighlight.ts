@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../CAhkFunc';
-import { TAhkSymbolList } from '../../TAhkSymbolIn';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { pushToken, TSemanticTokensLeaf } from './tools';
 

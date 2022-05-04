@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
+import { TAhkSymbol, TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
 import { TTokenStream } from '../globalEnum';
-import { TAhkSymbol, TAhkSymbolList } from '../TAhkSymbolIn';
 import { TGValMap } from './ParserTools/ahkGlobalDef';
 
 export type TFuncInput = Readonly<{

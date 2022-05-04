@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { CAhkFunc } from '../../CAhkFunc';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { TTokenStream } from '../../globalEnum';
 import {
     BuiltInFunctionObj,

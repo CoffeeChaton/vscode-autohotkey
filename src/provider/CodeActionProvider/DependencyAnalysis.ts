@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../CAhkFunc';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
 import { Detecter } from '../../core/Detecter';

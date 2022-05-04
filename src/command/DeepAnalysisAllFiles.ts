@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../CAhkFunc';
+import { CAhkFunc } from '../AhkSymbol/CAhkFunc';
 import { Detecter, TAhkFileData } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';

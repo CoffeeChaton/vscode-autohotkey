@@ -4,7 +4,7 @@ import {
     TParamMapOut,
     TTextMapOut,
     TValMapOut,
-} from '../../CAhkFunc';
+} from '../../AhkSymbol/CAhkFunc';
 import { EFormatChannel, TTokenStream } from '../../globalEnum';
 import { FormatCore } from '../../provider/Format/FormatProvider';
 import { getAllFunc, TFullFuncMap } from '../../tools/Func/getAllFunc';

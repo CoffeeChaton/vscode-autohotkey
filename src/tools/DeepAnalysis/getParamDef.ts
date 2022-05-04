@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TParamMapIn, TParamMetaIn } from '../../CAhkFunc';
+import { TParamMapIn, TParamMetaIn } from '../../AhkSymbol/CAhkFunc';
 import { TTokenStream } from '../../globalEnum';
 import { replacerSpace } from '../str/removeSpecialChar';
 

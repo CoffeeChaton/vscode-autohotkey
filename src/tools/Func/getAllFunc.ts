@@ -1,4 +1,4 @@
-import { CAhkFunc } from '../../CAhkFunc';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { DeepReadonly } from '../../globalEnum';
 

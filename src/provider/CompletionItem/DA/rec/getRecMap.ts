@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../../../CAhkFunc';
+import { CAhkFunc } from '../../../../AhkSymbol/CAhkFunc';
 import { TSnippetRecMap } from '../ESnippetRecBecause';
 import { setParaRec } from './setParaRec';
 import { getContextRange, setVarRec } from './setVarRec';
