@@ -1,12 +1,13 @@
 import * as vscode from 'vscode';
+import { CAhkComment } from '../../AhkSymbol/CAhkComment';
 import { CAhkHotKeys } from '../../AhkSymbol/CAhkHotKeys';
 import { CAhkHotString } from '../../AhkSymbol/CAhkHotString';
 import { CAhkInclude } from '../../AhkSymbol/CAhkInclude';
 import { CAhkLabel } from '../../AhkSymbol/CAhkLabel';
+import { EDetail } from '../../globalEnum';
 import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 import { TFuncInput } from '../getChildren';
 
-type TLineClassList = CAhkInclude | CAhkLabel | CAhkHotString | CAhkHotKeys;
 type TClassName = typeof CAhkInclude | typeof CAhkLabel | typeof CAhkHotString | typeof CAhkHotKeys;
 
 type TLineRuler = Readonly<{
@@ -81,7 +82,7 @@ const LineRuler: readonly TLineRuler[] = [
     },
 ];
 
-export function ParserLine(FuncInput: TFuncInput): null | TLineClassList {
+export function ParserLine(FuncInput: TFuncInput): null | CAhkInclude | CAhkLabel | CAhkHotString | CAhkHotKeys {
     const {
         fistWordUp,
         DocStrMap,
@@ -89,6 +90,8 @@ export function ParserLine(FuncInput: TFuncInput): null | TLineClassList {
         lStr,
         document,
     } = FuncInput;
+
+    if (lStr.length === 0) return null;
     const strTrim: string = lStr.trim();
     if (strTrim === '') return null;
 
@@ -108,4 +111,34 @@ export function ParserLine(FuncInput: TFuncInput): null | TLineClassList {
         });
     }
     return null;
+}
+
+export function getComment(FuncInput: TFuncInput): null | CAhkComment {
+    const {
+        line,
+        lStr,
+        DocStrMap,
+        document,
+    } = FuncInput;
+    if (lStr.trim().length !== 0) return null;
+
+    const { textRaw, detail, lineComment } = DocStrMap[line];
+    if (detail.indexOf(EDetail.hasDoubleSemicolon) !== -1) return null;
+
+    // ;;
+    if (!(/^\s*;;/u).test(textRaw)) return null;
+
+    const doubleSemicolon = textRaw.indexOf(';;', lStr.length);
+
+    const name: string = lineComment.replace(/^;;/u, '');
+    const range: vscode.Range = new vscode.Range(
+        new vscode.Position(line, doubleSemicolon + 2),
+        new vscode.Position(line, textRaw.length),
+    );
+    return new CAhkComment({
+        name,
+        range,
+        selectionRange: range,
+        uri: document.uri,
+    });
 }

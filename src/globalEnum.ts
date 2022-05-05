@@ -17,6 +17,7 @@ export const enum EDetail {
     deepAdd = 5,
     deepSubtract = 6,
     isGlobalLine = 7,
+    hasDoubleSemicolon = 8,
 }
 
 export type TAhkToken = {
@@ -27,6 +28,7 @@ export type TAhkToken = {
     readonly detail: readonly EDetail[];
     readonly line: number;
     readonly cll: 0 | 1;
+    readonly lineComment: string;
     // I know this is not Complete and correct Token.
 }[];
 export type TTokenStream = DeepReadonly<TAhkToken>;

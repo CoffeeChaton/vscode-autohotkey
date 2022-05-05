@@ -34,6 +34,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
                 detail: [EDetail.inComment],
                 line,
                 cll: 0,
+                lineComment: '',
             });
             continue;
         }
@@ -51,6 +52,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
                 detail: [inLTrimLevel],
                 line,
                 cll: 0,
+                lineComment: '',
             });
             continue;
         }
@@ -64,6 +66,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
                 detail: [EDetail.inSkipSign2],
                 line,
                 cll: 0,
+                lineComment: '',
             });
             continue;
         }
@@ -92,6 +95,14 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
 
         const cll: 0 | 1 = ContinueLongLine(lStrTrim); // ex: line start with ","
 
+        const lineComment: string = textRaw.length - lStr.length > 2
+            ? textRaw.substring(lStr.length).trim()
+            : '';
+
+        if (lineComment.startsWith(';;')) {
+            detail.push(EDetail.hasDoubleSemicolon);
+        }
+
         result.push({
             fistWordUp,
             lStr,
@@ -100,6 +111,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
             detail,
             line,
             cll,
+            lineComment,
         });
     }
     return result;

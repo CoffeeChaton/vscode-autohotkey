@@ -25,7 +25,7 @@ export class CAhkLabel extends vscode.DocumentSymbol {
             uri,
         }: TCAhkLabelParam,
     ) {
-        super(name, '', vscode.SymbolKind.Namespace, range, selectionRange);
+        super(name, 'label', vscode.SymbolKind.Namespace, range, selectionRange);
         this.uri = uri;
     }
 }

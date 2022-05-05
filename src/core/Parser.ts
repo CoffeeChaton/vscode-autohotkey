@@ -15,7 +15,7 @@ import { getRangeOfLine } from '../tools/range/getRangeOfLine';
 import { replacerSpace } from '../tools/str/removeSpecialChar';
 import { getChildren, TFuncInput } from './getChildren';
 import { getFuncCore } from './ParserFunc';
-import { ParserLine } from './ParserTools/ParserLine';
+import { getComment, ParserLine } from './ParserTools/ParserLine';
 import { setClassInsertText } from './ParserTools/setClassInsertText';
 
 export const ParserBlock = {
@@ -47,7 +47,7 @@ export const ParserBlock = {
             RangeStartLine: Range.start.line + 1,
             RangeEndLine: Range.end.line,
             classStack,
-            fnList: [ParserBlock.getSwitchBlock, ParserBlock.getComment, ParserLine],
+            fnList: [ParserBlock.getSwitchBlock, ParserLine, getComment],
             document,
             GValMap,
         }) as vscode.DocumentSymbol[];
@@ -111,7 +111,7 @@ export const ParserBlock = {
             RangeEndLine: range.end.line,
             classStack,
             fnList: [
-                ParserBlock.getComment,
+                getComment,
                 ParserBlock.getSwitchBlock,
                 ParserLine,
             ],
@@ -173,27 +173,5 @@ export const ParserBlock = {
             children: children as vscode.DocumentSymbol[],
         });
         return AhkClassSymbol;
-    },
-
-    getComment(FuncInput: TFuncInput): null | TAhkSymbolIn {
-        const {
-            line,
-            lStr,
-            DocStrMap,
-        } = FuncInput;
-        if (lStr.trim().length !== 0) return null;
-        const { textRaw } = DocStrMap[line];
-        const doubleSemicolon = textRaw.indexOf(';;');
-        if (doubleSemicolon === -1) return null;
-        // ;;
-        if ((/^\s*;;/u).test(textRaw)) {
-            const name: string = textRaw.substring(doubleSemicolon + 2).trimEnd();
-            const Range: vscode.Range = new vscode.Range(
-                new vscode.Position(line, doubleSemicolon + 2),
-                new vscode.Position(line, textRaw.length),
-            );
-            return new vscode.DocumentSymbol(name, '', vscode.SymbolKind.Package, Range, Range);
-        }
-        return null;
     },
 } as const;
