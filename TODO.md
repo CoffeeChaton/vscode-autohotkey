@@ -5,3 +5,4 @@
 3. [remover await vscode.workspace.openTextDocument](src/provider/CompletionItem/classThis/getWmThis.ts)
 4. [diag of `If Var op Value`](https://www.autohotkey.com/docs/Language.htm#if-statement)
 5. [Random, vs Random()](syntaxes/ahk.tmLanguage.json)
+6. [check #Include](https://www.autohotkey.com/docs/Functions.htm#lib)

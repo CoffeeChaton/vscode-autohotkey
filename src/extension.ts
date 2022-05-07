@@ -3,6 +3,7 @@ import {
     DocumentSelector,
     ExtensionContext,
     languages,
+    window,
     workspace,
 } from 'vscode';
 import { AnalyzeFuncMain } from './command/AnalyzeFunc/AnalyzeThisFunc';
@@ -17,7 +18,7 @@ import { AhkCodeLens } from './provider/CodeLens/CodeLensProvider';
 import { showUnknownAnalyze } from './provider/CodeLens/showUnknownAnalyze';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { DefProvider } from './provider/Def/DefProvider';
-import { ahkOnDidCloseTextDoc } from './provider/event/ahkOnDidCloseTextDoc';
+import { onDidChangeTabs } from './provider/event/onDidChangeTabs';
 import { ahkRenameFiles } from './provider/event/ahkRenameFiles';
 import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
@@ -50,12 +51,14 @@ export function activate(context: ExtensionContext): void {
         languages.registerWorkspaceSymbolProvider(WorkspaceSymbolProvider),
         // workspace-------------------
         workspace.onDidChangeConfiguration(configChangEvent),
-        workspace.onDidCloseTextDocument(ahkOnDidCloseTextDoc),
         workspace.onDidCreateFiles(Detecter.createMap),
         workspace.onDidDeleteFiles(Detecter.delMap),
         workspace.onDidRenameFiles(ahkRenameFiles),
         // workspace.onDidChangeTextDocument((e) => d(e)),
         // workspace.registerTextDocumentContentProvider(selector, e),
+        // window----------------------
+        window.tabGroups.onDidChangeTabs(onDidChangeTabs),
+        // window.tabGroups.onDidChangeTabGroups(onDidChangeTabGroups),
         // commands--------------------
         commands.registerCommand('ahk.bar.click', statusBarClick),
         commands.registerCommand('ahk.nekoHelp.openDoc', openDocs),

@@ -20,28 +20,6 @@
     "[typescript]": {
         "editor.defaultFormatter": "dprint.dprint"
     },
-    "cSpell.enableFiletypes": [
-        "ahk",
-        "c",
-        "cpp",
-        "csharp",
-        "css",
-        "git-commit",
-        "html",
-        "ini",
-        "javascript",
-        "javascriptreact",
-        "julia",
-        "juliamarkdown",
-        "latex",
-        "markdown",
-        "python",
-        "restructuredtext",
-        "scss",
-        "text",
-        "typescript",
-        "typescriptreact"
-    ],
     "editor.codeActionsOnSave": {
         "addMissingImports": true,
         "source.fixAll": true,
