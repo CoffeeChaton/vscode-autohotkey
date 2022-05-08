@@ -9,6 +9,7 @@ import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 import { TFuncInput } from '../getChildren';
 
 type TClassName = typeof CAhkInclude | typeof CAhkLabel | typeof CAhkHotString | typeof CAhkHotKeys;
+type TParserLine = CAhkInclude | CAhkLabel | CAhkHotString | CAhkHotKeys;
 
 type TLineRuler = Readonly<{
     ClassName: TClassName;
@@ -82,45 +83,13 @@ const LineRuler: readonly TLineRuler[] = [
     },
 ];
 
-export function ParserLine(FuncInput: TFuncInput): null | CAhkInclude | CAhkLabel | CAhkHotString | CAhkHotKeys {
-    const {
-        fistWordUp,
-        DocStrMap,
-        line,
-        lStr,
-        document,
-    } = FuncInput;
-
-    if (lStr.length === 0) return null;
-    const strTrim: string = lStr.trim();
-    if (strTrim === '') return null;
-
-    if (fistWordUp.length > 0) return null;
-
-    for (const { test, getName, ClassName } of LineRuler) {
-        if (!test(strTrim)) continue;
-        const name: string | null = getName(strTrim);
-        if (name === null) continue;
-
-        const range: vscode.Range = getRangeOfLine(DocStrMap, line);
-        return new ClassName({
-            name,
-            range,
-            selectionRange: range,
-            uri: document.uri,
-        });
-    }
-    return null;
-}
-
-export function getComment(FuncInput: TFuncInput): null | CAhkComment {
+function getComment(FuncInput: TFuncInput): null | CAhkComment {
     const {
         line,
         lStr,
         DocStrMap,
         document,
     } = FuncInput;
-    if (lStr.trim().length !== 0) return null;
 
     const { textRaw, detail, lineComment } = DocStrMap[line];
     if (detail.indexOf(EDetail.hasDoubleSemicolon) === -1) return null;
@@ -141,4 +110,34 @@ export function getComment(FuncInput: TFuncInput): null | CAhkComment {
         selectionRange: range,
         uri: document.uri,
     });
+}
+
+export function ParserLine(FuncInput: TFuncInput): null | TParserLine | CAhkComment {
+    const {
+        fistWordUp,
+        line,
+        lStr,
+        document,
+        textRaw,
+    } = FuncInput;
+
+    const strTrim: string = lStr.trim();
+    if (strTrim === '') return getComment(FuncInput);
+
+    if (fistWordUp.length > 0) return null;
+
+    for (const { test, getName, ClassName } of LineRuler) {
+        if (!test(strTrim)) continue;
+        const name: string | null = getName(strTrim);
+        if (name === null) continue;
+
+        const range: vscode.Range = getRangeOfLine(line, lStr, textRaw.length);
+        return new ClassName({
+            name,
+            range,
+            selectionRange: range,
+            uri: document.uri,
+        });
+    }
+    return null;
 }

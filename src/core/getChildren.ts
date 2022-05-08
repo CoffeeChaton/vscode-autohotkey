@@ -6,6 +6,7 @@ import { TGValMap } from './ParserTools/ahkGlobalDef';
 export type TFuncInput = Readonly<{
     fistWordUp: string;
     lStr: string;
+    textRaw: string;
     line: number;
     RangeEndLine: number;
     classStack: string[];
@@ -41,7 +42,7 @@ export function getChildren(child: ChildType): TAhkSymbolList {
     let Resolved = RangeStartLine; // <--------------------------------
     for (let line = RangeStartLine; line < RangeEndLine; line++) {
         if (line < Resolved) continue; // <------------------------------------
-        const { lStr, fistWordUp } = DocStrMap[line];
+        const { lStr, fistWordUp, textRaw } = DocStrMap[line];
         for (const fn of fnList) {
             const DocumentSymbol: null | TAhkSymbol = fn({
                 fistWordUp,
@@ -52,6 +53,7 @@ export function getChildren(child: ChildType): TAhkSymbolList {
                 classStack,
                 document,
                 GValMap,
+                textRaw,
             });
             if (DocumentSymbol !== null) {
                 result.push(DocumentSymbol);

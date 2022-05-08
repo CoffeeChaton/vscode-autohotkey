@@ -8,12 +8,12 @@ export function getRangeCaseBlock(
     defLine: number,
     searchLine: number,
     RangeEnd: number,
-    lStr: string,
+    defLStr: string,
 ): vscode.Range {
-    if (!(/:\s*$/u).test(lStr)) {
+    if (!defLStr.trimEnd().endsWith(':')) {
         // exp : case "cat": return "cat";
         // exp : case 3: do something;
-        return getRangeOfLine(DocStrMap, defLine);
+        return getRangeOfLine(defLine, defLStr, DocStrMap[defLine].textRaw.length);
     }
     // exp : case 0:\s*
     //          something at next line;
@@ -23,18 +23,18 @@ export function getRangeCaseBlock(
     for (let line = nextLine; line <= RangeEnd; line++) {
         if (line < Resolved) continue;
 
-        const lineLStr = DocStrMap[line].lStr;
+        const { lStr, fistWordUp } = DocStrMap[line];
 
-        if ((/^\s*\bswitch\b/ui).test(lineLStr)) {
+        if (fistWordUp === 'SWITCH') {
             const SwitchRange = getRange(DocStrMap, line, line, RangeEnd);
             Resolved = SwitchRange.end.line;
             continue;
         }
         if (
-            lineLStr.indexOf(':') !== -1
-            && ((/^\s*\bcase\b\s*/ui).test(lineLStr) || (/^\s*\bdefault\b\s*:/ui).test(lineLStr))
+            (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT')
+            && lStr.indexOf(':') !== -1
         ) {
-            const col = DocStrMap[line - 1].lStr.length;
+            const col = DocStrMap[line - 1].textRaw.length;
             return new vscode.Range(startPos, new vscode.Position(line - 1, col));
         }
     }

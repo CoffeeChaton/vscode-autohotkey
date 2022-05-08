@@ -1,12 +1,11 @@
 import * as vscode from 'vscode';
-import { TTokenStream } from '../../globalEnum';
 
-export function getRangeOfLine(DocStrMap: TTokenStream, line: number): vscode.Range {
-    const col = DocStrMap[line].lStr.search(/\S/u);
+export function getRangeOfLine(line: number, lStr: string, textRawLen: number): vscode.Range {
+    // const col = lStr.search(/\S/u);
+    const col = lStr.length - lStr.trimStart().length;
+
     return new vscode.Range(
-        line,
-        col,
-        line,
-        DocStrMap[line].textRaw.length,
+        new vscode.Position(line, col),
+        new vscode.Position(line, textRawLen),
     );
 }

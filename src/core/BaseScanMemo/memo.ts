@@ -6,7 +6,7 @@ import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
 import { getChildren } from '../getChildren';
 import { ParserBlock } from '../Parser';
 import { ahkGlobalMain, TGValMap, TGValMapReadOnly } from '../ParserTools/ahkGlobalDef';
-import { getComment, ParserLine } from '../ParserTools/ParserLine';
+import { ParserLine } from '../ParserTools/ParserLine';
 import { Pretreatment } from '../Pretreatment';
 
 export type TMemo = {
@@ -90,7 +90,6 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
             ParserBlock.getFunc,
             ParserBlock.getSwitchBlock,
             ParserLine,
-            getComment,
         ],
         document,
         GValMap,

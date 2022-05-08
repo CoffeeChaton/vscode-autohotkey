@@ -1,10 +1,15 @@
 /* eslint-disable max-lines */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,20] }] */
 import * as vscode from 'vscode';
 import { CAhkClass } from '../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../AhkSymbol/CAhkFunc';
-import { TAhkSymbolIn, TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
-import { getCaseDefaultName, getSwitchName } from '../provider/SymbolProvider/getSwitchCaseName';
+import {
+    CAhkCase,
+    CAhkDefault,
+    CAhkSwitch,
+    TCaseCh,
+} from '../AhkSymbol/CAhkSwitch';
+import { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
+import { getCaseName, getSwitchName } from '../provider/SymbolProvider/getSwitchCaseName';
 import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
@@ -15,13 +20,16 @@ import { getRangeOfLine } from '../tools/range/getRangeOfLine';
 import { replacerSpace } from '../tools/str/removeSpecialChar';
 import { getChildren, TFuncInput } from './getChildren';
 import { getFuncCore } from './ParserFunc';
-import { getComment, ParserLine } from './ParserTools/ParserLine';
+import { ParserLine } from './ParserTools/ParserLine';
 import { setClassInsertText } from './ParserTools/setClassInsertText';
 
 export const ParserBlock = {
-    getCaseDefaultBlock(FuncInput: TFuncInput): null | TAhkSymbolIn {
-        const { lStr } = FuncInput;
-        if (lStr === '' || lStr.indexOf(':') === -1) return null;
+    getCaseBlock(FuncInput: TFuncInput): null | CAhkCase {
+        const { lStr, fistWordUp } = FuncInput;
+
+        if (fistWordUp !== 'CASE') return null;
+        if (lStr.indexOf(':') === -1) return null;
+
         const {
             RangeEndLine,
             classStack,
@@ -29,33 +37,70 @@ export const ParserBlock = {
             DocStrMap,
             document,
             GValMap,
+            textRaw,
         } = FuncInput;
 
-        const caseName: string | null = getCaseDefaultName(DocStrMap[line].textRaw, lStr);
-        if (caseName === null) return null;
+        const name: string | null = getCaseName(DocStrMap[line].textRaw, lStr);
+        if (name === null) return null;
 
-        const Range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
-        const Block: vscode.DocumentSymbol = new vscode.DocumentSymbol(
-            caseName,
-            '',
-            vscode.SymbolKind.EnumMember,
-            Range,
-            Range,
-        );
-        Block.children = getChildren({
+        const range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
+        const ch: TCaseCh[] = getChildren({
             DocStrMap,
-            RangeStartLine: Range.start.line + 1,
-            RangeEndLine: Range.end.line,
+            RangeStartLine: range.start.line + 1,
+            RangeEndLine: range.end.line,
             classStack,
-            fnList: [ParserBlock.getSwitchBlock, ParserLine, getComment],
+            fnList: [ParserBlock.getSwitchBlock, ParserLine],
             document,
             GValMap,
-        }) as vscode.DocumentSymbol[];
-        return Block;
+        }) as TCaseCh[];
+
+        return new CAhkCase({
+            name,
+            range,
+            selectionRange: getRangeOfLine(line, lStr, textRaw.length),
+            uri: document.uri,
+            ch,
+        });
     },
 
-    getSwitchBlock(FuncInput: TFuncInput): null | TAhkSymbolIn {
-        if (!(/^SWITCH$/ui).test(FuncInput.fistWordUp)) return null;
+    getDefaultBlock(FuncInput: TFuncInput): null | CAhkDefault | CAhkCase {
+        const { lStr, fistWordUp } = FuncInput;
+
+        if (fistWordUp !== 'DEFAULT') return null;
+        if (!(/^default\b\s*:/iu).test(lStr.trim())) return null;
+
+        const {
+            RangeEndLine,
+            classStack,
+            line,
+            DocStrMap,
+            document,
+            GValMap,
+            textRaw,
+        } = FuncInput;
+
+        const range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
+        const ch: TCaseCh[] = getChildren({
+            DocStrMap,
+            RangeStartLine: range.start.line + 1,
+            RangeEndLine: range.end.line,
+            classStack,
+            fnList: [ParserBlock.getSwitchBlock, ParserLine],
+            document,
+            GValMap,
+        }) as TCaseCh[];
+
+        return new CAhkDefault({
+            name: 'Default :',
+            range,
+            selectionRange: getRangeOfLine(line, lStr, textRaw.length),
+            uri: document.uri,
+            ch,
+        });
+    },
+
+    getSwitchBlock(FuncInput: TFuncInput): null | CAhkSwitch {
+        if (FuncInput.fistWordUp !== 'SWITCH') return null;
 
         const {
             DocStrMap,
@@ -65,27 +110,28 @@ export const ParserBlock = {
             lStr,
             document,
             GValMap,
+            textRaw,
         } = FuncInput;
 
         const range = getRange(DocStrMap, line, line, RangeEndLine);
-        const selectionRange = getRangeOfLine(DocStrMap, line);
-        const SwitchBlock: vscode.DocumentSymbol = new vscode.DocumentSymbol(
-            getSwitchName(lStr),
-            'Switch',
-            vscode.SymbolKind.Enum,
-            range,
-            selectionRange,
-        );
-        SwitchBlock.children = getChildren({
+
+        const ch = getChildren({
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
             classStack,
-            fnList: [ParserBlock.getCaseDefaultBlock],
+            fnList: [ParserBlock.getCaseBlock, ParserBlock.getDefaultBlock],
             document,
             GValMap,
-        }) as vscode.DocumentSymbol[];
-        return SwitchBlock;
+        }) as CAhkCase[];
+
+        return new CAhkSwitch({
+            name: `Switch ${getSwitchName(lStr)}`,
+            range,
+            selectionRange: getRangeOfLine(line, lStr, textRaw.length),
+            uri: document.uri,
+            ch,
+        });
     },
 
     getFunc(FuncInput: TFuncInput): null | CAhkFunc {
@@ -111,7 +157,6 @@ export const ParserBlock = {
             RangeEndLine: range.end.line,
             classStack,
             fnList: [
-                getComment,
                 ParserBlock.getSwitchBlock,
                 ParserLine,
             ],
@@ -129,7 +174,7 @@ export const ParserBlock = {
     },
 
     getClass(FuncInput: TFuncInput): null | CAhkClass {
-        if (!(/^CLASS$/ui).test(FuncInput.fistWordUp)) return null;
+        if (FuncInput.fistWordUp !== 'CLASS') return null;
         // class ClassName extends BaseClassName
         const ma: RegExpMatchArray | null = FuncInput.lStr.match(/(?<=^\s*\bClass\b\s+)(\w+)/ui);
         if (ma === null) return null;
