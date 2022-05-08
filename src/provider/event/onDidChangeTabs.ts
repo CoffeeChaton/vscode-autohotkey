@@ -3,8 +3,6 @@ import { diagColl } from '../../core/Detecter';
 import { EDiagBase } from '../../Enum/EDiagBase';
 
 function clearNekoDA(uri: vscode.Uri): null {
-    if (uri.scheme !== 'file' || uri.fsPath.endsWith('.ahk')) return null;
-
     const diagList: readonly vscode.Diagnostic[] | undefined = diagColl.get(uri);
     if (diagList === undefined) return null;
 
@@ -12,10 +10,17 @@ function clearNekoDA(uri: vscode.Uri): null {
     return null;
 }
 
+function isAhkTab(uri: vscode.Uri): boolean {
+    return uri.scheme === 'file' && uri.fsPath.endsWith('.ahk');
+}
+
 export function onDidChangeTabs(tabChangeEvent: vscode.TabChangeEvent): void {
     for (const tab of tabChangeEvent.closed) {
         if (!(tab.input instanceof vscode.TabInputText)) continue;
 
-        clearNekoDA(tab.input.uri);
+        const { uri } = tab.input;
+        if (isAhkTab(uri)) {
+            clearNekoDA(uri);
+        }
     }
 }

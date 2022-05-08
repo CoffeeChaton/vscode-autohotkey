@@ -31,7 +31,6 @@ import { SymBolProvider } from './provider/SymbolProvider/SymbolProvider';
 import { OutputChannel } from './provider/vscWindows/OutputChannel';
 import { WorkspaceSymbolProvider } from './provider/WorkspaceSymbolProvider/WorkspaceSymbolProvider';
 
-// package.nls.zh
 // main
 export function activate(context: ExtensionContext): void {
     const selector: DocumentSelector = { language: 'ahk' };
