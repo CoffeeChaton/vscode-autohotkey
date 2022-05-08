@@ -1,13 +1,12 @@
 /* eslint-disable max-classes-per-file */
 import * as vscode from 'vscode';
-import { ParserLine } from '../core/ParserTools/ParserLine';
 
 type TCAhkSwitchParam = {
     name: string;
     range: vscode.Range;
     selectionRange: vscode.Range;
     uri: vscode.Uri;
-    ch: (CAhkCase | CAhkDefault)[];
+    ch: vscode.DocumentSymbol[];
 };
 // switch
 export class CAhkSwitch extends vscode.DocumentSymbol {
@@ -15,7 +14,7 @@ export class CAhkSwitch extends vscode.DocumentSymbol {
 
     declare public readonly kind: vscode.SymbolKind.Enum;
     declare public readonly detail: 'Switch';
-    declare public readonly children: (CAhkCase | CAhkDefault)[];
+    declare public readonly children: vscode.DocumentSymbol[];
     public constructor(
         {
             name,
@@ -32,17 +31,13 @@ export class CAhkSwitch extends vscode.DocumentSymbol {
 }
 
 // ----
-// case | default
-type T1 = ReturnType<typeof ParserLine>;
-
-export type TCaseCh = Exclude<CAhkSwitch | T1, null>;
 
 type TCAhkSwitchCaseParam = {
     name: string;
     range: vscode.Range;
     selectionRange: vscode.Range;
     uri: vscode.Uri;
-    ch: TCaseCh[];
+    ch: vscode.DocumentSymbol[];
 };
 
 export class CAhkCase extends vscode.DocumentSymbol {
@@ -50,7 +45,6 @@ export class CAhkCase extends vscode.DocumentSymbol {
 
     declare public readonly kind: vscode.SymbolKind.EnumMember;
     declare public readonly detail: 'Case';
-    declare public readonly children: TCaseCh[];
     public constructor(
         {
             name,
@@ -71,7 +65,6 @@ export class CAhkDefault extends vscode.DocumentSymbol {
 
     declare public readonly kind: vscode.SymbolKind.EnumMember;
     declare public readonly detail: 'Default';
-    declare public readonly children: TCaseCh[];
     public constructor(
         {
             name,

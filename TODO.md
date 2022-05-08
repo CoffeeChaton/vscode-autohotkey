@@ -6,5 +6,6 @@
 4. [diag of `If Var op Value`](https://www.autohotkey.com/docs/Language.htm#if-statement)
 5. [Random, vs Random()](syntaxes/ahk.tmLanguage.json)
 6. [check #Include](https://www.autohotkey.com/docs/Functions.htm#lib)
-7. remove new vscode.DocumentSymbol
+7. remove vscode.DocumentSymbol
 8. [user getChildren\<T\>](src/core/getChildren.ts)
+9. use ast replace diag switch case default

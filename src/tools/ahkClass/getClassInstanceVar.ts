@@ -1,28 +1,52 @@
 import * as vscode from 'vscode';
-import { TAhkSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import { CAhkClassInstanceVar } from '../../AhkSymbol/CAhkClassInstanceVar';
 import { TFuncInput } from '../../core/getChildren';
-import { removeParentheses } from '../str/removeParentheses';
 
-export function getClassInstanceVar(FuncInput: TFuncInput): null | TAhkSymbol {
-    const { line, lStr } = FuncInput;
+export function getClassInstanceVar(FuncInput: TFuncInput): null | CAhkClassInstanceVar {
+    const {
+        line,
+        lStr,
+        textRaw,
+        document,
+    } = FuncInput;
 
-    if (lStr.indexOf(':=') === -1) return null;
-    if ((/^\s*\b(?:static|global)\b/iu).test(lStr)) return null;
+    const index = lStr.indexOf(':=');
+    if (index === -1) return null;
 
-    const name = removeParentheses(lStr)
-        .split(',')
-        .map((str) => str.replace(/:=.*/u, '').trim())
-        .join(', ');
+    const isStatic = (/^static\s/ui).test(lStr.trimStart());
 
-    const detail = 'Instance Var';
-    const kind = vscode.SymbolKind.Variable;
-    const range = new vscode.Range(line, 0, line + 1, 0);
+    const realName = lStr
+        .substring(0, index)
+        .replace(/^\s*static\s+/ui, '')
+        .trim();
 
-    return new vscode.DocumentSymbol(
-        name,
-        detail,
-        kind,
-        range,
-        range,
-    );
+    const col = lStr.lastIndexOf(realName, index);
+
+    return new CAhkClassInstanceVar({
+        showName: isStatic
+            ? `Static ${realName}`
+            : realName,
+        realName,
+        range: new vscode.Range(
+            new vscode.Position(line, 0),
+            new vscode.Position(line, textRaw.length),
+        ),
+        selectionRange: new vscode.Range(
+            new vscode.Position(line, col),
+            new vscode.Position(line, col + realName.length),
+        ),
+        uri: document.uri,
+        detail: isStatic
+            ? 'static ClassVar'
+            : 'Instance Var',
+        isStatic,
+    });
 }
+
+// https://www.autohotkey.com/docs/Objects.htm#Custom_Classes
+
+// class ClassName extends BaseClassName
+// {
+//     InstanceVar := Expression
+//     static ClassVar := Expression
+// }

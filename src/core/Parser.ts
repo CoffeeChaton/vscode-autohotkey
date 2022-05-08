@@ -6,7 +6,6 @@ import {
     CAhkCase,
     CAhkDefault,
     CAhkSwitch,
-    TCaseCh,
 } from '../AhkSymbol/CAhkSwitch';
 import { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
 import { getCaseName, getSwitchName } from '../provider/SymbolProvider/getSwitchCaseName';
@@ -44,7 +43,7 @@ export const ParserBlock = {
         if (name === null) return null;
 
         const range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
-        const ch: TCaseCh[] = getChildren({
+        const ch = getChildren({
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
@@ -52,7 +51,7 @@ export const ParserBlock = {
             fnList: [ParserBlock.getSwitchBlock, ParserLine],
             document,
             GValMap,
-        }) as TCaseCh[];
+        });
 
         return new CAhkCase({
             name,
@@ -80,7 +79,7 @@ export const ParserBlock = {
         } = FuncInput;
 
         const range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
-        const ch: TCaseCh[] = getChildren({
+        const ch = getChildren({
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
@@ -88,7 +87,7 @@ export const ParserBlock = {
             fnList: [ParserBlock.getSwitchBlock, ParserLine],
             document,
             GValMap,
-        }) as TCaseCh[];
+        });
 
         return new CAhkDefault({
             name: 'Default :',
