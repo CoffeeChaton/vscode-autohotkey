@@ -13,9 +13,9 @@ function clearNekoDA(uri: vscode.Uri): null {
 }
 
 export function onDidChangeTabs(tabChangeEvent: vscode.TabChangeEvent): void {
-    for (const removedTab of tabChangeEvent.closed) {
-        if (!(removedTab.input instanceof vscode.TabInputText)) continue;
+    for (const tab of tabChangeEvent.closed) {
+        if (!(tab.input instanceof vscode.TabInputText)) continue;
 
-        clearNekoDA(removedTab.input.uri);
+        clearNekoDA(tab.input.uri);
     }
 }

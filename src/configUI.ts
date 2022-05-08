@@ -12,7 +12,7 @@ export const statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBar
     0,
 );
 statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
-statusBarItem.command = 'ahk.bar.click';
+statusBarItem.command = 'ahk.nekoHelp.bar';
 
 const Config = 'AhkNekoHelp';
 let Configs: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration(Config);

@@ -18,8 +18,8 @@ import { AhkCodeLens } from './provider/CodeLens/CodeLensProvider';
 import { showUnknownAnalyze } from './provider/CodeLens/showUnknownAnalyze';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { DefProvider } from './provider/Def/DefProvider';
-import { onDidChangeTabs } from './provider/event/onDidChangeTabs';
 import { ahkRenameFiles } from './provider/event/ahkRenameFiles';
+import { onDidChangeTabs } from './provider/event/onDidChangeTabs';
 import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
@@ -31,6 +31,7 @@ import { SymBolProvider } from './provider/SymbolProvider/SymbolProvider';
 import { OutputChannel } from './provider/vscWindows/OutputChannel';
 import { WorkspaceSymbolProvider } from './provider/WorkspaceSymbolProvider/WorkspaceSymbolProvider';
 
+// package.nls.zh
 // main
 export function activate(context: ExtensionContext): void {
     const selector: DocumentSelector = { language: 'ahk' };
@@ -60,7 +61,7 @@ export function activate(context: ExtensionContext): void {
         window.tabGroups.onDidChangeTabs(onDidChangeTabs),
         // window.tabGroups.onDidChangeTabGroups(onDidChangeTabGroups),
         // commands--------------------
-        commands.registerCommand('ahk.bar.click', statusBarClick),
+        commands.registerCommand('ahk.nekoHelp.bar', statusBarClick),
         commands.registerCommand('ahk.nekoHelp.openDoc', openDocs),
         commands.registerCommand('ahk.nekoHelp.refreshResource', fnRefreshResource),
         commands.registerCommand(ECommand.showFuncAnalyze, AnalyzeFuncMain),
