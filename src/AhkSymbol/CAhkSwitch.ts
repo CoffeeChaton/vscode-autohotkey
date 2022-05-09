@@ -1,20 +1,15 @@
 /* eslint-disable max-classes-per-file */
 import * as vscode from 'vscode';
+import { TLineClass } from './CAhkLine';
 
-type TCAhkSwitchParam = {
-    name: string;
-    range: vscode.Range;
-    selectionRange: vscode.Range;
-    uri: vscode.Uri;
-    ch: vscode.DocumentSymbol[];
-};
 // switch
 export class CAhkSwitch extends vscode.DocumentSymbol {
     public readonly uri: vscode.Uri;
 
     declare public readonly kind: vscode.SymbolKind.Enum;
     declare public readonly detail: 'Switch';
-    declare public readonly children: vscode.DocumentSymbol[];
+    declare public readonly children: (CAhkDefault | CAhkCase)[];
+
     public constructor(
         {
             name,
@@ -22,7 +17,13 @@ export class CAhkSwitch extends vscode.DocumentSymbol {
             selectionRange,
             uri,
             ch,
-        }: TCAhkSwitchParam,
+        }: {
+            name: string;
+            range: vscode.Range;
+            selectionRange: vscode.Range;
+            uri: vscode.Uri;
+            ch: (CAhkDefault | CAhkCase)[];
+        },
     ) {
         super(name, 'Switch', vscode.SymbolKind.Enum, range, selectionRange);
         this.uri = uri;
@@ -30,21 +31,13 @@ export class CAhkSwitch extends vscode.DocumentSymbol {
     }
 }
 
-// ----
-
-type TCAhkSwitchCaseParam = {
-    name: string;
-    range: vscode.Range;
-    selectionRange: vscode.Range;
-    uri: vscode.Uri;
-    ch: vscode.DocumentSymbol[];
-};
-
 export class CAhkCase extends vscode.DocumentSymbol {
     public readonly uri: vscode.Uri;
 
     declare public readonly kind: vscode.SymbolKind.EnumMember;
     declare public readonly detail: 'Case';
+    declare public readonly children: (TLineClass | CAhkSwitch)[];
+
     public constructor(
         {
             name,
@@ -52,7 +45,13 @@ export class CAhkCase extends vscode.DocumentSymbol {
             selectionRange,
             uri,
             ch,
-        }: TCAhkSwitchCaseParam,
+        }: {
+            name: string;
+            range: vscode.Range;
+            selectionRange: vscode.Range;
+            uri: vscode.Uri;
+            ch: (TLineClass | CAhkSwitch)[];
+        },
     ) {
         super(name, 'Case', vscode.SymbolKind.EnumMember, range, selectionRange);
         this.uri = uri;
@@ -65,6 +64,8 @@ export class CAhkDefault extends vscode.DocumentSymbol {
 
     declare public readonly kind: vscode.SymbolKind.EnumMember;
     declare public readonly detail: 'Default';
+    declare public readonly children: (TLineClass | CAhkSwitch)[];
+
     public constructor(
         {
             name,
@@ -72,7 +73,13 @@ export class CAhkDefault extends vscode.DocumentSymbol {
             selectionRange,
             uri,
             ch,
-        }: TCAhkSwitchCaseParam,
+        }: {
+            name: string;
+            range: vscode.Range;
+            selectionRange: vscode.Range;
+            uri: vscode.Uri;
+            ch: (TLineClass | CAhkSwitch)[];
+        },
     ) {
         super(name, 'Default', vscode.SymbolKind.EnumMember, range, selectionRange);
         this.uri = uri;

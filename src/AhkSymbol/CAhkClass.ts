@@ -1,33 +1,86 @@
+/* eslint-disable max-classes-per-file */
 import * as vscode from 'vscode';
+import { CAhkFunc } from './CAhkFunc';
+import { TLineClass } from './CAhkLine';
 
-// ---------------------------------------------------------------------------
-// https://www.autohotkey.com/docs/Objects.htm#Custom_Classes
-// ---------------------------------------------------------------------------
-type TUpName = string;
-
-type TCAhkClassParam = {
-    name: string;
-    detail: string;
+type TCAhkClassInstanceVarParam = {
+    showName: string;
+    realName: string;
     range: vscode.Range;
     selectionRange: vscode.Range;
-    //
-    //  md: vscode.MarkdownString
-    insertText: string;
     uri: vscode.Uri;
-    children: vscode.DocumentSymbol[]; // ... CAhkFuncSymbol CAhkClassSymbol vscode.DocumentSymbol
+    detail: 'Instance Var' | 'static ClassVar';
+    isStatic: boolean;
 };
 
-// AhkSymbol instanceof CAhkClass
+export class CAhkClassInstanceVar extends vscode.DocumentSymbol {
+    // https://www.autohotkey.com/docs/Objects.htm#Custom_Classes_var
+    public readonly uri: vscode.Uri;
+    public readonly realName: string;
+    public readonly isStatic: boolean;
+    declare public readonly kind: vscode.SymbolKind.Variable;
+    declare public readonly detail: 'Instance Var' | 'static ClassVar';
+    declare public readonly children: [];
+    public constructor(
+        {
+            showName,
+            range,
+            selectionRange,
+            uri,
+            detail,
+            realName,
+            isStatic,
+        }: TCAhkClassInstanceVarParam,
+    ) {
+        super(showName, detail, vscode.SymbolKind.Variable, range, selectionRange);
+        this.uri = uri;
+        this.realName = realName;
+        this.isStatic = isStatic;
+    }
+}
 
+export class CAhkClassGetSet extends vscode.DocumentSymbol {
+    // https://www.autohotkey.com/docs/Objects.htm#Custom_Classes_property
+
+    public readonly uri: vscode.Uri;
+
+    declare public readonly kind: vscode.SymbolKind.Property;
+    declare public readonly detail: 'Property';
+    declare public readonly children: [];
+    public constructor(
+        {
+            name,
+            range,
+            selectionRange,
+            uri,
+        }: {
+            name: string;
+            range: vscode.Range;
+            selectionRange: vscode.Range;
+            uri: vscode.Uri;
+        },
+    ) {
+        super(name, 'Property', vscode.SymbolKind.Property, range, selectionRange);
+        this.uri = uri;
+    }
+}
+
+export type TClassChildren = (CAhkClass | CAhkFunc | CAhkClassInstanceVar | CAhkClassGetSet | TLineClass);
+
+// AhkSymbol instanceof CAhkClass
 export class CAhkClass extends vscode.DocumentSymbol {
+    // https://www.autohotkey.com/docs/Objects.htm#Custom_Classes
+    // https://www.autohotkey.com/docs/Objects.htm#Custom_NewDelete
+
     public readonly insertText: string;
     public readonly uri: vscode.Uri;
-    public readonly upName: TUpName;
+    public readonly upName: string;
     declare public readonly kind: vscode.SymbolKind.Class;
-    declare public readonly children: vscode.DocumentSymbol[];
+    declare public readonly children: TClassChildren[];
 
     public constructor(
         {
+            //  md: vscode.MarkdownString
             name,
             detail,
             range,
@@ -35,7 +88,15 @@ export class CAhkClass extends vscode.DocumentSymbol {
             insertText,
             uri,
             children,
-        }: TCAhkClassParam,
+        }: {
+            name: string;
+            detail: string;
+            range: vscode.Range;
+            selectionRange: vscode.Range;
+            insertText: string;
+            uri: vscode.Uri;
+            children: TClassChildren[];
+        },
     ) {
         super(name, detail, vscode.SymbolKind.Class, range, selectionRange);
         this.insertText = insertText;
@@ -43,38 +104,32 @@ export class CAhkClass extends vscode.DocumentSymbol {
         this.uri = uri;
         this.children = children;
     }
+    // m1 := new GMem(0, 20) ; OK!
+    // m2 := {base: GMem}.__New(0, 30) ; no support
+
+    // class GMem
+    // {
+    //     __New(aFlags, aSize)
+    //     {
+    //         this.ptr := DllCall("GlobalAlloc", "UInt", aFlags, "Ptr", aSize, "Ptr")
+    //         if !this.ptr
+    //             return ""
+    //         MsgBox % "New GMem of " aSize " bytes at address " this.ptr "."
+    //         return this  ; This line can be omitted when using the 'new' operator.
+    //     }
+
+    //     __Delete()
+    //     {
+    //         MsgBox % "Delete GMem at address " this.ptr "."
+    //         DllCall("GlobalFree", "Ptr", this.ptr)
+    //     }
+    // }
+
+    // ...Method syntax:
+
+    // class ClassName {
+    //     __Get([Key, Key2, ...])
+    //     __Set([Key, Key2, ...], Value)
+    //     __Call(Name [, Params...])
+    // }
 }
-
-// https://www.autohotkey.com/docs/Objects.htm#Custom_NewDelete
-
-// m1 := new GMem(0, 20) ; OK!
-// m2 := {base: GMem}.__New(0, 30) ; no support
-
-// class GMem
-// {
-//     __New(aFlags, aSize)
-//     {
-//         this.ptr := DllCall("GlobalAlloc", "UInt", aFlags, "Ptr", aSize, "Ptr")
-//         if !this.ptr
-//             return ""
-//         MsgBox % "New GMem of " aSize " bytes at address " this.ptr "."
-//         return this  ; This line can be omitted when using the 'new' operator.
-//     }
-
-//     __Delete()
-//     {
-//         MsgBox % "Delete GMem at address " this.ptr "."
-//         DllCall("GlobalFree", "Ptr", this.ptr)
-//     }
-// }
-
-// ...Method syntax:
-
-// class ClassName {
-//     __Get([Key, Key2, ...])
-//     __Set([Key, Key2, ...], Value)
-//     __Call(Name [, Params...])
-// }
-
-// static init := ("".base.base := StringLib)
-// static __Set := Func("StringLib_Set")

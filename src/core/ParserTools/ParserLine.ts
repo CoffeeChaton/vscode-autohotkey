@@ -1,18 +1,20 @@
 import * as vscode from 'vscode';
-import { CAhkComment } from '../../AhkSymbol/CAhkComment';
-import { CAhkHotKeys } from '../../AhkSymbol/CAhkHotKeys';
-import { CAhkHotString } from '../../AhkSymbol/CAhkHotString';
-import { CAhkInclude } from '../../AhkSymbol/CAhkInclude';
-import { CAhkLabel } from '../../AhkSymbol/CAhkLabel';
-import { EDetail } from '../../globalEnum';
+import {
+    CAhkComment,
+    CAhkHotKeys,
+    CAhkHotString,
+    CAhkInclude,
+    CAhkLabel,
+    TLineClass,
+} from '../../AhkSymbol/CAhkLine';
 import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 import { TFuncInput } from '../getChildren';
+import { getComment } from './getComment';
 
-type TClassName = typeof CAhkInclude | typeof CAhkLabel | typeof CAhkHotString | typeof CAhkHotKeys;
-type TParserLine = CAhkInclude | CAhkLabel | CAhkHotString | CAhkHotKeys;
+type TParserLine = TLineClass;
 
 type TLineRuler = Readonly<{
-    ClassName: TClassName;
+    ClassName: typeof CAhkInclude | typeof CAhkLabel | typeof CAhkHotString | typeof CAhkHotKeys;
     getName(strTrim: string): string | null;
     test(strTrim: string): boolean;
 }>;
@@ -82,35 +84,6 @@ const LineRuler: readonly TLineRuler[] = [
         },
     },
 ];
-
-function getComment(FuncInput: TFuncInput): null | CAhkComment {
-    const {
-        line,
-        lStr,
-        DocStrMap,
-        document,
-    } = FuncInput;
-
-    const { textRaw, detail, lineComment } = DocStrMap[line];
-    if (detail.indexOf(EDetail.hasDoubleSemicolon) === -1) return null;
-
-    // ;;
-    if (!(/^\s*;;/u).test(textRaw)) return null;
-
-    const doubleSemicolon = textRaw.indexOf(';;', lStr.length);
-
-    const name: string = lineComment.replace(/^;;/u, '');
-    const range: vscode.Range = new vscode.Range(
-        new vscode.Position(line, doubleSemicolon + 2),
-        new vscode.Position(line, textRaw.length),
-    );
-    return new CAhkComment({
-        name,
-        range,
-        selectionRange: range,
-        uri: document.uri,
-    });
-}
 
 export function ParserLine(FuncInput: TFuncInput): null | TParserLine | CAhkComment {
     const {

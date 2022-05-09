@@ -1,4 +1,4 @@
-import { CAhkInclude } from '../AhkSymbol/CAhkInclude';
+import { CAhkInclude } from '../AhkSymbol/CAhkLine';
 import { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';

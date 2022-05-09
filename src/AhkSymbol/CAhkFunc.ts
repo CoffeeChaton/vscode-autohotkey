@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 import { DeepReadonly } from '../globalEnum';
+import { TLineClass } from './CAhkLine';
+import { CAhkSwitch } from './CAhkSwitch';
 
 // ---------------------------------------------------------------------------
 // WTF
@@ -62,7 +64,7 @@ type TCAhkFuncParam = {
     paramMap: TParamMapOut;
     valMap: TValMapOut;
     textMap: TTextMapOut;
-    children: vscode.DocumentSymbol[];
+    children: (TLineClass | CAhkSwitch)[];
     nameRange: vscode.Range;
 };
 
@@ -81,7 +83,7 @@ export class CAhkFunc extends vscode.DocumentSymbol {
     public readonly defStack: string[];
     //
     declare public readonly kind: vscode.SymbolKind.Function | vscode.SymbolKind.Method;
-    declare public readonly children: vscode.DocumentSymbol[];
+    declare public readonly children: (TLineClass | CAhkSwitch)[];
 
     public constructor(
         {

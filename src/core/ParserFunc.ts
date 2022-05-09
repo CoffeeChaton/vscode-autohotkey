@@ -6,6 +6,8 @@ import {
     TTextMapIn,
     TValMapIn,
 } from '../AhkSymbol/CAhkFunc';
+import { TLineClass } from '../AhkSymbol/CAhkLine';
+import { CAhkSwitch } from '../AhkSymbol/CAhkSwitch';
 import { TTokenStream } from '../globalEnum';
 import { getFnVarDef } from '../tools/DeepAnalysis/FnVar/getFnVarDef';
 import { getParamDef } from '../tools/DeepAnalysis/getParamDef';
@@ -27,7 +29,7 @@ type TGetFuncCore = {
     name: string;
     selectionRange: vscode.Range;
     range: vscode.Range;
-    children: vscode.DocumentSymbol[];
+    children: (TLineClass | CAhkSwitch)[];
 };
 
 export function getFuncCore(

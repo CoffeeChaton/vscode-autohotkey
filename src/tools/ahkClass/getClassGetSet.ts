@@ -1,4 +1,4 @@
-import { CAhkClassGetSet } from '../../AhkSymbol/CAhkClassGetSet';
+import { CAhkClassGetSet } from '../../AhkSymbol/CAhkClass';
 import { TFuncInput } from '../../core/getChildren';
 import { getRange } from '../range/getRange';
 import { getRangeOfLine } from '../range/getRangeOfLine';

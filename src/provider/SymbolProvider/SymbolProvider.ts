@@ -10,7 +10,7 @@ function SymBolProviderCore(document: vscode.TextDocument): vscode.DocumentSymbo
     const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
     digDAFile(DAList, document.uri);
 
-    return AhkSymbolList as vscode.DocumentSymbol[];
+    return AhkSymbolList;
 }
 
 export const SymBolProvider: vscode.DocumentSymbolProvider = {

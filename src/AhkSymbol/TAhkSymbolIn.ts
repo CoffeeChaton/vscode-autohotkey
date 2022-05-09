@@ -1,27 +1,16 @@
-import * as vscode from 'vscode';
-import { CAhkClass } from './CAhkClass';
-import { CAhkClassGetSet } from './CAhkClassGetSet';
-import { CAhkClassInstanceVar } from './CAhkClassInstanceVar';
-import { CAhkComment } from './CAhkComment';
+import { CAhkClass, CAhkClassGetSet, CAhkClassInstanceVar } from './CAhkClass';
 import { CAhkFunc } from './CAhkFunc';
-import { CAhkHotKeys } from './CAhkHotKeys';
-import { CAhkHotString } from './CAhkHotString';
-import { CAhkInclude } from './CAhkInclude';
-import { CAhkLabel } from './CAhkLabel';
+import { TLineClass } from './CAhkLine';
 import { CAhkCase, CAhkDefault, CAhkSwitch } from './CAhkSwitch';
 
 export type TAhkSymbol =
-    | vscode.DocumentSymbol // TODO: remove this
+    | CAhkCase
     | CAhkClass
     | CAhkClassGetSet
     | CAhkClassInstanceVar
-    | CAhkComment
+    | CAhkDefault
     | CAhkFunc
-    | CAhkHotKeys
-    | CAhkHotString
-    | CAhkInclude
-    | CAhkLabel
     | CAhkSwitch
-    | CAhkCase
-    | CAhkDefault;
+    | TLineClass;
+
 export type TAhkSymbolList = TAhkSymbol[];

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TAhkSymbol, TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
+import { TAhkSymbol } from '../AhkSymbol/TAhkSymbolIn';
 import { TTokenStream } from '../globalEnum';
 import { TGValMap } from './ParserTools/ahkGlobalDef';
 
@@ -27,7 +27,22 @@ type ChildType = Readonly<{
     GValMap: TGValMap;
 }>;
 
-export function getChildren(child: ChildType): TAhkSymbolList {
+// export type TAhkSymbol =
+//     | TBaseCh // TODO: remove this
+//     | CAhkClass
+//     | CAhkClassGetSet
+//     | CAhkClassInstanceVar
+//     | CAhkComment
+//     | CAhkFunc
+//     | CAhkHotKeys
+//     | CAhkHotString
+//     | CAhkInclude
+//     | CAhkLabel
+//     | CAhkSwitch
+//     | CAhkCase
+//     | CAhkDefault;
+
+export function getChildren(child: ChildType): TAhkSymbol[] {
     const {
         DocStrMap,
         RangeStartLine,

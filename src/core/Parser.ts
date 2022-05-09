@@ -1,13 +1,13 @@
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
-import { CAhkClass } from '../AhkSymbol/CAhkClass';
+import { CAhkClass, TClassChildren } from '../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../AhkSymbol/CAhkFunc';
+import { TLineClass } from '../AhkSymbol/CAhkLine';
 import {
     CAhkCase,
     CAhkDefault,
     CAhkSwitch,
 } from '../AhkSymbol/CAhkSwitch';
-import { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
 import { getCaseName, getSwitchName } from '../provider/SymbolProvider/getSwitchCaseName';
 import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
@@ -51,7 +51,7 @@ export const ParserBlock = {
             fnList: [ParserBlock.getSwitchBlock, ParserLine],
             document,
             GValMap,
-        });
+        }) as (TLineClass | CAhkSwitch)[];
 
         return new CAhkCase({
             name,
@@ -87,7 +87,7 @@ export const ParserBlock = {
             fnList: [ParserBlock.getSwitchBlock, ParserLine],
             document,
             GValMap,
-        });
+        }) as (TLineClass | CAhkSwitch)[];
 
         return new CAhkDefault({
             name: 'Default :',
@@ -122,7 +122,7 @@ export const ParserBlock = {
             fnList: [ParserBlock.getCaseBlock, ParserBlock.getDefaultBlock],
             document,
             GValMap,
-        }) as CAhkCase[];
+        }) as (CAhkCase | CAhkDefault)[];
 
         return new CAhkSwitch({
             name: `Switch ${getSwitchName(lStr)}`,
@@ -150,7 +150,7 @@ export const ParserBlock = {
         const { name, selectionRange } = isFunc;
 
         const range = getRange(DocStrMap, line, selectionRange.end.line, RangeEndLine);
-        const children: vscode.DocumentSymbol[] = getChildren({
+        const children = getChildren({
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
@@ -161,7 +161,7 @@ export const ParserBlock = {
             ],
             document,
             GValMap,
-        }) as vscode.DocumentSymbol[];
+        }) as (TLineClass | CAhkSwitch)[];
 
         return getFuncCore({
             FuncInput,
@@ -191,31 +191,26 @@ export const ParserBlock = {
         const range = getRange(DocStrMap, line, line, RangeEndLine);
         const name = ma[1];
 
-        const col = ma.index ?? lStr.replace(/^\s*Class\s+/ui, replacerSpace).indexOf(name);
-        if (col === -1) {
-            console.error('🚀 ~ getClass ~ ma', ma);
-            return null;
-        }
-
-        const children: TAhkSymbolList = getChildren({
+        const children = getChildren({
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
             classStack: [...classStack, name],
-            fnList: [ParserBlock.getClass, ParserBlock.getFunc, getClassGetSet, ParserLine, getClassInstanceVar],
+            fnList: [ParserBlock.getClass, ParserBlock.getFunc, getClassGetSet, getClassInstanceVar, ParserLine],
             document,
             GValMap,
-        });
+        }) as TClassChildren[];
 
-        const AhkClassSymbol: CAhkClass = new CAhkClass({
+        const col = ma.index ?? lStr.replace(/^\s*Class\s+/ui, replacerSpace).indexOf(name);
+
+        return new CAhkClass({
             name,
             detail: getClassDetail(lStr, col, name),
             range,
             selectionRange: new vscode.Range(line, col, line, col + name.length),
             insertText: `${name}${setClassInsertText(children)}`,
             uri: document.uri,
-            children: children as vscode.DocumentSymbol[],
+            children,
         });
-        return AhkClassSymbol;
     },
 } as const;
