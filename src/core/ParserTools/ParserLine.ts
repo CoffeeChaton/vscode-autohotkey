@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 import {
     CAhkComment,
     CAhkHotKeys,
@@ -37,7 +36,7 @@ const LineRuler: readonly TLineRuler[] = [
 
         getName(strTrim: string): string {
             const col = strTrim.indexOf(':');
-            return strTrim.substring(0, col);
+            return strTrim.substring(0, col + 1);
         },
 
         test(strTrim: string): boolean {
@@ -104,11 +103,10 @@ export function ParserLine(FuncInput: TFuncInput): null | TParserLine | CAhkComm
         const name: string | null = getName(strTrim);
         if (name === null) continue;
 
-        const range: vscode.Range = getRangeOfLine(line, lStr, textRaw.length);
         return new ClassName({
             name,
-            range,
-            selectionRange: range,
+            range: getRangeOfLine(line, lStr, textRaw.length),
+            selectionRange: getRangeOfLine(line, lStr, lStr.length),
             uri: document.uri,
         });
     }

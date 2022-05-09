@@ -95,14 +95,10 @@ function DefProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): null | vscode.Location[] {
-    //  Definition | DefinitionLink[]
-
     // eslint-disable-next-line security/detect-unsafe-regex
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`#])\b\w+\b/u);
     if (range === undefined) return null;
     const wordUp: string = document.getText(range).toUpperCase();
-    // const fileLink: vscode.Location | null = ahkInclude(document, position);
-    // if (fileLink !== null) return fileLink;
 
     const listAllUsing = false;
 

@@ -1,9 +1,9 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,20] }] */
 import * as vscode from 'vscode';
-import { CAhkCase, CAhkDefault, CAhkSwitch } from '../../../AhkSymbol/CAhkSwitch';
-import { TAhkSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
-import { EDiagCode } from '../../../diag';
-import { setDiagnostic } from './setDiagnostic';
+import { CAhkCase, CAhkDefault, CAhkSwitch } from '../../../../AhkSymbol/CAhkSwitch';
+import { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
+import { EDiagCode } from '../../../../diag';
+import { setDiagnostic } from '../setDiagnostic';
 
 function getDefaultNumber(swChildren: (CAhkCase | CAhkDefault)[]): number {
     let iDefault = 0;
