@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import { EDiagLine, TLineDiag } from './lineErrTools';
 
+// FIXME: use tree Error
 export function getDirectivesErr(lStr: string, lStrTrim: string, _fistWordUp: string): TLineDiag {
     // err of #Directives
 

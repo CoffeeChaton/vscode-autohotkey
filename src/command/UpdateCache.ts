@@ -34,5 +34,3 @@ export async function fnRefreshResource(): Promise<void> {
     OutputChannel.appendLine(`Refresh Resource ${t2 - t1} ms`);
     OutputChannel.show();
 }
-// TODO detail: string -> Enum
-// kind: vscode.SymbolKind; -> myEnum

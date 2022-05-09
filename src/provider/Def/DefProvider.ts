@@ -60,9 +60,6 @@ export function userDefFunc(
 ): null | vscode.Location[] {
     const timeStart: number = Date.now();
 
-    // TODO pos at like func pos... exp:
-    // c := c();
-    // No   Yes
     const funcSymbol: CAhkFunc | null = getFuncWithName(wordUp);
     if (funcSymbol === null || isPosAtMethodName(document.uri.fsPath, position)) return null;
 
@@ -74,6 +71,8 @@ export function userDefFunc(
     } as const;
 
     if (document.getWordRangeAtPosition(position, ahkFunc.reg) === undefined) return null;
+    // c := c();
+    // No   Yes check pos at like func()
 
     if (listAllUsing) return getReference(ahkFunc.refFn, timeStart, wordUp);
 

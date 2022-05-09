@@ -51,4 +51,4 @@ export function ahkSend(document: vscode.TextDocument, position: vscode.Position
     return [];
 }
 
-// TODO send https://www.autohotkey.com/docs/commands/Send.htm#keynames
+// TODO send Key names https://www.autohotkey.com/docs/commands/Send.htm#keynames
