@@ -21,7 +21,7 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
 
         const filterLineList: number[] = getDAList(AhkSymbolList)
             .filter((DA: CAhkFunc) => DA.kind === vscode.SymbolKind.Method)
-            .map((DA: CAhkFunc) => DA.selectionRange.start.line);
+            .map((DA: CAhkFunc) => DA.nameRange.start.line);
 
         for (const { textRaw, line, lStr } of DocStrMap) {
             if (lStr.trim().length === 0 || filterLineList.indexOf(line) !== -1) continue;
@@ -49,7 +49,7 @@ function isPosAtMethodName(fsPath: string, position: vscode.Position): boolean {
     const DA: CAhkFunc | undefined = getDAWithPos(fsPath, position);
     return DA !== undefined
         && DA.kind === vscode.SymbolKind.Method
-        && DA.selectionRange.contains(position);
+        && DA.nameRange.contains(position);
 }
 
 export function userDefFunc(
@@ -60,10 +60,11 @@ export function userDefFunc(
 ): null | vscode.Location[] {
     const timeStart: number = Date.now();
 
+    // TODO pos at like func pos... exp:
+    // c := c();
+    // No   Yes
     const funcSymbol: CAhkFunc | null = getFuncWithName(wordUp);
     if (funcSymbol === null || isPosAtMethodName(document.uri.fsPath, position)) return null;
-
-    const { fsPath } = funcSymbol.uri;
 
     const ahkFunc = {
         // funcName( | "funcName"
@@ -72,18 +73,18 @@ export function userDefFunc(
         refFn: (lineStr: string): IterableIterator<RegExpMatchArray> => lineStr.matchAll(ahkFunc.reg),
     } as const;
 
-    if (listAllUsing) {
-        return getReference(ahkFunc.refFn, timeStart, wordUp);
-    }
+    if (document.getWordRangeAtPosition(position, ahkFunc.reg) === undefined) return null;
+
+    if (listAllUsing) return getReference(ahkFunc.refFn, timeStart, wordUp);
 
     if (
-        (fsPath === document.uri.fsPath
-            && funcSymbol.selectionRange.start.line === position.line)
+        (funcSymbol.uri.fsPath === document.uri.fsPath
+            && funcSymbol.nameRange.contains(position))
     ) {
         // OK..i know who to go to References...
         // keep uri as old uri && return old pos/range
         // don't new vscode.Uri.file()
-        return [new vscode.Location(document.uri, funcSymbol.selectionRange)]; // let auto use getReference
+        return [new vscode.Location(document.uri, funcSymbol.nameRange)]; // let auto use getReference
     }
 
     console.log(`🚀 goto def of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 0~1ms
