@@ -4,7 +4,7 @@ import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 import { TFsPath, TTokenStream } from '../../globalEnum';
 import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
 import { getChildren } from '../getChildren';
-import { ParserBlock } from '../Parser';
+import { getClass, getFunc, ParserBlock } from '../Parser';
 import { ahkGlobalMain, TGValMap, TGValMapReadOnly } from '../ParserTools/ahkGlobalDef';
 import { ParserLine } from '../ParserTools/ParserLine';
 import { Pretreatment } from '../Pretreatment';
@@ -86,8 +86,8 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
         RangeEndLine: DocStrMap.length,
         classStack: [],
         fnList: [
-            ParserBlock.getClass,
-            ParserBlock.getFunc,
+            getClass,
+            getFunc,
             ParserBlock.getSwitchBlock,
             ParserLine,
         ],

@@ -27,21 +27,6 @@ type ChildType = Readonly<{
     GValMap: TGValMap;
 }>;
 
-// export type TAhkSymbol =
-//     | TBaseCh // TODO: remove this
-//     | CAhkClass
-//     | CAhkClassGetSet
-//     | CAhkClassInstanceVar
-//     | CAhkComment
-//     | CAhkFunc
-//     | CAhkHotKeys
-//     | CAhkHotString
-//     | CAhkInclude
-//     | CAhkLabel
-//     | CAhkSwitch
-//     | CAhkCase
-//     | CAhkDefault;
-
 export function getChildren(child: ChildType): TAhkSymbol[] {
     const {
         DocStrMap,

@@ -132,85 +132,85 @@ export const ParserBlock = {
             ch,
         });
     },
-
-    getFunc(FuncInput: TFuncInput): null | CAhkFunc {
-        const {
-            DocStrMap,
-            line,
-            RangeEndLine,
-            classStack,
-            lStr,
-            document,
-            GValMap,
-        } = FuncInput;
-
-        if (lStr.length < 1 || lStr.indexOf('(') === -1 || lStr.indexOf('}') > -1) return null;
-        const isFunc: TFuncDefData | null = getFuncDef(DocStrMap, line);
-        if (isFunc === null) return null;
-        const { name, selectionRange } = isFunc;
-
-        const range = getRange(DocStrMap, line, selectionRange.end.line, RangeEndLine);
-        const children = getChildren({
-            DocStrMap,
-            RangeStartLine: range.start.line + 1,
-            RangeEndLine: range.end.line,
-            classStack,
-            fnList: [
-                ParserBlock.getSwitchBlock,
-                ParserLine,
-            ],
-            document,
-            GValMap,
-        }) as (TLineClass | CAhkSwitch)[];
-
-        return getFuncCore({
-            FuncInput,
-            name,
-            selectionRange,
-            range,
-            children,
-        });
-    },
-
-    getClass(FuncInput: TFuncInput): null | CAhkClass {
-        if (FuncInput.fistWordUp !== 'CLASS') return null;
-        // class ClassName extends BaseClassName
-        const ma: RegExpMatchArray | null = FuncInput.lStr.match(/(?<=^\s*\bClass\b\s+)(\w+)/ui);
-        if (ma === null) return null;
-
-        const {
-            DocStrMap,
-            line,
-            RangeEndLine,
-            lStr,
-            document,
-            GValMap,
-            classStack,
-        } = FuncInput;
-
-        const range = getRange(DocStrMap, line, line, RangeEndLine);
-        const name = ma[1];
-
-        const children = getChildren({
-            DocStrMap,
-            RangeStartLine: range.start.line + 1,
-            RangeEndLine: range.end.line,
-            classStack: [...classStack, name],
-            fnList: [ParserBlock.getClass, ParserBlock.getFunc, getClassGetSet, getClassInstanceVar, ParserLine],
-            document,
-            GValMap,
-        }) as TClassChildren[];
-
-        const col = ma.index ?? lStr.replace(/^\s*Class\s+/ui, replacerSpace).indexOf(name);
-
-        return new CAhkClass({
-            name,
-            detail: getClassDetail(lStr, col, name),
-            range,
-            selectionRange: new vscode.Range(line, col, line, col + name.length),
-            insertText: `${name}${setClassInsertText(children)}`,
-            uri: document.uri,
-            children,
-        });
-    },
 } as const;
+
+export function getFunc(FuncInput: TFuncInput): null | CAhkFunc {
+    const {
+        DocStrMap,
+        line,
+        RangeEndLine,
+        classStack,
+        lStr,
+        document,
+        GValMap,
+    } = FuncInput;
+
+    if (lStr.length < 1 || lStr.indexOf('(') === -1 || lStr.indexOf('}') > -1) return null;
+    const isFunc: TFuncDefData | null = getFuncDef(DocStrMap, line);
+    if (isFunc === null) return null;
+    const { name, selectionRange } = isFunc;
+
+    const range = getRange(DocStrMap, line, selectionRange.end.line, RangeEndLine);
+    const children = getChildren({
+        DocStrMap,
+        RangeStartLine: range.start.line + 1,
+        RangeEndLine: range.end.line,
+        classStack,
+        fnList: [
+            ParserBlock.getSwitchBlock,
+            ParserLine,
+        ],
+        document,
+        GValMap,
+    }) as (TLineClass | CAhkSwitch)[];
+
+    return getFuncCore({
+        FuncInput,
+        name,
+        selectionRange,
+        range,
+        children,
+    });
+}
+
+export function getClass(FuncInput: TFuncInput): null | CAhkClass {
+    if (FuncInput.fistWordUp !== 'CLASS') return null;
+    // class ClassName extends BaseClassName
+    const ma: RegExpMatchArray | null = FuncInput.lStr.match(/(?<=^\s*\bClass\b\s+)(\w+)/ui);
+    if (ma === null) return null;
+
+    const {
+        DocStrMap,
+        line,
+        RangeEndLine,
+        lStr,
+        document,
+        GValMap,
+        classStack,
+    } = FuncInput;
+
+    const range = getRange(DocStrMap, line, line, RangeEndLine);
+    const name = ma[1];
+
+    const children = getChildren({
+        DocStrMap,
+        RangeStartLine: range.start.line + 1,
+        RangeEndLine: range.end.line,
+        classStack: [...classStack, name],
+        fnList: [getClass, getFunc, getClassGetSet, getClassInstanceVar, ParserLine],
+        document,
+        GValMap,
+    }) as TClassChildren[];
+
+    const col = ma.index ?? lStr.replace(/^\s*Class\s+/ui, replacerSpace).indexOf(name);
+
+    return new CAhkClass({
+        name,
+        detail: getClassDetail(lStr, col, name),
+        range,
+        selectionRange: new vscode.Range(line, col, line, col + name.length),
+        insertText: `${name}${setClassInsertText(children)}`,
+        uri: document.uri,
+        children,
+    });
+}
