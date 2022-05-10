@@ -6,6 +6,7 @@ import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { getGlobalMarkdown } from '../../tools/MD/getGlobalMarkdown';
 import { DeepAnalysisHover } from './DeepAnalysisHover';
+import { HoverDirectives } from './HoverDirectives';
 
 function HoverOfFunc(wordUp: string, textRaw: string): null | vscode.Hover {
     // eslint-disable-next-line security/detect-non-literal-regexp
@@ -25,6 +26,10 @@ function HoverProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Hover | null {
+    // ex #Warn
+    const DirectivesMd: vscode.MarkdownString | undefined = HoverDirectives(document.uri.fsPath, position);
+    if (DirectivesMd !== undefined) return new vscode.Hover(DirectivesMd);
+
     // eslint-disable-next-line security/detect-unsafe-regex
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
     if (range === undefined) return null;

@@ -3,17 +3,15 @@ import * as vscode from 'vscode';
 import { CAhkDirectives } from '../../../../AhkSymbol/CAhkLine';
 import { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../../diag';
-import { DirectivesList } from '../../../../Enum/EDirectives';
+import { DirectivesUpKeyList, THashTagUPKey } from '../../../../tools/Built-in/DirectivesList';
 import { setDiagnostic } from '../setDiagnostic';
 
 export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
     // err of #Directives
     if (!(ch instanceof CAhkDirectives)) return [];
 
-    type TElement = typeof DirectivesList[number];
-
     type TRulerErr = {
-        str: TElement;
+        str: THashTagUPKey;
         code: EDiagCode;
         severity: vscode.DiagnosticSeverity;
         tags: vscode.DiagnosticTag[];
@@ -77,7 +75,57 @@ export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
     }
 
     // check is unknown Directives or not
-    return DirectivesList.indexOf(hashtag as TElement) > -1
+    return DirectivesUpKeyList.indexOf(hashtag as THashTagUPKey) > -1
         ? []
         : [setDiagnostic(EDiagCode.code503, ch.selectionRange, vscode.DiagnosticSeverity.Warning, [])];
 }
+
+/*
+#DerefChar
+#AllowSameLineComments
+#ClipboardTimeout Milliseconds
+#CommentFlag NewString
+#EscapeChar NewChar
+#DerefChar #  ; Change it from its normal default, which is %.
+#Delimiter /  ; Change it from its normal default, which is comma.
+#ErrorStdOut Encoding
+#EscapeChar NewChar
+#HotkeyInterval Milliseconds
+#HotkeyModifierTimeout Milliseconds
+#Hotstring NoMouse
+#Hotstring EndChars NewChars
+#Hotstring NewOptions
+#If Expression
+#IfTimeout Timeout
+#IfWinActive WinTitle, WinText
+#IfWinExist WinTitle, WinText
+#IfWinNotActive WinTitle, WinText
+#IfWinNotExist WinTitle, WinText
+#If , Expression
+
+#Include FileOrDirName
+#Include <LibName>
+#IncludeAgain FileOrDirName
+#InputLevel Level
+#InstallKeybdHook
+#InstallMouseHook
+#KeyHistory MaxEvents
+#LTrim Off
+#MaxHotkeysPerInterval Value
+#MaxMem Megabytes
+#MaxThreads Value
+#MaxThreadsBuffer OnOff
+#MaxThreadsPerHotkey Value
+#MenuMaskKey KeyName
+#NoEnv
+#NoTrayIcon
+#Persistent
+#Requires Requirement
+#SingleInstance ForceIgnorePromptOff
+#UseHook OnOff
+#Warn WarningType, WarningMode
+#WinActivateForce
+
+Unknown #Directives
+#WT ; Unknown #Directives
+*/

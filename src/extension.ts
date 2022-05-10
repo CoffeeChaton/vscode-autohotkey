@@ -38,7 +38,7 @@ export function activate(context: ExtensionContext): void {
         // languages-------------------
         languages.registerCodeActionsProvider(selector, CodeActionProvider),
         languages.registerCodeLensProvider(selector, AhkCodeLens),
-        languages.registerCompletionItemProvider(selector, CompletionItemProvider, 'A_', '', '.', '{'),
+        languages.registerCompletionItemProvider(selector, CompletionItemProvider, 'A_', '', '.', '{', '#'),
         languages.registerDefinitionProvider(selector, DefProvider),
         languages.registerDocumentFormattingEditProvider(selector, FormatProvider),
         languages.registerDocumentRangeFormattingEditProvider(selector, RangeFormatProvider),
