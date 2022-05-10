@@ -208,7 +208,7 @@ const DirectivesList: TDirectivesObj = {
     },
     IF: {
         keyRawName: '#If',
-        insert: '#If, ${1:[Expression]}',
+        insert: '#If, $0',
         doc: 'Creates context-sensitive [hotkeys](https://www.autohotkey.com/docs/Hotkeys.htm) and [hotstrings](https://www.autohotkey.com/docs/Hotstrings.htm). Such hotkeys perform a different action (or none at all) depending on the result of an expression.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/_If.htm',
@@ -297,7 +297,7 @@ const DirectivesList: TDirectivesObj = {
     },
     INPUTLEVEL: {
         keyRawName: '#InputLevel',
-        insert: '#InputLevel, ${1:[Level]}',
+        insert: '#InputLevel, ${1:0}',
         doc: 'Controls which artificial keyboard and mouse events are ignored by hotkeys and hotstrings. [Level] - An integer between 0 and 100. If omitted, it defaults to 0.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/_InputLevel.htm',
@@ -351,7 +351,7 @@ const DirectivesList: TDirectivesObj = {
     },
     LTRIM: {
         keyRawName: '#LTrim',
-        insert: '#LTrim, ${1:On|Off}',
+        insert: '#LTrim, ${1|On,Off|}',
         doc: 'LTrim: Omits spaces and tabs at the beginning of each line. This is primarily used to allow the continuation section to be indented. Also, this option may be turned on for multiple continuation sections by specifying #LTrim on a line by itself. #LTrim is positional: it affects all continuation sections physically beneath it. The setting may be turned off via #LTrim Off.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/Scripts.htm#LTrim',
@@ -403,7 +403,7 @@ const DirectivesList: TDirectivesObj = {
     },
     MAXTHREADSBUFFER: {
         keyRawName: '#MaxThreadsBuffer',
-        insert: '#MaxThreadsBuffer, ${1:On|Off}',
+        insert: '#MaxThreadsBuffer, ${1|On,Off|}',
         doc: 'Causes some or all hotkeys to buffer rather than ignore keypresses when their #MaxThreadsPerHotkey limit has been reached.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/_MaxThreadsBuffer.htm',
@@ -491,7 +491,7 @@ const DirectivesList: TDirectivesObj = {
     },
     SINGLEINSTANCE: {
         keyRawName: '#SingleInstance',
-        insert: '#SingleInstance, ${1:[force|ignore|prompt|off]}',
+        insert: '#SingleInstance, ${1|force,ignore,prompt,off|}',
         doc: 'Determines whether a script is allowed to run again when it is already running.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/_SingleInstance.htm',
@@ -507,7 +507,7 @@ const DirectivesList: TDirectivesObj = {
     },
     USEHOOK: {
         keyRawName: '#UseHook',
-        insert: '#UseHook, ${1:[On|Off]}',
+        insert: '#UseHook, ${1|On,Off|}',
         doc: 'Forces the use of the hook to implement all or some keyboard [hotkeys](https://www.autohotkey.com/docs/Hotkeys.htm).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/_UseHook.htm',
@@ -525,7 +525,7 @@ const DirectivesList: TDirectivesObj = {
     WARN: {
         keyRawName: '#Warn',
         insert:
-            '#Warn, ${1 |All,Unreachable,ClassOverwrite,LocalSameAsGlobal,UseEnv,UseUnsetLocal,UseUnsetGlobal|}, ${2:|MsgBox,StdOut,OutputDebug,Off|}',
+            '#Warn,$0 ${1|All,Unreachable,ClassOverwrite,LocalSameAsGlobal,UseEnv,UseUnsetLocal,UseUnsetGlobal|}, ${2|MsgBox,StdOut,OutputDebug,Off|}',
         doc: 'Enables or disables warnings for specific conditions which may indicate an error, such as a typo or missing "global" declaration.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/_Warn.htm',
@@ -586,3 +586,39 @@ export const DirectivesMDMap: ReadonlyMap<string, vscode.MarkdownString> = new M
     [...Object.entries(DirectivesList)]
         .map(([ukName, BiFunc]: [string, TElement]) => [ukName, Directives2Md(BiFunc)]),
 );
+
+const SnippetDirectives: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
+    // initialize
+
+    const result: vscode.CompletionItem[] = [];
+    for (const [ukName, v] of Object.entries(DirectivesList)) {
+        const { keyRawName, insert, recommended } = v;
+        if (!recommended) continue;
+
+        const item: vscode.CompletionItem = new vscode.CompletionItem({
+            label: `${keyRawName}`, // Left
+            description: '#Directives', // Right
+        });
+        item.kind = vscode.CompletionItemKind.Event;
+        item.insertText = new vscode.SnippetString(insert.replace('#', ''));
+
+        item.detail = '#Directives (neko-help)';
+        item.documentation = DirectivesMDMap.get(ukName) ?? Directives2Md(v);
+
+        result.push(item);
+    }
+
+    return result;
+})();
+
+export function Completion2Directives(
+    triggerCharacter: string | undefined,
+    document: vscode.TextDocument,
+    position: vscode.Position,
+): readonly vscode.CompletionItem[] {
+    if (triggerCharacter === '#') return SnippetDirectives;
+
+    return document.lineAt(position).text.trimStart().startsWith('#')
+        ? SnippetDirectives
+        : [];
+}

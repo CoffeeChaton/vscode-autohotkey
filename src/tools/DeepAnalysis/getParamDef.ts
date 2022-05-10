@@ -14,7 +14,7 @@ function getKeyRawName(param: string): TParamData {
     const key0: string = isByRef
         ? param.replace(/^ByRef\s+/ui, '')
         : param;
-    const isVariadic: boolean = param.endsWith('*'); // https://ahkde.github.io/docs/Functions.htm#Variadic
+    const isVariadic: boolean = param.endsWith('*'); // https://www.autohotkey.com/docs/Functions.htm#Variadic
     const keyRawName: string = isVariadic
         ? key0.replace(/\*$/u, '')
         : key0;
@@ -32,8 +32,8 @@ function checkParam(keyRawName: string, funcRawName: string, line: number): void
         const errLoc = `${funcRawName}() line : ${line + 1}`;
         const message = `${errMsg} args Error ${keyRawName}${errCode}${errLoc}`;
         console.error('🚀 getParamDef ~ message', message);
-        void vscode.window.showErrorMessage(message);
-        throw new Error(message);
+        // void vscode.window.showErrorMessage(message);
+        // throw new Error(message);
     }
 }
 

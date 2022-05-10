@@ -7,7 +7,7 @@ export const snippetStartWihA: readonly vscode.CompletionItem[] = ((): vscode.Co
         const label: vscode.CompletionItemLabel = {
             label: k, // Left
             //  detail: '', // mid
-            description: v.class, // Right
+            description: v.group, // Right
         };
         const item = new vscode.CompletionItem(label);
         // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
@@ -17,7 +17,7 @@ export const snippetStartWihA: readonly vscode.CompletionItem[] = ((): vscode.Co
         item.detail = 'Built-in Variables (neko-help)'; // description
         item.documentation = new vscode.MarkdownString('', true)
             .appendCodeblock(k, 'ahk')
-            .appendMarkdown(v.class)
+            .appendMarkdown(v.group)
             .appendMarkdown('\n\n')
             .appendMarkdown(`[Read Doc](${v.uri})`);
         tempList.push(item);

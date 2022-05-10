@@ -158,30 +158,9 @@
         "description": "Performs a series of commands repeatedly until the specified expression evaluates to false."
     },
 
-    "Clipboard": {
-        "prefix": "Clipboard",
-        "body": "Clipboard"
-    },
-    "ClipboardAll": {
-        "prefix": "ClipboardAll",
-        "body": "ClipboardAll"
-    },
-
-    "ErrorLevel": {
-        "prefix": "ErrorLevel",
-        "body": "ErrorLevel"
-    },
     "ProgramFiles": {
         "prefix": "ProgramFiles",
         "body": "ProgramFiles"
-    },
-    "True": {
-        "prefix": "True",
-        "body": "True"
-    },
-    "False": {
-        "prefix": "False",
-        "body": "False"
     },
     "Shift": {
         "prefix": "Shift",

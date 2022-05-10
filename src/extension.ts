@@ -14,7 +14,7 @@ import { configChangEvent, statusBarItem } from './configUI';
 import { BaseScanMemo } from './core/BaseScanMemo/memo';
 import { Detecter, diagColl } from './core/Detecter';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
-import { AhkCodeLens } from './provider/CodeLens/CodeLensProvider';
+import { CodeLensProvider } from './provider/CodeLens/CodeLensProvider';
 import { showUnknownAnalyze } from './provider/CodeLens/showUnknownAnalyze';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { DefProvider } from './provider/Def/DefProvider';
@@ -37,7 +37,7 @@ export function activate(context: ExtensionContext): void {
     context.subscriptions.push(
         // languages-------------------
         languages.registerCodeActionsProvider(selector, CodeActionProvider),
-        languages.registerCodeLensProvider(selector, AhkCodeLens),
+        languages.registerCodeLensProvider(selector, CodeLensProvider),
         languages.registerCompletionItemProvider(selector, CompletionItemProvider, 'A_', '', '.', '{', '#'),
         languages.registerDefinitionProvider(selector, DefProvider),
         languages.registerDocumentFormattingEditProvider(selector, FormatProvider),

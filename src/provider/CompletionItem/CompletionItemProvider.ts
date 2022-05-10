@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { getSnippetBlockFilesList } from '../../configUI';
+import { Completion2Directives } from '../../tools/Built-in/DirectivesList';
 import { ahkSend } from './ahkSend';
 import { BuiltInFunc2Completion } from './autoBuiltInFunc2Completion';
 import { wrapClass } from './classThis/wrapClass';
@@ -13,10 +14,12 @@ import { getStartWithStr } from './util';
 function CompletionItemCore(
     document: vscode.TextDocument,
     position: vscode.Position,
+    context: vscode.CompletionContext,
 ): vscode.CompletionItem[] {
     const completions: vscode.CompletionItem[] = [
         ...wrapClass(document, position), // '.'
         ...ahkSend(document, position), // '{'
+        ...Completion2Directives(context.triggerCharacter, document, position),
     ];
 
     if (isNormalPos(document, position)) {
@@ -40,9 +43,9 @@ export const CompletionItemProvider: vscode.CompletionItemProvider = {
         document: vscode.TextDocument,
         position: vscode.Position,
         _token: vscode.CancellationToken,
-        _context: vscode.CompletionContext,
+        context: vscode.CompletionContext,
     ): vscode.ProviderResult<vscode.CompletionItem[]> {
-        return CompletionItemCore(document, position);
+        return CompletionItemCore(document, position, context);
     },
 };
 

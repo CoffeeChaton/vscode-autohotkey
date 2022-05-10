@@ -4,7 +4,10 @@ import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../../core/Detecter';
 import { DirectivesMDMap } from '../../tools/Built-in/DirectivesList';
 
-function findDirectivesWithPos(AhkSymbolList: TAhkSymbolList, position: vscode.Position): undefined | CAhkDirectives {
+export function findDirectivesWithPos(
+    AhkSymbolList: TAhkSymbolList,
+    position: vscode.Position,
+): undefined | CAhkDirectives {
     for (const ah of AhkSymbolList) {
         if (ah.range.contains(position)) {
             return ah instanceof CAhkDirectives
