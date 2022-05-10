@@ -5,7 +5,7 @@ export function getDeepKeywords(textFix: string, oneCommandCode: number): number
     const occ = Math.max(oneCommandCode, 0);
     const textFixTwo = textFix.replace(/^\}\s*/u, '');
     const commandRegexps: DeepReadonly<RegExp[]> = [
-        /^if(?:msgbox)?\b/iu,
+        /^if(?:Msgbox)?\b/iu,
         /^else\b/iu,
         /^loop\b/iu,
         /^for\b/iu,
@@ -13,7 +13,6 @@ export function getDeepKeywords(textFix: string, oneCommandCode: number): number
         /^if(?:not)?exist\b/iu,
         /^ifWin(?:not)?(?:active|exist)\b/iu,
         /^if(?:not)?inString\b/iu,
-        /^ifmsgbox\b/iu,
         /^try\b/iu,
         /^catch\b/iu,
         /^switch\b/iu,

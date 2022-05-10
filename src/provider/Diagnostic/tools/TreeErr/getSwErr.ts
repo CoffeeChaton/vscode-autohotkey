@@ -43,21 +43,23 @@ function setErrCase(sw: CAhkSwitch): null | vscode.Diagnostic {
 }
 
 function setErrSwNameNotFind(sw: CAhkSwitch): null | vscode.Diagnostic {
+    // i know ahk allow switch name is not found, but I don't think it is a good idea.
     return sw.name === ''
         ? setDiagnostic(EDiagCode.code114, sw.range, vscode.DiagnosticSeverity.Information, [])
         : null;
 }
 
-export function getSwErr(sw: TAhkSymbol, displayErr: readonly boolean[]): vscode.Diagnostic[] {
+export function getSwErr(sw: TAhkSymbol): vscode.Diagnostic[] {
+    if (!(sw instanceof CAhkSwitch)) return [];
+
+    type TFnLint = (sw: CAhkSwitch) => vscode.Diagnostic | null;
+    const fnList: TFnLint[] = [setErrDefault, setErrCase, setErrSwNameNotFind];
+
     const digS: vscode.Diagnostic[] = [];
-    if (
-        sw instanceof CAhkSwitch
-        && displayErr[sw.range.start.line]
-    ) {
-        for (const fn of [setErrDefault, setErrCase, setErrSwNameNotFind]) {
-            const err: vscode.Diagnostic | null = fn(sw);
-            if (err !== null) digS.push(err);
-        }
+    for (const fn of fnList) {
+        const err: vscode.Diagnostic | null = fn(sw);
+        if (err !== null) digS.push(err);
     }
+
     return digS;
 }

@@ -10,7 +10,6 @@ export function getObjBaseErr(lStr: string, lStrTrim: string, _fistWordUp: strin
     const baseLen: number = 'x.base'.length;
     if (lStrTrim.length < baseLen) return EDiagLine.miss;
     if (lStrTrim.indexOf('.') === -1) return EDiagLine.miss;
-    // 50~60 ms -> 23ms
 
     const colL = lStr.search(/\.base\b/ui);
     if (colL === -1) { // not find

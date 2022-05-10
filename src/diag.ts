@@ -49,6 +49,7 @@ export const enum EDiagCode {
     // code501~599 warn user
     code501 = 501, // DEFAULT:
     code502 = 502, // On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.
+    code503 = 503, // Unknown #Directives
     code601 = 601, // 601 is Prototype pollution!
     code700 = 700, // 700 is Command -> func
     // code701 = 701, // 701~799 is Command error
@@ -65,10 +66,12 @@ export const enum EDiagCode {
     code815 = 815,
     code816 = 816,
     code824 = 824,
+    code825 = 825,
     // 901~999 is not recommended
     code901 = 901,
     code902 = 902,
     code903 = 903,
+    code904 = 904,
 }
 
 export type TDiags = {
@@ -118,6 +121,10 @@ export const Diags: DeepReadonly<TDiags> = {
     502: {
         msg: 'recommended that the following names not be used: On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.',
         path: 'https://www.autohotkey.com/docs/misc/Labels.htm#syntax-and-usage=',
+    },
+    503: {
+        msg: 'Unknown #Directives',
+        path: 'https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm',
     },
     601: {
         msg: 'Alert Prototype Pollution!! Suggest to use class replace',
@@ -175,16 +182,24 @@ export const Diags: DeepReadonly<TDiags> = {
         msg: 'Deprecated: This command is not recommended for use in new scripts.',
         path: 'https://www.autohotkey.com/docs/commands/Transform.htm',
     },
+    825: {
+        msg: 'Deprecated: #AllowSameLineComments was removed.',
+        path: 'https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm',
+    },
     901: {
-        msg: 'ahk-doc not recommended and ahk-neko-help Syntax highlighting is not work.',
+        msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',
         path: 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm',
     },
     902: {
-        msg: 'ahk-doc not recommended and ahk-neko-help Syntax highlighting is not work.',
+        msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',
         path: 'https://www.autohotkey.com/docs/commands/_CommentFlag.htm',
     },
     903: {
-        msg: 'ahk-doc not recommended and ahk-neko-help Syntax highlighting is not work.',
+        msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',
         path: 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related',
+    },
+    904: {
+        msg: 'ahk-neko-help is not work of this Directives',
+        path: 'https://www.autohotkey.com/docs/commands/_Hotstring.htm',
     },
 };

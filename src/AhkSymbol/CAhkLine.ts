@@ -12,8 +12,12 @@ export class CAhkDirectives extends vscode.DocumentSymbol {
     // #Directives
     // exp #AllowSameLineComments
     // https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm
-    // FIXME: src/provider/Diagnostic/tools/lineErr/getDirectivesErr.ts
     public readonly uri: vscode.Uri;
+    /**
+     * hashtag is without # && toUpperCase()
+     * exp : #noEnv -> NOENV
+     */
+    public readonly hashtag: string; //
 
     declare public readonly kind: vscode.SymbolKind.Event;
     declare public readonly detail: '#Directives';
@@ -29,6 +33,7 @@ export class CAhkDirectives extends vscode.DocumentSymbol {
     ) {
         super(name, '#Directives', vscode.SymbolKind.Event, range, selectionRange);
         this.uri = uri;
+        this.hashtag = name.replace('#', '').toUpperCase();
     }
 }
 

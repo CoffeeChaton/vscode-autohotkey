@@ -4,48 +4,46 @@ import { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../../diag';
 import { setDiagnostic } from '../setDiagnostic';
 
-export function getLabelErr(ch: TAhkSymbol, displayErr: readonly boolean[]): vscode.Diagnostic[] {
+export function getLabelErr(ch: TAhkSymbol): vscode.Diagnostic[] {
     if (!(ch instanceof CAhkLabel)) return [];
-    if (!displayErr[ch.range.start.line]) return [];
 
     const labName: string = ch.name.toUpperCase();
 
     type TLabelErr = {
-        str: string;
+        reg: RegExp;
         code: EDiagCode;
         tags: vscode.DiagnosticTag[];
     };
     const rulerMatch: TLabelErr[] = [
         {
-            str: 'DEFAULT:'.toUpperCase(),
+            reg: /^DEFAULT:$/ui,
             code: EDiagCode.code501,
             tags: [],
         },
         {
-            str: 'OnClipboardChange:'.toUpperCase(),
+            reg: /^OnClipboardChange:$/ui,
             code: EDiagCode.code811,
             tags: [vscode.DiagnosticTag.Deprecated],
         },
         {
-            str: 'OnExit:'.toUpperCase(),
+            reg: /^OnExit:$/ui,
             code: EDiagCode.code812,
             tags: [vscode.DiagnosticTag.Deprecated],
+        },
+        {
+            // if ((/^On|Off|Toggle|ShiftAltTab|AltTab|AltTabAndMenu|AltTabMenuDismiss$/ui).test(labName)) {
+            reg: /^(On|Off|Toggle|ShiftAltTab|AltTab(AndMenu|MenuDismiss)?):$/ui,
+            code: EDiagCode.code502,
+            tags: [],
         },
     ];
 
     for (const v of rulerMatch) {
-        if (v.str === labName) {
+        if (v.reg.test(labName)) {
             return [
                 setDiagnostic(v.code, ch.selectionRange, vscode.DiagnosticSeverity.Warning, v.tags),
             ];
         }
-    }
-
-    // if ((/^On|Off|Toggle|ShiftAltTab|AltTab|AltTabAndMenu|AltTabMenuDismiss$/ui).test(labName)) {
-    if ((/^(On|Off|Toggle|ShiftAltTab|AltTab(AndMenu|MenuDismiss)?):$/ui).test(labName)) {
-        return [
-            setDiagnostic(EDiagCode.code502, ch.selectionRange, vscode.DiagnosticSeverity.Warning, []),
-        ];
     }
 
     return [];

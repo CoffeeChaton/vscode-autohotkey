@@ -31,12 +31,12 @@ const filter = (src, _dest) => {
         '.gitignore',
         '.heapprofile',
         '.heapsnapshot',
+        'TODO.md',
         'cspell.json',
         'dprint.json',
         'esbuild.config.js',
         'esbuildTarget.json',
         'pnpm-lock.yaml',
-        'rslintrc.toml',
         'tsconfig.json',
     ];
     const List = [...folder, ...file];
@@ -49,35 +49,33 @@ const filter = (src, _dest) => {
     return true;
 };
 
-const plugins = [
-    copyStaticFiles({
-        src: './',
-        dest: esbuildTarget, // 'C:/Users/<useName>/.vscode/extensions/cz00',
-        filter,
-        preserveTimestamps: true,
-    }),
-];
-
 esbuild
     .build({
+        // define:DEBUG=false
+        // entryNames: '[dir]/neko',
+        // keepNames: true,
+        // mainFields: ['module', 'main'],
+        // splitting: true,
+        // tsconfig
+        // watch: false,
         bundle: true,
         entryPoints: ['./src/extension.ts'],
-        // entryNames: '[dir]/neko',
         external: ['vscode'], // not bundle 'vscode'
         format: 'cjs',
-        // keepNames: true,
         logLevel: 'info',
-        // mainFields: ['module', 'main'],
         minify: false, //
         outdir: 'dict',
         platform: 'node',
         sourcemap: true,
-        // splitting: true,
         target: ['es2021', 'chrome98', 'node16.13'],
         treeShaking: true,
-        // tsconfig
-        // watch: false,
-        // define:DEBUG=false
-        plugins,
+        plugins: [
+            copyStaticFiles({
+                src: './',
+                dest: esbuildTarget, // 'C:/Users/<useName>/.vscode/extensions/cz00',
+                filter,
+                preserveTimestamps: true,
+            }),
+        ],
     })
     .catch(() => process.exit(1));

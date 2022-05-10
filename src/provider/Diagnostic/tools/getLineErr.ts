@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { TTokenStream } from '../../../globalEnum';
 import { assignErr } from './lineErr/assignErr';
 import { getCommandErr } from './lineErr/getCommandErr';
-import { getDirectivesErr } from './lineErr/getDirectivesErr';
 import { getObjBaseErr } from './lineErr/getObjBaseErr';
 import { EDiagLine, TLineDiag, TLineErr } from './lineErr/lineErrTools';
 import { setDiagnostic } from './setDiagnostic';
@@ -23,7 +22,7 @@ function getLineErrCore(lStr: string, fistWordUp: string): 0 | TLineErr {
     const lStrTrim: string = lStr.trim();
     if (lStrTrim === '') return 0;
     type TFnLineErr = (lStr: string, lStrTrim: string, fistWordUp: string) => TLineDiag;
-    const fnList: TFnLineErr[] = [getDirectivesErr, getObjBaseErr, getCommandErr];
+    const fnList: TFnLineErr[] = [getObjBaseErr, getCommandErr];
     for (const fn of fnList) {
         const err: TLineDiag = fn(lStr, lStrTrim, fistWordUp);
 
