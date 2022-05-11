@@ -64,7 +64,7 @@ type TCAhkFuncParam = {
     paramMap: TParamMapOut;
     valMap: TValMapOut;
     textMap: TTextMapOut;
-    children: (TLineClass | CAhkSwitch)[];
+    ch: (TLineClass | CAhkSwitch)[];
     nameRange: vscode.Range;
 };
 
@@ -98,7 +98,7 @@ export class CAhkFunc extends vscode.DocumentSymbol {
             paramMap,
             valMap,
             textMap,
-            children,
+            ch,
             nameRange,
         }: TCAhkFuncParam,
     ) {
@@ -114,7 +114,7 @@ export class CAhkFunc extends vscode.DocumentSymbol {
         this.paramMap = paramMap;
         this.valMap = valMap;
         this.textMap = textMap;
-        this.children = children;
+        this.children = ch;
 
         this.nameRange = nameRange;
     }

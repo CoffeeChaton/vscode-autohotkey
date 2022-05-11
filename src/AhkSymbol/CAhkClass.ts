@@ -87,7 +87,7 @@ export class CAhkClass extends vscode.DocumentSymbol {
             selectionRange,
             insertText,
             uri,
-            children,
+            ch,
         }: {
             name: string;
             detail: string;
@@ -95,14 +95,14 @@ export class CAhkClass extends vscode.DocumentSymbol {
             selectionRange: vscode.Range;
             insertText: string;
             uri: vscode.Uri;
-            children: TClassChildren[];
+            ch: TClassChildren[];
         },
     ) {
         super(name, detail, vscode.SymbolKind.Class, range, selectionRange);
         this.insertText = insertText;
         this.upName = name.toUpperCase();
         this.uri = uri;
-        this.children = children;
+        this.children = ch;
     }
     // m1 := new GMem(0, 20) ; OK!
     // m2 := {base: GMem}.__New(0, 30) ; no support

@@ -1,13 +1,8 @@
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
-import { CAhkClass, TClassChildren } from '../AhkSymbol/CAhkClass';
+import { CAhkClass } from '../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../AhkSymbol/CAhkFunc';
-import { TLineClass } from '../AhkSymbol/CAhkLine';
-import {
-    CAhkCase,
-    CAhkDefault,
-    CAhkSwitch,
-} from '../AhkSymbol/CAhkSwitch';
+import { CAhkCase, CAhkDefault, CAhkSwitch } from '../AhkSymbol/CAhkSwitch';
 import { getCaseName, getSwitchName } from '../provider/SymbolProvider/getSwitchCaseName';
 import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
@@ -43,15 +38,17 @@ export const ParserBlock = {
         if (name === null) return null;
 
         const range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
-        const ch = getChildren({
-            DocStrMap,
-            RangeStartLine: range.start.line + 1,
-            RangeEndLine: range.end.line,
-            classStack,
-            fnList: [ParserBlock.getSwitchBlock, ParserLine],
-            document,
-            GValMap,
-        }) as (TLineClass | CAhkSwitch)[];
+        const ch = getChildren<CAhkCase>(
+            [ParserBlock.getSwitchBlock, ParserLine],
+            {
+                DocStrMap,
+                RangeStartLine: range.start.line + 1,
+                RangeEndLine: range.end.line,
+                classStack,
+                document,
+                GValMap,
+            },
+        );
 
         return new CAhkCase({
             name,
@@ -62,7 +59,7 @@ export const ParserBlock = {
         });
     },
 
-    getDefaultBlock(FuncInput: TFuncInput): null | CAhkDefault | CAhkCase {
+    getDefaultBlock(FuncInput: TFuncInput): null | CAhkDefault {
         const { lStr, fistWordUp } = FuncInput;
 
         if (fistWordUp !== 'DEFAULT') return null;
@@ -79,18 +76,19 @@ export const ParserBlock = {
         } = FuncInput;
 
         const range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
-        const ch = getChildren({
-            DocStrMap,
-            RangeStartLine: range.start.line + 1,
-            RangeEndLine: range.end.line,
-            classStack,
-            fnList: [ParserBlock.getSwitchBlock, ParserLine],
-            document,
-            GValMap,
-        }) as (TLineClass | CAhkSwitch)[];
+        const ch = getChildren<CAhkDefault>(
+            [ParserBlock.getSwitchBlock, ParserLine],
+            {
+                DocStrMap,
+                RangeStartLine: range.start.line + 1,
+                RangeEndLine: range.end.line,
+                classStack,
+                document,
+                GValMap,
+            },
+        );
 
         return new CAhkDefault({
-            name: 'Default :',
             range,
             selectionRange: getRangeOfLine(line, lStr, textRaw.length),
             uri: document.uri,
@@ -114,15 +112,17 @@ export const ParserBlock = {
 
         const range = getRange(DocStrMap, line, line, RangeEndLine);
 
-        const ch = getChildren({
-            DocStrMap,
-            RangeStartLine: range.start.line + 1,
-            RangeEndLine: range.end.line,
-            classStack,
-            fnList: [ParserBlock.getCaseBlock, ParserBlock.getDefaultBlock],
-            document,
-            GValMap,
-        }) as (CAhkCase | CAhkDefault)[];
+        const ch = getChildren<CAhkSwitch>(
+            [ParserBlock.getCaseBlock, ParserBlock.getDefaultBlock],
+            {
+                DocStrMap,
+                RangeStartLine: range.start.line + 1,
+                RangeEndLine: range.end.line,
+                classStack,
+                document,
+                GValMap,
+            },
+        );
 
         return new CAhkSwitch({
             name: `Switch ${getSwitchName(lStr)}`,
@@ -151,25 +151,24 @@ export function getFunc(FuncInput: TFuncInput): null | CAhkFunc {
     const { name, selectionRange } = isFunc;
 
     const range = getRange(DocStrMap, line, selectionRange.end.line, RangeEndLine);
-    const children = getChildren({
-        DocStrMap,
-        RangeStartLine: range.start.line + 1,
-        RangeEndLine: range.end.line,
-        classStack,
-        fnList: [
-            ParserBlock.getSwitchBlock,
-            ParserLine,
-        ],
-        document,
-        GValMap,
-    }) as (TLineClass | CAhkSwitch)[];
+    const ch = getChildren<CAhkFunc>(
+        [ParserBlock.getSwitchBlock, ParserLine],
+        {
+            DocStrMap,
+            RangeStartLine: range.start.line + 1,
+            RangeEndLine: range.end.line,
+            classStack,
+            document,
+            GValMap,
+        },
+    );
 
     return getFuncCore({
         FuncInput,
         name,
         selectionRange,
         range,
-        children,
+        ch,
     });
 }
 
@@ -192,15 +191,17 @@ export function getClass(FuncInput: TFuncInput): null | CAhkClass {
     const range = getRange(DocStrMap, line, line, RangeEndLine);
     const name = ma[1];
 
-    const children = getChildren({
-        DocStrMap,
-        RangeStartLine: range.start.line + 1,
-        RangeEndLine: range.end.line,
-        classStack: [...classStack, name],
-        fnList: [getClass, getFunc, getClassGetSet, getClassInstanceVar, ParserLine],
-        document,
-        GValMap,
-    }) as TClassChildren[];
+    const ch = getChildren<CAhkClass>(
+        [getClass, getFunc, getClassGetSet, getClassInstanceVar, ParserLine],
+        {
+            DocStrMap,
+            RangeStartLine: range.start.line + 1,
+            RangeEndLine: range.end.line,
+            classStack: [...classStack, name],
+            document,
+            GValMap,
+        },
+    );
 
     const col = ma.index ?? lStr.replace(/^\s*Class\s+/ui, replacerSpace).indexOf(name);
 
@@ -209,8 +210,8 @@ export function getClass(FuncInput: TFuncInput): null | CAhkClass {
         detail: getClassDetail(lStr, col, name),
         range,
         selectionRange: new vscode.Range(line, col, line, col + name.length),
-        insertText: `${name}${setClassInsertText(children)}`,
+        insertText: `${name}${setClassInsertText(ch)}`,
         uri: document.uri,
-        children,
+        ch,
     });
 }

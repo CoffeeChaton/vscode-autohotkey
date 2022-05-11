@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { TAhkSymbol } from '../AhkSymbol/TAhkSymbolIn';
 import { TTokenStream } from '../globalEnum';
 import { TGValMap } from './ParserTools/ahkGlobalDef';
 
@@ -15,11 +14,8 @@ export type TFuncInput = Readonly<{
     GValMap: TGValMap;
 }>;
 
-export type TFuncLimit = (FuncInput: TFuncInput) => null | TAhkSymbol;
-
 type ChildType = Readonly<{
     classStack: string[];
-    fnList: TFuncLimit[];
     RangeStartLine: number;
     RangeEndLine: number;
     DocStrMap: TTokenStream;
@@ -27,24 +23,28 @@ type ChildType = Readonly<{
     GValMap: TGValMap;
 }>;
 
-export function getChildren(child: ChildType): TAhkSymbol[] {
+type TChildrenType<T extends vscode.DocumentSymbol> = T['children'][number];
+
+export function getChildren<T extends vscode.DocumentSymbol>(
+    fnList: ((FuncInput: TFuncInput) => null | TChildrenType<T>)[],
+    child: ChildType,
+): TChildrenType<T>[] {
     const {
         DocStrMap,
         RangeStartLine,
         RangeEndLine,
         classStack,
-        fnList,
         document,
         GValMap,
     } = child;
 
-    const result: TAhkSymbol[] = [];
+    const result: TChildrenType<T>[] = [];
     let Resolved = RangeStartLine; // <--------------------------------
     for (let line = RangeStartLine; line < RangeEndLine; line++) {
         if (line < Resolved) continue; // <------------------------------------
         const { lStr, fistWordUp, textRaw } = DocStrMap[line];
         for (const fn of fnList) {
-            const DocumentSymbol: null | TAhkSymbol = fn({
+            const DocumentSymbol: null | TChildrenType<T> = fn({
                 fistWordUp,
                 lStr,
                 DocStrMap,

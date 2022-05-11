@@ -29,7 +29,7 @@ type TGetFuncCore = {
     name: string;
     selectionRange: vscode.Range;
     range: vscode.Range;
-    children: (TLineClass | CAhkSwitch)[];
+    ch: (TLineClass | CAhkSwitch)[];
 };
 
 export function getFuncCore(
@@ -38,7 +38,7 @@ export function getFuncCore(
         name,
         selectionRange,
         range,
-        children,
+        ch,
     }: TGetFuncCore,
 ): CAhkFunc {
     const {
@@ -86,7 +86,7 @@ export function getFuncCore(
         paramMap,
         valMap,
         textMap,
-        children,
+        ch,
         nameRange,
     });
     return myFn2;

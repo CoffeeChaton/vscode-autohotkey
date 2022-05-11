@@ -68,20 +68,18 @@ export class CAhkDefault extends vscode.DocumentSymbol {
 
     public constructor(
         {
-            name,
             range,
             selectionRange,
             uri,
             ch,
         }: {
-            name: string;
             range: vscode.Range;
             selectionRange: vscode.Range;
             uri: vscode.Uri;
             ch: (TLineClass | CAhkSwitch)[];
         },
     ) {
-        super(name, 'Default', vscode.SymbolKind.EnumMember, range, selectionRange);
+        super('Default :', 'Default', vscode.SymbolKind.EnumMember, range, selectionRange);
         this.uri = uri;
         this.children = ch;
     }

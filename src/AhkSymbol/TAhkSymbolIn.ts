@@ -1,6 +1,6 @@
 import { CAhkClass, CAhkClassGetSet, CAhkClassInstanceVar } from './CAhkClass';
 import { CAhkFunc } from './CAhkFunc';
-import { TLineClass } from './CAhkLine';
+import { CAhkComment, TLineClass } from './CAhkLine';
 import { CAhkCase, CAhkDefault, CAhkSwitch } from './CAhkSwitch';
 
 export type TAhkSymbol =
@@ -12,5 +12,7 @@ export type TAhkSymbol =
     | CAhkFunc
     | CAhkSwitch
     | TLineClass;
+
+export type TTopSymbol = CAhkClass | CAhkFunc | CAhkSwitch | TLineClass | CAhkComment;
 
 export type TAhkSymbolList = TAhkSymbol[];

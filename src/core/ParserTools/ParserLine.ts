@@ -11,7 +11,6 @@ import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 import { TFuncInput } from '../getChildren';
 import { getComment } from './getComment';
 
-type TParserLine = TLineClass;
 type TClassName =
     | typeof CAhkDirectives
     | typeof CAhkHotKeys
@@ -110,7 +109,7 @@ const LineRuler: readonly TLineRuler[] = [
     },
 ];
 
-export function ParserLine(FuncInput: TFuncInput): null | TParserLine | CAhkComment {
+export function ParserLine(FuncInput: TFuncInput): null | TLineClass | CAhkComment {
     const {
         fistWordUp,
         line,

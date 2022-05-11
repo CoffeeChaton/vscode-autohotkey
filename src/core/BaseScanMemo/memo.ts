@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
-import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
+import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { TFsPath, TTokenStream } from '../../globalEnum';
 import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
 import { getChildren } from '../getChildren';
@@ -9,8 +9,15 @@ import { ahkGlobalMain, TGValMap, TGValMapReadOnly } from '../ParserTools/ahkGlo
 import { ParserLine } from '../ParserTools/ParserLine';
 import { Pretreatment } from '../Pretreatment';
 
+/**
+ * Never user this, just for Memo...
+ */
+class CTopClass extends vscode.DocumentSymbol {
+    declare public readonly children: TTopSymbol[];
+}
+
 export type TMemo = {
-    AhkSymbolList: TAhkSymbolList;
+    AhkSymbolList: TTopSymbol[];
     GValMap: TGValMapReadOnly;
     DocStrMap: TTokenStream;
     DocFullSize: number;
@@ -80,20 +87,17 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
 
     const DocStrMap: TTokenStream = Pretreatment(fullTextList, 0, document.fileName);
     const GValMap: TGValMap = ahkGlobalMain(DocStrMap);
-    const AhkSymbolList: TAhkSymbolList = getChildren({
-        DocStrMap,
-        RangeStartLine: 0,
-        RangeEndLine: DocStrMap.length,
-        classStack: [],
-        fnList: [
-            getClass,
-            getFunc,
-            ParserBlock.getSwitchBlock,
-            ParserLine,
-        ],
-        document,
-        GValMap,
-    });
+    const AhkSymbolList = getChildren<CTopClass>(
+        [getClass, getFunc, ParserBlock.getSwitchBlock, ParserLine],
+        {
+            DocStrMap,
+            RangeStartLine: 0,
+            RangeEndLine: DocStrMap.length,
+            classStack: [],
+            document,
+            GValMap,
+        },
+    );
 
     const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
     const AhkCache: TMemo = {
