@@ -6,45 +6,55 @@ import { getIgnore } from './getIgnore';
 import { getFuncErr } from './tools/getFuncErr';
 import { getLineErr } from './tools/getLineErr';
 import { getTreeErr } from './tools/getTreeErr';
+import { CNekoBaseLineDiag } from './tools/lineErr/lineErrTools';
 
-// eslint-disable-next-line no-magic-numbers
-const wm: WeakMap<TTokenStream, vscode.Diagnostic[]> = new WeakMap();
+type TDisplayErr = boolean[];
+type TDisplayErrAndLineErr = {
+    displayErr: TDisplayErr;
+    lineDiagS: CNekoBaseLineDiag[];
+};
 
-export function baseDiagnostic(
-    DocStrMap: TTokenStream,
-    AhkSymbolList: TAhkSymbolList,
-): vscode.Diagnostic[] {
-    const cache: vscode.Diagnostic[] | undefined = wm.get(DocStrMap);
-    if (cache !== undefined) return cache;
+function getDisplayErrAndLineErr(DocStrMap: TTokenStream): TDisplayErrAndLineErr {
+    const displayErr: TDisplayErr = [];
+    const lineDiagS: CNekoBaseLineDiag[] = [];
 
-    // const timeStart: number = Date.now();
-
-    const lineMax: number = DocStrMap.length;
-    let IgnoreLine = -1;
-    const displayErr: boolean[] = [];
-    const lineDiagS: vscode.Diagnostic[] = [];
-
-    IgnoreLine = getIgnore(DocStrMap[0].textRaw, 0, IgnoreLine);
-    for (let line = 0; line < lineMax; line++) {
+    let IgnoreLine = getIgnore(DocStrMap[0].textRaw, 0, -1);
+    for (const { textRaw, line } of DocStrMap) {
+        IgnoreLine = getIgnore(textRaw, line, IgnoreLine);
         if (line <= IgnoreLine) {
             displayErr.push(false);
             continue;
         }
-        IgnoreLine = getIgnore(DocStrMap[line].textRaw, line, IgnoreLine);
 
         displayErr.push(true);
-        const err: vscode.Diagnostic | null = getLineErr(DocStrMap, line);
+
+        const err: CNekoBaseLineDiag | null = getLineErr(DocStrMap, line);
         if (err !== null) lineDiagS.push(err);
     }
+    return {
+        displayErr,
+        lineDiagS,
+    };
+}
 
-    const diagList: vscode.Diagnostic[] = [
+// eslint-disable-next-line no-magic-numbers
+const wm: WeakMap<TTokenStream, readonly vscode.Diagnostic[]> = new WeakMap();
+
+export function baseDiagnostic(
+    DocStrMap: TTokenStream,
+    AhkSymbolList: TAhkSymbolList,
+): readonly vscode.Diagnostic[] {
+    const cache: readonly vscode.Diagnostic[] | undefined = wm.get(DocStrMap);
+    if (cache !== undefined) return cache;
+
+    const { displayErr, lineDiagS } = getDisplayErrAndLineErr(DocStrMap);
+
+    const diagList: readonly vscode.Diagnostic[] = [
         ...lineDiagS,
         ...getTreeErr(AhkSymbolList, displayErr),
         ...getFuncErr(DocStrMap, AhkSymbolList, displayErr, getLintConfig().funcSize),
     ];
-    // 8k lines without hashCache -> 6ms
-    // with hashCache -> 2ms
-    // I think this way, complexity && ram >> 4ms
+    // 8k lines without gc -> 3ms
     wm.set(DocStrMap, diagList);
     return diagList;
 }

@@ -5,4 +5,3 @@
 3. [diag of `If Var op Value`](https://www.autohotkey.com/docs/Language.htm#if-statement)
 4. [Random, vs Random()](syntaxes/ahk.tmLanguage.json)
 5. [check #Include](https://www.autohotkey.com/docs/Functions.htm#lib)
-6. [use getChildren\<T\>](src/core/getChildren.ts)

@@ -1,9 +1,14 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
-import { EDiagLine, TLineDiag } from './lineErrTools';
+import {
+    CNekoBaseLineDiag,
+    EDiagLine,
+    TLineDiag,
+    TLineErrDiagParam,
+} from './lineErrTools';
 
 // ---------------------------------------------------------------------------------------------------------------------
-function getLoopErr(lStr: string): TLineDiag {
+function getLoopErr(lStr: string, line: number): EDiagLine | CNekoBaseLineDiag {
     const exec = (/^\s*Loop\b[\s,]+(\w+)/iu).exec(lStr);
     if (exec === null) {
         return EDiagLine.miss;
@@ -19,38 +24,41 @@ function getLoopErr(lStr: string): TLineDiag {
     const colR = colL + SecondSection.length;
     if ((/^RootKey$/ui).test(SecondSection)) {
         // https://www.autohotkey.com/docs/commands/LoopReg.htm#old
-        return {
+        return new CNekoBaseLineDiag({
+            line,
             colL,
             colR,
             value: EDiagCode.code801,
             severity: vscode.DiagnosticSeverity.Warning,
             tags: [vscode.DiagnosticTag.Deprecated],
-        };
+        });
     }
 
     if ((/^FilePattern$/ui).test(SecondSection)) {
         // https://www.autohotkey.com/docs/commands/LoopFile.htm#old
-        return {
+        return new CNekoBaseLineDiag({
+            line,
             colL,
             colR,
             value: EDiagCode.code802,
             severity: vscode.DiagnosticSeverity.Warning,
             tags: [vscode.DiagnosticTag.Deprecated],
-        };
+        });
     }
 
     // https://www.autohotkey.com/docs/commands/Loop.htm
-    return {
+    return new CNekoBaseLineDiag({
+        line,
         colL,
         colR,
         value: EDiagCode.code201,
         severity: vscode.DiagnosticSeverity.Error,
         tags: [],
-    };
+    });
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-function getCommandErrFnReplace(fistWord: string, lStr: string): TLineDiag {
+function getCommandErrFnReplace(fistWord: string, lStr: string, line: number): EDiagLine.miss | CNekoBaseLineDiag {
     // eslint-disable-next-line no-magic-numbers
     if (fistWord.length < 3) return EDiagLine.miss;
     // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
@@ -60,19 +68,20 @@ function getCommandErrFnReplace(fistWord: string, lStr: string): TLineDiag {
         || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/ui).test(fistWord)
     ) {
         const colL = lStr.search(/\S/u);
-        return {
+        return new CNekoBaseLineDiag({
+            line,
             colL,
             colR: colL + fistWord.length,
             value: EDiagCode.code700,
             severity: vscode.DiagnosticSeverity.Warning,
             tags: [vscode.DiagnosticTag.Deprecated],
-        };
+        });
     }
     return EDiagLine.miss;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-function getOtherCommandErr(fistWordUp: string, lStr: string): TLineDiag {
+function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): EDiagLine.miss | CNekoBaseLineDiag {
     // eslint-disable-next-line no-magic-numbers
     if (fistWordUp.length < 5) return EDiagLine.miss;
     type TCommandErr = {
@@ -118,13 +127,14 @@ function getOtherCommandErr(fistWordUp: string, lStr: string): TLineDiag {
     for (const v of headMatch) {
         if (v.reg.test(fistWordUp)) {
             const colL = lStr.search(/\S/ui);
-            return {
+            return new CNekoBaseLineDiag({
+                line,
                 colL,
                 colR: colL + fistWordUp.length,
                 value: v.code,
                 severity: vscode.DiagnosticSeverity.Warning,
                 tags: [vscode.DiagnosticTag.Deprecated],
-            };
+            });
         }
     }
 
@@ -132,11 +142,17 @@ function getOtherCommandErr(fistWordUp: string, lStr: string): TLineDiag {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-export function getCommandErr(lStr: string, _lStrTrim: string, fistWordUp: string): TLineDiag {
+export function getCommandErr(params: TLineErrDiagParam): CNekoBaseLineDiag | EDiagLine {
+    const {
+        lStr,
+        fistWordUp,
+        line,
+    } = params;
+
     if (fistWordUp.length === 0) return EDiagLine.miss;
 
     if (fistWordUp === 'LOOP') {
-        return getLoopErr(lStr);
+        return getLoopErr(lStr, line);
     }
 
     if (
@@ -163,11 +179,10 @@ export function getCommandErr(lStr: string, _lStrTrim: string, fistWordUp: strin
     }
 
     // _commandHeadStatistics(fistWord);
-
-    const fnReplaceErr: TLineDiag = getCommandErrFnReplace(fistWordUp, lStr);
+    const fnReplaceErr: TLineDiag = getCommandErrFnReplace(fistWordUp, lStr, line);
     if (fnReplaceErr !== EDiagLine.miss) {
         return fnReplaceErr;
     }
 
-    return getOtherCommandErr(fistWordUp, lStr);
+    return getOtherCommandErr(fistWordUp, lStr, line);
 }

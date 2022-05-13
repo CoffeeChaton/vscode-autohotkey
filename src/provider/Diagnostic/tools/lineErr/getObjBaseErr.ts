@@ -1,11 +1,16 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
-import { EDiagLine, TLineDiag } from './lineErrTools';
+import { CNekoBaseLineDiag, EDiagLine, TLineErrDiagParam } from './lineErrTools';
 
-export function getObjBaseErr(lStr: string, lStrTrim: string, _fistWordUp: string): TLineDiag {
+export function getObjBaseErr(params: TLineErrDiagParam): CNekoBaseLineDiag | EDiagLine.miss {
     // base property
     // Prototype pollution!
     // .base
+    const {
+        lStr,
+        lStrTrim,
+        line,
+    } = params;
 
     const baseLen: number = 'x.base'.length;
     if (lStrTrim.length < baseLen) return EDiagLine.miss;
@@ -16,12 +21,12 @@ export function getObjBaseErr(lStr: string, lStrTrim: string, _fistWordUp: strin
         return EDiagLine.miss;
     }
 
-    return {
+    return new CNekoBaseLineDiag({
+        line,
         colL,
-        // eslint-disable-next-line no-magic-numbers
-        colR: colL + 5, // ".base" or "base:" len
-        value: EDiagCode.code601,
+        colR: colL + baseLen, // ".base" or "base:" len
         severity: vscode.DiagnosticSeverity.Warning,
         tags: [],
-    };
+        value: EDiagCode.code601,
+    });
 }

@@ -21,7 +21,7 @@ export type TMemo = {
     GValMap: TGValMapReadOnly;
     DocStrMap: TTokenStream;
     DocFullSize: number;
-    baseDiag: vscode.Diagnostic[];
+    baseDiag: readonly vscode.Diagnostic[];
 };
 
 function strListDeepEq(DocStrMap: TTokenStream, fullTextList: string[]): boolean {
@@ -99,7 +99,15 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
         },
     );
 
-    const baseDiag: vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
+    // const t1 = Date.now();
+    const baseDiag: readonly vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
+
+    // const t2 = Date.now();
+    // const t3 = t2 - t1;
+    // if (t3 > 1) {
+    //     console.log('🚀 ~ getBaseData ~ t3', t3, ' ms ', document.fileName);
+    // }
+
     const AhkCache: TMemo = {
         GValMap, // TGValMapReadOnly
         DocStrMap,

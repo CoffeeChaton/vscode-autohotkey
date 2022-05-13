@@ -1,56 +1,47 @@
-import * as vscode from 'vscode';
 import { TTokenStream } from '../../../globalEnum';
 import { assignErr } from './lineErr/assignErr';
 import { getCommandErr } from './lineErr/getCommandErr';
 import { getObjBaseErr } from './lineErr/getObjBaseErr';
-import { EDiagLine, TLineDiag, TLineErr } from './lineErr/lineErrTools';
-import { setDiagnostic } from './setDiagnostic';
+import {
+    CNekoBaseLineDiag,
+    EDiagLine,
+    TLineDiag,
+    TLineErrDiagParam,
+} from './lineErr/lineErrTools';
 
-function lineErrDiag(line: number, lineErr: TLineErr): vscode.Diagnostic {
-    const {
-        colL,
-        colR,
-        value,
-        severity,
-        tags,
-    } = lineErr;
-    const range: vscode.Range = new vscode.Range(line, colL, line, colR);
-    return setDiagnostic(value, range, severity, tags);
-}
-
-function getLineErrCore(lStr: string, fistWordUp: string): 0 | TLineErr {
+function getLineErrCore(lStr: string, fistWordUp: string, line: number): null | CNekoBaseLineDiag {
     const lStrTrim: string = lStr.trim();
-    if (lStrTrim === '') return 0;
-    type TFnLineErr = (lStr: string, lStrTrim: string, fistWordUp: string) => TLineDiag;
+    if (lStrTrim === '') return null;
+
+    type TFnLineErr = (parm: TLineErrDiagParam) => TLineDiag;
     const fnList: TFnLineErr[] = [getObjBaseErr, getCommandErr];
     for (const fn of fnList) {
-        const err: TLineDiag = fn(lStr, lStrTrim, fistWordUp);
+        const err: TLineDiag = fn({
+            lStr,
+            lStrTrim,
+            fistWordUp,
+            line,
+        });
 
-        if (err === EDiagLine.OK) return 0; // OK
+        if (err === EDiagLine.OK) return null; // OK
 
         if (err !== EDiagLine.miss) { // err
             return err;
         }
         // err=== EDiagLine.miss
     }
-    return 0;
+    return null;
 }
 
-export function getLineErr(DocStrMap: TTokenStream, line: number): null | vscode.Diagnostic {
+export function getLineErr(DocStrMap: TTokenStream, line: number): null | CNekoBaseLineDiag {
     const {
         textRaw,
         lStr,
         detail,
         fistWordUp,
     } = DocStrMap[line];
-    const err0: TLineDiag = assignErr(textRaw, detail);
-    if (err0 !== 0 && err0 !== EDiagLine.OK) {
-        return lineErrDiag(line, err0);
-    }
+    const err0: null | CNekoBaseLineDiag = assignErr(textRaw, detail, line);
+    if (err0 !== null) return err0;
 
-    const err1: TLineErr | 0 = getLineErrCore(lStr, fistWordUp);
-
-    if (err1 !== 0) return lineErrDiag(line, err1);
-    // err1 === 0
-    return null;
+    return getLineErrCore(lStr, fistWordUp, line);
 }

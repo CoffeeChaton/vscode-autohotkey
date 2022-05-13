@@ -1,18 +1,17 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import { EDetail } from '../../../../globalEnum';
-import { EDiagLine, TLineDiag } from './lineErrTools';
+import { CNekoBaseLineDiag } from './lineErrTools';
 
-export function assignErr(textRaw: string, detail: readonly EDetail[]): TLineDiag {
-    // https://www.autohotkey.com/docs/commands/SetEnv.htm
-    if (!detail.includes(EDetail.inSkipSign2)) return EDiagLine.miss;
-
-    const colL = textRaw.indexOf('=');
-    return {
-        colL,
-        colR: textRaw.length,
-        value: EDiagCode.code107,
-        severity: vscode.DiagnosticSeverity.Error,
-        tags: [],
-    };
+export function assignErr(textRaw: string, detail: readonly EDetail[], line: number): null | CNekoBaseLineDiag {
+    return detail.includes(EDetail.inSkipSign2)
+        ? new CNekoBaseLineDiag({
+            line,
+            colL: textRaw.indexOf('='),
+            colR: textRaw.length,
+            severity: vscode.DiagnosticSeverity.Error,
+            tags: [],
+            value: EDiagCode.code107,
+        })
+        : null; // 0
 }
