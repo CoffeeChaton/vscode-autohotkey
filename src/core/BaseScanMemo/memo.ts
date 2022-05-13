@@ -17,14 +17,14 @@ class CTopClass extends vscode.DocumentSymbol {
 }
 
 export type TMemo = {
-    AhkSymbolList: TTopSymbol[];
-    GValMap: TGValMapReadOnly;
-    DocStrMap: TTokenStream;
-    DocFullSize: number;
-    baseDiag: readonly vscode.Diagnostic[];
+    readonly AhkSymbolList: TTopSymbol[];
+    readonly GValMap: TGValMapReadOnly;
+    readonly DocStrMap: TTokenStream;
+    readonly DocFullSize: number;
+    readonly baseDiag: readonly vscode.Diagnostic[];
 };
 
-function strListDeepEq(DocStrMap: TTokenStream, fullTextList: string[]): boolean {
+function strListDeepEq(DocStrMap: TTokenStream, fullTextList: readonly string[]): boolean {
     const len: number = DocStrMap.length;
     if (len !== fullTextList.length) return false;
     for (let i = 0; i < len; i++) {
@@ -64,7 +64,7 @@ export const BaseScanMemo = {
         this.memo.set(fsPath, oldCache);
     },
 
-    getMemo(fsPath: TFsPath, fullTextList: string[], DocFullSize: number): TMemo | undefined {
+    getMemo(fsPath: TFsPath, fullTextList: readonly string[], DocFullSize: number): TMemo | undefined {
         return this.memo
             .get(fsPath)
             ?.find((v: TMemo): boolean => v.DocFullSize === DocFullSize && strListDeepEq(v.DocStrMap, fullTextList));
@@ -77,15 +77,13 @@ export const BaseScanMemo = {
 
 export function getBaseData(document: vscode.TextDocument): TMemo {
     const fullText: string = document.getText();
-    const fullTextList: string[] = fullText
-        .replaceAll(/\r/gu, '')
-        .split('\n');
+    const fullTextList: readonly string[] = fullText.split(/\r?\n/u);
     const DocFullSize: number = fullText.length;
     const { fsPath } = document.uri;
     const oldCache: TMemo | undefined = BaseScanMemo.getMemo(fsPath, fullTextList, DocFullSize);
     if (oldCache !== undefined) return oldCache;
 
-    const DocStrMap: TTokenStream = Pretreatment(fullTextList, 0, document.fileName);
+    const DocStrMap: TTokenStream = Pretreatment(fullTextList, document.fileName);
     const GValMap: TGValMap = ahkGlobalMain(DocStrMap);
     const AhkSymbolList = getChildren<CTopClass>(
         [getClass, getFunc, ParserBlock.getSwitchBlock, ParserLine],

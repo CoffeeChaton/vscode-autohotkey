@@ -7,16 +7,20 @@ import { inCommentBlock } from '../tools/str/inCommentBlock';
 import { inLTrimRange } from '../tools/str/inLTrimRange';
 import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
 
-export function Pretreatment(strArray: readonly string[], startLineBaseZero: number, fileName: string): TTokenStream {
+/**
+ * @param strArray keep this with readonly string[], don't use String, because of copy.
+ *  and without str.spilt(\r?\n), I hate \r
+ * @param fileName just debug of deep < 0
+ * @returns FFullDocTokenDocStream
+ */
+export function Pretreatment(strArray: readonly string[], fileName: string): TTokenStream {
     const result: TAhkToken = [];
     let CommentBlock = false;
     let inLTrim: 0 | 1 | 2 = 0;
-    const OffsetMax: number = strArray.length;
     let deep = 0;
-    //  const timeStart = Date.now();
-    for (let Offset = 0; Offset < OffsetMax; Offset++) {
-        const line: number = Offset + startLineBaseZero;
-        const textRaw: string = strArray[Offset].replace(/\r/ug, '');
+    let line = -1;
+    for (const textRaw of strArray) {
+        line++;
         const textTrimStart: string = textRaw.trimStart();
         if (deep < 0) {
             console.warn('Pretreatment -> line , deep < 0, fsPath ', fileName);
@@ -24,6 +28,7 @@ export function Pretreatment(strArray: readonly string[], startLineBaseZero: num
             console.warn('Pretreatment -> line , deep < 0, textTrimStart ', textTrimStart);
             deep = 0;
         }
+
         CommentBlock = inCommentBlock(textTrimStart, CommentBlock);
         if (CommentBlock) {
             result.push({

@@ -2,12 +2,16 @@ import { EDiagBase } from '../../Enum/EDiagBase';
 
 export function getIgnore(textRaw: string, line: number, IgnoreLine: number): number {
     // ;@ahk-ignore 30 line.
-    // textRaw
+
+    // ";@ahk-ignore 3".length is 14
+
+    // eslint-disable-next-line no-magic-numbers
+    if (textRaw.length < 14) return IgnoreLine;
     if (textRaw.indexOf(EDiagBase.ignore) === -1) return IgnoreLine;
-    const ignoreExec = (/^\s*;@ahk-ignore\s+(\d+)\s/iu).exec(textRaw);
-    if (ignoreExec === null) {
+    const ignoreMatch: RegExpMatchArray | null = textRaw.match(/^\s*;@ahk-ignore\s+(\d+)\s/iu);
+    if (ignoreMatch === null) {
         return IgnoreLine;
     }
-    const numberOfIgnore = Number(ignoreExec[1]);
+    const numberOfIgnore = Number(ignoreMatch[1]);
     return numberOfIgnore + line;
 }

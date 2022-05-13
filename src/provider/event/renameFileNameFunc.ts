@@ -20,7 +20,7 @@ export async function renameFileNameFunc(oldUri: vscode.Uri, newUri: vscode.Uri)
     for (const uri of UriList) {
         const document: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
 
-        const DocStrMap: TTokenStream = Pretreatment(document.getText().split('\n'), 0, document.fileName);
+        const DocStrMap: TTokenStream = Pretreatment(document.getText().split(/\r?\n/u), document.fileName);
         for (const { textRaw, lStr, line } of DocStrMap) {
             if (
                 RegexInclude.test(lStr)
