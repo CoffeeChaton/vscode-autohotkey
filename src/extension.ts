@@ -93,4 +93,6 @@ registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', '
 CodeLensProvider -> run this func/command DA
 FoldingRangeProvider
 */
-// TODO https://www.autohotkey.com/docs/Functions.htm#lib
+// TODO %A_ScriptDir%\Lib\  ; Local library - requires [v1.0.90+].
+//      %A_MyDocuments%\AutoHotkey\Lib\  ; User library.
+//      directory-of-the-currently-running-AutoHotkey.exe\Lib\  ; Standard library.

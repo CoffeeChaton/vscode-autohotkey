@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
 
@@ -13,7 +12,7 @@ export function getFuncWithName(wordUP: string): null | CAhkFunc {
         for (const DA of AhkSymbolList) {
             if (
                 DA instanceof CAhkFunc
-                && DA.kind === vscode.SymbolKind.Function
+                // && DA.kind === vscode.SymbolKind.Function
                 && DA.upName === wordUP
             ) {
                 return DA;
