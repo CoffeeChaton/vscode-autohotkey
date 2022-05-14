@@ -15,25 +15,22 @@ export function getClassInstanceVar(FuncInput: TFuncInput): null | CAhkClassInst
 
     const isStatic = (/^static\s/ui).test(lStr.trimStart());
 
-    const realName = lStr
+    const name = lStr
         .substring(0, index)
         .replace(/^\s*static\s+/ui, '')
         .trim();
 
-    const col = lStr.lastIndexOf(realName, index);
+    const col = lStr.lastIndexOf(name, index);
 
     return new CAhkClassInstanceVar({
-        showName: isStatic
-            ? `Static ${realName}`
-            : realName,
-        realName,
+        name,
         range: new vscode.Range(
             new vscode.Position(line, 0),
             new vscode.Position(line, textRaw.length),
         ),
         selectionRange: new vscode.Range(
             new vscode.Position(line, col),
-            new vscode.Position(line, col + realName.length),
+            new vscode.Position(line, col + name.length),
         ),
         uri: document.uri,
         detail: isStatic

@@ -192,7 +192,7 @@ export function getClass(FuncInput: TFuncInput): null | CAhkClass {
     const name = ma[1];
 
     const ch = getChildren<CAhkClass>(
-        [getClass, getFunc, getClassGetSet, getClassInstanceVar, ParserLine],
+        [getClass, getFunc, getClassGetSet, getClassInstanceVar],
         {
             DocStrMap,
             RangeStartLine: range.start.line + 1,

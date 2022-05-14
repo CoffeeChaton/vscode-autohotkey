@@ -1,48 +1,16 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4] }] */
-import * as vscode from 'vscode';
+export function getObjChapterArr(textRaw: string, character: number): readonly string[] | null {
+    if (character === 0) return null;
 
-function fnTest(chapter: string): boolean {
-    return chapter === '' || (/^\d+$/u).test(chapter);
-}
+    const textLPart: string = textRaw.substring(0, character);
 
-export function getObjChapterArr(document: vscode.TextDocument, position: vscode.Position): readonly string[] | null {
-    /*
-    a common trigger character is . to trigger member completions.
-    */
-    const textRaw = document.lineAt(position).text;
+    const ma: RegExpMatchArray | null = textLPart.match(/([\w.]+)$/u);
+    if (ma === null) return null;
+    const ChapterList: string[] = ma[1].split('.');
+    ChapterList.pop();
 
-    if (position.character === 0) return null;
-    const textLPart = textRaw.substring(0, position.character);
-    const ChapterArr: string[] = [];
-    let chapter = '';
+    if (ChapterList.length === 0) return null;
 
-    if (textLPart.length - 2 < 0) return null;
-    for (let i = textLPart.length - 2; i > -1; i--) {
-        if (textLPart[i] === ' ' || textLPart[i] === '=') {
-            if (fnTest(chapter)) return null;
-            ChapterArr.push(chapter);
-            chapter = '';
-            break;
-        } else if (textLPart[i] === '.') {
-            if (fnTest(chapter)) return null;
-            ChapterArr.push(chapter);
-            chapter = '';
-        } else {
-            if (!(/^\w$/u).test(textLPart[i])) return null;
-            chapter = `${textLPart[i]}${chapter}`;
-        }
+    if ((/^\d+$/ui).test(ChapterList[0])) return null; // ex: 0.5
 
-        if (i === 0) {
-            if (fnTest(chapter)) return null;
-            ChapterArr.push(chapter);
-            chapter = '';
-        }
-    }
-
-    if (ChapterArr.length === 0) return null;
-    ChapterArr.reverse();
-    const chapterHead = ChapterArr[0];
-
-    if (chapterHead === '') return null;
-    return ChapterArr;
+    return ChapterList;
 }

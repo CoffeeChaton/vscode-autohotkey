@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { A_Variables } from '../../../tools/Built-in/Variables';
 
-export const snippetStartWihA: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
+const snippetStartWihA: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     const tempList: vscode.CompletionItem[] = [];
     for (const [k, v] of Object.entries(A_Variables)) {
         const label: vscode.CompletionItemLabel = {
@@ -25,5 +25,17 @@ export const snippetStartWihA: readonly vscode.CompletionItem[] = ((): vscode.Co
     return tempList;
 })();
 
+export function getSnippetStartWihA(
+    PartStr: string | null,
+    triggerCharacter: string | undefined,
+): readonly vscode.CompletionItem[] {
+    if (triggerCharacter === 'A') return snippetStartWihA;
+
+    if (PartStr === null) return [];
+
+    return PartStr.startsWith('A')
+        ? snippetStartWihA
+        : [];
+}
 // // Delay loading
 // setTimeout(snippetStartWihA, ETime.SnippetStartWihA);

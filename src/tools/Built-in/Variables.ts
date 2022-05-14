@@ -771,6 +771,10 @@ export const A_Variables: TA_Variables = {
         group: 'Date and Time',
         uri: 'https://www.autohotkey.com/docs/Variables.htm#date',
     },
+};
+
+// FIXME:
+const TODO: TA_Variables = {
     Clipboard: {
         body: 'Clipboard',
         group: 'Misc.',
@@ -797,6 +801,5 @@ export const A_Variables: TA_Variables = {
         uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
     },
 };
-
 // if this object size > 1k line, should use JSON.parse replace object literal,
 // but I need tsc && Syntax Highlight.

@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
+import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { getSnippetBlockFilesList } from '../../configUI';
+import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { Completion2Directives } from '../../tools/Built-in/DirectivesList';
 import { ahkSend } from './ahkSend';
 import { BuiltInFunc2Completion } from './autoBuiltInFunc2Completion';
@@ -7,19 +9,45 @@ import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
 // import { globalValCompletion } from './global/globalValCompletion';
 import { isNormalPos } from './isNormalPos';
-import { snippetStartWihA } from './json/SnippetStartWihA';
+import { getSnippetStartWihA } from './json/SnippetStartWihA';
 import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
 import { getStartWithStr } from './util';
+
+function getPartStr(lStr: string, position: vscode.Position): string | null {
+    const match: RegExpMatchArray | null = lStr
+        .substring(0, position.character)
+        .match(/(?<![^.`{}])\b(\w+)$/u);
+
+    return match === null
+        ? null
+        : match[1];
+}
+
+function getTopSymbolWithPos(AhkSymbolList: TTopSymbol[], position: vscode.Position): TTopSymbol | null {
+    for (const DA of AhkSymbolList) {
+        if (DA.range.contains(position)) return DA;
+    }
+    return null;
+}
 
 function CompletionItemCore(
     document: vscode.TextDocument,
     position: vscode.Position,
     context: vscode.CompletionContext,
 ): vscode.CompletionItem[] {
+    const AhkFileData: TAhkFileData = Detecter.updateDocDef(document);
+
+    const { AhkSymbolList, DocStrMap } = AhkFileData;
+    const { lStr, textRaw } = DocStrMap[position.line];
+    const topSymbol: TTopSymbol | null = getTopSymbolWithPos(AhkSymbolList, position);
+
+    const PartStr: string | null = getPartStr(lStr, position);
+
     const completions: vscode.CompletionItem[] = [
-        ...wrapClass(document, position), // '.'
+        ...wrapClass(document, position, textRaw, lStr, topSymbol), // '.'
         ...ahkSend(document, position), // '{'
-        ...Completion2Directives(context.triggerCharacter, document, position),
+        ...Completion2Directives(lStr, position),
+        ...getSnippetStartWihA(PartStr, context.triggerCharacter),
     ];
 
     if (isNormalPos(document, position)) {
@@ -28,7 +56,6 @@ function CompletionItemCore(
         completions.push(
             ...listAllFuncClass(inputStr, filesBlockList),
             ...DeepAnalysisToCompletionItem(document, position, inputStr),
-            ...snippetStartWihA,
             ...BuiltInFunc2Completion(inputStr),
             // ...globalValCompletion(document, position, inputStr),
         );

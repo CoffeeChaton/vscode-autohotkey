@@ -612,13 +612,15 @@ const SnippetDirectives: readonly vscode.CompletionItem[] = ((): vscode.Completi
 })();
 
 export function Completion2Directives(
-    triggerCharacter: string | undefined,
-    document: vscode.TextDocument,
+    lStr: string,
     position: vscode.Position,
 ): readonly vscode.CompletionItem[] {
-    if (triggerCharacter === '#') return SnippetDirectives;
+    const lStrTrim = lStr.trim();
+    if (!lStrTrim.startsWith('#')) return [];
 
-    return document.lineAt(position).text.trimStart().startsWith('#')
+    const subStr = lStr.substring(0, position.character).trim();
+
+    return (/^#\w*$/ui).test(subStr)
         ? SnippetDirectives
         : [];
 }

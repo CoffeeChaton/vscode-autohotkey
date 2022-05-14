@@ -1,11 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import * as vscode from 'vscode';
 import { CAhkFunc } from './CAhkFunc';
-import { TLineClass } from './CAhkLine';
 
 type TCAhkClassInstanceVarParam = {
-    showName: string;
-    realName: string;
+    name: string;
     range: vscode.Range;
     selectionRange: vscode.Range;
     uri: vscode.Uri;
@@ -16,25 +14,22 @@ type TCAhkClassInstanceVarParam = {
 export class CAhkClassInstanceVar extends vscode.DocumentSymbol {
     // https://www.autohotkey.com/docs/Objects.htm#Custom_Classes_var
     public readonly uri: vscode.Uri;
-    public readonly realName: string;
     public readonly isStatic: boolean;
     declare public readonly kind: vscode.SymbolKind.Variable;
     declare public readonly detail: 'Instance Var' | 'static ClassVar';
     declare public readonly children: [];
     public constructor(
         {
-            showName,
             range,
             selectionRange,
             uri,
             detail,
-            realName,
+            name,
             isStatic,
         }: TCAhkClassInstanceVarParam,
     ) {
-        super(showName, detail, vscode.SymbolKind.Variable, range, selectionRange);
+        super(name, detail, vscode.SymbolKind.Variable, range, selectionRange);
         this.uri = uri;
-        this.realName = realName;
         this.isStatic = isStatic;
     }
 }
@@ -65,7 +60,7 @@ export class CAhkClassGetSet extends vscode.DocumentSymbol {
     }
 }
 
-export type TClassChildren = (CAhkClass | CAhkFunc | CAhkClassInstanceVar | CAhkClassGetSet | TLineClass);
+export type TClassChildren = (CAhkClass | CAhkFunc | CAhkClassInstanceVar | CAhkClassGetSet);
 
 // AhkSymbol instanceof CAhkClass
 export class CAhkClass extends vscode.DocumentSymbol {
