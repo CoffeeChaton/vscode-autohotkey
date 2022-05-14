@@ -1,10 +1,10 @@
-import * as mm from 'micromatch';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { Detecter, TAhkFileData } from '../../../core/Detecter';
 import { EStr } from '../../../Enum/EStr';
+import { fsPathIsAllow } from '../../../tools/fsTools/getUriList';
 
 function setClassSnip(
     inputStr: string,
@@ -56,12 +56,12 @@ function setFuncSnip(
 
 export function listAllFuncClass(
     inputStr: string, // <------------------------------------ don't use wm because inputStr
-    blockList: readonly string[],
+    blockList: readonly RegExp[],
 ): vscode.CompletionItem[] {
     const fsPaths: string[] = Detecter.getDocMapFile();
     const itemS: vscode.CompletionItem[] = [];
     for (const fsPath of fsPaths) {
-        if (mm.isMatch(fsPath, blockList)) continue;
+        if (!fsPathIsAllow(fsPath.replaceAll('\\', '/'), blockList)) continue;
 
         const AhkFileData: undefined | TAhkFileData = Detecter.getDocMap(fsPath);
         if (AhkFileData === undefined) continue;

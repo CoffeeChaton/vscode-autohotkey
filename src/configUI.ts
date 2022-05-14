@@ -78,12 +78,35 @@ export function getFormatConfig(): boolean {
     return config.formatTextReplace;
 }
 
-export function getIgnoredList(): readonly string[] {
-    return config.baseScan.IgnoredList;
+const wm: WeakMap<readonly string[], readonly RegExp[]> = new WeakMap();
+
+function str2RegexList(key: readonly string[]): readonly RegExp[] {
+    const cache: readonly RegExp[] | undefined = wm.get(key);
+    if (cache !== undefined) return cache;
+
+    // "/\\.",
+    // "/node_modules$",
+    // "/ahk_lib$",
+    // "/ahk_log$",
+    // "/ahk_music$",
+    // "/IMG$"
+    // "/Gdip_.*\\.ahk$",
+
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    const regexList: readonly RegExp[] = key.map((str: string): RegExp => new RegExp(str, 'u'));
+
+    wm.set(key, regexList);
+    return regexList;
 }
 
-export function getSnippetBlockFilesList(): readonly string[] {
-    return config.snippets.blockFilesList;
+export function getIgnoredList(): readonly RegExp[] {
+    const key: readonly string[] = config.baseScan.IgnoredList;
+    return str2RegexList(key);
+}
+
+export function getSnippetBlockFilesList(): readonly RegExp[] {
+    const key: readonly string[] = config.snippets.blockFilesList;
+    return str2RegexList(key);
 }
 
 /**

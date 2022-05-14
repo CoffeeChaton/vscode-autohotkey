@@ -23,7 +23,7 @@ function CompletionItemCore(
     ];
 
     if (isNormalPos(document, position)) {
-        const filesBlockList: readonly string[] = getSnippetBlockFilesList();
+        const filesBlockList: readonly RegExp[] = getSnippetBlockFilesList();
         const inputStr: string = getStartWithStr(document, position);
         completions.push(
             ...listAllFuncClass(inputStr, filesBlockList),

@@ -79,14 +79,15 @@
                 "AhkNekoHelp.baseScan.IgnoredList": {
                     "type": "array",
                     "default": [
-                        "**/.*",
-                        "**/node_modules/**",
-                        "**/*neko_Exp_GDIP*.ahk"
+                        "/\\.",
+                        "/node_modules$",
+                        "/node_modules/",
+                        "/neko_Exp_GDIP\\.ahk$"
                     ],
                     "items": {
                         "type": "string"
                     },
-                    "description": "goto Def, hover feature, block List, use glob Syntax,\nhttps://en.wikipedia.org/wiki/Glob_(programming)#Syntax"
+                    "description": "Disable AhkNekoHelp when the file path contains a match of any of the provided RegExpArray. Note: pathname separator use \"/\" not windows style \"\\\""
                 },
                 "AhkNekoHelp.format.textReplace": {
                     "type": "boolean",
@@ -103,13 +104,12 @@
                 "AhkNekoHelp.snippets.blockFilesList": {
                     "type": "array",
                     "default": [
-                        "**/node_modules/**",
-                        "**/*neko_Exp_GDIP*.ahk"
+                        "/Gdip_all_2020_08_24\\.ahk"
                     ],
                     "items": {
                         "type": "string"
                     },
-                    "description": "intelliSense block List, use glob Syntax,\nhttps://en.wikipedia.org/wiki/Glob_(programming)#Syntax"
+                    "description": "Disable IntelliSense when the file path contains a match of any of the provided RegExpArray. Note: pathname separator use \"/\" not windows style \"\\\""
                 },
                 "AhkNekoHelp.statusBar.displayColor": {
                     "type": "string",
@@ -213,6 +213,5 @@
         "typescript": "^4.6.4"
     },
     "dependencies": {
-        "micromatch": "^4.0.5"
     }
 }
