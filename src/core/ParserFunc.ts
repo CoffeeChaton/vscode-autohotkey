@@ -6,15 +6,17 @@ import {
     TTextMapIn,
     TValMapIn,
 } from '../AhkSymbol/CAhkFunc';
-import { TLineClass } from '../AhkSymbol/CAhkLine';
-import { CAhkSwitch } from '../AhkSymbol/CAhkSwitch';
 import { TTokenStream } from '../globalEnum';
 import { getFnVarDef } from '../tools/DeepAnalysis/FnVar/getFnVarDef';
 import { getParamDef } from '../tools/DeepAnalysis/getParamDef';
 import { getUnknownTextMap } from '../tools/DeepAnalysis/getUnknownTextMap';
+import { getFuncDef, TFuncDefData } from '../tools/Func/getFuncDef';
 import { getDocStrMapMask } from '../tools/getDocStrMapMask';
 import { getFuncDocCore } from '../tools/MD/getFuncDocMD';
-import { TFuncInput } from './getChildren';
+import { getRange } from '../tools/range/getRange';
+import { getChildren, TFuncInput } from './getChildren';
+import { ParserBlock } from './Parser';
+import { ParserLine } from './ParserTools/ParserLine';
 
 function getFuncDetail(line: number, DocStrMap: TTokenStream): string {
     if (line === 0) return '';
@@ -24,32 +26,37 @@ function getFuncDetail(line: number, DocStrMap: TTokenStream): string {
         : '';
 }
 
-type TGetFuncCore = {
-    FuncInput: TFuncInput;
-    name: string;
-    selectionRange: vscode.Range;
-    range: vscode.Range;
-    ch: (TLineClass | CAhkSwitch)[];
-};
-
-export function getFuncCore(
-    {
-        FuncInput,
-        name,
-        selectionRange,
-        range,
-        ch,
-    }: TGetFuncCore,
-): CAhkFunc {
+// TODO spilt this func
+export function getFunc(FuncInput: TFuncInput): null | CAhkFunc {
     const {
-        classStack,
-        line,
         DocStrMap,
+        line,
+        RangeEndLine,
+        classStack,
+        lStr,
         document,
         GValMap,
     } = FuncInput;
 
-    const detail: string = getFuncDetail(line, DocStrMap);
+    const col: number = lStr.indexOf('(');
+    if (lStr.length < 1 || col === -1 || lStr.indexOf('}') > -1) return null;
+    const isFunc: TFuncDefData | null = getFuncDef(DocStrMap, line);
+    if (isFunc === null) return null;
+
+    const { name, selectionRange } = isFunc;
+
+    const range = getRange(DocStrMap, line, selectionRange.end.line, RangeEndLine);
+    const ch = getChildren<CAhkFunc>(
+        [ParserBlock.getSwitchBlock, ParserLine],
+        {
+            DocStrMap,
+            RangeStartLine: range.start.line + 1,
+            RangeEndLine: range.end.line,
+            classStack,
+            document,
+            GValMap,
+        },
+    );
 
     const AhkTokenList: TTokenStream = getDocStrMapMask(range, DocStrMap);
 
@@ -66,17 +73,9 @@ export function getFuncCore(
     const selectionRangeText: string = document.getText(selectionRange);
     const fileName: string = path.basename(document.uri.fsPath);
 
-    const nameRange = new vscode.Range(
-        selectionRange.start,
-        new vscode.Position(
-            selectionRange.start.line,
-            selectionRangeText.indexOf('('),
-        ),
-    );
-
     const myFn2: CAhkFunc = new CAhkFunc({
         name,
-        detail,
+        detail: getFuncDetail(line, DocStrMap),
         range,
         selectionRange,
         selectionRangeText,
@@ -87,7 +86,13 @@ export function getFuncCore(
         valMap,
         textMap,
         ch,
-        nameRange,
+        nameRange: new vscode.Range(
+            selectionRange.start,
+            new vscode.Position(
+                line,
+                col,
+            ),
+        ),
     });
     return myFn2;
 }

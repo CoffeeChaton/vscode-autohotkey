@@ -35,13 +35,14 @@ function HoverProviderCore(
 
     const DA: CAhkFunc | null = getDAWithPosNext(AhkSymbolList, position);
     if (DA !== null) {
-        console.log('🚀 ~ DA', DA.nameRange);
         if (DA.nameRange.contains(position)) {
-            console.log('🚀 ~ DA------', DA.name);
-
             return new vscode.Hover(DA.md);
         }
     }
+
+    // pos at Comment range...
+    // const { lStr } = DocStrMap[position.line];
+    // if (position.character > lStr.length) return null;
 
     // eslint-disable-next-line security/detect-unsafe-regex
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
