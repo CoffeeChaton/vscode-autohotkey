@@ -5,6 +5,7 @@ import { getSnippetBlockFilesList } from '../../configUI';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { Completion2Directives } from '../../tools/Built-in/DirectivesList';
 import { getDAWithPosNext } from '../../tools/DeepAnalysis/getDAWithPos';
+import { getTopSymbolWithPos } from '../../tools/DeepAnalysis/getTopSymbolWithPos';
 import { ahkSend } from './ahkSend';
 import { BuiltInFunc2Completion } from './autoBuiltInFunc2Completion';
 import { wrapClass } from './classThis/wrapClass';
@@ -23,13 +24,6 @@ function getPartStr(lStr: string, position: vscode.Position): string | null {
     return match === null
         ? null
         : match[1];
-}
-
-function getTopSymbolWithPos(AhkSymbolList: TTopSymbol[], position: vscode.Position): TTopSymbol | null {
-    for (const DA of AhkSymbolList) {
-        if (DA.range.contains(position)) return DA;
-    }
-    return null;
 }
 
 function CompletionItemCore(

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
+import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { pushToken, TSemanticTokensLeaf } from './tools';
 
@@ -37,7 +37,7 @@ function DA2SemanticHighlight(DA: CAhkFunc): TSemanticTokensLeaf[] {
 }
 
 export function DAList2SemanticHighlightFull(
-    AhkSymbolList: TAhkSymbolList,
+    AhkSymbolList: readonly TTopSymbol[],
     Collector: vscode.SemanticTokensBuilder,
 ): void {
     const DAList: CAhkFunc[] = getDAList(AhkSymbolList);

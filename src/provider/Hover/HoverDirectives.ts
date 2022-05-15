@@ -1,11 +1,10 @@
 import * as vscode from 'vscode';
 import { CAhkDirectives } from '../../AhkSymbol/CAhkLine';
-import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
-import { Detecter } from '../../core/Detecter';
+import { TAhkSymbolList, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { DirectivesMDMap } from '../../tools/Built-in/DirectivesList';
 
 export function findDirectivesWithPos(
-    AhkSymbolList: TAhkSymbolList,
+    AhkSymbolList: Readonly<TAhkSymbolList>,
     position: vscode.Position,
 ): undefined | CAhkDirectives {
     for (const ah of AhkSymbolList) {
@@ -19,12 +18,9 @@ export function findDirectivesWithPos(
 }
 
 export function HoverDirectives(
-    fsPath: string,
     position: vscode.Position,
+    AhkSymbolList: readonly TTopSymbol[],
 ): vscode.MarkdownString | undefined {
-    const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
-    if (AhkSymbolList === undefined) return undefined;
-
     const ah: CAhkDirectives | undefined = findDirectivesWithPos(AhkSymbolList, position);
 
     return ah !== undefined

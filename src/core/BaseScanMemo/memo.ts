@@ -16,13 +16,13 @@ class CTopClass extends vscode.DocumentSymbol {
     declare public readonly children: TTopSymbol[];
 }
 
-export type TMemo = {
-    readonly AhkSymbolList: TTopSymbol[];
+export type TMemo = Readonly<{
+    readonly AhkSymbolList: readonly TTopSymbol[];
     readonly GValMap: TGValMapReadOnly;
     readonly DocStrMap: TTokenStream;
     readonly DocFullSize: number;
     readonly baseDiag: readonly vscode.Diagnostic[];
-};
+}>;
 
 function strListDeepEq(DocStrMap: TTokenStream, fullTextList: readonly string[]): boolean {
     const len: number = DocStrMap.length;

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TAhkSymbol, TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
+import { TAhkSymbol, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../../core/Detecter';
 
 function toSymbolInfo(AhkSymbol: TAhkSymbol): vscode.SymbolInformation {
@@ -13,9 +13,9 @@ function toSymbolInfo(AhkSymbol: TAhkSymbol): vscode.SymbolInformation {
     return new vscode.SymbolInformation(name, kind, detail, new vscode.Location(AhkSymbol.uri, range));
 }
 
-const wm: WeakMap<TAhkSymbolList, vscode.SymbolInformation[]> = new WeakMap(); // 4ms -> 0ms
+const wm: WeakMap<readonly TTopSymbol[], vscode.SymbolInformation[]> = new WeakMap(); // 4ms -> 0ms
 
-function DocSymbol2SymbolInfo(AhkSymbolList: TAhkSymbolList): vscode.SymbolInformation[] {
+function DocSymbol2SymbolInfo(AhkSymbolList: readonly TTopSymbol[]): vscode.SymbolInformation[] {
     const cache: vscode.SymbolInformation[] | undefined = wm.get(AhkSymbolList);
     if (cache !== undefined) return cache;
 
@@ -30,7 +30,7 @@ function WorkspaceSymbolCore(): vscode.SymbolInformation[] {
     const fsPathList: string[] = Detecter.getDocMapFile();
 
     for (const fsPath of fsPathList) {
-        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
+        const AhkSymbolList: readonly TTopSymbol[] | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) continue;
 
         result.push(...DocSymbol2SymbolInfo(AhkSymbolList));

@@ -2,7 +2,7 @@ import { CAhkClass } from '../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 
-export function getDAList(AhkSymbolList: TAhkSymbolList): CAhkFunc[] {
+export function getDAList(AhkSymbolList: Readonly<TAhkSymbolList>): CAhkFunc[] {
     const result: CAhkFunc[] = [];
     for (const DA of AhkSymbolList) {
         if (DA instanceof CAhkFunc) {

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
+import { TTopSymbol } from '../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 
@@ -15,7 +15,7 @@ export function ListAllFunc(showLink: boolean): null {
 
     const AllList: string[] = [];
     for (const fsPath of allFsPath) {
-        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
+        const AhkSymbolList: readonly TTopSymbol[] | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) continue;
 
         AllList.push(fsPath);
@@ -47,7 +47,7 @@ export function ListAllFuncSort(reverse: boolean): null {
 
     const AllList: string[] = [];
     for (const fsPath of allFsPath) {
-        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
+        const AhkSymbolList: readonly TTopSymbol[] | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) {
             continue;
         }

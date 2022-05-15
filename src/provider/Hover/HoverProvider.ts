@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import { Detecter } from '../../core/Detecter';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func';
-import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
+import { getDAWithPosNext } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { getGlobalMarkdown } from '../../tools/MD/getGlobalMarkdown';
@@ -26,9 +27,21 @@ function HoverProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Hover | null {
-    // ex #Warn
-    const DirectivesMd: vscode.MarkdownString | undefined = HoverDirectives(document.uri.fsPath, position);
+    const { AhkSymbolList } = Detecter.getDocMap(document.uri.fsPath) ?? Detecter.updateDocDef(document);
+
+    // ex: #Warn
+    const DirectivesMd: vscode.MarkdownString | undefined = HoverDirectives(position, AhkSymbolList);
     if (DirectivesMd !== undefined) return new vscode.Hover(DirectivesMd);
+
+    const DA: CAhkFunc | null = getDAWithPosNext(AhkSymbolList, position);
+    if (DA !== null) {
+        console.log('🚀 ~ DA', DA.nameRange);
+        if (DA.nameRange.contains(position)) {
+            console.log('🚀 ~ DA------', DA.name);
+
+            return new vscode.Hover(DA.md);
+        }
+    }
 
     // eslint-disable-next-line security/detect-unsafe-regex
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
@@ -43,8 +56,7 @@ function HoverProviderCore(
     // const commands = getCommandsHover(document, position);
     // if (commands !== null) return commands;
 
-    const DA: CAhkFunc | undefined = getDAWithPos(document.uri.fsPath, position);
-    if (DA !== undefined) {
+    if (DA !== null) {
         const md: vscode.MarkdownString | null = DeepAnalysisHover(DA, wordUp, position);
         if (md !== null) return new vscode.Hover(md);
     }

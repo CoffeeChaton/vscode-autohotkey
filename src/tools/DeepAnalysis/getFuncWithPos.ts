@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
+import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../../core/Detecter';
 
 export function getFuncWithPos(
     fsPath: string,
     position: vscode.Position,
 ): undefined | CAhkFunc {
-    const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
+    const AhkSymbolList: readonly TTopSymbol[] | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
     if (AhkSymbolList === undefined) return undefined;
 
     for (const DA of AhkSymbolList) {

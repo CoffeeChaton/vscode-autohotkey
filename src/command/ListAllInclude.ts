@@ -1,9 +1,9 @@
 import { CAhkInclude } from '../AhkSymbol/CAhkLine';
-import { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
+import { TAhkSymbolList, TTopSymbol } from '../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 
-function collectInclude(List: string[], AhkSymbolList: TAhkSymbolList): void {
+function collectInclude(List: string[], AhkSymbolList: Readonly<TAhkSymbolList>): void {
     for (const AhkSymbol of AhkSymbolList) {
         if (AhkSymbol instanceof CAhkInclude) {
             List.push(AhkSymbol.name.trim());
@@ -19,7 +19,7 @@ export function ListAllInclude(): null {
 
     const AllList: string[] = [];
     for (const fsPath of allFsPath) {
-        const AhkSymbolList: TAhkSymbolList | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
+        const AhkSymbolList: readonly TTopSymbol[] | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) continue;
 
         const List: string[] = [];

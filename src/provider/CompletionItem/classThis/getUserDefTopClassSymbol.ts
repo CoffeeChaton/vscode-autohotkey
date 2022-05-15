@@ -1,11 +1,11 @@
 import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
-import { TAhkSymbolList } from '../../../AhkSymbol/TAhkSymbolIn';
+import { TTopSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../../../core/Detecter';
 
 export function getUserDefTopClassSymbol(keyUpName: string): CAhkClass | null {
     const fsPaths: string[] = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
-        const AhkSymbolList: undefined | TAhkSymbolList = Detecter.getDocMap(fsPath)?.AhkSymbolList;
+        const AhkSymbolList: undefined | readonly TTopSymbol[] = Detecter.getDocMap(fsPath)?.AhkSymbolList;
         if (AhkSymbolList === undefined) continue;
 
         for (const AhkSymbol of AhkSymbolList) {
