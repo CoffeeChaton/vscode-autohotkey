@@ -42,6 +42,7 @@ export function getClassGetSet(FuncInput: TFuncInput): null | CAhkClassGetSet {
 //         ...
 //     }
 
+// FIXME: Property is like function!
 //     Property[]  ; Brackets are optional ....<<< this way
 //     {
 //         get {

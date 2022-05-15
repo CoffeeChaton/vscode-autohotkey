@@ -1,8 +1,10 @@
 import * as vscode from 'vscode';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { getSnippetBlockFilesList } from '../../configUI';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { Completion2Directives } from '../../tools/Built-in/DirectivesList';
+import { getDAWithPosNext } from '../../tools/DeepAnalysis/getDAWithPos';
 import { ahkSend } from './ahkSend';
 import { BuiltInFunc2Completion } from './autoBuiltInFunc2Completion';
 import { wrapClass } from './classThis/wrapClass';
@@ -37,14 +39,15 @@ function CompletionItemCore(
 ): vscode.CompletionItem[] {
     const AhkFileData: TAhkFileData = Detecter.updateDocDef(document);
 
+    // const t1 = Date.now();
     const { AhkSymbolList, DocStrMap } = AhkFileData;
     const { lStr, textRaw } = DocStrMap[position.line];
     const topSymbol: TTopSymbol | null = getTopSymbolWithPos(AhkSymbolList, position);
-
+    const DA: null | CAhkFunc = getDAWithPosNext(AhkSymbolList, position);
     const PartStr: string | null = getPartStr(lStr, position);
 
     const completions: vscode.CompletionItem[] = [
-        ...wrapClass(document, position, textRaw, lStr, topSymbol), // '.'
+        ...wrapClass(position, textRaw, lStr, topSymbol, DocStrMap, DA), // '.'
         ...ahkSend(document, position), // '{'
         ...Completion2Directives(lStr, position),
         ...getSnippetStartWihA(PartStr, context.triggerCharacter),
@@ -60,6 +63,10 @@ function CompletionItemCore(
             // ...globalValCompletion(document, position, inputStr),
         );
     }
+
+    // const t2 = Date.now();
+    // console.log('🚀 ~ CompletionItemCore ~ t2', t2 - t1);
+    // console.log('🚀 ~ CompletionItemCore ~ context.triggerCharacter', context.triggerCharacter);
 
     return completions;
 }

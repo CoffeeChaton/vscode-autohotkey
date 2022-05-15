@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
+import { TAhkSymbolList, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../../core/Detecter';
 import { getDAList } from './getDAList';
 
+// FIXME: remove getDAWithPos
 export function getDAWithPos(
     fsPath: string,
     position: vscode.Position,
@@ -18,4 +19,16 @@ export function getDAWithPos(
     }
     return undefined;
     // at 8K line Gdip_all_2020_08_24 just need 1 ms
+}
+
+export function getDAWithPosNext(
+    AhkSymbolList: TTopSymbol[],
+    position: vscode.Position,
+): null | CAhkFunc {
+    const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
+
+    for (const DA of DAList) {
+        if (DA.range.contains(position)) return DA;
+    }
+    return null;
 }

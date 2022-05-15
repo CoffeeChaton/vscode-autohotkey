@@ -20,10 +20,7 @@ function wrapItem(
 ): vscode.CompletionItem {
     const item: vscode.CompletionItem = new vscode.CompletionItem(AhkSymbol.name.trim(), getKindOfCh(AhkSymbol.kind));
     item.detail = 'neko help; (wrapClass)';
-    if (
-        AhkSymbol instanceof CAhkFunc
-        && AhkSymbol.kind === vscode.SymbolKind.Method
-    ) {
+    if (AhkSymbol instanceof CAhkFunc) {
         item.documentation = AhkSymbol.md;
         item.label = AhkSymbol.selectionRangeText;
         item.insertText = AhkSymbol.selectionRangeText;
