@@ -1,14 +1,12 @@
 import * as vscode from 'vscode';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
-import { TTopSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
-import { getDAWithPos } from '../../../tools/DeepAnalysis/getDAWithPos';
 import { getParamCompletion } from './completion/getArgCompletion';
 import { getUnknownTextCompletion } from './completion/getUnknownTextCompletion';
 import { getValCompletion } from './completion/getValCompletion';
 import { TSnippetRecMap } from './ESnippetRecBecause';
 import { getRecMap } from './rec/getRecMap';
 
-function suggest(
+export function DeepAnalysisToCompletionItem(
     DA: CAhkFunc,
     position: vscode.Position,
     inputStr: string,
@@ -25,14 +23,3 @@ function suggest(
 }
 
 // don't use weakMap Memo, because position && inputStr
-// && DA is fragile.
-export function DeepAnalysisToCompletionItem(
-    position: vscode.Position,
-    inputStr: string,
-    AhkSymbolList: readonly TTopSymbol[],
-): vscode.CompletionItem[] {
-    const DA: null | CAhkFunc = getDAWithPos(AhkSymbolList, position);
-    return DA === null
-        ? []
-        : suggest(DA, position, inputStr);
-}

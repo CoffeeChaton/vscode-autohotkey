@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
-import { getSnippetBlockFilesList } from '../../configUI';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { Completion2Directives } from '../../tools/Built-in/DirectivesList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
@@ -18,7 +17,7 @@ import { getStartWithStr } from './util';
 function getPartStr(lStr: string, position: vscode.Position): string | null {
     const match: RegExpMatchArray | null = lStr
         .substring(0, position.character)
-        .match(/(?<![^.`{}])\b(\w+)$/u);
+        .match(/(?<![.`{}#])\b(\w+)$/u);
 
     return match === null
         ? null
@@ -28,7 +27,6 @@ function getPartStr(lStr: string, position: vscode.Position): string | null {
 function CompletionItemCore(
     document: vscode.TextDocument,
     position: vscode.Position,
-    context: vscode.CompletionContext,
 ): vscode.CompletionItem[] {
     const AhkFileData: TAhkFileData = Detecter.updateDocDef(document);
 
@@ -38,23 +36,24 @@ function CompletionItemCore(
     const topSymbol: TTopSymbol | null = getTopSymbolWithPos(AhkSymbolList, position);
     const DA: null | CAhkFunc = getDAWithPos(AhkSymbolList, position);
     const PartStr: string | null = getPartStr(lStr, position);
+    // console.log('🚀 ~ PartStr', PartStr);
 
     const completions: vscode.CompletionItem[] = [
         ...wrapClass(position, textRaw, lStr, topSymbol, DocStrMap, DA), // '.'
         ...ahkSend(document, position), // '{'
         ...Completion2Directives(lStr, position),
-        ...getSnippetStartWihA(PartStr, context.triggerCharacter),
+        ...getSnippetStartWihA(PartStr),
     ];
 
     if (PartStr !== null && !isPosAtStrNext(textRaw, lStr, position)) {
-        const filesBlockList: readonly RegExp[] = getSnippetBlockFilesList();
         const inputStr: string = getStartWithStr(document, position);
         completions.push(
-            ...listAllFuncClass(inputStr, filesBlockList),
-            ...DeepAnalysisToCompletionItem(position, inputStr, AhkSymbolList),
+            ...listAllFuncClass(inputStr),
             ...BuiltInFunc2Completion(inputStr),
             // ...globalValCompletion(document, position, inputStr),
         );
+
+        if (DA !== null) completions.push(...DeepAnalysisToCompletionItem(DA, position, inputStr));
     }
 
     // const t2 = Date.now();
@@ -70,9 +69,8 @@ export const CompletionItemProvider: vscode.CompletionItemProvider = {
         document: vscode.TextDocument,
         position: vscode.Position,
         _token: vscode.CancellationToken,
-        context: vscode.CompletionContext,
     ): vscode.ProviderResult<vscode.CompletionItem[]> {
-        return CompletionItemCore(document, position, context);
+        return CompletionItemCore(document, position);
     },
 };
 

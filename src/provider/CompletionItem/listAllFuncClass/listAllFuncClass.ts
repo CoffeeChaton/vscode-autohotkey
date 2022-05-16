@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
+import { getSnippetBlockFilesList } from '../../../configUI';
 import { Detecter, TAhkFileData } from '../../../core/Detecter';
 import { EStr } from '../../../Enum/EStr';
 import { fsPathIsAllow } from '../../../tools/fsTools/getUriList';
@@ -56,12 +57,13 @@ function setFuncSnip(
 
 export function listAllFuncClass(
     inputStr: string, // <------------------------------------ don't use wm because inputStr
-    blockList: readonly RegExp[],
 ): vscode.CompletionItem[] {
+    const filesBlockList: readonly RegExp[] = getSnippetBlockFilesList();
+
     const fsPaths: string[] = Detecter.getDocMapFile();
     const itemS: vscode.CompletionItem[] = [];
     for (const fsPath of fsPaths) {
-        if (!fsPathIsAllow(fsPath.replaceAll('\\', '/'), blockList)) continue;
+        if (!fsPathIsAllow(fsPath.replaceAll('\\', '/'), filesBlockList)) continue;
 
         const AhkFileData: undefined | TAhkFileData = Detecter.getDocMap(fsPath);
         if (AhkFileData === undefined) continue;

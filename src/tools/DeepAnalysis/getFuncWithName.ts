@@ -10,11 +10,7 @@ export function getFuncWithName(wordUP: string): null | CAhkFunc {
 
         const { AhkSymbolList } = AhkFileData;
         for (const DA of AhkSymbolList) {
-            if (
-                DA instanceof CAhkFunc
-                // && DA.kind === vscode.SymbolKind.Function
-                && DA.upName === wordUP
-            ) {
+            if (DA instanceof CAhkFunc && DA.upName === wordUP) {
                 return DA;
             }
         }
