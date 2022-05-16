@@ -45,14 +45,15 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
     return List;
 }
 
-function isPosAtMethodName(fsPath: string, position: vscode.Position): boolean {
-    const DA: CAhkFunc | undefined = getDAWithPos(fsPath, position);
-    return DA !== undefined
+function isPosAtMethodName(DA: CAhkFunc | null, position: vscode.Position): boolean {
+    return DA !== null
         && DA.kind === vscode.SymbolKind.Method
         && DA.nameRange.contains(position);
 }
 
+// FIXME: spilt this func
 export function userDefFunc(
+    // TODO input DA: CAhkFunc
     document: vscode.TextDocument,
     position: vscode.Position,
     wordUp: string,
@@ -60,8 +61,15 @@ export function userDefFunc(
 ): null | vscode.Location[] {
     const timeStart: number = Date.now();
 
-    const funcSymbol: CAhkFunc | null = getFuncWithName(wordUp);
-    if (funcSymbol === null || isPosAtMethodName(document.uri.fsPath, position)) return null;
+    const AhkFileData: TAhkFileData = Detecter.getDocMap(document.uri.fsPath) ?? Detecter.updateDocDef(document);
+    const { AhkSymbolList } = AhkFileData;
+
+    if (isPosAtMethodName(getDAWithPos(AhkSymbolList, position), position)) {
+        return null;
+    }
+
+    const funcSymbol: CAhkFunc | null = getFuncWithName(wordUp); // FIXME: just need input ahkFunc
+    if (funcSymbol === null) return null;
 
     const ahkFunc = {
         // funcName( | "funcName"

@@ -4,14 +4,13 @@ import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { getSnippetBlockFilesList } from '../../configUI';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { Completion2Directives } from '../../tools/Built-in/DirectivesList';
-import { getDAWithPosNext } from '../../tools/DeepAnalysis/getDAWithPos';
+import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getTopSymbolWithPos } from '../../tools/DeepAnalysis/getTopSymbolWithPos';
+import { isPosAtStrNext } from '../../tools/isPosAtStr';
 import { ahkSend } from './ahkSend';
 import { BuiltInFunc2Completion } from './autoBuiltInFunc2Completion';
 import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
-// import { globalValCompletion } from './global/globalValCompletion';
-import { isNormalPos } from './isNormalPos';
 import { getSnippetStartWihA } from './json/SnippetStartWihA';
 import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
 import { getStartWithStr } from './util';
@@ -37,7 +36,7 @@ function CompletionItemCore(
     const { AhkSymbolList, DocStrMap } = AhkFileData;
     const { lStr, textRaw } = DocStrMap[position.line];
     const topSymbol: TTopSymbol | null = getTopSymbolWithPos(AhkSymbolList, position);
-    const DA: null | CAhkFunc = getDAWithPosNext(AhkSymbolList, position);
+    const DA: null | CAhkFunc = getDAWithPos(AhkSymbolList, position);
     const PartStr: string | null = getPartStr(lStr, position);
 
     const completions: vscode.CompletionItem[] = [
@@ -47,12 +46,12 @@ function CompletionItemCore(
         ...getSnippetStartWihA(PartStr, context.triggerCharacter),
     ];
 
-    if (isNormalPos(document, position)) {
+    if (PartStr !== null && !isPosAtStrNext(textRaw, lStr, position)) {
         const filesBlockList: readonly RegExp[] = getSnippetBlockFilesList();
         const inputStr: string = getStartWithStr(document, position);
         completions.push(
             ...listAllFuncClass(inputStr, filesBlockList),
-            ...DeepAnalysisToCompletionItem(document, position, inputStr),
+            ...DeepAnalysisToCompletionItem(position, inputStr, AhkSymbolList),
             ...BuiltInFunc2Completion(inputStr),
             // ...globalValCompletion(document, position, inputStr),
         );

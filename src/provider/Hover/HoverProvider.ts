@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { Detecter } from '../../core/Detecter';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func';
-import { getDAWithPosNext } from '../../tools/DeepAnalysis/getDAWithPos';
+import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { getGlobalMarkdown } from '../../tools/MD/getGlobalMarkdown';
@@ -33,7 +33,7 @@ function HoverProviderCore(
     const DirectivesMd: vscode.MarkdownString | undefined = HoverDirectives(position, AhkSymbolList);
     if (DirectivesMd !== undefined) return new vscode.Hover(DirectivesMd);
 
-    const DA: CAhkFunc | null = getDAWithPosNext(AhkSymbolList, position);
+    const DA: CAhkFunc | null = getDAWithPos(AhkSymbolList, position);
     if (DA !== null) {
         if (DA.nameRange.contains(position)) {
             return new vscode.Hover(DA.md);

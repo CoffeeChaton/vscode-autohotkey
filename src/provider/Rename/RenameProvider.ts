@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import { Detecter } from '../../core/Detecter';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { userDefFunc } from '../Def/DefProvider';
 
@@ -8,15 +9,15 @@ function RenameProviderCore(
     position: vscode.Position,
     newName: string,
 ): vscode.WorkspaceEdit | null {
-    const DA: undefined | CAhkFunc = getDAWithPos(document.uri.fsPath, position);
-    if (DA === undefined || !DA.nameRange.contains(position)) {
+    const { AhkSymbolList } = Detecter.getDocMap(document.uri.fsPath) ?? Detecter.updateDocDef(document);
+
+    const DA: null | CAhkFunc = getDAWithPos(AhkSymbolList, position);
+    if (DA === null || !DA.nameRange.contains(position) || DA.kind === vscode.SymbolKind.Method) {
         void vscode.window.showInformationMessage('please use rename at function def range');
         return null;
     }
 
-    const wordUp: string = document.getText(DA.nameRange).toUpperCase();
-    const listAllUsing = true;
-    const userDefLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
+    const userDefLink: vscode.Location[] | null = userDefFunc(document, position, DA.upName, true);
     if (userDefLink === null) return null;
 
     const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
+import { TTopSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
 import { getDAWithPos } from '../../../tools/DeepAnalysis/getDAWithPos';
-import { isPosAtStr } from '../../../tools/isPosAtStr';
 import { getParamCompletion } from './completion/getArgCompletion';
 import { getUnknownTextCompletion } from './completion/getUnknownTextCompletion';
 import { getValCompletion } from './completion/getValCompletion';
@@ -27,14 +27,12 @@ function suggest(
 // don't use weakMap Memo, because position && inputStr
 // && DA is fragile.
 export function DeepAnalysisToCompletionItem(
-    document: vscode.TextDocument,
     position: vscode.Position,
     inputStr: string,
+    AhkSymbolList: readonly TTopSymbol[],
 ): vscode.CompletionItem[] {
-    if (isPosAtStr(document, position)) return [];
-
-    const DA: undefined | CAhkFunc = getDAWithPos(document.uri.fsPath, position);
-    if (DA === undefined) return [];
-
-    return suggest(DA, position, inputStr);
+    const DA: null | CAhkFunc = getDAWithPos(AhkSymbolList, position);
+    return DA === null
+        ? []
+        : suggest(DA, position, inputStr);
 }
