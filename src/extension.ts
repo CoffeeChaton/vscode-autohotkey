@@ -7,7 +7,7 @@ import {
     workspace,
 } from 'vscode';
 import { AnalyzeFuncMain } from './command/AnalyzeFunc/AnalyzeThisFunc';
-import { openDocs, statusBarClick } from './command/Command';
+import { statusBarClick } from './command/Command';
 import { ECommand } from './command/ECommand';
 import { fnRefreshResource, UpdateCacheAsync } from './command/UpdateCache';
 import { configChangEvent, statusBarItem } from './configUI';
@@ -61,7 +61,6 @@ export function activate(context: ExtensionContext): void {
         // window.tabGroups.onDidChangeTabGroups(onDidChangeTabGroups),
         // commands--------------------
         commands.registerCommand('ahk.nekoHelp.bar', statusBarClick),
-        commands.registerCommand('ahk.nekoHelp.openDoc', openDocs),
         commands.registerCommand('ahk.nekoHelp.refreshResource', fnRefreshResource),
         commands.registerCommand(ECommand.showFuncAnalyze, AnalyzeFuncMain),
         commands.registerCommand(ECommand.showUnknownAnalyze, showUnknownAnalyze),

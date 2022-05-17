@@ -24,24 +24,18 @@ AutoHotKey language support for VS Code
 
 ## CodeSymbol
 
-1. You can add two semicolon `;;` to comment line
-   or add `{ ;;` to comment code block.
-
+1. You can add two semicolon `;;` at line first.
    ![codeSymbol](image/codeSymbol4.png)
 
 2. You can see Leveled outline
 
 - class
 - function
-- Return
 - switch, Case, Default
-- Static Var
-- Global Var
 - Labels, like `this_is_a_label:`
 - HotString, like `::ahk::`
 - HotKeys, like `~F12::`
 - directive, like `#Include` or `#Warn`
-- Throw
   ![codeSymbol3](image/codeSymbol3.jpg)
 
 ## GotoDefinition
@@ -58,7 +52,7 @@ AutoHotKey language support for VS Code
 
    ![hover2](image/hover2.jpg)
 
-2. how to add comment of function ?
+2. Add comment of function ?
 
 ```ahk
 /**

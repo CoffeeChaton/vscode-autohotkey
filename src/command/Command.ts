@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { getDocUriStr } from '../configUI';
 import { DeepAnalysisAllFiles } from './DeepAnalysisAllFiles';
 import { pressureTest } from './DevMode';
 import { FormatAllFile } from './FormatAllFile';
@@ -26,14 +25,4 @@ export async function statusBarClick(): Promise<void> {
     const pick: TPick<void> | undefined = await vscode.window.showQuickPick<TCommand>(items);
 
     void pick?.fn();
-}
-
-export function openDocs(): void {
-    const Uri: vscode.Uri = vscode.Uri.parse(getDocUriStr());
-    void vscode.commands.executeCommand(
-        'vscode.open',
-        Uri,
-    );
-    //  .vscode.open();
-    // this.run(await this.createTemplate(text));
 }

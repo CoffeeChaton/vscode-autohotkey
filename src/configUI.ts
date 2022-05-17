@@ -42,7 +42,6 @@ function getConfig(): TConfigs {
                 code503: getConfigs<number>('Diag.WarningCap.code503'), // of param
             },
         },
-        openUriStr: getConfigs<string>('open.Documents.Uri'),
         useCodeLens: getConfigs<boolean>('useCodeLens'),
     } as const;
 
@@ -121,10 +120,6 @@ export function getCode502Default(): number {
  */
 export function getCode503Default(): number {
     return config.Diag.WarningCap.code503;
-}
-
-export function getDocUriStr(): string {
-    return config.openUriStr;
 }
 
 // vscode.window.setStatusBarMessage(timeSpend);

@@ -18,7 +18,6 @@ type TempConfigs = {
             code503: number; // of param
         };
     };
-    openUriStr: string; //
     useCodeLens: boolean;
 };
 export type TConfigs = DeepReadonly<TempConfigs>;

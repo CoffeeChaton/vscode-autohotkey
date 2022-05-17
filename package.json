@@ -1,7 +1,7 @@
 {
     "name": "vscode-autohotkey-neko-help",
-    "displayName": "AutoHotkeyNekoHelp",
-    "description": "AutoHotkey help of VSCode",
+    "displayName": "AutoHotkey NekoHelp",
+    "description": "AutoHotkey IntelliSense, format, linters, and language support for VS Code, ",
     "version": "2.5.0",
     "publisher": "CoffeeChaton",
     "engines": {
@@ -35,23 +35,14 @@
         "ahk"
     ],
     "contributes": {
-        "breakpoints": [
-            {
-                "language": "ahk"
-            }
-        ],
         "commands": [
             {
                 "command": "ahk.nekoHelp.bar",
                 "title": "ahk:List all ahk-neko-help command"
             },
             {
-                "command": "ahk.nekoHelp.openDoc",
-                "title": "open docs"
-            },
-            {
                 "command": "ahk.nekoHelp.refreshResource",
-                "title": "Refresh Resource (nekoHelp)"
+                "title": "Refresh Resource (AHK)"
             }
         ],
         "configuration": {
@@ -154,13 +145,6 @@
             {
                 "language": "ahk",
                 "path": "./snippets/ahk.snippets.json"
-            }
-        ],
-        "keybindings": [
-            {
-                "command": "ahk.nekoHelp.openDoc",
-                "key": "ctrl+f1",
-                "when": "editorLangId == ahk"
             }
         ],
         "menus": {

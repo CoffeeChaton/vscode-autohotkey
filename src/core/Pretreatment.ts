@@ -19,6 +19,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
     let inLTrim: 0 | 1 | 2 = 0;
     let deep = 0;
     let line = -1;
+    let lastLineIsGlobal = false;
     for (const textRaw of strArray) {
         line++;
         const textTrimStart: string = textRaw.trimStart();
@@ -93,12 +94,17 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             }
         }
 
+        const cll: 0 | 1 = ContinueLongLine(lStrTrim); // ex: line start with ","
+
         const fistWordUp: string = lStrTrim.match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1].toUpperCase() ?? '';
         if (fistWordUp === 'GLOBAL') {
             detail.push(EDetail.isGlobalLine);
-        } // TODO: else   if (fistWordUp === '...') {
-
-        const cll: 0 | 1 = ContinueLongLine(lStrTrim); // ex: line start with ","
+            lastLineIsGlobal = true;
+        } else if (cll === 1 && lastLineIsGlobal) {
+            lastLineIsGlobal = true;
+        } else {
+            lastLineIsGlobal = false;
+        }
 
         const lineComment: string = textRaw.length - lStr.length > 2
             ? textRaw.substring(lStr.length).trim()
