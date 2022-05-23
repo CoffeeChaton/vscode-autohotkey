@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "module": "CommonJS",
-        "target": "ES2021",
-        "outDir": "out",
+        "alwaysStrict": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
         "lib": [
             "ES5",
             "ES6",
@@ -35,20 +35,20 @@
             "ES2018.Promise",
             "ES2018.RegExp"
         ],
-        "sourceMap": true,
-        "rootDir": "src",
-        "removeComments": true,
-        "strict": true,
-        "alwaysStrict": true,
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "noEmit": true,
         "noFallthroughCasesInSwitch": true,
         "noImplicitOverride": true,
         "noImplicitReturns": true,
         "noUnusedLocals": false,
+        "outDir": "out",
+        "removeComments": true,
         "resolveJsonModule": true,
-        "moduleResolution": "node",
-        // "isolatedModules": true,
-        "forceConsistentCasingInFileNames": true,
-        "esModuleInterop": true,
+        "rootDir": "src",
+        "sourceMap": true,
+        "strict": true,
+        "target": "ES2021",
         "types": [
             "@types/node"
         ],

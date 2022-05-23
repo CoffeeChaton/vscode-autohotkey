@@ -18,18 +18,8 @@
             "name": "comment.line.semicolon.ahk"
         },
         {
-            "begin": "^\\s*/\\*{2,}?",
-            "beginCaptures": {
-                "1": {
-                    "name": "comment.block.documentation.start.ahk"
-                }
-            },
+            "begin": "^\\s*/\\*\\*",
             "end": "^\\s*\\*/",
-            "endCaptures": {
-                "1": {
-                    "name": "comment.block.documentation.end.ahk"
-                }
-            },
             "name": "comment.block.documentation.ahk",
             "patterns": [
                 {

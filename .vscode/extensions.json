@@ -21,6 +21,7 @@
         "eamodio.gitlens",
         "donjayamanne.githistory",
         "mhutchie.git-graph",
-        "ionutvmi.path-autocomplete"
+        "ionutvmi.path-autocomplete",
+        "usernamehw.errorlens"
     ]
 }
