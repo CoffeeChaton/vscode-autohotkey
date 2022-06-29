@@ -11,9 +11,12 @@
 		"prefix": "##.00",
 		"body": [
 			"$CLIPBOARD : {",
-			"    body: '$CLIPBOARD',",
-			"    class : 'Loop-Registry',",
-			"    uri : 'https://www.autohotkey.com/docs/commands/LoopReg.htm#Remarks',",
+			"    keyRawName: '$CLIPBOARD',",
+			"    body : '',",
+			"    doc : '',",
+			"    recommended: false,",
+			"    link: '',",
+			"    exp: [],",
 			"},"
 		],
 		"description": "just a temp snippets"

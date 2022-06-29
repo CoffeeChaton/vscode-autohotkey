@@ -13,12 +13,11 @@ async function devTestDA(): Promise<null> {
     const t2: number = Date.now();
     // ---------------------------------------------
     // The task be completed, please confirm!
-    // iMax is 20
-    // statistics len is 20
-    // sum is 3297
-    // avg is 164.85
-    // stdDev is 1.5256146302392355
-    // [166, 170, 164, 165, 166, 165, 165, 165, 165, 165, 163, 162, 165, 165, 164, 164, 164, 164, 164, 166]
+    // iMax is 80
+    // statistics len is 80
+    // sum is 13266
+    // avg is 165.825
+    // stdDev is 4.65235155593384
     // ---------------------------------------------
     Data.push(t2 - t1);
     return null;

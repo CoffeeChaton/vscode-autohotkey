@@ -3,6 +3,7 @@
 
 import { EDetail, TAhkToken, TTokenStream } from '../globalEnum';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
+import { CommandMDMap } from '../tools/Built-in/Command';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
 import { inLTrimRange } from '../tools/str/inLTrimRange';
 import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
@@ -14,6 +15,25 @@ import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
  * @returns FFullDocTokenDocStream
  */
 export function Pretreatment(strArray: readonly string[], fileName: string): TTokenStream {
+    const ignoreList = [
+        'AND',
+        'BREAK',
+        'CASE',
+        'CATCH',
+        'CLICK',
+        'DEFAULT',
+        'ELSE',
+        'GLOBAL',
+        'IF',
+        'LOOP',
+        'OR',
+        'STATIC',
+        'SWITCH',
+        'THROW',
+        'WHILE',
+    ] as const;
+    const debugSet: Set<string> = new Set(ignoreList); // fistWordUp
+
     const result: TAhkToken = [];
     let CommentBlock = false;
     let inLTrim: 0 | 1 | 2 = 0;
@@ -106,6 +126,10 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             lastLineIsGlobal = false;
         }
 
+        if (fistWordUp !== '' && !debugSet.has(fistWordUp) && !CommandMDMap.has(fistWordUp)) {
+            debugSet.add(fistWordUp);
+        }
+
         const lineComment: string = textRaw.length - lStr.length > 2
             ? textRaw.substring(lStr.length).trim()
             : '';
@@ -125,6 +149,13 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             lineComment,
         });
     }
+
+    if (debugSet.size > ignoreList.length) {
+        console.log('🚀 ----------------', fileName);
+        // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
+        console.log('🚀 ~ Pretreatment ~ c3a9', [...debugSet.keys()].sort());
+    }
+
     return result;
 }
 

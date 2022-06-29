@@ -25,9 +25,7 @@ const snippetStartWihA: readonly vscode.CompletionItem[] = ((): vscode.Completio
     return tempList;
 })();
 
-export function getSnippetStartWihA(PartStr: string | null): readonly vscode.CompletionItem[] {
-    if (PartStr === null) return [];
-
+export function getSnippetStartWihA(PartStr: string): readonly vscode.CompletionItem[] {
     return PartStr.startsWith('A')
         ? snippetStartWihA
         : [];

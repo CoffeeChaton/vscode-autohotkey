@@ -93,7 +93,7 @@ const LineRuler: readonly TLineRuler[] = [
 
         getName(strTrim: string): string | null {
             // ex #NoEnv
-            const e: RegExpExecArray | null = (/^(#\w+)(?:\s|$)/u).exec(strTrim);
+            const e: RegExpExecArray | null = (/^(#\w+)(?:[\s,$])/u).exec(strTrim);
 
             return (e !== null)
                 ? e[1]
@@ -104,7 +104,7 @@ const LineRuler: readonly TLineRuler[] = [
             // Hotkey labels consist of a hotkey followed by double-colon.
             // if (strTrim.startsWith(':')) return false;
             if (!strTrim.startsWith('#')) return false;
-            return (/^#\w+(?:\s|$)/u).test(strTrim);
+            return (/^#\w+(?:[\s,$])/u).test(strTrim);
         },
     },
 ];

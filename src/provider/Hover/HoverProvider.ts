@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { Detecter } from '../../core/Detecter';
+import { getHoverCommand } from '../../tools/Built-in/Command';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
@@ -27,22 +28,25 @@ function HoverProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Hover | null {
-    const { AhkSymbolList } = Detecter.getDocMap(document.uri.fsPath) ?? Detecter.updateDocDef(document);
+    const { AhkSymbolList, DocStrMap } = Detecter.getDocMap(document.uri.fsPath) ?? Detecter.updateDocDef(document);
+
+    // pos at Comment range...
+    const { lStr, fistWordUp } = DocStrMap[position.line];
+    if (position.character > lStr.length) return null;
 
     // ex: #Warn
     const DirectivesMd: vscode.MarkdownString | undefined = HoverDirectives(position, AhkSymbolList);
     if (DirectivesMd !== undefined) return new vscode.Hover(DirectivesMd);
 
     const DA: CAhkFunc | null = getDAWithPos(AhkSymbolList, position);
-    if (DA !== null) {
-        if (DA.nameRange.contains(position)) {
-            return new vscode.Hover(DA.md);
-        }
+    if (DA !== null && DA.nameRange.contains(position)) {
+        return new vscode.Hover(DA.md);
     }
 
-    // pos at Comment range...
-    // const { lStr } = DocStrMap[position.line];
-    // if (position.character > lStr.length) return null;
+    const CommandMd: vscode.MarkdownString | undefined = getHoverCommand(fistWordUp, position, lStr);
+    if (CommandMd !== undefined) {
+        return new vscode.Hover(CommandMd);
+    }
 
     // eslint-disable-next-line security/detect-unsafe-regex
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
@@ -58,8 +62,8 @@ function HoverProviderCore(
     // if (commands !== null) return commands;
 
     if (DA !== null) {
-        const md: vscode.MarkdownString | null = DeepAnalysisHover(DA, wordUp, position);
-        if (md !== null) return new vscode.Hover(md);
+        const DAmd: vscode.MarkdownString | null = DeepAnalysisHover(DA, wordUp, position);
+        if (DAmd !== null) return new vscode.Hover(DAmd);
     }
 
     const haveFunc: vscode.Hover | null = HoverOfFunc(wordUp, textRaw);
@@ -68,6 +72,7 @@ function HoverProviderCore(
     const global: vscode.MarkdownString | null = getGlobalMarkdown(wordUp);
     if (global !== null) return new vscode.Hover(global);
 
+    // TODO hover of A_HOTKEY or #warn or sleep
     return null;
 }
 

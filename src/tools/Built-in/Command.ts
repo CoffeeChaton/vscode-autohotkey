@@ -4,6 +4,16 @@
 /* cSpell:disable */
 import * as vscode from 'vscode';
 
+type TCommandElement = { // FIXME: use DeepReadonly
+    keyRawName: string;
+    body: string;
+    doc: string;
+
+    recommended?: boolean;
+    link?: string;
+    exp?: string[];
+};
+
 export const CommandList = [
     'AUTOTRIM',
     'BLOCKINPUT',
@@ -31,8 +41,36 @@ export const CommandList = [
     'ENVSET',
     'ENVSUB',
     'EXIT',
+    'FILECOPY',
+    'FILECOPYDIR',
+    'FILECREATEDIR',
+    'FILECREATESHORTCUT',
+    'FILEDELETE',
+    'FILEENCODING',
+    'FILEGETATTRIB',
+    'FILEGETSHORTCUT',
+    'FILEGETSIZE',
+    'FILEGETTIME',
+    'FILEGETVERSION',
+    'FILEINSTALL',
+    'FILEMOVE',
+    'FILEMOVEDIR',
+    'FILEREAD',
+    'FILEREADLINE',
+    'FILERECYCLE',
+    'FILERECYCLEEMPTY',
+    'FILEREMOVEDIR',
+    'FILESELECTFILE',
+    'FILESELECTFOLDER',
+    'FILESETATTRIB',
+    'FILESETTIME',
+    'FOR',
     'FORMATTIME',
+    'GETKEYSTATE',
     'GROUPACTIVATE',
+    'GROUPADD',
+    'GROUPCLOSE',
+    'GROUPDEACTIVATE',
     'GUI',
     'GUICONTROL',
     'GUICONTROLGET',
@@ -62,6 +100,7 @@ export const CommandList = [
     'REGDELETE',
     'REGREAD',
     'REGWRITE',
+    'RETURN',
     'RUN',
     'RUNAS',
     'RUNWAIT',
@@ -77,6 +116,7 @@ export const CommandList = [
     'SETCAPSLOCKSTATE',
     'SETCONTROLDELAY',
     'SETDEFAULTMOUSESPEED',
+    'SETFORMAT',
     'SETKEYDELAY',
     'SETMOUSEDELAY',
     'SETNUMLOCKSTATE',
@@ -88,6 +128,7 @@ export const CommandList = [
     'SETWINDELAY',
     'SETWORKINGDIR',
     'SHUTDOWN',
+    'SLEEP',
     'SORT',
     'SOUNDBEEP',
     'SOUNDGET',
@@ -99,24 +140,52 @@ export const CommandList = [
     'STATUSBARGETTEXT',
     'STATUSBARWAIT',
     'STRINGCASESENSE',
+    'STRINGGETPOS',
+    'STRINGLEFT',
+    'STRINGLEN',
+    'STRINGLOWER',
+    'STRINGMID',
+    'STRINGREPLACE',
+    'STRINGRIGHT',
+    'STRINGTRIMLEFT',
+    'STRINGTRIMRIGHT',
+    'STRINGUPPER',
     'SUSPEND',
     'SYSGET',
     'THREAD',
     'TOOLTIP',
+    'TRANSFORM',
     'TRAYTIP',
     'URLDOWNLOADTOFILE',
+    'WINACTIVATE',
+    'WINACTIVATEBOTTOM',
+    'WINCLOSE',
+    'WINGET',
+    'WINGETACTIVESTATS',
+    'WINGETACTIVETITLE',
+    'WINGETCLASS',
+    'WINGETPOS',
+    'WINGETTEXT',
+    'WINGETTITLE',
+    'WINHIDE',
+    'WINKILL',
+    'WINMAXIMIZE',
+    'WINMENUSELECTITEM',
+    'WINMINIMIZE',
+    'WINMINIMIZEALL',
+    'WINMINIMIZEALLUNDO',
+    'WINMOVE',
+    'WINRESTORE',
+    'WINSET',
+    'WINSETTITLE',
+    'WINSHOW',
+    'WINWAIT',
+    'WINWAITACTIVE',
+    'WINWAITCLOSE',
+    'WINWAITNOTACTIVE',
 ] as const;
 
 type TCommandKeyList = typeof CommandList[number];
-type TCommandElement = { // FIXME: use DeepReadonly
-    keyRawName: string;
-    body: string;
-    doc: string;
-
-    recommended?: boolean;
-    link?: string;
-    exp?: string[];
-};
 type TLineCommand = {
     [k in TCommandKeyList]: TCommandElement;
 };
@@ -124,7 +193,7 @@ type TLineCommand = {
 export const LineCommand: TLineCommand = {
     AUTOTRIM: {
         keyRawName: 'AutoTrim',
-        body: 'AutoTrim, ${1:|On,Off|}',
+        body: 'AutoTrim, ${1|On,Off|}',
         doc: 'Determines whether [traditional assignments](https://www.autohotkey.com/docs/commands/SetEnv.htm "Deprecated. New scripts should use Var := Value instead.") like `Var1 = %Var2%` omit spaces and tabs from the beginning and end of _Var2_.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/AutoTrim.htm',
@@ -137,7 +206,7 @@ export const LineCommand: TLineCommand = {
     },
     BLOCKINPUT: {
         keyRawName: 'BlockInput',
-        body: 'BlockInput, ${1:|On,Off,Send,Mouse,SendAndMouse,Default,MouseMove,MouseMoveOff|}',
+        body: 'BlockInput, ${1|On,Off,Send,Mouse,SendAndMouse,Default,MouseMove,MouseMoveOff|}',
         doc: 'Disables or enables the user\'s ability to interact with the computer via keyboard and mouse.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/BlockInput.htm',
@@ -157,7 +226,7 @@ export const LineCommand: TLineCommand = {
     },
     CLIPWAIT: {
         keyRawName: 'ClipWait',
-        body: 'ClipWait, ${1:Timeout}, ${2:False|True]}',
+        body: 'ClipWait, ${1:Timeout}, ${2|False,True|}',
         doc: 'Waits until the [clipboard](https://www.autohotkey.com/docs/misc/Clipboard.htm) contains data.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ClipWait.htm',
@@ -169,40 +238,120 @@ export const LineCommand: TLineCommand = {
             '',
         ],
     },
-    // FIXME:
     CONTROL: {
         keyRawName: 'Control',
         body:
-            'Control, ${1:Cmd [}, ${2:Value}, ${3:Control}, ${4:WinTitle}, ${5:WinText}, ${6:ExcludeTitle}, ${7:ExcludeText]}',
+            'Control, ${1|Check,Uncheck,Enable,Disable,Show,Hide,Style,ExStyle,ShowDropDown,HideDropDown,TabLeft,TabRight,Add,Delete,Choose,ChooseString,EditPaste|}',
         doc: 'Makes a variety of changes to a control.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Control.htm',
+        exp: [
+            'Control, SubCommand , [Value, Control, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+            ';  SubCommand',
+            ';        Check: Turns on (checks) a radio button or checkbox.',
+            ';        Uncheck: Turns off a radio button or checkbox.',
+            ';        Enable: Enables a control if it was previously disabled.',
+            ';        Disable: Disables or "grays out" a control.',
+            ';        Show: Shows a control if it was previously hidden.',
+            ';        Hide: Hides a control.',
+            ';        Style: Changes the style of a control.',
+            ';        ExStyle: Changes the extended style of a control.',
+            ';        ShowDropDown: Shows the drop-down list of a ComboBox control.',
+            ';        HideDropDown: Hides the drop-down list of a ComboBox control.',
+            ';        TabLeft: Moves left by one or more tabs in a SysTabControl32.',
+            ';        TabRight: Moves right by one or more tabs in a SysTabControl32.',
+            ';        Add: Adds the specified string as a new entry at the bottom of a ListBox, ComboBox (and possibly other types).',
+            ';        Delete: Deletes the specified entry number from a ListBox or ComboBox.',
+            ';        Choose: Sets the selection in a ListBox or ComboBox to be the specified entry number.',
+            ';        ChooseString: Sets the selection in a ListBox or ComboBox to be the first entry whose leading part matches the specified string.',
+            ';        EditPaste: Pastes the specified string at the caret in an Edit control.',
+            ';        ',
+        ],
     },
     CONTROLCLICK: {
         keyRawName: 'ControlClick',
-        body:
-            'ControlClick, ${1:[Control-or-Pos}, ${2:WinTitle}, ${3:WinText}, ${4:WhichButton}, ${5:ClickCount}, ${6:Options}, ${7:ExcludeTitle}, ${8:ExcludeText]}',
+        body: 'ControlClick, ',
         doc: 'Sends a mouse button or mouse wheel event to a control.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ControlClick.htm',
+        exp: [
+            'ControlClick , [Control-or-Pos, WinTitle, WinText, WhichButton, ClickCount, Options, ExcludeTitle, ExcludeText]',
+        ],
     },
+    // FIXME: add more
     CONTROLFOCUS: {
         keyRawName: 'ControlFocus',
-        body: 'ControlFocus, ${1:[ Control}, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        body: 'ControlFocus, ',
         doc: 'Sets input focus to a given control on a window.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ControlFocus.htm',
+        exp: [
+            'ControlFocus , [Control, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     CONTROLGET: {
         keyRawName: 'ControlGet',
         body:
-            'ControlGet, ${1:OutputVar}, ${2:Cmd}, ${3:[Value}, ${4:Control}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText}',
+            'ControlGet, ${1:OutputVar}, ${2|List,Checked,Enabled,Visible,Tab,FindString,Choice,LineCount,CurrentLine,CurrentCol,Line,Selected,Style,ExStyle,Hwnd|}, [${3:Value}, ${4:Control}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText}]',
         doc: 'Retrieves various types of information about a control.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ControlGet.htm',
+        exp: [
+            'ControlGet, OutputVar, SubCommand , [Value, Control, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+            ';SubCommand',
+            ';    List: Retrieves a list of items from a ListView, ListBox, ComboBox, or DropDownList.',
+            ';    Checked: Retrieves 1 if the checkbox or radio button is checked or 0 if not.',
+            ';    Enabled: Retrieves 1 if the control is enabled, or 0 if disabled.',
+            ';    Visible: Retrieves 1 if the control is visible, or 0 if hidden.',
+            ';    Tab: Retrieves the tab number of a SysTabControl32 control.',
+            ';    FindString: Retrieves the entry number of a ListBox or ComboBox that is an exact match for the string.',
+            ';    Choice: Retrieves the name of the currently selected entry in a ListBox or ComboBox.',
+            ';    LineCount: Retrieves the number of lines in an Edit control.',
+            ';    CurrentLine: Retrieves the line number in an Edit control where the caret resides.',
+            ';    CurrentCol: Retrieves the column number in an Edit control where the caret resides.',
+            ';    Line: Retrieves the text of the specified line number in an Edit control.',
+            ';    Selected: Retrieves the selected text in an Edit control.',
+            ';    Style: Retrieves an 8-digit hexadecimal number representing the style of the control.',
+            ';    ExStyle: Retrieves an 8-digit hexadecimal number representing the extended style of the control.',
+            ';    Hwnd [v1.1.04+]: Retrieves the window handle (HWND) of the control.',
+        ],
     },
     CONTROLGETFOCUS: {
         keyRawName: 'ControlGetFocus',
-        body: 'ControlGetFocus, ${1:OutputVar}, ${2:[WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        body: 'ControlGetFocus, ${1:OutputVar}',
         doc: 'Retrieves which control of the target window has input focus, if any.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ControlGetFocus.htm',
+        exp: [
+            'ControlGetFocus, OutputVar , [WinTitle, WinText, ExcludeTitle, ExcludeText]',
+            ';exp:',
+            'ControlGetFocus, OutputVar, % "Untitled - Notepad"',
+            'if ErrorLevel',
+            '    MsgBox, % "The target window doesn\'t exist or none of its controls has input focus."',
+            'else',
+            '    MsgBox, % "Control with focus = " OutputVar',
+        ],
     },
     CONTROLGETPOS: {
         keyRawName: 'ControlGetPos',
         body:
-            'ControlGetPos, ${1:[ X}, ${2:Y}, ${3:Width}, ${4:Height}, ${5:Control}, ${6:WinTitle}, ${7:WinText}, ${8:ExcludeTitle}',
+            'ControlGetPos, [{1:X}, ${2:Y}, ${3:Width}, ${4:Height}, ${5:Control}, ${6:WinTitle}, ${7:WinText}, ${8:ExcludeTitle}]',
         doc: 'Retrieves the position and size of a control.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ControlGetPos.htm',
+        exp: [
+            'ControlGetPos , [X, Y, Width, Height, Control, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+            '',
+            ';exp: Continuously updates and displays the name and position of the control currently under the mouse cursor.',
+            '',
+            'Loop',
+            '{',
+            '    Sleep, 100',
+            '    MouseGetPos, , , WhichWindow, WhichControl',
+            '    ControlGetPos, x, y, w, h, %WhichControl%, ahk_id %WhichWindow%',
+            '    ToolTip, % WhichControl "`nX: " X "`tY: " Y "`nW: " W "`tH:" H',
+            '}',
+        ],
     },
     CONTROLGETTEXT: {
         keyRawName: 'ControlGetText',
@@ -291,18 +440,181 @@ export const LineCommand: TLineCommand = {
     },
     EXIT: {
         keyRawName: 'Exit',
-        body: 'Exit, ${1:[ ExitCode]}',
+        body: 'Exit, ${1:ExitCode}',
         doc: 'Exits the current thread or (if the script is not persistent and contains no hotkeys) the entire script.',
+    },
+    FILECOPY: {
+        keyRawName: 'FileCopy',
+        body: 'FileCopy, ${1:Source}, ${2:Dest [}, ${3:Flag (1 = overwrite)]}',
+        doc: 'Copies one or more files.',
+    },
+    FILECOPYDIR: {
+        keyRawName: 'FileCopyDir',
+        body: 'FileCopyDir, ${1:Source}, ${2:Dest [}, ${3:Flag]}',
+        doc: 'Copies a folder along with all its sub-folders and files (similar to xcopy).',
+    },
+    FILECREATEDIR: {
+        keyRawName: 'FileCreateDir',
+        body: 'FileCreateDir, ${1:Path}',
+        doc: 'Creates a directory/folder.',
+    },
+    FILECREATESHORTCUT: {
+        keyRawName: 'FileCreateShortcut',
+        body:
+            'FileCreateShortcut, ${1:Target}, ${2:C:\\My Shortcut.lnk [}, ${3:WorkingDir}, ${4:Args}, ${5:doc}, ${6:IconFile}, ${7:ShortcutKey}, ${8:IconNumber}',
+        doc: 'Creates a shortcut (.lnk) file.',
+    },
+    FILEDELETE: {
+        keyRawName: 'FileDelete',
+        body: 'FileDelete, ${1:FilePattern}',
+        doc: 'Deletes one or more files.',
+    },
+    FILEENCODING: {
+        keyRawName: 'FileEncoding',
+        body: 'FileEncoding, [${1:Encoding}]',
+        doc: 'Sets the default encoding for FileRead, FileReadLine, Loop Read, FileAppend, and FileOpen().',
+    },
+    FILEGETATTRIB: {
+        keyRawName: 'FileGetAttrib',
+        body: 'FileGetAttrib, ${1:OutputVar} , [${2:Filename}]',
+        doc: 'Reports whether a file or folder is read-only, hidden, etc.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/FileGetAttrib.htm',
+        exp: [
+            'FileGetAttrib, OutputVar , Filename',
+            ';exp',
+            'FileGetAttrib, OutputVar, % "C:\\New Folder"',
+        ],
+    },
+    FILEGETSHORTCUT: {
+        keyRawName: 'FileGetShortcut',
+        body:
+            'FileGetShortcut, ${1:LinkFile [}, ${2:OutTarget}, ${3:OutDir}, ${4:OutArgs}, ${5:Outdoc}, ${6:OutIcon}, ${7:OutIconNum}, ${8:OutRunState]}',
+        doc: 'Retrieves information about a shortcut (.lnk) file, such as its target file.',
+    },
+    FILEGETSIZE: {
+        keyRawName: 'FileGetSize',
+        body: 'FileGetSize, ${1:OutputVar [}, ${2:Filename}, ${3:Units]}',
+        doc: 'Retrieves the size of a file.',
+    },
+    FILEGETTIME: {
+        keyRawName: 'FileGetTime',
+        body: 'FileGetTime, ${1:OutputVar [}, ${2:Filename}, ${3:WhichTime (M}, ${4:C}, ${5:or A -- default is M)]}',
+        doc: 'Retrieves the datetime stamp of a file or folder.',
+    },
+    FILEGETVERSION: {
+        keyRawName: 'FileGetVersion',
+        body: 'FileGetVersion, ${1:OutputVar [}, ${2:Filename]}',
+        doc: 'Retrieves the version of a file.',
+    },
+    FILEINSTALL: {
+        keyRawName: 'FileInstall',
+        body: 'FileInstall, ${1:Source}, ${2:Dest [}, ${3:Flag (1 = overwrite)]}',
+        doc: 'Includes the specified file inside the compiled version of the script.',
+    },
+    FILEMOVE: {
+        keyRawName: 'FileMove',
+        body: 'FileMove, ${1:Source}, ${2:Dest [}, ${3:Flag (1 = overwrite)]}',
+        doc: 'Moves or renames one or more files.',
+    },
+    FILEMOVEDIR: {
+        keyRawName: 'FileMoveDir',
+        body: 'FileMoveDir, ${1:Source}, ${2:Dest [}, ${3:Flag (2 = overwrite)]}',
+        doc: 'Moves a folder along with all its sub-folders and files. It can also rename a folder.',
+    },
+    FILEREAD: {
+        keyRawName: 'FileRead',
+        body: 'FileRead, ${1:OutputVar}, ${2:Filename}',
+        doc: 'Reads a file\'s contents into a [variable](https://www.autohotkey.com/docs/Variables.htm).',
+        recommended: true,
+        exp: [
+            'FileRead, OutputVar, % "C:\\My Documents\\My File.txt"',
+        ],
+    },
+    FILEREADLINE: {
+        keyRawName: 'FileReadLine',
+        body: 'FileReadLine, ${1:OutputVar}, ${2:Filename}, ${3:LineNum}',
+        doc: 'Reads the specified line from a file and stores the text in a variable.',
+    },
+    FILERECYCLE: {
+        keyRawName: 'FileRecycle',
+        body: 'FileRecycle, ${1:FilePattern}',
+        doc: 'Sends a file or directory to the recycle bin if possible, or permanently deletes it.',
+    },
+    FILERECYCLEEMPTY: {
+        keyRawName: 'FileRecycleEmpty',
+        body: 'FileRecycleEmpty, ${1:[ C:\\]}',
+        doc: 'Empties the recycle bin.',
+    },
+    FILEREMOVEDIR: {
+        keyRawName: 'FileRemoveDir',
+        body: 'FileRemoveDir, ${1:Path [}, ${2:Recurse? (1 = yes)]}',
+        doc: 'Deletes a folder.',
+    },
+    FILESELECTFILE: {
+        keyRawName: 'FileSelectFile',
+        body:
+            'FileSelectFile, ${1:OutputVar [}, ${2:Options}, ${3:RootDir[\\DefaultFilename]}, ${4:Prompt}, ${5:Filter]}',
+        doc: 'Displays a standard dialog that allows the user to open or save file(s).',
+    },
+    FILESELECTFOLDER: {
+        keyRawName: 'FileSelectFolder',
+        body: 'FileSelectFolder, ${1:OutputVar [}, ${2:*StartingFolder}, ${3:Options}, ${4:Prompt]}',
+        doc: 'Displays a standard dialog that allows the user to select a folder.',
+    },
+    FILESETATTRIB: {
+        keyRawName: 'FileSetAttrib',
+        body: 'FileSetAttrib, ${1:Attributes(+-^RASHNOT) [}, ${2:FilePattern}, ${3:OperateOnFolders?}, ${4:Recurse?]}',
+        doc: 'Changes the attributes of one or more files or folders. Wildcards are supported.',
+    },
+    FILESETTIME: {
+        keyRawName: 'FileSetTime',
+        body:
+            'FileSetTime, ${1:[ YYYYMMDDHH24MISS}, ${2:FilePattern}, ${3:WhichTime (M|C|A)}, ${4:OperateOnFolders?}, ${5:Recurse?]}',
+        doc: 'Changes the datetime stamp of one or more files or folders. Wildcards are supported.',
+    },
+    FOR: {
+        keyRawName: 'For',
+        body: 'For ${1:Key} , [${2:Value}] in Expression',
+        doc: 'Repeats a series of commands once for each key-value pair in an object.',
     },
     FORMATTIME: {
         keyRawName: 'FormatTime',
         body: 'FormatTime, ${1:OutputVar [}, ${2:YYYYMMDDHH24MISS}, ${3:Format]}',
         doc: 'Transforms a YYYYMMDDHH24MISS timestamp into the specified date/time format.',
     },
+    GETKEYSTATE: {
+        keyRawName: 'GETKEYSTATE',
+        body: '',
+        doc: '**Deprecated:** This command is not recommended for use in new scripts. Use the [GetKeyState](https://www.autohotkey.com/docs/commands/GetKeyState.htm#function) function instead.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/GetKeyState.htm#command',
+        exp: [
+            'GetKeyState, OutputVar, KeyName , Mode',
+            ' ',
+            'KeyIsDown := GetKeyState(KeyName , Mode)',
+        ],
+    },
     GROUPACTIVATE: {
         keyRawName: 'GroupActivate',
         body: 'GroupActivate, ${1:GroupName [}, ${2:R]}',
         doc: 'Activates the next window in a window group that was defined with GroupAdd.',
+    },
+    GROUPADD: {
+        keyRawName: 'GroupAdd',
+        body:
+            'GroupAdd, ${1:GroupName}, ${2:WinTitle [}, ${3:WinText}, ${4:Label}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
+        doc: 'Adds a window specification to a window group, creating the group if necessary.',
+    },
+    GROUPCLOSE: {
+        keyRawName: 'GroupClose',
+        body: 'GroupClose, ${1:GroupName [}, ${2:A|R]}',
+        doc: 'Closes the active window if it was just activated by GroupActivate or GroupDeactivate. It then activates the next window in the series. It can also close all windows in a group.',
+    },
+    GROUPDEACTIVATE: {
+        keyRawName: 'GroupDeactivate',
+        body: 'GroupDeactivate, ${1:GroupName [}, ${2:R]}',
+        doc: 'Similar to GroupActivate except activates the next window not in the group.',
     },
     GUI: {
         keyRawName: 'Gui',
@@ -453,6 +765,11 @@ export const LineCommand: TLineCommand = {
             'RegWrite, ${1:REG_SZ|REG_EXPAND_SZ|REG_MULTI_SZ|REG_DWORD|REG_BINARY}, ${2:HKLM|HKU|HKCU|HKCR|HKCC}, ${3:SubKey [}, ${4:ValueName}, ${5:Value]}',
         doc: 'Writes a value to the registry.',
     },
+    RETURN: {
+        keyRawName: 'Return',
+        body: 'Return',
+        doc: 'Returns from a subroutine to which execution had previously jumped via function-call, Gosub, Hotkey activation, GroupActivate, or other means.',
+    },
     RUN: {
         keyRawName: 'Run',
         body: 'Run, ${1:Target [}, ${2:WorkingDir}, ${3:Max|Min|Hide|UseErrorLevel}, ${4:OutputVarPID]}',
@@ -529,6 +846,14 @@ export const LineCommand: TLineCommand = {
         body: 'SetDefaultMouseSpeed, ${1:Speed}',
         doc: 'Sets the mouse speed that will be used if unspecified in Click and MouseMove/Click/Drag.',
     },
+    SETFORMAT: {
+        keyRawName: 'SetFormat',
+        body: 'SetFormat, NumberType, Format',
+        doc: '**Deprecated:** This command is not recommended for use in new scripts. Use the [Format](https://www.autohotkey.com/docs/commands/Format.htm) function instead.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/SetFormat.htm',
+        exp: ['SetFormat, NumberType, Format'],
+    },
     SETKEYDELAY: {
         keyRawName: 'SetKeyDelay',
         body: 'SetKeyDelay, ${1:[ Delay}, ${2:PressDuration]}',
@@ -583,6 +908,11 @@ export const LineCommand: TLineCommand = {
         keyRawName: 'Shutdown',
         body: 'Shutdown, ${1:Code}',
         doc: 'Shuts down, restarts, or logs off the system.',
+    },
+    SLEEP: {
+        keyRawName: 'Sleep',
+        body: 'Sleep, ${1:Delay}',
+        doc: 'Waits the specified amount of time before continuing.',
     },
     SORT: {
         keyRawName: 'Sort',
@@ -642,6 +972,86 @@ export const LineCommand: TLineCommand = {
         body: 'StringCaseSense, ${1:On|Off|Locale}',
         doc: 'Determines whether string comparisons are case sensitive (default is "not case sensitive").',
     },
+    STRINGGETPOS: {
+        keyRawName: 'StringGetPos',
+        body: 'StringGetPos, OutputVar, InputVar, SearchText , Occurrence, Offset',
+        doc: 'Retrieves the position of the specified substring within a string.\n\n**Deprecated:** This command is not recommended for use in new scripts. Use the [InStr](https://www.autohotkey.com/docs/commands/InStr.htm) function instead.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/StringGetPos.htm',
+        exp: ['StringGetPos, OutputVar, InputVar, SearchText [, Occurrence, Offset]'],
+    },
+    STRINGLEFT: {
+        keyRawName: 'StringLeft',
+        body: 'StringLeft, OutputVar, InputVar, Count',
+        doc: 'Retrieves a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
+        exp: ['StringLeft, OutputVar, InputVar, Count'],
+    },
+    STRINGLEN: {
+        keyRawName: 'StringLen',
+        body: 'StringLen, OutputVar, InputVar',
+        doc: 'Retrieves the count of how many characters are in a string.\n\n**Deprecated:** This command is not recommended for use in new scripts. Use the [StrLen](https://www.autohotkey.com/docs/commands/StrLen.htm) function instead.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/StringLen.htm',
+        exp: ['StringLen, OutputVar, InputVar'],
+    },
+    STRINGLOWER: {
+        keyRawName: 'StringLower',
+        body: 'StringLower, ${1:OutputVar}, ${2:InputVar} [, T]',
+        doc: 'Converts a string to lowercase or uppercase.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/StringLower.htm',
+        exp: ['StringLower, OutputVar, InputVar , T'],
+    },
+    STRINGMID: {
+        keyRawName: 'StringMid',
+        body: 'StringMid, OutputVar, InputVar, StartChar [, Count, L]',
+        doc: 'Retrieves one or more characters from the specified position in a string.\n\n**Deprecated:** This command is not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/StringMid.htm',
+        exp: ['StringMid, OutputVar, InputVar, StartChar , Count, L'],
+    },
+    STRINGREPLACE: {
+        keyRawName: 'StringReplace',
+        body: 'StringReplace, OutputVar, InputVar, SearchText , ReplaceText, ReplaceAll',
+        doc: 'Replaces the specified substring with a new string.\n\n**Deprecated:** This command is not recommended for use in new scripts. Use the [StrReplace](https://www.autohotkey.com/docs/commands/StrReplace.htm) function instead.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/StringReplace.htm',
+        exp: ['StringReplace, OutputVar, InputVar, SearchText , ReplaceText, ReplaceAll'],
+    },
+    STRINGRIGHT: {
+        keyRawName: 'StringRight',
+        body: 'StringRight, OutputVar, InputVar, Count',
+        doc: 'Retrieves a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
+        exp: ['StringRight, OutputVar, InputVar, Count'],
+    },
+    STRINGTRIMLEFT: {
+        keyRawName: 'StringTrimLeft',
+        body: 'StringTrimLeft, OutputVar, InputVar, Count',
+        doc: 'Removes a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/StringTrimLeft.htm',
+        exp: ['StringTrimLeft, OutputVar, InputVar, Count'],
+    },
+    STRINGTRIMRIGHT: {
+        keyRawName: 'StringTrimRight',
+        body: 'StringTrimRight, OutputVar, InputVar, Count',
+        doc: 'Removes a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/StringTrimLeft.htm',
+        exp: ['StringTrimRight, OutputVar, InputVar, Count'],
+    },
+    STRINGUPPER: {
+        keyRawName: 'StringUpper',
+        body: 'StringUpper, OutputVar, InputVar [, T]',
+        doc: 'Converts a string to lowercase or uppercase.\n\nCommand -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/StringLower.htm',
+        exp: ['StringUpper, OutputVar, InputVar , T'],
+    },
     SUSPEND: {
         keyRawName: 'Suspend',
         body: 'Suspend, ${1:[ On|Off|Toggle|Permit]}',
@@ -662,6 +1072,14 @@ export const LineCommand: TLineCommand = {
         body: 'ToolTip, ${1:[ Text}, ${2:X}, ${3:Y}, ${4:WhichToolTip]}',
         doc: 'Creates an always-on-top window anywhere on the screen.',
     },
+    TRANSFORM: {
+        keyRawName: 'TRANSFORM',
+        body: 'Transform, OutputVar, SubCommand, Value1 [, Value2]',
+        doc: 'Performs miscellaneous math functions, bitwise operations, and tasks such as ASCII/Unicode conversion.\n\n**Deprecated:** This command is not recommended for use in new scripts. For details on what you can use instead, see the sub-command sections below.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/Transform.htm',
+        exp: ['Transform, OutputVar, SubCommand, Value1 [, Value2]'],
+    },
     TRAYTIP: {
         keyRawName: 'TrayTip',
         body: 'TrayTip, ${1:[ Title}, ${2:Text}, ${3:Seconds}, ${4:Options]}',
@@ -672,11 +1090,147 @@ export const LineCommand: TLineCommand = {
         body: 'UrlDownloadToFile, ${1:URL}, ${2:Filename}',
         doc: 'Downloads a file from the Internet.',
     },
+
+    WINACTIVATE: {
+        keyRawName: 'WinActivate',
+        body: 'WinActivate, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
+        doc: 'Activates the specified window.',
+    },
+    WINACTIVATEBOTTOM: {
+        keyRawName: 'WinActivateBottom',
+        body: 'WinActivateBottom, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
+        doc: 'Same as WinActivate except that it activates the bottommost matching window rather than the topmost.',
+    },
+    WINCLOSE: {
+        keyRawName: 'WinClose',
+        body: 'WinClose, ${1:[ WinTitle}, ${2:WinText}, ${3:SecondsToWait}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        doc: 'Closes the specified window.',
+    },
+    WINGET: {
+        keyRawName: 'WinGet',
+        body: 'WinGet, ${1:OutputVar [}, ${2:Cmd}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
+        doc: 'Retrieves the specified window\'s unique ID, process ID, process name, or a list of its controls. It can also retrieve a list of all windows matching the specified criteria.',
+    },
+    WINGETACTIVESTATS: {
+        keyRawName: 'WinGetActiveStats',
+        body: 'WinGetActiveStats, ${1:Title}, ${2:Width}, ${3:Height}, ${4:X}, ${5:Y}',
+        doc: 'Combines the functions of WinGetActiveTitle and WinGetPos into one command.',
+    },
+    WINGETACTIVETITLE: {
+        keyRawName: 'WinGetActiveTitle',
+        body: 'WinGetActiveTitle, ${1:OutputVar}',
+        doc: 'Retrieves the title of the active window.',
+    },
+    WINGETCLASS: {
+        keyRawName: 'WinGetClass',
+        body: 'WinGetClass, ${1:OutputVar [}, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        doc: 'Retrieves the specified window\'s class name.',
+    },
+    WINGETPOS: {
+        keyRawName: 'WinGetPos',
+        body:
+            'WinGetPos, ${1:[X}, ${2:Y}, ${3:Width}, ${4:Height}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText]}',
+        doc: 'Retrieves the position and size of the specified window.',
+    },
+    WINGETTEXT: {
+        keyRawName: 'WinGetText',
+        body: 'WinGetText, ${1:OutputVar [}, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        doc: 'Retrieves the text from the specified window.',
+    },
+    WINGETTITLE: {
+        keyRawName: 'WinGetTitle',
+        body: 'WinGetTitle, ${1:OutputVar [}, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        doc: 'Retrieves the title of the specified window.',
+    },
+    WINHIDE: {
+        keyRawName: 'WinHide',
+        body: 'WinHide,${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
+        doc: 'Hides the specified window.',
+    },
+    WINKILL: {
+        keyRawName: 'WinKill',
+        body: 'WinKill,${1:[ WinTitle}, ${2:WinText}, ${3:SecondsToWait}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        doc: 'Forces the specified window to close.',
+    },
+    WINMAXIMIZE: {
+        keyRawName: 'WinMaximize',
+        body: 'WinMaximize, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
+        doc: 'Enlarges the specified window to its maximum size.',
+    },
+    WINMENUSELECTITEM: {
+        keyRawName: 'WinMenuSelectItem',
+        body:
+            'WinMenuSelectItem, ${1:WinTitle}, ${2:WinText}, ${3:Menu [}, ${4:SubMenu1}, ${5:SubMenu2}, ${6:SubMenu3}, ${7:SubMenu4}, ${8:SubMenu5}, ${9:SubMenu6}, ${10:ExcludeTitle}',
+        doc: 'Invokes a menu item from the menu bar of the specified window.',
+    },
+    WINMINIMIZE: {
+        keyRawName: 'WinMinimize',
+        body: 'WinMinimize, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
+        doc: 'Collapses the specified window into a button on the task bar.',
+    },
+    WINMINIMIZEALL: {
+        keyRawName: 'WinMinimizeAll',
+        body: 'WinMinimizeAll',
+        doc: 'Minimizes all windows.',
+    },
+    WINMINIMIZEALLUNDO: {
+        keyRawName: 'WinMinimizeAllUndo',
+        body: 'WinMinimizeAllUndo',
+        doc: 'Unminimizes all windows.',
+    },
+    WINMOVE: {
+        keyRawName: 'WinMove',
+        body:
+            'WinMove, ${1:WinTitle}, ${2:WinText}, ${3:X}, ${4:Y}, ${5:[Width}, ${6:Height}, ${7:ExcludeTitle}, ${8:ExcludeText]}',
+        doc: 'Changes the position and/or size of the specified window.',
+    },
+    WINRESTORE: {
+        keyRawName: 'WinRestore',
+        body: 'WinRestore, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
+        doc: 'Unminimizes or unmaximizes the specified window if it is minimized or maximized.',
+    },
+    WINSET: {
+        keyRawName: 'WinSet',
+        body:
+            'WinSet, ${1:AlwaysOnTop|Trans}, ${2:On|Off|Toggle|Value(0-255) [}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
+        doc: 'Makes a variety of changes to the specified window, such as "always on top" and transparency.',
+    },
+    WINSETTITLE: {
+        keyRawName: 'WinSetTitle',
+        body: 'WinSetTitle, ${1:WinTitle}, ${2:WinText}, ${3:NewTitle [}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        doc: 'Changes the title of the specified window.',
+    },
+    WINSHOW: {
+        keyRawName: 'WinShow',
+        body: 'WinShow, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
+        doc: 'Unhides the specified window.',
+    },
+    WINWAIT: {
+        keyRawName: 'WinWait',
+        body: 'WinWait, ${1:WinTitle}, ${2:WinText}, ${3:Seconds [}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        doc: 'Waits until the specified window exists.',
+    },
+    WINWAITACTIVE: {
+        keyRawName: 'WinWaitActive',
+        body: 'WinWaitActive, ${1:[ WinTitle}, ${2:WinText}, ${3:Seconds}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        doc: 'Waits until the specified window is active.',
+    },
+    WINWAITCLOSE: {
+        keyRawName: 'WinWaitClose',
+        body: 'WinWaitClose, ${1:WinTitle}, ${2:WinText}, ${3:Seconds [}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        doc: 'Waits until the specified window does not exist.',
+    },
+    WINWAITNOTACTIVE: {
+        keyRawName: 'WinWaitNotActive',
+        body: 'WinWaitNotActive, ${1:[ WinTitle}, ${2:WinText}, ${3:Seconds}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        doc: 'Waits until the specified window is not active.',
+    },
 };
 
-export function commandElement2Md(DirectivesElemnt: TCommandElement): vscode.MarkdownString {
+function commandElement2Md(DirectivesElemnt: TCommandElement): vscode.MarkdownString {
     const {
         keyRawName,
+        body,
         doc,
         link,
         exp,
@@ -684,14 +1238,68 @@ export function commandElement2Md(DirectivesElemnt: TCommandElement): vscode.Mar
     const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
         .appendMarkdown('Command')
         .appendCodeblock(keyRawName, 'ahk')
+        .appendCodeblock(body, 'ahk')
         .appendMarkdown(doc)
         .appendMarkdown('\n')
-        .appendMarkdown(`[(Read Doc)](${link})`)
+        .appendMarkdown(`[(Read Doc)](${link ?? 'https://www.autohotkey.com/docs/commands/index.htm'})`) // FIXME
         .appendMarkdown('\n\n***')
         .appendMarkdown('\n\n*exp:*');
     // .appendCodeblock(exp.join('\n'));
-
+    if ((exp !== undefined) && exp.length > 0) {
+        md.appendCodeblock(exp.join('\n'), 'ahk');
+    }
     md.supportHtml = true;
     return md;
 }
+
 // FIXME: command Completion
+
+export const CommandMDMap: ReadonlyMap<string, vscode.MarkdownString> = new Map(
+    [...Object.entries(LineCommand)]
+        .map(([ukName, BiFunc]: [string, TCommandElement]) => [ukName, commandElement2Md(BiFunc)]),
+);
+
+const snippetCommand: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
+    const tempList: vscode.CompletionItem[] = [];
+    for (const [k, v] of Object.entries(LineCommand)) {
+        const label: vscode.CompletionItemLabel = {
+            label: v.keyRawName,
+            description: 'Command',
+        };
+        const item: vscode.CompletionItem = new vscode.CompletionItem(label);
+        item.kind = vscode.CompletionItemKind.Field; // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
+        item.insertText = new vscode.SnippetString(v.body);
+
+        item.detail = 'Command of AHK (neko-help)'; // description
+        item.documentation = CommandMDMap.get(k) ?? commandElement2Md(v);
+
+        tempList.push(item);
+    }
+    return tempList;
+})();
+
+export function getSnippetCommand(PartStr: string): readonly vscode.CompletionItem[] {
+    return PartStr.startsWith('A_')
+        ? []
+        : snippetCommand;
+}
+
+export function getHoverCommand(
+    fistWordUp: string,
+    position: vscode.Position,
+    lStr: string,
+): vscode.MarkdownString | undefined {
+    if (fistWordUp === '') return undefined;
+
+    const { character } = position;
+    const posS = lStr.length - lStr.trimStart().length;
+
+    if (character < posS) return undefined;
+
+    const posE = posS + fistWordUp.length;
+    if (character > posE) return undefined;
+
+    console.log('🚀 getHoverCommand ~ fistWordUp', fistWordUp);
+
+    return CommandMDMap.get(fistWordUp);
+}

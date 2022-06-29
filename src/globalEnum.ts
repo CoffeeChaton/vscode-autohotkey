@@ -9,10 +9,8 @@ export type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [
 
 export const enum EDetail {
     inComment = 3,
-    // inLTrim0 = 0,
     inLTrim1 = 1,
     inLTrim2 = 2,
-    // inSkipSign = 'Sk',
     inSkipSign2 = 4,
     deepAdd = 5,
     deepSubtract = 6,

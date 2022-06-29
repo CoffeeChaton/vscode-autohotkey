@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
+import { getSnippetCommand } from '../../tools/Built-in/Command';
 import { Completion2Directives } from '../../tools/Built-in/DirectivesList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getTopSymbolWithPos } from '../../tools/DeepAnalysis/getTopSymbolWithPos';
@@ -36,14 +37,19 @@ function CompletionItemCore(
     const topSymbol: TTopSymbol | null = getTopSymbolWithPos(AhkSymbolList, position);
     const DA: null | CAhkFunc = getDAWithPos(AhkSymbolList, position);
     const PartStr: string | null = getPartStr(lStr, position);
-    // console.log('🚀 ~ PartStr', PartStr);
 
     const completions: vscode.CompletionItem[] = [
         ...wrapClass(position, textRaw, lStr, topSymbol, DocStrMap, DA), // '.'
         ...ahkSend(document, position), // '{'
         ...Completion2Directives(lStr, position),
-        ...getSnippetStartWihA(PartStr),
     ];
+
+    if (PartStr !== null) {
+        completions.push(
+            ...getSnippetStartWihA(PartStr),
+            ...getSnippetCommand(PartStr),
+        );
+    }
 
     if (PartStr !== null && !isPosAtStrNext(textRaw, lStr, position)) {
         const inputStr: string = getStartWithStr(document, position);
