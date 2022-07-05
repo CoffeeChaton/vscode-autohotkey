@@ -1,0 +1,12 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+ <title>AutoHotkey nekoHelp logo</title>
+
+ <g>
+  <title>keycap</title>
+  <rect id="svg_bg" height="500" width="500" y="6" x="6" fill="#2d323b" rx="250"/>
+  <text transform="matrix(0.919444, 0, 0, 0.919444, 5.39722, 1.53056)" text-anchor="middle" fill="#b09df5" x="272.01511" y="233.3142" id="svg_ahk" font-size="200" font-family="'Fira Code'">AHK</text>
+  <text x="100" y="420" id="svg_ahk" font-size="150" >🐾</text>
+
+ </g>
+</svg>
+

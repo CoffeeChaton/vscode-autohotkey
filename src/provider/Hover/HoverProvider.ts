@@ -3,6 +3,7 @@ import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { Detecter } from '../../core/Detecter';
 import { getHoverCommand } from '../../tools/Built-in/Command';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func';
+import { getHoverStatement } from '../../tools/Built-in/statement';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStr } from '../../tools/isPosAtStr';
@@ -71,6 +72,9 @@ function HoverProviderCore(
 
     const global: vscode.MarkdownString | null = getGlobalMarkdown(wordUp);
     if (global !== null) return new vscode.Hover(global);
+
+    const StatementMd: vscode.MarkdownString | undefined = getHoverStatement(wordUp);
+    if (StatementMd !== undefined) return new vscode.Hover(StatementMd);
 
     // TODO hover of A_HOTKEY or #warn or sleep
     return null;

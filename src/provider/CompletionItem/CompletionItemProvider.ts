@@ -4,6 +4,7 @@ import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { Detecter, TAhkFileData } from '../../core/Detecter';
 import { getSnippetCommand } from '../../tools/Built-in/Command';
 import { Completion2Directives } from '../../tools/Built-in/DirectivesList';
+import { getSnippetStatement } from '../../tools/Built-in/statement';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getTopSymbolWithPos } from '../../tools/DeepAnalysis/getTopSymbolWithPos';
 import { isPosAtStrNext } from '../../tools/isPosAtStr';
@@ -48,6 +49,7 @@ function CompletionItemCore(
         completions.push(
             ...getSnippetStartWihA(PartStr),
             ...getSnippetCommand(PartStr),
+            ...getSnippetStatement(PartStr),
         );
     }
 

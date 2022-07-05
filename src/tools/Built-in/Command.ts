@@ -17,6 +17,8 @@ type TCommandElement = { // FIXME: use DeepReadonly
 export const CommandList = [
     'AUTOTRIM',
     'BLOCKINPUT',
+    'CLASS',
+    'CLICK',
     'CLIPWAIT',
     'CONTROL',
     'CONTROLCLICK',
@@ -41,6 +43,7 @@ export const CommandList = [
     'ENVSET',
     'ENVSUB',
     'EXIT',
+    'EXITAPP',
     'FILECOPY',
     'FILECOPYDIR',
     'FILECREATEDIR',
@@ -67,6 +70,7 @@ export const CommandList = [
     'FOR',
     'FORMATTIME',
     'GETKEYSTATE',
+    'GLOBAL',
     'GROUPACTIVATE',
     'GROUPADD',
     'GROUPCLOSE',
@@ -84,7 +88,10 @@ export const CommandList = [
     'INPUTBOX',
     'KEYHISTORY',
     'KEYWAIT',
+    'LISTHOTKEYS',
     'LISTLINES',
+    'LISTVARS',
+    'LOCAL',
     'MENU',
     'MOUSECLICK',
     'MOUSECLICKDRAG',
@@ -100,7 +107,6 @@ export const CommandList = [
     'REGDELETE',
     'REGREAD',
     'REGWRITE',
-    'RETURN',
     'RUN',
     'RUNAS',
     'RUNWAIT',
@@ -137,6 +143,7 @@ export const CommandList = [
     'SOUNDSET',
     'SOUNDSETWAVEVOLUME',
     'SPLITPATH',
+    'STATIC',
     'STATUSBARGETTEXT',
     'STATUSBARWAIT',
     'STRINGCASESENSE',
@@ -222,6 +229,67 @@ export const LineCommand: TLineCommand = {
             'BlockInput, MouseMove  ; [v1.0.43.11+]',
             ';  MouseMove',
             ';  MouseMoveOff',
+        ],
+    },
+    CLASS: {
+        keyRawName: 'class',
+        body: 'class',
+        doc: 'At its root, a "class" is a set or category of things having some property or attribute in common. Since a [base](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects) or [prototype](https://www.autohotkey.com/docs/Objects.htm#Custom_Prototypes) object defines properties and behaviour for set of objects, it can also be called a _class_ object. For convenience, base objects can be defined using the "class" keyword as shown below:',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/Objects.htm#Custom_Classes',
+        exp: [
+            'class ClassName extends BaseClassName',
+            '{',
+            '    InstanceVar := Expression',
+            '    static ClassVar := Expression',
+            '',
+            '    class NestedClass',
+            '    {',
+            '        ...',
+            '    }',
+            '',
+            '    Method()',
+            '    {',
+            '        ...',
+            '    }',
+            '',
+            '    Property[]  ; Brackets are optional',
+            '    {',
+            '        get {',
+            '            return ...',
+            '        }',
+            '        set {',
+            '            return ... := value',
+            '        }',
+            '    }',
+            '}',
+        ],
+    },
+    CLICK: {
+        keyRawName: 'Click',
+        body: 'Click , Options',
+        doc: 'Clicks a mouse button at the specified coordinates. It can also hold down a mouse button, turn the mouse wheel, or move the mouse.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Click.htm',
+        exp: [
+            ';exp1 Clicks the left mouse button at a specific position.',
+            'Click, 100 200',
+            '',
+            ';exp2 Moves the mouse cursor to a specific position without clicking.',
+            'Click, 100 200 0',
+            '',
+            ';exp3 Clicks the right mouse button at a specific position.',
+            ' Click, 100 200 Right',
+            '',
+            ';exp Performs a double-click at the mouse cursor\'s current position.',
+            'Click, 2',
+            '',
+            ';exp Presses down the left mouse button and holds it.',
+            'Click, Down',
+            '',
+            ';exp Releases the right mouse button.',
+            'Click, Up Right',
+            '',
         ],
     },
     CLIPWAIT: {
@@ -443,6 +511,18 @@ export const LineCommand: TLineCommand = {
         body: 'Exit, ${1:ExitCode}',
         doc: 'Exits the current thread or (if the script is not persistent and contains no hotkeys) the entire script.',
     },
+    EXITAPP: {
+        keyRawName: 'ExitApp',
+        body: 'ExitApp',
+        doc: 'Terminates the script.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ExitApp.htm',
+        exp: [
+            'ExitApp [, ExitCode]',
+            '; ExitCode ',
+            ';    Zero is traditionally used to indicate success.',
+        ],
+    },
     FILECOPY: {
         keyRawName: 'FileCopy',
         body: 'FileCopy, ${1:Source}, ${2:Dest [}, ${3:Flag (1 = overwrite)]}',
@@ -595,6 +675,16 @@ export const LineCommand: TLineCommand = {
             'KeyIsDown := GetKeyState(KeyName , Mode)',
         ],
     },
+    GLOBAL: {
+        keyRawName: 'global',
+        body: 'global',
+        doc: 'To refer to an existing global variable inside a function (or create a new one), declare the variable as global prior to using it.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/Functions.htm#Global',
+        exp: [
+            'global LogFileName  ; This global variable was previously given a value somewhere outside this function.',
+        ],
+    },
     GROUPACTIVATE: {
         keyRawName: 'GroupActivate',
         body: 'GroupActivate, ${1:GroupName [}, ${2:R]}',
@@ -682,10 +772,55 @@ export const LineCommand: TLineCommand = {
         body: 'KeyWait, ${1:KeyName [}, ${2:Options]}',
         doc: 'Waits for a key or mouse/joystick button to be released or pressed down.',
     },
+    LISTHOTKEYS: {
+        keyRawName: 'ListHotkeys',
+        body: 'ListHotkeys',
+        doc: 'Displays the hotkeys in use by the current script, whether their subroutines are currently running, and whether or not they use the [keyboard](https://www.autohotkey.com/docs/commands/_InstallKeybdHook.htm) or [mouse](https://www.autohotkey.com/docs/commands/_InstallMouseHook.htm) hook.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ListHotkeys.htm',
+        exp: ['ListHotkeys'],
+    },
     LISTLINES: {
         keyRawName: 'ListLines',
         body: 'ListLines, ${1:[ On|Off]}',
         doc: 'Displays the script lines most recently executed.',
+    },
+    LISTVARS: {
+        keyRawName: 'ListVars',
+        body: 'ListVars',
+        doc: 'Displays the script\'s [variables](https://www.autohotkey.com/docs/Variables.htm): their names and current contents.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ListVars.htm',
+        exp: ['ListVars'],
+    },
+    LOCAL: {
+        keyRawName: 'Local',
+        body: 'Local, ${1:VariableName}',
+        doc: 'Local variables are specific to a single function and are visible only inside that function. Consequently, a local variable may have the same name as a global variable and both will have separate contents. Separate functions may also safely use the same variable names.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/Functions.htm#Local',
+        exp: [
+            'Local variables are specific to a single function and are visible only inside that function. Consequently, a local variable may have the same name as a global variable and both will have separate contents. Separate functions may also safely use the same variable names.',
+            '',
+            'All local variables which are not [static](https://www.autohotkey.com/docs/Functions.htm#static) are automatically freed (made empty) when the function returns.',
+            '',
+            'Built-in variables such as [Clipboard](https://www.autohotkey.com/docs/misc/Clipboard.htm), [ErrorLevel](https://www.autohotkey.com/docs/misc/ErrorLevel.htm), and [A\\_TimeIdle](https://www.autohotkey.com/docs/Variables.htm#TimeIdle) are never local (they can be accessed from anywhere), and cannot be redeclared.',
+            '',
+            'Functions are **assume-local** by default. Variables accessed or created inside an assume-local function are local by default, with the following exceptions:',
+            '',
+            '- [Super-global](https://www.autohotkey.com/docs/Functions.htm#SuperGlobal) variables, including [classes](https://www.autohotkey.com/docs/Objects.htm#Custom_Classes).',
+            '- A [dynamic variable reference](https://www.autohotkey.com/docs/Functions.htm#DynVar) may resolve to an existing global variable if no local variable exists by that name.',
+            '- [Commands that create pseudo-arrays](https://www.autohotkey.com/docs/Functions.htm#PseudoArrays) may create all elements as global even if only the first element is declared.',
+            '',
+            'The default may also be overridden as shown below (by declaring the variable or by changing the mode of the function).',
+            '',
+            '**Force-local mode** [\\[v1.1.27+\\]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.27.00 "Applies to AutoHotkey v1.1.27 and later"): If the function\'s first line is the word "local", all variable references (even dynamic ones) are assumed to be local unless they are declared as global _inside_ the function. Unlike the default mode, force-local mode has the following behavior:',
+            '',
+            '- Super-global variables (including classes) cannot be accessed without declaring them inside the function.',
+            '- Dynamic variable references follow the same rules as non-dynamic ones. Only global variables which are declared inside the function can be accessed.',
+            '- StringSplit and other commands which create pseudo-arrays follow the same rules as non-dynamic variable references (avoiding a common source of confusion).',
+            '- The _LocalSameAsGlobal_ [warning](https://www.autohotkey.com/docs/commands/_Warn.htm) is never raised for variables within a force-local function.',
+        ],
     },
     MENU: {
         keyRawName: 'Menu',
@@ -764,11 +899,6 @@ export const LineCommand: TLineCommand = {
         body:
             'RegWrite, ${1:REG_SZ|REG_EXPAND_SZ|REG_MULTI_SZ|REG_DWORD|REG_BINARY}, ${2:HKLM|HKU|HKCU|HKCR|HKCC}, ${3:SubKey [}, ${4:ValueName}, ${5:Value]}',
         doc: 'Writes a value to the registry.',
-    },
-    RETURN: {
-        keyRawName: 'Return',
-        body: 'Return',
-        doc: 'Returns from a subroutine to which execution had previously jumped via function-call, Gosub, Hotkey activation, GroupActivate, or other means.',
     },
     RUN: {
         keyRawName: 'Run',
@@ -954,6 +1084,22 @@ export const LineCommand: TLineCommand = {
         body:
             'SplitPath, ${1:InputVar [}, ${2:OutFileName}, ${3:OutDir}, ${4:OutExtension}, ${5:OutNameNoExt}, ${6:OutDrive]}',
         doc: 'Separates a file name or URL into its name, directory, extension, and drive.',
+    },
+    STATIC: {
+        keyRawName: 'Static',
+        body: 'Static LoggedLines := 0',
+        doc: 'Static variables are always implicitly local, but differ from locals because their values are remembered between calls.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/Functions.htm#static',
+        exp: [
+            'LogToFile(TextToLog)',
+            '{',
+            '    static LoggedLines := 0',
+            '    LoggedLines += 1  ; Maintain a tally locally (its value is remembered between calls).',
+            '    global LogFileName',
+            '    FileAppend, %LoggedLines%: %TextToLog%`n, %LogFileName%',
+            '}',
+        ],
     },
     STATUSBARGETTEXT: {
         keyRawName: 'StatusBarGetText',
@@ -1227,14 +1373,14 @@ export const LineCommand: TLineCommand = {
     },
 };
 
-function commandElement2Md(DirectivesElemnt: TCommandElement): vscode.MarkdownString {
+function commandElement2Md(DirectivesElement: TCommandElement): vscode.MarkdownString {
     const {
         keyRawName,
         body,
         doc,
         link,
         exp,
-    } = DirectivesElemnt;
+    } = DirectivesElement;
     const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
         .appendMarkdown('Command')
         .appendCodeblock(keyRawName, 'ahk')
@@ -1273,6 +1419,11 @@ const snippetCommand: readonly vscode.CompletionItem[] = ((): vscode.CompletionI
         item.detail = 'Command of AHK (neko-help)'; // description
         item.documentation = CommandMDMap.get(k) ?? commandElement2Md(v);
 
+        const { recommended } = v;
+        if (recommended !== undefined && recommended === false) {
+            item.tags = [vscode.CompletionItemTag.Deprecated];
+        }
+
         tempList.push(item);
     }
     return tempList;
@@ -1293,13 +1444,10 @@ export function getHoverCommand(
 
     const { character } = position;
     const posS = lStr.length - lStr.trimStart().length;
-
     if (character < posS) return undefined;
 
     const posE = posS + fistWordUp.length;
     if (character > posE) return undefined;
-
-    console.log('🚀 getHoverCommand ~ fistWordUp', fistWordUp);
 
     return CommandMDMap.get(fistWordUp);
 }

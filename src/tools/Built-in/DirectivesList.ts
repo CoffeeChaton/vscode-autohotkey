@@ -561,13 +561,13 @@ const DirectivesList: TDirectivesObj = {
     },
 };
 
-export function Directives2Md(DirectivesElemnt: TElement): vscode.MarkdownString {
+export function Directives2Md(DirectivesElement: TElement): vscode.MarkdownString {
     const {
         keyRawName,
         doc,
         link,
         exp,
-    } = DirectivesElemnt;
+    } = DirectivesElement;
     const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
         .appendMarkdown('#Directives')
         .appendCodeblock(keyRawName, 'ahk')
