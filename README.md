@@ -115,6 +115,7 @@ Previous extensions:
 
 - [AutoHotkey Plus by cweijan](https://github.com/cweijan/vscode-autohotkey)
 - [AutoHotkey by stef-levesque](https://github.com/stef-levesque/vscode-autohotkey)
+- [AutoHotkey_L-Docs](https://github.com/Lexikos/AutoHotkey_L-Docs)
 
 ## otherSuggest
 

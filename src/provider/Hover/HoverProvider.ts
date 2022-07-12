@@ -33,7 +33,6 @@ function HoverProviderCore(
 
     // pos at Comment range...
     const { lStr, fistWordUp } = DocStrMap[position.line];
-    console.log('🚀 ~ lStr', lStr);
     if (position.character > lStr.length) return null;
 
     // ex: #Warn

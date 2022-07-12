@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { DAList2SemanticHighlightFull } from './DAList2SemanticHighlight';
 import { GlobalHighlight } from './GlobalHighlight';
+import { inLTrimHighlight } from './inLTrimHighlight';
 import { TokenModifiers, TokenTypes } from './tools';
 // https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers
 
@@ -14,11 +15,13 @@ function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticToken
     const {
         GValMap,
         AhkSymbolList,
+        DocStrMap,
     } = Detecter.updateDocDef(document);
 
     const Collector: vscode.SemanticTokensBuilder = new vscode.SemanticTokensBuilder(legend);
     DAList2SemanticHighlightFull(AhkSymbolList, Collector);
     GlobalHighlight(GValMap, Collector);
+    inLTrimHighlight(DocStrMap, Collector);
     return Collector.build();
 }
 
