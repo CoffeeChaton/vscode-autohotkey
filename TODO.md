@@ -6,3 +6,4 @@
 4. [Random, vs Random()](syntaxes/ahk.tmLanguage.json)
 5. [check #Include](https://www.autohotkey.com/docs/Functions.htm#lib)
 6. [Highlight `(LTrim Join`](syntaxes/ahk.tmLanguage.json)
+7. auto check of `catch{} ;null catch`

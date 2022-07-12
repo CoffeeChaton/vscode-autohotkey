@@ -1,7 +1,12 @@
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 
-import { EDetail, TAhkToken, TTokenStream } from '../globalEnum';
+import {
+    EDetail,
+    ELTrim,
+    TAhkToken,
+    TTokenStream,
+} from '../globalEnum';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
 import { inLTrimRange } from '../tools/str/inLTrimRange';
@@ -16,7 +21,7 @@ import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
 export function Pretreatment(strArray: readonly string[], fileName: string): TTokenStream {
     const result: TAhkToken = [];
     let CommentBlock = false;
-    let inLTrim: 0 | 1 | 2 = 0;
+    let LTrim: ELTrim = ELTrim.none;
     let deep = 0;
     let line = -1;
     let lastLineIsGlobal = false;
@@ -41,24 +46,23 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 line,
                 cll: 0,
                 lineComment: '',
+                LTrim,
             });
             continue;
         }
 
-        inLTrim = inLTrimRange(textTrimStart, inLTrim);
-        if (inLTrim > 0) {
-            const inLTrimLevel = inLTrim === 1
-                ? EDetail.inLTrim1
-                : EDetail.inLTrim2;
+        LTrim = inLTrimRange(textTrimStart, LTrim);
+        if (LTrim !== ELTrim.none) {
             result.push({
                 fistWordUp: '',
                 lStr: '',
                 deep,
                 textRaw,
-                detail: [inLTrimLevel],
+                detail: [],
                 line,
                 cll: 0,
                 lineComment: '',
+                LTrim,
             });
             continue;
         }
@@ -73,6 +77,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 line,
                 cll: 0,
                 lineComment: '',
+                LTrim,
             });
             continue;
         }
@@ -125,6 +130,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             line,
             cll,
             lineComment,
+            LTrim,
         });
     }
 

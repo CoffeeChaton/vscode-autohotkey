@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { getFormatConfig } from '../../configUI';
-import { DeepReadonly, EDetail } from '../../globalEnum';
+import { DeepReadonly, EDetail, ELTrim } from '../../globalEnum';
 import { ContinueLongLine } from './ContinueLongLine';
 import { lineReplace } from './fmtReplace';
 import { getDeepLTrim } from './getDeepLTrim';
@@ -15,8 +15,7 @@ type TWarnUse =
         occ: number;
         deep: number;
         labDeep: 0 | 1;
-        // eslint-disable-next-line no-magic-numbers
-        inLTrim: 0 | 1 | 2;
+        LTrim: ELTrim;
         textRaw: string;
         switchRangeArray: vscode.Range[];
         document: vscode.TextDocument;
@@ -31,14 +30,14 @@ function wrap(args: TWarnUse, text: string): vscode.TextEdit {
         detail,
         textFix,
         line,
-        inLTrim,
+        LTrim,
         textRaw,
         DiffMap,
     } = args;
 
     const CommentBlock: boolean = detail.includes(EDetail.inComment);
     const newText: string = getFormatConfig() // WTF
-        ? lineReplace(text, textFix, CommentBlock, inLTrim)
+        ? lineReplace(text, textFix, CommentBlock, LTrim)
         : text;
 
     if (newText !== text) {
@@ -58,17 +57,13 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
         occ,
         deep,
         labDeep,
-        inLTrim,
-        textRaw,
+        LTrim,
         switchRangeArray,
         document,
         options, // by self
     } = args;
 
-    if (
-        inLTrim === 1
-        && !(/^\s\(/iu).test(textRaw)
-    ) {
+    if (LTrim === ELTrim.FlagM || LTrim === ELTrim.noFlagM) {
         return wrap(args, document.lineAt(line).text); // WTF**********
         //    return wrap(args, textRaw.replace(/\r$/u, ''));
     }
@@ -90,7 +85,7 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
 
     const deepFix = Math.max(
         0,
-        deep + labDeep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(inLTrim, textRaw),
+        deep + labDeep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(LTrim),
     );
 
     const TabSpaces = options.insertSpaces

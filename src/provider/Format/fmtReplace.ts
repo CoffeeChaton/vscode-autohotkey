@@ -1,5 +1,4 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,100] }] */
-
+import { ELTrim } from '../../globalEnum';
 import { isSetVarTradition } from '../../tools/str/removeSpecialChar';
 
 function textReplace(textElement: string): string {
@@ -76,8 +75,13 @@ function fnStrGroup(text: string): string {
     return head + newBody.trimStart();
 }
 
-export function lineReplace(text: string, textFix: string, CommentBlock: boolean, inLTrim: 0 | 1 | 2): string {
-    return (CommentBlock || textFix === '' || inLTrim > 0
+export function lineReplace(text: string, textFix: string, CommentBlock: boolean, LTrim: ELTrim): string {
+    return (CommentBlock
+            || textFix === ''
+            || LTrim === ELTrim.FlagS
+            || LTrim === ELTrim.FlagM
+            || LTrim === ELTrim.noFlagS
+            || LTrim === ELTrim.noFlagM
             || isSetVarTradition(textFix) || textFix.startsWith(':') || textFix.includes('::'))
         ? text
         : fnStrGroup(text);

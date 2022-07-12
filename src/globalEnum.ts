@@ -9,13 +9,20 @@ export type DeepReadonly<T> = T extends (...args: any) => any ? T : { readonly [
 
 export const enum EDetail {
     inComment = 3,
-    inLTrim1 = 1, // FIXME LTrim with ) end
-    inLTrim2 = 2,
     inSkipSign2 = 4,
     deepAdd = 5,
     deepSubtract = 6,
     isGlobalLine = 7,
     hasDoubleSemicolon = 8,
+}
+export const enum ELTrim {
+    none = 0,
+    FlagS = 1,
+    FlagM = 2,
+    FlagE = 3,
+    noFlagS = 11,
+    noFlagM = 12,
+    noFlagE = 13,
 }
 
 export type TAhkToken = {
@@ -25,6 +32,7 @@ export type TAhkToken = {
     readonly deep: number;
     readonly detail: readonly EDetail[];
     readonly line: number;
+    readonly LTrim: ELTrim;
     readonly cll: 0 | 1;
     readonly lineComment: string;
     // I know this is not Complete and correct Token.

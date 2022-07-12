@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { EStr } from '../../Enum/EStr';
-import { EDetail, EFormatChannel } from '../../globalEnum';
+import { EFormatChannel } from '../../globalEnum';
 import { fmtDiffInfo } from './fmtDiffInfo';
 import { getDeepKeywords } from './getDeepKeywords';
 import { isHotStr, isLabel } from './isLabelOrHotStr';
@@ -30,12 +30,6 @@ function Hashtag(textFix: string): '#if' | '#HotString' | '' {
 
 function isReturn(tagDeep: number, deep: number, textFix: string): boolean {
     return (tagDeep === deep && (/^\s*return\s*$/iu).test(textFix));
-}
-
-function detail2LTrim(detail: readonly EDetail[]): 0 | 1 | 2 {
-    if (detail.indexOf(EDetail.inLTrim1) > -1) return 1;
-    if (detail.indexOf(EDetail.inLTrim2) > -1) return 2;
-    return 0;
 }
 
 type TFmtCoreArgs = {
@@ -79,6 +73,7 @@ export function FormatCore(
             textRaw,
             lStr,
             detail,
+            LTrim,
         } of DocStrMap
     ) {
         const textFix = lStr.trim();
@@ -96,7 +91,6 @@ export function FormatCore(
         }
 
         if (line >= fmtStart && line <= fmtEnd) {
-            const inLTrim: 0 | 1 | 2 = detail2LTrim(detail);
             newTextList.push(fn_Warn_thisLineText_WARN({
                 detail,
                 textFix,
@@ -104,7 +98,7 @@ export function FormatCore(
                 occ,
                 deep,
                 labDeep,
-                inLTrim,
+                LTrim,
                 textRaw,
                 switchRangeArray,
                 document,

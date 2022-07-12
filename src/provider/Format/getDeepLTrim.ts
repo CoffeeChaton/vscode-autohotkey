@@ -1,11 +1,25 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
+import { ELTrim } from '../../globalEnum';
 
 // return deep of LTrim
-export function getDeepLTrim(inLTrim: 0 | 1 | 2, textRaw: string): 0 | 1 | 2 {
-    if (textRaw.trim().startsWith('(')) return 1;
-    if (inLTrim > 0) return 2;
-    if (textRaw.trim().startsWith(')')) return 1; // FIXME
-    return 0;
+export function getDeepLTrim(LTrim: ELTrim): 0 | 1 | 2 {
+    switch (LTrim) {
+        case ELTrim.none:
+            return 0;
+        case ELTrim.FlagS:
+            return 1;
+        case ELTrim.FlagM:
+            return 2;
+        case ELTrim.FlagE:
+            return 1;
+        case ELTrim.noFlagS:
+            return 1;
+        case ELTrim.noFlagM:
+            return 0;
+        case ELTrim.noFlagE:
+            return 1;
+        default:
+            return 0;
+    }
 }
 
 /*
