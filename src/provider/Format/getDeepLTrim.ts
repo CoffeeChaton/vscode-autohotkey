@@ -4,7 +4,7 @@
 export function getDeepLTrim(inLTrim: 0 | 1 | 2, textRaw: string): 0 | 1 | 2 {
     if (textRaw.trim().startsWith('(')) return 1;
     if (inLTrim > 0) return 2;
-    if (textRaw.trim().startsWith(')')) return 1;
+    if (textRaw.trim().startsWith(')')) return 1; // FIXME
     return 0;
 }
 
