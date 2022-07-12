@@ -75,9 +75,9 @@ const LineRuler: readonly TLineRuler[] = [
 
         getName(strTrim: string): string | null {
             // ex ~F10::
-            const e: RegExpExecArray | null = (/^([^:]+::)/u).exec(strTrim);
-            return (e !== null)
-                ? e[1]
+            const m: RegExpMatchArray | null = strTrim.match(/^([^:]+::)/u);
+            return (m !== null)
+                ? m[1]
                 : null;
         },
 
@@ -93,10 +93,9 @@ const LineRuler: readonly TLineRuler[] = [
 
         getName(strTrim: string): string | null {
             // ex #NoEnv
-            const e: RegExpExecArray | null = (/^(#\w+)(?:[\s,$])/u).exec(strTrim);
-
-            return (e !== null)
-                ? e[1]
+            const m: RegExpMatchArray | null = strTrim.match(/^(#\w+)(?:[\s,$])/u);
+            return (m !== null)
+                ? m[1]
                 : null;
         },
 

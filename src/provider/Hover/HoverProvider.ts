@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { Detecter } from '../../core/Detecter';
-import { getHoverCommand } from '../../tools/Built-in/Command';
+import { getHoverCommand, getHoverCommand2 } from '../../tools/Built-in/Command';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func';
 import { getHoverStatement } from '../../tools/Built-in/statement';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
@@ -33,6 +33,7 @@ function HoverProviderCore(
 
     // pos at Comment range...
     const { lStr, fistWordUp } = DocStrMap[position.line];
+    console.log('🚀 ~ lStr', lStr);
     if (position.character > lStr.length) return null;
 
     // ex: #Warn
@@ -45,9 +46,7 @@ function HoverProviderCore(
     }
 
     const CommandMd: vscode.MarkdownString | undefined = getHoverCommand(fistWordUp, position, lStr);
-    if (CommandMd !== undefined) {
-        return new vscode.Hover(CommandMd);
-    }
+    if (CommandMd !== undefined) return new vscode.Hover(CommandMd);
 
     // eslint-disable-next-line security/detect-unsafe-regex
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
@@ -69,6 +68,9 @@ function HoverProviderCore(
 
     const haveFunc: vscode.Hover | null = HoverOfFunc(wordUp, textRaw);
     if (haveFunc !== null) return haveFunc;
+
+    const CommandMd2: vscode.MarkdownString | undefined = getHoverCommand2(wordUp);
+    if (CommandMd2 !== undefined) return new vscode.Hover(CommandMd2);
 
     const global: vscode.MarkdownString | null = getGlobalMarkdown(wordUp);
     if (global !== null) return new vscode.Hover(global);

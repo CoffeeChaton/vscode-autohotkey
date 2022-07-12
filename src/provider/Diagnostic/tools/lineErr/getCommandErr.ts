@@ -9,11 +9,10 @@ import {
 
 // ---------------------------------------------------------------------------------------------------------------------
 function getLoopErr(lStr: string, line: number): EDiagLine | CNekoBaseLineDiag {
-    const exec = (/^\s*Loop\b[\s,]+(\w+)/iu).exec(lStr);
-    if (exec === null) {
-        return EDiagLine.miss;
-    }
-    const SecondSection = exec[1];
+    const matchLoop: RegExpMatchArray | null = lStr.match(/^\s*Loop\b[\s,]+(\w+)/iu);
+    if (matchLoop === null) return EDiagLine.miss;
+
+    const SecondSection = matchLoop[1];
     if ((/^(?:\d+|Files|Parse|Read|Reg)$/ui).test(SecondSection)) {
         return EDiagLine.OK;
     }

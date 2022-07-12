@@ -12,12 +12,11 @@ type TMathName = { ChapterArr: readonly string[]; strPart: string; ahkBaseObj: T
 
 function matchClassName({ ChapterArr, strPart, ahkBaseObj }: TMathName): string | null {
     // case 1: https://www.autohotkey.com/docs/Objects.htm#Objects_as_Functions
-    if ((/^new\s/iu).test(strPart)) {
-        const ahkNewClass = (/^\w+/u).exec(strPart.replace(/^new\s*/iu, ''));
-        if (ahkNewClass !== null) {
-            return ahkNewClass[0];
-        }
+    const ahkNewClass: RegExpMatchArray | null = strPart.match(/^new\s*(\w+)/iu);
+    if (ahkNewClass !== null) {
+        return ahkNewClass[1];
     }
+
     // case 2:
     if (ChapterArr.length === 1) {
         ahkBaseUp(strPart, ahkBaseObj);

@@ -13,5 +13,7 @@ export function getGlobalMarkdown(wordUp: string): vscode.MarkdownString | null 
         if (GlobalVal === undefined) continue;
         msgList.push(globalVal2Msg(fsPath, GlobalVal));
     }
-    return new vscode.MarkdownString(msgList.join('\n\n'), true);
+    return msgList.length === 0
+        ? null
+        : new vscode.MarkdownString(msgList.join('\n\n'), true);
 }

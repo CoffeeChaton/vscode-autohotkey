@@ -3,16 +3,6 @@
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
 
-type TStatementElement = {
-    keyRawName: string;
-    body: string;
-    doc: string;
-
-    recommended: boolean;
-    link: string;
-    exp: string[];
-};
-
 export const StatementList = [
     'AND',
     'BREAK',
@@ -37,13 +27,23 @@ export const StatementList = [
 
 type TStatementKeyList = typeof StatementList[number];
 
+type TStatementElement<T extends TStatementKeyList> = {
+    keyRawName: Capitalize<Lowercase<T>>;
+    body: string;
+    doc: string;
+
+    recommended: boolean;
+    link: string;
+    exp: string[];
+};
+
 type TStatement = {
-    [k in TStatementKeyList]: TStatementElement;
+    [k in TStatementKeyList]: TStatementElement<k>;
 };
 
 export const Statement: TStatement = {
     AND: {
-        keyRawName: 'and',
+        keyRawName: 'And',
         body: 'and',
         doc: 'Both of these are **logical-AND**. For example: `x > 3 and x < 10`. To enhance performance, [short-circuit evaluation](https://www.autohotkey.com/docs/Functions.htm#ShortCircuit) is applied. Also, a line that begins with AND/OR/&&/|| (or any other operator) is automatically [appended to](https://www.autohotkey.com/docs/Scripts.htm#continuation) the line above it.',
         recommended: true,
@@ -85,14 +85,13 @@ export const Statement: TStatement = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Switch.htm',
         exp: [
-            'switch UserInput',
-            '{',
-            '   case "btw":   Send, {backspace 4}by the way',
-            '   case "otoh":  Send, {backspace 5}on the other hand',
-            '   case "fl":    Send, {backspace 3}Florida',
-            '   case "ca":    Send, {backspace 3}California',
-            '   case "ahk":   Run, https://www.autohotkey.com',
-            '   default:      Send, {backspace 3}default',
+            'Switch UserInput {',
+            '    Case "btw":   MsgBox % "by the way"',
+            '    Case "otoh":  MsgBox % "on the other hand"',
+            '    Case "fl":    MsgBox % "Florida" Send, {backspace 3}Florida',
+            '    Case "ca":    MsgBox % "California"  Send, {backspace 3}California',
+            '    Case "ahk":   Run, % "https://www.autohotkey.com"',
+            '    Default :     MsgBox % "default"',
             '}',
         ],
     },
@@ -119,7 +118,7 @@ export const Statement: TStatement = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Continue.htm',
         exp: [
-            'Break [, LoopLabel]',
+            'Continue [, LoopLabel]',
             '',
             ';exp',
             'Loop',
@@ -140,14 +139,13 @@ export const Statement: TStatement = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Switch.htm',
         exp: [
-            'switch UserInput',
-            '{',
-            '   case "btw":   Send, {backspace 4}by the way',
-            '   case "otoh":  Send, {backspace 5}on the other hand',
-            '   case "fl":    Send, {backspace 3}Florida',
-            '   case "ca":    Send, {backspace 3}California',
-            '   case "ahk":   Run, https://www.autohotkey.com',
-            '   default:      Send, {backspace 3}default',
+            'Switch UserInput {',
+            '    Case "btw":   MsgBox % "by the way"',
+            '    Case "otoh":  MsgBox % "on the other hand"',
+            '    Case "fl":    MsgBox % "Florida" Send, {backspace 3}Florida',
+            '    Case "ca":    MsgBox % "California"  Send, {backspace 3}California',
+            '    Case "ahk":   Run, % "https://www.autohotkey.com"',
+            '    Default :     MsgBox % "default"',
             '}',
         ],
     },
@@ -184,8 +182,8 @@ export const Statement: TStatement = {
         ],
     },
     IF: {
-        keyRawName: 'if',
-        body: 'if',
+        keyRawName: 'If',
+        body: 'If',
         doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions) evaluates to true.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/IfExpression.htm',
@@ -213,7 +211,7 @@ export const Statement: TStatement = {
         ],
     },
     OR: {
-        keyRawName: 'or',
+        keyRawName: 'Or',
         body: 'or',
         doc: 'Both of these are **logical-OR**. For example: `x <= 3 or x >= 10`. To enhance performance, [short-circuit evaluation](https://www.autohotkey.com/docs/Functions.htm#ShortCircuit) is applied.',
         recommended: true,
@@ -278,13 +276,13 @@ export const Statement: TStatement = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Switch.htm',
         exp: [
-            'switch UserInput',
-            '{',
-            'case "btw":   Send, {backspace 4}by the way',
-            'case "otoh":  Send, {backspace 5}on the other hand',
-            'case "fl":    Send, {backspace 3}Florida',
-            'case "ca":    Send, {backspace 3}California',
-            'case "ahk":   Run, https://www.autohotkey.com',
+            'Switch UserInput {',
+            '    Case "btw":   MsgBox % "by the way"',
+            '    Case "otoh":  MsgBox % "on the other hand"',
+            '    Case "fl":    MsgBox % "Florida" Send, {backspace 3}Florida',
+            '    Case "ca":    MsgBox % "California"  Send, {backspace 3}California',
+            '    Case "ahk":   Run, % "https://www.autohotkey.com"',
+            '    Default :     MsgBox % "default"',
             '}',
         ],
     },
@@ -357,18 +355,15 @@ export const Statement: TStatement = {
     },
 };
 
-function Statement2Md(DirectivesElement: TStatementElement): vscode.MarkdownString {
+function Statement2Md(DirectivesElement: TStatementElement<TStatementKeyList>): vscode.MarkdownString {
     const {
         keyRawName,
-        body,
         doc,
         link,
         exp,
     } = DirectivesElement;
     const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
-        .appendMarkdown('Statement')
         .appendCodeblock(keyRawName, 'ahk')
-        .appendCodeblock(body, 'ahk')
         .appendMarkdown(doc)
         .appendMarkdown('\n')
         .appendMarkdown(`[(Read Doc)](${link})`)
@@ -388,21 +383,20 @@ export const StatementMDMap: ReadonlyMap<string, vscode.MarkdownString> = new Ma
 const snippetStatement: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     const tempList: vscode.CompletionItem[] = [];
     for (const [k, v] of Object.entries(Statement)) {
-        const label: vscode.CompletionItemLabel = {
-            label: v.keyRawName,
-            description: 'Statement',
-        };
-        const item: vscode.CompletionItem = new vscode.CompletionItem(label);
-        item.kind = vscode.CompletionItemKind.Field; // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
-        item.insertText = new vscode.SnippetString(v.body);
+        if (v.recommended === false) {
+            continue;
+        }
+        const { keyRawName, body } = v;
+
+        const item: vscode.CompletionItem = new vscode.CompletionItem({
+            label: keyRawName,
+            description: keyRawName,
+        });
+        item.kind = vscode.CompletionItemKind.Keyword; // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
+        item.insertText = new vscode.SnippetString(body);
 
         item.detail = 'Statement of AHK (neko-help)'; // description
         item.documentation = StatementMDMap.get(k) ?? Statement2Md(v);
-
-        const { recommended } = v;
-        if (recommended === false) {
-            item.tags = [vscode.CompletionItemTag.Deprecated];
-        }
 
         tempList.push(item);
     }

@@ -3,13 +3,9 @@
 
 import { EDetail, TAhkToken, TTokenStream } from '../globalEnum';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
-import { CommandMDMap } from '../tools/Built-in/Command';
-import { StatementList } from '../tools/Built-in/statement';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
 import { inLTrimRange } from '../tools/str/inLTrimRange';
 import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
-
-const debugSet: Set<string> = new Set(); // fistWordUp
 
 /**
  * @param strArray keep this with readonly string[], don't use String, because of copy.
@@ -112,15 +108,6 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             lastLineIsGlobal = false;
         }
 
-        if (
-            fistWordUp !== ''
-            && !debugSet.has(fistWordUp)
-            && !StatementList.includes(fistWordUp as typeof StatementList[number])
-            && !CommandMDMap.has(fistWordUp)
-        ) {
-            debugSet.add(fistWordUp);
-        }
-
         const lineComment: string = textRaw.length - lStr.length > 2
             ? textRaw.substring(lStr.length).trim()
             : '';
@@ -139,12 +126,6 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             cll,
             lineComment,
         });
-    }
-
-    if (debugSet.size > 0) {
-        console.log('🚀 ----------------', fileName);
-        // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
-        console.log('🚀 ~ Pretreatment ~ c3a9', [...debugSet.keys()].sort());
     }
 
     return result;

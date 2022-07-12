@@ -1,12 +1,11 @@
 import * as vscode from 'vscode';
-import { A_Variables } from '../../../tools/Built-in/Variables';
+import { A_Variables, A_Variables2Md, A_VariablesMDMap } from '../../../tools/Built-in/Variables';
 
 const snippetStartWihA: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     const tempList: vscode.CompletionItem[] = [];
     for (const [k, v] of Object.entries(A_Variables)) {
         const label: vscode.CompletionItemLabel = {
             label: k, // Left
-            //  detail: '', // mid
             description: v.group, // Right
         };
         const item = new vscode.CompletionItem(label);
@@ -15,12 +14,7 @@ const snippetStartWihA: readonly vscode.CompletionItem[] = ((): vscode.Completio
         item.insertText = k;
         // item.filterText = 'A_';
         item.detail = 'Built-in Variables (neko-help)'; // description
-        item.documentation = new vscode.MarkdownString('', true)
-            .appendCodeblock(k, 'ahk')
-            .appendMarkdown(v.group)
-            .appendMarkdown('\n\n')
-            .appendMarkdown(`[Read Doc](${v.uri})`);
-        tempList.push(item);
+        item.documentation = A_VariablesMDMap.get(k.toUpperCase()) ?? A_Variables2Md(v);
     }
     return tempList;
 })();

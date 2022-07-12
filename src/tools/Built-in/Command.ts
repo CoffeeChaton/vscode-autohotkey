@@ -4,16 +4,6 @@
 /* cSpell:disable */
 import * as vscode from 'vscode';
 
-type TCommandElement = { // FIXME: use DeepReadonly
-    keyRawName: string;
-    body: string;
-    doc: string;
-
-    recommended?: boolean;
-    link?: string;
-    exp?: string[];
-};
-
 export const CommandList = [
     'AUTOTRIM',
     'BLOCKINPUT',
@@ -193,6 +183,17 @@ export const CommandList = [
 ] as const;
 
 type TCommandKeyList = typeof CommandList[number];
+
+type TCommandElement = {
+    keyRawName: string;
+    body: string;
+    doc: string;
+    // FIXME: use DeepReadonly
+    recommended?: boolean;
+    link?: string;
+    exp?: string[];
+};
+
 type TLineCommand = {
     [k in TCommandKeyList]: TCommandElement;
 };
@@ -232,7 +233,7 @@ export const LineCommand: TLineCommand = {
         ],
     },
     CLASS: {
-        keyRawName: 'class',
+        keyRawName: 'Class',
         body: 'class',
         doc: 'At its root, a "class" is a set or category of things having some property or attribute in common. Since a [base](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects) or [prototype](https://www.autohotkey.com/docs/Objects.htm#Custom_Prototypes) object defines properties and behaviour for set of objects, it can also be called a _class_ object. For convenience, base objects can be defined using the "class" keyword as shown below:',
         recommended: true,
@@ -346,7 +347,6 @@ export const LineCommand: TLineCommand = {
             'ControlClick , [Control-or-Pos, WinTitle, WinText, WhichButton, ClickCount, Options, ExcludeTitle, ExcludeText]',
         ],
     },
-    // FIXME: add more
     CONTROLFOCUS: {
         keyRawName: 'ControlFocus',
         body: 'ControlFocus, ',
@@ -424,130 +424,389 @@ export const LineCommand: TLineCommand = {
     CONTROLGETTEXT: {
         keyRawName: 'ControlGetText',
         body:
-            'ControlGetText, ${1:OutputVar [}, ${2:Control}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
-        doc: 'Retrieves text from a control.',
+            'ControlGetText, ${1:OutputVar} [, ${2:Control}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
+        doc: 'Retrieves text from a control.\n\n* Note: To retrieve text from a ListView, ListBox, or ComboBox, use ControlGet List instead.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ControlGetText.htm',
+        exp: [
+            'ControlGetText, OutputVar [, Control, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+            '',
+            ';exp 1 Retrieves the current text from Notepad\'s edit control and stores it in OutputVar.',
+            '',
+            '~F11::fn_test()',
+            '',
+            'fn_test() {',
+            '    SetTitleMatchMode, 2',
+            '    SetTitleMatchMode, Fast',
+            '    ControlGetText, OutputVar, % "Edit1", % ".txt"',
+            '    MsgBox % OutputVar',
+            '}',
+        ],
     },
     CONTROLMOVE: {
         keyRawName: 'ControlMove',
         body:
-            'ControlMove, ${1:Control}, ${2:X}, ${3:Y}, ${4:Width}, ${5:Height [}, ${6:WinTitle}, ${7:WinText}, ${8:ExcludeTitle}',
+            'ControlMove, ${1:Control}, ${2:X}, ${3:Y}, ${4:Width}, ${5:Height} [, ${6:WinTitle}, ${7:WinText}, ${8:ExcludeTitle}]',
         doc: 'Moves or resizes a control.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ControlGetText.htm',
+        exp: [
+            'ControlMove, Control, X, Y, Width, Height [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+            '',
+            ';exp',
+            'fn_1 := Func("fn_ControlMoveTimer")^$',
+            'SetTimer, %fn_1%',
+            'InputBox, OutputVar, % "My Input Box"',
+            'return',
+            '',
+            'fn_ControlMoveTimer() {',
+            '    if not WinExist("My Input Box")',
+            '        return',
+            '    ; Otherwise the above set the "last found" window for us:',
+            '    WinActivate',
+            '    ControlMove, OK, 10, , 200 ; Move the OK button to the left and increase its width.',
+            '}',
+            '',
+        ],
     },
     CONTROLSEND: {
         keyRawName: 'ControlSend',
         body:
-            'ControlSend, ${1:[ Control}, ${2:Keys}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
+            'ControlSend, [${1:Control}, ${2:Keys}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
         doc: 'Sends simulated keystrokes to a window or control.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ControlSend.htm',
+        exp: [
+            'ControlSend [, Control, Keys, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     CONTROLSENDRAW: {
         keyRawName: 'ControlSendRaw',
         body:
-            'ControlSendRaw, ${1:[ Control}, ${2:Keys}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
-        doc: 'Sends simulated keystrokes to a window or control. ControlSendRaw sends the keystrokes in the Keys parameter without translating {Enter} to Enter, ^c to Control+C, etc.',
+            'ControlSendRaw, [${1:Control}, ${2:Keys}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
+        doc: 'Sends simulated keystrokes to a window or control.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ControlSend.htm',
+        exp: [
+            'ControlSendRaw [, Control, Keys, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     CONTROLSETTEXT: {
         keyRawName: 'ControlSetText',
         body:
-            'ControlSetText, ${1:Control}, ${2:NewText [}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
+            'ControlSetText, [${1:Control}, ${2:NewText }, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
         doc: 'Changes the text of a control.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ControlSetText.htm',
+        exp: [
+            'ControlSetText [, Control, NewText, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     COORDMODE: {
         keyRawName: 'CoordMode',
-        body: 'CoordMode, ${1:ToolTip|Pixel|Mouse [}, ${2:Screen|Relative]}',
+        body: 'CoordMode, ${1:ToolTip|Pixel|Mouse} [, ${2:Screen|Relative}]',
         doc: 'Sets coordinate mode for various commands to be relative to either the active window or the screen.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/CoordMode.htm',
+        exp: [
+            'CoordMode, TargetType [, RelativeTo]',
+            'CoordMode, ToolTip, Screen',
+            'CoordMode, ToolTip',
+        ],
     },
     CRITICAL: {
         keyRawName: 'Critical',
         body: 'Critical, ${1|Off,On|}',
         doc: 'Prevents the current thread from being interrupted by other threads, or enables it to be interrupted.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/CoordMode.htm',
+        exp: [
+            'CoordMode, TargetType [, RelativeTo]',
+            ';          TargetType',
+            ';                 -> On (defaults)',
+            ';                 -> Off',
+            'CoordMode, ToolTip, Screen',
+            'CoordMode, ToolTip',
+        ],
     },
     DETECTHIDDENTEXT: {
         keyRawName: 'DetectHiddenText',
         body: 'DetectHiddenText, ${1:On|Off}',
-        doc: 'Determines whether invisible text in a window is "seen" for the purpose of finding the window. This affects commands such as IfWinExist and WinActivate.',
+        doc: 'Determines whether invisible text in a window is "seen" for the purpose of finding the window. This affects commands, built-in functions and control flow statements such as WinExist() and WinActivate.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/DetectHiddenText.htm',
+        exp: [
+            'DetectHiddenText, OnOff',
+            ';                -> On (defaults), Hidden text will be detected.',
+            ';                -> Off, Hidden text is not detected.',
+        ],
     },
     DETECTHIDDENWINDOWS: {
         keyRawName: 'DetectHiddenWindows',
         body: 'DetectHiddenWindows, ${1:On|Off}',
         doc: 'Determines whether invisible windows are "seen" by the script.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/DetectHiddenWindows.htm',
+        exp: [
+            'DetectHiddenWindows, OnOff',
+            ';                     On: Hidden windows are detected.',
+            ';          (default) Off: Hidden windows are not detected, except by the WinShow command.',
+        ],
     },
     DRIVE: {
         keyRawName: 'Drive',
-        body: 'Drive, ${1:Sub-command [}, ${2:Drive}, ${3:Value]}',
+        body: 'Drive, ${1|Label,Lock,Unlock,Eject|} [, ${2:Drive}, ${3:Value}]',
         doc: 'Ejects/retracts the tray in a CD or DVD drive, or sets a drive\'s volume label.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Drive.htm',
+        exp: [
+            'Drive, SubCommand , Value1, Value2',
+            ';      SubCommand',
+            ';          Label: Renames the volume label of a drive.',
+            ';          Lock: Prevents a drive\'s eject feature from working.',
+            ';          Unlock: Restores a drive\'s eject feature.',
+            ';          Eject: Ejects or retracts the tray of a CD or DVD drive.',
+        ],
     },
     DRIVEGET: {
         keyRawName: 'DriveGet',
-        body: 'DriveGet, ${1:OutputVar}, ${2:Cmd [}, ${3:Value]}',
-        doc: 'Retrieves various types of information about the computer\'s drive(s).',
+        body:
+            'DriveGet, ${1:OutputVar}, ${2|List,Capacity,FileSystem,Label,Serial,Type,Status,StatusCD|} [, ${3:Value}]',
+        doc: [
+            'Retrieves various types of information about the computer\'s drive(s).',
+            '*SubCommand*',
+            '* List:        Retrieves a string of letters, one character for each drive letter in the system.',
+            '* Capacity:    Retrieves the total capacity of the specified path in megabytes.',
+            '* FileSystem:  Retrieves the type of the specified drive\'s file system.',
+            '* Label:       Retrieves the volume label of the specified drive.',
+            '* Serial:      Retrieves the volume serial number of the specified drive.',
+            '* Type:        Retrieves the drive type of the specified path.',
+            '* Status:      Retrieves the status of the specified path.',
+            '* StatusCD:    Retrieves the media status of a CD or DVD drive.',
+        ].join('\n'),
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/DriveGet.htm',
+        exp: [
+            'DriveGet, OutputVar, SubCommand [, Value]',
+            '',
+            ';exp Allows the user to select a drive in order to analyze it.',
+            '',
+            'FileSelectFolder, folder,, 3, Pick a drive to analyze:',
+            'if not folder',
+            '    return',
+            'DriveGet, list, List',
+            'DriveGet, cap, Capacity, %folder%',
+            'DriveSpaceFree, free, %folder%',
+            'DriveGet, fs, FileSystem, %folder%',
+            'DriveGet, label, Label, %folder%',
+            'DriveGet, serial, Serial, %folder%',
+            'DriveGet, type, Type, %folder%',
+            'DriveGet, status, Status, %folder%',
+            'MsgBox All Drives: %list%`nSelected Drive: %folder%`nDrive Type: %type%`nStatus: %status%`nCapacity: %cap% M`nFree Space: %free% M`nFilesystem: %fs%`nVolume Label: %label%`nSerial Number: %serial%',
+        ],
     },
     DRIVESPACEFREE: {
         keyRawName: 'DriveSpaceFree',
-        body: 'DriveSpaceFree, ${1:OutputVar}, ${2:C:\\}',
+        body: 'DriveSpaceFree, ${1:OutputVar_MBSize}, ${2:C:\\}',
         doc: 'Retrieves the free disk space of a drive, in Megabytes.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/DriveSpaceFree.htm',
+        exp: [
+            'DriveSpaceFree, OutputVar, Path',
+            '; OutputVar size is Megabytes.',
+            '',
+            'DriveSpaceFree, FreeSpace, C:\\',
+            'MsgBox % FreeSpace//1024 ; MB -> GB',
+        ],
     },
     ENVADD: {
         keyRawName: 'EnvAdd',
-        body: 'EnvAdd, ${1:Var}, ${2:Value [}, ${3:TimeUnits]}',
-        doc: 'Sets a variable to the sum of itself plus the given value (can also add or subtract time from a date-time value). Synonymous with: var += value.',
+        body: 'EnvAdd, ${1:Var}, ${2:Value} [, ${3:TimeUnits]}',
+        doc: 'Sets a [variable](https://www.autohotkey.com/docs/Variables.htm) to the sum of itself plus the given value (can also add or subtract time from a [date-time](https://www.autohotkey.com/docs/commands/FileSetTime.htm#YYYYMMDD) value). Synonymous with: `Var += Value`.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/EnvAdd.htm',
+        exp: [
+            'EnvAdd, Var, Value , TimeUnits',
+            'Var += Value , TimeUnits',
+            'Var++',
+            ';-----',
+            '; exp 1',
+            'var1 := ""  ; Make it blank so that the below will use the current timestamp instead.',
+            'var1 += 31, days',
+            'MsgBox, % var1  ; The answer will be the date 31 days from now.',
+        ],
     },
     ENVGET: {
         keyRawName: 'EnvGet',
         body: 'EnvGet, ${1:OutputVar}, ${2:EnvVarName}',
-        doc: 'Retrieves an environment variable.',
+        doc: [
+            'Retrieves an environment variable.',
+            '# [Parameters](https://www.autohotkey.com/docs/commands/EnvGet.htm#Parameters)',
+            '* OutputVar : ',
+            '  The name of the variable in which to store the string.',
+            '* EnvVarName :',
+            '  The name of the [environment variable](https://www.autohotkey.com/docs/Concepts.htm#environment-variables) to retrieve.',
+            '  Exp : `Path` or `TEMP`or `TMP`',
+        ].join('\n'),
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/EnvGet.htm',
+        exp: [
+            'EnvGet, OutputVar, % A_Is64bitOS ? "ProgramW6432" : "ProgramFiles"',
+            'MsgBox, % "Program files are in: " OutputVar',
+        ],
     },
     ENVSET: {
         keyRawName: 'EnvSet',
         body: 'EnvSet, ${1:EnvVar}, ${2:Value}',
-        doc: 'Writes a value to a variable contained in the environment.',
+        doc: [
+            'Writes a value to a [variable](https://www.autohotkey.com/docs/Variables.htm) contained in the environment.',
+            '## Parameters',
+            '* EnvVar : ',
+            '  Name of the [environment variable](https://www.autohotkey.com/docs/Concepts.htm#environment-variables) to use, e.g. "COMSPEC" or "PATH".',
+            '* Value :',
+            '  Value to set the [environment variable](https://www.autohotkey.com/docs/Concepts.htm#environment-variables) to.',
+        ].join('\n'),
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/EnvSet.htm',
+        exp: [
+            'EnvSet, AutGUI, Some text to put in the variable.',
+        ],
     },
     ENVSUB: {
         keyRawName: 'EnvSub',
-        body: 'EnvSub, ${1:Var}, ${2:Value [}, ${3:TimeUnits]}',
-        doc: 'Sets a variable to itself minus the given value (can also compare date-time values). Synonymous with: Var -= Value.',
+        body: 'EnvSub, ${1:Var}, ${2:Value}, ${3|Seconds,Minutes,Hours,Days|}',
+        doc: [
+            'Sets a [variable](https://www.autohotkey.com/docs/Variables.htm) to itself minus the given value (can also compare [date-time](https://www.autohotkey.com/docs/commands/FileSetTime.htm#YYYYMMDD) values). Synonymous with: `Var -= Value`.',
+            '## [Parameters](https://www.autohotkey.com/docs/commands/EnvSub.htm#Parameters)',
+            '* Var : ',
+            '  The name of the [variable](https://www.autohotkey.com/docs/Variables.htm) upon which to operate.',
+            '* Value :',
+            '  Any integer, floating point number, or [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions).',
+            '* TimeUnits \n',
+            '> `Seconds`, `Minutes`, `Hours`, `Days`\n',
+        ].join('\n'),
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/EnvSub.htm',
+        exp: [
+            'var1 := 20050126',
+            'var2 := 20040126',
+            'EnvSub, var1, %var2%, Days',
+            'MsgBox, %var1%  ; The answer will be 366 since 2004 is a leap year.',
+        ],
     },
     EXIT: {
         keyRawName: 'Exit',
-        body: 'Exit, ${1:ExitCode}',
-        doc: 'Exits the current thread or (if the script is not persistent and contains no hotkeys) the entire script.',
+        body: 'Exit [, ${1:ExitCode}]',
+        doc: [
+            'Exits the [current thread](https://www.autohotkey.com/docs/misc/Threads.htm) or (if the script is not [persistent](https://www.autohotkey.com/docs/commands/_Persistent.htm)) the entire script.',
+            '* ExitCode',
+            '',
+            '> An integer between -2147483648 and 2147483647 (can be an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions)) that is returned to its caller when the script exits. This code is accessible to any program that spawned the script, such as another script (via RunWait) or a batch (.bat) file. If omitted, _ExitCode_ defaults to zero. Zero is traditionally used to indicate success.',
+        ].join('\n'),
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Exit.htm',
+        exp: [
+            '#z::',
+            '    Gosub, Sub2',
+            '    MsgBox, % "This MsgBox will never happen because of the EXIT."',
+            'Return',
+            '',
+            'Sub2:',
+            'Exit  ; Terminate this subroutine as well as the calling subroutine.',
+        ],
     },
     EXITAPP: {
         keyRawName: 'ExitApp',
-        body: 'ExitApp',
-        doc: 'Terminates the script.',
+        body: 'ExitApp [, ${1:ExitCode}]',
+        doc: [
+            'Terminates the script.',
+            '* ExitCode',
+            '1. An integer between -2147483648 and 2147483647',
+            '2. If omitted, _ExitCode_ defaults to zero.',
+            '3. Zero is traditionally used to indicate success.',
+            '\n\n',
+        ].join('\n'),
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ExitApp.htm',
         exp: [
             'ExitApp [, ExitCode]',
-            '; ExitCode ',
-            ';    Zero is traditionally used to indicate success.',
+            '',
+            ';exp Press a hotkey to terminate the script.',
+            '#x::ExitApp  ; Win+X',
         ],
     },
     FILECOPY: {
         keyRawName: 'FileCopy',
-        body: 'FileCopy, ${1:Source}, ${2:Dest [}, ${3:Flag (1 = overwrite)]}',
-        doc: 'Copies one or more files.',
+        body: 'FileCopy, ${1:Source}, ${2:Dest} [, ${3|0,1|}]',
+        doc: [
+            'Copies one or more files.',
+            '* Overwrite',
+            '* If omitted or 0 (false), the command does not overwrite existing files.',
+            '* If this parameter is 1 (true), the command overwrites existing files.',
+            '',
+        ].join('\n'),
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/FileCopy.htm',
+        exp: [
+            'FileCopy, SourcePattern, DestPattern [, Overwrite]',
+            '',
+            ';exp1 Makes a copy but keep the original file name.',
+            'FileCopy, C:\\My Documents\\List1.txt, D:\\Main Backup\\',
+        ],
     },
     FILECOPYDIR: {
         keyRawName: 'FileCopyDir',
-        body: 'FileCopyDir, ${1:Source}, ${2:Dest [}, ${3:Flag]}',
-        doc: 'Copies a folder along with all its sub-folders and files (similar to xcopy).',
+        body: 'FileCopyDir, ${1:Source}, ${2:Dest} [, ${3|0,1|}]',
+        doc: [
+            'Copies a folder along with all its sub-folders and files (similar to xcopy).',
+            '* **Overwrite**',
+            '* This parameter determines whether to overwrite files if they already exist. If omitted, it defaults to 0 (false). Specify one of the following values:',
+            '* 0 (false): Do not overwrite existing files. The operation will fail and have no effect if _Dest_ already exists as a file or directory.',
+            '* 1 (true): Overwrite existing files. However, any files or subfolders inside _Dest_ that do not have a counterpart in _Source_ will not be deleted.',
+            '* This parameter can be an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions), even one that evalutes to true or false (since true and false are stored internally as 1 and 0).',
+            '',
+        ].join('\n'),
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/FileCopyDir.htm',
+        exp: [
+            'FileCopyDir, Source, Dest [, Overwrite]',
+            '',
+            ';exp1 Copies a directory to a new location.',
+            'FileCopyDir, % "C:\\My Folder", % "C:\\Copy of My Folder"',
+        ],
     },
     FILECREATEDIR: {
         keyRawName: 'FileCreateDir',
         body: 'FileCreateDir, ${1:Path}',
-        doc: 'Creates a directory/folder.',
+        doc: 'Creates a folder.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/FileCreateDir.htm',
+        exp: [
+            'FileCreateDir, DirName',
+            '',
+            ';exp1 Creates a new directory, including its parent directories if necessary.',
+            'FileCreateDir, % "C:\\Test1\\My Images\\Folder2"',
+        ],
     },
     FILECREATESHORTCUT: {
         keyRawName: 'FileCreateShortcut',
         body:
-            'FileCreateShortcut, ${1:Target}, ${2:C:\\My Shortcut.lnk [}, ${3:WorkingDir}, ${4:Args}, ${5:doc}, ${6:IconFile}, ${7:ShortcutKey}, ${8:IconNumber}',
+            'FileCreateShortcut, ${1:Target}, ${2:C:\\My Shortcut.lnk } [, ${3:WorkingDir}, ${4:Args}, ${5:Description}, ${6:IconFile}, ${7:ShortcutKey}, ${8:IconNumber}, ${9|1,3,7|}',
         doc: 'Creates a shortcut (.lnk) file.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/FileCreateShortcut.htm',
+        exp: [
+            'FileCreateShortcut, Target, LinkFile [, WorkingDir, Args, Description, IconFile, ShortcutKey, IconNumber, RunState]',
+            '',
+            ';exp1 The letter "i" in the last parameter makes the shortcut key be Ctrl+Alt+I.',
+            'FileCreateShortcut, Notepad.exe, %A_Desktop%\\My Shortcut.lnk, C:\\, "%A_ScriptFullPath%", My Description, C:\\My Icon.ico, i',
+        ],
     },
     FILEDELETE: {
         keyRawName: 'FileDelete',
         body: 'FileDelete, ${1:FilePattern}',
         doc: 'Deletes one or more files.',
+        // FIXME
     },
     FILEENCODING: {
         keyRawName: 'FileEncoding',
@@ -1215,7 +1474,7 @@ export const LineCommand: TLineCommand = {
     },
     TOOLTIP: {
         keyRawName: 'ToolTip',
-        body: 'ToolTip, ${1:[ Text}, ${2:X}, ${3:Y}, ${4:WhichToolTip]}',
+        body: 'ToolTip, ${1:[ Text}, ${2:X}, ${3:Y}, ${4:1_to_20]}',
         doc: 'Creates an always-on-top window anywhere on the screen.',
     },
     TRANSFORM: {
@@ -1398,8 +1657,6 @@ function commandElement2Md(DirectivesElement: TCommandElement): vscode.MarkdownS
     return md;
 }
 
-// FIXME: command Completion
-
 export const CommandMDMap: ReadonlyMap<string, vscode.MarkdownString> = new Map(
     [...Object.entries(LineCommand)]
         .map(([ukName, BiFunc]: [string, TCommandElement]) => [ukName, commandElement2Md(BiFunc)]),
@@ -1408,18 +1665,18 @@ export const CommandMDMap: ReadonlyMap<string, vscode.MarkdownString> = new Map(
 const snippetCommand: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     const tempList: vscode.CompletionItem[] = [];
     for (const [k, v] of Object.entries(LineCommand)) {
+        const { keyRawName, body, recommended } = v;
         const label: vscode.CompletionItemLabel = {
-            label: v.keyRawName,
+            label: keyRawName,
             description: 'Command',
         };
         const item: vscode.CompletionItem = new vscode.CompletionItem(label);
         item.kind = vscode.CompletionItemKind.Field; // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
-        item.insertText = new vscode.SnippetString(v.body);
+        item.insertText = new vscode.SnippetString(body);
 
         item.detail = 'Command of AHK (neko-help)'; // description
         item.documentation = CommandMDMap.get(k) ?? commandElement2Md(v);
 
-        const { recommended } = v;
         if (recommended !== undefined && recommended === false) {
             item.tags = [vscode.CompletionItemTag.Deprecated];
         }
@@ -1450,4 +1707,8 @@ export function getHoverCommand(
     if (character > posE) return undefined;
 
     return CommandMDMap.get(fistWordUp);
+}
+
+export function getHoverCommand2(wordUp: string): vscode.MarkdownString | undefined {
+    return CommandMDMap.get(wordUp);
 }

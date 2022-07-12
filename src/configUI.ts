@@ -1,15 +1,34 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,10] }] */
 import * as vscode from 'vscode';
-import { TConfigs } from './configType';
+import { DeepReadonly } from './globalEnum';
+
+type TempConfigs = {
+    statusBarDisplayColor: string;
+    formatTextReplace: boolean;
+    lint: {
+        funcSize: number;
+    };
+    baseScan: {
+        IgnoredList: readonly string[];
+    };
+    snippets: {
+        blockFilesList: readonly string[];
+    };
+    Diag: {
+        WarningCap: {
+            code502: number; // of var
+            code503: number; // of param
+        };
+    };
+    useCodeLens: boolean;
+};
+type TConfigs = DeepReadonly<TempConfigs>;
 
 /*
     ---set start---
 */
-const id = 'ahk-neko-help';
 export const statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(
-    id,
+    'ahk-neko-help',
     vscode.StatusBarAlignment.Right,
-    0,
 );
 statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
 statusBarItem.command = 'ahk.nekoHelp.bar';
