@@ -81,10 +81,6 @@ AutoHotKey language support for VS Code
 
 ![fmt](image/fmt.png)
 
-<!-- ## IntelliSense
-
-![IntelliSense For Class](image/IntelliSenseForClass.gif) -->
-
 ## Diagnostic and lint
 
 1. warning about use `=` not `:=` to assign.
