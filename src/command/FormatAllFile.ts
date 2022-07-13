@@ -75,8 +75,8 @@ async function setFormattingOptions(): Promise<vscode.FormattingOptions | null> 
 async function getJustTest(): Promise<boolean | null> {
     type TJustTest = TPick<boolean>;
     const items: TJustTest[] = [
-        { label: '1 -> just test format replace func <---bug now', fn: () => true },
-        { label: '2 -> need format all', fn: () => false },
+        { label: '1 -> need format all', fn: () => false },
+        // { label: '2 -> just test format replace func <---bug now', fn: () => true },
     ];
     const jestTestPick = await vscode.window.showQuickPick<TJustTest>(items, {
         title: 'this is Dev tools',

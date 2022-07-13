@@ -6,7 +6,7 @@ import { inLTrimHighlight } from './inLTrimHighlight';
 import { TokenModifiers, TokenTypes } from './tools';
 // https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers
 
-export const legend = new vscode.SemanticTokensLegend(
+export const legend: vscode.SemanticTokensLegend = new vscode.SemanticTokensLegend(
     [...TokenTypes],
     [...TokenModifiers],
 );

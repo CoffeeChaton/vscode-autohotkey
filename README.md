@@ -10,7 +10,7 @@ AutoHotKey language support for VS Code
   - [GotoDefinition](#gotodefinition)
   - [Hover](#hover)
   - [CodeFormat](#codeformat)
-  - [Diagnostic](#diagnostic)
+  - [Diagnostic and lint](#diagnostic-and-lint)
   - [IntelliSense](#intellisense)
   - [ListAllFunctions](#listallfunctions)
   - [Credits](#credits)
@@ -36,7 +36,6 @@ AutoHotKey language support for VS Code
 - HotString, like `::ahk::`
 - HotKeys, like `~F12::`
 - directive, like `#Include` or `#Warn`
-  ![codeSymbol3](image/codeSymbol3.jpg)
 
 ## GotoDefinition
 
@@ -86,7 +85,7 @@ AutoHotKey language support for VS Code
 
 ![IntelliSense For Class](image/IntelliSenseForClass.gif) -->
 
-## Diagnostic
+## Diagnostic and lint
 
 1. warning about use `=` not `:=` to assign.
 2. warning of Switch\
