@@ -8,14 +8,14 @@ export type TFuncInput = Readonly<{
     textRaw: string;
     line: number;
     RangeEndLine: number;
-    classStack: string[];
+    defStack: string[];
     DocStrMap: TTokenStream;
     document: vscode.TextDocument;
     GValMap: TGValMap;
 }>;
 
 type ChildType = Readonly<{
-    classStack: string[];
+    defStack: string[];
     RangeStartLine: number;
     RangeEndLine: number;
     DocStrMap: TTokenStream;
@@ -33,7 +33,7 @@ export function getChildren<T extends vscode.DocumentSymbol>(
         DocStrMap,
         RangeStartLine,
         RangeEndLine,
-        classStack,
+        defStack,
         document,
         GValMap,
     } = child;
@@ -50,7 +50,7 @@ export function getChildren<T extends vscode.DocumentSymbol>(
                 DocStrMap,
                 line,
                 RangeEndLine,
-                classStack,
+                defStack,
                 document,
                 GValMap,
                 textRaw,

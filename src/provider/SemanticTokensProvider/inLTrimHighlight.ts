@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
 import { ELTrim, TTokenStream } from '../../globalEnum';
-import { pushToken, TSemanticTokensLeaf } from './tools';
+import { TSemanticTokensLeaf } from './tools';
 
 // https://www.autohotkey.com/docs/Scripts.htm#continuation
 
-function getLTrimHighlightList(DocStrMap: TTokenStream): TSemanticTokensLeaf[] {
+export function inLTrimHighlight(DocStrMap: TTokenStream): TSemanticTokensLeaf[] {
     const Tokens: TSemanticTokensLeaf[] = [];
     for (const element of DocStrMap) {
         const { LTrim } = element;
@@ -38,15 +38,8 @@ function getLTrimHighlightList(DocStrMap: TTokenStream): TSemanticTokensLeaf[] {
             }
         }
     }
-    return Tokens;
-}
 
-export function inLTrimHighlight(
-    DocStrMap: TTokenStream,
-    Collector: vscode.SemanticTokensBuilder,
-): void {
-    const Tokens: TSemanticTokensLeaf[] = getLTrimHighlightList(DocStrMap);
-    pushToken(Tokens, Collector);
+    return Tokens;
 }
 
 // TODO change color of ")" of line

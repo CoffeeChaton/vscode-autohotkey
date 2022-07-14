@@ -93,7 +93,7 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
             DocStrMap,
             RangeStartLine: 0,
             RangeEndLine: DocStrMap.length,
-            classStack: [],
+            defStack: [],
             document,
             GValMap,
         },

@@ -1,9 +1,13 @@
 import * as vscode from 'vscode';
-import { Detecter } from '../../core/Detecter';
-import { DAList2SemanticHighlightFull } from './DAList2SemanticHighlight';
+import { Detecter, TAhkFileData } from '../../core/Detecter';
+import { DAList2SemanticHighlight } from './DAList2SemanticHighlight';
 import { GlobalHighlight } from './GlobalHighlight';
 import { inLTrimHighlight } from './inLTrimHighlight';
-import { TokenModifiers, TokenTypes } from './tools';
+import {
+    pushToken,
+    TokenModifiers,
+    TokenTypes,
+} from './tools';
 // https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers
 
 export const legend: vscode.SemanticTokensLegend = new vscode.SemanticTokensLegend(
@@ -11,18 +15,31 @@ export const legend: vscode.SemanticTokensLegend = new vscode.SemanticTokensLege
     [...TokenModifiers],
 );
 
+const wm: WeakMap<TAhkFileData, vscode.SemanticTokens> = new WeakMap();
+
 function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticTokens {
+    const AhkFileData: TAhkFileData = Detecter.updateDocDef(document);
+    const cache: vscode.SemanticTokens | undefined = wm.get(AhkFileData);
+    if (cache !== undefined) return cache;
+
     const {
         GValMap,
         AhkSymbolList,
         DocStrMap,
-    } = Detecter.updateDocDef(document);
+    } = AhkFileData;
 
-    const Collector: vscode.SemanticTokensBuilder = new vscode.SemanticTokensBuilder(legend);
-    DAList2SemanticHighlightFull(AhkSymbolList, Collector);
-    GlobalHighlight(GValMap, Collector);
-    inLTrimHighlight(DocStrMap, Collector);
-    return Collector.build();
+    const tokensBuilder: vscode.SemanticTokensBuilder = new vscode.SemanticTokensBuilder(legend);
+
+    pushToken([
+        ...DAList2SemanticHighlight(AhkSymbolList),
+        ...GlobalHighlight(GValMap),
+        ...inLTrimHighlight(DocStrMap),
+    ], tokensBuilder);
+
+    const result: vscode.SemanticTokens = tokensBuilder.build();
+    wm.set(AhkFileData, result);
+
+    return result;
 }
 
 // semantic token type

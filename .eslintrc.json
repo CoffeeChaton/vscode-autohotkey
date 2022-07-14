@@ -7,6 +7,7 @@
         "node": true
     },
     "extends": [
+        "plugin:unicorn/all",
         "airbnb-base",
         "airbnb-typescript",
         "eslint:recommended",
@@ -66,6 +67,7 @@
         "sourceType": "module"
     },
     "plugins": [
+        "unicorn",
         "fp",
         "immutable",
         "@typescript-eslint/eslint-plugin",
@@ -79,6 +81,10 @@
     ],
     "root": true,
     "rules": {
+        "unicorn/prevent-abbreviations": "off", // ....wait to new case
+        "unicorn/filename-case": "off", // ....wait to new case
+        "unicorn/no-null": "off",
+        //
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",
         "@typescript-eslint/await-thenable": "error",

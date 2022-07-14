@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import {
-    DeepReadonly,
     EDetail,
     TTokenStream,
 } from '../../globalEnum';
@@ -25,7 +24,7 @@ export type TValUpName = string;
 type TGValMapPrivacy = Map<TValUpName, TGlobalVal>;
 export type TGValMap = ReadonlyMap<TValUpName, TGlobalVal>;
 
-export type TGlobalValReadonly = DeepReadonly<TGlobalVal>;
+export type TGlobalValReadonly = Readonly<TGlobalVal>;
 export type TGValMapReadOnly = ReadonlyMap<TValUpName, TGlobalValReadonly>;
 
 function getGRange(strF: string, rawName: string, ma: RegExpMatchArray, line: number): vscode.Range {

@@ -4,7 +4,7 @@
         {
             "type": "npm",
             "script": "vscode:prepublish",
-            "isBackground": true,
+            "isBackground": false,
             "presentation": {
                 "reveal": "always"
             },
@@ -25,3 +25,4 @@
         }
     ]
 }
+// https://go.microsoft.com/fwlink/?LinkId=733558

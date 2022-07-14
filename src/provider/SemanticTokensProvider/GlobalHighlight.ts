@@ -1,33 +1,18 @@
-import * as vscode from 'vscode';
 import { TGValMapReadOnly } from '../../core/ParserTools/ahkGlobalDef';
-import { pushToken, TSemanticTokensLeaf } from './tools';
+import { TSemanticTokensLeaf } from './tools';
 
-function GlobalHighlightN3(GlobalValMap: TGValMapReadOnly): TSemanticTokensLeaf[] {
-    const need: TSemanticTokensLeaf[] = [];
+export function GlobalHighlight(GValMap: TGValMapReadOnly): TSemanticTokensLeaf[] {
+    const Tokens: TSemanticTokensLeaf[] = [];
 
-    for (const GlobalVal of GlobalValMap.values()) {
-        const { defRangeList, refRangeList } = GlobalVal;
-
-        for (const range of defRangeList) {
-            need.push({
+    for (const { defRangeList, refRangeList } of GValMap.values()) {
+        for (const range of [...defRangeList, ...refRangeList]) {
+            Tokens.push({
                 range,
                 tokenType: 'variable',
                 tokenModifiers: ['definition'],
             });
         }
-
-        for (const range of refRangeList) {
-            need.push({
-                range,
-                tokenType: 'variable',
-                tokenModifiers: ['declaration'],
-            });
-        }
     }
 
-    return need;
-}
-
-export function GlobalHighlight(GlobalValMap: TGValMapReadOnly, Collector: vscode.SemanticTokensBuilder): void {
-    pushToken(GlobalHighlightN3(GlobalValMap), Collector);
+    return Tokens;
 }

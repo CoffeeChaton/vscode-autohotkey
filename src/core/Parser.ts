@@ -11,11 +11,11 @@ export const ParserBlock = {
         const { lStr, fistWordUp } = FuncInput;
 
         if (fistWordUp !== 'CASE') return null;
-        if (lStr.indexOf(':') === -1) return null;
+        if (!lStr.includes(':')) return null;
 
         const {
             RangeEndLine,
-            classStack,
+            defStack,
             line,
             DocStrMap,
             document,
@@ -33,7 +33,7 @@ export const ParserBlock = {
                 DocStrMap,
                 RangeStartLine: range.start.line + 1,
                 RangeEndLine: range.end.line,
-                classStack,
+                defStack,
                 document,
                 GValMap,
             },
@@ -56,7 +56,7 @@ export const ParserBlock = {
 
         const {
             RangeEndLine,
-            classStack,
+            defStack,
             line,
             DocStrMap,
             document,
@@ -71,7 +71,7 @@ export const ParserBlock = {
                 DocStrMap,
                 RangeStartLine: range.start.line + 1,
                 RangeEndLine: range.end.line,
-                classStack,
+                defStack,
                 document,
                 GValMap,
             },
@@ -92,7 +92,7 @@ export const ParserBlock = {
             DocStrMap,
             line,
             RangeEndLine,
-            classStack,
+            defStack,
             lStr,
             document,
             GValMap,
@@ -107,7 +107,7 @@ export const ParserBlock = {
                 DocStrMap,
                 RangeStartLine: range.start.line + 1,
                 RangeEndLine: range.end.line,
-                classStack,
+                defStack,
                 document,
                 GValMap,
             },

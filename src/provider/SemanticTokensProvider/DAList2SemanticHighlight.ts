@@ -1,47 +1,34 @@
-import * as vscode from 'vscode';
-import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import { CAhkFunc as CAhkFunction } from '../../AhkSymbol/CAhkFunc';
 import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
-import { pushToken, TSemanticTokensLeaf } from './tools';
+import { TSemanticTokensLeaf } from './tools';
 
-const wm: WeakMap<CAhkFunc, TSemanticTokensLeaf[]> = new WeakMap();
-
-function DA2SemanticHighlight(DA: CAhkFunc): TSemanticTokensLeaf[] {
-    const cache: TSemanticTokensLeaf[] | undefined = wm.get(DA);
-    if (cache !== undefined) return cache;
-
+function DA2SemanticHighlight(DA: CAhkFunction): TSemanticTokensLeaf[] {
     const Tokens: TSemanticTokensLeaf[] = [];
     const { paramMap, valMap } = DA;
-    for (const arg of paramMap.values()) {
-        const { defRangeList, refRangeList } = arg;
-        [...defRangeList, ...refRangeList].forEach((range) => {
+    for (const { defRangeList, refRangeList } of paramMap.values()) {
+        for (const range of [...defRangeList, ...refRangeList]) {
             Tokens.push({
                 range,
                 tokenType: 'parameter', // <---------------
                 tokenModifiers: [],
             });
-        });
+        }
     }
-    for (const val of valMap.values()) {
-        const { defRangeList, refRangeList } = val;
-        [...defRangeList, ...refRangeList].forEach((range) => {
+    for (const { defRangeList, refRangeList } of valMap.values()) {
+        for (const range of [...defRangeList, ...refRangeList]) {
             Tokens.push({
                 range,
                 tokenType: 'variable', // <---------------
                 tokenModifiers: [],
             });
-        });
+        }
     }
-    wm.set(DA, Tokens);
+
     return Tokens;
 }
 
-export function DAList2SemanticHighlightFull(
-    AhkSymbolList: readonly TTopSymbol[],
-    Collector: vscode.SemanticTokensBuilder,
-): void {
-    const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
-    for (const DA of DAList) {
-        pushToken(DA2SemanticHighlight(DA), Collector);
-    }
+export function DAList2SemanticHighlight(AhkSymbolList: readonly TTopSymbol[]): TSemanticTokensLeaf[] {
+    return getDAList(AhkSymbolList)
+        .flatMap((DA: CAhkFunction): TSemanticTokensLeaf[] => DA2SemanticHighlight(DA));
 }

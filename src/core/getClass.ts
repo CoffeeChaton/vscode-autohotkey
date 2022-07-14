@@ -22,7 +22,7 @@ export function getClass(FuncInput: TFuncInput): null | CAhkClass {
         lStr,
         document,
         GValMap,
-        classStack,
+        defStack,
     } = FuncInput;
 
     const range = getRange(DocStrMap, line, line, RangeEndLine);
@@ -34,7 +34,7 @@ export function getClass(FuncInput: TFuncInput): null | CAhkClass {
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
-            classStack: [...classStack, name],
+            defStack: [...defStack, name],
             document,
             GValMap,
         },

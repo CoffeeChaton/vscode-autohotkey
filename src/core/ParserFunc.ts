@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import * as vscode from 'vscode';
 import {
     CAhkFunc,
@@ -22,7 +22,7 @@ function getFuncDetail(line: number, DocStrMap: TTokenStream): string {
     if (line === 0) return '';
     const PreviousLineText = DocStrMap[line - 1].textRaw.trimStart();
     return PreviousLineText.startsWith(';@')
-        ? PreviousLineText.substring(2) // 2=== ';@'.len
+        ? PreviousLineText.slice(2) // 2=== ';@'.len
         : '';
 }
 
@@ -32,14 +32,14 @@ export function getFunc(FuncInput: TFuncInput): null | CAhkFunc {
         DocStrMap,
         line,
         RangeEndLine,
-        classStack,
+        defStack,
         lStr,
         document,
         GValMap,
     } = FuncInput;
 
     const col: number = lStr.indexOf('(');
-    if (lStr.length < 1 || col === -1 || lStr.indexOf('}') > -1) return null;
+    if (lStr.length === 0 || col === -1 || lStr.includes('}')) return null;
     const isFunc: TFuncDefData | null = getFuncDef(DocStrMap, line);
     if (isFunc === null) return null;
 
@@ -52,7 +52,7 @@ export function getFunc(FuncInput: TFuncInput): null | CAhkFunc {
             DocStrMap,
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
-            classStack,
+            defStack,
             document,
             GValMap,
         },
@@ -79,9 +79,9 @@ export function getFunc(FuncInput: TFuncInput): null | CAhkFunc {
         range,
         selectionRange,
         selectionRangeText,
-        md: getFuncDocCore(fileName, AhkTokenList, selectionRangeText, classStack),
+        md: getFuncDocCore(fileName, AhkTokenList, selectionRangeText, defStack),
         uri: document.uri,
-        classStack,
+        defStack,
         paramMap,
         valMap,
         textMap,

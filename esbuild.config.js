@@ -67,7 +67,7 @@ esbuild
         outdir: 'dict',
         platform: 'node',
         sourcemap: true,
-        target: ['es2021', 'chrome98', 'node16.13'],
+        target: ['es2021', 'chrome100', 'node16.13'],
         treeShaking: true,
         plugins: [
             copyStaticFiles({

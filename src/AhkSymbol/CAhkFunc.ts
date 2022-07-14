@@ -60,7 +60,7 @@ type TCAhkFuncParam = {
     selectionRangeText: string;
     md: vscode.MarkdownString;
     uri: vscode.Uri;
-    classStack: string[];
+    defStack: string[];
     paramMap: TParamMapOut;
     valMap: TValMapOut;
     textMap: TTextMapOut;
@@ -94,7 +94,7 @@ export class CAhkFunc extends vscode.DocumentSymbol {
             selectionRangeText,
             md,
             uri,
-            classStack,
+            defStack,
             paramMap,
             valMap,
             textMap,
@@ -102,7 +102,7 @@ export class CAhkFunc extends vscode.DocumentSymbol {
             nameRange,
         }: TCAhkFuncParam,
     ) {
-        const kind = classStack.length === 0
+        const kind = defStack.length === 0
             ? vscode.SymbolKind.Function
             : vscode.SymbolKind.Method;
         super(name, detail, kind, range, selectionRange);
@@ -110,7 +110,7 @@ export class CAhkFunc extends vscode.DocumentSymbol {
         this.upName = name.toUpperCase();
         this.md = md;
         this.uri = uri;
-        this.defStack = classStack;
+        this.defStack = defStack;
         this.paramMap = paramMap;
         this.valMap = valMap;
         this.textMap = textMap;

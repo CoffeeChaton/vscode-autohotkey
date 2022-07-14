@@ -3,10 +3,7 @@ import { EMode } from '../../Enum/EMode';
 import { TTokenStream } from '../../globalEnum';
 import { docCommentBlock, EDocBlock } from '../str/inCommentBlock';
 
-function getReturnText(lStr: string, textRaw: string): string {
-    const col: number = lStr.search(/\breturn\b[\s,]+\S/ui);
-    if (col === -1) return '';
-
+function getReturnText(lStr: string, textRaw: string, col: number): string {
     const name: string = textRaw
         .substring(col)
         .replace(/^\s*Return\b[\s,]+/ui, '')
@@ -15,24 +12,27 @@ function getReturnText(lStr: string, textRaw: string): string {
     // func
     const Func: RegExpMatchArray | null = name.match(/^(\w+)\(/u);
     if (Func !== null) {
-        return `    Return ${Func[1]}(...)}\n`;
+        const comment = textRaw.length > lStr.length
+            ? textRaw.substring(lStr.length)
+            : '';
+        return `    Return ${Func[1]}(...) ${comment}`;
     }
 
     // obj
     if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
         const returnObj: RegExpMatchArray | null = name.match(/^(\{\s*\w+\s*:\s*\S{0,20})/u);
         if (returnObj !== null) {
-            return `    Return ${returnObj[1].trim()} ; (obj) ...\n`;
+            return `    Return ${returnObj[1].trim()}`;
         }
     }
 
     // too long
     const maxLen = 30;
     if (name.length > maxLen) {
-        return `    Return ${name.substring(0, maxLen)} ;...\n`;
+        return `    Return ${name.substring(0, maxLen)} ...`;
     }
     // else
-    return `    Return ${name.trim()}\n`;
+    return `    Return ${name.trim()}`;
 }
 
 export function getFuncDocCore(
@@ -43,23 +43,27 @@ export function getFuncDocCore(
 ): vscode.MarkdownString {
     let flag: EDocBlock = EDocBlock.other;
     const fnDocList: string[] = [];
-    let returnList = '';
+    const returnList: string[] = [];
 
     for (const { lStr, textRaw } of AhkTokenList) {
         const textRawTrim: string = textRaw.trimStart(); // **** MD ****** sensitive of \s && \n
         flag = docCommentBlock(textRawTrim, flag);
         if (flag === EDocBlock.inDocCommentBlockMid) {
-            if (!textRawTrim.startsWith('*')) continue;
-
-            const lineDoc: string = textRawTrim.substring(1); // **** MD ****** sensitive of \s && \n
-            fnDocList.push(
-                lineDoc.trim() === ''
-                    ? '\n'
-                    : lineDoc,
-            );
+            if (textRawTrim.startsWith('*') || textRawTrim.startsWith(';')) {
+                // allow '*' and ';'
+                const lineDoc: string = textRawTrim.substring(1); // **** MD ****** sensitive of \s && \n
+                fnDocList.push(lineDoc);
+            }
             continue;
         }
-        returnList += getReturnText(lStr, textRaw);
+
+        // eslint-disable-next-line no-magic-numbers
+        if (lStr.trim().length < 6) continue;
+
+        const col: number = lStr.search(/\breturn\b[\s,]/ui);
+        if (col !== -1) {
+            returnList.push(getReturnText(lStr, textRaw, col));
+        }
     }
 
     const kindStr: string = classStack.length === 0
@@ -75,10 +79,10 @@ export function getFuncDocCore(
         .appendMarkdown(kindDetail)
         .appendMarkdown(classStackStr)
         .appendCodeblock(selectionRangeText, 'ahk')
-        .appendCodeblock(returnList, 'ahk')
+        .appendCodeblock(returnList.join('\n'), 'ahk')
         .appendCodeblock('}', 'ahk');
 
-    const fnFullDoc: string = fnDocList.join('\n'); // **** MD ****** sensitive of \s && \n
+    const fnFullDoc: string = fnDocList.join('\n\n'); // **** MD ****** sensitive of \s && \n
     if (fnFullDoc.trim().length > 0) {
         md
             .appendMarkdown('\n\n***\n\n')
