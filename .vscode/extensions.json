@@ -2,26 +2,26 @@
     // See https://code.visualstudio.com/docs/editor/extension-marketplace#_workspace-recommended-extensions
     // for the documentation about the extensions.json format
     "recommendations": [
-        "dbaeumer.vscode-eslint",
-        "igorsbitnev.error-gutters",
-        "christian-kohler.path-intellisense",
-        "gruntfuggly.todo-tree",
-        "ms-vscode.vscode-js-profile-flame",
-        "ipatalas.vscode-postfix-ts",
-        "github.copilot",
         "alefragnani.project-manager",
-        "chakrounanas.turbo-console-log",
-        "editorconfig.editorconfig",
-        "visualstudioexptteam.vscodeintellicode",
-        "tabnine.tabnine-vscode",
         "bierner.markdown-preview-github-styles",
+        "chakrounanas.turbo-console-log",
+        "christian-kohler.path-intellisense",
         "davidanson.vscode-markdownlint",
-        "yzhang.markdown-all-in-one",
-        "sburg.vscode-javascript-booster",
-        "eamodio.gitlens",
+        "dbaeumer.vscode-eslint",
         "donjayamanne.githistory",
-        "mhutchie.git-graph",
+        "eamodio.gitlens",
+        "editorconfig.editorconfig",
+        "github.copilot",
+        "gruntfuggly.todo-tree",
+        "igorsbitnev.error-gutters",
         "ionutvmi.path-autocomplete",
-        "usernamehw.errorlens"
+        "ipatalas.vscode-postfix-ts",
+        "mhutchie.git-graph",
+        "ms-vscode.vscode-js-profile-flame",
+        "sburg.vscode-javascript-booster",
+        "tabnine.tabnine-vscode",
+        "usernamehw.errorlens",
+        "visualstudioexptteam.vscodeintellicode",
+        "yzhang.markdown-all-in-one"
     ]
 }

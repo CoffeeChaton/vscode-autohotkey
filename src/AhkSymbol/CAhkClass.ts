@@ -60,7 +60,7 @@ export class CAhkClassGetSet extends vscode.DocumentSymbol {
     }
 }
 
-export type TClassChildren = (CAhkClass | CAhkFunc | CAhkClassInstanceVar | CAhkClassGetSet);
+export type TClassChildren = CAhkClass | CAhkFunc | CAhkClassInstanceVar | CAhkClassGetSet;
 
 // AhkSymbol instanceof CAhkClass
 export class CAhkClass extends vscode.DocumentSymbol {

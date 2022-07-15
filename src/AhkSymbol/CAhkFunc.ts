@@ -11,7 +11,7 @@ type TUpName = string;
  * if keyRawName = first def name -> 0
  * ; else -> string
  */
-export type TC502New = (0 | string);
+export type TC502New = 0 | string;
 
 export type TParamMetaIn = {
     keyRawName: string;
