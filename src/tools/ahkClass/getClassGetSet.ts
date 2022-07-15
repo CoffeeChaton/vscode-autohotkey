@@ -13,7 +13,7 @@ export function getClassGetSet(FuncInput: TFuncInput): null | CAhkClassGetSet {
         textRaw,
     } = FuncInput;
     const lStrTrim = lStr.trim();
-    if (lStrTrim.indexOf('(') !== -1 || lStrTrim.indexOf('=') !== -1) return null;
+    if (lStrTrim.includes('(') || lStrTrim.includes('=')) return null;
 
     const ma: RegExpMatchArray | null = lStrTrim.match(/^(\w+)(?:\[\])?\s*\{?$/u);
     if (ma === null) return null;

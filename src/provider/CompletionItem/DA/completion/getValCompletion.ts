@@ -9,8 +9,7 @@ export function getValCompletion(
     funcName: string,
     recMap: TSnippetRecMap,
 ): vscode.CompletionItem[] {
-    const need: vscode.CompletionItem[] = [];
-    valMap.forEach((v: TValMetaOut): void => {
+    return [...valMap.values()].map((v: TValMetaOut): vscode.CompletionItem => {
         const {
             keyRawName,
             refRangeList,
@@ -27,8 +26,6 @@ export function getValCompletion(
             defRangeList,
             kind: vscode.CompletionItemKind.Variable,
         });
-        need.push(item);
+        return item;
     });
-
-    return need;
 }

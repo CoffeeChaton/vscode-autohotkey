@@ -69,7 +69,7 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): null | TFu
     });
     if (funcData !== null) return funcData;
 
-    if (DocStrMap[defLine].lStr.indexOf(')') > -1) return null; // fn_Name( ... ) ...  ,this is not ahk function
+    if (DocStrMap[defLine].lStr.includes(')')) return null; // fn_Name( ... ) ...  ,this is not ahk function
 
     // I don't think the definition of the function will exceed 15 lines.
     // eslint-disable-next-line no-magic-numbers

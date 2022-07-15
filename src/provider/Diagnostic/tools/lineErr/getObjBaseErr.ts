@@ -14,7 +14,7 @@ export function getObjBaseErr(params: TLineErrDiagParam): CNekoBaseLineDiag | ED
 
     const baseLen: number = 'x.base'.length;
     if (lStrTrim.length < baseLen) return EDiagLine.miss;
-    if (lStrTrim.indexOf('.') === -1) return EDiagLine.miss;
+    if (!lStrTrim.includes('.')) return EDiagLine.miss;
 
     const colL = lStr.search(/\.base\b/ui);
     if (colL === -1) { // not find

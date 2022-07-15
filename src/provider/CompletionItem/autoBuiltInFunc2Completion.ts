@@ -42,7 +42,7 @@ const SnippetObj: TSnip = ((): TSnip => {
         item.detail = 'Built-in Function (neko-help)';
         item.documentation = BuiltInFuncMDMap.get(ukName) ?? Bif2Md(BiFunc);
 
-        const head = ukName.substring(0, EMagic.len);
+        const head = ukName.slice(0, EMagic.len);
 
         const index: TrGroup = baseGroup.find((v: TrGroup) => v === head) ?? '_';
         SnipTempObj[index].push(item);
@@ -60,7 +60,7 @@ export function BuiltInFunc2Completion(inputStr: string): readonly vscode.Comple
         return result; // 111
     }
 
-    const head: string = inputStr.substring(0, EMagic.len).toUpperCase();
+    const head: string = inputStr.slice(0, EMagic.len).toUpperCase();
     // head.len is 3 !== '_'
     const index: TrGroup = baseGroup.find((v: TrGroup) => v === head) ?? '_';
 

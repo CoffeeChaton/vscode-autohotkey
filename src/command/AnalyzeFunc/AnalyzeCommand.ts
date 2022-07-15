@@ -92,7 +92,6 @@ export function AnalyzeCommand(AhkTokenList: TTokenStream, fullFuncMap: TFullFun
     }
 
     ed.pop();
-    ed.push('}');
-    ed.push('');
+    ed.push('}', '');
     return ed;
 }

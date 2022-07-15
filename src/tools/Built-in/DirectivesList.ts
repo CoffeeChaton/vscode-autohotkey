@@ -615,7 +615,7 @@ export function Completion2Directives(
     lStr: string,
     position: vscode.Position,
 ): readonly vscode.CompletionItem[] {
-    const subStr = lStr.substring(0, position.character).trim();
+    const subStr = lStr.slice(0, position.character).trim();
 
     return (/^#\w*$/ui).test(subStr)
         ? SnippetDirectives

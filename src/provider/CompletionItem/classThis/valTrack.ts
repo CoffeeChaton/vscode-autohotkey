@@ -40,7 +40,10 @@ function valTrackCore(
     for (const { lStr } of AhkTokenList) {
         const col: number = lStr.search(reg);
         if (col === -1) continue;
-        const strPart: string = lStr.substring(col + Head.length, lStr.length).replace(/^\s*:=\s*/u, '');
+        const strPart: string = lStr
+            .slice(col + Head.length, lStr.length)
+            .replace(/^\s*:=\s*/u, '');
+
         const name0: string | null = matchClassName({ ChapterArr, strPart, ahkBaseObj });
         if (name0 !== null) classNameList.push(name0);
     }

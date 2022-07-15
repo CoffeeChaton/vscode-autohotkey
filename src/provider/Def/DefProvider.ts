@@ -24,8 +24,8 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
             .map((DA: CAhkFunc) => DA.nameRange.start.line);
 
         for (const { textRaw, line, lStr } of DocStrMap) {
-            if (lStr.trim().length === 0 || filterLineList.indexOf(line) !== -1) continue;
-            const text2: string = textRaw.substring(0, lStr.length);
+            if (lStr.trim().length === 0 || filterLineList.includes(line)) continue;
+            const text2: string = textRaw.slice(0, lStr.length);
             for (const ma of refFn(text2)) {
                 const col: number | undefined = ma.index;
                 if (col === undefined) continue;
@@ -41,7 +41,7 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
             }
         }
     }
-    console.log(`🚀 list all using of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 9~11ms (if not gc)
+    console.log(`🚀 list all using of "${wordUp}"`, Date.now() - timeStart, 'ms'); // ssd -> 9~11ms (if not gc)
     return List;
 }
 
@@ -94,7 +94,7 @@ export function userDefFunc(
         return [new vscode.Location(document.uri, funcSymbol.nameRange)]; // let auto use getReference
     }
 
-    console.log(`🚀 goto def of "${wordUp}"`, Date.now() - timeStart, ' ms'); // ssd -> 0~1ms
+    console.log(`🚀 goto def of "${wordUp}"`, Date.now() - timeStart, 'ms'); // ssd -> 0~1ms
     return [new vscode.Location(funcSymbol.uri, funcSymbol.selectionRange)];
 }
 
@@ -102,7 +102,6 @@ function DefProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): null | vscode.Location[] {
-    // eslint-disable-next-line security/detect-unsafe-regex
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`#])\b\w+\b/u);
     if (range === undefined) return null;
     const wordUp: string = document.getText(range).toUpperCase();

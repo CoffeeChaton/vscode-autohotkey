@@ -21,10 +21,8 @@ function diagDAFileCore(DAList: CAhkFunc[]): readonly vscode.Diagnostic[] {
     const code503Max = getCode503Default();
 
     const cache: TDaDiagCache | undefined = wm.get(DAList);
-    if (cache !== undefined) {
-        if (cache.code502Max === code502Max && cache.code503Max === code503Max) {
-            return cache.DADiagList;
-        }
+    if (cache !== undefined && cache.code502Max === code502Max && cache.code503Max === code503Max) {
+        return cache.DADiagList;
     }
     const code500List: vscode.Diagnostic[] = []; // WTF...
     const code501List: vscode.Diagnostic[] = [];

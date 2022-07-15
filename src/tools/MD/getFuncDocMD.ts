@@ -5,7 +5,7 @@ import { docCommentBlock, EDocBlock } from '../str/inCommentBlock';
 
 function getReturnText(lStr: string, textRaw: string, col: number): string {
     const name: string = textRaw
-        .substring(col)
+        .slice(col)
         .replace(/^\s*Return\b[\s,]+/ui, '')
         .trim();
 
@@ -13,13 +13,13 @@ function getReturnText(lStr: string, textRaw: string, col: number): string {
     const Func: RegExpMatchArray | null = name.match(/^(\w+)\(/u);
     if (Func !== null) {
         const comment = textRaw.length > lStr.length
-            ? textRaw.substring(lStr.length)
+            ? textRaw.slice(lStr.length)
             : '';
         return `    Return ${Func[1]}(...) ${comment}`;
     }
 
     // obj
-    if (name.indexOf('{') > -1 && name.indexOf(':') > -1) {
+    if (name.includes('{') && name.includes(':')) {
         const returnObj: RegExpMatchArray | null = name.match(/^(\{\s*\w+\s*:\s*\S{0,20})/u);
         if (returnObj !== null) {
             return `    Return ${returnObj[1].trim()}`;
@@ -29,7 +29,7 @@ function getReturnText(lStr: string, textRaw: string, col: number): string {
     // too long
     const maxLen = 30;
     if (name.length > maxLen) {
-        return `    Return ${name.substring(0, maxLen)} ...`;
+        return `    Return ${name.slice(0, maxLen)} ...`;
     }
     // else
     return `    Return ${name.trim()}`;
@@ -51,7 +51,7 @@ export function getFuncDocCore(
         if (flag === EDocBlock.inDocCommentBlockMid) {
             if (textRawTrim.startsWith('*') || textRawTrim.startsWith(';')) {
                 // allow '*' and ';'
-                const lineDoc: string = textRawTrim.substring(1); // **** MD ****** sensitive of \s && \n
+                const lineDoc: string = textRawTrim.slice(1); // **** MD ****** sensitive of \s && \n
                 fnDocList.push(lineDoc);
             }
             continue;

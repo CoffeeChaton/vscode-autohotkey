@@ -172,7 +172,7 @@ export function getCommandErr(params: TLineErrDiagParam): CNekoBaseLineDiag | ED
             // FOR ?
             // MOUSEMOVE ?
             // don't add Loop
-        ].indexOf(fistWordUp) > -1
+        ].includes(fistWordUp)
     ) {
         return EDiagLine.miss;
     }

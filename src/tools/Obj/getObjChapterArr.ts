@@ -2,7 +2,7 @@ export function getObjChapterArr(textRaw: string, character: number): readonly s
     if (character === 0) return null;
 
     const ma: RegExpMatchArray | null = textRaw
-        .substring(0, character)
+        .slice(0, character)
         .match(/([\w.]+)$/u); // not supported className["foo"]
 
     if (ma === null) return null;

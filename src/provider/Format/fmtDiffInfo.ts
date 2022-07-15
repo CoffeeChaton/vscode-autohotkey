@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { EFormatChannel } from '../../globalEnum';
 import { OutputChannel } from '../vscWindows/OutputChannel';
@@ -10,7 +10,6 @@ type TDiffParm = {
     document: vscode.TextDocument;
     timeStart: number;
     from: EFormatChannel;
-    newTextList: vscode.TextEdit[];
 };
 // eslint-disable-next-line max-params
 export function fmtDiffInfo(
@@ -19,18 +18,12 @@ export function fmtDiffInfo(
         document,
         timeStart,
         from,
-        newTextList,
     }: TDiffParm,
 ): void {
     if (DiffMap.size === 0) return;
 
     const fileName: string = path.basename(document.uri.fsPath);
     fmtReplaceWarn(timeStart, from, fileName);
-
-    const rTextList: string[] = [];
-    newTextList.forEach((v: vscode.TextEdit) => rTextList.push(v.newText));
-
-    // eslint-disable-next-line no-magic-numbers
 
     OutputChannel.appendLine('-----------Format Diff Start--------------------------------');
     for (const [ln, [oldStr, newStr]] of DiffMap) {

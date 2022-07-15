@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 
 export function isNormalPos(document: vscode.TextDocument, position: vscode.Position): boolean {
-    // eslint-disable-next-line security/detect-unsafe-regex
     const Range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`{}])\b\w+\b/u);
     if (Range === undefined) {
         return false;
@@ -16,6 +15,5 @@ export function isNormalPos(document: vscode.TextDocument, position: vscode.Posi
         Range.start.line,
         Range.start.character,
     );
-    const newStr: string = document.getText(newRange);
-    return ['.', '`', '{', '}', '#'].indexOf(newStr) === -1;
+    return !['.', '`', '{', '}', '#'].includes(document.getText(newRange));
 }

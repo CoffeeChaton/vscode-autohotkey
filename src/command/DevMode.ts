@@ -24,10 +24,10 @@ async function devTestDA(): Promise<null> {
 }
 
 function devTestEnd(iMax: number): void {
-    const statistics = [...Data];
+    const statistics: number[] = [...Data];
     Data.length = 0;
 
-    const len = statistics.length;
+    const len: number = statistics.length;
     const sum: number = arrSum(statistics);
     const avg: number = sum / len;
     const stdDev: number = stdDevFn(statistics);
@@ -47,7 +47,9 @@ function devTestEnd(iMax: number): void {
 const c1: NodeJS.Timeout[] = [];
 
 export async function pressureTest(): Promise<null> {
-    c1.forEach((timeout: NodeJS.Timeout): void => clearInterval(timeout));
+    for (const timeout of c1) {
+        clearInterval(timeout);
+    }
     c1.length = 0;
     Data.length = 0;
 

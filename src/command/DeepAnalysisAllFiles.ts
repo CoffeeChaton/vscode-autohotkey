@@ -29,9 +29,9 @@ export function DeepAnalysisAllFiles(): null {
     const allFsPath: string[] = Detecter.getDocMapFile();
 
     const need: CAhkFunc[] = [];
-    allFsPath.forEach((fsPath: string): void => {
+    for (const fsPath of allFsPath) {
         const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
-        if (AhkFileData === undefined) return;
+        if (AhkFileData === undefined) continue;
 
         const { AhkSymbolList } = AhkFileData;
 
@@ -39,7 +39,7 @@ export function DeepAnalysisAllFiles(): null {
 
         need.push(...DAList);
         digDAFile(DAList, vscode.Uri.file(fsPath));
-    });
+    }
 
     const t2 = Date.now();
     showOutputChannel(WordFrequencyStatistics(need), t2 - t1);

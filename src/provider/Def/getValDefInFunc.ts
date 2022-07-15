@@ -47,7 +47,7 @@ export function getValDefInFunc(
     listAllUsing: boolean,
 ): null | vscode.Location[] {
     const { uri } = document;
-    const AhkFileData: TAhkFileData = Detecter.getDocMap(document.uri.fsPath) ?? Detecter.updateDocDef(document);
+    const AhkFileData: TAhkFileData = Detecter.getDocMap(uri.fsPath) ?? Detecter.updateDocDef(document);
     const { AhkSymbolList } = AhkFileData;
 
     const DA: CAhkFunc | null = getDAWithPos(AhkSymbolList, position);

@@ -12,8 +12,7 @@ export function varSetCapacityFunc({
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line no-magic-numbers
     if (lStr.length < 8) return; // 'NumGet('.length
-    if (lStr.indexOf('(') === -1) return;
-    // eslint-disable-next-line security/detect-unsafe-regex
+    if (!lStr.includes('(')) return;
     for (const v of lStr.matchAll(/(?<![.%`])\b(?:VarSetCapacity|NumGet)\b\(\s*&?(\w+)\b(?!\()/gui)) {
         const ch: number | undefined = v.index;
         if (ch === undefined) continue;

@@ -14,7 +14,7 @@ function getDocStrMapMaskSlowMode(range: vscode.Range, DocStrMap: TTokenStream):
 }
 
 export function getDocStrMapMask(range: vscode.Range, DocStrMap: TTokenStream): TTokenStream {
-    if (DocStrMap[0].line === 0 && DocStrMap[DocStrMap.length - 1].line === (DocStrMap.length - 1)) {
+    if (DocStrMap[0].line === 0 && DocStrMap.at(-1)?.line === (DocStrMap.length - 1)) {
         return DocStrMap.slice(range.start.line, range.end.line + 1);
     }
     console.log('🚀 ~ getDocStrMapMask ~ range', range);

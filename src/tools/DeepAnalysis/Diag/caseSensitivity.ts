@@ -27,20 +27,25 @@ export function caseSensitivityVar(
     }
 
     for (const ValAnalysis of paramOrValMap.values()) {
-        const { c502Array, defRangeList, refRangeList } = ValAnalysis;
+        const {
+            c502Array,
+            defRangeList,
+            refRangeList,
+            keyRawName,
+        } = ValAnalysis;
 
         const c502ArrayLen: number = c502Array.length;
         for (let i = 0; i < c502ArrayLen; i++) {
             const C502: TC502New = c502Array[i];
             if (C502 === 0) continue;
 
-            const defPos: vscode.Position = ValAnalysis.defRangeList[0].start;
+            const defPos: vscode.Position = defRangeList[0].start;
             const diag: vscode.Diagnostic = setDiagnosticDA(
                 EDiagCodeDA.code502,
                 getRangeOfC502(defRangeList, refRangeList, i),
                 vscode.DiagnosticSeverity.Information,
                 [],
-                setDiagCaseMsg(ValAnalysis.keyRawName, defPos, C502, prefix),
+                setDiagCaseMsg(keyRawName, defPos, C502, prefix),
             );
 
             code502or503List.push(diag);

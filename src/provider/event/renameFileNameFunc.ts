@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import * as path from 'path';
+import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { Pretreatment } from '../../core/Pretreatment';
 import { TTokenStream } from '../../globalEnum';

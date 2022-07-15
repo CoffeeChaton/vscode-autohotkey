@@ -34,8 +34,8 @@ function findClassDef(
     const Head: string = ChapterArr[0];
     if ((/^this$/iu).test(Head)) return headIsThis(topSymbol, ChapterArr);
 
-    const classSymbol: CAhkClass | null = getUserDefTopClassSymbol(Head.toUpperCase());
-    if (classSymbol !== null) return RefClassWithName(ChapterArr, classSymbol);
+    const AhkClass: CAhkClass | null = getUserDefTopClassSymbol(Head.toUpperCase());
+    if (AhkClass !== null) return RefClassWithName(ChapterArr, AhkClass);
 
     // a := new ClassName
     // a.  ;<---

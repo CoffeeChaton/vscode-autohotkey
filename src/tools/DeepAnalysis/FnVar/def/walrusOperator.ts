@@ -12,9 +12,8 @@ export function walrusOperator({
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line no-magic-numbers
     if (lStr.trim().length < 4) return; // A:= ----> len 3
-    if (lStr.indexOf(':=') === -1) return;
+    if (!lStr.includes(':=')) return;
 
-    // eslint-disable-next-line security/detect-unsafe-regex
     for (const v of lStr.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gu)) {
         const character: number | undefined = v.index;
         if (character === undefined) continue;

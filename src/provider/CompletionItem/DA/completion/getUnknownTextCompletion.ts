@@ -7,8 +7,7 @@ export function getUnknownTextCompletion(
     textMap: TTextMapOut,
     funcName: string,
 ): vscode.CompletionItem[] {
-    const need: vscode.CompletionItem[] = [];
-    textMap.forEach((v: TTextMetaOut): void => {
+    return [...textMap.values()].map((v: TTextMetaOut): vscode.CompletionItem => {
         const { keyRawName, refRangeList } = v;
         const item: vscode.CompletionItem = setItemCore({
             prefix: EPrefix.unKnownText,
@@ -19,8 +18,6 @@ export function getUnknownTextCompletion(
             defRangeList: [],
             kind: vscode.CompletionItemKind.Text,
         });
-        need.push(item);
+        return item;
     });
-
-    return need;
 }

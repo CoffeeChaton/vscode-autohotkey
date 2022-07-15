@@ -81,9 +81,12 @@
     ],
     "root": true,
     "rules": {
+        "security/detect-unsafe-regex": "warn",
         "unicorn/prevent-abbreviations": "off", // ....wait to new case
         "unicorn/filename-case": "off", // ....wait to new case
         "unicorn/no-null": "off",
+        "unicorn/prefer-set-has": "off",
+        "unicorn/no-keyword-prefix": "off",
         //
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",

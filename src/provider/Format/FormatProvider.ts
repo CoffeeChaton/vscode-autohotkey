@@ -2,7 +2,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { EStr } from '../../Enum/EStr';
 import { EFormatChannel } from '../../globalEnum';
 import { fmtDiffInfo } from './fmtDiffInfo';
 import { getDeepKeywords } from './getDeepKeywords';
@@ -50,11 +49,6 @@ export function FormatCore(
         from,
     }: TFmtCoreArgs,
 ): vscode.TextEdit[] {
-    if (document.uri.fsPath.indexOf(EStr.diff_name_prefix) > -1) {
-        const message = 'Don\'t Format the TEMP file!';
-        void vscode.window.showWarningMessage(message);
-        return [];
-    }
     const timeStart: number = Date.now();
 
     const { DocStrMap } = Detecter.updateDocDef(document);
@@ -133,7 +127,6 @@ export function FormatCore(
         document,
         timeStart,
         from,
-        newTextList,
     });
 
     return newTextList;

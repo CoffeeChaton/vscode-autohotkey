@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import * as vscode from 'vscode';
 import {
     EDetail,
@@ -37,7 +37,6 @@ function getGRange(strF: string, rawName: string, ma: RegExpMatchArray, line: nu
 }
 
 function defGlobal(gValMapBySelf: TGValMapPrivacy, strF: string, line: number): void {
-    // eslint-disable-next-line security/detect-unsafe-regex
     for (const ma of strF.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gui)) {
         const rawName: string = ma[1].trim();
         if (rawName === '') continue;
@@ -90,7 +89,7 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
             cll,
         } of DocStrMap
     ) {
-        if (detail.indexOf(EDetail.isGlobalLine) > -1) {
+        if (detail.includes(EDetail.isGlobalLine)) {
             lastLineIsGlobal = true;
         } else if (lastLineIsGlobal && cll === 1) {
             lastLineIsGlobal = true;
@@ -104,7 +103,7 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
 
         const strF: string = lStr.replace(/^\s*\bglobal\b[,\s]+/ui, replacerSpace);
 
-        if (strF.indexOf(':=') > -1) {
+        if (strF.includes(':=')) {
             defGlobal(GValMap, strF, line);
         } else {
             refGlobal(GValMap, strF, line);
@@ -132,7 +131,7 @@ export function globalVal2Msg(fsPath: string, GlobalVal: TGlobalValReadonly): st
     if (refRangeList.length > 0) {
         // don't show ref, because sometimes ref is not defined at this file...
         msg.push('- ref');
-        for (const range of GlobalVal.refRangeList) {
+        for (const range of refRangeList) {
             msg.push(range2Str(range));
         }
     }

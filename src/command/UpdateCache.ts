@@ -10,12 +10,8 @@ export async function UpdateCacheAsync(clearCache: boolean): Promise<null | TAhk
         BaseScanMemo.memo.clear();
     }
 
-    // const t1 = Date.now();
     const uriList: vscode.Uri[] | null = getUriList();
     if (uriList === null) return null;
-
-    // const t2 = Date.now();
-    // console.log('🚀 ~ getUriList ~ t2', t2 - t1);
 
     const waitDocFullData: Thenable<TAhkFileData>[] = [];
     for (const uri of uriList) {

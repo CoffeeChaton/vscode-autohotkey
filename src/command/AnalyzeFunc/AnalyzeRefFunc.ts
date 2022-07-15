@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { TTokenStream } from '../../globalEnum';
 import {
@@ -19,7 +19,6 @@ type TRefFuncInfoMap = Map<string, TMsg[]>;
 function getRefFuncMap(AhkTokenList: TTokenStream): TRefFuncInfoMap {
     const refFuncMap: TRefFuncInfoMap = new Map();
     for (const { line, textRaw, lStr } of AhkTokenList) {
-        // eslint-disable-next-line security/detect-unsafe-regex
         for (const ma of lStr.matchAll(/(?<![.`%])\b(\w+)\(/gui)) {
             const ch: number | undefined = ma.index;
             if (ch === undefined) continue;
@@ -78,7 +77,6 @@ export function AnalyzeRefFunc(AhkTokenList: TTokenStream, fullFuncMap: TFullFun
     }
 
     ed.pop();
-    ed.push('}');
-    ed.push('');
+    ed.push('}', '');
     return ed;
 }

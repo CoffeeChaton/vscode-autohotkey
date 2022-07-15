@@ -47,7 +47,6 @@ function HoverProviderCore(
     const CommandMd: vscode.MarkdownString | undefined = getHoverCommand(fistWordUp, position, lStr);
     if (CommandMd !== undefined) return new vscode.Hover(CommandMd);
 
-    // eslint-disable-next-line security/detect-unsafe-regex
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
     if (range === undefined) return null;
 

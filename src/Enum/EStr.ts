@@ -7,6 +7,5 @@
 // }
 
 export const enum EStr {
-    diff_name_prefix = '_diff_temp_',
     suggestStr = '✿',
 }

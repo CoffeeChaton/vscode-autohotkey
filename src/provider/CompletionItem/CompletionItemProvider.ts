@@ -18,7 +18,7 @@ import { getStartWithStr } from './util';
 
 function getPartStr(lStr: string, position: vscode.Position): string | null {
     const match: RegExpMatchArray | null = lStr
-        .substring(0, position.character)
+        .slice(0, position.character)
         .match(/(?<![.`{}#])\b(\w+)$/u);
 
     return match === null

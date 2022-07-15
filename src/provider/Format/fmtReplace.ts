@@ -41,8 +41,8 @@ function fnLR(strElement: string): string {
     if (LR === -1) return textReplace(strElement);
     if (LR === 0) return strElement;
     if (LR > 0) {
-        const Left = strElement.substring(0, LR + 1);
-        const Right = strElement.substring(LR + 1, strElement.length); // || '';
+        const Left = strElement.slice(0, LR + 1);
+        const Right = strElement.slice(LR + 1, strElement.length); // || '';
         return textReplace(Left) + Right;
     }
     return strElement;
@@ -52,11 +52,11 @@ function fnStrGroup(text: string): string {
     const headInt = text.search(/\S/u);
 
     const head = (headInt > 0)
-        ? text.substring(0, headInt)
+        ? text.slice(0, headInt)
         : '';
 
     const body = (headInt >= 0)
-        ? text.substring(headInt)
+        ? text.slice(headInt)
         : text;
 
     const strGroup = body.split('"');

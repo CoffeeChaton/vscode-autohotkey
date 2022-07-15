@@ -9,7 +9,6 @@ function ReferenceProviderCore(
 ): vscode.Location[] | null {
     if (isPosAtStr(document, position)) return null;
 
-    // eslint-disable-next-line security/detect-unsafe-regex
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/ui);
     if (range === undefined) return null;
     const wordUp: string = document.getText(range).toUpperCase();

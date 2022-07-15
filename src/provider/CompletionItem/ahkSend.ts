@@ -43,7 +43,7 @@ export function ahkSend(document: vscode.TextDocument, position: vscode.Position
     const lStr = getLStr(textRaw);
     if (
         (/\b(?:Control)?Send(?:Input|Play|Event)?\b/ui).test(lStr)
-        || lStr.indexOf('::') > -1
+        || lStr.includes('::')
         || isPosAtStr(document, position)
     ) {
         return ahkSendLazy();

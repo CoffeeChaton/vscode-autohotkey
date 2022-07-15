@@ -7,7 +7,7 @@ export function getIgnore(textRaw: string, line: number, IgnoreLine: number): nu
 
     // eslint-disable-next-line no-magic-numbers
     if (textRaw.length < 14) return IgnoreLine;
-    if (textRaw.indexOf(EDiagBase.ignore) === -1) return IgnoreLine;
+    if (!textRaw.includes(EDiagBase.ignore)) return IgnoreLine;
     const ignoreMatch: RegExpMatchArray | null = textRaw.match(/^\s*;@ahk-ignore\s+(\d+)\s/iu);
     if (ignoreMatch === null) {
         return IgnoreLine;

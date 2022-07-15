@@ -43,12 +43,13 @@ export const BaseScanMemo = {
         const oldCache: TMemo[] | undefined = this.memo.get(fsPath);
 
         for (const [key, value] of this.memo) {
-            if (value.length <= 1 || key === fsPath) {
-                continue;
+            if (key === fsPath) continue;
+
+            const tempVal: TMemo | undefined = value.at(-1); // last
+            if (tempVal !== undefined) {
+                value.length = 0;
+                value.push(tempVal);
             }
-            const tempVal: TMemo = value[value.length - 1]; // last
-            value.length = 0;
-            value.push(tempVal);
         }
 
         if (oldCache === undefined) return [];
@@ -87,7 +88,7 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
 
     const DocStrMap: TTokenStream = Pretreatment(fullTextList, document.fileName);
     const GValMap: TGValMap = ahkGlobalMain(DocStrMap);
-    const AhkSymbolList = getChildren<CTopClass>(
+    const AhkSymbolList: TTopSymbol[] = getChildren<CTopClass>(
         [getClass, getFunc, ParserBlock.getSwitchBlock, ParserLine],
         {
             DocStrMap,
@@ -99,14 +100,7 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
         },
     );
 
-    // const t1 = Date.now();
     const baseDiag: readonly vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
-
-    // const t2 = Date.now();
-    // const t3 = t2 - t1;
-    // if (t3 > 1) {
-    //     console.log('🚀 ~ getBaseData ~ t3', t3, ' ms ', document.fileName);
-    // }
 
     const AhkCache: TMemo = {
         GValMap, // TGValMapReadOnly

@@ -30,10 +30,10 @@ export type TParseDiagCaseMsg = Readonly<{
 }>;
 
 export function ParseDiagCaseMsg(diag: vscode.Diagnostic): TParseDiagCaseMsg {
-    const { message } = diag;
+    const { message, range } = diag;
     //  var "A" is the same variable as "a" defined earlier (at [165, 20])
     const magStrList: string[] = [];
-    for (const temp0 of [...message.matchAll(/"(\w+)"/uig)]) {
+    for (const temp0 of message.matchAll(/"(\w+)"/uig)) {
         magStrList.push(temp0[1]);
     }
 
@@ -47,19 +47,17 @@ export function ParseDiagCaseMsg(diag: vscode.Diagnostic): TParseDiagCaseMsg {
     }
 
     const radix = 10;
-    const defLine: number = parseInt(lineMatch[1], radix) - 1;
-    const defChar: number = parseInt(charMatch[1], radix) - 1;
+    const defLine: number = Number.parseInt(lineMatch[1], radix) - 1;
+    const defChar: number = Number.parseInt(charMatch[1], radix) - 1;
 
     const defStr: string = magStrList[1];
     const refStr: string = magStrList[0];
     const defRange: vscode.Range = new vscode.Range(defLine, defChar, defLine, defChar + defStr.length);
 
-    const refRange: vscode.Range = diag.range;
-
     return {
         defStr,
         refStr,
         defRange,
-        refRange,
+        refRange: range,
     };
 }

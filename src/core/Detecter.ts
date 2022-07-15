@@ -1,7 +1,6 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { showTimeSpend } from '../configUI';
-import { EStr } from '../Enum/EStr';
 import { TFsPath } from '../globalEnum';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
 import { BaseScanMemo, getBaseData, TMemo } from './BaseScanMemo/memo';
@@ -68,18 +67,17 @@ export const Detecter = {
         const UpDateDocDefReturn: TAhkFileData = getBaseData(document);
 
         const { uri } = document;
-        const { fsPath } = document.uri;
+        const { fsPath, scheme } = uri;
         if (
-            uri.scheme === 'file'
+            scheme === 'file'
             && !fsPath.startsWith('\\')
             && fsPath.endsWith('.ahk')
-            && fsPath.indexOf(EStr.diff_name_prefix) === -1
         ) {
             Detecter.DocMap.set(fsPath, UpDateDocDefReturn);
             diagColl.set(uri, [...UpDateDocDefReturn.baseDiag]);
         }
 
-        const fileName: string = path.basename(document.uri.fsPath);
+        const fileName: string = path.basename(fsPath);
         showTimeSpend(fileName);
 
         return UpDateDocDefReturn;

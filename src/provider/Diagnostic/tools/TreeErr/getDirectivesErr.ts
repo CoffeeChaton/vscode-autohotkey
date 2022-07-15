@@ -65,19 +65,19 @@ export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
         },
     ];
 
-    const { hashtag } = ch;
+    const { hashtag, selectionRange } = ch;
     for (const v of rulerMatch) {
         if (v.str === hashtag) {
             return [
-                setDiagnostic(v.code, ch.selectionRange, v.severity, v.tags),
+                setDiagnostic(v.code, selectionRange, v.severity, v.tags),
             ];
         }
     }
 
     // check is unknown Directives or not
-    return DirectivesUpKeyList.indexOf(hashtag as THashTagUPKey) > -1
+    return DirectivesUpKeyList.includes(hashtag as THashTagUPKey)
         ? []
-        : [setDiagnostic(EDiagCode.code503, ch.selectionRange, vscode.DiagnosticSeverity.Warning, [])];
+        : [setDiagnostic(EDiagCode.code503, selectionRange, vscode.DiagnosticSeverity.Warning, [])];
 }
 
 /*

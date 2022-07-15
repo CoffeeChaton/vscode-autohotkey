@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,15] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,10] }] */
 import * as vscode from 'vscode';
 import { TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
 import { TGetFnDefNeed } from '../TFnVarDef';
@@ -8,7 +8,13 @@ function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {
     const {
         line,
         valMap,
+        paramMap,
+        GValMap,
     } = arg;
+
+    const UpName: string = RawName.toUpperCase();
+    if (paramMap.has(UpName) || GValMap.has(UpName)) return;
+
     const defRange: vscode.Range = new vscode.Range(
         new vscode.Position(line, character),
         new vscode.Position(line, character + RawName.length),
@@ -19,41 +25,7 @@ function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {
         valMap,
         defRange,
     });
-    valMap.set(RawName.toUpperCase(), value);
-}
-
-function setV1(
-    arg: TGetFnDefNeed,
-    ch: number,
-    v0: string,
-    v1: string,
-): void {
-    const {
-        paramMap,
-        GValMap,
-    } = arg;
-    const UpName: string = v1.toUpperCase();
-    if (paramMap.has(UpName) || GValMap.has(UpName)) return;
-
-    const character: number = ch + v0.indexOf(v1, 3);
-    wrap(arg, character, v1);
-}
-
-function setV2(
-    arg: TGetFnDefNeed,
-    ch: number,
-    v0: string,
-    v2: string,
-): void {
-    const {
-        paramMap,
-        GValMap,
-    } = arg;
-    const UpName: string = v2.toUpperCase();
-    if (paramMap.has(UpName) || GValMap.has(UpName)) return;
-
-    const character: number = ch + v0.lastIndexOf(v2);
-    wrap(arg, character, v2);
+    valMap.set(UpName, value);
 }
 
 // For var1,var2 in Range
@@ -63,21 +35,30 @@ export function forLoop(arg: TGetFnDefNeed): void {
     } = arg;
 
     const lStrTrim: string = lStr.trim();
-    // eslint-disable-next-line no-magic-numbers
     if (lStrTrim.trim().length < 10) return; // for a in b ----> len 10
 
-    if (!(/\bFor\b\s/ui).test(lStrTrim)) return;
+    const col1: number = lStr.search(/\bFor\b\s/ui);
+    if (col1 === -1) return;
+    const col2: number = lStr.search(/\sin\s/ui);
+    if (col2 === -1 || col1 >= col2) return;
 
-    // eslint-disable-next-line security/detect-unsafe-regex
-    for (const v of lStr.matchAll(/\bFor\b\s+(\w+)\s*(?:,\s*(\w+))?\s+in\s/giu)) {
-        const ch: number | undefined = v.index;
-        if (ch === undefined) continue;
-        const v0: string = v[0];
-        const v1: string = v[1];
-        if (v1 !== '') setV1(arg, ch, v0, v1);
+    const replaceFor: number = col1 + 4; // 'for '.len = 4
 
-        const v2: string | undefined = v[2];
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (v2 !== undefined && v2 !== '') setV2(arg, ch, v0, v2);
-    }
+    const strPart: string = lStr.slice(replaceFor, col2);
+    const keyMatch: RegExpMatchArray | null = strPart.match(/\s*(\w+)[,\s]/ui);
+    if (keyMatch === null) return;
+
+    const keyPos: number = replaceFor + keyMatch[0].lastIndexOf(keyMatch[1]);
+    wrap(arg, keyPos, keyMatch[1]);
+
+    const col3: number = strPart.indexOf(',');
+    if (col3 === -1) return;
+    // has value
+
+    const replaceComma: number = col3 + 1;
+    const valMatch: RegExpMatchArray | null = strPart.slice(replaceComma).match(/\s*(\w+)[\s,]/ui);
+    if (valMatch === null) return;
+
+    const valuePos: number = replaceFor + replaceComma + valMatch[0].lastIndexOf(valMatch[1]);
+    wrap(arg, valuePos, valMatch[1]);
 }

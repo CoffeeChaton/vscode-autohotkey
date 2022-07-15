@@ -16,7 +16,7 @@ export function getClassInstanceVar(FuncInput: TFuncInput): null | CAhkClassInst
     const isStatic = (/^static\s/ui).test(lStr.trimStart());
 
     const name = lStr
-        .substring(0, index)
+        .slice(0, index)
         .replace(/^\s*static\s+/ui, '')
         .trim();
 

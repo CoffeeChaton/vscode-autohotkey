@@ -162,13 +162,12 @@ const ItemOfAhkObj: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
         },
     ];
     const itemS: vscode.CompletionItem[] = [];
-    BaseObj.forEach((v) => {
-        const { label, documentation } = v;
+    for (const { label, documentation } of BaseObj) {
         const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Method);
         item.detail = 'neko help : AhkObj Methods';
         item.documentation = new vscode.MarkdownString(documentation.join('\n\n'), true);
         itemS.push(item);
-    });
+    }
 
     const BaseItem = new vscode.CompletionItem('Base', vscode.CompletionItemKind.Property);
     BaseItem.detail = 'neko help : AhkObj  Property';
@@ -276,13 +275,12 @@ const ItemOfFileOpen: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => 
             ],
         },
     ];
-    ahkFileOpenMethod.forEach((e) => {
-        const { label, documentation } = e;
+    for (const { label, documentation } of ahkFileOpenMethod) {
         const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Method);
         item.detail = 'neko help : FileOpen() Method';
         item.documentation = new vscode.MarkdownString(documentation.join('\n\n'), true);
         itemS.push(item);
-    });
+    }
 
     const ahkFileOpenProperties: readonly TDescription[] = [
         {
@@ -343,83 +341,98 @@ const ItemOfFileOpen: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => 
             ],
         },
     ];
-    ahkFileOpenProperties.forEach((e) => {
-        const { label, documentation } = e;
-        const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Property);
+    for (const { label, documentation } of ahkFileOpenProperties) {
+        const item: vscode.CompletionItem = new vscode.CompletionItem(label, vscode.CompletionItemKind.Property);
         item.detail = 'neko help : FileOpen() -> Properties';
         item.documentation = new vscode.MarkdownString(documentation.join('\n\n'), true);
         itemS.push(item);
-    });
+    }
 
-    [
-        'ReadUInt()',
-        'ReadInt()',
-        'ReadInt64()',
-        'ReadShort()',
-        'ReadUShort()',
-        'ReadChar()',
-        'ReadUChar()',
-        'ReadDouble()',
-        'ReadFloat()',
-    ]
-        .forEach((v) => {
-            const documentation: string[] = [
-                'Reads a number from the file and advances the file pointer.',
-                '```NumType``` is either UInt, Int, Int64, Short, UShort, Char, UChar, Double, or Float. These type names have the same meanings as with ```DllCall()```.',
-                '*Returns* a number if successful, otherwise an empty string.',
-                'If a Try statement is active and no bytes were read, an exception is thrown. However, no exception is thrown if at least one byte was read, even if the size of the given NumType is greater than the number of bytes read. Instead, the missing bytes are assumed to be zero.',
-                'https://www.autohotkey.com/docs/objects/File.htm#ReadNum',
-            ];
-            const item = new vscode.CompletionItem(v, vscode.CompletionItemKind.Method);
-            item.detail = 'neko help : FileOpen() -> ReadNumType';
-            item.documentation = new vscode.MarkdownString(documentation.join('\n\n'), true);
-            itemS.push(item);
-        });
+    for (
+        const v of [
+            'ReadUInt()',
+            'ReadInt()',
+            'ReadInt64()',
+            'ReadShort()',
+            'ReadUShort()',
+            'ReadChar()',
+            'ReadUChar()',
+            'ReadDouble()',
+            'ReadFloat()',
+        ]
+    ) {
+        const documentation: string[] = [
+            'Reads a number from the file and advances the file pointer.',
+            '```NumType``` is either UInt, Int, Int64, Short, UShort, Char, UChar, Double, or Float. These type names have the same meanings as with ```DllCall()```.',
+            '*Returns* a number if successful, otherwise an empty string.',
+            'If a Try statement is active and no bytes were read, an exception is thrown. However, no exception is thrown if at least one byte was read, even if the size of the given NumType is greater than the number of bytes read. Instead, the missing bytes are assumed to be zero.',
+            'https://www.autohotkey.com/docs/objects/File.htm#ReadNum',
+        ];
+        const item = new vscode.CompletionItem(v, vscode.CompletionItemKind.Method);
+        item.detail = 'neko help : FileOpen() -> ReadNumType';
+        item.documentation = new vscode.MarkdownString(documentation.join('\n\n'), true);
+        itemS.push(item);
+    }
 
-    [
-        'WriteUInt(Num)',
-        'WriteInt(Num)',
-        'WriteInt64(Num)',
-        'WriteShort(Num)',
-        'WriteUShort(Num)',
-        'WriteChar(Num)',
-        'WriteUChar(Num)',
-        'WriteDouble(Num)',
-        'WriteFloat(Num)',
-    ]
-        .forEach((v) => {
-            const documentation: string[] = [
-                'Writes a number to the file and advances the file pointer.',
-                '```Num```:A number to write.',
-                '```NumType``` is either UInt, Int, Int64, Short, UShort, Char, UChar, Double, or Float. These type names have the same meanings as with ```DllCall()```.',
-                '*Returns* the number of bytes that were written. For instance, WriteUInt returns 4 if successful.',
-                'https://www.autohotkey.com/docs/objects/File.htm#WriteNum',
-            ];
-            const item = new vscode.CompletionItem(v, vscode.CompletionItemKind.Method);
-            item.detail = 'neko help : FileOpen() -> WriteNumType';
-            item.documentation = new vscode.MarkdownString(documentation.join('\n\n'), true);
-            itemS.push(item);
-        });
+    for (
+        const v of [
+            'WriteUInt(Num)',
+            'WriteInt(Num)',
+            'WriteInt64(Num)',
+            'WriteShort(Num)',
+            'WriteUShort(Num)',
+            'WriteChar(Num)',
+            'WriteUChar(Num)',
+            'WriteDouble(Num)',
+            'WriteFloat(Num)',
+        ]
+    ) {
+        const documentation: string[] = [
+            'Writes a number to the file and advances the file pointer.',
+            '```Num```:A number to write.',
+            '```NumType``` is either UInt, Int, Int64, Short, UShort, Char, UChar, Double, or Float. These type names have the same meanings as with ```DllCall()```.',
+            '*Returns* the number of bytes that were written. For instance, WriteUInt returns 4 if successful.',
+            'https://www.autohotkey.com/docs/objects/File.htm#WriteNum',
+        ];
+        const item = new vscode.CompletionItem(v, vscode.CompletionItemKind.Method);
+        item.detail = 'neko help : FileOpen() -> WriteNumType';
+        item.documentation = new vscode.MarkdownString(documentation.join('\n\n'), true);
+        itemS.push(item);
+    }
     return itemS;
 })();
 
 const ItemOfFunc: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     const itemS: vscode.CompletionItem[] = [];
-    ['Name', 'IsBuiltIn', 'IsVariadic', 'MinParams', 'MaxParams', '__Handle']
-        .forEach((v) => {
-            const item = new vscode.CompletionItem(v, vscode.CompletionItemKind.Property);
-            item.detail = 'neko help : Func() Property';
-            itemS.push(item);
-        });
-    ['Call(', 'Bind(', 'IsByRef(', 'IsOptional(']
-        .forEach((v) => {
-            const item = new vscode.CompletionItem(`${v})`, vscode.CompletionItemKind.Method);
-            item.detail = 'neko help : Func() Methods';
-            item.insertText = new vscode.SnippetString(v)
-                .appendTabstop()
-                .appendText(')'); // SnippetString;
-            itemS.push(item);
-        });
+    for (
+        const v of [
+            'Name',
+            'IsBuiltIn',
+            'IsVariadic',
+            'MinParams',
+            'MaxParams',
+            '__Handle',
+        ]
+    ) {
+        const item = new vscode.CompletionItem(v, vscode.CompletionItemKind.Property);
+        item.detail = 'neko help : Func() Property';
+        itemS.push(item);
+    }
+    for (
+        const v of [
+            'Call(',
+            'Bind(',
+            'IsByRef(',
+            'IsOptional(',
+        ]
+    ) {
+        const item = new vscode.CompletionItem(`${v})`, vscode.CompletionItemKind.Method);
+        item.detail = 'neko help : Func() Methods';
+        item.insertText = new vscode.SnippetString(v)
+            .appendTabstop()
+            .appendText(')'); // SnippetString;
+        itemS.push(item);
+    }
 
     return itemS;
 })();

@@ -16,9 +16,8 @@ function getFsPath(diag: vscode.Diagnostic): string | null {
 function setEdit(uri: vscode.Uri, line: number, FsPath: string): vscode.WorkspaceEdit {
     const position: vscode.Position = new vscode.Position(line, 0);
     const Today: Date = new Date();
-    const newText = `${EDiagBase.ignore} 1 line; at ${Today.toLocaleString()} ; ${FsPath}\n`;
     const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
-    edit.insert(uri, position, newText);
+    edit.insert(uri, position, `${EDiagBase.ignore} 1 line; at ${Today.toLocaleString()} ; ${FsPath}\n`);
     return edit;
 }
 

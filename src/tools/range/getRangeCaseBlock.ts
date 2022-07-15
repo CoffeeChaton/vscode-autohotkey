@@ -32,7 +32,7 @@ export function getRangeCaseBlock(
         }
         if (
             (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT')
-            && lStr.indexOf(':') !== -1
+            && lStr.includes(':')
         ) {
             const col = DocStrMap[line - 1].textRaw.length;
             return new vscode.Range(startPos, new vscode.Position(line - 1, col));

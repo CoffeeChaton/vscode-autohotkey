@@ -12,7 +12,7 @@ export function getComment(FuncInput: TFuncInput): null | CAhkComment {
     } = FuncInput;
 
     const { textRaw, detail, lineComment } = DocStrMap[line];
-    if (detail.indexOf(EDetail.hasDoubleSemicolon) === -1) {
+    if (!detail.includes(EDetail.hasDoubleSemicolon)) {
         return null;
     }
 

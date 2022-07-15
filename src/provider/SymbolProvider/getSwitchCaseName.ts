@@ -6,7 +6,7 @@ export function getCaseName(textRaw: string, lStr: string): null | string {
     if (caseE === -1) return null;
 
     // eslint-disable-next-line no-magic-numbers
-    return `Case ${textRaw.substring(caseS + 4, caseE).trim()}:`;
+    return `Case ${textRaw.slice(caseS + 4, caseE).trim()}:`;
 }
 
 export function getSwitchName(textRaw: string): string {

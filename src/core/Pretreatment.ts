@@ -29,9 +29,9 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
         line++;
         const textTrimStart: string = textRaw.trimStart();
         if (deep < 0) {
-            console.warn('Pretreatment -> line , deep < 0, fsPath ', fileName);
-            console.warn('Pretreatment -> line , deep < 0, line ', line);
-            console.warn('Pretreatment -> line , deep < 0, textTrimStart ', textTrimStart);
+            console.warn('Pretreatment -> line , deep < 0, fsPath', fileName);
+            console.warn('Pretreatment -> line , deep < 0, line', line);
+            console.warn('Pretreatment -> line , deep < 0, textTrimStart', textTrimStart);
             deep = 0;
         }
 
@@ -86,7 +86,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
         const lStr: string = getLStr(textRaw);
         const lStrTrim: string = lStr.trim();
         const detail: EDetail[] = [];
-        if (lStrTrim.indexOf('::') === -1) {
+        if (!lStrTrim.includes('::')) {
             // {$                     || ^{
             if (lStrTrim.endsWith('{') || lStrTrim.startsWith('{')) {
                 detail.push(EDetail.deepAdd);
@@ -114,7 +114,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
         }
 
         const lineComment: string = textRaw.length - lStr.length > 2
-            ? textRaw.substring(lStr.length).trim()
+            ? textRaw.slice(lStr.length).trim()
             : '';
 
         if (lineComment.startsWith(';;')) {

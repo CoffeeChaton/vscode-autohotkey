@@ -102,16 +102,13 @@ export function getUnknownTextMap(
 ): TTextMapIn {
     const ignoreList: string[] = getIgnoreList();
     const textMap: TTextMapIn = new Map<string, TTextMetaIn>();
-    // const startLine: number = AhkSymbol.selectionRange.end.line;
-    // const endLine: number = AhkSymbol.range.end.line;
     for (const { lStr, line, fistWordUp } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;
-        // eslint-disable-next-line security/detect-unsafe-regex
         for (const v of lStr.matchAll(/(?<![.#])\b(\w+)\b(?!\()/gu)) {
             const keyRawName: string = v[1];
             const wordUp: string = keyRawName.toUpperCase();
-            if (ignoreList.indexOf(wordUp) > -1) continue;
+            if (ignoreList.includes(wordUp)) continue;
             if (!textMap.has(wordUp)) {
                 if (fistWordUp === wordUp) continue;
                 if (

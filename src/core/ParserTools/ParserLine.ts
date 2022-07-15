@@ -42,7 +42,7 @@ const LineRuler: readonly TLineRuler[] = [
 
         getName(strTrim: string): string {
             const col = strTrim.indexOf(':');
-            return strTrim.substring(0, col + 1);
+            return strTrim.slice(0, col + 1);
         },
 
         test(strTrim: string): boolean {
@@ -66,7 +66,7 @@ const LineRuler: readonly TLineRuler[] = [
             // https://www.autohotkey.com/docs/misc/Labels.htm#syntax-and-usage
             // HotString labels consist of a colon, zero or more options, another colon, an abbreviation and double-colon.
             // if (!strTrim.startsWith(':')) return false;
-            if (strTrim.indexOf('::') === -1) return false;
+            if (!strTrim.includes('::')) return false;
             return (/^:[^:]*?:[^:]+::/u).test(strTrim);
         },
     },
@@ -84,7 +84,7 @@ const LineRuler: readonly TLineRuler[] = [
         test(strTrim: string): boolean {
             // Hotkey labels consist of a hotkey followed by double-colon.
             // if (strTrim.startsWith(':')) return false;
-            if (strTrim.indexOf('::') === -1) return false;
+            if (!strTrim.includes('::')) return false;
             return (/^[^:]+::/u).test(strTrim);
         },
     },

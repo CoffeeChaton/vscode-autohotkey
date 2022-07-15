@@ -30,7 +30,6 @@ export function AnalyzeGlobalVal(AhkTokenList: TTokenStream): string[] {
     }
 
     // ed.pop();
-    ed.push('}');
-    ed.push('');
+    ed.push('}', '');
     return ed;
 }

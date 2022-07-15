@@ -25,7 +25,7 @@ export function isSetVarTradition(textTrimStart: string): boolean {
         default:
             break;
     }
-    const eqLeftStr: string = textTrimStart.substring(0, col0).trim();
+    const eqLeftStr: string = textTrimStart.slice(0, col0).trim();
 
     return (/^[%\w.[\]]+$/u).test(eqLeftStr);
     // return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/u).test(t);
@@ -50,6 +50,6 @@ export function getLStr(textRaw: string): string {
         case 0:
             return '';
         default:
-            return textFix.substring(0, i);
+            return textFix.slice(0, i);
     }
 }

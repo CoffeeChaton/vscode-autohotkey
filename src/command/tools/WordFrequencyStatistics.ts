@@ -1,4 +1,4 @@
-import { CAhkFunc, TTextMetaOut } from '../../AhkSymbol/CAhkFunc';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { OutputChannel } from '../../provider/vscWindows/OutputChannel';
 
 export type TWordFrequencyStatistics = {
@@ -14,15 +14,15 @@ export function WordFrequencyStatistics(need: CAhkFunc[]): TWordFrequencyStatist
     let valMapSize = 0;
     let textMapSize = 0;
     const DEB: Map<string, number> = new Map();
-    need.forEach((ed: CAhkFunc): void => {
+    for (const ed of need) {
         paramMapSize += ed.paramMap.size;
         valMapSize += ed.valMap.size;
         textMapSize += ed.textMap.size;
-        ed.textMap.forEach((v: TTextMetaOut, k: string): void => {
+        for (const [k, v] of ed.textMap) {
             const oldNum: number = DEB.get(k) ?? 0;
             DEB.set(k, oldNum + v.refRangeList.length);
-        });
-    });
+        }
+    }
 
     type TElement = {
         k: string;

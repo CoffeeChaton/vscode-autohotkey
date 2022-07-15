@@ -4,9 +4,9 @@ import { DiagsDA, EDiagCodeDA } from '../../../../diag';
 import { setDiagnosticDA } from '../../../../provider/Diagnostic/tools/setDiagnostic';
 
 export function NeverUsedParam(paramMap: TParamMapOut, code501List: vscode.Diagnostic[]): void {
-    paramMap.forEach((v): void => {
-        if (v.refRangeList.length > 0) return;
-        if (v.keyRawName.startsWith('_')) return;
+    for (const v of paramMap.values()) {
+        if (v.refRangeList.length > 0) continue;
+        if (v.keyRawName.startsWith('_')) continue;
 
         code501List.push(setDiagnosticDA(
             EDiagCodeDA.code501,
@@ -15,7 +15,7 @@ export function NeverUsedParam(paramMap: TParamMapOut, code501List: vscode.Diagn
             [vscode.DiagnosticTag.Unnecessary],
             DiagsDA[EDiagCodeDA.code501].msg,
         ));
-    });
+    }
 }
 
 export function NeverUsedVar(valMap: TValMapOut, code500List: vscode.Diagnostic[]): void {

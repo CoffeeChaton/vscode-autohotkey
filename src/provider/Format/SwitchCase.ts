@@ -23,9 +23,9 @@ export function getSwitchRange(
 export function inSwitchBlock(textFix: string, line: number, switchRangeArray: DeepReadonly<vscode.Range[]>): number {
     const Pos = new vscode.Position(line, 0);
     let switchDeep = 0;
-    switchRangeArray.forEach((sw) => {
+    for (const sw of switchRangeArray) {
         if (sw.contains(Pos)) switchDeep++;
-    });
+    }
     if (
         (/^\s*case[\s,]/ui).test(textFix)
         || (/^\s*default[\s:]/iu).test(textFix)
