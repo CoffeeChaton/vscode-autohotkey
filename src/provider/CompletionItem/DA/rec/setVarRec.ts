@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [0,5] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-5,0,5] }] */
 import * as vscode from 'vscode';
 import type { TValMapOut } from '../../../../AhkSymbol/CAhkFunc';
 import type { TSnippetRecMap } from '../ESnippetRecBecause';
@@ -6,11 +6,11 @@ import { ESnippetRecBecause } from '../ESnippetRecBecause';
 
 export function getContextRange(position: vscode.Position, DARange: vscode.Range): vscode.Range {
     const enum ERecLine {
-        up = 5,
+        up = -5,
         down = 5,
     }
 
-    const startLine: number = Math.max(position.line - ERecLine.up, DARange.start.line);
+    const startLine: number = Math.max(position.line + ERecLine.up, DARange.start.line);
     const endLine: number = Math.min(position.line + ERecLine.down, DARange.end.line);
 
     return new vscode.Range(startLine, 0, endLine, 0);

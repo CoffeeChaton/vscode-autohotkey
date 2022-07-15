@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable max-statements */
 import * as vscode from 'vscode';
 import type {
@@ -89,7 +90,6 @@ function getIgnoreList(): string[] {
     ];
 }
 
-// eslint-disable-next-line max-statements
 // eslint-disable-next-line max-params
 export function getUnknownTextMap(
     startLine: number,

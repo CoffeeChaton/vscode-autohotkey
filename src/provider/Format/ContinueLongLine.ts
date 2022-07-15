@@ -17,7 +17,7 @@ Return
 ```
 */
 
-export function ContinueLongLine(textFix: string): 1 | 0 {
+export function ContinueLongLine(textFix: string): 0 | 1 {
     // [ContinueLongLine](https://www.autohotkey.com/docs/Scripts.htm#continuation)
     // Hotkeys && HotStrings has '::'
     if (hasDoubleSemicolon(textFix)) {

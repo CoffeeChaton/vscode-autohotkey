@@ -60,7 +60,7 @@ async function setFormattingOptions(): Promise<vscode.FormattingOptions | null> 
         { label: '7', fn: () => 7 },
         { label: '8', fn: () => 8 },
     ];
-    const tabSizePick: undefined | TTabSize = await vscode.window.showQuickPick<TTabSize>(items, {
+    const tabSizePick: TTabSize | undefined = await vscode.window.showQuickPick<TTabSize>(items, {
         title: 'set format ident size',
     });
     if (tabSizePick === undefined) return null;

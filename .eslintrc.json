@@ -9,10 +9,10 @@
     "extends": [
         "airbnb-base",
         "airbnb-typescript",
-        "eslint:recommended",
+        "eslint:all",
+        "plugin:@typescript-eslint/all",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
-        "plugin:@typescript-eslint/recommended",
         "plugin:import/errors",
         "plugin:import/recommended",
         "plugin:import/typescript",
@@ -81,12 +81,15 @@
     ],
     "root": true,
     "rules": {
-        "@typescript-eslint/consistent-type-definitions": ["error", "type"],
-        "@typescript-eslint/consistent-type-imports": "error",
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/ban-types": "warn",
+        "@typescript-eslint/consistent-type-definitions": [
+            "error",
+            "type"
+        ],
+        "@typescript-eslint/consistent-type-imports": "error",
         "@typescript-eslint/explicit-function-return-type": "warn",
         "@typescript-eslint/explicit-member-accessibility": "warn",
         "@typescript-eslint/indent": [
@@ -104,6 +107,7 @@
         "@typescript-eslint/no-floating-promises": "warn",
         "@typescript-eslint/no-for-in-array": "warn",
         "@typescript-eslint/no-inferrable-types": "warn",
+        "@typescript-eslint/no-magic-numbers": "off",
         "@typescript-eslint/no-misused-new": "warn",
         "@typescript-eslint/no-namespace": "warn",
         "@typescript-eslint/no-non-null-assertion": "warn",
@@ -139,6 +143,8 @@
         "@typescript-eslint/no-var-requires": "warn",
         "@typescript-eslint/prefer-function-type": "warn",
         "@typescript-eslint/prefer-namespace-keyword": "warn",
+        "@typescript-eslint/prefer-readonly-parameter-types": "off",
+        "@typescript-eslint/prefer-regexp-exec": "off",
         "@typescript-eslint/promise-function-async": "warn",
         "@typescript-eslint/require-array-sort-compare": "warn",
         "@typescript-eslint/restrict-plus-operands": "warn",
@@ -183,6 +189,8 @@
         "fp/no-proxy": "error",
         "fp/no-valueof-field": "error",
         "func-names": "warn",
+        "func-style": "off",
+        "id-length": "off",
         "immutable/no-let": "off",
         "immutable/no-mutation": "off",
         "immutable/no-this": "off",
@@ -206,10 +214,12 @@
         "import/prefer-default-export": "off",
         "indent": "off",
         "init-declarations": "error",
+        "line-comment-position": "off",
         "linebreak-style": [
             "error",
             "windows"
         ],
+        "lines-around-comment": "off",
         "max-depth": [
             "error",
             4
@@ -238,6 +248,7 @@
             30
         ],
         "max-statements-per-line": "error",
+        "multiline-comment-style": "off",
         "multiline-ternary": [
             "error",
             "always"
@@ -266,6 +277,7 @@
         "no-global-assign": "error",
         "no-implicit-coercion": "error",
         "no-implicit-globals": "error",
+        "no-inline-comments": "off",
         "no-inner-declarations": "warn",
         "no-invalid-this": "warn",
         "no-loop-func": "error",
@@ -296,6 +308,7 @@
         "no-shadow-restricted-names": "error",
         "no-sparse-arrays": "error",
         "no-undef-init": "error",
+        "no-undefined": "off",
         "no-underscore-dangle": "off",
         "no-unmodified-loop-condition": "error",
         "no-unneeded-ternary": "error",
@@ -312,11 +325,13 @@
         "no-useless-return": "error",
         "no-var": "warn",
         "no-void": "off",
+        "no-warning-comments": "off",
         "no-whitespace-before-property": "warn",
         "nonblock-statement-body-position": "warn",
         "operator-assignment": "warn",
         "operator-linebreak": "warn",
         "prefer-destructuring": "warn",
+        "prefer-named-capture-group": "off",
         "prefer-object-has-own": "off",
         "prefer-template": "warn",
         "promise/always-return": "error",
@@ -336,6 +351,8 @@
         "require-unicode-regexp": "error",
         "security/detect-object-injection": "off",
         "security/detect-unsafe-regex": "warn",
+        "sort-imports": "off",
+        "sort-keys": "off",
         "unicorn/custom-error-definition": "error",
         "unicorn/filename-case": "off",
         "unicorn/no-keyword-prefix": "off",

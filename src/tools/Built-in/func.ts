@@ -11,25 +11,25 @@ import type { DeepReadonly } from '../../globalEnum';
 // https://www.autohotkey.com/docs/Functions.htm#BuiltIn
 
 type TElementGroup =
-    | 'Math'
     | '△Math'
-    | 'Str'
-    | 'COM' // COM
-    | 'Lib'
+    | 'COM'
+    | 'Control'
+    | 'Env'
     | 'Error'
     | 'File'
-    | 'Misc.'
-    | 'Keyboard'
-    | 'ImageLists' // IL_XX
     | 'Func'
     | 'GUI'
-    | 'ListView' // LV_XX
-    | 'Env'
-    | 'Control'
-    | 'StatusBar' // SB_XX
-    | 'TreeView' // TV_XX
-    | 'Window'
-    | 'Object'; // OBJ_XX
+    | 'ImageLists'
+    | 'Keyboard'
+    | 'Lib'
+    | 'ListView'
+    | 'Math'
+    | 'Misc.'
+    | 'Object'
+    | 'StatusBar'
+    | 'Str'
+    | 'TreeView'
+    | 'Window'; // OBJ_XX
 
 export type TBuiltInFuncElement = DeepReadonly<{
     keyRawName: string;

@@ -40,6 +40,7 @@ function HoverProviderCore(
     if (DirectivesMd !== undefined) return new vscode.Hover(DirectivesMd);
 
     const DA: CAhkFunc | null = getDAWithPos(AhkSymbolList, position);
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (DA !== null && DA.nameRange.contains(position)) {
         return new vscode.Hover(DA.md);
     }

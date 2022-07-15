@@ -96,7 +96,7 @@ export function getFormatConfig(): boolean {
     return config.formatTextReplace;
 }
 
-const wm: WeakMap<readonly string[], readonly RegExp[]> = new WeakMap();
+const wm = new WeakMap<readonly string[], readonly RegExp[]>();
 
 function str2RegexList(key: readonly string[]): readonly RegExp[] {
     const cache: readonly RegExp[] | undefined = wm.get(key);

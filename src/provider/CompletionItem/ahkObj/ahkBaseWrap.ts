@@ -1,8 +1,9 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable max-lines */
 /* eslint-disable max-len */
 
 import * as vscode from 'vscode';
-import { TAhkBaseObj } from './ahkBase';
+import type { TAhkBaseObj } from './ahkBase';
 
 type TDescription = Readonly<{
     label: string;

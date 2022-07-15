@@ -31,6 +31,7 @@ function getFuncDetail(line: number, DocStrMap: TTokenStream): string {
 }
 
 // TODO spilt this func
+// eslint-disable-next-line max-lines-per-function
 export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
     const {
         DocStrMap,

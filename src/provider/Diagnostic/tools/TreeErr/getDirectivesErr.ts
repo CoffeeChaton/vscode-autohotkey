@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* cSpell:disable */
 import * as vscode from 'vscode';
 import { CAhkDirectives } from '../../../../AhkSymbol/CAhkLine';

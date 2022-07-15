@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import type {

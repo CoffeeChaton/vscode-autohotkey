@@ -1,14 +1,8 @@
 import * as path from 'node:path';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TTokenStream } from '../../globalEnum';
-import type {
-    TBuiltInFuncElement,
-    TUPKey,
-} from '../../tools/Built-in/func';
-import {
-    BuiltInFunctionObj,
-    UPKeyList,
-} from '../../tools/Built-in/func';
+import type { TBuiltInFuncElement, TUPKey } from '../../tools/Built-in/func';
+import { BuiltInFunctionObj, UPKeyList } from '../../tools/Built-in/func';
 import type { TFullFuncMap } from '../../tools/Func/getAllFunc';
 
 type TMsg = {

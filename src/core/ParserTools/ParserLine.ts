@@ -22,8 +22,8 @@ type TClassName =
 
 type TLineRuler = Readonly<{
     ClassName: TClassName;
-    getName(strTrim: string): string | null;
-    test(strTrim: string): boolean;
+    getName: (strTrim: string) => string | null;
+    test: (strTrim: string) => boolean;
 }>;
 
 const LineRuler: readonly TLineRuler[] = [

@@ -8,7 +8,7 @@ export class CAhkSwitch extends vscode.DocumentSymbol {
 
     declare public readonly kind: vscode.SymbolKind.Enum;
     declare public readonly detail: 'Switch';
-    declare public readonly children: (CAhkDefault | CAhkCase)[];
+    declare public readonly children: (CAhkCase | CAhkDefault)[];
 
     public constructor(
         {
@@ -22,7 +22,7 @@ export class CAhkSwitch extends vscode.DocumentSymbol {
             range: vscode.Range;
             selectionRange: vscode.Range;
             uri: vscode.Uri;
-            ch: (CAhkDefault | CAhkCase)[];
+            ch: (CAhkCase | CAhkDefault)[];
         },
     ) {
         super(name, 'Switch', vscode.SymbolKind.Enum, range, selectionRange);
@@ -36,7 +36,7 @@ export class CAhkCase extends vscode.DocumentSymbol {
 
     declare public readonly kind: vscode.SymbolKind.EnumMember;
     declare public readonly detail: 'Case';
-    declare public readonly children: (TLineClass | CAhkSwitch)[];
+    declare public readonly children: (CAhkSwitch | TLineClass)[];
 
     public constructor(
         {
@@ -50,7 +50,7 @@ export class CAhkCase extends vscode.DocumentSymbol {
             range: vscode.Range;
             selectionRange: vscode.Range;
             uri: vscode.Uri;
-            ch: (TLineClass | CAhkSwitch)[];
+            ch: (CAhkSwitch | TLineClass)[];
         },
     ) {
         super(name, 'Case', vscode.SymbolKind.EnumMember, range, selectionRange);
@@ -64,7 +64,7 @@ export class CAhkDefault extends vscode.DocumentSymbol {
 
     declare public readonly kind: vscode.SymbolKind.EnumMember;
     declare public readonly detail: 'Default';
-    declare public readonly children: (TLineClass | CAhkSwitch)[];
+    declare public readonly children: (CAhkSwitch | TLineClass)[];
 
     public constructor(
         {
@@ -76,7 +76,7 @@ export class CAhkDefault extends vscode.DocumentSymbol {
             range: vscode.Range;
             selectionRange: vscode.Range;
             uri: vscode.Uri;
-            ch: (TLineClass | CAhkSwitch)[];
+            ch: (CAhkSwitch | TLineClass)[];
         },
     ) {
         super('Default :', 'Default', vscode.SymbolKind.EnumMember, range, selectionRange);

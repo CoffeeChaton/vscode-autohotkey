@@ -591,8 +591,8 @@ const SnippetDirectives: readonly vscode.CompletionItem[] = ((): vscode.Completi
     // initialize
 
     const result: vscode.CompletionItem[] = [];
-    for (const [ukName, v] of Object.entries(DirectivesList)) {
-        const { keyRawName, insert, recommended } = v;
+    for (const [ukName, Element] of Object.entries(DirectivesList)) {
+        const { keyRawName, insert, recommended } = Element;
         if (!recommended) continue;
 
         const item: vscode.CompletionItem = new vscode.CompletionItem({
@@ -603,7 +603,7 @@ const SnippetDirectives: readonly vscode.CompletionItem[] = ((): vscode.Completi
         item.insertText = new vscode.SnippetString(insert.replace('#', ''));
 
         item.detail = '#Directives (neko-help)';
-        item.documentation = DirectivesMDMap.get(ukName) ?? Directives2Md(v);
+        item.documentation = DirectivesMDMap.get(ukName) ?? Directives2Md(Element);
 
         result.push(item);
     }

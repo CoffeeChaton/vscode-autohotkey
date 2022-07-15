@@ -13,7 +13,7 @@ export function WordFrequencyStatistics(need: CAhkFunc[]): TWordFrequencyStatist
     let paramMapSize = 0;
     let valMapSize = 0;
     let textMapSize = 0;
-    const DEB: Map<string, number> = new Map();
+    const DEB = new Map<string, number>();
     for (const ed of need) {
         paramMapSize += ed.paramMap.size;
         valMapSize += ed.valMap.size;
