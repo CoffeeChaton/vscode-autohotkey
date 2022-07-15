@@ -1,11 +1,12 @@
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { Detecter, TAhkFileData } from '../../core/Detecter';
+import type { TAhkFileData } from '../../core/Detecter';
+import { Detecter } from '../../core/Detecter';
 
-export function getFuncWithName(wordUP: string): null | CAhkFunc {
+export function getFuncWithName(wordUP: string): CAhkFunc | null {
     const fsPaths: string[] = Detecter.getDocMapFile();
 
     for (const fsPath of fsPaths) {
-        const AhkFileData: undefined | TAhkFileData = Detecter.getDocMap(fsPath);
+        const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
         if (AhkFileData === undefined) continue;
 
         const { AhkSymbolList } = AhkFileData;

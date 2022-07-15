@@ -1,9 +1,7 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
-import {
-    EDetail,
-    TTokenStream,
-} from '../../globalEnum';
+import type { TTokenStream } from '../../globalEnum';
+import { EDetail } from '../../globalEnum';
 import { replacerSpace } from '../../tools/str/removeSpecialChar';
 
 // function getRVal(textRaw: string, ch: number, nameLen: number, ma2Len: number): string {

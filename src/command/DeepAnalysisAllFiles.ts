@@ -1,10 +1,12 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../AhkSymbol/CAhkFunc';
-import { Detecter, TAhkFileData } from '../core/Detecter';
+import type { CAhkFunc } from '../AhkSymbol/CAhkFunc';
+import type { TAhkFileData } from '../core/Detecter';
+import { Detecter } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAList } from '../tools/DeepAnalysis/getDAList';
-import { TWordFrequencyStatistics, WordFrequencyStatistics } from './tools/WordFrequencyStatistics';
+import type { TWordFrequencyStatistics } from './tools/WordFrequencyStatistics';
+import { WordFrequencyStatistics } from './tools/WordFrequencyStatistics';
 
 function showOutputChannel(results: TWordFrequencyStatistics, timeSpend: number): void {
     const {

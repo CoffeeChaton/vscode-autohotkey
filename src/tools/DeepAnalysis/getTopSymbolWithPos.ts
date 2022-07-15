@@ -1,5 +1,5 @@
-import * as vscode from 'vscode';
-import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import type * as vscode from 'vscode';
+import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 
 export function getTopSymbolWithPos(
     AhkSymbolList: readonly TTopSymbol[],

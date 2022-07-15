@@ -2,7 +2,7 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { Pretreatment } from '../../core/Pretreatment';
-import { TTokenStream } from '../../globalEnum';
+import type { TTokenStream } from '../../globalEnum';
 import { getUriList } from '../../tools/fsTools/getUriList';
 
 export async function renameFileNameFunc(oldUri: vscode.Uri, newUri: vscode.Uri): Promise<void> {

@@ -4,7 +4,7 @@ import { pressureTest } from './DevMode';
 import { FormatAllFile } from './FormatAllFile';
 import { ListAllFunc, ListAllFuncSort } from './ListAllFunc';
 import { ListAllInclude } from './ListAllInclude';
-import { TPick } from './TPick';
+import type { TPick } from './TPick';
 import { fnRefreshResource } from './UpdateCache';
 
 export async function statusBarClick(): Promise<void> {

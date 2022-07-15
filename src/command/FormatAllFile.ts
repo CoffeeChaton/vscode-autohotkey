@@ -5,7 +5,7 @@ import { EFormatChannel } from '../globalEnum';
 import { FormatCore } from '../provider/Format/FormatProvider';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { getUriList } from '../tools/fsTools/getUriList';
-import { TPick } from './TPick';
+import type { TPick } from './TPick';
 import { UpdateCacheAsync } from './UpdateCache';
 
 async function formatByPathAsync(

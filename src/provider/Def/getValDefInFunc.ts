@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
-import {
+import type {
     CAhkFunc,
     TParamMetaOut,
     TTextMetaOut,
     TValMetaOut,
 } from '../../AhkSymbol/CAhkFunc';
-import { Detecter, TAhkFileData } from '../../core/Detecter';
+import type { TAhkFileData } from '../../core/Detecter';
+import { Detecter } from '../../core/Detecter';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 
 function rangeList2LocList(rangeList: readonly vscode.Range[], uri: vscode.Uri): vscode.Location[] {
@@ -45,7 +46,7 @@ export function getValDefInFunc(
     position: vscode.Position,
     wordUp: string,
     listAllUsing: boolean,
-): null | vscode.Location[] {
+): vscode.Location[] | null {
     const { uri } = document;
     const AhkFileData: TAhkFileData = Detecter.getDocMap(uri.fsPath) ?? Detecter.updateDocDef(document);
     const { AhkSymbolList } = AhkFileData;

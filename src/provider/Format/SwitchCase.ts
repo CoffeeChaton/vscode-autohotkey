@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { DeepReadonly, TTokenStream } from '../../globalEnum';
+import type { DeepReadonly, TTokenStream } from '../../globalEnum';
 import { getRange } from '../../tools/range/getRange';
 
 export function getSwitchRange(
@@ -7,7 +7,7 @@ export function getSwitchRange(
     DocStrMap: TTokenStream,
     textFix: string,
     line: number,
-): null | vscode.Range {
+): vscode.Range | null {
     if (!(/^\s*switch[\s,]/ui).test(textFix)) return null;
 
     const lineFix = textFix.endsWith('{')

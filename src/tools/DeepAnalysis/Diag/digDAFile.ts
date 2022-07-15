@@ -1,4 +1,4 @@
-import * as vscode from 'vscode';
+import type * as vscode from 'vscode';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { getCode502Default, getCode503Default } from '../../../configUI';
 import { diagColl } from '../../../core/Detecter';
@@ -14,7 +14,7 @@ type TDaDiagCache = {
     code503Max: number;
 };
 
-const wm: WeakMap<CAhkFunc[], TDaDiagCache> = new WeakMap();
+const wm = new WeakMap<CAhkFunc[], TDaDiagCache>();
 
 function diagDAFileCore(DAList: CAhkFunc[]): readonly vscode.Diagnostic[] {
     const code502Max = getCode502Default();

@@ -383,7 +383,7 @@ export const StatementMDMap: ReadonlyMap<string, vscode.MarkdownString> = new Ma
 const snippetStatement: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     const tempList: vscode.CompletionItem[] = [];
     for (const [k, v] of Object.entries(Statement)) {
-        if (v.recommended === false) {
+        if (!v.recommended) {
             continue;
         }
         const { keyRawName, body } = v;

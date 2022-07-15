@@ -1,9 +1,9 @@
-import * as vscode from 'vscode';
-import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
+import type * as vscode from 'vscode';
+import type { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { getParamCompletion } from './completion/getArgCompletion';
 import { getUnknownTextCompletion } from './completion/getUnknownTextCompletion';
 import { getValCompletion } from './completion/getValCompletion';
-import { TSnippetRecMap } from './ESnippetRecBecause';
+import type { TSnippetRecMap } from './ESnippetRecBecause';
 import { getRecMap } from './rec/getRecMap';
 
 export function DeepAnalysisToCompletionItem(

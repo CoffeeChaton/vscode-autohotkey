@@ -1,6 +1,6 @@
-import * as vscode from 'vscode';
+import type * as vscode from 'vscode';
 import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
-import { TTopSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
+import type { TTopSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
 import { getWmThis } from './getWmThis';
 import { parsingUserDefClassRecursive } from './parsingUserDefClassRecursive';
 

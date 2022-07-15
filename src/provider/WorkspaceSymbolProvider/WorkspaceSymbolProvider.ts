@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import { TAhkSymbol, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkSymbol, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../../core/Detecter';
 
-const wm: WeakMap<readonly TTopSymbol[], vscode.SymbolInformation[]> = new WeakMap(); // 4ms -> 0ms
+const wm = new WeakMap<readonly TTopSymbol[], vscode.SymbolInformation[]>(); // 4ms -> 0ms
 
 function DocSymbol2SymbolInfo(AhkSymbolList: readonly TTopSymbol[]): vscode.SymbolInformation[] {
     const cache: vscode.SymbolInformation[] | undefined = wm.get(AhkSymbolList);
@@ -48,7 +48,4 @@ export const WorkspaceSymbolProvider: vscode.WorkspaceSymbolProvider = {
     ): vscode.ProviderResult<vscode.SymbolInformation[]> {
         return WorkspaceSymbolCore();
     },
-    // resolveWorkspaceSymbol?(symbol: T, token: vscodeCancellationToken): vscode.ProviderResult<T> {
-    //     return [];
-    // }
 };

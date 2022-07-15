@@ -1,9 +1,9 @@
 import { CAhkClassGetSet } from '../../AhkSymbol/CAhkClass';
-import { TFuncInput } from '../../core/getChildren';
+import type { TFuncInput } from '../../core/getChildren';
 import { getRange } from '../range/getRange';
 import { getRangeOfLine } from '../range/getRangeOfLine';
 
-export function getClassGetSet(FuncInput: TFuncInput): null | CAhkClassGetSet {
+export function getClassGetSet(FuncInput: TFuncInput): CAhkClassGetSet | null {
     const {
         line,
         lStr,

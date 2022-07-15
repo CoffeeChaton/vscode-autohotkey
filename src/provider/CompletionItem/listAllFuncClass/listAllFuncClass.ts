@@ -3,7 +3,8 @@ import * as vscode from 'vscode';
 import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { getSnippetBlockFilesList } from '../../../configUI';
-import { Detecter, TAhkFileData } from '../../../core/Detecter';
+import type { TAhkFileData } from '../../../core/Detecter';
+import { Detecter } from '../../../core/Detecter';
 import { EStr } from '../../../Enum/EStr';
 import { fsPathIsAllow } from '../../../tools/fsTools/getUriList';
 
@@ -65,7 +66,7 @@ export function listAllFuncClass(
     for (const fsPath of fsPaths) {
         if (!fsPathIsAllow(fsPath.replaceAll('\\', '/'), filesBlockList)) continue;
 
-        const AhkFileData: undefined | TAhkFileData = Detecter.getDocMap(fsPath);
+        const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
         if (AhkFileData === undefined) continue;
 
         const { AhkSymbolList } = AhkFileData;

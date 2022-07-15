@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { DeepReadonly } from './globalEnum';
+import type { DeepReadonly } from './globalEnum';
 
 type TempConfigs = {
     statusBarDisplayColor: string;

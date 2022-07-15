@@ -1,7 +1,9 @@
-import * as vscode from 'vscode';
+import type * as vscode from 'vscode';
 
-// https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers
-// Standard token types:
+/*
+ * https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers
+ * Standard token types:
+ */
 export const TokenTypes = [
     'namespace',
     'class',
@@ -57,10 +59,12 @@ export type TSemanticTokensLeaf = {
      * The range of the token. Must be single-line.
      */
     range: vscode.Range;
+
     /**
      * tokenType The token type.
      */
     tokenType: typeof TokenTypes[number];
+
     /**
      * tokenModifiers The token modifiers.
      */

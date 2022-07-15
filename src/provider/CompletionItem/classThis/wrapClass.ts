@@ -1,8 +1,8 @@
-import * as vscode from 'vscode';
-import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
-import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
-import { TTopSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
-import { TTokenStream } from '../../../globalEnum';
+import type * as vscode from 'vscode';
+import type { CAhkClass } from '../../../AhkSymbol/CAhkClass';
+import type { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
+import type { TTopSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
+import type { TTokenStream } from '../../../globalEnum';
 import { getObjChapterArr } from '../../../tools/Obj/getObjChapterArr';
 import { getUserDefTopClassSymbol } from './getUserDefTopClassSymbol';
 import { headIsThis } from './headIsThis';
@@ -12,7 +12,7 @@ import { valTrack } from './valTrack';
 function getAhkTokenList(
     position: vscode.Position,
     DocStrMap: TTokenStream,
-    DA: null | CAhkFunc,
+    DA: CAhkFunc | null,
 ): TTokenStream {
     const varSearchStartLine: number = (DA === null)
         ? 0
@@ -29,7 +29,7 @@ function findClassDef(
     ChapterArr: readonly string[],
     topSymbol: TTopSymbol | null,
     DocStrMap: TTokenStream,
-    DA: null | CAhkFunc,
+    DA: CAhkFunc | null,
 ): vscode.CompletionItem[] {
     const Head: string = ChapterArr[0];
     if ((/^this$/iu).test(Head)) return headIsThis(topSymbol, ChapterArr);
@@ -50,7 +50,7 @@ export function wrapClass(
     lStr: string,
     topSymbol: TTopSymbol | null,
     DocStrMap: TTokenStream,
-    DA: null | CAhkFunc,
+    DA: CAhkFunc | null,
 ): vscode.CompletionItem[] {
     const col = position.character;
     if (col > lStr.length) return [];

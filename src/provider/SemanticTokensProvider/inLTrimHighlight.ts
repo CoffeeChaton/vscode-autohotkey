@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
-import { ELTrim, TTokenStream } from '../../globalEnum';
-import { TSemanticTokensLeaf } from './tools';
+import type { TTokenStream } from '../../globalEnum';
+import { ELTrim } from '../../globalEnum';
+import type { TSemanticTokensLeaf } from './tools';
 
 // https://www.autohotkey.com/docs/Scripts.htm#continuation
 

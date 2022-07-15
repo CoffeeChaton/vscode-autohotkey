@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { CAhkClassInstanceVar } from '../../AhkSymbol/CAhkClass';
-import { TFuncInput } from '../../core/getChildren';
+import type { TFuncInput } from '../../core/getChildren';
 
-export function getClassInstanceVar(FuncInput: TFuncInput): null | CAhkClassInstanceVar {
+export function getClassInstanceVar(FuncInput: TFuncInput): CAhkClassInstanceVar | null {
     const {
         line,
         lStr,

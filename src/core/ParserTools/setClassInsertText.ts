@@ -1,7 +1,7 @@
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 
-export function setClassInsertText(children: TAhkSymbolList): '' | string {
+export function setClassInsertText(children: TAhkSymbolList): string | '' {
     for (const ch of children) {
         if (ch instanceof CAhkFunc && ch.upName === '__NEW') {
             return ch.selectionRangeText.replace(/^__NEW/ui, '');

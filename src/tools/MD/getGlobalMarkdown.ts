@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
-import { globalVal2Msg, TGlobalValReadonly } from '../../core/ParserTools/ahkGlobalDef';
+import type { TGlobalValReadonly } from '../../core/ParserTools/ahkGlobalDef';
+import { globalVal2Msg } from '../../core/ParserTools/ahkGlobalDef';
 
 export function getGlobalMarkdown(wordUp: string): vscode.MarkdownString | null {
     const msgList: string[] = [];

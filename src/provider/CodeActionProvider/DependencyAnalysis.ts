@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
+import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import type { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
 import { Detecter } from '../../core/Detecter';
-import { TTokenStream } from '../../globalEnum';
+import type { TTokenStream } from '../../globalEnum';
 import { getFuncWithPos } from '../../tools/DeepAnalysis/getFuncWithPos';
 
 export function DependencyAnalysis(

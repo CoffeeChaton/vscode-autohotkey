@@ -1,4 +1,4 @@
-import { TC502New } from '../../../../../AhkSymbol/CAhkFunc';
+import type { TC502New } from '../../../../../AhkSymbol/CAhkFunc';
 
 /**
  * @param oldRawName don't input UpName, and this is first def name

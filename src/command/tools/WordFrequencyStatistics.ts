@@ -1,4 +1,4 @@
-import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { OutputChannel } from '../../provider/vscWindows/OutputChannel';
 
 export type TWordFrequencyStatistics = {

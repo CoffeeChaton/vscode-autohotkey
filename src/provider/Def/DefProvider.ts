@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { Detecter, TAhkFileData } from '../../core/Detecter';
+import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import type { TAhkFileData } from '../../core/Detecter';
+import { Detecter } from '../../core/Detecter';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
@@ -58,7 +59,7 @@ export function userDefFunc(
     position: vscode.Position,
     wordUp: string,
     listAllUsing: boolean,
-): null | vscode.Location[] {
+): vscode.Location[] | null {
     const timeStart: number = Date.now();
 
     const AhkFileData: TAhkFileData = Detecter.getDocMap(document.uri.fsPath) ?? Detecter.updateDocDef(document);
@@ -101,7 +102,7 @@ export function userDefFunc(
 function DefProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
-): null | vscode.Location[] {
+): vscode.Location[] | null {
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`#])\b\w+\b/u);
     if (range === undefined) return null;
     const wordUp: string = document.getText(range).toUpperCase();
@@ -117,9 +118,11 @@ function DefProviderCore(
     return null;
 }
 
-// Go to Definition (via F12 || Ctrl+Click)
-// open the definition to the side with ( via Ctrl+Alt+Click )
-// Peek Definition (via Alt+F12)
+/*
+ * Go to Definition (via F12 || Ctrl+Click)
+ * open the definition to the side with ( via Ctrl+Alt+Click )
+ * Peek Definition (via Alt+F12)
+ */
 export const DefProvider: vscode.DefinitionProvider = {
     provideDefinition(
         document: vscode.TextDocument,

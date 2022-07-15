@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { DeepReadonly } from '../globalEnum';
-import { TLineClass } from './CAhkLine';
-import { CAhkSwitch } from './CAhkSwitch';
+import type { DeepReadonly } from '../globalEnum';
+import type { TLineClass } from './CAhkLine';
+import type { CAhkSwitch } from './CAhkSwitch';
 
 // ---------------------------------------------------------------------------
 // WTF
@@ -11,7 +11,7 @@ type TUpName = string;
  * if keyRawName = first def name -> 0
  * ; else -> string
  */
-export type TC502New = 0 | string;
+export type TC502New = string | 0;
 
 export type TParamMetaIn = {
     keyRawName: string;
@@ -64,7 +64,7 @@ type TCAhkFuncParam = {
     paramMap: TParamMapOut;
     valMap: TValMapOut;
     textMap: TTextMapOut;
-    ch: (TLineClass | CAhkSwitch)[];
+    ch: (CAhkSwitch | TLineClass)[];
     nameRange: vscode.Range;
 };
 
@@ -83,7 +83,7 @@ export class CAhkFunc extends vscode.DocumentSymbol {
     public readonly defStack: string[];
     //
     declare public readonly kind: vscode.SymbolKind.Function | vscode.SymbolKind.Method;
-    declare public readonly children: (TLineClass | CAhkSwitch)[];
+    declare public readonly children: (CAhkSwitch | TLineClass)[];
 
     public constructor(
         {

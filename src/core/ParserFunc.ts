@@ -1,20 +1,24 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
-import {
-    CAhkFunc,
+import type {
     TParamMapIn,
     TTextMapIn,
     TValMapIn,
 } from '../AhkSymbol/CAhkFunc';
-import { TTokenStream } from '../globalEnum';
+import {
+    CAhkFunc,
+} from '../AhkSymbol/CAhkFunc';
+import type { TTokenStream } from '../globalEnum';
 import { getFnVarDef } from '../tools/DeepAnalysis/FnVar/getFnVarDef';
 import { getParamDef } from '../tools/DeepAnalysis/getParamDef';
 import { getUnknownTextMap } from '../tools/DeepAnalysis/getUnknownTextMap';
-import { getFuncDef, TFuncDefData } from '../tools/Func/getFuncDef';
+import type { TFuncDefData } from '../tools/Func/getFuncDef';
+import { getFuncDef } from '../tools/Func/getFuncDef';
 import { getDocStrMapMask } from '../tools/getDocStrMapMask';
 import { getFuncDocCore } from '../tools/MD/getFuncDocMD';
 import { getRange } from '../tools/range/getRange';
-import { getChildren, TFuncInput } from './getChildren';
+import type { TFuncInput } from './getChildren';
+import { getChildren } from './getChildren';
 import { ParserBlock } from './Parser';
 import { ParserLine } from './ParserTools/ParserLine';
 
@@ -27,7 +31,7 @@ function getFuncDetail(line: number, DocStrMap: TTokenStream): string {
 }
 
 // TODO spilt this func
-export function getFunc(FuncInput: TFuncInput): null | CAhkFunc {
+export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
     const {
         DocStrMap,
         line,

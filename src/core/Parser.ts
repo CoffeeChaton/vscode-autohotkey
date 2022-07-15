@@ -3,11 +3,12 @@ import { getCaseName, getSwitchName } from '../provider/SymbolProvider/getSwitch
 import { getRange } from '../tools/range/getRange';
 import { getRangeCaseBlock } from '../tools/range/getRangeCaseBlock';
 import { getRangeOfLine } from '../tools/range/getRangeOfLine';
-import { getChildren, TFuncInput } from './getChildren';
+import type { TFuncInput } from './getChildren';
+import { getChildren } from './getChildren';
 import { ParserLine } from './ParserTools/ParserLine';
 
 export const ParserBlock = {
-    getCaseBlock(FuncInput: TFuncInput): null | CAhkCase {
+    getCaseBlock(FuncInput: TFuncInput): CAhkCase | null {
         const { lStr, fistWordUp } = FuncInput;
 
         if (fistWordUp !== 'CASE') return null;
@@ -48,7 +49,7 @@ export const ParserBlock = {
         });
     },
 
-    getDefaultBlock(FuncInput: TFuncInput): null | CAhkDefault {
+    getDefaultBlock(FuncInput: TFuncInput): CAhkDefault | null {
         const { lStr, fistWordUp } = FuncInput;
 
         if (fistWordUp !== 'DEFAULT') return null;
@@ -85,7 +86,7 @@ export const ParserBlock = {
         });
     },
 
-    getSwitchBlock(FuncInput: TFuncInput): null | CAhkSwitch {
+    getSwitchBlock(FuncInput: TFuncInput): CAhkSwitch | null {
         if (FuncInput.fistWordUp !== 'SWITCH') return null;
 
         const {

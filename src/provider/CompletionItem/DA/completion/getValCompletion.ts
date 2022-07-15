@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { TValMapOut, TValMetaOut } from '../../../../AhkSymbol/CAhkFunc';
+import type { TValMapOut, TValMetaOut } from '../../../../AhkSymbol/CAhkFunc';
 import { EPrefix } from '../../../../tools/MD/setMD';
-import { TSnippetRecMap } from '../ESnippetRecBecause';
+import type { TSnippetRecMap } from '../ESnippetRecBecause';
 import { setItemCore } from './setItem';
 
 export function getValCompletion(

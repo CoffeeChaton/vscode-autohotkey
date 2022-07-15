@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TTokenStream } from '../../globalEnum';
+import type { TTokenStream } from '../../globalEnum';
 import { getRange } from './getRange';
 import { getRangeOfLine } from './getRangeOfLine';
 
@@ -11,12 +11,17 @@ export function getRangeCaseBlock(
     defLStr: string,
 ): vscode.Range {
     if (!defLStr.trimEnd().endsWith(':')) {
-        // exp : case "cat": return "cat";
-        // exp : case 3: do something;
+        /*
+         * exp : case "cat": return "cat";
+         * exp : case 3: do something;
+         */
         return getRangeOfLine(defLine, defLStr, DocStrMap[defLine].textRaw.length);
     }
-    // exp : case 0:\s*
-    //          something at next line;
+
+    /*
+     * exp : case 0:\s*
+     *          something at next line;
+     */
     const startPos: vscode.Position = new vscode.Position(defLine, 0);
     const nextLine = searchLine + 1;
     let Resolved = -1;

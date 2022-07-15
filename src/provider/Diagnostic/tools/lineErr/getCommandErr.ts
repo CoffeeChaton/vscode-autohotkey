@@ -1,14 +1,16 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
-import {
-    CNekoBaseLineDiag,
-    EDiagLine,
+import type {
     TLineDiag,
     TLineErrDiagParam,
 } from './lineErrTools';
+import {
+    CNekoBaseLineDiag,
+    EDiagLine,
+} from './lineErrTools';
 
 // ---------------------------------------------------------------------------------------------------------------------
-function getLoopErr(lStr: string, line: number): EDiagLine | CNekoBaseLineDiag {
+function getLoopErr(lStr: string, line: number): CNekoBaseLineDiag | EDiagLine {
     const matchLoop: RegExpMatchArray | null = lStr.match(/^\s*Loop\b[\s,]+(\w+)/iu);
     if (matchLoop === null) return EDiagLine.miss;
 
@@ -57,7 +59,7 @@ function getLoopErr(lStr: string, line: number): EDiagLine | CNekoBaseLineDiag {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-function getCommandErrFnReplace(fistWord: string, lStr: string, line: number): EDiagLine.miss | CNekoBaseLineDiag {
+function getCommandErrFnReplace(fistWord: string, lStr: string, line: number): CNekoBaseLineDiag | EDiagLine.miss {
     // eslint-disable-next-line no-magic-numbers
     if (fistWord.length < 3) return EDiagLine.miss;
     // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
@@ -80,7 +82,7 @@ function getCommandErrFnReplace(fistWord: string, lStr: string, line: number): E
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): EDiagLine.miss | CNekoBaseLineDiag {
+function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): CNekoBaseLineDiag | EDiagLine.miss {
     // eslint-disable-next-line no-magic-numbers
     if (fistWordUp.length < 5) return EDiagLine.miss;
     type TCommandErr = {

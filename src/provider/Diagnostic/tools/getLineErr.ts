@@ -1,15 +1,15 @@
-import { TTokenStream } from '../../../globalEnum';
+import type { TTokenStream } from '../../../globalEnum';
 import { assignErr } from './lineErr/assignErr';
 import { getCommandErr } from './lineErr/getCommandErr';
 import { getObjBaseErr } from './lineErr/getObjBaseErr';
-import {
+import type {
     CNekoBaseLineDiag,
-    EDiagLine,
     TLineDiag,
     TLineErrDiagParam,
 } from './lineErr/lineErrTools';
+import { EDiagLine } from './lineErr/lineErrTools';
 
-function getLineErrCore(lStr: string, fistWordUp: string, line: number): null | CNekoBaseLineDiag {
+function getLineErrCore(lStr: string, fistWordUp: string, line: number): CNekoBaseLineDiag | null {
     const lStrTrim: string = lStr.trim();
     if (lStrTrim === '') return null;
 
@@ -33,14 +33,14 @@ function getLineErrCore(lStr: string, fistWordUp: string, line: number): null | 
     return null;
 }
 
-export function getLineErr(DocStrMap: TTokenStream, line: number): null | CNekoBaseLineDiag {
+export function getLineErr(DocStrMap: TTokenStream, line: number): CNekoBaseLineDiag | null {
     const {
         textRaw,
         lStr,
         detail,
         fistWordUp,
     } = DocStrMap[line];
-    const err0: null | CNekoBaseLineDiag = assignErr(textRaw, detail, line);
+    const err0: CNekoBaseLineDiag | null = assignErr(textRaw, detail, line);
     if (err0 !== null) return err0;
 
     return getLineErrCore(lStr, fistWordUp, line);

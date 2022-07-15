@@ -1,5 +1,5 @@
-import * as vscode from 'vscode';
-import { TAhkSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
+import type * as vscode from 'vscode';
+import type { TAhkSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
 import { getDirectivesErr } from './TreeErr/getDirectivesErr';
 import { getLabelErr } from './TreeErr/getLabelErr';
 import { getSwErr } from './TreeErr/getSwErr';

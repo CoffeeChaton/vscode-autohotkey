@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TTokenStream } from '../../globalEnum';
+import type { TTokenStream } from '../../globalEnum';
 
 export type TFuncDefData = {
     name: string;
@@ -31,7 +31,7 @@ function getFuncTail({
     name,
     searchLine,
     defLine,
-}: TFuncTailType): null | TFuncDefData {
+}: TFuncTailType): TFuncDefData | null {
     // i+1   ^, something , something ........ ) {$
     if ((/\)\s*\{$/u).test(searchTextTrim)) {
         return getFuncDefData(DocStrMap, defLine, searchLine, name);
@@ -50,7 +50,7 @@ function getFuncTail({
     return null;
 }
 
-export function getFuncDef(DocStrMap: TTokenStream, defLine: number): null | TFuncDefData {
+export function getFuncDef(DocStrMap: TTokenStream, defLine: number): TFuncDefData | null {
     if (defLine + 1 === DocStrMap.length) return null;
     const textFixTrim: string = DocStrMap[defLine].lStr.trim();
 

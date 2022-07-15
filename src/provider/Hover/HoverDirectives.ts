@@ -1,12 +1,12 @@
-import * as vscode from 'vscode';
+import type * as vscode from 'vscode';
 import { CAhkDirectives } from '../../AhkSymbol/CAhkLine';
-import { TAhkSymbolList, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkSymbolList, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { DirectivesMDMap } from '../../tools/Built-in/DirectivesList';
 
 export function findDirectivesWithPos(
     AhkSymbolList: Readonly<TAhkSymbolList>,
     position: vscode.Position,
-): undefined | CAhkDirectives {
+): CAhkDirectives | undefined {
     for (const ah of AhkSymbolList) {
         if (ah.range.contains(position)) {
             return ah instanceof CAhkDirectives

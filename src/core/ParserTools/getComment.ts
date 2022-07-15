@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import { CAhkComment } from '../../AhkSymbol/CAhkLine';
 import { EDetail } from '../../globalEnum';
-import { TFuncInput } from '../getChildren';
+import type { TFuncInput } from '../getChildren';
 
-export function getComment(FuncInput: TFuncInput): null | CAhkComment {
+export function getComment(FuncInput: TFuncInput): CAhkComment | null {
     const {
         line,
         lStr,

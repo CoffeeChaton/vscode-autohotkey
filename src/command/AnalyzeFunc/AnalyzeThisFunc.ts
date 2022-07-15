@@ -1,18 +1,20 @@
 import * as vscode from 'vscode';
-import {
+import type {
     CAhkFunc,
     TParamMapOut,
     TTextMapOut,
     TValMapOut,
 } from '../../AhkSymbol/CAhkFunc';
-import { EFormatChannel, TTokenStream } from '../../globalEnum';
+import type { TTokenStream } from '../../globalEnum';
+import { EFormatChannel } from '../../globalEnum';
 import { FormatCore } from '../../provider/Format/FormatProvider';
-import { getAllFunc, TFullFuncMap } from '../../tools/Func/getAllFunc';
+import type { TFullFuncMap } from '../../tools/Func/getAllFunc';
+import { getAllFunc } from '../../tools/Func/getAllFunc';
 import { AnalyzeCommand } from './AnalyzeCommand';
 import { AnalyzeGlobalVal } from './AnalyzeGlobalVal';
 import { AnalyzeRefFunc } from './AnalyzeRefFunc';
 
-function showElement(map: TValMapOut | TParamMapOut | TTextMapOut): string {
+function showElement(map: TParamMapOut | TTextMapOut | TValMapOut): string {
     if (map.size === 0) return '';
 
     const arr: string[] = [];

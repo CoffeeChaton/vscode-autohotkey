@@ -1,5 +1,5 @@
-import * as vscode from 'vscode';
-import { TAhkToken, TTokenStream } from '../globalEnum';
+import type * as vscode from 'vscode';
+import type { TAhkToken, TTokenStream } from '../globalEnum';
 
 function getDocStrMapMaskSlowMode(range: vscode.Range, DocStrMap: TTokenStream): TTokenStream {
     const startLine: number = range.start.line;

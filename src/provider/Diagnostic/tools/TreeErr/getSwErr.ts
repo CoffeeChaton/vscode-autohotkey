@@ -1,7 +1,7 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,20] }] */
 import * as vscode from 'vscode';
 import { CAhkCase, CAhkDefault, CAhkSwitch } from '../../../../AhkSymbol/CAhkSwitch';
-import { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../../diag';
 import { setDiagnostic } from '../setDiagnostic';
 
@@ -21,7 +21,7 @@ function getCaseNumber(swChildren: (CAhkCase | CAhkDefault)[]): number {
     return iCase;
 }
 
-function setErrDefault(sw: CAhkSwitch): null | vscode.Diagnostic {
+function setErrDefault(sw: CAhkSwitch): vscode.Diagnostic | null {
     const iDefault: number = getDefaultNumber(sw.children);
 
     if (iDefault === 1) return null; // OK
@@ -31,7 +31,7 @@ function setErrDefault(sw: CAhkSwitch): null | vscode.Diagnostic {
         : setDiagnostic(EDiagCode.code111, sw.range, vscode.DiagnosticSeverity.Warning, []); // too Much
 }
 
-function setErrCase(sw: CAhkSwitch): null | vscode.Diagnostic {
+function setErrCase(sw: CAhkSwitch): vscode.Diagnostic | null {
     const iCase: number = getCaseNumber(sw.children);
 
     // too Much
@@ -42,7 +42,7 @@ function setErrCase(sw: CAhkSwitch): null | vscode.Diagnostic {
         : null; // at 1~19
 }
 
-function setErrSwNameNotFind(sw: CAhkSwitch): null | vscode.Diagnostic {
+function setErrSwNameNotFind(sw: CAhkSwitch): vscode.Diagnostic | null {
     // i know ahk allow switch name is not found, but I don't think it is a good idea.
     return sw.name === ''
         ? setDiagnostic(EDiagCode.code114, sw.range, vscode.DiagnosticSeverity.Information, [])

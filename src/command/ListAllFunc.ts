@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TTopSymbol } from '../AhkSymbol/TAhkSymbolIn';
+import type { TTopSymbol } from '../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
-import { CNekoBaseLineDiag, EDiagLine, TLineErrDiagParam } from './lineErrTools';
+import type { TLineErrDiagParam } from './lineErrTools';
+import { CNekoBaseLineDiag, EDiagLine } from './lineErrTools';
 
 export function getObjBaseErr(params: TLineErrDiagParam): CNekoBaseLineDiag | EDiagLine.miss {
     // base property

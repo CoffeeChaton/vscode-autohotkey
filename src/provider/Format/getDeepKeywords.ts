@@ -1,4 +1,4 @@
-import { DeepReadonly } from '../../globalEnum';
+import type { DeepReadonly } from '../../globalEnum';
 import { ContinueLongLine } from './ContinueLongLine';
 
 export function getDeepKeywords(textFix: string, oneCommandCode: number): number {

@@ -1,7 +1,9 @@
-import {
-    commands,
+import type {
     DocumentSelector,
     ExtensionContext,
+} from 'vscode';
+import {
+    commands,
     languages,
     window,
     workspace,

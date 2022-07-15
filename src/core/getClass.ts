@@ -5,21 +5,26 @@ import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
 import { getRange } from '../tools/range/getRange';
 import { replacerSpace } from '../tools/str/removeSpecialChar';
-import { getChildren, TFuncInput } from './getChildren';
+import type { TFuncInput } from './getChildren';
+import { getChildren } from './getChildren';
 import { getFunc } from './ParserFunc';
 import { setClassInsertText } from './ParserTools/setClassInsertText';
 
-export function getClass(FuncInput: TFuncInput): null | CAhkClass {
-    if (FuncInput.fistWordUp !== 'CLASS') return null;
+export function getClass(FuncInput: TFuncInput): CAhkClass | null {
+    const {
+        fistWordUp,
+        lStr,
+    } = FuncInput;
+
+    if (fistWordUp !== 'CLASS') return null;
     // class ClassName extends BaseClassName
-    const ma: RegExpMatchArray | null = FuncInput.lStr.match(/(?<=^\s*\bClass\b\s+)(\w+)/ui);
+    const ma: RegExpMatchArray | null = lStr.match(/(?<=^\s*\bClass\b\s+)(\w+)/ui);
     if (ma === null) return null;
 
     const {
         DocStrMap,
         line,
         RangeEndLine,
-        lStr,
         document,
         GValMap,
         defStack,

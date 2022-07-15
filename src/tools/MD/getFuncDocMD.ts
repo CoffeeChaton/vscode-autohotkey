@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { EMode } from '../../Enum/EMode';
-import { TTokenStream } from '../../globalEnum';
+import type { TTokenStream } from '../../globalEnum';
 import { docCommentBlock, EDocBlock } from '../str/inCommentBlock';
 
 function getReturnText(lStr: string, textRaw: string, col: number): string {

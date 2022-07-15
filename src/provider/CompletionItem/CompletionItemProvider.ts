@@ -1,7 +1,8 @@
-import * as vscode from 'vscode';
-import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
-import { Detecter, TAhkFileData } from '../../core/Detecter';
+import type * as vscode from 'vscode';
+import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkFileData } from '../../core/Detecter';
+import { Detecter } from '../../core/Detecter';
 import { getSnippetCommand } from '../../tools/Built-in/Command';
 import { Completion2Directives } from '../../tools/Built-in/DirectivesList';
 import { getSnippetStatement } from '../../tools/Built-in/statement';
@@ -36,7 +37,7 @@ function CompletionItemCore(
     const { AhkSymbolList, DocStrMap } = AhkFileData;
     const { lStr, textRaw } = DocStrMap[position.line];
     const topSymbol: TTopSymbol | null = getTopSymbolWithPos(AhkSymbolList, position);
-    const DA: null | CAhkFunc = getDAWithPos(AhkSymbolList, position);
+    const DA: CAhkFunc | null = getDAWithPos(AhkSymbolList, position);
     const PartStr: string | null = getPartStr(lStr, position);
 
     const completions: vscode.CompletionItem[] = [
@@ -63,10 +64,6 @@ function CompletionItemCore(
 
         if (DA !== null) completions.push(...DeepAnalysisToCompletionItem(DA, position, inputStr));
     }
-
-    // const t2 = Date.now();
-    // console.log('🚀 ~ CompletionItemCore ~ t2', t2 - t1);
-    // console.log('🚀 ~ CompletionItemCore ~ context.triggerCharacter', context.triggerCharacter);
 
     return completions;
 }

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { CAhkLabel } from '../../../../AhkSymbol/CAhkLine';
-import { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../../diag';
 import { setDiagnostic } from '../setDiagnostic';
 

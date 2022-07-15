@@ -6,7 +6,7 @@
 /* cSpell:disable */
 /* spell-checker: disable */
 import * as vscode from 'vscode';
-import { DeepReadonly } from '../../globalEnum';
+import type { DeepReadonly } from '../../globalEnum';
 
 // https://www.autohotkey.com/docs/Functions.htm#BuiltIn
 

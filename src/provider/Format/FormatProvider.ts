@@ -1,16 +1,16 @@
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
-import * as vscode from 'vscode';
+import type * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { EFormatChannel } from '../../globalEnum';
 import { fmtDiffInfo } from './fmtDiffInfo';
 import { getDeepKeywords } from './getDeepKeywords';
 import { isHotStr, isLabel } from './isLabelOrHotStr';
 import { getSwitchRange } from './SwitchCase';
-import { TDiffMap } from './TFormat';
+import type { TDiffMap } from './TFormat';
 import { fn_Warn_thisLineText_WARN } from './TWarnUse';
 
-function Hashtag(textFix: string): '#if' | '#HotString' | '' {
+function Hashtag(textFix: string): '' | '#HotString' | '#if' {
     if (textFix === '') return '';
 
     // https://www.autohotkey.com/docs/commands/_If.htm#Basic_Operation

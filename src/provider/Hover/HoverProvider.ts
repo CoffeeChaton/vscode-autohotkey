@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { Detecter } from '../../core/Detecter';
 import { getHoverCommand, getHoverCommand2 } from '../../tools/Built-in/Command';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func';
@@ -11,7 +11,7 @@ import { getGlobalMarkdown } from '../../tools/MD/getGlobalMarkdown';
 import { DeepAnalysisHover } from './DeepAnalysisHover';
 import { HoverDirectives } from './HoverDirectives';
 
-function HoverOfFunc(wordUp: string, textRaw: string): null | vscode.Hover {
+function HoverOfFunc(wordUp: string, textRaw: string): vscode.Hover | null {
     // eslint-disable-next-line security/detect-non-literal-regexp
     const testOfFunc = new RegExp(`(?<![.%\`#])(${wordUp})\\(`, 'iu'); // not search class.Method()
     if (!testOfFunc.test(textRaw)) return null;

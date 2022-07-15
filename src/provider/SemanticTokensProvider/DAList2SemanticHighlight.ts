@@ -1,7 +1,7 @@
-import { CAhkFunc as CAhkFunction } from '../../AhkSymbol/CAhkFunc';
-import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import type { CAhkFunc as CAhkFunction } from '../../AhkSymbol/CAhkFunc';
+import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
-import { TSemanticTokensLeaf } from './tools';
+import type { TSemanticTokensLeaf } from './tools';
 
 function DA2SemanticHighlight(DA: CAhkFunction): TSemanticTokensLeaf[] {
     const Tokens: TSemanticTokensLeaf[] = [];

@@ -1,5 +1,6 @@
-import { TParamMapOut } from '../../../../AhkSymbol/CAhkFunc';
-import { ESnippetRecBecause, TSnippetRecMap } from '../ESnippetRecBecause';
+import type { TParamMapOut } from '../../../../AhkSymbol/CAhkFunc';
+import type { TSnippetRecMap } from '../ESnippetRecBecause';
+import { ESnippetRecBecause } from '../ESnippetRecBecause';
 
 export function setParaRec(suggestMap: TSnippetRecMap, paramMap: TParamMapOut, inputStr: string): void {
     for (const paramMeta of paramMap.values()) {

@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
+import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import type { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
 import { getCodeLenConfig } from '../../configUI';
-import { Detecter, TAhkFileData } from '../../core/Detecter';
+import type { TAhkFileData } from '../../core/Detecter';
+import { Detecter } from '../../core/Detecter';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
-import { TShowUnknownAnalyze } from './showUnknownAnalyze';
+import type { TShowUnknownAnalyze } from './showUnknownAnalyze';
 
 function CodeLensCore(fsPath: string): vscode.CodeLens[] {
     const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);

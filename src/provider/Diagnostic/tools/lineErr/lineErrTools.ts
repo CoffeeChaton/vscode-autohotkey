@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { Diags, EDiagCode } from '../../../../diag';
+import type { EDiagCode } from '../../../../diag';
+import { Diags } from '../../../../diag';
 import { EDiagBase } from '../../../../Enum/EDiagBase';
 
 export const enum EDiagLine {
@@ -44,4 +45,4 @@ export class CNekoBaseLineDiag extends vscode.Diagnostic {
     }
 }
 
-export type TLineDiag = EDiagLine | CNekoBaseLineDiag;
+export type TLineDiag = CNekoBaseLineDiag | EDiagLine;

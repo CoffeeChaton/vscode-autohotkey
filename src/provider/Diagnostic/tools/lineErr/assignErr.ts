@@ -3,7 +3,7 @@ import { EDiagCode } from '../../../../diag';
 import { EDetail } from '../../../../globalEnum';
 import { CNekoBaseLineDiag } from './lineErrTools';
 
-export function assignErr(textRaw: string, detail: readonly EDetail[], line: number): null | CNekoBaseLineDiag {
+export function assignErr(textRaw: string, detail: readonly EDetail[], line: number): CNekoBaseLineDiag | null {
     return detail.includes(EDetail.inSkipSign2)
         ? new CNekoBaseLineDiag({
             line,

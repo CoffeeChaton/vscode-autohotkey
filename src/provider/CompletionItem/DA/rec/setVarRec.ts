@@ -1,10 +1,8 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,5] }] */
 import * as vscode from 'vscode';
-import { TValMapOut } from '../../../../AhkSymbol/CAhkFunc';
-import {
-    ESnippetRecBecause,
-    TSnippetRecMap,
-} from '../ESnippetRecBecause';
+import type { TValMapOut } from '../../../../AhkSymbol/CAhkFunc';
+import type { TSnippetRecMap } from '../ESnippetRecBecause';
+import { ESnippetRecBecause } from '../ESnippetRecBecause';
 
 export function getContextRange(position: vscode.Position, DARange: vscode.Range): vscode.Range {
     const enum ERecLine {

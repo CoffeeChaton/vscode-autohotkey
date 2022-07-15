@@ -1,10 +1,10 @@
-import { TParamMapIn, TValMapIn, TValMetaIn } from '../../../AhkSymbol/CAhkFunc';
-import { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
-import { TTokenStream } from '../../../globalEnum';
+import type { TParamMapIn, TValMapIn, TValMetaIn } from '../../../AhkSymbol/CAhkFunc';
+import type { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
+import type { TTokenStream } from '../../../globalEnum';
 import { forLoop } from './def/forLoop';
 import { varSetCapacityFunc } from './def/varSetCapacityFunc';
 import { walrusOperator } from './def/walrusOperator';
-import { TGetFnDefNeed } from './TFnVarDef';
+import type { TGetFnDefNeed } from './TFnVarDef';
 
 export function getFnVarDef(
     startLine: number,

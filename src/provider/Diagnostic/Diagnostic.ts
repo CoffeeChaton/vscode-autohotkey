@@ -1,12 +1,12 @@
-import * as vscode from 'vscode';
-import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
+import type * as vscode from 'vscode';
+import type { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 import { getLintConfig } from '../../configUI';
-import { TTokenStream } from '../../globalEnum';
+import type { TTokenStream } from '../../globalEnum';
 import { getIgnore } from './getIgnore';
 import { getFuncErr } from './tools/getFuncErr';
 import { getLineErr } from './tools/getLineErr';
 import { getTreeErr } from './tools/getTreeErr';
-import { CNekoBaseLineDiag } from './tools/lineErr/lineErrTools';
+import type { CNekoBaseLineDiag } from './tools/lineErr/lineErrTools';
 
 type TDisplayErr = boolean[];
 type TDisplayErrAndLineErr = {
@@ -38,7 +38,7 @@ function getDisplayErrAndLineErr(DocStrMap: TTokenStream): TDisplayErrAndLineErr
 }
 
 // eslint-disable-next-line no-magic-numbers
-const wm: WeakMap<TTokenStream, readonly vscode.Diagnostic[]> = new WeakMap();
+const wm = new WeakMap<TTokenStream, readonly vscode.Diagnostic[]>();
 
 export function baseDiagnostic(
     DocStrMap: TTokenStream,

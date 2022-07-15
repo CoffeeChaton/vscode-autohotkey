@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
-import { TC502New, TParamMapOut, TValMapOut } from '../../../AhkSymbol/CAhkFunc';
+import type { TC502New, TParamMapOut, TValMapOut } from '../../../AhkSymbol/CAhkFunc';
 import { EDiagCodeDA } from '../../../diag';
 import { setDiagnosticDA } from '../../../provider/Diagnostic/tools/setDiagnostic';
-import { EPrefixC502, setDiagCaseMsg } from './caseSensitivityMagic';
+import type { EPrefixC502 } from './caseSensitivityMagic';
+import { setDiagCaseMsg } from './caseSensitivityMagic';
 
 function getRangeOfC502(
     defRangeList: readonly vscode.Range[],
@@ -18,7 +19,7 @@ function getRangeOfC502(
 
 export function caseSensitivityVar(
     prefix: EPrefixC502,
-    paramOrValMap: TValMapOut | TParamMapOut,
+    paramOrValMap: TParamMapOut | TValMapOut,
     code502or503List: vscode.Diagnostic[],
     maxDiag: number,
 ): void {

@@ -3,7 +3,7 @@
 /* eslint-disable max-len */
 /* cSpell:disable */
 import * as vscode from 'vscode';
-import { DeepReadonly } from '../../globalEnum';
+import type { DeepReadonly } from '../../globalEnum';
 
 export const DirectivesUpKeyList = [
     'ALLOWSAMELINECOMMENTS',

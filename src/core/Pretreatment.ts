@@ -1,11 +1,13 @@
 /* eslint-disable max-statements */
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 
+import type {
+    TAhkToken,
+    TTokenStream,
+} from '../globalEnum';
 import {
     EDetail,
     ELTrim,
-    TAhkToken,
-    TTokenStream,
 } from '../globalEnum';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
 import { inCommentBlock } from '../tools/str/inCommentBlock';

@@ -1,13 +1,14 @@
 /* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
-import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
-import { TFsPath, TTokenStream } from '../../globalEnum';
+import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TFsPath, TTokenStream } from '../../globalEnum';
 import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
 import { getChildren } from '../getChildren';
 import { getClass } from '../getClass';
 import { ParserBlock } from '../Parser';
 import { getFunc } from '../ParserFunc';
-import { ahkGlobalMain, TGValMap, TGValMapReadOnly } from '../ParserTools/ahkGlobalDef';
+import type { TGValMap, TGValMapReadOnly } from '../ParserTools/ahkGlobalDef';
+import { ahkGlobalMain } from '../ParserTools/ahkGlobalDef';
 import { ParserLine } from '../ParserTools/ParserLine';
 import { Pretreatment } from '../Pretreatment';
 

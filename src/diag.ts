@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
 /* eslint-disable max-lines */
-import { DeepReadonly } from './globalEnum';
+import type { DeepReadonly } from './globalEnum';
 
 export const enum EDiagCodeDA {
     // 501~599 Analysis Func or Method

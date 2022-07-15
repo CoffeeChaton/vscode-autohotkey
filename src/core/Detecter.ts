@@ -1,9 +1,10 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { showTimeSpend } from '../configUI';
-import { TFsPath } from '../globalEnum';
+import type { TFsPath } from '../globalEnum';
 import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
-import { BaseScanMemo, getBaseData, TMemo } from './BaseScanMemo/memo';
+import type { TMemo } from './BaseScanMemo/memo';
+import { BaseScanMemo, getBaseData } from './BaseScanMemo/memo';
 
 export type TAhkFileData = TMemo;
 
@@ -27,7 +28,7 @@ export const Detecter = {
         // await openTextDocument(fsPath);
     },
 
-    getDocMap(fsPath: string): undefined | TAhkFileData {
+    getDocMap(fsPath: string): TAhkFileData | undefined {
         return Detecter.DocMap.get(fsPath);
     },
 

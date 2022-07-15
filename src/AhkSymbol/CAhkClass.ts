@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import * as vscode from 'vscode';
-import { CAhkFunc } from './CAhkFunc';
+import type { CAhkFunc } from './CAhkFunc';
 
 type TCAhkClassInstanceVarParam = {
     name: string;

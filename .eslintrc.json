@@ -2,26 +2,26 @@
     "env": {
         "browser": false,
         "es6": true,
+        "node": true
         // "jest": true,
         // "jest/globals": true,
-        "node": true
     },
     "extends": [
-        "plugin:unicorn/all",
         "airbnb-base",
         "airbnb-typescript",
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:@typescript-eslint/recommended",
+        "plugin:import/errors",
         "plugin:import/recommended",
         "plugin:import/typescript",
-        "plugin:import/errors",
         "plugin:import/typescript",
         "plugin:import/warnings",
         "plugin:promise/recommended",
         "plugin:security/recommended",
+        "plugin:unicorn/all",
         "sukka/typescript"
-        // "plugin:@typescript-eslint/recommended-requiring-type-checking", // any any And any
     ],
     "globals": {
         "Atomics": "readonly",
@@ -67,27 +67,22 @@
         "sourceType": "module"
     },
     "plugins": [
-        "unicorn",
+        "@typescript-eslint",
+        "@typescript-eslint/eslint-plugin",
         "fp",
         "immutable",
-        "@typescript-eslint/eslint-plugin",
-        "@typescript-eslint",
+        "import",
+        "no-setter-return",
         "promise",
         "security",
-        "no-setter-return",
-        "import"
+        "unicorn"
         // "jest",
         // "jest-formatting"
     ],
     "root": true,
     "rules": {
-        "security/detect-unsafe-regex": "warn",
-        "unicorn/prevent-abbreviations": "off", // ....wait to new case
-        "unicorn/filename-case": "off", // ....wait to new case
-        "unicorn/no-null": "off",
-        "unicorn/prefer-set-has": "off",
-        "unicorn/no-keyword-prefix": "off",
-        //
+        "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+        "@typescript-eslint/consistent-type-imports": "error",
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",
         "@typescript-eslint/await-thenable": "error",
@@ -150,15 +145,16 @@
         "@typescript-eslint/strict-boolean-expressions": [
             "error",
             {
-                "allowString": false,
-                "allowNumber": false,
-                "allowNullableObject": false,
+                "allowAny": false,
                 "allowNullableBoolean": false,
-                "allowNullableString": false,
                 "allowNullableNumber": false,
-                "allowAny": false
+                "allowNullableObject": false,
+                "allowNullableString": false,
+                "allowNumber": false,
+                "allowString": false
             }
         ],
+        "@typescript-eslint/unbound-method": "off",
         "array-bracket-newline": "warn",
         "array-bracket-spacing": "warn",
         "array-callback-return": "error",
@@ -339,6 +335,13 @@
         "require-await": "error",
         "require-unicode-regexp": "error",
         "security/detect-object-injection": "off",
+        "security/detect-unsafe-regex": "warn",
+        "unicorn/custom-error-definition": "error",
+        "unicorn/filename-case": "off",
+        "unicorn/no-keyword-prefix": "off",
+        "unicorn/no-null": "off",
+        "unicorn/prefer-set-has": "off",
+        "unicorn/prevent-abbreviations": "off",
         "use-isnan": "error",
         "wrap-regex": "error"
     },

@@ -1,14 +1,16 @@
-import {
+import type {
     CAhkComment,
+    TLineClass,
+} from '../../AhkSymbol/CAhkLine';
+import {
     CAhkDirectives,
     CAhkHotKeys,
     CAhkHotString,
     CAhkInclude,
     CAhkLabel,
-    TLineClass,
 } from '../../AhkSymbol/CAhkLine';
 import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
-import { TFuncInput } from '../getChildren';
+import type { TFuncInput } from '../getChildren';
 import { getComment } from './getComment';
 
 type TClassName =
@@ -108,7 +110,7 @@ const LineRuler: readonly TLineRuler[] = [
     },
 ];
 
-export function ParserLine(FuncInput: TFuncInput): null | TLineClass | CAhkComment {
+export function ParserLine(FuncInput: TFuncInput): CAhkComment | TLineClass | null {
     const {
         fistWordUp,
         line,

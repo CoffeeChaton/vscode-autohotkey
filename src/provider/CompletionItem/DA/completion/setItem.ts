@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import { EStr } from '../../../../Enum/EStr';
-import { EPrefix, setMD } from '../../../../tools/MD/setMD';
-import { ESnippetRecBecause, TSnippetRecMap } from '../ESnippetRecBecause';
+import type { EPrefix } from '../../../../tools/MD/setMD';
+import { setMD } from '../../../../tools/MD/setMD';
+import type { ESnippetRecBecause, TSnippetRecMap } from '../ESnippetRecBecause';
 
 type TSetItem = {
     prefix: EPrefix;

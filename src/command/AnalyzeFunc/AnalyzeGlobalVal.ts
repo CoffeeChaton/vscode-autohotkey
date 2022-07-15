@@ -1,4 +1,4 @@
-import { TTokenStream } from '../../globalEnum';
+import type { TTokenStream } from '../../globalEnum';
 
 type TMsg = {
     textRaw: string;

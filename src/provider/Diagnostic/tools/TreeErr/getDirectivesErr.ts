@@ -1,9 +1,10 @@
 /* cSpell:disable */
 import * as vscode from 'vscode';
 import { CAhkDirectives } from '../../../../AhkSymbol/CAhkLine';
-import { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../../diag';
-import { DirectivesUpKeyList, THashTagUPKey } from '../../../../tools/Built-in/DirectivesList';
+import type { THashTagUPKey } from '../../../../tools/Built-in/DirectivesList';
+import { DirectivesUpKeyList } from '../../../../tools/Built-in/DirectivesList';
 import { setDiagnostic } from '../setDiagnostic';
 
 export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
@@ -33,16 +34,20 @@ export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
             tags: [vscode.DiagnosticTag.Deprecated],
         },
         {
-            // change of % , #DerefChar https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related
-            // #DerefChar
+            /*
+             * change of % , #DerefChar https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related
+             * #DerefChar
+             */
             str: 'DEREFCHAR',
             code: EDiagCode.code903,
             severity: vscode.DiagnosticSeverity.Error,
             tags: [vscode.DiagnosticTag.Deprecated],
         },
         {
-            // change of % , #DerefChar https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related
-            // #Delimiter
+            /*
+             * change of % , #DerefChar https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related
+             * #Delimiter
+             */
             str: 'DELIMITER',
             code: EDiagCode.code903,
             severity: vscode.DiagnosticSeverity.Error,
@@ -56,8 +61,10 @@ export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
             tags: [vscode.DiagnosticTag.Deprecated],
         },
         {
-            // https://www.autohotkey.com/docs/commands/_Hotstring.htm
-            // #Hotstring
+            /*
+             * https://www.autohotkey.com/docs/commands/_Hotstring.htm
+             * #Hotstring
+             */
             str: 'HOTSTRING',
             code: EDiagCode.code904,
             severity: vscode.DiagnosticSeverity.Warning,

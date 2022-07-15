@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { Diags, EDiagCode, EDiagCodeDA } from '../../diag';
+import type { EDiagCode } from '../../diag';
+import { Diags, EDiagCodeDA } from '../../diag';
 import { EDiagBase } from '../../Enum/EDiagBase';
 import { c501ignoreArgNeverUsed } from './c501ignoreArgNeverUsed';
 import { c502c503CodeAction } from './c502c503CodeAction';
@@ -21,7 +22,7 @@ function setEdit(uri: vscode.Uri, line: number, FsPath: string): vscode.Workspac
     return edit;
 }
 
-function setIgnore(uri: vscode.Uri, diag: vscode.Diagnostic): null | vscode.CodeAction {
+function setIgnore(uri: vscode.Uri, diag: vscode.Diagnostic): vscode.CodeAction | null {
     const FsPath: string | null = getFsPath(diag);
     if (FsPath === null) return null;
 
@@ -68,7 +69,7 @@ export const CodeActionProvider: vscode.CodeActionProvider = {
         range: vscode.Range | vscode.Selection,
         context: vscode.CodeActionContext,
         _token: vscode.CancellationToken,
-    ): vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[] | null> {
+    ): vscode.ProviderResult<(vscode.CodeAction | vscode.Command)[] | null> {
         return [
             ...fixDiag(document.uri, context.diagnostics),
             ...DependencyAnalysis(document, range),

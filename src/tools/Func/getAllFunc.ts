@@ -1,6 +1,7 @@
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { Detecter, TAhkFileData } from '../../core/Detecter';
-import { DeepReadonly } from '../../globalEnum';
+import type { TAhkFileData } from '../../core/Detecter';
+import { Detecter } from '../../core/Detecter';
+import type { DeepReadonly } from '../../globalEnum';
 
 type TKeyUpName = string;
 type TMap = Map<TKeyUpName, CAhkFunc>;
@@ -12,7 +13,7 @@ export function getAllFunc(): TFullFuncMap {
 
     const fsPaths: string[] = Detecter.getDocMapFile();
     for (const fsPath of fsPaths) {
-        const AhkFileData: undefined | TAhkFileData = Detecter.getDocMap(fsPath);
+        const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
         if (AhkFileData === undefined) continue;
 
         const { AhkSymbolList } = AhkFileData;

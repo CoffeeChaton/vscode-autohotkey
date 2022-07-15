@@ -1,9 +1,11 @@
 import * as vscode from 'vscode';
+import type {
+    EDiagCode,
+    EDiagCodeDA,
+} from '../../../diag';
 import {
     Diags,
     DiagsDA,
-    EDiagCode,
-    EDiagCodeDA,
 } from '../../../diag';
 import { EDiagBase } from '../../../Enum/EDiagBase';
 

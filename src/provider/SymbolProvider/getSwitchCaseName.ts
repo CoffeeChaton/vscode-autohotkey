@@ -1,4 +1,4 @@
-export function getCaseName(textRaw: string, lStr: string): null | string {
+export function getCaseName(textRaw: string, lStr: string): string | null {
     const caseS = lStr.search(/\bcase[\s,]/ui);
     if (caseS === -1) return null;
 

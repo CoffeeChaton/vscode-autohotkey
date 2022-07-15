@@ -1,6 +1,6 @@
-import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { TTokenStream } from '../../globalEnum';
-import { TFullFuncMap } from '../../tools/Func/getAllFunc';
+import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import type { TTokenStream } from '../../globalEnum';
+import type { TFullFuncMap } from '../../tools/Func/getAllFunc';
 
 function getIgnoreList(): string[] {
     return [

@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
-import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
-import { Detecter, TAhkFileData } from '../../../core/Detecter';
-import { TTokenStream } from '../../../globalEnum';
+import type { CAhkClass } from '../../../AhkSymbol/CAhkClass';
+import type { TAhkFileData } from '../../../core/Detecter';
+import { Detecter } from '../../../core/Detecter';
+import type { TTokenStream } from '../../../globalEnum';
 import { getDocStrMapMask } from '../../../tools/getDocStrMapMask';
 
 function getWmThisCore(AhkClassSymbol: CAhkClass): vscode.CompletionItem[] {
@@ -11,7 +12,7 @@ function getWmThisCore(AhkClassSymbol: CAhkClass): vscode.CompletionItem[] {
     const { DocStrMap } = AhkFileData;
     const AhkTokenList: TTokenStream = getDocStrMapMask(AhkClassSymbol.range, DocStrMap);
 
-    const mapStrNumber: Map<string, number> = new Map();
+    const mapStrNumber = new Map<string, number>();
 
     for (const { lStr, line } of AhkTokenList) {
         for (const ma of lStr.matchAll(/\bthis\.(\w+)\b(?!\()/gui)) {
@@ -34,7 +35,7 @@ function getWmThisCore(AhkClassSymbol: CAhkClass): vscode.CompletionItem[] {
     return itemS;
 }
 
-const wm: WeakMap<CAhkClass, vscode.CompletionItem[]> = new WeakMap();
+const wm = new WeakMap<CAhkClass, vscode.CompletionItem[]>();
 
 export function getWmThis(AhkClassSymbol: CAhkClass): vscode.CompletionItem[] {
     const cache: vscode.CompletionItem[] | undefined = wm.get(AhkClassSymbol);

@@ -1,5 +1,5 @@
-import { TGValMapReadOnly } from '../../core/ParserTools/ahkGlobalDef';
-import { TSemanticTokensLeaf } from './tools';
+import type { TGValMapReadOnly } from '../../core/ParserTools/ahkGlobalDef';
+import type { TSemanticTokensLeaf } from './tools';
 
 export function GlobalHighlight(GValMap: TGValMapReadOnly): TSemanticTokensLeaf[] {
     const Tokens: TSemanticTokensLeaf[] = [];

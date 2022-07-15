@@ -1,5 +1,5 @@
-import * as vscode from 'vscode';
-import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
+import type * as vscode from 'vscode';
+import type { CAhkClass } from '../../../AhkSymbol/CAhkClass';
 import { getWmThis } from './getWmThis';
 import { parsingUserDefClassRecursive } from './parsingUserDefClassRecursive';
 

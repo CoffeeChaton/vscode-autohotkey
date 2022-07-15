@@ -1,5 +1,5 @@
-import * as vscode from 'vscode';
-import { TValMapIn, TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
+import type * as vscode from 'vscode';
+import type { TValMapIn, TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
 import { newC502 } from './diag/c502';
 
 type TGetValue = {

@@ -1,13 +1,14 @@
-import * as vscode from 'vscode';
-import { CAhkClass, TClassChildren } from '../../AhkSymbol/CAhkClass';
+import type * as vscode from 'vscode';
+import type { TClassChildren } from '../../AhkSymbol/CAhkClass';
+import { CAhkClass } from '../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { getTopSymbolWithPos } from './getTopSymbolWithPos';
 
 function getMethodWithPos(
     classCh: TClassChildren[],
     position: vscode.Position,
-): null | CAhkFunc {
+): CAhkFunc | null {
     for (const DA of classCh) {
         if (!DA.range.contains(position)) continue;
 
@@ -20,7 +21,7 @@ function getMethodWithPos(
 export function getDAWithPos(
     AhkSymbolList: readonly TTopSymbol[],
     position: vscode.Position,
-): null | CAhkFunc {
+): CAhkFunc | null {
     const TopSymbol: TTopSymbol | null = getTopSymbolWithPos(AhkSymbolList, position);
     if (TopSymbol === null) return null;
     if (TopSymbol instanceof CAhkFunc) return TopSymbol;

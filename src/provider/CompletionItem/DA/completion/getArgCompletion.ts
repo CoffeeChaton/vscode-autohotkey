@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { TParamMapOut, TParamMetaOut } from '../../../../AhkSymbol/CAhkFunc';
+import type { TParamMapOut, TParamMetaOut } from '../../../../AhkSymbol/CAhkFunc';
 import { setPreFix } from '../../../../tools/str/setPreFix';
-import { TSnippetRecMap } from '../ESnippetRecBecause';
+import type { TSnippetRecMap } from '../ESnippetRecBecause';
 import { setItemCore } from './setItem';
 
 export function getParamCompletion(

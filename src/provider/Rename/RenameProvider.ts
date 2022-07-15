@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { Detecter } from '../../core/Detecter';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { userDefFunc } from '../Def/DefProvider';
@@ -11,7 +11,7 @@ function RenameProviderCore(
 ): vscode.WorkspaceEdit | null {
     const { AhkSymbolList } = Detecter.getDocMap(document.uri.fsPath) ?? Detecter.updateDocDef(document);
 
-    const DA: null | CAhkFunc = getDAWithPos(AhkSymbolList, position);
+    const DA: CAhkFunc | null = getDAWithPos(AhkSymbolList, position);
     if (DA === null || !DA.nameRange.contains(position) || DA.kind === vscode.SymbolKind.Method) {
         void vscode.window.showInformationMessage('please use rename at function def range');
         return null;
@@ -26,11 +26,6 @@ function RenameProviderCore(
             Loc.uri,
             Loc.range,
             newName,
-            // {
-            //     needsConfirmation: true,
-            //     label: 'test',
-            //     description: 'test-description',
-            // },
         );
     }
     return edit;
@@ -57,5 +52,7 @@ export const RenameProvider: vscode.RenameProvider = {
     },
 };
 
-// fn_img_m() && "fn_img_m" && fn_img_m() && fn_img_m() && fn_img_m && fn_img_m && "fn_img_m"
-//     O             O            O              O            X          X              O
+/*
+ * fn_img_m() && "fn_img_m" && fn_img_m() && fn_img_m() && fn_img_m && fn_img_m && "fn_img_m"
+ *     O             O            O              O            X          X              O
+ */

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CAhkClass, TClassChildren } from '../../../AhkSymbol/CAhkClass';
+import type { CAhkClass, TClassChildren } from '../../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { getUserDefTopClassSymbol } from './getUserDefTopClassSymbol';
 

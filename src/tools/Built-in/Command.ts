@@ -1677,7 +1677,7 @@ const snippetCommand: readonly vscode.CompletionItem[] = ((): vscode.CompletionI
         item.detail = 'Command of AHK (neko-help)'; // description
         item.documentation = CommandMDMap.get(k) ?? commandElement2Md(v);
 
-        if (recommended !== undefined && recommended === false) {
+        if (recommended !== undefined && !recommended) {
             item.tags = [vscode.CompletionItemTag.Deprecated];
         }
 

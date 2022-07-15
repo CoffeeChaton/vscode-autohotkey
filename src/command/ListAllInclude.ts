@@ -1,5 +1,5 @@
 import { CAhkInclude } from '../AhkSymbol/CAhkLine';
-import { TAhkSymbolList, TTopSymbol } from '../AhkSymbol/TAhkSymbolIn';
+import type { TAhkSymbolList, TTopSymbol } from '../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 

@@ -1,6 +1,6 @@
 import { OutputChannel } from '../../../vscWindows/OutputChannel';
 
-const DEB: Map<string, number> = new Map();
+const DEB = new Map<string, number>();
 
 const isDebug = false;
 

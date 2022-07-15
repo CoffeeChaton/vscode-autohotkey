@@ -1,5 +1,5 @@
-import { TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
-import { TGetFnDefNeed } from '../TFnVarDef';
+import type { TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
+import type { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
 
 // VarSetCapacity(varName)

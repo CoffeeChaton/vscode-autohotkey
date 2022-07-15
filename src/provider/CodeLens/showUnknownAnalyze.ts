@@ -1,4 +1,4 @@
-import { TTextMapOut } from '../../AhkSymbol/CAhkFunc';
+import type { TTextMapOut } from '../../AhkSymbol/CAhkFunc';
 import { OutputChannel as Out } from '../vscWindows/OutputChannel';
 
 export type TShowUnknownAnalyze = [TTextMapOut, string];

@@ -1,4 +1,4 @@
-import * as vscode from 'vscode';
+import type * as vscode from 'vscode';
 import { isPosAtStr } from '../tools/isPosAtStr';
 import { userDefFunc } from './Def/DefProvider';
 import { getValDefInFunc } from './Def/getValDefInFunc';

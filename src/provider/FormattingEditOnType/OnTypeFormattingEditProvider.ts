@@ -1,4 +1,4 @@
-import * as vscode from 'vscode';
+import type * as vscode from 'vscode';
 import { EFormatChannel } from '../../globalEnum';
 import { FormatCore } from '../Format/FormatProvider';
 

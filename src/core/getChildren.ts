@@ -1,6 +1,6 @@
-import * as vscode from 'vscode';
-import { TTokenStream } from '../globalEnum';
-import { TGValMap } from './ParserTools/ahkGlobalDef';
+import type * as vscode from 'vscode';
+import type { TTokenStream } from '../globalEnum';
+import type { TGValMap } from './ParserTools/ahkGlobalDef';
 
 export type TFuncInput = Readonly<{
     fistWordUp: string;
@@ -26,7 +26,7 @@ type ChildType = Readonly<{
 type TChildrenType<T extends vscode.DocumentSymbol> = T['children'][number];
 
 export function getChildren<T extends vscode.DocumentSymbol>(
-    fnList: ((FuncInput: TFuncInput) => null | TChildrenType<T>)[],
+    fnList: ((FuncInput: TFuncInput) => TChildrenType<T> | null)[],
     child: ChildType,
 ): TChildrenType<T>[] {
     const {
@@ -44,7 +44,7 @@ export function getChildren<T extends vscode.DocumentSymbol>(
         if (line < Resolved) continue; // <------------------------------------
         const { lStr, fistWordUp, textRaw } = DocStrMap[line];
         for (const fn of fnList) {
-            const DocumentSymbol: null | TChildrenType<T> = fn({
+            const DocumentSymbol: TChildrenType<T> | null = fn({
                 fistWordUp,
                 lStr,
                 DocStrMap,

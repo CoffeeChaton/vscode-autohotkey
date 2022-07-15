@@ -1,6 +1,6 @@
 import { CAhkClass } from '../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 
 export function getDAList(AhkSymbolList: Readonly<TAhkSymbolList>): CAhkFunc[] {
     const result: CAhkFunc[] = [];

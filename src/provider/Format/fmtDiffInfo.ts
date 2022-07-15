@@ -1,9 +1,9 @@
 import * as path from 'node:path';
-import * as vscode from 'vscode';
-import { EFormatChannel } from '../../globalEnum';
+import type * as vscode from 'vscode';
+import type { EFormatChannel } from '../../globalEnum';
 import { OutputChannel } from '../vscWindows/OutputChannel';
 import { fmtReplaceWarn } from './fmtReplaceWarn';
-import { TDiffMap } from './TFormat';
+import type { TDiffMap } from './TFormat';
 
 type TDiffParm = {
     DiffMap: TDiffMap;

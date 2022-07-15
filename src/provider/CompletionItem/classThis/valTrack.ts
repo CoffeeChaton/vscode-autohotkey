@@ -1,14 +1,19 @@
-import * as vscode from 'vscode';
-import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
-import { TTokenStream } from '../../../globalEnum';
+import type * as vscode from 'vscode';
+import type { CAhkClass } from '../../../AhkSymbol/CAhkClass';
+import type { TTokenStream } from '../../../globalEnum';
 import { ahkValDefRegex } from '../../../tools/regexTools';
-import { ahkBaseUp, TAhkBaseObj } from '../ahkObj/ahkBase';
+import type { TAhkBaseObj } from '../ahkObj/ahkBase';
+import { ahkBaseUp } from '../ahkObj/ahkBase';
 import { ahkBaseWrap } from '../ahkObj/ahkBaseWrap';
 import { getUserDefTopClassSymbol } from './getUserDefTopClassSymbol';
 import { getWmThis } from './getWmThis';
 import { parsingUserDefClassRecursive } from './parsingUserDefClassRecursive';
 
-type TMathName = { ChapterArr: readonly string[]; strPart: string; ahkBaseObj: TAhkBaseObj };
+type TMathName = {
+    ChapterArr: readonly string[];
+    strPart: string;
+    ahkBaseObj: TAhkBaseObj;
+};
 
 function matchClassName({ ChapterArr, strPart, ahkBaseObj }: TMathName): string | null {
     // case 1: https://www.autohotkey.com/docs/Objects.htm#Objects_as_Functions

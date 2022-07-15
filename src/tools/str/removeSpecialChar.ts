@@ -35,11 +35,13 @@ export const replacerSpace = (match: string): string => ' '.repeat(match.length)
 
 export const fnReplacerStr = (match: string): string => '_'.repeat(match.length);
 
-// [textFix , '; comment text']
-// total time 490~520ms
+/**
+ * [textFix , '; comment text']
+ * total time 490~520ms
+ */
 export function getLStr(textRaw: string): string {
     if (textRaw.length === 0) return ''; // let 524 -> 493ms
-    if (textRaw[0] === ';') return '';
+    if (textRaw.startsWith(';')) return '';
     if ((/^\s*;/u).test(textRaw)) return '';
     const textFix = textRaw.replace(/`./ug, '__').replace(/"[^"]*?"/ug, fnReplacerStr);
     const i = textFix.indexOf(';');

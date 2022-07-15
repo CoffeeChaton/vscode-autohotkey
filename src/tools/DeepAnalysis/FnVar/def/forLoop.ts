@@ -1,7 +1,7 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,3,4,10] }] */
 import * as vscode from 'vscode';
-import { TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
-import { TGetFnDefNeed } from '../TFnVarDef';
+import type { TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
+import type { TGetFnDefNeed } from '../TFnVarDef';
 import { wrapFnValDef } from './wrapFnValDef';
 
 function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {

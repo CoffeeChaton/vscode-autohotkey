@@ -1,5 +1,5 @@
-import { TParamMapIn, TValMapIn } from '../../../AhkSymbol/CAhkFunc';
-import { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
+import type { TParamMapIn, TValMapIn } from '../../../AhkSymbol/CAhkFunc';
+import type { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
 
 export type TGetFnDefNeed = {
     lStr: string;
