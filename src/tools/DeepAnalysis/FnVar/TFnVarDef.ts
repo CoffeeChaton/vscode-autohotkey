@@ -7,4 +7,5 @@ export type TGetFnDefNeed = {
     line: number;
     paramMap: TParamMapIn;
     GValMap: TGValMap;
+    lStrTrimLen: number;
 };

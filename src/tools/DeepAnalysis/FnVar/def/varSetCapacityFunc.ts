@@ -9,9 +9,10 @@ export function varSetCapacityFunc({
     line,
     paramMap,
     GValMap,
+    lStrTrimLen,
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line no-magic-numbers
-    if (lStr.length < 8) return; // 'NumGet('.length
+    if (lStrTrimLen < 8) return; // 'NumGet('.length
     if (!lStr.includes('(')) return;
     for (const v of lStr.matchAll(/(?<![.%`])\b(?:VarSetCapacity|NumGet)\b\(\s*&?(\w+)\b(?!\()/gui)) {
         const ch: number | undefined = v.index;

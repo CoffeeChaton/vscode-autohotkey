@@ -5,7 +5,10 @@ module.exports = {
     verbose: true,
     bail: true,
     coverageDirectory: 'coverage',
-    preset: 'ts-jest',
+    // preset: 'ts-jest',
     testEnvironment: 'node',
     testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.ts$',
+    transform: {
+        '^.+\\.(t|j)sx?$': '@swc/jest',
+    },
 };

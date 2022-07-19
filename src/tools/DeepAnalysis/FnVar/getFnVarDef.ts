@@ -18,7 +18,8 @@ export function getFnVarDef(
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;
         // eslint-disable-next-line no-magic-numbers
-        if (lStr.trim().length < 2) continue; // a=b need length >=3
+        const lStrTrimLen: number = lStr.trim().length;
+        if (lStrTrimLen < 2) continue; // a=b need length >=3
 
         const need: TGetFnDefNeed = {
             lStr,
@@ -26,6 +27,7 @@ export function getFnVarDef(
             line,
             paramMap,
             GValMap,
+            lStrTrimLen,
         };
         walrusOperator(need); // :=
         varSetCapacityFunc(need); // VarSetCapacity(varName) or NumGet(varName) or NumGet(&varName)

@@ -9,9 +9,10 @@ export function walrusOperator({
     line,
     paramMap,
     GValMap,
+    lStrTrimLen,
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line no-magic-numbers
-    if (lStr.trim().length < 4) return; // A:= ----> len 3
+    if (lStrTrimLen < 4) return; // A:= ----> len 3
     if (!lStr.includes(':=')) return;
 
     for (const v of lStr.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gu)) {

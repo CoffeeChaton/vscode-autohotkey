@@ -31,15 +31,15 @@ function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {
 // For var1,var2 in Range
 export function forLoop(arg: TGetFnDefNeed): void {
     const {
+        lStrTrimLen,
         lStr,
     } = arg;
 
-    const lStrTrim: string = lStr.trim();
-    if (lStrTrim.trim().length < 10) return; // for a in b ----> len 10
+    if (lStrTrimLen < 10) return; // for a in b ----> len 10
 
     const col1: number = lStr.search(/\bFor\b\s/ui);
     if (col1 === -1) return;
-    const col2: number = lStr.search(/\sin\s/ui);
+    const col2: number = lStr.search(/\sin\s/ui); // (?:\s)in
     if (col2 === -1 || col1 >= col2) return;
 
     const replaceFor: number = col1 + 4; // 'for '.len = 4
@@ -56,7 +56,7 @@ export function forLoop(arg: TGetFnDefNeed): void {
     // has value
 
     const replaceComma: number = col3 + 1;
-    const valMatch: RegExpMatchArray | null = strPart.slice(replaceComma).match(/\s*(\w+)[\s,]/ui);
+    const valMatch: RegExpMatchArray | null = strPart.slice(replaceComma).match(/\s*(\w+)\b/ui);
     if (valMatch === null) return;
 
     const valuePos: number = replaceFor + replaceComma + valMatch[0].lastIndexOf(valMatch[1]);
