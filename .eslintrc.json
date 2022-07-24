@@ -360,7 +360,29 @@
         "unicorn/prefer-set-has": "off",
         "unicorn/prevent-abbreviations": "off",
         "use-isnan": "error",
-        "wrap-regex": "error"
+        "wrap-regex": "error",
+        "unicorn/numeric-separators-style": [
+            "warn",
+            {
+                "onlyIfContainsSeparator": false,
+                "hexadecimal": {
+                    "minimumDigits": 0,
+                    "groupLength": 4
+                },
+                "binary": {
+                    "minimumDigits": 0,
+                    "groupLength": 4
+                },
+                "octal": {
+                    "minimumDigits": 0,
+                    "groupLength": 4
+                },
+                "number": {
+                    "minimumDigits": 5,
+                    "groupLength": 3
+                }
+            }
+        ]
     },
     "settings": {
         "import/resolver": {

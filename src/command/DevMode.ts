@@ -1,27 +1,38 @@
 import type { TAhkFileData } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
-import { arrSum, stdDevFn } from './tools/myMath';
+import {
+    arrSum,
+    avgMin5,
+    stdDevFn,
+    stdMin5,
+} from './tools/myMath';
 import type { TPickReturn } from './tools/pressureTestConfig';
 import { pressureTestConfig } from './tools/pressureTestConfig';
 import { UpdateCacheAsync } from './UpdateCache';
 
 const DevModeData: number[] = [];
 
-async function devTestDA(): Promise<null> {
+function devTestDA(): void {
     const t1: number = Date.now();
-    const ed: TAhkFileData[] | null = await UpdateCacheAsync(true);
-    if (ed === null) return null;
-    const t2: number = Date.now();
-    // ---------------------------------------------
-    // The task be completed, please confirm!
-    // iMax is 80
-    // statistics len is 80
-    // sum is 13266
-    // avg is 165.825
-    // stdDev is 4.65235155593384
-    // ---------------------------------------------
-    DevModeData.push(t2 - t1);
-    return null;
+
+    void UpdateCacheAsync(true)
+        .then((ed: TAhkFileData[] | null): null => {
+            if (ed === null) return null;
+            const t2: number = Date.now();
+            // ---------------------------------------------
+            // The task be completed, please confirm!
+            // iMax is 80
+            // statistics len is 80
+            // sum is 13266
+            // avg is 165.825
+            // stdDev is 4.65235155593384
+            // ---------------------------------------------
+            DevModeData.push(t2 - t1);
+            return null;
+        })
+        .catch((error: Error): void => {
+            console.error('🚀 ~ devTestDA ~ error.message', error);
+        });
 }
 
 function devTestEnd(iMax: number): void {
@@ -32,16 +43,27 @@ function devTestEnd(iMax: number): void {
     const sum: number = arrSum(statistics);
     const avg: number = sum / len;
     const stdDev: number = stdDevFn(statistics);
+    const { subAvg, subAvgArr } = avgMin5(statistics);
+    const { subStd, subStdArr } = stdMin5(statistics);
 
-    OutputChannel.appendLine('---------------------------------------------');
-    OutputChannel.appendLine('The task be completed, please confirm!');
-    OutputChannel.appendLine(`iMax is ${iMax}`);
-    OutputChannel.appendLine(`statistics len is ${len}`);
-    OutputChannel.appendLine(`sum is ${sum}`);
-    OutputChannel.appendLine(`avg is ${avg}`);
-    OutputChannel.appendLine(`stdDev is ${stdDev}`);
-    OutputChannel.appendLine(`[${statistics.join(', ')}]`);
-    OutputChannel.appendLine('---------------------------------------------');
+    OutputChannel.appendLine([
+        '---------------------------------------------',
+        'The task be completed, please confirm!',
+        `iMax is ${iMax}`,
+        `statistics len is ${len}`,
+        `sum is ${sum}`,
+        `avg is ${avg}`,
+        `stdDev is ${stdDev}`,
+        `[${statistics.join(', ')}]`,
+        '---Min avg of 5 ---',
+        `subAvg is ${subAvg}`,
+        `subAvgArr len is [${subAvgArr.join(', ')}]`,
+        '---Min std of 5 ---',
+        `subStd is ${subStd}`,
+        `subStdArr len is [${subStdArr.join(', ')}]`,
+        '---------------------------------------------',
+    ].join('\n'));
+
     OutputChannel.show();
 }
 
@@ -65,15 +87,10 @@ export async function pressureTest(): Promise<null> {
 
     OutputChannel.appendLine('---------------------------------------------');
     OutputChannel.appendLine('>> this is Dev tools, open "vscode-js-profile-flame" to get ".cpuprofile"');
-    OutputChannel.appendLine(`   please wait of [${label}]`);
+    OutputChannel.appendLine(`    please wait of [${label}]`);
     OutputChannel.show();
 
-    // const fn: () => Promise<null> = mode === EPressureTestMode.baseAndDA
-    //     ? devTestDA
-    //     : devTestBase;
-
     for (let i = 1; i <= maxTime; i++) {
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         TimeoutList.push(setTimeout(devTestDA, i * delay));
     }
 

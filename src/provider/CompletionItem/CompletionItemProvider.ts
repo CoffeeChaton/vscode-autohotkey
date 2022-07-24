@@ -3,9 +3,11 @@ import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TAhkFileData } from '../../core/Detecter';
 import { Detecter } from '../../core/Detecter';
-import { getSnippetCommand } from '../../tools/Built-in/Command';
+import { getSnippetStartWihA } from '../../tools/Built-in/A_Variables_Tools';
+import { getSnippetCommand } from '../../tools/Built-in/Command_Tools';
 import { Completion2Directives } from '../../tools/Built-in/DirectivesList';
 import { getSnippetStatement } from '../../tools/Built-in/statement';
+import { getSnippetWinMsg } from '../../tools/Built-in/Windows_Messages_Tools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getTopSymbolWithPos } from '../../tools/DeepAnalysis/getTopSymbolWithPos';
 import { isPosAtStrNext } from '../../tools/isPosAtStr';
@@ -13,7 +15,7 @@ import { ahkSend } from './ahkSend';
 import { BuiltInFunc2Completion } from './autoBuiltInFunc2Completion';
 import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
-import { getSnippetStartWihA } from './json/SnippetStartWihA';
+
 import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
 import { getStartWithStr } from './util';
 
@@ -51,6 +53,7 @@ function CompletionItemCore(
             ...getSnippetStartWihA(PartStr),
             ...getSnippetCommand(PartStr),
             ...getSnippetStatement(PartStr),
+            ...getSnippetWinMsg(PartStr),
         );
     }
 

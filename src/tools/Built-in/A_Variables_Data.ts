@@ -1,20 +1,18 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-lines */
 /* eslint-disable max-len */
-import * as vscode from 'vscode';
-// eslint-disable-next-line @typescript-eslint/naming-convention
 
-type TA_VarEleMent = {
+export type TA_VarEleMent = {
     body: string;
     group: string;
     uri: string;
     // FIXME TODO msg
 };
 
-type TA_Variables = {
+export type TA_Variables = {
     [k in string]: TA_VarEleMent;
 };
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 export const A_Variables: TA_Variables = {
     A_AhkPath: {
         body: 'A_AhkPath',
@@ -778,53 +776,5 @@ export const A_Variables: TA_Variables = {
     },
 };
 
-export function A_Variables2Md(DirectivesElement: TA_VarEleMent): vscode.MarkdownString {
-    const {
-        body,
-        uri,
-        group,
-    } = DirectivesElement;
-    const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
-        .appendCodeblock(body, 'ahk')
-        .appendMarkdown(group)
-        .appendMarkdown('\n\n')
-        .appendMarkdown(`[Read Doc](${uri})`);
-    md.supportHtml = true;
-    return md;
-}
-
-export const A_VariablesMDMap: ReadonlyMap<string, vscode.MarkdownString> = new Map(
-    [...Object.entries(A_Variables)]
-        .map(([ukName, BiFunc]) => [ukName.toUpperCase(), A_Variables2Md(BiFunc)]),
-);
-
-// FIXME:
-const TODO: TA_Variables = {
-    Clipboard: {
-        body: 'Clipboard',
-        group: 'Misc.',
-        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
-    },
-    ClipboardAll: {
-        body: 'ClipboardAll',
-        group: 'Misc.',
-        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
-    },
-    ErrorLevel: {
-        body: 'ErrorLevel',
-        group: 'Misc.',
-        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
-    },
-    False: {
-        body: 'False',
-        group: 'Misc.',
-        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
-    },
-    True: {
-        body: 'True',
-        group: 'Misc.',
-        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
-    },
-};
 // if this object size > 1k line, should use JSON.parse replace object literal,
 // but I need tsc && Syntax Highlight.

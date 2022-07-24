@@ -1,9 +1,12 @@
+/* eslint-disable max-statements */
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { Detecter } from '../../core/Detecter';
-import { getHoverCommand, getHoverCommand2 } from '../../tools/Built-in/Command';
+import { getHoverCommand, getHoverCommand2 } from '../../tools/Built-in/Command_Tools';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func';
 import { getHoverStatement } from '../../tools/Built-in/statement';
+import { hover2winMsgMd } from '../../tools/Built-in/Windows_Messages_Tools';
+import { numberFindWinMsg } from '../../tools/Built-in/Windows_MessagesRe_Tools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStr } from '../../tools/isPosAtStr';
@@ -76,6 +79,12 @@ function HoverProviderCore(
 
     const StatementMd: vscode.MarkdownString | undefined = getHoverStatement(wordUp);
     if (StatementMd !== undefined) return new vscode.Hover(StatementMd);
+
+    const winMsgMd: vscode.MarkdownString | undefined = hover2winMsgMd(wordUp);
+    if (winMsgMd !== undefined) return new vscode.Hover(winMsgMd);
+
+    const winMsgRe: vscode.MarkdownString | null = numberFindWinMsg(wordUp);
+    if (winMsgRe !== null) return new vscode.Hover(winMsgRe);
 
     // TODO hover of A_HOTKEY or #warn or sleep
     return null;
