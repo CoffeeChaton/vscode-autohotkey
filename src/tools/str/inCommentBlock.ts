@@ -1,5 +1,3 @@
-import { enumLog } from '../enumErr';
-
 export function inCommentBlock(textTrimStart: string, CommentBlock: boolean): boolean {
     if (CommentBlock) {
         if (textTrimStart.startsWith('*/')) {
@@ -29,17 +27,11 @@ export function docCommentBlock(textRawTrim: string, flag: EDocBlock): EDocBlock
             : EDocBlock.other;
     }
 
-    if (
-        flag === EDocBlock.inDocCommentBlockStart
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        || flag === EDocBlock.inDocCommentBlockMid // i know this always true
-    ) {
-        return textRawTrim.startsWith('*/') // textRaw.indexOf('*/') > -1
-            ? EDocBlock.inDocCommentBlockEnd
-            : EDocBlock.inDocCommentBlockMid;
-    }
-
-    // NEVER-----------------------------------
-    enumLog(flag);
-    return EDocBlock.other;
+    // if (
+    //     flag === EDocBlock.inDocCommentBlockStart
+    //     || flag === EDocBlock.inDocCommentBlockMid // i know this always true
+    // ) {
+    return textRawTrim.startsWith('*/') // textRaw.indexOf('*/') > -1
+        ? EDocBlock.inDocCommentBlockEnd
+        : EDocBlock.inDocCommentBlockMid;
 }

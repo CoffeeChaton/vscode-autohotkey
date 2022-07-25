@@ -17,7 +17,7 @@ export function getFnVarDef(
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;
-        // eslint-disable-next-line no-magic-numbers
+
         const lStrTrimLen: number = lStr.trim().length;
         if (lStrTrimLen < 2) continue; // a=b need length >=3
 

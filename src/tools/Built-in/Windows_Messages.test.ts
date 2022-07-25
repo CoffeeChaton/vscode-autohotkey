@@ -3,7 +3,7 @@ import {
     to0X,
     winMsg,
     winMsgRe,
-} from './Windows_Messages_Data';
+} from './Windows_Messages';
 
 test('Check Windows_Messages name ruler', () => {
     for (const [wm, [base10, base16]] of winMsg.entries()) {
@@ -21,9 +21,14 @@ test('Check Windows_Messages name ruler', () => {
     // https://www.autohotkey.com/docs/misc/SendMessageList.htm at 2022/7/23
 
     // eslint-disable-next-line no-magic-numbers
-    expect(winMsg.size === 207).toBeTruthy();
+    if (winMsg.size !== 207) {
+        expect(false).toBeTruthy();
+    }
+
     // eslint-disable-next-line no-magic-numbers
-    expect(winMsgRe.size === 201).toBeTruthy();
+    if (winMsgRe.size !== 201) {
+        expect(false).toBeTruthy();
+    }
 });
 
 test('test 1000 to "0x03E8"', () => {

@@ -1,7 +1,4 @@
-import type {
-    DocumentSelector,
-    ExtensionContext,
-} from 'vscode';
+import type { DocumentSelector, ExtensionContext } from 'vscode';
 import {
     commands,
     languages,
@@ -40,7 +37,7 @@ export function activate(context: ExtensionContext): void {
         // languages-------------------
         languages.registerCodeActionsProvider(selector, CodeActionProvider),
         languages.registerCodeLensProvider(selector, CodeLensProvider),
-        languages.registerCompletionItemProvider(selector, CompletionItemProvider, '', '.', '{', '#'),
+        languages.registerCompletionItemProvider(selector, CompletionItemProvider, '', '.', '{', '#', '_'),
         languages.registerDefinitionProvider(selector, DefProvider),
         languages.registerDocumentFormattingEditProvider(selector, FormatProvider),
         languages.registerDocumentRangeFormattingEditProvider(selector, RangeFormatProvider),

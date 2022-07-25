@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { to0X, winMsgRe } from './Windows_Messages_Data';
+import { to0X, winMsgRe } from './Windows_Messages';
 
 function str2Number(str: string): number | null {
     if ((/^0x[0-9A-F]+$/ui).test(str)) {
@@ -24,8 +24,8 @@ function str2Number(str: string): number | null {
     return null;
 }
 
-export function numberFindWinMsg(str: string): vscode.MarkdownString | null {
-    const number: number | null = str2Number(str);
+export function numberFindWinMsg(wordUp: string): vscode.MarkdownString | null {
+    const number: number | null = str2Number(wordUp);
     if (number === null || Number.isNaN(number)) {
         return null;
     }

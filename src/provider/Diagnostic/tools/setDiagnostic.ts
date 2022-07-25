@@ -1,12 +1,6 @@
 import * as vscode from 'vscode';
-import type {
-    EDiagCode,
-    EDiagCodeDA,
-} from '../../../diag';
-import {
-    Diags,
-    DiagsDA,
-} from '../../../diag';
+import type { EDiagCode, EDiagCodeDA } from '../../../diag';
+import { Diags, DiagsDA } from '../../../diag';
 import { EDiagBase } from '../../../Enum/EDiagBase';
 
 export function setDiagnostic(

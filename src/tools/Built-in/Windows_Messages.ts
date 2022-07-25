@@ -1,11 +1,11 @@
-/* eslint-disable no-magic-numbers */
-/* eslint-disable max-lines */
 /* cSpell:disable */
+/* eslint-disable max-lines */
+/* eslint-disable no-magic-numbers */
 // TODO WM_NULL
-// https://www.autohotkey.com/docs/misc/Styles.htm
-// https://www.autohotkey.com/docs/misc/SendMessageList.htm
-// https://www.autohotkey.com/docs/misc/SendMessage.htm
 // https://www.autohotkey.com/docs/commands/PostMessage.htm
+// https://www.autohotkey.com/docs/misc/SendMessage.htm
+// https://www.autohotkey.com/docs/misc/SendMessageList.htm
+// https://www.autohotkey.com/docs/misc/Styles.htm
 
 /**
  * @param str0x '0x03E8' pleas do not to use '0x03_E8'
@@ -20,14 +20,13 @@ export function base16toNumber(str0x: string): number {
  * @returns '0x03E8'
  */
 export function to0X(base10: number): string {
-    const hex = 16;
-    const maxLength = 4;
     return `0x${
-        base10.toString(hex)
+        base10.toString(16)
             .toUpperCase()
-            .padStart(maxLength, '0')
+            .padStart(4, '0')
     }`;
 }
+
 /**
  * WM_DDE_EXECUTE -> [1000,'0x03E8']
  */
@@ -267,12 +266,10 @@ export const [winMsg, winMsgRe] = ((): [TWinMsg, TWinMsgRe] => {
     } as const;
 
     const map1 = new Map<string, [number, string]>();
-    for (const [k, v] of Object.entries(wmEnum)) {
-        map1.set(k, [v, to0X(v)]);
-    }
-
     const map2 = new Map<number, string[]>();
     for (const [k, v] of Object.entries(wmEnum)) {
+        map1.set(k, [v, to0X(v)]);
+        //
         const oldV: string[] = map2.get(v) ?? [];
         map2.set(v, [...oldV, k]);
     }

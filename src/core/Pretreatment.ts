@@ -1,15 +1,8 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-statements */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 
-import type {
-    TAhkToken,
-    TTokenStream,
-} from '../globalEnum';
-import {
-    EDetail,
-    ELTrim,
-} from '../globalEnum';
+import type { TAhkToken, TTokenStream } from '../globalEnum';
+import { EDetail, ELTrim } from '../globalEnum';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
 import { inLTrimRange } from '../tools/str/inLTrimRange';

@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable max-statements */
-/* eslint-disable no-template-curly-in-string */
-/* eslint-disable max-lines */
-/* eslint-disable max-len */
 /* cSpell:disable */
-/* spell-checker: disable */
-import * as vscode from 'vscode';
+/* eslint-disable max-len */
+/* eslint-disable max-lines */
+/* eslint-disable no-template-curly-in-string */
+
 import type { DeepReadonly } from '../../globalEnum';
 
 // https://www.autohotkey.com/docs/Functions.htm#BuiltIn
@@ -308,7 +305,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFuncbj> = {
         keyRawName: 'ComObjCreate',
         link: 'https://www.autohotkey.com/docs/commands/ComObjCreate.htm',
         msg: ' Creates a COM object.',
-        insert: 'NumGet(${1:CLSID})',
+        insert: 'ComObjCreate(${1:CLSID})',
         exp: [
             'ie := ComObjCreate("InternetExplorer.Application")',
             'ie.Visible := true  ; This is known to work incorrectly on IE7.',
@@ -934,7 +931,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFuncbj> = {
         msg: 'Returns the binary number stored at the specified address+offset.',
         insert: 'NumGet(${1:VarOrAddress})',
         exp: [
-            '        Width := NumGet(rc, 8, "int")',
+            'Width := NumGet(rc, 8, "int")',
         ],
     },
     NUMPUT: {
@@ -944,7 +941,7 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFuncbj> = {
         msg: 'Stores a number in binary format at the specified address+offset.',
         insert: 'NumPut(${1:Number}, ${2:VarOrAddress})',
         exp: [
-            '    NumPut(x, RectF, 0, "float"), NumPut(y, RectF, 4, "float")',
+            'NumPut(x, RectF, 0, "float"), NumPut(y, RectF, 4, "float")',
         ],
     },
     OBJADDREF: {
@@ -1478,23 +1475,3 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFuncbj> = {
         ],
     },
 };
-
-export function Bif2Md(BiFunc: TBuiltInFuncElement): vscode.MarkdownString {
-    const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
-        .appendMarkdown(`Built-in Function (${BiFunc.group})`)
-        .appendCodeblock(`${BiFunc.keyRawName}()`, 'ahk')
-        .appendMarkdown(BiFunc.msg)
-        .appendMarkdown('\n')
-        .appendMarkdown(`[(Read Doc)](${BiFunc.link})`)
-        .appendMarkdown('\n\n***')
-        .appendMarkdown('\n\n*exp:*')
-        .appendCodeblock(BiFunc.exp.join('\n'));
-
-    md.supportHtml = true;
-    return md;
-}
-
-export const BuiltInFuncMDMap: ReadonlyMap<string, vscode.MarkdownString> = new Map(
-    [...Object.entries(BuiltInFunctionObj)]
-        .map(([ukName, BiFunc]: [string, TBuiltInFuncElement]) => [ukName, Bif2Md(BiFunc)]),
-);

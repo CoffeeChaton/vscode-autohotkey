@@ -1,14 +1,8 @@
 /* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
-import type {
-    TLineDiag,
-    TLineErrDiagParam,
-} from './lineErrTools';
-import {
-    CNekoBaseLineDiag,
-    EDiagLine,
-} from './lineErrTools';
+import type { TLineDiag, TLineErrDiagParam } from './lineErrTools';
+import { CNekoBaseLineDiag, EDiagLine } from './lineErrTools';
 
 // ---------------------------------------------------------------------------------------------------------------------
 function getLoopErr(lStr: string, line: number): CNekoBaseLineDiag | EDiagLine {

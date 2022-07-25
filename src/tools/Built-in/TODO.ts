@@ -1,7 +1,7 @@
 // TODO js
 // ComObjParameter
 // IsByRef()
-// ObjAddRef() / ObjRelease()
+// ObjAddRef()
 // ObjBindMethod()
 // ObjClone()
 // ObjClone()
@@ -22,6 +22,7 @@
 // ObjPush()
 // ObjRawGet()
 // ObjRawSet()
+// ObjRelease()
 // ObjRemove()
 // ObjRemoveAt()
 // ObjSetCapacity()
@@ -55,8 +56,6 @@
 // Progress
 // SetEnv
 // SplashImage
-// SplashTextOff
-// SplashTextOff
 // SplashTextOff
 // StringSplit
 

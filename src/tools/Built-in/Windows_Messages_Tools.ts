@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { winMsg } from './Windows_Messages_Data';
+import { winMsg } from './Windows_Messages';
 
 function winMsg2Md(k: string, v: [number, string]): vscode.MarkdownString {
     // WM_DDE_EXECUTE -> [1000,'0x03E8']
@@ -56,6 +56,6 @@ export function getSnippetWinMsg(PartStr: string): readonly vscode.CompletionIte
         : [];
 }
 
-export function hover2winMsgMd(str: string): vscode.MarkdownString | undefined {
-    return winMsgMDMap.get(str.toUpperCase());
+export function hover2winMsgMd(wordUp: string): vscode.MarkdownString | undefined {
+    return winMsgMDMap.get(wordUp);
 }

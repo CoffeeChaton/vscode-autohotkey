@@ -4,11 +4,7 @@ import { Detecter } from '../../core/Detecter';
 import { DAList2SemanticHighlight } from './DAList2SemanticHighlight';
 import { GlobalHighlight } from './GlobalHighlight';
 import { inLTrimHighlight } from './inLTrimHighlight';
-import {
-    pushToken,
-    TokenModifiers,
-    TokenTypes,
-} from './tools';
+import { pushToken, TokenModifiers, TokenTypes } from './tools';
 // https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers
 
 export const legend: vscode.SemanticTokensLegend = new vscode.SemanticTokensLegend(

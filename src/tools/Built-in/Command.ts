@@ -233,7 +233,7 @@ export const LineCommand: TLineCommand = {
     },
     CLASS: {
         keyRawName: 'Class',
-        body: 'class',
+        body: 'Class',
         doc: 'At its root, a "class" is a set or category of things having some property or attribute in common. Since a [base](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects) or [prototype](https://www.autohotkey.com/docs/Objects.htm#Custom_Prototypes) object defines properties and behaviour for set of objects, it can also be called a _class_ object. For convenience, base objects can be defined using the "class" keyword as shown below:',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/Objects.htm#Custom_Classes',
@@ -520,12 +520,10 @@ export const LineCommand: TLineCommand = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/CoordMode.htm',
         exp: [
-            'CoordMode, TargetType [, RelativeTo]',
+            'Critical [, OnOffNumeric]',
             ';          TargetType',
             ';                 -> On (defaults)',
             ';                 -> Off',
-            'CoordMode, ToolTip, Screen',
-            'CoordMode, ToolTip',
         ],
     },
     DETECTHIDDENTEXT: {
@@ -922,8 +920,8 @@ export const LineCommand: TLineCommand = {
         doc: 'Transforms a YYYYMMDDHH24MISS timestamp into the specified date/time format.',
     },
     GETKEYSTATE: {
-        keyRawName: 'GETKEYSTATE',
-        body: '',
+        keyRawName: 'GetKeyState',
+        body: 'GetKeyState, ${1:OutputVar}, ${2:KeyName} [,${3:Mode}]',
         doc: '**Deprecated:** This command is not recommended for use in new scripts. Use the [GetKeyState](https://www.autohotkey.com/docs/commands/GetKeyState.htm#function) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/GetKeyState.htm#command',
@@ -1352,7 +1350,7 @@ export const LineCommand: TLineCommand = {
         exp: [
             'LogToFile(TextToLog)',
             '{',
-            '    static LoggedLines := 0',
+            '    Static LoggedLines := 0',
             '    LoggedLines += 1  ; Maintain a tally locally (its value is remembered between calls).',
             '    global LogFileName',
             '    FileAppend, %LoggedLines%: %TextToLog%`n, %LogFileName%',
@@ -1477,7 +1475,7 @@ export const LineCommand: TLineCommand = {
         doc: 'Creates an always-on-top window anywhere on the screen.',
     },
     TRANSFORM: {
-        keyRawName: 'TRANSFORM',
+        keyRawName: 'Transform',
         body: 'Transform, OutputVar, SubCommand, Value1 [, Value2]',
         doc: 'Performs miscellaneous math functions, bitwise operations, and tasks such as ASCII/Unicode conversion.\n\n**Deprecated:** This command is not recommended for use in new scripts. For details on what you can use instead, see the sub-command sections below.',
         recommended: false,

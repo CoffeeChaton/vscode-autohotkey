@@ -4,8 +4,9 @@ import * as vscode from 'vscode';
 import { CAhkDirectives } from '../../../../AhkSymbol/CAhkLine';
 import type { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../../diag';
-import type { THashTagUPKey } from '../../../../tools/Built-in/DirectivesList';
-import { DirectivesUpKeyList } from '../../../../tools/Built-in/DirectivesList';
+import type { THashTagUPKey } from '../../../../tools/Built-in/Directives';
+import { DirectivesMDMap } from '../../../../tools/Built-in/Directives';
+
 import { setDiagnostic } from '../setDiagnostic';
 
 export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
@@ -83,7 +84,7 @@ export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
     }
 
     // check is unknown Directives or not
-    return DirectivesUpKeyList.includes(hashtag as THashTagUPKey)
+    return DirectivesMDMap.has(hashtag)
         ? []
         : [setDiagnostic(EDiagCode.code503, selectionRange, vscode.DiagnosticSeverity.Warning, [])];
 }

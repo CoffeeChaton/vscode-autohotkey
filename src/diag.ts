@@ -1,5 +1,5 @@
-/* eslint-disable no-magic-numbers */
 /* eslint-disable max-lines */
+/* eslint-disable no-magic-numbers */
 import type { DeepReadonly } from './globalEnum';
 
 export const enum EDiagCodeDA {

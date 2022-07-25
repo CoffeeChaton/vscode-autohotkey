@@ -1,9 +1,9 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable max-lines */
 /* eslint-disable max-len */
+/* eslint-disable max-lines */
+/* eslint-disable max-lines-per-function */
 
 import * as vscode from 'vscode';
-import type { TAhkBaseObj } from './ahkBase';
+import type { TAhkBaseObj } from './ahkBase_tools';
 
 type TDescription = Readonly<{
     label: string;
@@ -141,7 +141,6 @@ const ItemOfAhkObj: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
         },
         {
             label: '_NewEnum()',
-
             documentation: [
                 '*Returns* a new enumerator to enumerate this object\'s key-value pairs. This method is usually not called directly, but by the for-loop.',
                 'https://www.autohotkey.com/docs/objects/Object.htm#NewEnum',

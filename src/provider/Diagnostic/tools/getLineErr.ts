@@ -2,11 +2,7 @@ import type { TTokenStream } from '../../../globalEnum';
 import { assignErr } from './lineErr/assignErr';
 import { getCommandErr } from './lineErr/getCommandErr';
 import { getObjBaseErr } from './lineErr/getObjBaseErr';
-import type {
-    CNekoBaseLineDiag,
-    TLineDiag,
-    TLineErrDiagParam,
-} from './lineErr/lineErrTools';
+import type { CNekoBaseLineDiag, TLineDiag, TLineErrDiagParam } from './lineErr/lineErrTools';
 import { EDiagLine } from './lineErr/lineErrTools';
 
 function getLineErrCore(lStr: string, fistWordUp: string, line: number): CNekoBaseLineDiag | null {

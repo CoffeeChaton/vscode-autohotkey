@@ -1,33 +1,32 @@
-/* eslint-disable no-template-curly-in-string */
 /* eslint-disable max-len */
 /* eslint-disable max-lines */
-import * as vscode from 'vscode';
+/* eslint-disable no-template-curly-in-string */
 
-export const StatementList = [
-    'AND',
-    'BREAK',
-    'CASE',
-    'CATCH',
-    'CONTINUE',
-    'DEFAULT',
-    'ELSE',
-    'FINALLY',
-    'IF',
-    'LOOP',
-    'OR',
-    'PAUSE',
-    'RELOAD',
-    'RETURN',
-    'SWITCH',
-    'THROW',
-    'TRY',
-    'UNTIL',
-    'WHILE',
-] as const;
+// TODO snippets/ahk.snippets.json
+export type TStatementKeyList =
+    | 'AND'
+    | 'BREAK'
+    | 'CASE'
+    | 'CATCH'
+    | 'CONTINUE'
+    | 'DEFAULT'
+    | 'ELSE'
+    | 'FINALLY'
+    | 'FOR'
+    | 'IF'
+    | 'LOOP'
+    | 'OR'
+    | 'PAUSE'
+    | 'RELOAD'
+    | 'RETURN'
+    | 'SWITCH'
+    | 'THROW'
+    | 'TRY'
+    | 'UNTIL'
+    | 'WHILE';
+// Loop <file>
 
-type TStatementKeyList = typeof StatementList[number];
-
-type TStatementElement<T extends TStatementKeyList> = {
+export type TStatementElement<T extends TStatementKeyList> = {
     keyRawName: Capitalize<Lowercase<T>>;
     body: string;
     doc: string;
@@ -37,19 +36,19 @@ type TStatementElement<T extends TStatementKeyList> = {
     exp: string[];
 };
 
-type TStatement = {
+export type TStatement = {
     [k in TStatementKeyList]: TStatementElement<k>;
 };
 
 export const Statement: TStatement = {
     AND: {
         keyRawName: 'And',
-        body: 'and',
+        body: 'And',
         doc: 'Both of these are **logical-AND**. For example: `x > 3 and x < 10`. To enhance performance, [short-circuit evaluation](https://www.autohotkey.com/docs/Functions.htm#ShortCircuit) is applied. Also, a line that begins with AND/OR/&&/|| (or any other operator) is automatically [appended to](https://www.autohotkey.com/docs/Scripts.htm#continuation) the line above it.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/Variables.htm#and',
         exp: [
-            'x > 3 and x < 10',
+            'x > 3 And x < 10',
             'x > 3 && x < 10',
             ';exp2',
             'if (Color = "Red" or Color = "Green"  or Color = "Blue"   ; Comment.',
@@ -97,7 +96,7 @@ export const Statement: TStatement = {
     },
     CATCH: {
         keyRawName: 'Catch',
-        body: 'Catch',
+        body: 'Catch, $0',
         doc: 'Specifies the code to execute if an exception is raised during execution of a [try](https://www.autohotkey.com/docs/commands/Try.htm) statement.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Catch.htm',
@@ -156,11 +155,11 @@ export const Statement: TStatement = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Else.htm',
         exp: [
-            'if (x = 1) {',
+            'If (x = 1) {',
             '    ; ...',
-            '} else if (x < y) {',
+            '} Else If (x < y) {',
             '    ; ...',
-            '} else {',
+            '} Else {',
             '    ; ...',
             '}',
         ],
@@ -172,34 +171,49 @@ export const Statement: TStatement = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Finally.htm',
         exp: [
-            'try {',
+            'Try {',
             '    ...',
-            '} catch e {',
+            '} Catch e {',
             '    ...',
-            '} finally {',
+            '} Finally {',
             '    ...',
+            '}',
+        ],
+    },
+    FOR: {
+        keyRawName: 'For',
+        body: 'For ${1:Key}, ${2:Value} in ${3:Expression} {\n}',
+        doc: 'Repeats a series of commands once for each key-value pair in an object.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/For.htm',
+        exp: [
+            'For Key [, Value] in Expression',
+            ';',
+            '; exp',
+            'For Key , Value in ["A", "B", "C"] {',
+            '    MsgBox % Key " & " Value',
             '}',
         ],
     },
     IF: {
         keyRawName: 'If',
-        body: 'If',
+        body: 'If ($0)',
         doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions) evaluates to true.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/IfExpression.htm',
         exp: [
-            'if (x = 1) {',
+            'If (x = 1) {',
             '    ; ...',
-            '} else if (x < y) {',
+            '} Else If (x < y) {',
             '    ; ...',
-            '} else {',
+            '} Else {',
             '    ; ...',
             '}',
         ],
     },
     LOOP: {
         keyRawName: 'Loop',
-        body: 'Loop',
+        body: 'Loop, ${1:number}',
         doc: 'Performs a series of commands repeatedly: either the specified number of times or until [break](https://www.autohotkey.com/docs/commands/Break.htm) is encountered.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Loop.htm',
@@ -212,12 +226,12 @@ export const Statement: TStatement = {
     },
     OR: {
         keyRawName: 'Or',
-        body: 'or',
+        body: 'Or',
         doc: 'Both of these are **logical-OR**. For example: `x <= 3 or x >= 10`. To enhance performance, [short-circuit evaluation](https://www.autohotkey.com/docs/Functions.htm#ShortCircuit) is applied.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/Variables.htm#or',
         exp: [
-            'x <= 3 or x >= 10',
+            'x <= 3 Or x >= 10',
             'x <= 3 || x >= 10',
         ],
     },
@@ -251,13 +265,13 @@ export const Statement: TStatement = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Return.htm',
         exp: [
-            '     return 3',
-            '     return "literal string"',
-            '     return MyVar ',
-            '     return i + 1',
-            '     return true  ; Returns the number 1 to mean "true".',
-            '     return ItemCount < MaxItems  ; Returns a true or false value.',
-            '     return FindColor(TargetColor)',
+            '     Return 3',
+            '     Return "literal string"',
+            '     Return MyVar ',
+            '     Return i + 1',
+            '     Return true  ; Returns the number 1 to mean "true".',
+            '     Return ItemCount < MaxItems  ; Returns a true or false value.',
+            '     Return FindColor(TargetColor)',
         ],
     },
     SWITCH: {
@@ -293,11 +307,11 @@ export const Statement: TStatement = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Throw.htm',
         exp: [
-            'throw 3',
-            'throw "literal string"',
-            'throw MyVar',
-            'throw i + 1',
-            'throw { what: "Custom error", file: A_LineFile, line: A_LineNumber } ; Throws an object',
+            'Throw 3',
+            'Throw "literal string"',
+            'Throw MyVar',
+            'Throw i + 1',
+            'Throw { what: "Custom error", file: A_LineFile, line: A_LineNumber } ; Throws an object',
         ],
     },
     TRY: {
@@ -318,7 +332,7 @@ export const Statement: TStatement = {
     },
     UNTIL: {
         keyRawName: 'Until',
-        body: 'Until',
+        body: 'Until $0',
         doc: 'Applies a condition to the continuation of a Loop or For-loop.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Until.htm',
@@ -343,7 +357,7 @@ export const Statement: TStatement = {
             '',
             'fn_lb1(){',
             '    MouseGetPos, begin_x, begin_y',
-            '    while GetKeyState("LButton")',
+            '    While GetKeyState("LButton")',
             '    {',
             '        MouseGetPos, x, y',
             '        ToolTip, % begin_x ", " begin_y "`n" Abs(begin_x-x) " x " Abs(begin_y-y)',
@@ -354,61 +368,3 @@ export const Statement: TStatement = {
         ],
     },
 };
-
-function Statement2Md(DirectivesElement: TStatementElement<TStatementKeyList>): vscode.MarkdownString {
-    const {
-        keyRawName,
-        doc,
-        link,
-        exp,
-    } = DirectivesElement;
-    const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
-        .appendCodeblock(keyRawName, 'ahk')
-        .appendMarkdown(doc)
-        .appendMarkdown('\n')
-        .appendMarkdown(`[(Read Doc)](${link})`)
-        .appendMarkdown('\n\n***')
-        .appendMarkdown('\n\n*exp:*')
-        .appendCodeblock(exp.join('\n'), 'ahk');
-
-    md.supportHtml = true;
-    return md;
-}
-
-export const StatementMDMap: ReadonlyMap<string, vscode.MarkdownString> = new Map(
-    [...Object.entries(Statement)]
-        .map(([ukName, BiFunc]) => [ukName, Statement2Md(BiFunc)]),
-);
-
-const snippetStatement: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
-    const tempList: vscode.CompletionItem[] = [];
-    for (const [k, v] of Object.entries(Statement)) {
-        if (!v.recommended) {
-            continue;
-        }
-        const { keyRawName, body } = v;
-
-        const item: vscode.CompletionItem = new vscode.CompletionItem({
-            label: keyRawName,
-            description: keyRawName,
-        });
-        item.kind = vscode.CompletionItemKind.Keyword; // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
-        item.insertText = new vscode.SnippetString(body);
-
-        item.detail = 'Statement of AHK (neko-help)'; // description
-        item.documentation = StatementMDMap.get(k) ?? Statement2Md(v);
-
-        tempList.push(item);
-    }
-    return tempList;
-})();
-
-export function getSnippetStatement(PartStr: string): readonly vscode.CompletionItem[] {
-    return PartStr.startsWith('A_')
-        ? []
-        : snippetStatement;
-}
-
-export function getHoverStatement(wordUp: string): vscode.MarkdownString | undefined {
-    return StatementMDMap.get(wordUp);
-}

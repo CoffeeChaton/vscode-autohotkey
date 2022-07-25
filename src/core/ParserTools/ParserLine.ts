@@ -1,7 +1,4 @@
-import type {
-    CAhkComment,
-    TLineClass,
-} from '../../AhkSymbol/CAhkLine';
+import type { CAhkComment, TLineClass } from '../../AhkSymbol/CAhkLine';
 import {
     CAhkDirectives,
     CAhkHotKeys,

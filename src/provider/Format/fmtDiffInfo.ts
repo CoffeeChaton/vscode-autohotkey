@@ -11,7 +11,7 @@ type TDiffParm = {
     timeStart: number;
     from: EFormatChannel;
 };
-// eslint-disable-next-line max-params
+
 export function fmtDiffInfo(
     {
         DiffMap,

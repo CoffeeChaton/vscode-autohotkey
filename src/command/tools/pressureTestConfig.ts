@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 
 export const enum EPressureTestMode {
     justBase = 1,
-    // eslint-disable-next-line no-magic-numbers
     baseAndDA = 2,
 }
 

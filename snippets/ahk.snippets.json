@@ -1,19 +1,4 @@
 {
-    "Break": {
-        "prefix": "Break",
-        "body": "Break",
-        "description": "Exits (terminates) any type of loop statement."
-    },
-    "Catch": {
-        "prefix": "Catch",
-        "body": "Catch, ${1:[OutputVar]}",
-        "description": "Specifies the code to execute if an exception is raised during execution of a try statement."
-    },
-    "Continue": {
-        "prefix": "Continue",
-        "body": "Continue",
-        "description": "Skips the rest of a loop statement's current iteration and begins a new one."
-    },
     "Edit": {
         "prefix": "Edit",
         "body": "Edit",
@@ -39,16 +24,6 @@
         "body": "Pause, ${1:[ On|Off|Toggle}, ${2:OperateOnUnderlyingThread?]}",
         "description": "Pauses the script's current thread."
     },
-    "Finally": {
-        "prefix": "Finally",
-        "body": "Finally ${1:Statement}",
-        "description": "Ensures that one or more statements (commands or expressions) are always executed after the execution of a try statement."
-    },
-    "For": {
-        "prefix": "For",
-        "body": "For ${1:Key}, ${2:[Value]} in ${3:Expression}",
-        "description": "Repeats a series of commands once for each key-value pair in an object."
-    },
     "Gosub": {
         "prefix": "Gosub",
         "body": "Gosub, ${1:Label}",
@@ -58,11 +33,6 @@
         "prefix": "Goto",
         "body": "Goto, ${1:Label}",
         "description": "Jumps to the specified label and continues execution."
-    },
-    "If": {
-        "prefix": "If",
-        "body": "If (${1:expression})",
-        "description": "Specifies one or more statements to execute if an expression evaluates to true."
     },
     "If Between": {
         "prefix": "If Between",
@@ -89,16 +59,10 @@
         "body": "ListHotkeys",
         "description": "Displays the hotkeys in use by the current script, whether their subroutines are currently running, and whether or not they use the keyboard or mouse hook."
     },
-
     "ListVars": {
         "prefix": "ListVars",
         "body": "ListVars",
         "description": "Displays the script's variables: their names and current contents."
-    },
-    "Loop": {
-        "prefix": "Loop",
-        "body": "Loop, ${1:[ Count]}",
-        "description": "Performs a series of commands repeatedly: either the specified number of times or until break is encountered."
     },
     "Loop <file>": {
         "prefix": "Loop <file>",
@@ -136,28 +100,6 @@
         "body": "Sleep, ${1:Delay}",
         "description": "Waits the specified amount of time before continuing."
     },
-
-    "Throw": {
-        "prefix": "Throw",
-        "body": "Throw, ${1:[Expression]}",
-        "description": "Signals the occurrence of an error. This signal can be caught by a try-catch statement."
-    },
-    "Try": {
-        "prefix": "Try",
-        "body": "Try ${1:Statement}",
-        "description": "Guards one or more statements (commands or expressions) against runtime errors and exceptions thrown by the throw command."
-    },
-    "Until": {
-        "prefix": "Until",
-        "body": "Until ${1:Expression}",
-        "description": "Applies a condition to the continuation of a Loop or For-loop."
-    },
-    "While": {
-        "prefix": "While",
-        "body": "While, ${1:Expression}",
-        "description": "Performs a series of commands repeatedly until the specified expression evaluates to false."
-    },
-
     "ProgramFiles": {
         "prefix": "ProgramFiles",
         "body": "ProgramFiles"
@@ -1417,22 +1359,5 @@
     "Parent": {
         "prefix": "Parent",
         "body": "Parent"
-    },
-    "Switch": {
-        "prefix": "Switch",
-        "body": [
-            "Switch ${1:key} {",
-            "Case ${2:val1}:",
-            "    $0",
-            "Case ${3:val2}, ${4:val3}:",
-            "    ",
-            "Default :",
-            "    ",
-            "}"
-        ],
-        "description": [
-            "Executes one case from a list of mutually exclusive candidates.",
-            "https://www.autohotkey.com/docs/commands/Switch.htm"
-        ]
     }
 }

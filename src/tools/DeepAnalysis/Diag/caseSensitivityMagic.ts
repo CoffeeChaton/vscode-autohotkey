@@ -40,7 +40,7 @@ export function ParseDiagCaseMsg(diag: vscode.Diagnostic): TParseDiagCaseMsg {
     // magStrList like ["A","a"]
     const lineMatch: RegExpMatchArray | null = message.match(/\[(\d+)/ui);
     const charMatch: RegExpMatchArray | null = message.match(/(\d+)\]/ui);
-    // eslint-disable-next-line no-magic-numbers
+
     if (magStrList.length !== 2 || lineMatch === null || charMatch === null) {
         void vscode.window.showErrorMessage(`ParseDiagCaseMsg error: ${message}`);
         throw new Error(`ParseDiagCaseMsg Err--59--12--14,diag is ${message}`);

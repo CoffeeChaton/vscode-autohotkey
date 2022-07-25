@@ -1,13 +1,7 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
-import type {
-    TParamMapIn,
-    TTextMapIn,
-    TValMapIn,
-} from '../AhkSymbol/CAhkFunc';
-import {
-    CAhkFunc,
-} from '../AhkSymbol/CAhkFunc';
+import type { TParamMapIn, TTextMapIn, TValMapIn } from '../AhkSymbol/CAhkFunc';
+import { CAhkFunc } from '../AhkSymbol/CAhkFunc';
 import type { TTokenStream } from '../globalEnum';
 import { getFnVarDef } from '../tools/DeepAnalysis/FnVar/getFnVarDef';
 import { getParamDef } from '../tools/DeepAnalysis/getParamDef';

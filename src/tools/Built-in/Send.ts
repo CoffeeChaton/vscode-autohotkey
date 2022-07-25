@@ -4,7 +4,7 @@ type TA_SendCore = {
     label: string;
     icon: string;
     doc: string[];
-    insertText: string;
+    body: string;
     uri: string;
 };
 
@@ -18,7 +18,7 @@ export const A_Send: TA_Send = {
         label: '{F1-F12}',
         icon: '{F1-F12}',
         doc: ['Function keys. For example: {F12} is **F12** on keypad'],
-        insertText: 'F12',
+        body: 'F12',
         uri: 'https://www.autohotkey.com/docs/commands/Send.htm#keynames',
     },
     Text: {
@@ -29,14 +29,14 @@ export const A_Send: TA_Send = {
             'exp:',
             '    Send {Text} your text',
         ],
-        insertText: 'Text',
+        body: 'Text',
         uri: 'https://www.autohotkey.com/docs/commands/Send.htm#Text',
     },
     Up: {
         label: '{Up}',
         icon: '↑',
         doc: ['↑ (up arrow) on main keyboard'],
-        insertText: 'Up',
+        body: 'Up',
         uri: 'https://www.autohotkey.com/docs/commands/Send.htm#keynames',
     },
     // 'Blind',

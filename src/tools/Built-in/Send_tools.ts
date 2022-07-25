@@ -1,20 +1,16 @@
 import * as vscode from 'vscode';
-import { A_Send } from '../../tools/Built-in/sendSpecialKeys';
-import { isPosAtStr } from '../../tools/isPosAtStr';
-import { getLStr } from '../../tools/str/removeSpecialChar';
+import { isPosAtStr } from '../isPosAtStr';
+import { getLStr } from '../str/removeSpecialChar';
+import { A_Send } from './Send';
 
-const sendBigBlock: vscode.CompletionItem[] = [];
-
-function ahkSendLazy(): vscode.CompletionItem[] {
-    // normal
-    if (sendBigBlock.length > 0) return sendBigBlock;
-    // First loading
+const sendBigBlock: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => {
+    const list: vscode.CompletionItem[] = [];
     for (const v of Object.values(A_Send)) {
         const {
             label,
             icon,
             doc,
-            insertText,
+            body: insertText,
             uri,
         } = v;
         const item = new vscode.CompletionItem({
@@ -23,22 +19,20 @@ function ahkSendLazy(): vscode.CompletionItem[] {
         });
         item.kind = vscode.CompletionItemKind.Text;
         item.insertText = insertText;
-        item.detail = '{Special Keys} (neko-help)'; // description
+        item.detail = '{Special Keys} (neko-help)';
         item.documentation = new vscode.MarkdownString('', true)
             .appendCodeblock(label, 'ahk')
             .appendMarkdown(doc.join('\n\n'))
             .appendMarkdown('\n\n')
             .appendMarkdown(`[Read Doc](${uri})`);
-        sendBigBlock.push(item);
+        //
+        list.push(item);
     }
-    Object.freeze(sendBigBlock);
-    return sendBigBlock;
-}
 
-// Delay loading
-ahkSendLazy();
+    return list;
+})();
 
-export function ahkSend(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
+export function ahkSend(document: vscode.TextDocument, position: vscode.Position): readonly vscode.CompletionItem[] {
     const textRaw = document.lineAt(position).text;
     const lStr = getLStr(textRaw);
     if (
@@ -46,7 +40,7 @@ export function ahkSend(document: vscode.TextDocument, position: vscode.Position
         || lStr.includes('::')
         || isPosAtStr(document, position)
     ) {
-        return ahkSendLazy();
+        return sendBigBlock;
     }
     return [];
 }

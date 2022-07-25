@@ -1,15 +1,15 @@
 import * as vscode from 'vscode';
-import type { TCommandElement } from './Command_Data';
-import { LineCommand } from './Command_Data';
+import type { TCommandElement } from './Command';
+import { LineCommand } from './Command';
 
-function commandElement2Md(DirectivesElement: TCommandElement): vscode.MarkdownString {
+function commandElement2Md(Element: TCommandElement): vscode.MarkdownString {
     const {
         keyRawName,
         body,
         doc,
-        link,
-        exp,
-    } = DirectivesElement;
+        link, // string | undefined
+        exp, // string[] | undefined
+    } = Element;
     const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
         .appendMarkdown('Command')
         .appendCodeblock(keyRawName, 'ahk')
@@ -20,32 +20,32 @@ function commandElement2Md(DirectivesElement: TCommandElement): vscode.MarkdownS
         .appendMarkdown('\n\n***')
         .appendMarkdown('\n\n*exp:*');
     // .appendCodeblock(exp.join('\n'));
-    if ((exp !== undefined) && exp.length > 0) {
+    if (exp !== undefined && exp.length > 0) {
         md.appendCodeblock(exp.join('\n'), 'ahk');
     }
     md.supportHtml = true;
     return md;
 }
 
-export const CommandMDMap: ReadonlyMap<string, vscode.MarkdownString> = new Map(
-    [...Object.entries(LineCommand)]
-        .map(([ukName, BiFunc]: [string, TCommandElement]) => [ukName, commandElement2Md(BiFunc)]),
-);
+type TCommandMDMap = ReadonlyMap<string, vscode.MarkdownString>;
+type TSnippetCommand = readonly vscode.CompletionItem[];
 
-const snippetCommand: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
+export const [snippetCommand, CommandMDMap] = ((): [TSnippetCommand, TCommandMDMap] => {
+    const map1 = new Map<string, vscode.MarkdownString>();
     const tempList: vscode.CompletionItem[] = [];
     for (const [k, v] of Object.entries(LineCommand)) {
+        const md = commandElement2Md(v);
+        map1.set(k, md);
+
         const { keyRawName, body, recommended } = v;
-        const label: vscode.CompletionItemLabel = {
+        const item: vscode.CompletionItem = new vscode.CompletionItem({
             label: keyRawName,
             description: 'Command',
-        };
-        const item: vscode.CompletionItem = new vscode.CompletionItem(label);
+        });
         item.kind = vscode.CompletionItemKind.Field; // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
         item.insertText = new vscode.SnippetString(body);
-
         item.detail = 'Command of AHK (neko-help)'; // description
-        item.documentation = CommandMDMap.get(k) ?? commandElement2Md(v);
+        item.documentation = md;
 
         if (recommended !== undefined && !recommended) {
             item.tags = [vscode.CompletionItemTag.Deprecated];
@@ -53,7 +53,7 @@ const snippetCommand: readonly vscode.CompletionItem[] = ((): vscode.CompletionI
 
         tempList.push(item);
     }
-    return tempList;
+    return [tempList, map1];
 })();
 
 export function getSnippetCommand(PartStr: string): readonly vscode.CompletionItem[] {

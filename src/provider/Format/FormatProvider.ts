@@ -1,6 +1,4 @@
 /* eslint-disable max-lines-per-function */
-/* eslint-disable max-statements */
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2] }] */
 import type * as vscode from 'vscode';
 import { Detecter } from '../../core/Detecter';
 import { EFormatChannel } from '../../globalEnum';

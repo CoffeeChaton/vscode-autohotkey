@@ -1,10 +1,10 @@
 import type * as vscode from 'vscode';
 import type { CAhkClass } from '../../../AhkSymbol/CAhkClass';
 import type { TTokenStream } from '../../../globalEnum';
+import { ahkBaseWrap } from '../../../tools/Built-in/ahkBase';
+import type { TAhkBaseObj } from '../../../tools/Built-in/ahkBase_tools';
+import { ahkBaseUp } from '../../../tools/Built-in/ahkBase_tools';
 import { ahkValDefRegex } from '../../../tools/regexTools';
-import type { TAhkBaseObj } from '../ahkObj/ahkBase';
-import { ahkBaseUp } from '../ahkObj/ahkBase';
-import { ahkBaseWrap } from '../ahkObj/ahkBaseWrap';
 import { getUserDefTopClassSymbol } from './getUserDefTopClassSymbol';
 import { getWmThis } from './getWmThis';
 import { parsingUserDefClassRecursive } from './parsingUserDefClassRecursive';
