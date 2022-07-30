@@ -4,7 +4,6 @@ import { Detecter } from '../../core/Detecter';
 import { hoverAVar } from '../../tools/Built-in/A_Variables';
 import { getHoverCommand, getHoverCommand2 } from '../../tools/Built-in/Command_Tools';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func_tools';
-
 import { getHoverStatement } from '../../tools/Built-in/statement_vsc';
 import { hover2winMsgMd } from '../../tools/Built-in/Windows_Messages_Tools';
 import { numberFindWinMsg } from '../../tools/Built-in/Windows_MessagesRe_Tools';

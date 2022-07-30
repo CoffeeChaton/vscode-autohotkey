@@ -3,6 +3,7 @@ import type { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 import { getLintConfig } from '../../configUI';
 import type { TTokenStream } from '../../globalEnum';
 import { getIgnore } from './getIgnore';
+import { getDeepErr } from './tools/getDeepErr';
 import { getFuncErr } from './tools/getFuncErr';
 import { getLineErr } from './tools/getLineErr';
 import { getTreeErr } from './tools/getTreeErr';
@@ -50,6 +51,7 @@ export function baseDiagnostic(
     const { displayErr, lineDiagS } = getDisplayErrAndLineErr(DocStrMap);
 
     const diagList: readonly vscode.Diagnostic[] = [
+        ...getDeepErr(DocStrMap),
         ...lineDiagS,
         ...getTreeErr(AhkSymbolList, displayErr),
         ...getFuncErr(DocStrMap, AhkSymbolList, displayErr, getLintConfig().funcSize),

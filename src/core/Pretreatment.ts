@@ -2,7 +2,7 @@
 /* eslint-disable max-statements */
 
 import type { TAhkToken, TTokenStream } from '../globalEnum';
-import { EDetail, ELTrim } from '../globalEnum';
+import { EDetail, EDiagDeep, ELTrim } from '../globalEnum';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
 import { inLTrimRange } from '../tools/str/inLTrimRange';
@@ -20,7 +20,6 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
     let LTrim: ELTrim = ELTrim.none;
     let deep = 0;
     let line = -1;
-    let lastLineIsGlobal = false;
     for (const textRaw of strArray) {
         line++;
         const textTrimStart: string = textRaw.trimStart();
@@ -43,6 +42,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 cll: 0,
                 lineComment: '',
                 LTrim,
+                diagDeep: 0,
             });
             continue;
         }
@@ -59,6 +59,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 cll: 0,
                 lineComment: '',
                 LTrim,
+                diagDeep: 0,
             });
             continue;
         }
@@ -74,6 +75,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 cll: 0,
                 lineComment: '',
                 LTrim,
+                diagDeep: 0,
             });
             continue;
         }
@@ -101,20 +103,48 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 cll: 0,
                 lineComment,
                 LTrim,
+                diagDeep: 0,
             });
             continue;
         }
 
+        let diagDeep: EDiagDeep = EDiagDeep.none;
         if (!lStrTrim.includes('::')) {
             // {$                     || ^{
             if (lStrTrim.endsWith('{') || lStrTrim.startsWith('{')) {
                 detail.push(EDetail.deepAdd);
                 deep++;
+                // {{{{
+                const addDeep: number | undefined = lStrTrim
+                    .replace(/\s/gu, '')
+                    .match(/^(\{+)$/u)
+                    ?.[1].length;
+
+                if (addDeep !== undefined && addDeep > 1) {
+                    deep--;
+                    deep += addDeep;
+                    diagDeep = EDiagDeep.multL;
+                }
             }
             // ^}
             if (lStrTrim.startsWith('}')) {
                 detail.push(EDetail.deepSubtract);
                 deep--;
+
+                // eslint-disable-next-line no-tabs
+                // if (lStrTrim === '		}	}'.trim())
+
+                // }}}}
+                const diffDeep: number | undefined = lStrTrim
+                    .replace(/\s/gu, '')
+                    .match(/^(\}+)$/u)
+                    ?.[1].length;
+
+                if (diffDeep !== undefined && diffDeep > 1) {
+                    deep++;
+                    deep -= diffDeep;
+                    diagDeep = EDiagDeep.multR;
+                }
             }
         }
 
@@ -123,14 +153,6 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
         const fistWordUp: string = lStrTrim.match(/^(\w+)$/u)?.[1].toUpperCase()
             ?? lStrTrim.match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1].toUpperCase()
             ?? '';
-        if (fistWordUp === 'GLOBAL') {
-            detail.push(EDetail.isGlobalLine);
-            lastLineIsGlobal = true;
-        } else if (cll === 1 && lastLineIsGlobal) {
-            lastLineIsGlobal = true;
-        } else {
-            lastLineIsGlobal = false;
-        }
 
         result.push({
             fistWordUp,
@@ -142,6 +164,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             cll,
             lineComment,
             LTrim,
+            diagDeep,
         });
     }
 

@@ -22,7 +22,11 @@ export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: n
             return new vscode.Range(defLine, 0, line, col + 1);
         }
     }
-
-    console.error('🚀 get Range ERROR at --904--321--33', RangeEnd);
-    return new vscode.Range(defLine, 0, RangeEnd - 1, 0);
+    console.error('🚀 get Range ERROR Start --904--321--33 -------');
+    console.error('🚀 ~ defLine', defLine);
+    console.error('🚀 ~ searchLineFix', searchLineFix);
+    console.error('🚀 ~ startDeep', startDeep);
+    console.error('🚀 ~ RangeEnd', RangeEnd);
+    console.error('🚀 get Range ERROR END -----------');
+    return new vscode.Range(defLine, 0, searchLine + 1, 0);
 }

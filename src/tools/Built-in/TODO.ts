@@ -1,3 +1,10 @@
+//
+// BUILT-IN VARIABLES //
+//
+
+// Declare built-in var read function.
+// #define BIV_DECL_R(name) VarSizeType name(LPTSTR aBuf, LPTSTR aVarName)
+
 // TODO fn()
 // ComObjParameter
 // IsByRef()

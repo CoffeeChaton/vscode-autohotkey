@@ -39,10 +39,10 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
 
     const col: number = lStr.indexOf('(');
     if (lStr.length === 0 || col === -1 || lStr.includes('}')) return null;
-    const isFunc: TFuncDefData | null = getFuncDef(DocStrMap, line);
-    if (isFunc === null) return null;
+    const fnDefData: TFuncDefData | null = getFuncDef(DocStrMap, line);
+    if (fnDefData === null) return null;
 
-    const { name, selectionRange } = isFunc;
+    const { name, selectionRange } = fnDefData;
 
     const range = getRange(DocStrMap, line, selectionRange.end.line, RangeEndLine);
     const ch = getChildren<CAhkFunc>(

@@ -21,6 +21,12 @@ export const enum ELTrim {
     noFlagE = 13,
 }
 
+export const enum EDiagDeep {
+    none = 0,
+    multL = 1, // multiple opening braces
+    multR = 2, // multiple closing braces
+}
+
 export type TAhkToken = {
     readonly fistWordUp: string;
     readonly lStr: string;
@@ -31,6 +37,7 @@ export type TAhkToken = {
     readonly LTrim: ELTrim;
     readonly cll: 0 | 1;
     readonly lineComment: string;
+    readonly diagDeep: EDiagDeep;
     // I know this is not Complete and correct Token.
 }[];
 export type TTokenStream = DeepReadonly<TAhkToken>;

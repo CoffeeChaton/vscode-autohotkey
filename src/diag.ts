@@ -72,6 +72,10 @@ export const enum EDiagCode {
     code902 = 902,
     code903 = 903,
     code904 = 904,
+
+    // of EDiagDeep
+    code908 = 908, // {{{ of one Line
+    code909 = 909, // }}} of one Line
 }
 
 export type TDiags = {
@@ -201,5 +205,14 @@ export const Diags: DeepReadonly<TDiags> = {
     904: {
         msg: 'ahk-neko-help is not work of this Directives',
         path: 'https://www.autohotkey.com/docs/commands/_Hotstring.htm',
+    },
+    // of EDiagDeep
+    908: { // {{{ of one Line
+        msg: 'Indentation suggestions : split to new line',
+        path: 'https://www.autohotkey.com/docs/Tutorial.htm#s84',
+    },
+    909: { // }}} of one Line
+        msg: 'Indentation suggestions : split to new line',
+        path: 'https://www.autohotkey.com/docs/Tutorial.htm#s84',
     },
 };

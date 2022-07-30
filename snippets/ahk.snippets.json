@@ -778,10 +778,6 @@
         "prefix": "UseErrorLevel",
         "body": "UseErrorLevel"
     },
-    "Text": {
-        "prefix": "Text",
-        "body": "Text"
-    },
     "Picture": {
         "prefix": "Picture",
         "body": "Picture"
