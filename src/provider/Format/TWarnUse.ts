@@ -15,7 +15,6 @@ type TWarnUse =
         line: number;
         occ: number;
         deep: number;
-        labDeep: 0 | 1;
         LTrim: ELTrim;
         textRaw: string;
         switchRangeArray: vscode.Range[];
@@ -57,7 +56,6 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
         line,
         occ,
         deep,
-        labDeep,
         LTrim,
         switchRangeArray,
         document,
@@ -86,7 +84,7 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
 
     const deepFix = Math.max(
         0,
-        deep + labDeep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(LTrim),
+        deep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(LTrim),
     );
 
     const TabSpaces = options.insertSpaces
