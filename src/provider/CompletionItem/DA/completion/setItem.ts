@@ -49,5 +49,10 @@ export function setItemCore(
         recStr: recStr ?? '',
         commentList,
     });
+
+    if (recStr !== undefined) {
+        item.preselect = true;
+    }
+
     return item;
 }

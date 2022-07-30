@@ -78,8 +78,6 @@ export const CompletionItemProvider: vscode.CompletionItemProvider = {
         _token: vscode.CancellationToken,
         _context: vscode.CompletionContext,
     ): vscode.ProviderResult<vscode.CompletionItem[]> {
-        console.log('🚀 ~ _context', _context);
-
         return CompletionItemCore(document, position);
     },
 };
