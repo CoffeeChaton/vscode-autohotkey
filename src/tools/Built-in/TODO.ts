@@ -1,4 +1,4 @@
-// TODO js
+// TODO fn()
 // ComObjParameter
 // IsByRef()
 // ObjAddRef()
@@ -59,7 +59,6 @@
 // SplashTextOff
 // StringSplit
 
-// FIXME:
 const TODO = {
     Clipboard: {
         body: 'Clipboard',

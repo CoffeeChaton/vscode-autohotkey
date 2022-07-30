@@ -59,7 +59,7 @@ function CompletionItemCore(
     if (PartStr !== null && !isPosAtStrNext(textRaw, lStr, position)) {
         const inputStr: string = getStartWithStr(document, position);
         completions.push(
-            ...listAllFuncClass(inputStr),
+            ...listAllFuncClass(),
             ...BuiltInFunc2Completion(inputStr),
             // ...globalValCompletion(document, position, inputStr),
         );

@@ -4,21 +4,15 @@ import { EDiagCode } from '../../../diag';
 import type { TTokenStream } from '../../../globalEnum';
 import { setDiagnostic } from './setDiagnostic';
 
-function setFuncErr(func: TAhkSymbol): vscode.Diagnostic {
-    const value = EDiagCode.code301;
-    const range = func.selectionRange;
-    return setDiagnostic(value, range, vscode.DiagnosticSeverity.Warning, []);
-}
-
 function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol, maxFnSize: number): boolean {
-    let fnSize = 0;
     const st = func.selectionRange.end.line;
     const ed = func.range.end.line;
     if (ed - st < maxFnSize) return false;
+
+    let fnSize = 0;
     for (let line = st; line < ed; line++) {
-        fnSize += DocStrMap[line].lStr === ''
-            ? 0
-            : 1;
+        if (DocStrMap[line].lStr === '') continue;
+        fnSize++;
         if (fnSize >= maxFnSize) return true;
     }
     return false;
@@ -39,7 +33,9 @@ export function getFuncErr(
                     displayErr[func.range.start.line]
                     && fnErrCheck(DocStrMap, func, maxFnSize)
                 ) {
-                    digS.push(setFuncErr(func));
+                    digS.push(
+                        setDiagnostic(EDiagCode.code301, func.selectionRange, vscode.DiagnosticSeverity.Warning, []),
+                    );
                 }
                 break;
             case vscode.SymbolKind.Class:

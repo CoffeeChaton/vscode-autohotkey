@@ -2,29 +2,23 @@ import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
+import type { TTopSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
 import { getSnippetBlockFilesList } from '../../../configUI';
-import type { TAhkFileData } from '../../../core/Detecter';
 import { Detecter } from '../../../core/Detecter';
-import { EStr } from '../../../Enum/EStr';
 import { fsPathIsAllow } from '../../../tools/fsTools/getUriList';
 
 function setClassSnip(
-    inputStr: string,
     fileName: string,
     AC: CAhkClass,
 ): vscode.CompletionItem {
     const { name, insertText } = AC;
 
-    const label: string = name.startsWith(inputStr) // <----- don't use memo because inputStr
-        ? `${EStr.suggestStr} ${name}`
-        : name;
-
     const item: vscode.CompletionItem = new vscode.CompletionItem({
-        label,
+        label: `new ${name}`,
         description: fileName,
     });
 
-    item.insertText = insertText;
+    item.insertText = `new ${insertText}`;
     item.detail = 'neko help';
 
     item.kind = vscode.CompletionItemKind.Class;
@@ -33,18 +27,13 @@ function setClassSnip(
 }
 
 function setFuncSnip(
-    inputStr: string,
     fileName: string,
     DA: CAhkFunc,
 ): vscode.CompletionItem {
     const { md, name, selectionRangeText } = DA;
 
-    const label: string = name.startsWith(inputStr) // <----- don't use memo because inputStr
-        ? `${EStr.suggestStr} ${name}`
-        : name;
-
     const item: vscode.CompletionItem = new vscode.CompletionItem({
-        label,
+        label: `${name}()`,
         description: fileName,
     });
 
@@ -56,31 +45,41 @@ function setFuncSnip(
     return item;
 }
 
-export function listAllFuncClass(
-    inputStr: string, // <------------------------------------ don't use wm because inputStr
-): vscode.CompletionItem[] {
+const wm = new WeakMap<readonly TTopSymbol[], readonly vscode.CompletionItem[]>();
+
+function partSnip(TopSymbol: readonly TTopSymbol[], fileName: string): readonly vscode.CompletionItem[] {
+    const cache: readonly vscode.CompletionItem[] | undefined = wm.get(TopSymbol);
+    if (cache !== undefined) {
+        return cache;
+    }
+
+    const item: vscode.CompletionItem[] = [];
+    for (const AH of TopSymbol) {
+        if (AH instanceof CAhkClass) {
+            // is Class
+            item.push(setClassSnip(fileName, AH));
+        } else if (AH instanceof CAhkFunc) {
+            // is Func
+            item.push(setFuncSnip(fileName, AH));
+        }
+    }
+
+    wm.set(TopSymbol, item);
+    return item;
+}
+
+export function listAllFuncClass(): vscode.CompletionItem[] {
     const filesBlockList: readonly RegExp[] = getSnippetBlockFilesList();
 
     const fsPaths: string[] = Detecter.getDocMapFile();
-    const itemS: vscode.CompletionItem[] = [];
+    const item: vscode.CompletionItem[] = [];
     for (const fsPath of fsPaths) {
         if (!fsPathIsAllow(fsPath.replaceAll('\\', '/'), filesBlockList)) continue;
 
-        const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
-        if (AhkFileData === undefined) continue;
+        const TopSymbol: readonly TTopSymbol[] | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
+        if (TopSymbol === undefined) continue;
 
-        const { AhkSymbolList } = AhkFileData;
-        const fileName: string = path.basename(fsPath);
-
-        for (const AH of AhkSymbolList) {
-            if (AH instanceof CAhkClass) {
-                // is Class
-                itemS.push(setClassSnip(inputStr, fileName, AH));
-            } else if (AH instanceof CAhkFunc && AH.kind === vscode.SymbolKind.Function) {
-                // is Func
-                itemS.push(setFuncSnip(inputStr, fileName, AH));
-            }
-        }
+        item.push(...partSnip(TopSymbol, path.basename(fsPath)));
     }
-    return itemS;
+    return item;
 }

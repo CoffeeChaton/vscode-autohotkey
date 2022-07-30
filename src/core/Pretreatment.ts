@@ -82,6 +82,29 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
         const lStr: string = getLStr(textRaw);
         const lStrTrim: string = lStr.trim();
         const detail: EDetail[] = [];
+        const lineComment: string = textRaw.length - lStr.length > 2
+            ? textRaw.slice(lStr.length).trim()
+            : '';
+
+        if (lineComment.startsWith(';;')) {
+            detail.push(EDetail.hasDoubleSemicolon);
+        }
+
+        if (lStrTrim === '') {
+            result.push({
+                fistWordUp: '',
+                lStr: '',
+                deep,
+                textRaw,
+                detail,
+                line,
+                cll: 0,
+                lineComment,
+                LTrim,
+            });
+            continue;
+        }
+
         if (!lStrTrim.includes('::')) {
             // {$                     || ^{
             if (lStrTrim.endsWith('{') || lStrTrim.startsWith('{')) {
@@ -107,14 +130,6 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             lastLineIsGlobal = true;
         } else {
             lastLineIsGlobal = false;
-        }
-
-        const lineComment: string = textRaw.length - lStr.length > 2
-            ? textRaw.slice(lStr.length).trim()
-            : '';
-
-        if (lineComment.startsWith(';;')) {
-            detail.push(EDetail.hasDoubleSemicolon);
         }
 
         result.push({

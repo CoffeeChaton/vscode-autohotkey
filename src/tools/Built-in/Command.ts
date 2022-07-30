@@ -56,7 +56,6 @@ export const CommandList = [
     'FILESELECTFOLDER',
     'FILESETATTRIB',
     'FILESETTIME',
-    'FOR',
     'FORMATTIME',
     'GETKEYSTATE',
     'GLOBAL',
@@ -908,11 +907,6 @@ export const LineCommand: TLineCommand = {
         body:
             'FileSetTime, ${1:[ YYYYMMDDHH24MISS}, ${2:FilePattern}, ${3:WhichTime (M|C|A)}, ${4:OperateOnFolders?}, ${5:Recurse?]}',
         doc: 'Changes the datetime stamp of one or more files or folders. Wildcards are supported.',
-    },
-    FOR: {
-        keyRawName: 'For',
-        body: 'For ${1:Key} , [${2:Value}] in Expression',
-        doc: 'Repeats a series of commands once for each key-value pair in an object.',
     },
     FORMATTIME: {
         keyRawName: 'FormatTime',

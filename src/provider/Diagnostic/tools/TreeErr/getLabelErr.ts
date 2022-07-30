@@ -38,13 +38,8 @@ export function getLabelErr(ch: TAhkSymbol): vscode.Diagnostic[] {
         },
     ];
 
-    for (const v of rulerMatch) {
-        if (v.reg.test(labName)) {
-            return [
-                setDiagnostic(v.code, ch.selectionRange, vscode.DiagnosticSeverity.Warning, v.tags),
-            ];
-        }
-    }
-
-    return [];
+    const v2: TLabelErr | undefined = rulerMatch.find((v) => v.reg.test(labName));
+    return (v2 !== undefined)
+        ? [setDiagnostic(v2.code, ch.selectionRange, vscode.DiagnosticSeverity.Warning, v2.tags)]
+        : [];
 }

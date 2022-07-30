@@ -27,7 +27,7 @@ function wrapItem(
         return item;
     }
 
-    const md = new vscode.MarkdownString('', true);
+    const md: vscode.MarkdownString = new vscode.MarkdownString('', true);
     md.appendMarkdown([...track].reverse().join('   \n'));
     item.documentation = md;
     return item;
@@ -40,7 +40,7 @@ export function parsingUserDefClassRecursive(
     deep: number,
 ): vscode.CompletionItem[] {
     const itemS: vscode.CompletionItem[] = [];
-    const newTrack = [...track, `Class  ${AhkSymbol.name}`];
+    const newTrack: string[] = [...track, `Class  ${AhkSymbol.name}`];
     for (const ch of AhkSymbol.children) {
         //
         if (ChapterArr.length === deep) {

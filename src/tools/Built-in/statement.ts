@@ -2,6 +2,23 @@
 /* eslint-disable max-lines */
 /* eslint-disable no-template-curly-in-string */
 
+// TODO
+type TodoKeyWord =
+    | 'class'
+    | 'critical'
+    | 'exit'
+    | 'exitApp'
+    | 'extends'
+    | 'global'
+    | 'gosub'
+    | 'goto'
+    | 'in'
+    | 'local'
+    | 'new'
+    | 'return'
+    | 'this'
+    | 'throw';
+// 'in', 'else', 'until', 'get', 'set', 'catch', 'finally', 'and', 'or'
 // TODO snippets/ahk.snippets.json
 export type TStatementKeyList =
     | 'AND'
@@ -25,6 +42,7 @@ export type TStatementKeyList =
     | 'UNTIL'
     | 'WHILE';
 // Loop <file>
+// critical https://www.autohotkey.com/docs/commands/Critical.htm
 
 export type TStatementElement<T extends TStatementKeyList> = {
     keyRawName: Capitalize<Lowercase<T>>;

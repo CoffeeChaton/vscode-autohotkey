@@ -16,13 +16,15 @@ function showOutputChannel(results: TWordFrequencyStatistics, timeSpend: number)
         topFuncNum,
     } = results;
 
-    OutputChannel.appendLine('Deep Analysis All Files');
-    OutputChannel.appendLine(`Deep Analysis : ${topFuncNum} Symbol`);
-    OutputChannel.appendLine(`paramMapSize is ${paramMapSize}`);
-    OutputChannel.appendLine(`valMapSize is ${valMapSize}`);
-    OutputChannel.appendLine(`textMapSize is ${textMapSize}`);
-    OutputChannel.appendLine(`All Size is ${paramMapSize + valMapSize + textMapSize}`);
-    OutputChannel.appendLine(`Done in ${timeSpend} ms`);
+    OutputChannel.appendLine([
+        'Deep Analysis All Files',
+        `Deep Analysis : ${topFuncNum} Symbol`,
+        `paramMapSize is ${paramMapSize}`,
+        `valMapSize is ${valMapSize}`,
+        `textMapSize is ${textMapSize}`,
+        `All Size is ${paramMapSize + valMapSize + textMapSize}`,
+        `Done in ${timeSpend} ms`,
+    ].join('\n'));
     OutputChannel.show();
 }
 

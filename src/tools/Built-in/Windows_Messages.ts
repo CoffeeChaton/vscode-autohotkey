@@ -1,7 +1,7 @@
 /* cSpell:disable */
 /* eslint-disable max-lines */
 /* eslint-disable no-magic-numbers */
-// TODO WM_NULL
+
 // https://www.autohotkey.com/docs/commands/PostMessage.htm
 // https://www.autohotkey.com/docs/misc/SendMessage.htm
 // https://www.autohotkey.com/docs/misc/SendMessageList.htm

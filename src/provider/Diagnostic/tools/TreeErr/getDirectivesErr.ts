@@ -6,7 +6,6 @@ import type { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../../diag';
 import type { THashTagUPKey } from '../../../../tools/Built-in/Directives';
 import { DirectivesMDMap } from '../../../../tools/Built-in/Directives';
-
 import { setDiagnostic } from '../setDiagnostic';
 
 export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
@@ -75,12 +74,11 @@ export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
     ];
 
     const { hashtag, selectionRange } = ch;
-    for (const v of rulerMatch) {
-        if (v.str === hashtag) {
-            return [
-                setDiagnostic(v.code, selectionRange, v.severity, v.tags),
-            ];
-        }
+    const v: TRulerErr | undefined = rulerMatch.find((element) => element.str === hashtag);
+    if (v !== undefined) {
+        return [
+            setDiagnostic(v.code, selectionRange, v.severity, v.tags),
+        ];
     }
 
     // check is unknown Directives or not

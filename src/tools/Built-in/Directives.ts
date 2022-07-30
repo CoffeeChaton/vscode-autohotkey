@@ -6,6 +6,9 @@
 import * as vscode from 'vscode';
 import type { DeepReadonly } from '../../globalEnum';
 
+// |"DELIMITER"
+// | "DEREFCHAR"
+
 export type THashTagUPKey =
     | 'ALLOWSAMELINECOMMENTS'
     | 'CLIPBOARDTIMEOUT'

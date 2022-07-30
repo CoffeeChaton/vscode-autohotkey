@@ -52,9 +52,8 @@ function isPosAtMethodName(DA: CAhkFunc | null, position: vscode.Position): bool
         && DA.nameRange.contains(position);
 }
 
-// FIXME: spilt this func
+// FIXME: spilt this func, just need input ahkFunc
 export function userDefFunc(
-    // TODO input DA: CAhkFunc
     document: vscode.TextDocument,
     position: vscode.Position,
     wordUp: string,
@@ -69,7 +68,7 @@ export function userDefFunc(
         return null;
     }
 
-    const funcSymbol: CAhkFunc | null = getFuncWithName(wordUp); // FIXME: just need input ahkFunc
+    const funcSymbol: CAhkFunc | null = getFuncWithName(wordUp);
     if (funcSymbol === null) return null;
 
     const ahkFunc = {

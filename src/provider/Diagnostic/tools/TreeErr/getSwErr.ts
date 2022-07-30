@@ -5,24 +5,10 @@ import type { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../../diag';
 import { setDiagnostic } from '../setDiagnostic';
 
-function getDefaultNumber(swChildren: (CAhkCase | CAhkDefault)[]): number {
-    let iDefault = 0;
-    for (const e of swChildren) {
-        if (e instanceof CAhkDefault) iDefault++;
-    }
-    return iDefault;
-}
-
-function getCaseNumber(swChildren: (CAhkCase | CAhkDefault)[]): number {
-    let iCase = 0;
-    for (const e of swChildren) {
-        if (e instanceof CAhkCase) iCase++;
-    }
-    return iCase;
-}
-
 function setErrDefault(sw: CAhkSwitch): vscode.Diagnostic | null {
-    const iDefault: number = getDefaultNumber(sw.children);
+    const iDefault: number = sw.children
+        .filter((e: CAhkCase | CAhkDefault): boolean => e instanceof CAhkDefault)
+        .length;
 
     if (iDefault === 1) return null; // OK
 
@@ -32,10 +18,12 @@ function setErrDefault(sw: CAhkSwitch): vscode.Diagnostic | null {
 }
 
 function setErrCase(sw: CAhkSwitch): vscode.Diagnostic | null {
-    const iCase: number = getCaseNumber(sw.children);
+    const iCase: number = sw.children
+        .filter((e: CAhkCase | CAhkDefault): boolean => e instanceof CAhkCase)
+        .length;
 
     // too Much
-    if (iCase >= 20) return setDiagnostic(EDiagCode.code112, sw.range, vscode.DiagnosticSeverity.Warning, []);
+    if (iCase > 20) return setDiagnostic(EDiagCode.code112, sw.range, vscode.DiagnosticSeverity.Warning, []);
 
     return iCase === 0 // not find
         ? setDiagnostic(EDiagCode.code113, sw.range, vscode.DiagnosticSeverity.Warning, [])
