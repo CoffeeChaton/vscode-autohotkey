@@ -11,34 +11,30 @@ import { UpdateCacheAsync } from './UpdateCache';
 async function formatByPathAsync(
     uri: vscode.Uri,
     options: vscode.FormattingOptions,
-    jestTest: boolean,
 ): Promise<void> {
     const document: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
 
-    const edits: vscode.TextEdit[] = FormatCore({
-        document,
-        options,
-        fmtStart: 0,
-        fmtEnd: document.lineCount - 1,
-        from: EFormatChannel.byFormatAllFile,
-        needDiff: true,
-    });
-    if (!jestTest) {
-        const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
-        edit.set(uri, edits);
-        await vscode.workspace.applyEdit(edit);
-    }
+    const WorkspaceEdit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
+    WorkspaceEdit.set(
+        uri,
+        FormatCore({
+            document,
+            options,
+            fmtStart: 0,
+            fmtEnd: document.lineCount - 1,
+            from: EFormatChannel.byFormatAllFile,
+            needDiff: true,
+        }),
+    );
+    await vscode.workspace.applyEdit(WorkspaceEdit);
 }
 
 async function setFormattingOptions(): Promise<vscode.FormattingOptions | null> {
-    type TUseTabOrSpace = TPick<boolean>;
-    const selectTabOrSpace: TUseTabOrSpace[] = [
-        { label: '1 -> indent Using Tabs', fn: () => false },
-        { label: '2 -> indent Using Spaces', fn: () => true },
-    ];
-
-    const TabOrSpacePick: TPick<boolean> | undefined = await vscode.window.showQuickPick<TUseTabOrSpace>(
-        selectTabOrSpace,
+    const TabOrSpacePick: TPick<boolean> | undefined = await vscode.window.showQuickPick<TPick<boolean>>(
+        [
+            { label: '1 -> indent Using Tabs', fn: () => false },
+            { label: '2 -> indent Using Spaces', fn: () => true },
+        ],
         {
             title: 'Select Formatting Options',
         },
@@ -46,7 +42,13 @@ async function setFormattingOptions(): Promise<vscode.FormattingOptions | null> 
 
     if (TabOrSpacePick === undefined) return null;
 
-    const insertSpaces: boolean = await TabOrSpacePick.fn();
+    const TabOrSpace: boolean = await TabOrSpacePick.fn();
+    if (!TabOrSpace) { // Tab
+        return {
+            tabSize: 0,
+            insertSpaces: false,
+        };
+    }
 
     type T1to8 = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
     type TTabSize = TPick<T1to8>;
@@ -68,44 +70,25 @@ async function setFormattingOptions(): Promise<vscode.FormattingOptions | null> 
 
     return {
         tabSize,
-        insertSpaces,
+        insertSpaces: true,
     };
-}
-
-async function getJustTest(): Promise<boolean | null> {
-    type TJustTest = TPick<boolean>;
-    const items: TJustTest[] = [
-        { label: '1 -> need format all', fn: () => false },
-        // { label: '2 -> just test format replace func <---bug now', fn: () => true },
-    ];
-    const jestTestPick = await vscode.window.showQuickPick<TJustTest>(items, {
-        title: 'this is Dev tools',
-    });
-
-    const jestTest = await jestTestPick?.fn();
-    if (jestTest === undefined) return null;
-
-    return jestTest;
 }
 
 export async function FormatAllFile(): Promise<null> {
     const uriList: vscode.Uri[] | null = getUriList();
     if (uriList === null) return null;
 
-    const jestTest: boolean | null = await getJustTest();
-    if (jestTest === null) return null;
-
-    const options: vscode.FormattingOptions | null = await setFormattingOptions();
-    if (options === null) return null;
+    const fmtOpt: vscode.FormattingOptions | null = await setFormattingOptions();
+    if (fmtOpt === null) return null;
 
     const t1: number = Date.now();
     const results: Promise<void>[] = [];
     for (const uri of uriList) {
-        results.push(formatByPathAsync(uri, options, jestTest));
+        results.push(formatByPathAsync(uri, fmtOpt));
     }
     await Promise.all(results);
-
     const t2: number = Date.now();
+
     OutputChannel.appendLine('-----------------------------------------------');
     OutputChannel.appendLine(`FormatAllFile -> ${t2 - t1} ms`);
     OutputChannel.show();
