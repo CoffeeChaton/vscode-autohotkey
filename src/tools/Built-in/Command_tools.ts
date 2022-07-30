@@ -56,10 +56,12 @@ export const [snippetCommand, CommandMDMap] = ((): [TSnippetCommand, TCommandMDM
     return [tempList, map1];
 })();
 
-export function getSnippetCommand(PartStr: string): readonly vscode.CompletionItem[] {
-    return PartStr.startsWith('A_')
-        ? []
-        : snippetCommand;
+export function getSnippetCommand(lStr: string, position: vscode.Position): readonly vscode.CompletionItem[] {
+    const subStr = lStr.slice(0, position.character).trim();
+
+    return (/^\w*$/ui).test(subStr)
+        ? snippetCommand
+        : [];
 }
 
 export function getHoverCommand(

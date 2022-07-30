@@ -45,12 +45,12 @@ function CompletionItemCore(
         ...wrapClass(position, textRaw, lStr, topSymbol, DocStrMap, DA), // '.'
         ...ahkSend(document, position), // '{'
         ...Completion2Directives(lStr, position),
+        ...getSnippetCommand(lStr, position),
     ];
 
     if (PartStr !== null) {
         completions.push(
             ...getSnippetStartWihA(PartStr),
-            ...getSnippetCommand(PartStr),
             ...getSnippetStatement(PartStr),
             ...getSnippetWinMsg(PartStr),
         );
@@ -76,7 +76,10 @@ export const CompletionItemProvider: vscode.CompletionItemProvider = {
         document: vscode.TextDocument,
         position: vscode.Position,
         _token: vscode.CancellationToken,
+        _context: vscode.CompletionContext,
     ): vscode.ProviderResult<vscode.CompletionItem[]> {
+        console.log('🚀 ~ _context', _context);
+
         return CompletionItemCore(document, position);
     },
 };
