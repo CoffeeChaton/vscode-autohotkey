@@ -14,7 +14,7 @@ export function getFnVarDef(
     GValMap: TGValMap,
 ): TValMapIn {
     const valMap: TValMapIn = new Map<string, TValMetaIn>();
-    for (const { lStr, line } of DocStrMap) {
+    for (const { lStr, line, lineComment } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;
 
@@ -28,6 +28,7 @@ export function getFnVarDef(
             paramMap,
             GValMap,
             lStrTrimLen,
+            comment: lineComment,
         };
         walrusOperator(need); // :=
         varSetCapacityFunc(need); // VarSetCapacity(varName) or NumGet(varName) or NumGet(&varName)

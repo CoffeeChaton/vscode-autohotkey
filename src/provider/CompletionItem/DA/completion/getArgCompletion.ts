@@ -16,8 +16,9 @@ export function getParamCompletion(
             defRangeList,
             isByRef,
             isVariadic,
+            commentList,
         } = v;
-        const item: vscode.CompletionItem = setItemCore({
+        return setItemCore({
             prefix: setPreFix(isByRef, isVariadic),
             recMap,
             keyRawName,
@@ -25,7 +26,7 @@ export function getParamCompletion(
             refRangeList,
             defRangeList,
             kind: vscode.CompletionItemKind.Variable,
+            commentList,
         });
-        return item;
     });
 }

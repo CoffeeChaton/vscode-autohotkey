@@ -17,6 +17,7 @@ export function getUnknownTextCompletion(
             refRangeList,
             defRangeList: [],
             kind: vscode.CompletionItemKind.Text,
+            commentList: [],
         });
         return item;
     });

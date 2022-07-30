@@ -37,7 +37,13 @@ function checkParam(keyRawName: string, funcRawName: string, line: number): void
     }
 }
 
-function getParamDefNeed(param: string, funcRawName: string, line: number, ch: number): TParamMetaIn {
+function getParamDefNeed(
+    param: string,
+    funcRawName: string,
+    line: number,
+    ch: number,
+    lineComment: string,
+): TParamMetaIn {
     const data: TParamData = getKeyRawName(param);
     const { isByRef, isVariadic, keyRawName } = data;
     checkParam(keyRawName, funcRawName, line);
@@ -46,6 +52,7 @@ function getParamDefNeed(param: string, funcRawName: string, line: number, ch: n
         new vscode.Position(line, ch),
         new vscode.Position(line, ch + keyRawName.length),
     );
+
     return {
         keyRawName,
         defRangeList: [range],
@@ -53,6 +60,11 @@ function getParamDefNeed(param: string, funcRawName: string, line: number, ch: n
         isByRef,
         isVariadic,
         c502Array: [0],
+        commentList: [
+            lineComment.startsWith(';')
+                ? lineComment.slice(1)
+                : '',
+        ],
     };
 }
 
@@ -61,7 +73,7 @@ export function getParamDef(fnName: string, selectionRange: vscode.Range, DocStr
     const paramMap: TParamMapIn = new Map<string, TParamMetaIn>();
     const startLine: number = selectionRange.start.line;
     const endLine: number = selectionRange.end.line;
-    for (const { lStr, line } of DocStrMap) {
+    for (const { lStr, line, lineComment } of DocStrMap) {
         if (line < startLine) continue;
         if (line > endLine) break;
         let lStrFix: string = lStr;
@@ -82,7 +94,7 @@ export function getParamDef(fnName: string, selectionRange: vscode.Range, DocStr
             const find: string = param.replace(/\bByRef\b\s*/ui, '');
             const ch: number = strF2.indexOf(find, ma.index);
 
-            const ArgAnalysis: TParamMetaIn = getParamDefNeed(param, fnName, line, ch);
+            const ArgAnalysis: TParamMetaIn = getParamDefNeed(param, fnName, line, ch, lineComment);
 
             const key: string = ArgAnalysis.keyRawName.toUpperCase();
             paramMap.set(key, ArgAnalysis);

@@ -83,10 +83,10 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
         const lStrTrim: string = lStr.trim();
         const detail: EDetail[] = [];
         const lineComment: string = textRaw.length - lStr.length > 2
-            ? textRaw.slice(lStr.length).trim()
+            ? textRaw.slice(lStr.length + 1).trim()
             : '';
 
-        if (lineComment.startsWith(';;')) {
+        if (lineComment.startsWith(';')) {
             detail.push(EDetail.hasDoubleSemicolon);
         }
 

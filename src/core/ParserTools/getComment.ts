@@ -21,7 +21,7 @@ export function getComment(FuncInput: TFuncInput): CAhkComment | null {
         return null;
     }
 
-    const doubleSemicolon = textRaw.indexOf(';;', lStr.length);
+    const doubleSemicolon: number = textRaw.indexOf(';;', lStr.length);
 
     const name: string = lineComment.replace(/^;;/u, '');
     const range: vscode.Range = new vscode.Range(

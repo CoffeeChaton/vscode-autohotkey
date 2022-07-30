@@ -12,6 +12,7 @@ type TSetItem = {
     refRangeList: readonly vscode.Range[];
     defRangeList: readonly vscode.Range[];
     kind: vscode.CompletionItemKind;
+    commentList: readonly string[];
 };
 
 export function setItemCore(
@@ -23,6 +24,7 @@ export function setItemCore(
         refRangeList,
         defRangeList,
         kind,
+        commentList,
     }: TSetItem,
 ): vscode.CompletionItem {
     const recStr: ESnippetRecBecause | undefined = recMap.get(keyRawName);
@@ -39,6 +41,13 @@ export function setItemCore(
     item.insertText = keyRawName;
     item.detail = `${prefix} (neko-help-DeepAnalysis)`;
 
-    item.documentation = setMD(prefix, refRangeList, defRangeList, funcName, recStr ?? '');
+    item.documentation = setMD({
+        prefix,
+        refRangeList,
+        defRangeList,
+        funcName,
+        recStr: recStr ?? '',
+        commentList,
+    });
     return item;
 }

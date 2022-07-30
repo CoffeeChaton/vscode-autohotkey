@@ -12,6 +12,7 @@ function PosInRange(arr: readonly vscode.Range[], position: vscode.Position): bo
     return arr.some((range: vscode.Range): boolean => range.contains(position));
 }
 
+// eslint-disable-next-line max-lines-per-function
 export function DeepAnalysisHover(
     DA: CAhkFunc,
     wordUp: string,
@@ -31,12 +32,20 @@ export function DeepAnalysisHover(
             isVariadic,
             refRangeList,
             defRangeList,
+            commentList,
         } = argMeta;
 
         if (!PosInRange([...refRangeList, ...defRangeList], position)) return null;
 
         const prefix = setPreFix(isByRef, isVariadic);
-        return setMD(prefix, refRangeList, defRangeList, name, '');
+        return setMD({
+            prefix,
+            refRangeList,
+            defRangeList,
+            funcName: name,
+            recStr: '',
+            commentList,
+        });
     }
 
     const value: TValMetaOut | undefined = valMap.get(wordUp);
@@ -44,10 +53,18 @@ export function DeepAnalysisHover(
         const {
             refRangeList,
             defRangeList,
+            commentList,
         } = value;
         if (!PosInRange([...refRangeList, ...defRangeList], position)) return null;
 
-        return setMD(EPrefix.var, refRangeList, defRangeList, name, '');
+        return setMD({
+            prefix: EPrefix.var,
+            refRangeList,
+            defRangeList,
+            funcName: name,
+            recStr: '',
+            commentList,
+        });
     }
 
     const textMeta: TTextMetaOut | undefined = textMap.get(wordUp);
@@ -55,7 +72,14 @@ export function DeepAnalysisHover(
         const { refRangeList } = textMeta;
         if (!PosInRange(refRangeList, position)) return null;
 
-        return setMD(EPrefix.unKnownText, refRangeList, [], name, '');
+        return setMD({
+            prefix: EPrefix.unKnownText,
+            refRangeList,
+            defRangeList: [],
+            funcName: name,
+            recStr: '',
+            commentList: [],
+        });
     }
 
     return null;

@@ -10,6 +10,7 @@ export function varSetCapacityFunc({
     paramMap,
     GValMap,
     lStrTrimLen,
+    comment,
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line no-magic-numbers
     if (lStrTrimLen < 8) return; // 'NumGet('.length
@@ -24,7 +25,7 @@ export function varSetCapacityFunc({
 
         const character: number = ch + v[0].indexOf(RawName);
 
-        const value: TValMetaIn = getValMeta(line, character, RawName, valMap);
+        const value: TValMetaIn = getValMeta(line, character, RawName, valMap, comment);
         valMap.set(RawName.toUpperCase(), value);
     }
 }

@@ -21,6 +21,7 @@ export type TParamMetaIn = {
 
     isByRef: boolean;
     isVariadic: boolean; // https://www.autohotkey.com/docs/Functions.htm#Variadic
+    commentList: string[];
 };
 export type TParamMetaOut = DeepReadonly<TParamMetaIn>;
 
@@ -33,6 +34,7 @@ export type TValMetaIn = {
     defRangeList: vscode.Range[];
     refRangeList: vscode.Range[];
     c502Array: TC502New[];
+    commentList: string[];
 };
 export type TValMetaOut = DeepReadonly<TValMetaIn>;
 

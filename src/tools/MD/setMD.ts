@@ -16,16 +16,34 @@ function RangeList2Str(RangeList: readonly vscode.Range[]): string {
         .join('\n');
 }
 
+type TSetMD = {
+    prefix: EPrefix;
+    refRangeList: readonly vscode.Range[];
+    defRangeList: readonly vscode.Range[];
+    funcName: string;
+    recStr: ESnippetRecBecause | '';
+    commentList: readonly string[];
+};
+
 export function setMD(
-    prefix: EPrefix,
-    refRangeList: readonly vscode.Range[],
-    defRangeList: readonly vscode.Range[],
-    funcName: string,
-    recStr: ESnippetRecBecause | '',
+    {
+        prefix,
+        refRangeList,
+        defRangeList,
+        funcName,
+        recStr,
+        commentList,
+    }: TSetMD,
 ): vscode.MarkdownString {
+    const commentList2 = commentList.filter((v: string): boolean => v !== '');
+    const commentListStr = commentList2.length > 0
+        ? `---\n\n${commentList2.join('\n\n')}\n\n---\n\n`
+        : '';
+
     return new vscode.MarkdownString('', true)
         .appendCodeblock(`${prefix} of ${funcName}()`)
         .appendMarkdown(recStr)
+        .appendMarkdown(commentListStr)
         .appendMarkdown('use`f12` goto def    \n')
         .appendMarkdown(RangeList2Str(defRangeList))
         .appendMarkdown('   \n')
