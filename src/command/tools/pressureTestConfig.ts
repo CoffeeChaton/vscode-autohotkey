@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-export const enum EPressureTestMode {
+const enum EPressureTestMode {
     justBase = 1,
     baseAndDA = 2,
 }
