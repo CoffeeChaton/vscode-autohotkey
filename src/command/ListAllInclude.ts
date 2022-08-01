@@ -1,39 +1,39 @@
 import { CAhkInclude } from '../AhkSymbol/CAhkLine';
-import type { TAhkSymbolList, TTopSymbol } from '../AhkSymbol/TAhkSymbolIn';
+import type { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 
-function collectInclude(List: string[], AhkSymbolList: Readonly<TAhkSymbolList>): void {
-    for (const AhkSymbol of AhkSymbolList) {
-        if (AhkSymbol instanceof CAhkInclude) {
-            List.push(AhkSymbol.name.trim());
+function collectInclude(AhkSymbolList: Readonly<TAhkSymbolList>): CAhkInclude[] {
+    const List: CAhkInclude[] = [];
+    for (const ahkInclude of AhkSymbolList) {
+        if (ahkInclude instanceof CAhkInclude) {
+            List.push(ahkInclude);
         } else {
-            collectInclude(List, AhkSymbol.children);
+            List.push(...collectInclude(ahkInclude.children));
         }
     }
+    return List;
 }
 
 export function ListAllInclude(): null {
-    const t1 = Date.now();
-    const allFsPath = Detecter.getDocMapFile();
+    const t1: number = Date.now();
 
     const AllList: string[] = [];
-    for (const fsPath of allFsPath) {
-        const AhkSymbolList: readonly TTopSymbol[] | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
-        if (AhkSymbolList === undefined) continue;
+    for (const { uri, AhkSymbolList } of Detecter.DocMap.values()) { // should keep output order
+        const List: CAhkInclude[] = collectInclude(AhkSymbolList);
 
-        const List: string[] = [];
-        collectInclude(List, AhkSymbolList);
         if (List.length > 0) {
-            AllList.push(`\n${fsPath}`, ...List);
+            AllList.push(`\n${uri.fsPath}`, ...List.map((ahkInclude) => ahkInclude.name));
         }
     }
 
     OutputChannel.clear();
-    OutputChannel.appendLine('[neko-help] List All #Include');
-    OutputChannel.append(AllList.join('\n'));
-    OutputChannel.appendLine('\n');
-    OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
+    OutputChannel.appendLine([
+        '[neko-help] List All #Include',
+        ...AllList,
+        '\n',
+        `Done in ${Date.now() - t1} ms`,
+    ].join('\n'));
     OutputChannel.show();
 
     return null;

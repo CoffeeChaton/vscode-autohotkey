@@ -71,15 +71,11 @@ function partSnip(TopSymbol: readonly TTopSymbol[], fileName: string): readonly 
 export function listAllFuncClass(): vscode.CompletionItem[] {
     const filesBlockList: readonly RegExp[] = getSnippetBlockFilesList();
 
-    const fsPaths: string[] = Detecter.getDocMapFile();
     const item: vscode.CompletionItem[] = [];
-    for (const fsPath of fsPaths) {
-        if (!fsPathIsAllow(fsPath.replaceAll('\\', '/'), filesBlockList)) continue;
+    for (const { uri, AhkSymbolList } of Detecter.DocMap.values()) { // keep output order is OK
+        if (!fsPathIsAllow(uri.fsPath.replaceAll('\\', '/'), filesBlockList)) continue;
 
-        const TopSymbol: readonly TTopSymbol[] | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
-        if (TopSymbol === undefined) continue;
-
-        item.push(...partSnip(TopSymbol, path.basename(fsPath)));
+        item.push(...partSnip(AhkSymbolList, path.basename(uri.fsPath)));
     }
     return item;
 }

@@ -38,6 +38,9 @@ export const [snippetCommand, CommandMDMap] = ((): [TSnippetCommand, TCommandMDM
         map1.set(k, md);
 
         const { keyRawName, body, recommended } = v;
+
+        if (recommended !== undefined && !recommended) continue;
+
         const item: vscode.CompletionItem = new vscode.CompletionItem({
             label: keyRawName,
             description: 'Command',
@@ -46,10 +49,6 @@ export const [snippetCommand, CommandMDMap] = ((): [TSnippetCommand, TCommandMDM
         item.insertText = new vscode.SnippetString(body);
         item.detail = 'Command of AHK (neko-help)'; // description
         item.documentation = md;
-
-        if (recommended !== undefined && !recommended) {
-            item.tags = [vscode.CompletionItemTag.Deprecated];
-        }
 
         tempList.push(item);
     }

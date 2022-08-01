@@ -25,6 +25,7 @@ export type TMemo = Readonly<{
     readonly DocStrMap: TTokenStream;
     readonly DocFullSize: number;
     readonly baseDiag: readonly vscode.Diagnostic[];
+    readonly uri: vscode.Uri;
 }>;
 
 function strListDeepEq(DocStrMap: TTokenStream, fullTextList: readonly string[]): boolean {
@@ -109,6 +110,7 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
         AhkSymbolList,
         baseDiag,
         DocFullSize,
+        uri: document.uri,
     };
     BaseScanMemo.setMemo(fsPath, AhkCache);
     return AhkCache;

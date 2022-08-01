@@ -1,8 +1,10 @@
+/* eslint-disable max-lines-per-function */
 import * as path from 'node:path';
 import * as vscode from 'vscode';
+import { ECommand } from '../command/ECommand';
 import { showTimeSpend } from '../configUI';
 import type { TFsPath } from '../globalEnum';
-import { renameFileNameFunc } from '../provider/event/renameFileNameFunc';
+import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import type { TMemo } from './BaseScanMemo/memo';
 import { BaseScanMemo, getBaseData } from './BaseScanMemo/memo';
 
@@ -10,6 +12,7 @@ export type TAhkFileData = TMemo;
 
 export const diagColl: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('ahk-neko-help');
 
+// ProjectManager
 export const Detecter = {
     // key : vscode.Uri.fsPath,
     DocMap: new Map<TFsPath, TAhkFileData>(),
@@ -26,6 +29,15 @@ export const Detecter = {
         // TODO check fs.existsSync(fsPath), but not this way.
         // Detecter.DocMap.delete(fsPath);
         // await openTextDocument(fsPath);
+    },
+
+    getDocMapValue(): TAhkFileData[] {
+        const need: TAhkFileData[] = [...Detecter.DocMap.values()];
+        // eslint-disable-next-line no-magic-numbers
+        if (Math.random() > 0.3) { // 1/3 -> .reverse() exp, funcName double def at 2 files
+            need.reverse();
+        }
+        return need;
     },
 
     getDocMap(fsPath: string): TAhkFileData | undefined {
@@ -49,19 +61,25 @@ export const Detecter = {
     },
 
     async renameFileName(e: vscode.FileRenameEvent): Promise<void> {
-        for (const { oldUri, newUri } of e.files) {
-            if (oldUri.fsPath.endsWith('.ahk')) {
-                delOldCache(oldUri); // ...not't open old .ahk
-                if (newUri.fsPath.endsWith('.ahk')) {
-                    // eslint-disable-next-line no-await-in-loop
-                    const document: vscode.TextDocument = await vscode.workspace.openTextDocument(newUri);
-                    void Detecter.updateDocDef(document);
+        const docList0: Thenable<vscode.TextDocument>[] = renameFileNameBefore(e);
+        for (const doc of await Promise.all(docList0)) Detecter.updateDocDef(doc);
 
-                    // eslint-disable-next-line no-await-in-loop
-                    await renameFileNameFunc(oldUri, newUri);
-                } // else EXP : let a.ahk -> a.ahk0 or a.0ahk
-            }
-        }
+        await vscode.commands.executeCommand(ECommand.ListAllInclude);
+
+        const eventMsg: string[] = e.files
+            .filter(({ oldUri, newUri }): boolean => oldUri.fsPath.endsWith('.ahk') || newUri.fsPath.endsWith('.ahk'))
+            .map(({ oldUri, newUri }): string => `    ${oldUri.fsPath} \n -> ${newUri.fsPath}`);
+
+        OutputChannel.appendLine([
+            '',
+            '----------------------',
+            '',
+            '[neko-help] FileRenameEvent',
+            ...eventMsg,
+            '',
+            '> please check #Include',
+        ].join('\n'));
+        OutputChannel.show();
     },
 
     updateDocDef(document: vscode.TextDocument): TAhkFileData {
@@ -90,4 +108,17 @@ export function delOldCache(uri: vscode.Uri): void {
     Detecter.DocMap.delete(fsPath);
     BaseScanMemo.memo.delete(fsPath);
     diagColl.delete(uri);
+}
+
+function renameFileNameBefore(e: vscode.FileRenameEvent): Thenable<vscode.TextDocument>[] {
+    const docList0: Thenable<vscode.TextDocument>[] = [];
+    for (const { oldUri, newUri } of e.files) {
+        if (oldUri.fsPath.endsWith('.ahk')) {
+            delOldCache(oldUri); // ...not't open old .ahk
+        }
+        if (newUri.fsPath.endsWith('.ahk')) {
+            docList0.push(vscode.workspace.openTextDocument(newUri));
+        }
+    }
+    return docList0;
 }

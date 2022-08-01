@@ -26,12 +26,8 @@ function DocSymbol2SymbolInfo(AhkSymbolList: readonly TTopSymbol[]): vscode.Symb
 
 function WorkspaceSymbolCore(): vscode.SymbolInformation[] {
     const result: vscode.SymbolInformation[] = [];
-    const fsPathList: string[] = Detecter.getDocMapFile();
 
-    for (const fsPath of fsPathList) {
-        const AhkSymbolList: readonly TTopSymbol[] | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
-        if (AhkSymbolList === undefined) continue;
-
+    for (const { AhkSymbolList } of Detecter.DocMap.values()) { // keep output order is OK
         result.push(...DocSymbol2SymbolInfo(AhkSymbolList));
     }
 

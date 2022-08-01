@@ -125,7 +125,8 @@ export function ParserLine(FuncInput: TFuncInput): CAhkComment | TLineClass | nu
         if (!test(strTrim)) continue;
         const name: string | null = getName(strTrim);
         if (name === null) continue;
-        const ed = new ClassName({
+
+        const ed: TLineClass = new ClassName({
             name,
             range: getRangeOfLine(line, lStr, textRaw.length),
             selectionRange: getRangeOfLine(line, lStr, lStr.length),

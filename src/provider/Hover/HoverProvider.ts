@@ -10,7 +10,6 @@ import { numberFindWinMsg } from '../../tools/Built-in/Windows_MessagesRe_Tools'
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStr } from '../../tools/isPosAtStr';
-import { getGlobalMarkdown } from '../../tools/MD/getGlobalMarkdown';
 import { DeepAnalysisHover } from './DeepAnalysisHover';
 import { HoverDirectives } from './HoverDirectives';
 
@@ -75,7 +74,6 @@ function HoverProviderCore(
     type TFn = (wordUp: string) => vscode.MarkdownString | null | undefined;
     const fnList: TFn[] = [
         getHoverCommand2,
-        getGlobalMarkdown,
         getHoverStatement,
         hoverAVar,
         hover2winMsgMd,

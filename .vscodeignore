@@ -2,12 +2,14 @@
 .eslintcache
 .history/
 .idea/
+.vscode-test/
 .VSCodeCounter/
 *.cpuprofile
 *.heapprofile
 *.heapsnapshot
 coverage/
-dict/
+esbuild.config.js
 esbuildTarget.json
+jest.config.js
 node_modules/
-out/
+src/

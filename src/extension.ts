@@ -8,9 +8,10 @@ import {
 import { AnalyzeFuncMain } from './command/AnalyzeFunc/AnalyzeThisFunc';
 import { statusBarClick } from './command/Command';
 import { ECommand } from './command/ECommand';
+import { ListAllFuncMain } from './command/ListAllFunc';
+import { ListAllInclude } from './command/ListAllInclude';
 import { fnRefreshResource, UpdateCacheAsync } from './command/UpdateCache';
 import { configChangEvent, statusBarItem } from './configUI';
-import { BaseScanMemo } from './core/BaseScanMemo/memo';
 import { Detecter, diagColl } from './core/Detecter';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CodeLensProvider } from './provider/CodeLens/CodeLensProvider';
@@ -59,8 +60,12 @@ export function activate(context: ExtensionContext): void {
         window.tabGroups.onDidChangeTabs(onDidChangeTabs),
         // window.tabGroups.onDidChangeTabGroups(onDidChangeTabGroups),
         // commands--------------------
+        // open of package.json
         commands.registerCommand('ahk.nekoHelp.bar', statusBarClick),
         commands.registerCommand('ahk.nekoHelp.refreshResource', fnRefreshResource),
+        commands.registerCommand(ECommand.ListAllFunc, ListAllFuncMain),
+        commands.registerCommand(ECommand.ListAllInclude, ListAllInclude),
+        // just of ui
         commands.registerCommand(ECommand.showFuncAnalyze, AnalyzeFuncMain),
         commands.registerCommand(ECommand.showUnknownAnalyze, showUnknownAnalyze),
         // root dispose
@@ -74,8 +79,7 @@ export function activate(context: ExtensionContext): void {
 
 // this method is called when your extension is deactivated
 export function deactive(): void {
-    Detecter.DocMap.clear();
-    BaseScanMemo.memo.clear();
+    // non
 }
 
 // TODO i18n of diag

@@ -1,6 +1,4 @@
-import * as vscode from 'vscode';
 import type { CAhkFunc } from '../AhkSymbol/CAhkFunc';
-import type { TAhkFileData } from '../core/Detecter';
 import { Detecter } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
@@ -30,22 +28,15 @@ function showOutputChannel(results: TWordFrequencyStatistics, timeSpend: number)
 
 export function DeepAnalysisAllFiles(): null {
     const t1: number = Date.now();
-    const allFsPath: string[] = Detecter.getDocMapFile();
 
     const need: CAhkFunc[] = [];
-    for (const fsPath of allFsPath) {
-        const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
-        if (AhkFileData === undefined) continue;
-
-        const { AhkSymbolList } = AhkFileData;
-
+    for (const { uri, AhkSymbolList } of Detecter.DocMap.values()) { // keep output order is OK
         const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
-
         need.push(...DAList);
-        digDAFile(DAList, vscode.Uri.file(fsPath));
+        digDAFile(DAList, uri);
     }
 
-    const t2 = Date.now();
+    const t2: number = Date.now();
     showOutputChannel(WordFrequencyStatistics(need), t2 - t1);
 
     return null;

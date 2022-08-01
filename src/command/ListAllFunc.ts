@@ -1,30 +1,26 @@
 import * as vscode from 'vscode';
-import type { TTopSymbol } from '../AhkSymbol/TAhkSymbolIn';
 import { Detecter } from '../core/Detecter';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import type { TPick } from './TPick';
 
-export function msgWithPos(text: string, fsPath: string, startPos: vscode.Position): string {
+function msgWithPos(text: string, fsPath: string, startPos: vscode.Position): string {
     const line: number = startPos.line + 1;
     const col: number = startPos.character + 1;
     return `${text} ;${fsPath}:${line}:${col}`;
 }
 
-export function ListAllFunc(showLink: boolean): null {
+function ListAllFunc(showLink: boolean): null {
     const t1: number = Date.now();
-    const allFsPath: string[] = Detecter.getDocMapFile();
 
     const AllList: string[] = [];
-    for (const fsPath of allFsPath) {
-        const AhkSymbolList: readonly TTopSymbol[] | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
-        if (AhkSymbolList === undefined) continue;
-
-        AllList.push(fsPath);
+    for (const { uri, AhkSymbolList } of Detecter.DocMap.values()) { // should keep output order
+        AllList.push(uri.fsPath);
 
         for (const DocumentSymbol of AhkSymbolList) {
             if (DocumentSymbol.kind === vscode.SymbolKind.Function) {
                 const text = `${DocumentSymbol.name}()`;
                 const textShow: string = showLink
-                    ? msgWithPos(text, fsPath, DocumentSymbol.selectionRange.start)
+                    ? msgWithPos(text, uri.fsPath, DocumentSymbol.selectionRange.start)
                     : text;
                 AllList.push(textShow);
             }
@@ -41,22 +37,14 @@ export function ListAllFunc(showLink: boolean): null {
     return null;
 }
 
-export function ListAllFuncSort(reverse: boolean): null {
+function ListAllFuncSort(reverse: boolean): null {
     const t1: number = Date.now();
-    const allFsPath: string[] = Detecter.getDocMapFile();
 
     const AllList: string[] = [];
-    for (const fsPath of allFsPath) {
-        const AhkSymbolList: readonly TTopSymbol[] | undefined = Detecter.getDocMap(fsPath)?.AhkSymbolList;
-        if (AhkSymbolList === undefined) {
-            continue;
-        }
-
+    for (const { uri, AhkSymbolList } of Detecter.DocMap.values()) { // should keep output order
         for (const DocumentSymbol of AhkSymbolList) {
             if (DocumentSymbol.kind === vscode.SymbolKind.Function) {
-                const text = `${DocumentSymbol.name}()`;
-
-                AllList.push(msgWithPos(text, fsPath, DocumentSymbol.selectionRange.start));
+                AllList.push(msgWithPos(`${DocumentSymbol.name}()`, uri.fsPath, DocumentSymbol.selectionRange.start));
             }
         }
     }
@@ -69,11 +57,30 @@ export function ListAllFuncSort(reverse: boolean): null {
             .join('\n')
         : AllList.join('\n');
 
+    const re = !reverse
+        ? 'a -> z'
+        : 'z -> a';
+
     OutputChannel.clear();
-    OutputChannel.appendLine('[neko-help] List All Function() Sort;');
+    OutputChannel.appendLine(`[neko-help] List All Function() ; Sort with ${re}`);
     OutputChannel.appendLine(appendText);
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();
 
     return null;
+}
+
+export async function ListAllFuncMain(): Promise<void> {
+    type TCommand = TPick<void>;
+
+    const items: TCommand[] = [
+        { label: '1 -> list all Function()', fn: (): null => ListAllFunc(false) },
+        { label: '2 -> list all Function() ; link', fn: (): null => ListAllFunc(true) },
+        { label: '3 -> list all Function() sort a -> z', fn: (): null => ListAllFuncSort(false) },
+        { label: '4 -> list all Function() sort z -> a', fn: (): null => ListAllFuncSort(true) },
+    ];
+
+    const pick: TPick<void> | undefined = await vscode.window.showQuickPick<TCommand>(items);
+
+    await pick?.fn();
 }

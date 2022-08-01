@@ -11,15 +11,7 @@ type TFnFindCol = (lineStr: string) => IterableIterator<RegExpMatchArray>;
 
 function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vscode.Location[] {
     const List: vscode.Location[] = [];
-    const fsPathList: string[] = Detecter.getDocMapFile();
-    for (const fsPath of fsPathList) {
-        const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
-
-        if (AhkFileData === undefined) continue;
-        const { DocStrMap, AhkSymbolList } = AhkFileData;
-
-        const uri: vscode.Uri = vscode.Uri.file(fsPath);
-
+    for (const { DocStrMap, AhkSymbolList, uri } of Detecter.getDocMapValue()) {
         const filterLineList: number[] = getDAList(AhkSymbolList)
             .filter((DA: CAhkFunc) => DA.kind === vscode.SymbolKind.Method)
             .map((DA: CAhkFunc) => DA.nameRange.start.line);

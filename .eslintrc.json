@@ -85,6 +85,7 @@
         "@typescript-eslint/array-type": "warn",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/ban-types": "warn",
+        "@typescript-eslint/consistent-type-assertions": "warn",
         "@typescript-eslint/consistent-type-definitions": [
             "error",
             "type"
@@ -357,10 +358,6 @@
         "unicorn/filename-case": "off",
         "unicorn/no-keyword-prefix": "off",
         "unicorn/no-null": "off",
-        "unicorn/prefer-set-has": "off",
-        "unicorn/prevent-abbreviations": "off",
-        "use-isnan": "error",
-        "wrap-regex": "error",
         "unicorn/numeric-separators-style": [
             "warn",
             {
@@ -382,7 +379,11 @@
                     "groupLength": 3
                 }
             }
-        ]
+        ],
+        "unicorn/prefer-set-has": "off",
+        "unicorn/prevent-abbreviations": "off",
+        "use-isnan": "error",
+        "wrap-regex": "error"
     },
     "settings": {
         "import/resolver": {

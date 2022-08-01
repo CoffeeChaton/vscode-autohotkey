@@ -92,6 +92,13 @@ export class CAhkInclude extends vscode.DocumentSymbol {
     //           A_Startup,A_StartupCommon, A_Temp, A_UserName ,A_WinDir
     //           A_UserName, A_WinDir
 
+    // WTF of this ?
+    // #Include Compiler.ahk
+    // #include *i __debug.ahk
+    // #Include <VersionRes>
+    // #Include %A_ScriptDir% ;Changes the working directory for subsequent #Includes and FileInstalls.
+    // #Include %A_LineFile%\..\other.ahk.
+
     public readonly uri: vscode.Uri;
 
     declare public readonly kind: vscode.SymbolKind.Module;
