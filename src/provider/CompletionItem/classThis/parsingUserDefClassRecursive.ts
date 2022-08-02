@@ -34,14 +34,14 @@ function wrapItem(
 }
 
 export function parsingUserDefClassRecursive(
-    AhkSymbol: CAhkClass,
+    ahkClass: CAhkClass,
     track: readonly string[],
     ChapterArr: readonly string[],
     deep: number,
 ): vscode.CompletionItem[] {
     const itemS: vscode.CompletionItem[] = [];
-    const newTrack: string[] = [...track, `Class  ${AhkSymbol.name}`];
-    for (const ch of AhkSymbol.children) {
+    const newTrack: string[] = [...track, `Class  ${ahkClass.name}`];
+    for (const ch of ahkClass.children) {
         //
         if (ChapterArr.length === deep) {
             itemS.push(wrapItem(ch, newTrack));
@@ -56,9 +56,9 @@ export function parsingUserDefClassRecursive(
         }
     }
 
-    const ahkExtends: string = AhkSymbol.detail;
-    if (ahkExtends !== '') {
-        const c1: CAhkClass | null = getUserDefTopClassSymbol(ahkExtends.toUpperCase());
+    const { classExtends } = ahkClass; // FIXME ahkExtends
+    if (classExtends !== '') {
+        const c1: CAhkClass | null = getUserDefTopClassSymbol(classExtends.toUpperCase());
         if (c1 !== null) {
             itemS.push(...parsingUserDefClassRecursive(c1, newTrack, ChapterArr, deep));
         }

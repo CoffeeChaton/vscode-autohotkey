@@ -6,5 +6,5 @@ export const enum ESnippetRecBecause {
     varStartWith = 'var start with(Case Sensitive)\n\n',
 }
 
-export type TKeyRawName = string;
+type TKeyRawName = string;
 export type TSnippetRecMap = Map<TKeyRawName, ESnippetRecBecause>;

@@ -19,7 +19,7 @@ function getDisplayErrAndLineErr(DocStrMap: TTokenStream): TDisplayErrAndLineErr
     const displayErr: TDisplayErr = [];
     const lineDiagS: CNekoBaseLineDiag[] = [];
 
-    let IgnoreLine = getIgnore(DocStrMap[0].textRaw, 0, -1);
+    let IgnoreLine: number = getIgnore(DocStrMap[0].textRaw, 0, -1);
     for (const { textRaw, line } of DocStrMap) {
         IgnoreLine = getIgnore(textRaw, line, IgnoreLine);
         if (line <= IgnoreLine) {

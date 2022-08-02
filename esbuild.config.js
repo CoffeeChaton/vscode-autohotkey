@@ -21,7 +21,6 @@ const filter = (src, _dest) => {
         'src',
     ];
     const file = [
-        '.VSCodeCounter',
         '.cpuprofile',
         '.cspell',
         '.editorconfig',
@@ -31,12 +30,14 @@ const filter = (src, _dest) => {
         '.gitignore',
         '.heapprofile',
         '.heapsnapshot',
-        'TODO.md',
+        '.VSCodeCounter',
+        '.vsix',
         'cspell.json',
         'dprint.json',
         'esbuild.config.js',
         'esbuildTarget.json',
         'pnpm-lock.yaml',
+        'TODO.md',
         'tsconfig.json',
     ];
     const List = [...folder, ...file];

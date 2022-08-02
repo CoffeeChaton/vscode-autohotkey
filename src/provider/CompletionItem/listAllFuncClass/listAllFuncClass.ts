@@ -28,9 +28,9 @@ function setClassSnip(
 
 function setFuncSnip(
     fileName: string,
-    DA: CAhkFunc,
+    func: CAhkFunc,
 ): vscode.CompletionItem {
-    const { md, name, selectionRangeText } = DA;
+    const { md, name, selectionRangeText } = func;
 
     const item: vscode.CompletionItem = new vscode.CompletionItem({
         label: `${name}()`,

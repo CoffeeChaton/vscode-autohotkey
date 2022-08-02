@@ -9,9 +9,9 @@ export function setDiagnostic(
     severity: vscode.DiagnosticSeverity,
     tags: vscode.DiagnosticTag[],
 ): vscode.Diagnostic {
-    const message = Diags[value].msg;
-    const target = vscode.Uri.parse(Diags[value].path);
-    const diag1 = new vscode.Diagnostic(range, message, severity);
+    const message: string = Diags[value].msg;
+    const target: vscode.Uri = vscode.Uri.parse(Diags[value].path);
+    const diag1: vscode.Diagnostic = new vscode.Diagnostic(range, message, severity);
     diag1.source = EDiagBase.source;
     diag1.code = { value, target };
     diag1.tags = tags;
@@ -25,8 +25,8 @@ export function setDiagnosticDA(
     tags: vscode.DiagnosticTag[],
     message: string,
 ): vscode.Diagnostic {
-    const target = vscode.Uri.parse(DiagsDA[value].path);
-    const diag1 = new vscode.Diagnostic(range, message, severity);
+    const target: vscode.Uri = vscode.Uri.parse(DiagsDA[value].path);
+    const diag1: vscode.Diagnostic = new vscode.Diagnostic(range, message, severity);
     diag1.source = EDiagBase.sourceDA;
     diag1.code = { value, target };
     diag1.tags = tags;

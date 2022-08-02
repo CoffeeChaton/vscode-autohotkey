@@ -6,6 +6,7 @@
 *.cpuprofile
 *.heapprofile
 *.heapsnapshot
+*.vsix
 coverage/
 dict/
 esbuildTarget.json

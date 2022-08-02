@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { CAhkClass } from '../AhkSymbol/CAhkClass';
-import { getClassDetail } from '../tools/ahkClass/getClassDetail';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
 import { getRange } from '../tools/range/getRange';
@@ -9,6 +8,15 @@ import type { TFuncInput } from './getChildren';
 import { getChildren } from './getChildren';
 import { getFunc } from './ParserFunc';
 import { setClassInsertText } from './ParserTools/setClassInsertText';
+
+function getClassExtends(lStr: string, colFix: number, name: string): string {
+    return lStr
+        .slice(colFix + name.length, lStr.length + colFix + name.length)
+        .replace(/\bextends\b/iu, '')
+        .trim()
+        .replace('{', '')
+        .trim();
+}
 
 export function getClass(FuncInput: TFuncInput): CAhkClass | null {
     const {
@@ -49,7 +57,7 @@ export function getClass(FuncInput: TFuncInput): CAhkClass | null {
 
     return new CAhkClass({
         name,
-        detail: getClassDetail(lStr, col, name),
+        classExtends: getClassExtends(lStr, col, name),
         range,
         selectionRange: new vscode.Range(line, col, line, col + name.length),
         insertText: `${name}${setClassInsertText(ch)}`,
