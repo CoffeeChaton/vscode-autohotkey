@@ -67,7 +67,7 @@ export class CAhkClass extends vscode.DocumentSymbol {
     // https://www.autohotkey.com/docs/Objects.htm#Custom_Classes
     // https://www.autohotkey.com/docs/Objects.htm#Custom_NewDelete
 
-    public readonly classExtends: string; // FIXME classExtends
+    public readonly Base: string;
     public readonly insertText: string;
     public readonly uri: vscode.Uri;
     public readonly upName: string;
@@ -83,7 +83,7 @@ export class CAhkClass extends vscode.DocumentSymbol {
             insertText,
             uri,
             ch,
-            classExtends,
+            Base,
         }: {
             name: string;
             range: vscode.Range;
@@ -91,7 +91,7 @@ export class CAhkClass extends vscode.DocumentSymbol {
             insertText: string;
             uri: vscode.Uri;
             ch: TClassChildren[];
-            classExtends: string;
+            Base: string;
         },
     ) {
         super(name, '', vscode.SymbolKind.Class, range, selectionRange);
@@ -99,7 +99,7 @@ export class CAhkClass extends vscode.DocumentSymbol {
         this.upName = name.toUpperCase();
         this.uri = uri;
         this.children = ch;
-        this.classExtends = classExtends;
+        this.Base = Base;
     }
     // m1 := new GMem(0, 20) ; OK!
     // m2 := {base: GMem}.__New(0, 30) ; no support

@@ -9,7 +9,7 @@ import { getChildren } from './getChildren';
 import { getFunc } from './ParserFunc';
 import { setClassInsertText } from './ParserTools/setClassInsertText';
 
-function getClassExtends(lStr: string, colFix: number, name: string): string {
+function getClassBase(lStr: string, colFix: number, name: string): string {
     return lStr
         .slice(colFix + name.length, lStr.length + colFix + name.length)
         .replace(/\bextends\b/iu, '')
@@ -57,7 +57,7 @@ export function getClass(FuncInput: TFuncInput): CAhkClass | null {
 
     return new CAhkClass({
         name,
-        classExtends: getClassExtends(lStr, col, name),
+        Base: getClassBase(lStr, col, name),
         range,
         selectionRange: new vscode.Range(line, col, line, col + name.length),
         insertText: `${name}${setClassInsertText(ch)}`,

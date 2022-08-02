@@ -56,9 +56,9 @@ export function parsingUserDefClassRecursive(
         }
     }
 
-    const { classExtends } = ahkClass; // FIXME ahkExtends
-    if (classExtends !== '') {
-        const c1: CAhkClass | null = getUserDefTopClassSymbol(classExtends.toUpperCase());
+    const { Base } = ahkClass;
+    if (Base !== '') {
+        const c1: CAhkClass | null = getUserDefTopClassSymbol(Base.toUpperCase());
         if (c1 !== null) {
             itemS.push(...parsingUserDefClassRecursive(c1, newTrack, ChapterArr, deep));
         }
