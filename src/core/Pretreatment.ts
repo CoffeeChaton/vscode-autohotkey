@@ -116,7 +116,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 deep++;
                 // {{{{
                 const addDeep: number | undefined = lStrTrim
-                    .replace(/\s/gu, '')
+                    .replaceAll(/\s/gu, '')
                     .match(/^(\{+)$/u)
                     ?.[1].length;
 
@@ -136,7 +136,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
 
                 // }}}}
                 const diffDeep: number | undefined = lStrTrim
-                    .replace(/\s/gu, '')
+                    .replaceAll(/\s/gu, '')
                     .match(/^(\}+)$/u)
                     ?.[1].length;
 

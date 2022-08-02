@@ -9,7 +9,7 @@ export function isPosAtStr(document: vscode.TextDocument, position: vscode.Posit
         return true; // in ;comment
     }
     let tf = 1;
-    const text = textRaw.replace(/`./ug, '  ');
+    const text = textRaw.replaceAll(/`./ug, '  ');
     const sL = text.length;
     for (let i = 0; i < sL; i++) {
         if (col === i) return tf !== 1;
@@ -30,7 +30,7 @@ export function isPosAtStrNext(textRaw: string, lStr: string, position: vscode.P
         return true; // in ;comment
     }
     let tf = 1;
-    const text = textRaw.replace(/`./ug, '  ');
+    const text = textRaw.replaceAll(/`./ug, '  ');
     const sL = text.length;
     for (let i = 0; i < sL; i++) {
         if (col === i) return tf !== 1;

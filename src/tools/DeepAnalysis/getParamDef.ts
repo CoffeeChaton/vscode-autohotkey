@@ -81,9 +81,9 @@ export function getParamDef(fnName: string, selectionRange: vscode.Range, DocStr
         if (lStrFix.trim() === '') break;
 
         const strF: string = lStrFix
-            .replace(/:?=\s*[-+.\w]+/ug, replacerSpace); // Test 0x00ffffff  , -0.5 , 0.8
+            .replaceAll(/:?=\s*[-+.\w]+/ug, replacerSpace); // Test 0x00ffffff  , -0.5 , 0.8
 
-        const strF2: string = strF.replace(/\bByRef\b/uig, replacerSpace);
+        const strF2: string = strF.replaceAll(/\bByRef\b/uig, replacerSpace);
 
         for (const ma of strF.matchAll(/\s*([^,]+),?/uig)) {
             const param: string = ma[1].trim();

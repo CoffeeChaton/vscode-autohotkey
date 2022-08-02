@@ -166,7 +166,7 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "node esbuild.config.js",
+        "vscode:prepublish": "node esbuild.config.js --minify",
         "fmt": "dprint fmt",
         "lint": "eslint src",
         "auto_fix": "eslint --fix src",
@@ -176,8 +176,8 @@
         "test": "jest",
         "up_dprint_config": "dprint config update",
         "up": "pnpm up -L",
-        "package": "pnpm vsce package --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp",
-        "publish": "pnpm vsce publish --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp"
+        "package": "pnpm vsce package --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp --baseImagesUrl https://raw.githubusercontent.com/CoffeeChaton/vscode-autohotkey-NekoHelp/master/",
+        "publish": "pnpm vsce publish --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp --baseImagesUrl https://raw.githubusercontent.com/CoffeeChaton/vscode-autohotkey-NekoHelp/master/"
     },
     "devDependencies": {
         "@swc/core": "^1.2.222",

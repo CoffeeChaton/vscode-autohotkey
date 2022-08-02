@@ -2,36 +2,36 @@ import { ELTrim } from '../../globalEnum';
 import { isSetVarTradition } from '../../tools/str/removeSpecialChar';
 
 function textReplace(textElement: string): string {
-    return textElement.replace(/ *, */gu, ', ')
-        .replace(/ *:= */ug, ' := ')
-        .replace(/ *!= */ug, ' != ')
-        // .replace(/ *== */g, ' == ') test err
-        // .replace(/ *>= */g, ' >= ') test err
-        // .replace(/ *<= */g, ' <= ') test err
-        .replace(/ *\.= */ug, ' .= ')
-        .replace(/ *\+= */ug, ' += ')
-        .replace(/ *-= */ug, ' -= ')
-        .replace(/ *\|\| */ug, ' || ')
-        .replace(/ *&& */ug, ' && ')
-        .replace(/ *<> */ug, ' <> ')
-        .replace(/\breturn\s+/ug, 'return ')
-        .replace(/\bReturn\s+/ug, 'Return ')
-        // .replace(/ *\? */g, ' ? ')
-        .replace(/\( */ug, '(')
-        .replace(/ *\)/ug, ')')
-        .replace(/\[ */ug, '[')
-        .replace(/ *\]/ug, ']')
-        // .replace(/ *\{ */ug, ' {')
-        // .replace(/ *\}/ug, '}')
-        // .replace(/\}\s+/ug, '} ')
-        .replace(/\)\s*\{ */ug, ') {')
-        .replace(/\bif\s*\(/ug, 'if (')
-        .replace(/\bIf\s*\(/ug, 'If (')
-        .replace(/\bIF\s*\(/ug, 'IF (')
-        .replace(/\bwhile\s*\(/ug, 'while (')
-        .replace(/\bWhile\s*\(/ug, 'While (')
-        .replace(/\bWHILE\s*\(/ug, 'WHILE (')
-        .replace(/ *;/ug, ' ;');
+    return textElement.replaceAll(/ *, */gu, ', ')
+        .replaceAll(/ *:= */ug, ' := ')
+        .replaceAll(/ *!= */ug, ' != ')
+        // .replaceAll(/ *== */g, ' == ') test err
+        // .replaceAll(/ *>= */g, ' >= ') test err
+        // .replaceAll(/ *<= */g, ' <= ') test err
+        .replaceAll(/ *\.= */ug, ' .= ')
+        .replaceAll(/ *\+= */ug, ' += ')
+        .replaceAll(/ *-= */ug, ' -= ')
+        .replaceAll(/ *\|\| */ug, ' || ')
+        .replaceAll(/ *&& */ug, ' && ')
+        .replaceAll(/ *<> */ug, ' <> ')
+        .replaceAll(/\breturn\s+/ug, 'return ')
+        .replaceAll(/\bReturn\s+/ug, 'Return ')
+        // .replaceAll(/ *\? */g, ' ? ')
+        .replaceAll(/\( */ug, '(')
+        .replaceAll(/ *\)/ug, ')')
+        .replaceAll(/\[ */ug, '[')
+        .replaceAll(/ *\]/ug, ']')
+        // .replaceAll(/ *\{ */ug, ' {')
+        // .replaceAll(/ *\}/ug, '}')
+        // .replaceAll(/\}\s+/ug, '} ')
+        .replaceAll(/\)\s*\{ */ug, ') {')
+        .replaceAll(/\bif\s*\(/ug, 'if (')
+        .replaceAll(/\bIf\s*\(/ug, 'If (')
+        .replaceAll(/\bIF\s*\(/ug, 'IF (')
+        .replaceAll(/\bwhile\s*\(/ug, 'while (')
+        .replaceAll(/\bWhile\s*\(/ug, 'While (')
+        .replaceAll(/\bWHILE\s*\(/ug, 'WHILE (')
+        .replaceAll(/ *;/ug, ' ;');
     // \s === [ \f\n\r\t\v]
     // need more TEST & options
 }

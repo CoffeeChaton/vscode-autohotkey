@@ -16,11 +16,15 @@ export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: n
 
     const searchLineFix = getSearchLineFix(DocStrMap, searchLine, RangeEnd);
     const startDeep = DocStrMap[searchLineFix].deep - 1;
-    for (let line = searchLineFix + 1; line <= RangeEnd; line++) {
+    for (let line = searchLineFix + 1; line < RangeEnd; line++) {
         if (DocStrMap[line].deep === startDeep) {
             const col = DocStrMap[line].lStr.lastIndexOf('}');
             return new vscode.Range(defLine, 0, line, col + 1);
         }
+    }
+    console.log('🚀 ~startDeep', startDeep);
+    for (let line = searchLineFix + 1; line < RangeEnd; line++) {
+        console.log('🚀 ~ DocStrMap[line].deep', line, DocStrMap[line].deep);
     }
     console.error('🚀 get Range ERROR Start --904--321--33 -------');
     console.error('🚀 ~ defLine', defLine);

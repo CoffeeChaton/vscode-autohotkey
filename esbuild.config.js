@@ -6,6 +6,8 @@ const copyStaticFiles = require('esbuild-copy-static-files');
 const rawData = fs.readFileSync('./esbuildTarget.json');
 const esbuildTarget = JSON.parse(rawData).A;
 
+const minify = process.argv.includes('--minify');
+
 const filter = (src, _dest) => {
     const folder = [
         '.config',
@@ -36,6 +38,7 @@ const filter = (src, _dest) => {
         'dprint.json',
         'esbuild.config.js',
         'esbuildTarget.json',
+        'icon.svg',
         'pnpm-lock.yaml',
         'TODO.md',
         'tsconfig.json',
@@ -64,11 +67,11 @@ esbuild
         external: ['vscode'], // not bundle 'vscode'
         format: 'cjs',
         logLevel: 'info',
-        minify: false, //
+        minify, //
         outdir: 'dict',
         platform: 'node',
         sourcemap: true,
-        target: ['es2021', 'chrome100', 'node16.13'],
+        target: ['es2021', 'node16.13'],
         treeShaking: true,
         plugins: [
             copyStaticFiles({

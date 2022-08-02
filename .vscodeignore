@@ -25,6 +25,7 @@ cspell.json
 dprint.json
 esbuild.config.js
 esbuildTarget.json
+icon.svg
 image/
 jest.config.js
 node_modules/
