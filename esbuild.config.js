@@ -33,6 +33,7 @@ const filter = (src, _dest) => {
         '.heapprofile',
         '.heapsnapshot',
         '.VSCodeCounter',
+        '.vscodeignore',
         '.vsix',
         'cspell.json',
         'dprint.json',
@@ -40,6 +41,7 @@ const filter = (src, _dest) => {
         'esbuildTarget.json',
         'icon.svg',
         'pnpm-lock.yaml',
+        'syntaxes\\README.md',
         'TODO.md',
         'tsconfig.json',
     ];

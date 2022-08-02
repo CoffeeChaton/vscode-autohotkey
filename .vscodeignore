@@ -25,12 +25,13 @@ cspell.json
 dprint.json
 esbuild.config.js
 esbuildTarget.json
-extension.js.map
 icon.svg
 image/
 jest.config.js
 node_modules/
 out/
+pnpm-lock.yaml
 src/
+syntaxes/README.md
 TODO.md
 tsconfig.json
