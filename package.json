@@ -3,7 +3,7 @@
     "displayName": "AutoHotkey NekoHelp",
     "description": "AutoHotkey IntelliSense, format, linters, and language support for VS Code, ",
     "version": "0.0.1",
-    "publisher": "CoffeeChaton",
+    "publisher": "cat1122",
     "engines": {
         "vscode": "^1.69.1"
     },
