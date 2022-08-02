@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { diagColl } from '../../core/Detecter';
+import { diagColl } from '../../core/ProjectManager';
 import { EDiagBase } from '../../Enum/EDiagBase';
 
 function clearNekoDA(uri: vscode.Uri): null {

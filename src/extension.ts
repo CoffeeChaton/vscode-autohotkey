@@ -12,13 +12,12 @@ import { ListAllFuncMain } from './command/ListAllFunc';
 import { ListAllInclude } from './command/ListAllInclude';
 import { fnRefreshResource, UpdateCacheAsync } from './command/UpdateCache';
 import { configChangEvent, statusBarItem } from './configUI';
-import { Detecter, diagColl } from './core/Detecter';
+import { diagColl, pm } from './core/ProjectManager';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CodeLensProvider } from './provider/CodeLens/CodeLensProvider';
 import { showUnknownAnalyze } from './provider/CodeLens/showUnknownAnalyze';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { DefProvider } from './provider/Def/DefProvider';
-import { ahkRenameFiles } from './provider/event/ahkRenameFiles';
 import { onDidChangeTabs } from './provider/event/onDidChangeTabs';
 import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
@@ -51,21 +50,19 @@ export function activate(context: ExtensionContext): void {
         languages.registerWorkspaceSymbolProvider(WorkspaceSymbolProvider),
         // workspace-------------------
         workspace.onDidChangeConfiguration(configChangEvent),
-        workspace.onDidCreateFiles(Detecter.createMap),
-        workspace.onDidDeleteFiles(Detecter.delMap),
-        workspace.onDidRenameFiles(ahkRenameFiles),
+        workspace.onDidCreateFiles(pm.createMap),
+        workspace.onDidDeleteFiles(pm.delMap),
+        workspace.onDidRenameFiles(pm.renameFiles),
         // workspace.onDidChangeTextDocument((e) => d(e)),
         // workspace.registerTextDocumentContentProvider(selector, e),
         // window----------------------
         window.tabGroups.onDidChangeTabs(onDidChangeTabs),
         // window.tabGroups.onDidChangeTabGroups(onDidChangeTabGroups),
         // commands--------------------
-        // open of package.json
         commands.registerCommand('ahk.nekoHelp.bar', statusBarClick),
         commands.registerCommand('ahk.nekoHelp.refreshResource', fnRefreshResource),
         commands.registerCommand(ECommand.ListAllFunc, ListAllFuncMain),
         commands.registerCommand(ECommand.ListAllInclude, ListAllInclude),
-        // just of ui
         commands.registerCommand(ECommand.showFuncAnalyze, AnalyzeFuncMain),
         commands.registerCommand(ECommand.showUnknownAnalyze, showUnknownAnalyze),
         // root dispose
@@ -79,7 +76,7 @@ export function activate(context: ExtensionContext): void {
 
 // this method is called when your extension is deactivated
 export function deactive(): void {
-    // non
+    // none
 }
 
 // TODO i18n of diag

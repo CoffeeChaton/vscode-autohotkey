@@ -5,20 +5,22 @@ import { ECommand } from '../command/ECommand';
 import { showTimeSpend } from '../configUI';
 import type { TFsPath } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
-import type { TMemo } from './BaseScanMemo/memo';
-import { BaseScanMemo, getBaseData } from './BaseScanMemo/memo';
+import type { TMemo } from './BaseScanMemo/getFileAST';
+import { BaseScanMemo, getFileAST } from './BaseScanMemo/getFileAST';
 
 export type TAhkFileData = TMemo;
 
 export const diagColl: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('ahk-neko-help');
 
-// ProjectManager
-export const Detecter = {
+/**
+ * ProjectManager
+ */
+export const pm = {
     // key : vscode.Uri.fsPath,
     DocMap: new Map<TFsPath, TAhkFileData>(),
 
     getDocMapValue(): TAhkFileData[] {
-        const need: TAhkFileData[] = [...Detecter.DocMap.values()];
+        const need: TAhkFileData[] = [...pm.DocMap.values()];
         // eslint-disable-next-line no-magic-numbers
         if (Math.random() > 0.3) { // 1/3 -> .reverse() exp, funcName double def at 2 files
             need.reverse();
@@ -30,7 +32,7 @@ export const Detecter = {
     },
 
     getDocMap(fsPath: string): TAhkFileData | undefined {
-        return Detecter.DocMap.get(fsPath);
+        return pm.DocMap.get(fsPath);
     },
 
     delMap(e: vscode.FileDeleteEvent): void {
@@ -44,14 +46,14 @@ export const Detecter = {
             if (uri.fsPath.endsWith('.ahk')) {
                 void vscode.workspace
                     .openTextDocument(uri)
-                    .then((doc: vscode.TextDocument): TAhkFileData => Detecter.updateDocDef(doc));
+                    .then((doc: vscode.TextDocument): TAhkFileData => pm.updateDocDef(doc));
             }
         }
     },
 
-    async renameFileName(e: vscode.FileRenameEvent): Promise<void> {
+    async renameFiles(e: vscode.FileRenameEvent): Promise<void> {
         const docList0: Thenable<vscode.TextDocument>[] = renameFileNameBefore(e);
-        for (const doc of await Promise.all(docList0)) Detecter.updateDocDef(doc);
+        for (const doc of await Promise.all(docList0)) pm.updateDocDef(doc);
 
         await vscode.commands.executeCommand(ECommand.ListAllInclude);
 
@@ -72,7 +74,7 @@ export const Detecter = {
     },
 
     updateDocDef(document: vscode.TextDocument): TAhkFileData {
-        const UpDateDocDefReturn: TAhkFileData = getBaseData(document);
+        const UpDateDocDefReturn: TAhkFileData = getFileAST(document);
 
         const { uri } = document;
         const { fsPath, scheme } = uri;
@@ -81,7 +83,7 @@ export const Detecter = {
             && !fsPath.startsWith('\\')
             && fsPath.endsWith('.ahk')
         ) {
-            Detecter.DocMap.set(fsPath, UpDateDocDefReturn);
+            pm.DocMap.set(fsPath, UpDateDocDefReturn);
             diagColl.set(uri, [...UpDateDocDefReturn.baseDiag]);
         }
 
@@ -94,7 +96,7 @@ export const Detecter = {
 
 export function delOldCache(uri: vscode.Uri): void {
     const { fsPath } = uri;
-    Detecter.DocMap.delete(fsPath);
+    pm.DocMap.delete(fsPath);
     BaseScanMemo.memo.delete(fsPath);
     diagColl.delete(uri);
 }

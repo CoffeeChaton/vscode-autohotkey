@@ -1,4 +1,4 @@
-import type { TAhkFileData } from '../core/Detecter';
+import type { TAhkFileData } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import {
     arrSum,

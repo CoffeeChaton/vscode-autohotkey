@@ -11,6 +11,7 @@ export const enum EDetail {
     isGlobalLine = 7,
     hasDoubleSemicolon = 8,
 }
+
 export const enum ELTrim {
     none = 0,
     FlagS = 1,
@@ -40,6 +41,7 @@ export type TAhkToken = {
     readonly diagDeep: EDiagDeep;
     // I know this is not Complete and correct Token.
 }[];
+
 export type TTokenStream = DeepReadonly<TAhkToken>;
 
 export type TFsPath = string; // vscode.uru.fsPath

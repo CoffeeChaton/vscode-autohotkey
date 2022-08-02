@@ -1,11 +1,11 @@
 import type * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { Detecter } from '../../core/Detecter';
+import { pm } from '../../core/ProjectManager';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 
 function SymBolProviderCore(document: vscode.TextDocument): vscode.DocumentSymbol[] {
-    const { AhkSymbolList } = Detecter.updateDocDef(document);
+    const { AST: AhkSymbolList } = pm.updateDocDef(document);
 
     const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
     digDAFile(DAList, document.uri);

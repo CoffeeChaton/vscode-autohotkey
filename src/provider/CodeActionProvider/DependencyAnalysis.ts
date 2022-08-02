@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
-import { Detecter } from '../../core/Detecter';
+import { pm } from '../../core/ProjectManager';
 import type { TTokenStream } from '../../globalEnum';
 import { getFuncWithPos } from '../../tools/DeepAnalysis/getFuncWithPos';
 
@@ -22,7 +22,7 @@ export function DependencyAnalysis(
         return [];
     }
 
-    const DocStrMap: TTokenStream | undefined = Detecter.getDocMap(fsPath)?.DocStrMap;
+    const DocStrMap: TTokenStream | undefined = pm.getDocMap(fsPath)?.DocStrMap;
     if (DocStrMap === undefined) return [];
 
     const CommandAnalyze: vscode.Command = {

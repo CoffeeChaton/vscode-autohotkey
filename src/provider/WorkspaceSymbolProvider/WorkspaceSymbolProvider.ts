@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import type { TAhkSymbol, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
-import { Detecter } from '../../core/Detecter';
+import { pm } from '../../core/ProjectManager';
 
 const wm = new WeakMap<readonly TTopSymbol[], vscode.SymbolInformation[]>(); // 4ms -> 0ms
 
@@ -27,7 +27,7 @@ function DocSymbol2SymbolInfo(AhkSymbolList: readonly TTopSymbol[]): vscode.Symb
 function WorkspaceSymbolCore(): vscode.SymbolInformation[] {
     const result: vscode.SymbolInformation[] = [];
 
-    for (const { AhkSymbolList } of Detecter.DocMap.values()) { // keep output order is OK
+    for (const { AST: AhkSymbolList } of pm.DocMap.values()) { // keep output order is OK
         result.push(...DocSymbol2SymbolInfo(AhkSymbolList));
     }
 

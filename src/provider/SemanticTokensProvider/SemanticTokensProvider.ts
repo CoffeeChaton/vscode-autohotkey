@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import type { TAhkFileData } from '../../core/Detecter';
-import { Detecter } from '../../core/Detecter';
+import type { TAhkFileData } from '../../core/ProjectManager';
+import { pm } from '../../core/ProjectManager';
 import { DAList2SemanticHighlight } from './DAList2SemanticHighlight';
 import { GlobalHighlight } from './GlobalHighlight';
 import { inLTrimHighlight } from './inLTrimHighlight';
@@ -15,13 +15,13 @@ export const legend: vscode.SemanticTokensLegend = new vscode.SemanticTokensLege
 const wm = new WeakMap<TAhkFileData, vscode.SemanticTokens>();
 
 function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticTokens {
-    const AhkFileData: TAhkFileData = Detecter.updateDocDef(document);
+    const AhkFileData: TAhkFileData = pm.updateDocDef(document);
     const cache: vscode.SemanticTokens | undefined = wm.get(AhkFileData);
     if (cache !== undefined) return cache;
 
     const {
         GValMap,
-        AhkSymbolList,
+        AST: AhkSymbolList,
         DocStrMap,
     } = AhkFileData;
 

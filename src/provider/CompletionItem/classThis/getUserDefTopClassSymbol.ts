@@ -1,8 +1,8 @@
 import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
-import { Detecter } from '../../../core/Detecter';
+import { pm } from '../../../core/ProjectManager';
 
 export function getUserDefTopClassSymbol(keyUpName: string): CAhkClass | null {
-    for (const { AhkSymbolList } of Detecter.getDocMapValue()) {
+    for (const { AST: AhkSymbolList } of pm.getDocMapValue()) {
         for (const AhkSymbol of AhkSymbolList) {
             if (
                 AhkSymbol instanceof CAhkClass

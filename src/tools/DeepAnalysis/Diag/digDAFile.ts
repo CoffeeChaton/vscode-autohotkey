@@ -1,7 +1,7 @@
 import type * as vscode from 'vscode';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { getCode502Default, getCode503Default } from '../../../configUI';
-import { diagColl } from '../../../core/Detecter';
+import { diagColl } from '../../../core/ProjectManager';
 import { EDiagBase } from '../../../Enum/EDiagBase';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { Detecter } from '../../core/Detecter';
+import { pm } from '../../core/ProjectManager';
 import { hoverAVar } from '../../tools/Built-in/A_Variables';
 import { getHoverCommand, getHoverCommand2 } from '../../tools/Built-in/Command_Tools';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func_tools';
@@ -31,7 +31,7 @@ function HoverProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Hover | null {
-    const { AhkSymbolList, DocStrMap } = Detecter.getDocMap(document.uri.fsPath) ?? Detecter.updateDocDef(document);
+    const { AST: AhkSymbolList, DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
 
     // pos at Comment range...
     const { lStr, fistWordUp } = DocStrMap[position.line];

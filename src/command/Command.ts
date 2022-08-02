@@ -7,7 +7,7 @@ import { ListAllInclude } from './ListAllInclude';
 import type { TPick } from './TPick';
 import { fnRefreshResource } from './UpdateCache';
 
-export async function statusBarClick(): Promise<void> {
+export function statusBarClick(): void {
     type TCommand = TPick<void>;
 
     const items: TCommand[] = [
@@ -19,7 +19,11 @@ export async function statusBarClick(): Promise<void> {
         { label: '5 -> format All File', fn: FormatAllFile },
     ];
 
-    const pick: TPick<void> | undefined = await vscode.window.showQuickPick<TCommand>(items);
-
-    void pick?.fn();
+    void vscode.window.showQuickPick<TCommand>(items)
+        .then((pick: TPick<void> | undefined): null => {
+            //
+            //
+            void pick?.fn();
+            return null;
+        });
 }

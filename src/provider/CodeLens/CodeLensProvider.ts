@@ -3,16 +3,16 @@ import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
 import { getCodeLenConfig } from '../../configUI';
-import type { TAhkFileData } from '../../core/Detecter';
-import { Detecter } from '../../core/Detecter';
+import type { TAhkFileData } from '../../core/ProjectManager';
+import { pm } from '../../core/ProjectManager';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import type { TShowUnknownAnalyze } from './showUnknownAnalyze';
 
 function CodeLensCore(fsPath: string): vscode.CodeLens[] {
-    const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
+    const AhkFileData: TAhkFileData | undefined = pm.getDocMap(fsPath);
     if (AhkFileData === undefined) return [];
 
-    const { AhkSymbolList, DocStrMap } = AhkFileData;
+    const { AST: AhkSymbolList, DocStrMap } = AhkFileData;
 
     const need: vscode.CodeLens[] = [];
     const DAList: CAhkFunc[] = getDAList(AhkSymbolList);

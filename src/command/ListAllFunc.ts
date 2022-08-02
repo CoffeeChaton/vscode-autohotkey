@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Detecter } from '../core/Detecter';
+import { pm } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import type { TPick } from './TPick';
 
@@ -13,7 +13,7 @@ function ListAllFunc(showLink: boolean): null {
     const t1: number = Date.now();
 
     const AllList: string[] = [];
-    for (const { uri, AhkSymbolList } of Detecter.DocMap.values()) { // should keep output order
+    for (const { uri, AST: AhkSymbolList } of pm.DocMap.values()) { // should keep output order
         AllList.push(uri.fsPath);
 
         for (const DocumentSymbol of AhkSymbolList) {
@@ -41,7 +41,7 @@ function ListAllFuncSort(reverse: boolean): null {
     const t1: number = Date.now();
 
     const AllList: string[] = [];
-    for (const { uri, AhkSymbolList } of Detecter.DocMap.values()) { // should keep output order
+    for (const { uri, AST: AhkSymbolList } of pm.DocMap.values()) { // should keep output order
         for (const DocumentSymbol of AhkSymbolList) {
             if (DocumentSymbol.kind === vscode.SymbolKind.Function) {
                 AllList.push(msgWithPos(`${DocumentSymbol.name}()`, uri.fsPath, DocumentSymbol.selectionRange.start));

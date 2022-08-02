@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import type * as vscode from 'vscode';
-import { Detecter } from '../../core/Detecter';
+import { pm } from '../../core/ProjectManager';
 import { EFormatChannel } from '../../globalEnum';
 import { fmtDiffInfo } from './fmtDiffInfo';
 import { getDeepKeywords } from './getDeepKeywords';
@@ -28,7 +28,7 @@ export function FormatCore(
 ): vscode.TextEdit[] {
     const timeStart: number = Date.now();
 
-    const { DocStrMap } = Detecter.updateDocDef(document);
+    const { DocStrMap } = pm.updateDocDef(document);
     let deep = 0;
     let occ = 0;
 

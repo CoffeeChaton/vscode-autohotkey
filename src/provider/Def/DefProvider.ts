@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import type { TAhkFileData } from '../../core/Detecter';
-import { Detecter } from '../../core/Detecter';
+import type { TAhkFileData } from '../../core/ProjectManager';
+import { pm } from '../../core/ProjectManager';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
@@ -11,7 +11,7 @@ type TFnFindCol = (lineStr: string) => IterableIterator<RegExpMatchArray>;
 
 function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vscode.Location[] {
     const List: vscode.Location[] = [];
-    for (const { DocStrMap, AhkSymbolList, uri } of Detecter.getDocMapValue()) {
+    for (const { DocStrMap, AST: AhkSymbolList, uri } of pm.getDocMapValue()) {
         const filterLineList: number[] = getDAList(AhkSymbolList)
             .filter((DA: CAhkFunc) => DA.kind === vscode.SymbolKind.Method)
             .map((DA: CAhkFunc) => DA.nameRange.start.line);
@@ -53,8 +53,8 @@ export function userDefFunc(
 ): vscode.Location[] | null {
     const timeStart: number = Date.now();
 
-    const AhkFileData: TAhkFileData = Detecter.getDocMap(document.uri.fsPath) ?? Detecter.updateDocDef(document);
-    const { AhkSymbolList } = AhkFileData;
+    const AhkFileData: TAhkFileData = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const { AST: AhkSymbolList } = AhkFileData;
 
     if (isPosAtMethodName(getDAWithPos(AhkSymbolList, position), position)) {
         return null;

@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
 import type { CAhkClass } from '../../../AhkSymbol/CAhkClass';
-import type { TAhkFileData } from '../../../core/Detecter';
-import { Detecter } from '../../../core/Detecter';
+import type { TAhkFileData } from '../../../core/ProjectManager';
+import { pm } from '../../../core/ProjectManager';
 import type { TTokenStream } from '../../../globalEnum';
 import { getDocStrMapMask } from '../../../tools/getDocStrMapMask';
 
 function getWmThisCore(AhkClassSymbol: CAhkClass): vscode.CompletionItem[] {
     const { fsPath } = AhkClassSymbol.uri;
-    const AhkFileData: TAhkFileData | undefined = Detecter.getDocMap(fsPath);
+    const AhkFileData: TAhkFileData | undefined = pm.getDocMap(fsPath);
     if (AhkFileData === undefined) return [];
     const { DocStrMap } = AhkFileData;
     const AhkTokenList: TTokenStream = getDocStrMapMask(AhkClassSymbol.range, DocStrMap);

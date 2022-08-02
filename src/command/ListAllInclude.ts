@@ -1,6 +1,6 @@
 import { CAhkInclude } from '../AhkSymbol/CAhkLine';
 import type { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
-import { Detecter } from '../core/Detecter';
+import { pm } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 
 function collectInclude(AhkSymbolList: Readonly<TAhkSymbolList>): CAhkInclude[] {
@@ -19,7 +19,7 @@ export function ListAllInclude(): null {
     const t1: number = Date.now();
 
     const AllList: string[] = [];
-    for (const { uri, AhkSymbolList } of Detecter.DocMap.values()) { // should keep output order
+    for (const { uri, AST: AhkSymbolList } of pm.DocMap.values()) { // should keep output order
         const List: CAhkInclude[] = collectInclude(AhkSymbolList);
 
         if (List.length > 0) {

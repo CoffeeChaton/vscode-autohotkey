@@ -20,7 +20,7 @@ class CTopClass extends vscode.DocumentSymbol {
 }
 
 export type TMemo = Readonly<{
-    readonly AhkSymbolList: readonly TTopSymbol[];
+    readonly AST: readonly TTopSymbol[];
     readonly GValMap: TGValMapReadOnly;
     readonly DocStrMap: TTokenStream;
     readonly DocFullSize: number;
@@ -80,7 +80,7 @@ export const BaseScanMemo = {
     },
 } as const;
 
-export function getBaseData(document: vscode.TextDocument): TMemo {
+export function getFileAST(document: vscode.TextDocument): TMemo {
     const fullText: string = document.getText();
     const fullTextList: readonly string[] = fullText.split(/\r?\n/u);
     const DocFullSize: number = fullText.length;
@@ -107,7 +107,7 @@ export function getBaseData(document: vscode.TextDocument): TMemo {
     const AhkCache: TMemo = {
         GValMap, // TGValMapReadOnly
         DocStrMap,
-        AhkSymbolList,
+        AST: AhkSymbolList,
         baseDiag,
         DocFullSize,
         uri: document.uri,

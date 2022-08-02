@@ -1,8 +1,8 @@
 import type * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
-import type { TAhkFileData } from '../../core/Detecter';
-import { Detecter } from '../../core/Detecter';
+import type { TAhkFileData } from '../../core/ProjectManager';
+import { pm } from '../../core/ProjectManager';
 import { getSnippetStartWihA } from '../../tools/Built-in/A_Variables';
 import { getSnippetCommand } from '../../tools/Built-in/Command_Tools';
 import { Completion2Directives } from '../../tools/Built-in/Directives';
@@ -32,10 +32,10 @@ function CompletionItemCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.CompletionItem[] {
-    const AhkFileData: TAhkFileData = Detecter.updateDocDef(document);
+    const AhkFileData: TAhkFileData = pm.updateDocDef(document);
 
     // const t1 = Date.now();
-    const { AhkSymbolList, DocStrMap } = AhkFileData;
+    const { AST: AhkSymbolList, DocStrMap } = AhkFileData;
     const { lStr, textRaw } = DocStrMap[position.line];
     const topSymbol: TTopSymbol | null = getTopSymbolWithPos(AhkSymbolList, position);
     const DA: CAhkFunc | null = getDAWithPos(AhkSymbolList, position);

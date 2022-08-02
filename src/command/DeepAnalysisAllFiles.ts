@@ -1,5 +1,5 @@
 import type { CAhkFunc } from '../AhkSymbol/CAhkFunc';
-import { Detecter } from '../core/Detecter';
+import { pm } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAList } from '../tools/DeepAnalysis/getDAList';
@@ -30,7 +30,7 @@ export function DeepAnalysisAllFiles(): null {
     const t1: number = Date.now();
 
     const need: CAhkFunc[] = [];
-    for (const { uri, AhkSymbolList } of Detecter.DocMap.values()) { // keep output order is OK
+    for (const { uri, AST: AhkSymbolList } of pm.DocMap.values()) { // keep output order is OK
         const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
         need.push(...DAList);
         digDAFile(DAList, uri);

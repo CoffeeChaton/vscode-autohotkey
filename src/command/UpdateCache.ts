@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
-import { BaseScanMemo } from '../core/BaseScanMemo/memo';
-import type { TAhkFileData } from '../core/Detecter';
-import { Detecter } from '../core/Detecter';
+import { BaseScanMemo } from '../core/BaseScanMemo/getFileAST';
+import type { TAhkFileData } from '../core/ProjectManager';
+import { pm } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { getUriList } from '../tools/fsTools/getUriList';
 
 export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileData[] | null> {
-    Detecter.DocMap.clear();
+    pm.DocMap.clear();
     if (clearCache) {
         BaseScanMemo.memo.clear();
     }
@@ -19,7 +19,7 @@ export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileDat
         waitDocFullData.push(
             vscode.workspace
                 .openTextDocument(uri)
-                .then((doc: vscode.TextDocument): TAhkFileData => Detecter.updateDocDef(doc)),
+                .then((doc: vscode.TextDocument): TAhkFileData => pm.updateDocDef(doc)),
         );
     }
 

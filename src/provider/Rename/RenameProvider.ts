@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { Detecter } from '../../core/Detecter';
+import { pm } from '../../core/ProjectManager';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { userDefFunc } from '../Def/DefProvider';
 
@@ -9,7 +9,7 @@ function RenameProviderCore(
     position: vscode.Position,
     newName: string,
 ): vscode.WorkspaceEdit | null {
-    const { AhkSymbolList } = Detecter.getDocMap(document.uri.fsPath) ?? Detecter.updateDocDef(document);
+    const { AST: AhkSymbolList } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
 
     const DA: CAhkFunc | null = getDAWithPos(AhkSymbolList, position);
     if (DA === null || !DA.nameRange.contains(position) || DA.kind === vscode.SymbolKind.Method) {

@@ -4,7 +4,7 @@ import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import type { TTopSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
 import { getSnippetBlockFilesList } from '../../../configUI';
-import { Detecter } from '../../../core/Detecter';
+import { pm } from '../../../core/ProjectManager';
 import { fsPathIsAllow } from '../../../tools/fsTools/getUriList';
 
 function setClassSnip(
@@ -72,7 +72,7 @@ export function listAllFuncClass(): vscode.CompletionItem[] {
     const filesBlockList: readonly RegExp[] = getSnippetBlockFilesList();
 
     const item: vscode.CompletionItem[] = [];
-    for (const { uri, AhkSymbolList } of Detecter.DocMap.values()) { // keep output order is OK
+    for (const { uri, AST: AhkSymbolList } of pm.DocMap.values()) { // keep output order is OK
         if (!fsPathIsAllow(uri.fsPath.replaceAll('\\', '/'), filesBlockList)) continue;
 
         item.push(...partSnip(AhkSymbolList, path.basename(uri.fsPath)));

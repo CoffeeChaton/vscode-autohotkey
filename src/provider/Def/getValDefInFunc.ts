@@ -5,8 +5,8 @@ import type {
     TTextMetaOut,
     TValMetaOut,
 } from '../../AhkSymbol/CAhkFunc';
-import type { TAhkFileData } from '../../core/Detecter';
-import { Detecter } from '../../core/Detecter';
+import type { TAhkFileData } from '../../core/ProjectManager';
+import { pm } from '../../core/ProjectManager';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 
 function rangeList2LocList(rangeList: readonly vscode.Range[], uri: vscode.Uri): vscode.Location[] {
@@ -48,8 +48,8 @@ export function getValDefInFunc(
     listAllUsing: boolean,
 ): vscode.Location[] | null {
     const { uri } = document;
-    const AhkFileData: TAhkFileData = Detecter.getDocMap(uri.fsPath) ?? Detecter.updateDocDef(document);
-    const { AhkSymbolList } = AhkFileData;
+    const AhkFileData: TAhkFileData = pm.getDocMap(uri.fsPath) ?? pm.updateDocDef(document);
+    const { AST: AhkSymbolList } = AhkFileData;
 
     const DA: CAhkFunc | null = getDAWithPos(AhkSymbolList, position);
     if (DA === null) return null;

@@ -32,8 +32,6 @@ function checkParam(keyRawName: string, funcRawName: string, line: number): void
         const errLoc = `${funcRawName}() line : ${line + 1}`;
         const message = `${errMsg} args Error ${keyRawName}${errCode}${errLoc}`;
         console.error('🚀 getParamDef ~ message', message);
-        // void vscode.window.showErrorMessage(message);
-        // throw new Error(message);
     }
 }
 

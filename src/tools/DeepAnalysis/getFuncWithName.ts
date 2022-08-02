@@ -1,8 +1,8 @@
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { Detecter } from '../../core/Detecter';
+import { pm } from '../../core/ProjectManager';
 
 export function getFuncWithName(wordUP: string): CAhkFunc | null {
-    for (const { AhkSymbolList } of Detecter.getDocMapValue()) {
+    for (const { AST: AhkSymbolList } of pm.getDocMapValue()) {
         for (const DA of AhkSymbolList) {
             if (DA instanceof CAhkFunc && DA.upName === wordUP) {
                 return DA;

@@ -1,15 +1,9 @@
 import * as vscode from 'vscode';
 
-const enum EPressureTestMode {
-    justBase = 1,
-    baseAndDA = 2,
-}
-
 export type TPickReturn = {
     label: string;
     delay: number;
     maxTime: number;
-    mode: EPressureTestMode; // 1 is base , 2 is base+DA
 };
 
 export function pressureTestConfig(): Thenable<TPickReturn | undefined> {
@@ -19,14 +13,11 @@ export function pressureTestConfig(): Thenable<TPickReturn | undefined> {
             delay: 400, // 173~250
             maxTime: 20, // 8 * 1000 / 400
             //              sec   ms    delay
-            mode: EPressureTestMode.baseAndDA,
         },
         {
             label: '32 sec (base + DA)',
             delay: 400,
             maxTime: 80,
-            //              sec   ms    delay
-            mode: EPressureTestMode.baseAndDA,
         },
     ];
 
