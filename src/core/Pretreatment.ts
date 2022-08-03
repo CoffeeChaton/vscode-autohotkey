@@ -30,7 +30,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             deep = 0;
         }
 
-        CommentBlock = inCommentBlock(textTrimStart, CommentBlock);
+        CommentBlock = inCommentBlock(textTrimStart, CommentBlock); /// TODO {CommentBlock,resultLn} | null
         if (CommentBlock) {
             result.push({
                 fistWordUp: '',

@@ -15,13 +15,9 @@ import { AnalyzeGlobalVal } from './AnalyzeGlobalVal';
 import { AnalyzeRefFunc } from './AnalyzeRefFunc';
 
 function showElement(map: TParamMapOut | TTextMapOut | TValMapOut): string {
-    if (map.size === 0) return '';
-
-    const arr: string[] = [];
-    for (const { keyRawName } of map.values()) {
-        arr.push(keyRawName);
-    }
-    return arr.join(', ');
+    return [...map.values()]
+        .map((e): string => e.keyRawName)
+        .join(', ');
 }
 // --------
 
@@ -43,8 +39,15 @@ async function fmtAnalyze(document: vscode.TextDocument): Promise<void> {
     await vscode.workspace.applyEdit(edit);
 }
 
-function baseDataAnalyze(DA: CAhkFunc): string[] {
-    return [
+export type TShowAnalyze = [CAhkFunc, TTokenStream];
+
+export async function AnalyzeFuncMain(DA: CAhkFunc, AhkTokenList: TTokenStream): Promise<void> {
+    const fullFuncMap: TFullFuncMap = getAllFunc();
+
+    const t1: number = Date.now();
+    const ed: string[] = [
+        `Analyze_Results_of_${DA.name}() {`,
+        'throw, "this is Analyze Results, not .ahk"',
         `${DA.name}() ;`,
         '/**',
         `* @Analyze ${DA.name}`,
@@ -55,19 +58,6 @@ function baseDataAnalyze(DA: CAhkFunc): string[] {
         `* @value : ${DA.valMap.size} of [${showElement(DA.valMap)}]`,
         `* @unknownText : ${DA.textMap.size} of [${showElement(DA.textMap)}]`,
         '*/',
-    ];
-}
-
-export type TShowAnalyze = [CAhkFunc, TTokenStream];
-
-export async function AnalyzeFuncMain(DA: CAhkFunc, AhkTokenList: TTokenStream): Promise<void> {
-    const fullFuncMap: TFullFuncMap = getAllFunc();
-
-    const t1 = Date.now();
-    const ed: string[] = [
-        `Analyze_Results_of_${DA.name}() {`,
-        'throw, "this is Analyze Results, not .ahk"',
-        ...baseDataAnalyze(DA),
         '',
         ...AnalyzeCommand(AhkTokenList, fullFuncMap),
         ...AnalyzeRefFunc(AhkTokenList, fullFuncMap),

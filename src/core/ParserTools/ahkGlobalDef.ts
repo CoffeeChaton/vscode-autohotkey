@@ -1,4 +1,3 @@
-import * as path from 'node:path';
 import * as vscode from 'vscode';
 import type { TTokenStream } from '../../globalEnum';
 import { EDetail } from '../../globalEnum';
@@ -18,14 +17,14 @@ export type TGlobalVal = {
     // c502 list ?
 };
 
-export type TValUpName = string;
+type TValUpName = string;
 type TGValMapPrivacy = Map<TValUpName, TGlobalVal>;
 export type TGValMap = ReadonlyMap<TValUpName, TGlobalVal>;
 
-export type TGlobalValReadonly = Readonly<TGlobalVal>;
+type TGlobalValReadonly = Readonly<TGlobalVal>;
 export type TGValMapReadOnly = ReadonlyMap<TValUpName, TGlobalValReadonly>;
 
-function getGRange(strF: string, rawName: string, ma: RegExpMatchArray, line: number): vscode.Range {
+function setRangeGlobal(strF: string, rawName: string, ma: RegExpMatchArray, line: number): vscode.Range {
     const ch: number = strF.indexOf(rawName, ma.index);
     const refRange: vscode.Range = new vscode.Range(
         new vscode.Position(line, ch),
@@ -40,7 +39,7 @@ function defGlobal(gValMapBySelf: TGValMapPrivacy, strF: string, line: number): 
         if (rawName === '') continue;
 
         const ValUpName: string = rawName.toUpperCase();
-        const defRange: vscode.Range = getGRange(strF, rawName, ma, line);
+        const defRange: vscode.Range = setRangeGlobal(strF, rawName, ma, line);
         const oldVal: TGlobalVal | undefined = gValMapBySelf.get(ValUpName);
 
         if (oldVal !== undefined) {
@@ -61,7 +60,7 @@ function refGlobal(gValMapBySelf: TGValMapPrivacy, strF: string, line: number): 
         if (rawName === '') continue;
 
         const ValUpName: string = rawName.toUpperCase();
-        const refRange: vscode.Range = getGRange(strF, rawName, ma, line);
+        const refRange: vscode.Range = setRangeGlobal(strF, rawName, ma, line);
         const oldVal: TGlobalVal | undefined = gValMapBySelf.get(ValUpName);
 
         if (oldVal !== undefined) {
@@ -111,31 +110,6 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
     return GValMap;
 }
 
-function range2Str(range: vscode.Range): string {
-    const { line, character } = range.start;
-    return `    ln ${line}, ch ${character}`; // -> md to ahk-lang
-}
-
-export function globalVal2Msg(fsPath: string, GlobalVal: TGlobalValReadonly): string {
-    const fileName: string = path.basename(fsPath);
-    const msg: string[] = [fileName];
-    const { defRangeList, refRangeList } = GlobalVal;
-    if (defRangeList.length > 0) {
-        msg.push('- def');
-        for (const range of defRangeList) {
-            msg.push(range2Str(range));
-        }
-    }
-    if (refRangeList.length > 0) {
-        // don't show ref, because sometimes ref is not defined at this file...
-        msg.push('- ref');
-        for (const range of refRangeList) {
-            msg.push(range2Str(range));
-        }
-    }
-
-    return msg.join('\n\n');
-}
 // just ref; global GLOBAL_VAL
 // def; global GLOBAL_VAL := 0
 // ref && user; -> GLOBAL_VAL := 0

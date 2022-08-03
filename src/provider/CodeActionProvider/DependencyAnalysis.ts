@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
 import { pm } from '../../core/ProjectManager';
@@ -14,7 +15,7 @@ export function DependencyAnalysis(
     const { AST, DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
 
     const ahkFn: CAhkFunc | undefined = AST
-        .find((top): top is CAhkFunc => top instanceof CAhkFunc && top.nameRange.contains(active));
+        .find((top: TTopSymbol): top is CAhkFunc => top instanceof CAhkFunc && top.nameRange.contains(active));
     if (ahkFn === undefined) {
         return [];
     }

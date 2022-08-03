@@ -10,7 +10,7 @@ import { statusBarClick } from './command/Command';
 import { ECommand } from './command/ECommand';
 import { ListAllFuncMain } from './command/ListAllFunc';
 import { ListAllInclude } from './command/ListAllInclude';
-import { fnRefreshResource, UpdateCacheAsync } from './command/UpdateCache';
+import { UpdateCacheAsync, UpdateCacheUi } from './command/UpdateCache';
 import { configChangEvent, statusBarItem } from './configUI';
 import { diagColl, pm } from './core/ProjectManager';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
@@ -60,7 +60,7 @@ export function activate(context: ExtensionContext): void {
         // window.tabGroups.onDidChangeTabGroups(onDidChangeTabGroups),
         // commands--------------------
         commands.registerCommand('ahk.nekoHelp.bar', statusBarClick),
-        commands.registerCommand('ahk.nekoHelp.refreshResource', fnRefreshResource),
+        commands.registerCommand('ahk.nekoHelp.refreshResource', UpdateCacheUi),
         commands.registerCommand(ECommand.ListAllFunc, ListAllFuncMain),
         commands.registerCommand(ECommand.ListAllInclude, ListAllInclude),
         commands.registerCommand(ECommand.showFuncAnalyze, AnalyzeFuncMain),

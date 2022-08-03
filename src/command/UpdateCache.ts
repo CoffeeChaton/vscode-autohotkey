@@ -28,7 +28,7 @@ export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileDat
     return FileListData;
 }
 
-export async function fnRefreshResource(): Promise<void> {
+export async function UpdateCacheUi(): Promise<void> {
     const t1: number = Date.now();
     await UpdateCacheAsync(true);
     const t2: number = Date.now();
