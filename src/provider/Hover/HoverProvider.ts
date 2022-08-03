@@ -31,17 +31,17 @@ function HoverProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Hover | null {
-    const { AST: AhkSymbolList, DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const { AST, DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
 
     // pos at Comment range...
     const { lStr, fistWordUp } = DocStrMap[position.line];
     if (position.character > lStr.length) return null;
 
     // ex: #Warn
-    const DirectivesMd: vscode.MarkdownString | undefined = HoverDirectives(position, AhkSymbolList);
+    const DirectivesMd: vscode.MarkdownString | undefined = HoverDirectives(position, AST);
     if (DirectivesMd !== undefined) return new vscode.Hover(DirectivesMd);
 
-    const AhkFunc: CAhkFunc | null = getDAWithPos(AhkSymbolList, position);
+    const AhkFunc: CAhkFunc | null = getDAWithPos(AST, position);
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (AhkFunc !== null && AhkFunc.nameRange.contains(position)) {
         return new vscode.Hover(AhkFunc.md);

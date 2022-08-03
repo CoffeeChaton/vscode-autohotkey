@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
 import * as vscode from 'vscode';
-import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TFsPath, TTokenStream } from '../../globalEnum';
 import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
 import { getChildren } from '../getChildren';
@@ -20,7 +20,7 @@ class CTopClass extends vscode.DocumentSymbol {
 }
 
 export type TMemo = Readonly<{
-    readonly AST: readonly TTopSymbol[];
+    readonly AST: TAstRoot;
     readonly GValMap: TGValMapReadOnly;
     readonly DocStrMap: TTokenStream;
     readonly DocFullSize: number;
@@ -90,7 +90,7 @@ export function getFileAST(document: vscode.TextDocument): TMemo {
 
     const DocStrMap: TTokenStream = Pretreatment(fullTextList, document.fileName);
     const GValMap: TGValMap = ahkGlobalMain(DocStrMap);
-    const AhkSymbolList: TTopSymbol[] = getChildren<CTopClass>(
+    const AST: TAstRoot = getChildren<CTopClass>(
         [getClass, getFunc, ParserBlock.getSwitchBlock, ParserLine],
         {
             DocStrMap,
@@ -102,12 +102,12 @@ export function getFileAST(document: vscode.TextDocument): TMemo {
         },
     );
 
-    const baseDiag: readonly vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AhkSymbolList);
+    const baseDiag: readonly vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AST);
 
     const AhkCache: TMemo = {
         GValMap, // TGValMapReadOnly
         DocStrMap,
-        AST: AhkSymbolList,
+        AST,
         baseDiag,
         DocFullSize,
         uri: document.uri,

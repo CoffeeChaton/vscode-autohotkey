@@ -14,5 +14,6 @@ export type TAhkSymbol =
     | TLineClass;
 
 export type TTopSymbol = CAhkClass | CAhkComment | CAhkFunc | CAhkSwitch | TLineClass;
+export type TAstRoot = readonly TTopSymbol[];
 
 export type TAhkSymbolList = TAhkSymbol[];

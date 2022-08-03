@@ -12,10 +12,10 @@ function CodeLensCore(fsPath: string): vscode.CodeLens[] {
     const AhkFileData: TAhkFileData | undefined = pm.getDocMap(fsPath);
     if (AhkFileData === undefined) return [];
 
-    const { AST: AhkSymbolList, DocStrMap } = AhkFileData;
+    const { AST, DocStrMap } = AhkFileData;
 
     const need: vscode.CodeLens[] = [];
-    const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
+    const DAList: CAhkFunc[] = getDAList(AST);
     for (const DA of DAList) {
         const CommandAnalyze: vscode.Command = {
             title: 'Analyze',

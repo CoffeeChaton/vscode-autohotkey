@@ -7,15 +7,15 @@ export function getFuncWithPos(
     fsPath: string,
     position: vscode.Position,
 ): CAhkFunc | undefined {
-    const AhkSymbolList: readonly TTopSymbol[] | undefined = pm.getDocMap(fsPath)?.AST;
-    if (AhkSymbolList === undefined) return undefined;
+    const AST: readonly TTopSymbol[] | undefined = pm.getDocMap(fsPath)?.AST; // FIXME 0 don't use getDocMap
+    if (AST === undefined) return undefined;
 
-    for (const DA of AhkSymbolList) {
+    for (const func of AST) {
         if (
-            DA instanceof CAhkFunc
-            && DA.range.contains(position)
+            func instanceof CAhkFunc
+            && func.range.contains(position)
         ) {
-            return DA;
+            return func;
         }
     }
     return undefined;

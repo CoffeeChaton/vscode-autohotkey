@@ -10,8 +10,8 @@ export type TFullFuncMap = DeepReadonly<TMap>;
 export function getAllFunc(): TFullFuncMap {
     const funcMap: TMap = new Map();
 
-    for (const { AST: AhkSymbolList } of pm.getDocMapValue()) {
-        for (const AhkSymbol of AhkSymbolList) {
+    for (const { AST } of pm.getDocMapValue()) {
+        for (const AhkSymbol of AST) {
             if (AhkSymbol instanceof CAhkFunc) {
                 funcMap.set(AhkSymbol.upName, AhkSymbol);
             }

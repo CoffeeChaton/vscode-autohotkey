@@ -21,14 +21,14 @@ function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticToken
 
     const {
         GValMap,
-        AST: AhkSymbolList,
+        AST,
         DocStrMap,
     } = AhkFileData;
 
     const tokensBuilder: vscode.SemanticTokensBuilder = new vscode.SemanticTokensBuilder(legend);
 
     pushToken([
-        ...DAList2SemanticHighlight(AhkSymbolList),
+        ...DAList2SemanticHighlight(AST),
         ...GlobalHighlight(GValMap),
         ...inLTrimHighlight(DocStrMap),
     ], tokensBuilder);

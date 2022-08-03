@@ -3,9 +3,9 @@ import type { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
 import { pm } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 
-function collectInclude(AhkSymbolList: Readonly<TAhkSymbolList>): CAhkInclude[] {
+function collectInclude(AST: Readonly<TAhkSymbolList>): CAhkInclude[] {
     const List: CAhkInclude[] = [];
-    for (const ahkInclude of AhkSymbolList) {
+    for (const ahkInclude of AST) {
         if (ahkInclude instanceof CAhkInclude) {
             List.push(ahkInclude);
         } else {
@@ -19,8 +19,8 @@ export function ListAllInclude(): null {
     const t1: number = Date.now();
 
     const AllList: string[] = [];
-    for (const { uri, AST: AhkSymbolList } of pm.DocMap.values()) { // should keep output order
-        const List: CAhkInclude[] = collectInclude(AhkSymbolList);
+    for (const { uri, AST } of pm.DocMap.values()) { // should keep output order
+        const List: CAhkInclude[] = collectInclude(AST);
 
         if (List.length > 0) {
             AllList.push(`\n${uri.fsPath}`, ...List.map((ahkInclude) => ahkInclude.name));

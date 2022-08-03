@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
-import type { TAhkSymbol, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkSymbol, TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
 import { pm } from '../../core/ProjectManager';
 
-const wm = new WeakMap<readonly TTopSymbol[], vscode.SymbolInformation[]>(); // 4ms -> 0ms
+const wm = new WeakMap<TAstRoot, vscode.SymbolInformation[]>(); // 4ms -> 0ms
 
-function DocSymbol2SymbolInfo(AhkSymbolList: readonly TTopSymbol[]): vscode.SymbolInformation[] {
-    const cache: vscode.SymbolInformation[] | undefined = wm.get(AhkSymbolList);
+function DocSymbol2SymbolInfo(AstRoot: TAstRoot): vscode.SymbolInformation[] {
+    const cache: vscode.SymbolInformation[] | undefined = wm.get(AstRoot);
     if (cache !== undefined) return cache;
 
-    const result: vscode.SymbolInformation[] = AhkSymbolList.map((AhkSymbol: TAhkSymbol): vscode.SymbolInformation => {
+    const result: vscode.SymbolInformation[] = AstRoot.map((AhkSymbol: TAhkSymbol): vscode.SymbolInformation => {
         const {
             name,
             kind,
@@ -20,15 +20,15 @@ function DocSymbol2SymbolInfo(AhkSymbolList: readonly TTopSymbol[]): vscode.Symb
         return new vscode.SymbolInformation(name, kind, detail, new vscode.Location(uri, range));
     });
 
-    wm.set(AhkSymbolList, result);
+    wm.set(AstRoot, result);
     return result;
 }
 
 function WorkspaceSymbolCore(): vscode.SymbolInformation[] {
     const result: vscode.SymbolInformation[] = [];
 
-    for (const { AST: AhkSymbolList } of pm.DocMap.values()) { // keep output order is OK
-        result.push(...DocSymbol2SymbolInfo(AhkSymbolList));
+    for (const { AST } of pm.DocMap.values()) { // keep output order is OK
+        result.push(...DocSymbol2SymbolInfo(AST));
     }
 
     return result;

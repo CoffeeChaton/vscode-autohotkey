@@ -1,5 +1,5 @@
 import type * as vscode from 'vscode';
-import type { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
 import { getLintConfig } from '../../configUI';
 import type { TTokenStream } from '../../globalEnum';
 import { getIgnore } from './getIgnore';
@@ -43,7 +43,7 @@ const wm = new WeakMap<TTokenStream, readonly vscode.Diagnostic[]>();
 
 export function baseDiagnostic(
     DocStrMap: TTokenStream,
-    AhkSymbolList: TAhkSymbolList,
+    AST: TAstRoot,
 ): readonly vscode.Diagnostic[] {
     const cache: readonly vscode.Diagnostic[] | undefined = wm.get(DocStrMap);
     if (cache !== undefined) return cache;
@@ -53,8 +53,8 @@ export function baseDiagnostic(
     const diagList: readonly vscode.Diagnostic[] = [
         ...getDeepErr(DocStrMap),
         ...lineDiagS,
-        ...getTreeErr(AhkSymbolList, displayErr),
-        ...getFuncErr(DocStrMap, AhkSymbolList, displayErr, getLintConfig().funcSize),
+        ...getTreeErr(AST, displayErr),
+        ...getFuncErr(DocStrMap, [...AST], displayErr, getLintConfig().funcSize),
     ];
     // 8k lines without gc -> 3ms
     wm.set(DocStrMap, diagList);

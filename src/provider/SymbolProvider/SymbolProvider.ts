@@ -5,12 +5,12 @@ import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 
 function SymBolProviderCore(document: vscode.TextDocument): vscode.DocumentSymbol[] {
-    const { AST: AhkSymbolList } = pm.updateDocDef(document);
+    const { AST } = pm.updateDocDef(document);
 
-    const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
+    const DAList: CAhkFunc[] = getDAList(AST);
     digDAFile(DAList, document.uri);
 
-    return [...AhkSymbolList];
+    return [...AST];
 }
 
 export const SymBolProvider: vscode.DocumentSymbolProvider = {

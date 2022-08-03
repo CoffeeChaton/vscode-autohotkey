@@ -35,10 +35,10 @@ function CompletionItemCore(
     const AhkFileData: TAhkFileData = pm.updateDocDef(document);
 
     // const t1 = Date.now();
-    const { AST: AhkSymbolList, DocStrMap } = AhkFileData;
+    const { AST, DocStrMap } = AhkFileData;
     const { lStr, textRaw } = DocStrMap[position.line];
-    const topSymbol: TTopSymbol | null = getTopSymbolWithPos(AhkSymbolList, position);
-    const DA: CAhkFunc | null = getDAWithPos(AhkSymbolList, position);
+    const topSymbol: TTopSymbol | null = getTopSymbolWithPos(AST, position);
+    const DA: CAhkFunc | null = getDAWithPos(AST, position);
     const PartStr: string | null = getPartStr(lStr, position);
 
     const completions: vscode.CompletionItem[] = [

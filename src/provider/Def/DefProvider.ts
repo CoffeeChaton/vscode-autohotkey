@@ -11,8 +11,8 @@ type TFnFindCol = (lineStr: string) => IterableIterator<RegExpMatchArray>;
 
 function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vscode.Location[] {
     const List: vscode.Location[] = [];
-    for (const { DocStrMap, AST: AhkSymbolList, uri } of pm.getDocMapValue()) {
-        const filterLineList: number[] = getDAList(AhkSymbolList)
+    for (const { DocStrMap, AST, uri } of pm.getDocMapValue()) {
+        const filterLineList: number[] = getDAList(AST)
             .filter((DA: CAhkFunc) => DA.kind === vscode.SymbolKind.Method)
             .map((DA: CAhkFunc) => DA.nameRange.start.line);
 
@@ -54,9 +54,9 @@ export function userDefFunc(
     const timeStart: number = Date.now();
 
     const AhkFileData: TAhkFileData = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
-    const { AST: AhkSymbolList } = AhkFileData;
+    const { AST } = AhkFileData;
 
-    if (isPosAtMethodName(getDAWithPos(AhkSymbolList, position), position)) {
+    if (isPosAtMethodName(getDAWithPos(AST, position), position)) {
         return null;
     }
 

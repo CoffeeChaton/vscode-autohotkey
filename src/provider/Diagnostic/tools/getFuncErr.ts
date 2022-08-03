@@ -20,12 +20,12 @@ function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol, maxFnSize: number
 
 export function getFuncErr(
     DocStrMap: TTokenStream,
-    funcS: TAhkSymbolList,
+    funcCh: TAhkSymbolList,
     displayErr: readonly boolean[],
     maxFnSize: number,
 ): vscode.Diagnostic[] {
     const digS: vscode.Diagnostic[] = [];
-    for (const func of funcS) {
+    for (const func of funcCh) {
         switch (func.kind) {
             case vscode.SymbolKind.Method:
             case vscode.SymbolKind.Function:

@@ -30,8 +30,8 @@ export function DeepAnalysisAllFiles(): null {
     const t1: number = Date.now();
 
     const need: CAhkFunc[] = [];
-    for (const { uri, AST: AhkSymbolList } of pm.DocMap.values()) { // keep output order is OK
-        const DAList: CAhkFunc[] = getDAList(AhkSymbolList);
+    for (const { uri, AST } of pm.DocMap.values()) { // keep output order is OK
+        const DAList: CAhkFunc[] = getDAList(AST);
         need.push(...DAList);
         digDAFile(DAList, uri);
     }

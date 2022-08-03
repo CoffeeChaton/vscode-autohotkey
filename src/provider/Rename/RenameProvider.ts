@@ -9,9 +9,9 @@ function RenameProviderCore(
     position: vscode.Position,
     newName: string,
 ): vscode.WorkspaceEdit | null {
-    const { AST: AhkSymbolList } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const { AST } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
 
-    const DA: CAhkFunc | null = getDAWithPos(AhkSymbolList, position);
+    const DA: CAhkFunc | null = getDAWithPos(AST, position);
     if (DA === null || !DA.nameRange.contains(position) || DA.kind === vscode.SymbolKind.Method) {
         void vscode.window.showInformationMessage('please use rename at function def range');
         return null;
