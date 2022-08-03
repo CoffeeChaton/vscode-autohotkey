@@ -1,37 +1,31 @@
 import * as vscode from 'vscode';
-import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
 import { pm } from '../../core/ProjectManager';
-import type { TTokenStream } from '../../globalEnum';
-import { getFuncWithPos } from '../../tools/DeepAnalysis/getFuncWithPos';
 
 export function DependencyAnalysis(
     document: vscode.TextDocument,
     selection: vscode.Range | vscode.Selection,
 ): vscode.Command[] {
     if (!(selection instanceof vscode.Selection)) return [];
-
-    const { fsPath } = document.uri;
     const { active } = selection;
-    const DA: CAhkFunc | undefined = getFuncWithPos(fsPath, active);
-    if (
-        DA === undefined
-        || !DA.nameRange.contains(active)
-    ) {
+
+    const { AST, DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+
+    const ahkFn: CAhkFunc | undefined = AST
+        .find((top): top is CAhkFunc => top instanceof CAhkFunc && top.nameRange.contains(active));
+    if (ahkFn === undefined) {
         return [];
     }
-
-    const DocStrMap: TTokenStream | undefined = pm.getDocMap(fsPath)?.DocStrMap;
-    if (DocStrMap === undefined) return [];
 
     const CommandAnalyze: vscode.Command = {
         title: 'Analyze this Function',
         command: ECommand.showFuncAnalyze,
         tooltip: 'by neko-help dev tools',
         arguments: [
-            DA,
-            DocStrMap.slice(DA.selectionRange.start.line + 1, DA.range.end.line + 1),
+            ahkFn,
+            DocStrMap.slice(ahkFn.selectionRange.start.line + 1, ahkFn.range.end.line + 1),
         ] as TShowAnalyze,
     };
 
