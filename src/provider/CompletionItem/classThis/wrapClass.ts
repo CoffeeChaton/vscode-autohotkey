@@ -27,7 +27,7 @@ function getAhkTokenList(
 function findClassDef(
     position: vscode.Position,
     ChapterArr: readonly string[],
-    topSymbol: TTopSymbol | null,
+    topSymbol: TTopSymbol | undefined,
     DocStrMap: TTokenStream,
     DA: CAhkFunc | null,
 ): vscode.CompletionItem[] {
@@ -51,7 +51,7 @@ export function wrapClass(
     position: vscode.Position,
     textRaw: string,
     lStr: string,
-    topSymbol: TTopSymbol | null,
+    topSymbol: TTopSymbol | undefined,
     DocStrMap: TTokenStream,
     DA: CAhkFunc | null,
 ): vscode.CompletionItem[] {

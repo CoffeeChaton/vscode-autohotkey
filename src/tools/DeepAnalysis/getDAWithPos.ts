@@ -3,7 +3,6 @@ import type { TClassChildren } from '../../AhkSymbol/CAhkClass';
 import { CAhkClass } from '../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
-import { getTopSymbolWithPos } from './getTopSymbolWithPos';
 
 function getMethodWithPos(
     classCh: TClassChildren[],
@@ -22,8 +21,8 @@ export function getDAWithPos(
     AstRoot: TAstRoot,
     position: vscode.Position,
 ): CAhkFunc | null {
-    const TopSymbol: TTopSymbol | null = getTopSymbolWithPos(AstRoot, position);
-    if (TopSymbol === null) return null;
+    const TopSymbol: TTopSymbol | undefined = AstRoot.find((top: TTopSymbol): boolean => top.range.contains(position));
+    if (TopSymbol === undefined) return null;
     if (TopSymbol instanceof CAhkFunc) return TopSymbol;
     if (TopSymbol instanceof CAhkClass) return getMethodWithPos(TopSymbol.children, position);
 

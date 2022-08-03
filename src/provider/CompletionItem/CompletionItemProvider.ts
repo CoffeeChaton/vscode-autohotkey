@@ -11,7 +11,6 @@ import { ahkSend } from '../../tools/Built-in/Send_tools';
 import { getSnippetStatement } from '../../tools/Built-in/statement_vsc';
 import { getSnippetWinMsg } from '../../tools/Built-in/Windows_Messages_Tools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
-import { getTopSymbolWithPos } from '../../tools/DeepAnalysis/getTopSymbolWithPos';
 import { isPosAtStrNext } from '../../tools/isPosAtStr';
 import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
@@ -37,7 +36,9 @@ function CompletionItemCore(
     // const t1 = Date.now();
     const { AST, DocStrMap } = AhkFileData;
     const { lStr, textRaw } = DocStrMap[position.line];
-    const topSymbol: TTopSymbol | null = getTopSymbolWithPos(AST, position);
+
+    const topSymbol: TTopSymbol | undefined = AST.find((top: TTopSymbol): boolean => top.range.contains(position));
+
     const DA: CAhkFunc | null = getDAWithPos(AST, position);
     const PartStr: string | null = getPartStr(lStr, position);
 
