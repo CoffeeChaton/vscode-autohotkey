@@ -1,21 +1,23 @@
 import * as vscode from 'vscode';
 import type { TParamMapOut } from '../../../../AhkSymbol/CAhkFunc';
 import { DiagsDA, EDiagCodeDA } from '../../../../diag';
-import { setDiagnosticDA } from '../../../../provider/Diagnostic/tools/setDiagnostic';
+import { CDiagFn } from '../../../../provider/Diagnostic/tools/CDiagFn';
 
-export function paramVariadicErr(paramMap: TParamMapOut, code504List: vscode.Diagnostic[]): void {
-    const rightIndex = paramMap.size - 1;
+export function paramVariadicErr(paramMap: TParamMapOut, code504List: CDiagFn[]): void {
+    const rightIndex: number = paramMap.size - 1;
     let i = 0;
     for (const ArgAnalysis of paramMap.values()) {
         const { isVariadic, defRangeList } = ArgAnalysis;
         if (isVariadic && (i !== rightIndex)) {
-            code504List.push(setDiagnosticDA(
-                EDiagCodeDA.code504,
-                defRangeList[0],
-                vscode.DiagnosticSeverity.Error,
-                [],
-                DiagsDA[EDiagCodeDA.code504].msg,
-            ));
+            code504List.push(
+                new CDiagFn({
+                    value: EDiagCodeDA.code504,
+                    range: defRangeList[0],
+                    severity: vscode.DiagnosticSeverity.Error,
+                    tags: [],
+                    message: DiagsDA[EDiagCodeDA.code504].msg,
+                }),
+            );
         }
         i++;
     }

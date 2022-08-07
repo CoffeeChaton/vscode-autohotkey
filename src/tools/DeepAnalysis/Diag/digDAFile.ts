@@ -3,6 +3,7 @@ import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { getCode502Default, getCode503Default } from '../../../configUI';
 import { diagColl } from '../../../core/ProjectManager';
 import { EDiagBase } from '../../../Enum/EDiagBase';
+import type { CDiagFn } from '../../../provider/Diagnostic/tools/CDiagFn';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';
 import { NeverUsedParam, NeverUsedVar } from './param/paramNeverUsed';
@@ -24,11 +25,11 @@ function diagDAFileCore(DAList: CAhkFunc[]): readonly vscode.Diagnostic[] {
     if (cache !== undefined && cache.code502Max === code502Max && cache.code503Max === code503Max) {
         return cache.DADiagList;
     }
-    const code500List: vscode.Diagnostic[] = []; // WTF...
-    const code501List: vscode.Diagnostic[] = [];
-    const code502List: vscode.Diagnostic[] = [];
-    const code503List: vscode.Diagnostic[] = [];
-    const code504List: vscode.Diagnostic[] = [];
+    const code500List: CDiagFn[] = []; // WTF...
+    const code501List: CDiagFn[] = [];
+    const code502List: CDiagFn[] = [];
+    const code503List: CDiagFn[] = [];
+    const code504List: CDiagFn[] = [];
 
     for (const DA of DAList) {
         if (!(DA instanceof CAhkFunc)) continue;

@@ -10,7 +10,7 @@
             "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
             "sourceMaps": true,
             "outFiles": ["${workspaceRoot}/out/src/**/*.js"],
-            "preLaunchTask": "npm: vscode:prepublish"
+            "preLaunchTask": "npm: compile"
         }
     ]
 }

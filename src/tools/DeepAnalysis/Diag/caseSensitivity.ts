@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import type { TC502New, TParamMapOut, TValMapOut } from '../../../AhkSymbol/CAhkFunc';
 import { EDiagCodeDA } from '../../../diag';
-import { setDiagnosticDA } from '../../../provider/Diagnostic/tools/setDiagnostic';
+import { CDiagFn } from '../../../provider/Diagnostic/tools/CDiagFn';
 import type { EPrefixC502 } from './caseSensitivityMagic';
 import { setDiagCaseMsg } from './caseSensitivityMagic';
 
@@ -20,7 +20,7 @@ function getRangeOfC502(
 export function caseSensitivityVar(
     prefix: EPrefixC502,
     paramOrValMap: TParamMapOut | TValMapOut,
-    code502or503List: vscode.Diagnostic[],
+    code502or503List: CDiagFn[],
     maxDiag: number,
 ): void {
     if (code502or503List.length >= maxDiag) {
@@ -41,15 +41,17 @@ export function caseSensitivityVar(
             if (C502 === 0) continue;
 
             const defPos: vscode.Position = defRangeList[0].start;
-            const diag: vscode.Diagnostic = setDiagnosticDA(
-                EDiagCodeDA.code502,
-                getRangeOfC502(defRangeList, refRangeList, i),
-                vscode.DiagnosticSeverity.Information,
-                [],
-                setDiagCaseMsg(keyRawName, defPos, C502, prefix),
-            );
 
-            code502or503List.push(diag);
+            const diagFn: CDiagFn = new CDiagFn(
+                {
+                    value: EDiagCodeDA.code502,
+                    range: getRangeOfC502(defRangeList, refRangeList, i),
+                    severity: vscode.DiagnosticSeverity.Information,
+                    tags: [],
+                    message: setDiagCaseMsg(keyRawName, defPos, C502, prefix),
+                },
+            );
+            code502or503List.push(diagFn);
             if (code502or503List.length >= maxDiag) {
                 return;
             }

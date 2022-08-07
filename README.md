@@ -84,12 +84,14 @@ AutoHotKey language support for VS Code
 ## Diagnostic and lint
 
 1. warning about use `=` not `:=` to assign.
-2. warning of Switch\
+2. warning of Switch
+   \
    `default : not find`\
    `default : too much`\
    `Case : > 20`\
    `Case : not find`
-3. use `;@ahk-ignore [number] line.` to ignore,\
+3. use `;@ahk-ignore [number] line.` to ignore,
+   \
    exp: `;@ahk-ignore 3 line.`
 
 ![Diagnostic1](image/Diagnostic1.png)

@@ -1,9 +1,10 @@
+// eslint-disable-next-line max-classes-per-file
 import * as vscode from 'vscode';
-import type { EDiagCode, EDiagCodeDA } from '../../../diag';
-import { Diags, DiagsDA } from '../../../diag';
+import type { EDiagCode } from '../../../diag';
+import { Diags } from '../../../diag';
 import { EDiagBase } from '../../../Enum/EDiagBase';
 
-export function setDiagnostic(
+export function setDiagnostic( // FIXME rm this func
     value: EDiagCode,
     range: vscode.Range,
     severity: vscode.DiagnosticSeverity,
@@ -13,21 +14,6 @@ export function setDiagnostic(
     const target: vscode.Uri = vscode.Uri.parse(Diags[value].path);
     const diag1: vscode.Diagnostic = new vscode.Diagnostic(range, message, severity);
     diag1.source = EDiagBase.source;
-    diag1.code = { value, target };
-    diag1.tags = tags;
-    return diag1;
-}
-
-export function setDiagnosticDA(
-    value: EDiagCodeDA,
-    range: vscode.Range,
-    severity: vscode.DiagnosticSeverity,
-    tags: vscode.DiagnosticTag[],
-    message: string,
-): vscode.Diagnostic {
-    const target: vscode.Uri = vscode.Uri.parse(DiagsDA[value].path);
-    const diag1: vscode.Diagnostic = new vscode.Diagnostic(range, message, severity);
-    diag1.source = EDiagBase.sourceDA;
     diag1.code = { value, target };
     diag1.tags = tags;
     return diag1;
