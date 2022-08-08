@@ -1,17 +1,15 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import { EDetail } from '../../../../globalEnum';
-import { CNekoBaseLineDiag } from './lineErrTools';
+import { CDiagBase } from '../CDiagBase';
 
-export function assignErr(textRaw: string, detail: readonly EDetail[], line: number): CNekoBaseLineDiag | null {
+export function assignErr(textRaw: string, detail: readonly EDetail[], line: number): CDiagBase | null {
     return detail.includes(EDetail.inSkipSign2)
-        ? new CNekoBaseLineDiag({
-            line,
-            colL: textRaw.indexOf('='),
-            colR: textRaw.length,
+        ? new CDiagBase({
+            value: EDiagCode.code107,
+            range: new vscode.Range(line, textRaw.indexOf('='), line, textRaw.length),
             severity: vscode.DiagnosticSeverity.Error,
             tags: [],
-            value: EDiagCode.code107,
         })
         : null; // 0
 }

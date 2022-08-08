@@ -6,15 +6,15 @@ import type { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../../diag';
 import type { THashTagUPKey } from '../../../../tools/Built-in/Directives';
 import { DirectivesMDMap } from '../../../../tools/Built-in/Directives';
-import { setDiagnostic } from '../setDiagnostic';
+import { CDiagBase } from '../CDiagBase';
 
-export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
+export function getDirectivesErr(ch: TAhkSymbol): CDiagBase[] {
     // err of #Directives
     if (!(ch instanceof CAhkDirectives)) return [];
 
     type TRulerErr = {
         str: THashTagUPKey;
-        code: EDiagCode;
+        value: EDiagCode;
         severity: vscode.DiagnosticSeverity;
         tags: vscode.DiagnosticTag[];
     };
@@ -23,14 +23,14 @@ export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
         {
             // change of ` https://www.autohotkey.com/docs/commands/_EscapeChar.htm
             str: 'ESCAPECHAR',
-            code: EDiagCode.code901,
+            value: EDiagCode.code901,
             severity: vscode.DiagnosticSeverity.Error,
             tags: [vscode.DiagnosticTag.Deprecated],
         },
         {
             // change of ; https://www.autohotkey.com/docs/commands/_CommentFlag.htm
             str: 'COMMENTFLAG',
-            code: EDiagCode.code902,
+            value: EDiagCode.code902,
             severity: vscode.DiagnosticSeverity.Error,
             tags: [vscode.DiagnosticTag.Deprecated],
         },
@@ -40,7 +40,7 @@ export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
              * #DerefChar
              */
             str: 'DEREFCHAR',
-            code: EDiagCode.code903,
+            value: EDiagCode.code903,
             severity: vscode.DiagnosticSeverity.Error,
             tags: [vscode.DiagnosticTag.Deprecated],
         },
@@ -50,14 +50,14 @@ export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
              * #Delimiter
              */
             str: 'DELIMITER',
-            code: EDiagCode.code903,
+            value: EDiagCode.code903,
             severity: vscode.DiagnosticSeverity.Error,
             tags: [vscode.DiagnosticTag.Deprecated],
         },
         {
             // https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm
             str: 'ALLOWSAMELINECOMMENTS',
-            code: EDiagCode.code825,
+            value: EDiagCode.code825,
             severity: vscode.DiagnosticSeverity.Warning,
             tags: [vscode.DiagnosticTag.Deprecated],
         },
@@ -67,7 +67,7 @@ export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
              * #Hotstring
              */
             str: 'HOTSTRING',
-            code: EDiagCode.code904,
+            value: EDiagCode.code904,
             severity: vscode.DiagnosticSeverity.Warning,
             tags: [],
         },
@@ -76,15 +76,28 @@ export function getDirectivesErr(ch: TAhkSymbol): vscode.Diagnostic[] {
     const { hashtag, selectionRange } = ch;
     const v: TRulerErr | undefined = rulerMatch.find((element) => element.str === hashtag);
     if (v !== undefined) {
+        const { value, severity, tags } = v;
         return [
-            setDiagnostic(v.code, selectionRange, v.severity, v.tags),
+            new CDiagBase({
+                value,
+                range: selectionRange,
+                severity,
+                tags,
+            }),
         ];
     }
 
     // check is unknown Directives or not
     return DirectivesMDMap.has(hashtag)
         ? []
-        : [setDiagnostic(EDiagCode.code503, selectionRange, vscode.DiagnosticSeverity.Warning, [])];
+        : [
+            new CDiagBase({
+                value: EDiagCode.code503,
+                range: selectionRange,
+                severity: vscode.DiagnosticSeverity.Warning,
+                tags: [],
+            }),
+        ];
 }
 
 /*

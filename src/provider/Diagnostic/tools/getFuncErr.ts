@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import type { TAhkSymbol, TAhkSymbolList } from '../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../diag';
 import type { TTokenStream } from '../../../globalEnum';
-import { setDiagnostic } from './setDiagnostic';
+import { CDiagBase } from './CDiagBase';
 
 function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol, maxFnSize: number): boolean {
     const st = func.selectionRange.end.line;
@@ -23,8 +23,8 @@ export function getFuncErr(
     funcCh: TAhkSymbolList,
     displayErr: readonly boolean[],
     maxFnSize: number,
-): vscode.Diagnostic[] {
-    const digS: vscode.Diagnostic[] = [];
+): CDiagBase[] {
+    const digS: CDiagBase[] = [];
     for (const func of funcCh) {
         switch (func.kind) {
             case vscode.SymbolKind.Method:
@@ -34,7 +34,12 @@ export function getFuncErr(
                     && fnErrCheck(DocStrMap, func, maxFnSize)
                 ) {
                     digS.push(
-                        setDiagnostic(EDiagCode.code301, func.selectionRange, vscode.DiagnosticSeverity.Warning, []),
+                        new CDiagBase({
+                            value: EDiagCode.code301,
+                            range: func.selectionRange,
+                            severity: vscode.DiagnosticSeverity.Warning,
+                            tags: [],
+                        }),
                     );
                 }
                 break;

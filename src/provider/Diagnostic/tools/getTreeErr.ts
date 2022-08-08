@@ -1,11 +1,11 @@
-import type * as vscode from 'vscode';
 import type { TAhkSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
+import type { CDiagBase } from './CDiagBase';
 import { getDirectivesErr } from './TreeErr/getDirectivesErr';
 import { getLabelErr } from './TreeErr/getLabelErr';
 import { getSwErr } from './TreeErr/getSwErr';
 
-export function getTreeErr(children: readonly TAhkSymbol[], displayErr: readonly boolean[]): vscode.Diagnostic[] {
-    const digS: vscode.Diagnostic[] = [];
+export function getTreeErr(children: readonly TAhkSymbol[], displayErr: readonly boolean[]): CDiagBase[] {
+    const digS: CDiagBase[] = [];
     for (const ch of children) {
         if (displayErr[ch.range.start.line]) {
             digS.push(

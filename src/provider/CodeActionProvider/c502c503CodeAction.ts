@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { ParseDiagCaseMsg } from '../../tools/DeepAnalysis/Diag/caseSensitivityMagic';
+import type { CDiagFn } from '../Diagnostic/tools/CDiagFn';
 
 // replace ref like Def
 function getCA0(uri: vscode.Uri, defStr: string, refRange: vscode.Range): vscode.CodeAction {
@@ -23,7 +24,7 @@ function getCA1(uri: vscode.Uri, refStr: string, defRange: vscode.Range): vscode
     return CA1;
 }
 
-export function c502c503CodeAction(uri: vscode.Uri, diag: vscode.Diagnostic): vscode.CodeAction[] {
+export function c502c503CodeAction(uri: vscode.Uri, diag: CDiagFn): vscode.CodeAction[] {
     const {
         defStr,
         defRange,

@@ -6,4 +6,3 @@
 4. [Random, vs Random()](syntaxes/ahk.tmLanguage.json)
 5. [check #Include](https://www.autohotkey.com/docs/Functions.htm#lib)
 6. auto check of `catch{} ;null catch`
-7. lineComment with TAhkToken

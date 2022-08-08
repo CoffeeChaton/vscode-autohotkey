@@ -2,22 +2,21 @@ import type * as vscode from 'vscode';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { getCode502Default, getCode503Default } from '../../../configUI';
 import { diagColl } from '../../../core/ProjectManager';
-import { EDiagBase } from '../../../Enum/EDiagBase';
-import type { CDiagFn } from '../../../provider/Diagnostic/tools/CDiagFn';
+import { CDiagFn } from '../../../provider/Diagnostic/tools/CDiagFn';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';
 import { NeverUsedParam, NeverUsedVar } from './param/paramNeverUsed';
 import { paramVariadicErr } from './param/paramVariadicErr';
 
 type TDaDiagCache = {
-    DADiagList: readonly vscode.Diagnostic[];
+    DADiagList: readonly CDiagFn[];
     code502Max: number;
     code503Max: number;
 };
 
 const wm = new WeakMap<CAhkFunc[], TDaDiagCache>();
 
-function diagDAFileCore(DAList: CAhkFunc[]): readonly vscode.Diagnostic[] {
+function diagDAFileCore(DAList: CAhkFunc[]): readonly CDiagFn[] {
     const code502Max = getCode502Default();
     const code503Max = getCode503Default();
 
@@ -41,7 +40,7 @@ function diagDAFileCore(DAList: CAhkFunc[]): readonly vscode.Diagnostic[] {
         paramVariadicErr(paramMap, code504List);
     }
 
-    const DADiagList: readonly vscode.Diagnostic[] = [
+    const DADiagList: readonly CDiagFn[] = [
         ...code500List,
         ...code501List,
         ...code502List,
@@ -58,7 +57,7 @@ function diagDAFileCore(DAList: CAhkFunc[]): readonly vscode.Diagnostic[] {
 }
 
 export function digDAFile(DAList: CAhkFunc[], uri: vscode.Uri): void {
-    const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) ?? [])
-        .filter((diag: vscode.Diagnostic): boolean => diag.source !== EDiagBase.sourceDA);
+    const baseDiag = (diagColl.get(uri) ?? [])
+        .filter((diag): boolean => !(diag instanceof CDiagFn));
     diagColl.set(uri, [...baseDiag, ...diagDAFileCore(DAList)]);
 }

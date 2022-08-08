@@ -1,7 +1,4 @@
-import * as vscode from 'vscode';
-import type { EDiagCode } from '../../../../diag';
-import { Diags } from '../../../../diag';
-import { EDiagBase } from '../../../../Enum/EDiagBase';
+import type { CDiagBase } from '../CDiagBase';
 
 export const enum EDiagLine {
     miss = 0,
@@ -15,34 +12,4 @@ export type TLineErrDiagParam = {
     line: number;
 };
 
-export class CNekoBaseLineDiag extends vscode.Diagnostic {
-    declare public readonly source: EDiagBase.source;
-    public constructor(
-        {
-            line,
-            colL,
-            colR,
-            severity,
-            tags,
-            value,
-        }: {
-            line: number;
-            colL: number;
-            colR: number;
-            severity: vscode.DiagnosticSeverity;
-            tags: vscode.DiagnosticTag[];
-            value: EDiagCode;
-        },
-    ) {
-        const { msg, path } = Diags[value];
-        const range: vscode.Range = new vscode.Range(line, colL, line, colR);
-        const target = vscode.Uri.parse(path);
-
-        super(range, msg, severity);
-        this.tags = tags;
-        this.source = EDiagBase.source;
-        this.code = { value, target };
-    }
-}
-
-export type TLineDiag = CNekoBaseLineDiag | EDiagLine;
+export type TLineDiag = CDiagBase | EDiagLine;

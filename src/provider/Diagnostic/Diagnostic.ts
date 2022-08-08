@@ -1,23 +1,22 @@
-import type * as vscode from 'vscode';
 import type { TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
 import { getLintConfig } from '../../configUI';
 import type { TTokenStream } from '../../globalEnum';
 import { getIgnore } from './getIgnore';
+import type { CDiagBase } from './tools/CDiagBase';
 import { getDeepErr } from './tools/getDeepErr';
 import { getFuncErr } from './tools/getFuncErr';
 import { getLineErr } from './tools/getLineErr';
 import { getTreeErr } from './tools/getTreeErr';
-import type { CNekoBaseLineDiag } from './tools/lineErr/lineErrTools';
 
 type TDisplayErr = boolean[];
 type TDisplayErrAndLineErr = {
     displayErr: TDisplayErr;
-    lineDiagS: CNekoBaseLineDiag[];
+    lineDiagS: CDiagBase[];
 };
 
 function getDisplayErrAndLineErr(DocStrMap: TTokenStream): TDisplayErrAndLineErr {
     const displayErr: TDisplayErr = [];
-    const lineDiagS: CNekoBaseLineDiag[] = [];
+    const lineDiagS: CDiagBase[] = [];
 
     let IgnoreLine: number = getIgnore(DocStrMap[0].textRaw, 0, -1);
     for (const { textRaw, line } of DocStrMap) {
@@ -29,7 +28,7 @@ function getDisplayErrAndLineErr(DocStrMap: TTokenStream): TDisplayErrAndLineErr
 
         displayErr.push(true);
 
-        const err: CNekoBaseLineDiag | null = getLineErr(DocStrMap, line);
+        const err: CDiagBase | null = getLineErr(DocStrMap, line);
         if (err !== null) lineDiagS.push(err);
     }
     return {
@@ -39,18 +38,18 @@ function getDisplayErrAndLineErr(DocStrMap: TTokenStream): TDisplayErrAndLineErr
 }
 
 // eslint-disable-next-line no-magic-numbers
-const wm = new WeakMap<TTokenStream, readonly vscode.Diagnostic[]>();
+const wm = new WeakMap<TTokenStream, readonly CDiagBase[]>();
 
 export function baseDiagnostic(
     DocStrMap: TTokenStream,
     AST: TAstRoot,
-): readonly vscode.Diagnostic[] {
-    const cache: readonly vscode.Diagnostic[] | undefined = wm.get(DocStrMap);
+): readonly CDiagBase[] {
+    const cache: readonly CDiagBase[] | undefined = wm.get(DocStrMap);
     if (cache !== undefined) return cache;
 
     const { displayErr, lineDiagS } = getDisplayErrAndLineErr(DocStrMap);
 
-    const diagList: readonly vscode.Diagnostic[] = [
+    const diagList: readonly CDiagBase[] = [
         ...getDeepErr(DocStrMap),
         ...lineDiagS,
         ...getTreeErr(AST, displayErr),

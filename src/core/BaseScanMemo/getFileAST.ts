@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TFsPath, TTokenStream } from '../../globalEnum';
 import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
+import type { CDiagBase } from '../../provider/Diagnostic/tools/CDiagBase';
 import { getChildren } from '../getChildren';
 import { getClass } from '../getClass';
 import { ParserBlock } from '../Parser';
@@ -24,7 +25,7 @@ export type TMemo = Readonly<{
     readonly GValMap: TGValMapReadOnly;
     readonly DocStrMap: TTokenStream;
     readonly DocFullSize: number;
-    readonly baseDiag: readonly vscode.Diagnostic[];
+    readonly baseDiag: readonly CDiagBase[];
     readonly uri: vscode.Uri;
 }>;
 
@@ -102,13 +103,11 @@ export function getFileAST(document: vscode.TextDocument): TMemo {
         },
     );
 
-    const baseDiag: readonly vscode.Diagnostic[] = baseDiagnostic(DocStrMap, AST);
-
     const AhkCache: TMemo = {
         GValMap, // TGValMapReadOnly
         DocStrMap,
         AST,
-        baseDiag,
+        baseDiag: baseDiagnostic(DocStrMap, AST),
         DocFullSize,
         uri: document.uri,
     };

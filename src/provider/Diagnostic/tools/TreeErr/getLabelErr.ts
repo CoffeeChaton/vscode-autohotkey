@@ -2,9 +2,9 @@ import * as vscode from 'vscode';
 import { CAhkLabel } from '../../../../AhkSymbol/CAhkLine';
 import type { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../../diag';
-import { setDiagnostic } from '../setDiagnostic';
+import { CDiagBase } from '../CDiagBase';
 
-export function getLabelErr(ch: TAhkSymbol): vscode.Diagnostic[] {
+export function getLabelErr(ch: TAhkSymbol): CDiagBase[] {
     if (!(ch instanceof CAhkLabel)) return [];
 
     const labName: string = ch.name.toUpperCase();
@@ -40,6 +40,13 @@ export function getLabelErr(ch: TAhkSymbol): vscode.Diagnostic[] {
 
     const v2: TLabelErr | undefined = rulerMatch.find((v) => v.reg.test(labName));
     return (v2 !== undefined)
-        ? [setDiagnostic(v2.code, ch.selectionRange, vscode.DiagnosticSeverity.Warning, v2.tags)]
+        ? [
+            new CDiagBase({
+                value: v2.code,
+                range: ch.selectionRange,
+                severity: vscode.DiagnosticSeverity.Warning,
+                tags: v2.tags,
+            }),
+        ]
         : [];
 }

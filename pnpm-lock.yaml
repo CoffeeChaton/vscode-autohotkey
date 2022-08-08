@@ -7,7 +7,7 @@ specifiers:
   '@types/jest': ^28.1.6
   '@types/micromatch': ^4.0.2
   '@types/node': ^18.6.4
-  '@types/vscode': ^1.69.1
+  '@types/vscode': ^1.70.0
   '@typescript-eslint/eslint-plugin': ^5.32.0
   '@typescript-eslint/parser': ^5.32.0
   '@vscode/test-electron': ^2.1.5
@@ -44,7 +44,7 @@ devDependencies:
   '@types/jest': 28.1.6
   '@types/micromatch': 4.0.2
   '@types/node': 18.6.4
-  '@types/vscode': 1.69.1
+  '@types/vscode': 1.70.0
   '@typescript-eslint/eslint-plugin': 5.32.0_iosr3hrei2tubxveewluhu5lhy
   '@typescript-eslint/parser': 5.32.0_qugx7qdu5zevzvxaiqyxfiwquq
   '@vscode/test-electron': 2.1.5
@@ -1103,8 +1103,8 @@ packages:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: true
 
-  /@types/vscode/1.69.1:
-    resolution: {integrity: sha512-YZ77g3u9S9Xw3dwAgRgNAwnKNS3nPlhSu3XKOIYQzCcItUrZovfJUlf/29wjON2VZvHGuYQnhKuJUP15ccpVIQ==}
+  /@types/vscode/1.70.0:
+    resolution: {integrity: sha512-3/9Fz0F2eBgwciazc94Ien+9u1elnjFg9YAhvAb3qDy/WeFWD9VrOPU7CIytryOVUdbxus8uzL4VZYONA0gDtA==}
     dev: true
 
   /@types/yargs-parser/21.0.0:

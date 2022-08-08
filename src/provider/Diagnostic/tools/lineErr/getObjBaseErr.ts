@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
+import { CDiagBase } from '../CDiagBase';
 import type { TLineErrDiagParam } from './lineErrTools';
-import { CNekoBaseLineDiag, EDiagLine } from './lineErrTools';
+import { EDiagLine } from './lineErrTools';
 
-export function getObjBaseErr(params: TLineErrDiagParam): CNekoBaseLineDiag | EDiagLine.miss {
+export function getObjBaseErr(params: TLineErrDiagParam): CDiagBase | EDiagLine.miss {
     // base property
     // Prototype pollution!
     // .base
@@ -21,13 +22,10 @@ export function getObjBaseErr(params: TLineErrDiagParam): CNekoBaseLineDiag | ED
     if (colL === -1) { // not find
         return EDiagLine.miss;
     }
-
-    return new CNekoBaseLineDiag({
-        line,
-        colL,
-        colR: colL + baseLen, // ".base" or "base:" len
+    return new CDiagBase({
+        value: EDiagCode.code601,
+        range: new vscode.Range(line, colL, line, colL + baseLen), // ".base" or "base:" len
         severity: vscode.DiagnosticSeverity.Warning,
         tags: [],
-        value: EDiagCode.code601,
     });
 }

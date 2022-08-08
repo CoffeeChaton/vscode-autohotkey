@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import type { CDiagFn } from '../../../provider/Diagnostic/tools/CDiagFn';
 
 export const enum EPrefixC502 {
     var = 'var',
@@ -6,6 +7,8 @@ export const enum EPrefixC502 {
 }
 
 /**
+ * WARN !!!!
+ * Keep this format string!!!
  * // var "A" is the same variable as "a" defined earlier (at [165, 20])
  * // param "dDC" is the some variable as "ddc" defined earlier (at [221, 8])
  * Keep this format string!!!
@@ -22,14 +25,14 @@ export function setDiagCaseMsg(
     return `${prefix} "${c502Name}" is the some variable as "${firstName}" defined earlier (at ${defPosStr})`;
 }
 
-export type TParseDiagCaseMsg = Readonly<{
+type TParseDiagCaseMsg = {
     defStr: string;
     defRange: vscode.Range;
     refStr: string;
     refRange: vscode.Range;
-}>;
+};
 
-export function ParseDiagCaseMsg(diag: vscode.Diagnostic): TParseDiagCaseMsg {
+export function ParseDiagCaseMsg(diag: CDiagFn): TParseDiagCaseMsg {
     const { message, range } = diag;
     //  var "A" is the same variable as "a" defined earlier (at [165, 20])
     const magStrList: string[] = [];

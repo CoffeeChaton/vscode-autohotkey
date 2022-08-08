@@ -1,11 +1,10 @@
-/* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
+import { CDiagBase } from '../CDiagBase';
 import type { TLineDiag, TLineErrDiagParam } from './lineErrTools';
-import { CNekoBaseLineDiag, EDiagLine } from './lineErrTools';
+import { EDiagLine } from './lineErrTools';
 
-// ---------------------------------------------------------------------------------------------------------------------
-function getLoopErr(lStr: string, line: number): CNekoBaseLineDiag | EDiagLine {
+function getLoopErr(lStr: string, line: number): CDiagBase | EDiagLine {
     const matchLoop: RegExpMatchArray | null = lStr.match(/^\s*Loop\b[\s,]+(\w+)/iu);
     if (matchLoop === null) return EDiagLine.miss;
 
@@ -20,11 +19,9 @@ function getLoopErr(lStr: string, line: number): CNekoBaseLineDiag | EDiagLine {
     const colR = colL + SecondSection.length;
     if ((/^RootKey$/ui).test(SecondSection)) {
         // https://www.autohotkey.com/docs/commands/LoopReg.htm#old
-        return new CNekoBaseLineDiag({
-            line,
-            colL,
-            colR,
+        return new CDiagBase({
             value: EDiagCode.code801,
+            range: new vscode.Range(line, colL, line, colR),
             severity: vscode.DiagnosticSeverity.Warning,
             tags: [vscode.DiagnosticTag.Deprecated],
         });
@@ -32,29 +29,24 @@ function getLoopErr(lStr: string, line: number): CNekoBaseLineDiag | EDiagLine {
 
     if ((/^FilePattern$/ui).test(SecondSection)) {
         // https://www.autohotkey.com/docs/commands/LoopFile.htm#old
-        return new CNekoBaseLineDiag({
-            line,
-            colL,
-            colR,
+        return new CDiagBase({
             value: EDiagCode.code802,
+            range: new vscode.Range(line, colL, line, colR),
             severity: vscode.DiagnosticSeverity.Warning,
             tags: [vscode.DiagnosticTag.Deprecated],
         });
     }
 
     // https://www.autohotkey.com/docs/commands/Loop.htm
-    return new CNekoBaseLineDiag({
-        line,
-        colL,
-        colR,
+    return new CDiagBase({
         value: EDiagCode.code201,
+        range: new vscode.Range(line, colL, line, colR),
         severity: vscode.DiagnosticSeverity.Error,
         tags: [],
     });
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
-function getCommandErrFnReplace(fistWord: string, lStr: string, line: number): CNekoBaseLineDiag | EDiagLine.miss {
+function getCommandErrFnReplace(fistWord: string, lStr: string, line: number): CDiagBase | EDiagLine.miss {
     // eslint-disable-next-line no-magic-numbers
     if (fistWord.length < 3) return EDiagLine.miss;
     // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
@@ -64,11 +56,9 @@ function getCommandErrFnReplace(fistWord: string, lStr: string, line: number): C
         || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/ui).test(fistWord)
     ) {
         const colL = lStr.search(/\S/u);
-        return new CNekoBaseLineDiag({
-            line,
-            colL,
-            colR: colL + fistWord.length,
+        return new CDiagBase({
             value: EDiagCode.code700,
+            range: new vscode.Range(line, colL, line, colL + fistWord.length),
             severity: vscode.DiagnosticSeverity.Warning,
             tags: [vscode.DiagnosticTag.Deprecated],
         });
@@ -76,8 +66,7 @@ function getCommandErrFnReplace(fistWord: string, lStr: string, line: number): C
     return EDiagLine.miss;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
-function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): CNekoBaseLineDiag | EDiagLine.miss {
+function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): CDiagBase | EDiagLine.miss {
     // eslint-disable-next-line no-magic-numbers
     if (fistWordUp.length < 5) return EDiagLine.miss;
     type TCommandErr = {
@@ -120,25 +109,20 @@ function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): CNe
         // Reg,,,... i need to Count colon  ??
     ];
 
-    for (const v of headMatch) {
-        if (v.reg.test(fistWordUp)) {
-            const colL = lStr.search(/\S/ui);
-            return new CNekoBaseLineDiag({
-                line,
-                colL,
-                colR: colL + fistWordUp.length,
-                value: v.code,
-                severity: vscode.DiagnosticSeverity.Warning,
-                tags: [vscode.DiagnosticTag.Deprecated],
-            });
-        }
-    }
+    const find: TCommandErr | undefined = headMatch.find((v) => v.reg.test(fistWordUp));
+    if (find === undefined) return EDiagLine.miss;
 
-    return EDiagLine.miss;
+    const colL = lStr.search(/\S/ui);
+
+    return new CDiagBase({
+        value: find.code,
+        range: new vscode.Range(line, colL, line, colL + fistWordUp.length),
+        severity: vscode.DiagnosticSeverity.Warning,
+        tags: [vscode.DiagnosticTag.Deprecated],
+    });
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
-export function getCommandErr(params: TLineErrDiagParam): CNekoBaseLineDiag | EDiagLine {
+export function getCommandErr(params: TLineErrDiagParam): CDiagBase | EDiagLine {
     const {
         lStr,
         fistWordUp,
@@ -176,9 +160,7 @@ export function getCommandErr(params: TLineErrDiagParam): CNekoBaseLineDiag | ED
 
     // _commandHeadStatistics(fistWord);
     const fnReplaceErr: TLineDiag = getCommandErrFnReplace(fistWordUp, lStr, line);
-    if (fnReplaceErr !== EDiagLine.miss) {
-        return fnReplaceErr;
-    }
-
-    return getOtherCommandErr(fistWordUp, lStr, line);
+    return fnReplaceErr !== EDiagLine.miss
+        ? fnReplaceErr
+        : getOtherCommandErr(fistWordUp, lStr, line);
 }

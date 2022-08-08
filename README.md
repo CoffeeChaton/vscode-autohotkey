@@ -90,9 +90,9 @@ AutoHotKey language support for VS Code
    `default : too much`\
    `Case : > 20`\
    `Case : not find`
-3. use `;@ahk-ignore [number] line.` to ignore,
+3. use `;@ahk-neko-ignore [number] line.` to ignore,
    \
-   exp: `;@ahk-ignore 3 line.`
+   exp: `;@ahk-neko-ignore 3 line.`
 
 ![Diagnostic1](image/Diagnostic1.png)
 ![Diagnostic2](image/Diagnostic2.png)
