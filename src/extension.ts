@@ -18,7 +18,7 @@ import { CodeLensProvider } from './provider/CodeLens/CodeLensProvider';
 import { showUnknownAnalyze } from './provider/CodeLens/showUnknownAnalyze';
 import { CompletionItemProvider } from './provider/CompletionItem/CompletionItemProvider';
 import { DefProvider } from './provider/Def/DefProvider';
-import { onDidChangeTabs } from './provider/event/onDidChangeTabs';
+import { onDidChangeActiveTab, onDidChangeTabs } from './provider/event/onDidChangeTabs';
 import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
@@ -49,15 +49,22 @@ export function activate(context: ExtensionContext): void {
         languages.registerRenameProvider(selector, RenameProvider),
         languages.registerWorkspaceSymbolProvider(WorkspaceSymbolProvider),
         // workspace-------------------
+        // workspace.onDidChangeTextDocument((e) => d(e)),
+        // workspace.onDidCreateFiles(handleCreateFile),
+        // workspace.onDidDeleteFiles(handleDeleteFile),
+        // workspace.onDidOpenTextDocument(handleOpenFile),
+        // workspace.onDidRenameFiles(handleRenameFile),
+        // workspace.onDidSaveTextDocument(handleOnDidSaveTextDocument),
+        // workspace.registerTextDocumentContentProvider(selector, e),
         workspace.onDidChangeConfiguration(configChangEvent),
         workspace.onDidCreateFiles(pm.createMap),
         workspace.onDidDeleteFiles(pm.delMap),
         workspace.onDidRenameFiles(pm.renameFiles),
-        // workspace.onDidChangeTextDocument((e) => d(e)),
-        // workspace.registerTextDocumentContentProvider(selector, e),
         // window----------------------
-        window.tabGroups.onDidChangeTabs(onDidChangeTabs),
+        // window.onDidChangeVisibleTextEditors(onChangeVisibleTabs),
         // window.tabGroups.onDidChangeTabGroups(onDidChangeTabGroups),
+        window.onDidChangeActiveTextEditor(onDidChangeActiveTab),
+        window.tabGroups.onDidChangeTabs(onDidChangeTabs),
         // commands--------------------
         commands.registerCommand('ahk.nekoHelp.bar', statusBarClick),
         commands.registerCommand('ahk.nekoHelp.refreshResource', UpdateCacheUi),

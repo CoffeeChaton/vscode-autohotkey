@@ -114,31 +114,3 @@ export function getFileAST(document: vscode.TextDocument): TMemo {
     BaseScanMemo.setMemo(fsPath, AhkCache);
     return AhkCache;
 }
-
-// /**
-//  * vscode.Tab
-//  * number
-//  */
-// const activityMap: Map<vscode.Tab, number> = new Map();
-//
-// export function onDidChangeTabs(tabChangeEvent: vscode.TabChangeEvent): void {
-//     for (const removedTab of tabChangeEvent.closed) {
-//         activityMap.delete(removedTab);
-//     }
-//
-//     const changedTabs = [...tabChangeEvent.opened, ...tabChangeEvent.changed];
-//
-//     for (const tab of changedTabs) {
-//         activityMap.set(tab, Date.now());
-//     }
-// }
-
-// export function onDidChangeTabGroups(e: vscode.TabGroupChangeEvent): void {
-//     const tabList: vscode.Tab[] = vscode.window.tabGroups.all
-//         .flatMap((group: vscode.TabGroup): readonly vscode.Tab[] => group.tabs);
-//
-//     activityMap.clear();
-//     for (const tab of tabList) {
-//         activityMap.set(tab, Date.now());
-//     }
-// }
