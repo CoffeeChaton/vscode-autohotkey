@@ -10,11 +10,13 @@
     "dictionaries": [],
     "words": [
         "autohotkey",
+        "CLIPBOARDALL",
         "Comand",
         "cpuprofile",
         "cputemp",
         "cweijan",
         "Deref",
+        "ERRORLEVEL",
         "esbuild",
         "eslintcache",
         "Gdip",

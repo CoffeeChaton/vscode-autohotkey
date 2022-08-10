@@ -87,8 +87,7 @@ export const pm = {
             diagColl.set(uri, [...UpDateDocDefReturn.baseDiag]);
         }
 
-        const fileName: string = path.basename(fsPath);
-        showTimeSpend(fileName);
+        showTimeSpend(path.basename(fsPath));
 
         return UpDateDocDefReturn;
     },

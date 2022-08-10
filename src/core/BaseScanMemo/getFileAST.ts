@@ -104,7 +104,7 @@ export function getFileAST(document: vscode.TextDocument): TMemo {
     );
 
     const AhkCache: TMemo = {
-        GValMap, // TGValMapReadOnly
+        GValMap,
         DocStrMap,
         AST,
         baseDiag: baseDiagnostic(DocStrMap, AST),

@@ -30,10 +30,10 @@ export function DeepAnalysisAllFiles(): null {
     const t1: number = Date.now();
 
     const need: CAhkFunc[] = [];
-    for (const { uri, AST } of pm.DocMap.values()) { // keep output order is OK
+    for (const { uri, AST, DocStrMap } of pm.DocMap.values()) { // keep output order is OK
         const DAList: CAhkFunc[] = getDAList(AST);
         need.push(...DAList);
-        digDAFile(DAList, uri);
+        digDAFile(DAList, uri, DocStrMap);
     }
 
     const t2: number = Date.now();
@@ -48,8 +48,8 @@ my project:
 Deep Analysis All Files
 Deep Analysis : 744 Symbol
 paramMapSize is 1922
-valMapSize is 1960
-textMapSize is 521
-All Size is 4403
+valMapSize is 1966
+textMapSize is 597
+All Size is 4485
 Done in 6 ms
 */

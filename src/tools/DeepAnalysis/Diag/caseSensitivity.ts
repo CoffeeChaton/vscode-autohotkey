@@ -22,6 +22,7 @@ export function caseSensitivityVar(
     paramOrValMap: TParamMapOut | TValMapOut,
     code502or503List: CDiagFn[],
     maxDiag: number,
+    displayErrList: readonly boolean[],
 ): void {
     if (code502or503List.length >= maxDiag) {
         return;
@@ -40,12 +41,15 @@ export function caseSensitivityVar(
             const C502: TC502New = c502Array[i];
             if (C502 === 0) continue;
 
+            const range: vscode.Range = getRangeOfC502(defRangeList, refRangeList, i);
+            if (!displayErrList[range.start.line]) continue;
+
             const defPos: vscode.Position = defRangeList[0].start;
 
             const diagFn: CDiagFn = new CDiagFn(
                 {
                     value: EDiagCodeDA.code502,
-                    range: getRangeOfC502(defRangeList, refRangeList, i),
+                    range,
                     severity: vscode.DiagnosticSeverity.Information,
                     tags: [],
                     message: setDiagCaseMsg(keyRawName, defPos, C502, prefix),

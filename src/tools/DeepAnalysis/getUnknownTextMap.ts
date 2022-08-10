@@ -47,7 +47,12 @@ function getIgnoreList(): string[] {
 
         'SWITCH',
         'CASE',
-        'DEFAULT',
+        'DEFAULT', //
+        // FIXME: EDiagCodeDA.code501
+        // IniRead(Filename, Section, Key, Default = "") {
+        //     IniRead, v, %Filename%, %Section%, %Key%, %Default%
+        //     Return, v
+        // }
 
         'TRUE',
         'FALSE',

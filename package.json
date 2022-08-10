@@ -58,24 +58,31 @@
             "type": "object",
             "title": "AhkNekoHelp",
             "properties": {
-                "AhkNekoHelp.open.Documents.Uri": {
-                    "type": "string",
-                    "default": "https://www.autohotkey.com/docs/AutoHotkey.htm",
-                    "description": "the doc uri"
+                "AhkNekoHelp.useSymBolProvider": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "use outline and breadcrumbs, if you like other plugins SymBolProvider, can close this. Read more https://code.visualstudio.com/docs/getstarted/userinterface#_breadcrumbs"
+                },
+                "AhkNekoHelp.Diag.WarningCap.code500": {
+                    "type": "number",
+                    "default": 20,
+                    "minimum": 0,
+                    "maximum": 999,
+                    "description": "(code500) var is assigned but never used, a file max checks number. use 0 to close warn."
                 },
                 "AhkNekoHelp.Diag.WarningCap.code502": {
                     "type": "number",
                     "default": 10,
                     "minimum": 0,
                     "maximum": 999,
-                    "description": "(code502) case sensitivity check of variable, a file max checks number.\\n use 0 to close warn."
+                    "description": "(code502) case sensitivity check of variable, a file max checks number. use 0 to close warn."
                 },
                 "AhkNekoHelp.Diag.WarningCap.code503": {
                     "type": "number",
                     "default": 10,
                     "minimum": 0,
                     "maximum": 999,
-                    "description": "(code503) case sensitivity check of parameter, a file max checks number.\\n use 0 to close warn."
+                    "description": "(code503) case sensitivity check of parameter, a file max checks number. use 0 to close warn."
                 },
                 "AhkNekoHelp.baseScan.IgnoredList": {
                     "type": "array",
@@ -185,13 +192,13 @@
         "@types/assert": "^1.5.6",
         "@types/jest": "^28.1.6",
         "@types/micromatch": "^4.0.2",
-        "@types/node": "^18.6.4",
+        "@types/node": "^18.6.5",
         "@types/vscode": "^1.70.0",
-        "@typescript-eslint/eslint-plugin": "^5.32.0",
-        "@typescript-eslint/parser": "^5.32.0",
+        "@typescript-eslint/eslint-plugin": "^5.33.0",
+        "@typescript-eslint/parser": "^5.33.0",
         "@vscode/test-electron": "^2.1.5",
         "dprint": "^0.30.3",
-        "esbuild": "^0.14.53",
+        "esbuild": "^0.15.0",
         "esbuild-copy-static-files": "^0.1.0",
         "eslint": "^8.21.0",
         "eslint-config-airbnb": "^19.0.4",

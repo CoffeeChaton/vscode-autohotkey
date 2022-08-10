@@ -28,7 +28,7 @@ export const enum EDiagDeep {
     multR = 2, // multiple closing braces
 }
 
-export type TAhkToken = {
+export type TAhkTokenLine = {
     readonly fistWordUp: string;
     readonly lStr: string;
     readonly textRaw: string;
@@ -39,8 +39,11 @@ export type TAhkToken = {
     readonly cll: 0 | 1;
     readonly lineComment: string;
     readonly diagDeep: EDiagDeep;
+    readonly displayErr: boolean; // FIXME displayErr
     // I know this is not Complete and correct Token.
-}[];
+};
+
+export type TAhkToken = TAhkTokenLine[];
 
 export type TTokenStream = DeepReadonly<TAhkToken>;
 

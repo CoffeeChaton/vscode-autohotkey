@@ -1,8 +1,10 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-statements */
 
-import type { TAhkToken, TTokenStream } from '../globalEnum';
+import type { TAhkTokenLine, TTokenStream } from '../globalEnum';
 import { EDetail, EDiagDeep, ELTrim } from '../globalEnum';
+import { getIgnore } from '../provider/Diagnostic/getIgnore';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
 import { inLTrimRange } from '../tools/str/inLTrimRange';
@@ -15,11 +17,13 @@ import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
  * @returns FFullDocTokenDocStream
  */
 export function Pretreatment(strArray: readonly string[], fileName: string): TTokenStream {
-    const result: TAhkToken = [];
+    const result: TAhkTokenLine[] = [];
     let CommentBlock = false;
     let LTrim: ELTrim = ELTrim.none;
     let deep = 0;
     let line = -1;
+    let IgnoreLine = 0;
+
     for (const textRaw of strArray) {
         line++;
         const textTrimStart: string = textRaw.trimStart();
@@ -29,7 +33,8 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             console.warn('Pretreatment -> line , deep < 0, textTrimStart', textTrimStart);
             deep = 0;
         }
-
+        IgnoreLine = getIgnore({ textRaw, line, IgnoreLine });
+        const displayErr = line > IgnoreLine;
         CommentBlock = inCommentBlock(textTrimStart, CommentBlock); /// TODO {CommentBlock,resultLn} | null
         if (CommentBlock) {
             result.push({
@@ -43,6 +48,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 lineComment: '',
                 LTrim,
                 diagDeep: 0,
+                displayErr,
             });
             continue;
         }
@@ -60,6 +66,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 lineComment: '',
                 LTrim,
                 diagDeep: 0,
+                displayErr,
             });
             continue;
         }
@@ -76,6 +83,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 lineComment: '',
                 LTrim,
                 diagDeep: 0,
+                displayErr,
             });
             continue;
         }
@@ -104,6 +112,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 lineComment,
                 LTrim,
                 diagDeep: 0,
+                displayErr,
             });
             continue;
         }
@@ -165,6 +174,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             lineComment,
             LTrim,
             diagDeep,
+            displayErr,
         });
     }
 

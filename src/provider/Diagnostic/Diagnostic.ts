@@ -1,43 +1,19 @@
 import type { TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
 import { getLintConfig } from '../../configUI';
-import type { TTokenStream } from '../../globalEnum';
-import { getIgnore } from './getIgnore';
+import type { TAhkTokenLine, TTokenStream } from '../../globalEnum';
 import type { CDiagBase } from './tools/CDiagBase';
 import { getDeepErr } from './tools/getDeepErr';
 import { getFuncErr } from './tools/getFuncErr';
 import { getLineErr } from './tools/getLineErr';
 import { getTreeErr } from './tools/getTreeErr';
 
-type TDisplayErr = boolean[];
-type TDisplayErrAndLineErr = {
-    displayErr: TDisplayErr;
-    lineDiagS: CDiagBase[];
-};
-
-function getDisplayErrAndLineErr(DocStrMap: TTokenStream): TDisplayErrAndLineErr {
-    const displayErr: TDisplayErr = [];
-    const lineDiagS: CDiagBase[] = [];
-
-    let IgnoreLine: number = getIgnore(DocStrMap[0].textRaw, 0, -1);
-    for (const { textRaw, line } of DocStrMap) {
-        IgnoreLine = getIgnore(textRaw, line, IgnoreLine);
-        if (line <= IgnoreLine) {
-            displayErr.push(false);
-            continue;
-        }
-
-        displayErr.push(true);
-
-        const err: CDiagBase | null = getLineErr(DocStrMap, line);
-        if (err !== null) lineDiagS.push(err);
-    }
-    return {
-        displayErr,
-        lineDiagS,
-    };
+function getDisplayErrAndLineErr(DocStrMap: TTokenStream): CDiagBase[] {
+    return DocStrMap
+        .filter((x: TAhkTokenLine): boolean => x.displayErr)
+        .map((x: TAhkTokenLine): CDiagBase | null => getLineErr(DocStrMap, x.line))
+        .filter<CDiagBase>((x: CDiagBase | null): x is CDiagBase => x !== null);
 }
 
-// eslint-disable-next-line no-magic-numbers
 const wm = new WeakMap<TTokenStream, readonly CDiagBase[]>();
 
 export function baseDiagnostic(
@@ -47,13 +23,13 @@ export function baseDiagnostic(
     const cache: readonly CDiagBase[] | undefined = wm.get(DocStrMap);
     if (cache !== undefined) return cache;
 
-    const { displayErr, lineDiagS } = getDisplayErrAndLineErr(DocStrMap);
+    const displayErrList: readonly boolean[] = DocStrMap.map(({ displayErr }: TAhkTokenLine): boolean => displayErr);
 
     const diagList: readonly CDiagBase[] = [
         ...getDeepErr(DocStrMap),
-        ...lineDiagS,
-        ...getTreeErr(AST, displayErr),
-        ...getFuncErr(DocStrMap, [...AST], displayErr, getLintConfig().funcSize),
+        ...getDisplayErrAndLineErr(DocStrMap),
+        ...getTreeErr(AST, displayErrList),
+        ...getFuncErr(DocStrMap, [...AST], displayErrList, getLintConfig().funcSize),
     ];
     // 8k lines without gc -> 3ms
     wm.set(DocStrMap, diagList);

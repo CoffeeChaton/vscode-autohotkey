@@ -15,11 +15,13 @@ type TempConfigs = {
     };
     Diag: {
         WarningCap: {
+            code500: number; // NeverUsedVar
             code502: number; // of var
             code503: number; // of param
         };
     };
     useCodeLens: boolean;
+    useSymBolProvider: boolean;
 };
 type TConfigs = DeepReadonly<TempConfigs>;
 
@@ -57,11 +59,13 @@ function getConfig(): TConfigs {
         },
         Diag: {
             WarningCap: {
+                code500: getConfigs<number>('Diag.WarningCap.code500'), // NeverUsedVar
                 code502: getConfigs<number>('Diag.WarningCap.code502'), // of var
                 code503: getConfigs<number>('Diag.WarningCap.code503'), // of param
             },
         },
         useCodeLens: getConfigs<boolean>('useCodeLens'),
+        useSymBolProvider: getConfigs<boolean>('useSymBolProvider'),
     } as const;
 
     return ed;
@@ -96,6 +100,10 @@ export function getFormatConfig(): boolean {
     return config.formatTextReplace;
 }
 
+export function useSymBolProvider(): boolean {
+    return config.useSymBolProvider;
+}
+
 const wm = new WeakMap<readonly string[], readonly RegExp[]>();
 
 function str2RegexList(key: readonly string[]): readonly RegExp[] {
@@ -125,6 +133,13 @@ export function getIgnoredList(): readonly RegExp[] {
 export function getSnippetBlockFilesList(): readonly RegExp[] {
     const key: readonly string[] = config.snippets.blockFilesList;
     return str2RegexList(key);
+}
+
+/**
+ * NeverUsedVar
+ */
+export function getCode500Default(): number {
+    return config.Diag.WarningCap.code500;
 }
 
 /**

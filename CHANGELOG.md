@@ -1,26 +1,21 @@
-## 2022/8/8 0.0.2
+# Changelog
 
-1. disambiguation, `;@ahk-ignore` -> `;@ahk-neko-ignore`
-2. just support vscode 1.70.0
+## 0.0.3(2022-08-10) wait to release
 
-## 2022/8/2 0.0.1
+- add option of `code500 error` flag
+- add option of `useSymBolProvider` flag
+- add highlight `;@ahk-neko-ignore`
+- refactor: move `displayErr` from `baseDiag` to `TAhkTokenLine`
+- [TODO] add highlight `;@ahk-neko-ignore-fn`
+
+## 0.0.2(2022-08-08)
+
+1. disambiguation, change `;@ahk-ignore` -> `;@ahk-neko-ignore`
+
+## 0.0.1(2022-08-02)
 
 [release to vscode market](https://marketplace.visualstudio.com/items?itemName=cat1122.vscode-autohotkey-neko-help)
 
-## 2020/07/12 Format Selection Alpha 0.3
+## 0.0.0(2020-04-05)
 
-fix bug of delete leading blank
-
-## 2020/05/22 Format Document Beta v0.3
-
-add switch case format
-
-## 2020/04/24 add goto class Definition
-
-## 2020/04/18 show all References
-
-## 2020/04/12 let goto Function Definition
-
-## 2020/04/05 fork from
-
-- <https://github.com/cweijan/vscode-autohotkey>
+- fork from [cweijan/vscode-autohotkey](https://github.com/cweijan/vscode-autohotkey)
