@@ -22,7 +22,8 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
     let LTrim: ELTrim = ELTrim.none;
     let deep = 0;
     let line = -1;
-    let IgnoreLine = 0;
+    let ignoreLine = 0;
+    let ignoreLineP = 0;
 
     for (const textRaw of strArray) {
         line++;
@@ -33,8 +34,16 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             console.warn('Pretreatment -> line , deep < 0, textTrimStart', textTrimStart);
             deep = 0;
         }
-        IgnoreLine = getIgnore({ textRaw, line, IgnoreLine });
-        const displayErr = line > IgnoreLine;
+        const temp = getIgnore({
+            textTrimStart,
+            line,
+            ignoreLine,
+            ignoreLineP,
+        });
+        ignoreLine = temp.ignoreLine;
+        ignoreLineP = temp.ignoreLineP;
+        const displayErr = line > ignoreLine;
+        const displayFnErr = line > ignoreLineP;
         CommentBlock = inCommentBlock(textTrimStart, CommentBlock); /// TODO {CommentBlock,resultLn} | null
         if (CommentBlock) {
             result.push({
@@ -49,6 +58,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 LTrim,
                 diagDeep: 0,
                 displayErr,
+                displayFnErr,
             });
             continue;
         }
@@ -67,6 +77,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 LTrim,
                 diagDeep: 0,
                 displayErr,
+                displayFnErr,
             });
             continue;
         }
@@ -84,6 +95,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 LTrim,
                 diagDeep: 0,
                 displayErr,
+                displayFnErr,
             });
             continue;
         }
@@ -113,6 +125,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 LTrim,
                 diagDeep: 0,
                 displayErr,
+                displayFnErr,
             });
             continue;
         }
@@ -175,6 +188,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             LTrim,
             diagDeep,
             displayErr,
+            displayFnErr,
         });
     }
 

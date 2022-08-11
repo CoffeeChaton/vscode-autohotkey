@@ -40,6 +40,7 @@ export type TAhkTokenLine = {
     readonly lineComment: string;
     readonly diagDeep: EDiagDeep;
     readonly displayErr: boolean; // FIXME displayErr
+    readonly displayFnErr: boolean;
     // I know this is not Complete and correct Token.
 };
 

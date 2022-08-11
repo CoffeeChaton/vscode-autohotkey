@@ -1,12 +1,12 @@
 # Changelog
 
-## 0.0.3(2022-08-10) wait to release
+## 0.0.3(2022-08-11) wait to release
 
 - add option of `code500 error` flag
 - add option of `useSymBolProvider` flag
 - add highlight `;@ahk-neko-ignore`
+- add highlight `;@ahk-neko-ignore-fn`
 - refactor: move `displayErr` from `baseDiag` to `TAhkTokenLine`
-- [TODO] add highlight `;@ahk-neko-ignore-fn`
 
 ## 0.0.2(2022-08-08)
 

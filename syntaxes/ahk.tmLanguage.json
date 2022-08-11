@@ -1,5 +1,4 @@
 {
-    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
     "fileTypes": [
         "ahk"
     ],
@@ -16,9 +15,21 @@
                 },
                 "2": {
                     "name": "keyword.other.ahk"
+                },
+                "3": {
+                    "name": "constant.numeric.ahk"
                 }
             },
-            "match": "(?:^|\\s+)(;)(@ahk-neko-ignore\\s*\\d+)?(.*)",
+            "match": "^\\s*(;)(@ahk-neko-ignore(?:-fn)?)\\s+(\\d+)\\s.*",
+            "name": "comment.line.semicolon.ahk"
+        },
+        {
+            "captures": {
+                "1": {
+                    "name": "punctuation.definition.comment.ahk"
+                }
+            },
+            "match": "(?:^|\\s+)(;).*",
             "name": "comment.line.semicolon.ahk"
         },
         {
@@ -89,7 +100,7 @@
                     "name": "string.parameter.import.ahk"
                 }
             },
-            "match": "#\\b(?i:include|includeAgain)\\b(.*)$",
+            "match": "#\\b(?i:include(?:Again)?)\\s$",
             "name": "keyword.control.import.ahk"
         },
         {

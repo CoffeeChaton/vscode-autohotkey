@@ -70,12 +70,11 @@ export function digDAFile(DAList: CAhkFunc[], uri: vscode.Uri, DocStrMap: TToken
     const baseDiag = (diagColl.get(uri) ?? [])
         .filter((diag): boolean => !(diag instanceof CDiagFn));
 
-    const displayErrList: readonly boolean[] = DocStrMap
-        .map(({ displayErr }: TAhkTokenLine): boolean => displayErr)
-        .map((): true => true); // FIXME of displayErr -> displayFnErr
+    const displayFnErrList: readonly boolean[] = DocStrMap
+        .map(({ displayFnErr }: TAhkTokenLine): boolean => displayFnErr);
 
     diagColl.set(uri, [
         ...baseDiag,
-        ...diagDAFileCore(DAList, displayErrList),
+        ...diagDAFileCore(DAList, displayFnErrList),
     ]);
 }

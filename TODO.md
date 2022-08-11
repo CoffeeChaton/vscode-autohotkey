@@ -7,3 +7,6 @@
 5. [check #Include](https://www.autohotkey.com/docs/Functions.htm#lib)
 6. auto check of `catch{} ;null catch`
 7. [add test of tmLanguage.json](https://github.com/Microsoft/TypeScript-TmLanguage)
+8. fmt option of keep line end `\s`, or not.
+9. add diag of `%\w%\w`
+10. `;@ahk-neko-ignore-fn` auto fix && hover
