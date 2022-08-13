@@ -83,7 +83,9 @@ export const BaseScanMemo = {
 
 export function getFileAST(document: vscode.TextDocument): TMemo {
     const fullText: string = document.getText();
-    const fullTextList: readonly string[] = fullText.split(/\r?\n/u);
+    const fullTextList: string[] = fullText.split(/\r?\n/u);
+    if (fullTextList.at(-1)?.trim() !== '') fullTextList.push('');
+
     const DocFullSize: number = fullText.length;
     const { fsPath } = document.uri;
     const oldCache: TMemo | undefined = BaseScanMemo.getMemo(fsPath, fullTextList, DocFullSize);
