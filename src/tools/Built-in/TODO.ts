@@ -93,3 +93,5 @@ const TODO = {
         uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
     },
 } as const;
+
+// ${3|Seconds,Minutes,Hours,Days|}

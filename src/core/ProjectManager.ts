@@ -56,7 +56,7 @@ export const pm = {
             .filter(({ oldUri, newUri }): boolean => oldUri.fsPath.endsWith('.ahk') || newUri.fsPath.endsWith('.ahk'))
             .map(({ oldUri, newUri }): string => `    ${oldUri.fsPath} \n -> ${newUri.fsPath}`);
 
-        if (eventMsg.length === 0) return; // FIXME if not .ahk rename
+        if (eventMsg.length === 0) return;
 
         const docList0: Thenable<vscode.TextDocument>[] = renameFileNameBefore(e);
         for (const doc of await Promise.all(docList0)) pm.updateDocDef(doc);

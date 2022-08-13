@@ -24,8 +24,8 @@ export const enum ELTrim {
 
 export const enum EDiagDeep {
     none = 0,
-    multL = 1, // multiple opening braces
-    multR = 2, // multiple closing braces
+    multL = 1, // multiple opening braces "{"
+    multR = 2, // multiple closing braces "}"
 }
 
 export type TAhkTokenLine = {
@@ -39,7 +39,7 @@ export type TAhkTokenLine = {
     readonly cll: 0 | 1;
     readonly lineComment: string;
     readonly diagDeep: EDiagDeep;
-    readonly displayErr: boolean; // FIXME displayErr
+    readonly displayErr: boolean;
     readonly displayFnErr: boolean;
     // I know this is not Complete and correct Token.
 };

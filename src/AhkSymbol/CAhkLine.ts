@@ -80,7 +80,6 @@ export class CAhkHotString extends vscode.DocumentSymbol {
 
 export class CAhkInclude extends vscode.DocumentSymbol {
     // https://www.autohotkey.com/docs/commands/_Include.htm
-    // TODO  #Include
     //           #Include FileOrDirName
     //           #IncludeAgain FileOrDirName
     //           \*i\s
