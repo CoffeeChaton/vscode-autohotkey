@@ -9,4 +9,4 @@
 7. [add test of tmLanguage.json](https://github.com/Microsoft/TypeScript-TmLanguage)
 8. fmt option of keep line end `\s`, or not.
 9. add diag of `%\w%\w`
-10. `;@ahk-neko-ignore-fn` auto fix && hover
+10. add `;@ahk-neko-ignore-fn` auto fix && hover

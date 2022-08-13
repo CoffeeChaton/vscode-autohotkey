@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Diags, EDiagCodeDA } from '../../diag';
+import { Diags, DiagsDA, EDiagCodeDA } from '../../diag';
 import { EDiagBase } from '../../Enum/EDiagBase';
 import { CDiagBase } from '../Diagnostic/tools/CDiagBase';
 import { CDiagFn } from '../Diagnostic/tools/CDiagFn';
@@ -27,14 +27,26 @@ function codeActionOfDA(uri: vscode.Uri, diag: CDiagFn): vscode.CodeAction[] {
     const { code, range } = diag;
     const { value } = code;
 
+    const position: vscode.Position = new vscode.Position(range.start.line, 0);
+    const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
+    edit.insert(
+        uri,
+        position,
+        `${EDiagBase.ignoreFn} 1 line; at ${(new Date()).toLocaleString()} ; ${DiagsDA[value].msg}\n`,
+    );
+
+    const CA: vscode.CodeAction = new vscode.CodeAction('ignore line');
+    CA.kind = vscode.CodeActionKind.QuickFix;
+    CA.edit = edit;
+
     if (value === EDiagCodeDA.code501) {
-        return [c501ignoreArgNeverUsed(uri, range.start)];
+        return [CA, c501ignoreArgNeverUsed(uri, range.start)];
     }
     if (value === EDiagCodeDA.code502) {
-        return [...c502c503CodeAction(uri, diag)];
+        return [CA, ...c502c503CodeAction(uri, diag)];
     }
 
-    return [];
+    return [CA];
 }
 
 function fixDiag(uri: vscode.Uri, diagnostics: readonly vscode.Diagnostic[]): vscode.CodeAction[] {
