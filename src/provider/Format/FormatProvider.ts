@@ -29,7 +29,7 @@ export function FormatCore(
     const timeStart: number = Date.now();
 
     const { DocStrMap } = pm.updateDocDef(document);
-    let deep = 0;
+
     let occ = 0;
 
     const switchRangeArray: vscode.Range[] = [];
@@ -43,6 +43,7 @@ export function FormatCore(
             lStr,
             detail,
             LTrim,
+            deep,
         } of DocStrMap
     ) {
         const textFix = lStr.trim();
@@ -67,8 +68,6 @@ export function FormatCore(
 
         const switchRange: vscode.Range | null = getSwitchRange(document, DocStrMap, textFix, line);
         if (switchRange !== null) switchRangeArray.push(switchRange);
-
-        deep = DocStrMap[line].deep;
 
         occ = (textFix.endsWith('{') && !textFix.startsWith('{'))
             ? occ

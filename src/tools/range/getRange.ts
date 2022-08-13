@@ -22,15 +22,25 @@ export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: n
             return new vscode.Range(defLine, 0, line, col + 1);
         }
     }
-    console.log('🚀 ~startDeep', startDeep);
+
+    const errMsg = [
+        `🚀 ~ startDeep${startDeep}`,
+        '  DocStrMap[line].deep',
+    ];
+
     for (let line = searchLineFix + 1; line < RangeEnd; line++) {
-        console.log('🚀 ~ DocStrMap[line].deep', line, DocStrMap[line].deep);
+        errMsg.push(`  ${line}, ${DocStrMap[line].deep}`);
     }
-    console.error('🚀 get Range ERROR Start --904--321--33 -------');
-    console.error('🚀 ~ defLine', defLine);
-    console.error('🚀 ~ searchLineFix', searchLineFix);
-    console.error('🚀 ~ startDeep', startDeep);
-    console.error('🚀 ~ RangeEnd', RangeEnd);
-    console.error('🚀 get Range ERROR END -----------');
+
+    errMsg.push(
+        '',
+        'get Range ERROR Start --904--321--33 -------',
+        `  defLine ${defLine}`,
+        `  searchLineFix ${searchLineFix}`,
+        `  startDeep ${startDeep}`,
+        `  RangeEnd ${RangeEnd}`,
+        'get Range ERROR END --904--321--33 -------',
+    );
+    console.error(errMsg.join('\n'));
     return new vscode.Range(defLine, 0, searchLine + 1, 0);
 }
