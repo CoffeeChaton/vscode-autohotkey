@@ -1,14 +1,10 @@
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { pm } from '../../core/ProjectManager';
-import type { DeepReadonly } from '../../globalEnum';
 
-type TKeyUpName = string;
-type TMap = Map<TKeyUpName, CAhkFunc>;
-
-export type TFullFuncMap = DeepReadonly<TMap>;
+export type TFullFuncMap = ReadonlyMap<string, CAhkFunc>;
 
 export function getAllFunc(): TFullFuncMap {
-    const funcMap: TMap = new Map();
+    const funcMap = new Map<string, CAhkFunc>();
 
     for (const { AST } of pm.getDocMapValue()) {
         for (const AhkSymbol of AST) {

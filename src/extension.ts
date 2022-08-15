@@ -26,7 +26,7 @@ import { HoverProvider } from './provider/Hover/HoverProvider';
 import { ReferenceProvider } from './provider/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
 import { AhkFullSemanticHighlight, legend } from './provider/SemanticTokensProvider/SemanticTokensProvider';
-import { SymBolProvider } from './provider/SymbolProvider/SymbolProvider';
+import { SymbolProvider } from './provider/SymbolProvider/SymbolProvider';
 import { OutputChannel } from './provider/vscWindows/OutputChannel';
 import { WorkspaceSymbolProvider } from './provider/WorkspaceSymbolProvider/WorkspaceSymbolProvider';
 
@@ -42,7 +42,7 @@ export function activate(context: ExtensionContext): void {
         languages.registerDocumentFormattingEditProvider(selector, FormatProvider),
         languages.registerDocumentRangeFormattingEditProvider(selector, RangeFormatProvider),
         languages.registerDocumentSemanticTokensProvider(selector, AhkFullSemanticHighlight, legend),
-        languages.registerDocumentSymbolProvider(selector, SymBolProvider),
+        languages.registerDocumentSymbolProvider(selector, SymbolProvider),
         languages.registerHoverProvider(selector, HoverProvider),
         languages.registerOnTypeFormattingEditProvider(selector, OnTypeFormattingEditProvider, '\n'),
         languages.registerReferenceProvider(selector, ReferenceProvider),

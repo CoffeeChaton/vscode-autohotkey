@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.4(2022-08-14) wait release
+
+- add option of `AhkNekoHelp.snippets.Command`
+- style: config use markdown
+
 ## 0.0.3(2022-08-13)
 
 - add option of `code500 error` flag

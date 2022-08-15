@@ -1,6 +1,14 @@
 import * as vscode from 'vscode';
 import type { DeepReadonly } from './globalEnum';
 
+export const enum ECommandOption {
+    All = 0, // "Don't filter Command, Provides all entered commands.",
+    Recommended = 1, // "filter not recommended Command. (Referral rules from AhkNekoHelp.)",
+    noSameFunc = 2, // "filter Command with the pack has same name function. exp: of ",
+    // eslint-disable-next-line no-magic-numbers
+    notProvided = 3, // "not provided any Command."
+}
+
 type TempConfigs = {
     statusBarDisplayColor: string;
     formatTextReplace: boolean;
@@ -12,6 +20,7 @@ type TempConfigs = {
     };
     snippets: {
         blockFilesList: readonly string[];
+        CommandOption: ECommandOption;
     };
     Diag: {
         WarningCap: {
@@ -21,7 +30,8 @@ type TempConfigs = {
         };
     };
     useCodeLens: boolean;
-    useSymBolProvider: boolean;
+    useSymbolProvider: boolean;
+    // https://code.visualstudio.com/api/references/contribution-points%5C#Configuration-example
 };
 type TConfigs = DeepReadonly<TempConfigs>;
 
@@ -56,6 +66,7 @@ function getConfig(): TConfigs {
         },
         snippets: {
             blockFilesList: getConfigs<readonly string[]>('snippets.blockFilesList'),
+            CommandOption: getConfigs<ECommandOption>('snippets.CommandOption'),
         },
         Diag: {
             WarningCap: {
@@ -65,7 +76,7 @@ function getConfig(): TConfigs {
             },
         },
         useCodeLens: getConfigs<boolean>('useCodeLens'),
-        useSymBolProvider: getConfigs<boolean>('useSymBolProvider'),
+        useSymbolProvider: getConfigs<boolean>('useSymbolProvider'),
     } as const;
 
     return ed;
@@ -100,8 +111,8 @@ export function getFormatConfig(): boolean {
     return config.formatTextReplace;
 }
 
-export function useSymBolProvider(): boolean {
-    return config.useSymBolProvider;
+export function useSymbolProvider(): boolean {
+    return config.useSymbolProvider;
 }
 
 const wm = new WeakMap<readonly string[], readonly RegExp[]>();
@@ -126,15 +137,16 @@ function str2RegexList(key: readonly string[]): readonly RegExp[] {
 }
 
 export function getIgnoredList(): readonly RegExp[] {
-    const key: readonly string[] = config.baseScan.IgnoredList;
-    return str2RegexList(key);
+    return str2RegexList(config.baseScan.IgnoredList);
 }
 
 export function getSnippetBlockFilesList(): readonly RegExp[] {
-    const key: readonly string[] = config.snippets.blockFilesList;
-    return str2RegexList(key);
+    return str2RegexList(config.snippets.blockFilesList);
 }
 
+export function getCommandOptions(): ECommandOption {
+    return config.snippets.CommandOption;
+}
 /**
  * NeverUsedVar
  */
