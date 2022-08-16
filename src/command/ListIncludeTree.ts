@@ -28,12 +28,10 @@ function getIncludeMap(): TIncludeMap {
 
 function getTPickList(map: TIncludeMap): readonly TPick2[] {
     const items: TPick2[] = [];
-    let i = 0;
-    for (const fsPath of map.keys()) {
+    // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
+    for (const [i, fsPath] of [...map.keys()].sort().entries()) {
         items.push({ label: `${i} -> ${fsPath}`, fsPath });
-        i++;
     }
-
     return items;
 }
 
