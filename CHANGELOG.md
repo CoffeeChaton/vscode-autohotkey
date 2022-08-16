@@ -3,6 +3,8 @@
 ## 0.0.4(2022-08-14) wait release
 
 - add option of `AhkNekoHelp.snippets.Command`
+- add register Command of `ListIncludeTree`
+- fix highlight of `#include exp.ahk`
 - style: config use markdown
 
 ## 0.0.3(2022-08-13)

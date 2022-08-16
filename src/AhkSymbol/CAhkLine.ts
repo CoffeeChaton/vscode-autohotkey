@@ -1,7 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import * as vscode from 'vscode';
+import type { CAhkInclude } from './CAhkInclude';
 
-type TBaseLineParam = {
+export type TBaseLineParam = {
     name: string;
     range: vscode.Range;
     selectionRange: vscode.Range;
@@ -21,7 +22,7 @@ export class CAhkDirectives extends vscode.DocumentSymbol {
 
     declare public readonly kind: vscode.SymbolKind.Event;
     declare public readonly detail: '#Directives';
-    declare public readonly children: [];
+    declare public readonly children: never[];
 
     public constructor(
         {
@@ -43,7 +44,7 @@ export class CAhkHotKeys extends vscode.DocumentSymbol {
 
     declare public readonly kind: vscode.SymbolKind.Event;
     declare public readonly detail: 'HotKeys';
-    declare public readonly children: [];
+    declare public readonly children: never[];
 
     public constructor(
         {
@@ -63,7 +64,7 @@ export class CAhkHotString extends vscode.DocumentSymbol {
 
     declare public readonly kind: vscode.SymbolKind.Event;
     declare public readonly detail: 'HotString';
-    declare public readonly children: [];
+    declare public readonly children: never[];
 
     public constructor(
         {
@@ -78,45 +79,6 @@ export class CAhkHotString extends vscode.DocumentSymbol {
     }
 }
 
-export class CAhkInclude extends vscode.DocumentSymbol {
-    // https://www.autohotkey.com/docs/commands/_Include.htm
-    //           #Include FileOrDirName
-    //           #IncludeAgain FileOrDirName
-    //           \*i\s
-    //           #Include <LibName>  https://www.autohotkey.com/docs/Functions.htm#lib
-    //
-    //           A_AhkPath, A_ComputerName, A_ComSpec, A_Desktop, A_DesktopCommon, A_IsCompiled
-    //           A_MyDocuments, A_ProgramFiles, A_Programs, A_ProgramsCommon
-    //           A_ScriptFullPath, A_ScriptName, A_StartMenu,A_StartMenuCommon
-    //           A_Startup,A_StartupCommon, A_Temp, A_UserName ,A_WinDir
-    //           A_UserName, A_WinDir
-
-    // WTF of this ?
-    // #Include Compiler.ahk
-    // #include *i __debug.ahk
-    // #Include <VersionRes>
-    // #Include %A_ScriptDir% ;Changes the working directory for subsequent #Includes and FileInstalls.
-    // #Include %A_LineFile%\..\other.ahk.
-
-    public readonly uri: vscode.Uri;
-
-    declare public readonly kind: vscode.SymbolKind.Module;
-    declare public readonly detail: '';
-    declare public readonly children: [];
-
-    public constructor(
-        {
-            name,
-            range,
-            selectionRange,
-            uri,
-        }: TBaseLineParam,
-    ) {
-        super(name, '', vscode.SymbolKind.Module, range, selectionRange);
-        this.uri = uri;
-    }
-}
-
 export class CAhkLabel extends vscode.DocumentSymbol {
     // https://www.autohotkey.com/docs/misc/Labels.htm
     // Label names must be unique throughout the whole script.
@@ -125,7 +87,7 @@ export class CAhkLabel extends vscode.DocumentSymbol {
 
     declare public readonly kind: vscode.SymbolKind.Namespace;
     declare public readonly detail: 'label';
-    declare public readonly children: [];
+    declare public readonly children: never[];
 
     public constructor(
         {
@@ -145,7 +107,7 @@ export class CAhkComment extends vscode.DocumentSymbol {
 
     declare public readonly kind: vscode.SymbolKind.Package;
     declare public readonly detail: '';
-    declare public readonly children: [];
+    declare public readonly children: never[];
     public constructor(
         {
             name,

@@ -34,6 +34,26 @@
 // ObjRemoveAt()
 // ObjSetCapacity()
 
+// -------
+// ObjClone()
+// ObjCount()
+// ObjDelete()
+// ObjGetAddress()
+// ObjGetCapacity()
+// ObjHasKey()
+// ObjInsert()
+// ObjInsertAt()
+// ObjLength()
+// ObjMaxIndex()
+// ObjMinIndex()
+// ObjNewEnum()
+// ObjPop()
+// ObjPush()
+// ObjRemove()
+// ObjRemoveAt()
+// ObjSetCapacity()
+// These functions are equivalent to built-in methods of the Object type. It is usually recommended to use the corresponding method instead.
+
 // TODO CommandList
 // Edit
 // EnvDiv

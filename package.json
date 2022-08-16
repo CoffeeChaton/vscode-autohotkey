@@ -50,6 +50,10 @@
                 "title": "ahk-neko-help:List all #include"
             },
             {
+                "command": "ahk.nekoHelp.ListIncludeTree",
+                "title": "ahk-neko-help:List #include as Tree"
+            },
+            {
                 "command": "ahk.nekoHelp.ListAllFunc",
                 "title": "ahk-neko-help:List all userDef function()"
             }
@@ -206,12 +210,12 @@
         "@swc/core": "^1.2.233",
         "@swc/jest": "^0.2.22",
         "@types/assert": "^1.5.6",
-        "@types/jest": "^28.1.6",
+        "@types/jest": "^28.1.7",
         "@types/micromatch": "^4.0.2",
-        "@types/node": "^18.7.4",
+        "@types/node": "^18.7.6",
         "@types/vscode": "^1.70.0",
-        "@typescript-eslint/eslint-plugin": "^5.33.0",
-        "@typescript-eslint/parser": "^5.33.0",
+        "@typescript-eslint/eslint-plugin": "^5.33.1",
+        "@typescript-eslint/parser": "^5.33.1",
         "@vscode/test-electron": "^2.1.5",
         "dprint": "^0.30.3",
         "esbuild": "^0.15.3",

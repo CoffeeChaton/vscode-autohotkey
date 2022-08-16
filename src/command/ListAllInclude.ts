@@ -1,9 +1,9 @@
-import { CAhkInclude } from '../AhkSymbol/CAhkLine';
+import { CAhkInclude } from '../AhkSymbol/CAhkInclude';
 import type { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
 import { pm } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 
-function collectInclude(AST: Readonly<TAhkSymbolList>): CAhkInclude[] {
+export function collectInclude(AST: Readonly<TAhkSymbolList>): CAhkInclude[] {
     const List: CAhkInclude[] = [];
     for (const ahkInclude of AST) {
         if (ahkInclude instanceof CAhkInclude) {

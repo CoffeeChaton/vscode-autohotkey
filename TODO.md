@@ -7,4 +7,6 @@
 - fmt option of keep line end `\s`, or not.
 - add diag of `%\w%\w`
 - add jest test of `package.json.config` <---> `configUI.ts`
-- TODO add hover of `;@ahk-neko-ignore`
+- add hover of `;@ahk-neko-ignore`
+- add class hover / goto def
+- add highlight of `"^\\s*#\\b(?i:include(?:Again)?)\\b\\s*(\\*i)?(.*)$"` lib mode,

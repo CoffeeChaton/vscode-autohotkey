@@ -10,6 +10,7 @@ import { statusBarClick } from './command/Command';
 import { ECommand } from './command/ECommand';
 import { ListAllFuncMain } from './command/ListAllFunc';
 import { ListAllInclude } from './command/ListAllInclude';
+import { ListIncludeTree } from './command/ListIncludeTree';
 import { UpdateCacheAsync, UpdateCacheUi } from './command/UpdateCache';
 import { configChangEvent, statusBarItem } from './configUI';
 import { diagColl, pm } from './core/ProjectManager';
@@ -67,6 +68,7 @@ export function activate(context: ExtensionContext): void {
         commands.registerCommand('ahk.nekoHelp.refreshResource', UpdateCacheUi),
         commands.registerCommand(ECommand.ListAllFunc, ListAllFuncMain),
         commands.registerCommand(ECommand.ListAllInclude, ListAllInclude),
+        commands.registerCommand(ECommand.ListIncludeTree, ListIncludeTree),
         commands.registerCommand(ECommand.showFuncAnalyze, AnalyzeFuncMain),
         commands.registerCommand(ECommand.showUnknownAnalyze, showUnknownAnalyze),
         // root dispose

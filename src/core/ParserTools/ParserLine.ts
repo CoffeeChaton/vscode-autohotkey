@@ -1,9 +1,9 @@
+import { CAhkInclude } from '../../AhkSymbol/CAhkInclude';
 import type { CAhkComment, TLineClass } from '../../AhkSymbol/CAhkLine';
 import {
     CAhkDirectives,
     CAhkHotKeys,
     CAhkHotString,
-    CAhkInclude,
     CAhkLabel,
 } from '../../AhkSymbol/CAhkLine';
 import { getRangeOfLine } from '../../tools/range/getRangeOfLine';

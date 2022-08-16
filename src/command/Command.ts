@@ -4,6 +4,7 @@ import { pressureTest } from './DevMode';
 import { FormatAllFile } from './FormatAllFile';
 import { ListAllFuncMain } from './ListAllFunc';
 import { ListAllInclude } from './ListAllInclude';
+import { ListIncludeTree } from './ListIncludeTree';
 import type { TPick } from './TPick';
 import { UpdateCacheUi } from './UpdateCache';
 
@@ -13,10 +14,11 @@ export function statusBarClick(): void {
     const items: TCommand[] = [
         { label: '0 -> Refresh Resource', fn: UpdateCacheUi },
         { label: '1 -> dev tools', fn: pressureTest },
-        { label: '2 -> list all #Include', fn: ListAllInclude },
-        { label: '3 -> list all Function()', fn: ListAllFuncMain },
-        { label: '4 -> DeepAnalysis All File', fn: DeepAnalysisAllFiles },
-        { label: '5 -> format All File', fn: FormatAllFile },
+        { label: '2 -> list all #Include List', fn: ListAllInclude },
+        { label: '3 -> list all #Include Tree', fn: ListIncludeTree },
+        { label: '4 -> list all Function()', fn: ListAllFuncMain },
+        { label: '5 -> DeepAnalysis All File', fn: DeepAnalysisAllFiles },
+        { label: '6 -> format All File', fn: FormatAllFile },
     ];
 
     void vscode.window.showQuickPick<TCommand>(items)
