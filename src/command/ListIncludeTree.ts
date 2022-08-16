@@ -16,11 +16,11 @@ type TPick2 = {
 
 function getIncludeMap(): TIncludeMap {
     const map: Map<string, CAhkInclude[]> = new Map<string, CAhkInclude[]>();
-    for (const [k, v] of pm.DocMap) { // keep output order
-        const list: CAhkInclude[] = collectInclude(v.AST);
+    for (const [fsPath, AhkFileData] of pm.DocMap) { // keep output order
+        const list: CAhkInclude[] = collectInclude(AhkFileData.AST);
 
         if (list.length > 0) {
-            map.set(k, list);
+            map.set(fsPath, list);
         }
     }
     return map;
@@ -87,7 +87,7 @@ function IncludeTree(docPath: string, searchStack: string[], IncludeMap: TInclud
         if (searchPath === '') {
             result.push({
                 deep,
-                name: `${name} TODO of <Lib Mode>`,
+                name,
                 hasFile: false,
                 searchPath: 'TODO of <Lib Mode>',
             });
@@ -125,7 +125,6 @@ function treeResult2StrList(result: TTreeResult[]): string[] {
     return msg;
 }
 
-// fsPath: string, searchStack: string[]
 export async function ListIncludeTree(): Promise<null> {
     const map: TIncludeMap = getIncludeMap();
     const select: TPick2 | undefined = await vscode.window.showQuickPick<TPick2>(getTPickList(map), {
@@ -138,7 +137,7 @@ export async function ListIncludeTree(): Promise<null> {
 
     OutputChannel.clear();
     OutputChannel.appendLine([
-        '[neko-help] List All #Include v2',
+        '[neko-help] List All #Include Tree',
         '',
         select.fsPath,
         ...treeResult2StrList(IncludeTree(select.fsPath, [], map, errMsg)),
