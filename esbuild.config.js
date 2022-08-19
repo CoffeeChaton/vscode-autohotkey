@@ -18,7 +18,7 @@ esbuild
         format: 'cjs',
         logLevel: 'info',
         minify, //
-        outdir: 'dict',
+        outdir: 'dist',
         platform: 'node',
         sourcemap: true,
         target: ['es2021', 'node16.13'],

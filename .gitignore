@@ -8,7 +8,7 @@
 *.heapsnapshot
 *.vsix
 coverage/
-dict/
+dist/
 esbuildTarget.json
 node_modules/
 out/

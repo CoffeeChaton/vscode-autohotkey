@@ -100,11 +100,11 @@
                     "name": "keyword.operator.arithmetic.ahk"
                 },
                 "2": {
-                    "name": "string.parameter.import.log"
+                    "name": "string.parameter.import.ahk"
                 }
             },
             "match": "^\\s*#\\b(?i:include(?:Again)?)\\b\\s*(\\*i)?(.*)$",
-            "name": "keyword.control.import.log"
+            "name": "keyword.control.import.ahk"
         },
         {
             "captures": {

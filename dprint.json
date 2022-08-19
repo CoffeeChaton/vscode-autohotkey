@@ -2,7 +2,7 @@
     "excludes": [
         "**/*-lock.json",
         "**/coverage",
-        "**/dict",
+        "**/dist",
         "**/node_modules",
         "**/out"
     ],

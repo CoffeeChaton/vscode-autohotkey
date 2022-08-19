@@ -13,7 +13,7 @@
         "onCommand:ahk.nekoHelp.refreshResource"
     ],
     "author": "Coffee Chaton(https://github.com/CoffeeChaton)",
-    "main": "./dict/extension",
+    "main": "./dist/extension",
     "homepage": "https://github.com/CoffeeChaton/vscode-ahk-outline/blob/master/README.md",
     "bugs": {
         "url": "https://github.com/CoffeeChaton/vscode-ahk-outline/issues"
@@ -207,7 +207,7 @@
         "publish": "pnpm vsce publish --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp --baseImagesUrl https://raw.githubusercontent.com/CoffeeChaton/vscode-autohotkey-NekoHelp/master/"
     },
     "devDependencies": {
-        "@swc/core": "^1.2.233",
+        "@swc/core": "^1.2.239",
         "@swc/jest": "^0.2.22",
         "@types/assert": "^1.5.6",
         "@types/jest": "^28.1.7",
@@ -218,14 +218,14 @@
         "@typescript-eslint/parser": "^5.33.1",
         "@vscode/test-electron": "^2.1.5",
         "dprint": "^0.30.3",
-        "esbuild": "^0.15.3",
+        "esbuild": "^0.15.5",
         "esbuild-copy-static-files": "^0.1.0",
         "eslint": "^8.22.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-airbnb-typescript": "^17.0.0",
         "eslint-config-sukka": "^1.4.0",
-        "eslint-import-resolver-typescript": "^3.4.1",
+        "eslint-import-resolver-typescript": "^3.4.2",
         "eslint-plugin-fp": "^2.3.0",
         "eslint-plugin-immutable": "^1.0.0",
         "eslint-plugin-import": "^2.26.0",
