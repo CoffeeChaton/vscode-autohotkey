@@ -17,47 +17,11 @@ export const enum EInclude {
     Lib = 4, // bad
 }
 
-export type TPathMsg = {
+export type TRawData = {
     readonly type: EInclude;
     readonly mayPath: string;
+    readonly warnMsg: string;
 };
-
-function getMaybePath(path1: string, fsPath: string): TPathMsg {
-    if ((/^%A_LineFile%/ui).test(path1)) {
-        // [v1.1.11+]: Use %A_LineFile%\.. to refer to the directory which contains the current file
-        //    , even if it is not the main script file. For example, #Include %A_LineFile%\..\other.ahk.
-        return {
-            type: EInclude.A_LineFile,
-            mayPath: join(fsPath, `../${normalize(path1.replace(/^%A_LineFile%/ui, ''))}`),
-        };
-    }
-
-    if (isAbsolute(path1)) {
-        return {
-            type: EInclude.Absolute,
-            mayPath: path1,
-        };
-    }
-
-    if (path1.startsWith('<') && path1.endsWith('>')) {
-        return {
-            type: EInclude.Lib,
-            mayPath: path1.slice(1, -1),
-        };
-    }
-
-    if (resolve(path1) === normalize(path1)) {
-        return {
-            type: EInclude.Relative,
-            mayPath: normalize(path1),
-        };
-    }
-
-    return {
-        type: EInclude.isUnknown,
-        mayPath: path1,
-    };
-}
 
 const list = [
     // 'A_LineFile',
@@ -86,10 +50,54 @@ const list = [
 ] as const;
 
 function setWarnMsg(path1: string): string {
-    const find = list.find((v) => path1.includes(v));
+    const pathLow: string = path1.toLowerCase();
+    const find: string | undefined = list.find((v: string): boolean => pathLow.includes(v.toLowerCase()));
     return find !== undefined
-        ? `ahk-neko-help Unplanned support of ${find}`
+        ? `not yet support of "${find}"`
         : '';
+}
+
+function getRawData(path1: string, fsPath: string): TRawData {
+    const warnMsg = setWarnMsg(path1);
+    if ((/^%A_LineFile%/ui).test(path1)) {
+        // [v1.1.11+]: Use %A_LineFile%\.. to refer to the directory which contains the current file
+        //    , even if it is not the main script file. For example, #Include %A_LineFile%\..\other.ahk.
+        return {
+            type: EInclude.A_LineFile,
+            mayPath: join(fsPath, `../${normalize(path1.replace(/^%A_LineFile%/ui, ''))}`),
+            warnMsg,
+        };
+    }
+
+    if (isAbsolute(path1)) {
+        return {
+            type: EInclude.Absolute,
+            mayPath: path1,
+            warnMsg,
+        };
+    }
+
+    if (path1.startsWith('<') && path1.endsWith('>')) {
+        return {
+            type: EInclude.Lib,
+            mayPath: path1.slice(1, -1),
+            warnMsg,
+        };
+    }
+
+    if (resolve(path1) === normalize(path1)) {
+        return {
+            type: EInclude.Relative,
+            mayPath: normalize(path1),
+            warnMsg,
+        };
+    }
+
+    return {
+        type: EInclude.isUnknown,
+        mayPath: path1,
+        warnMsg,
+    };
 }
 
 export class CAhkInclude extends vscode.DocumentSymbol {
@@ -101,8 +109,7 @@ export class CAhkInclude extends vscode.DocumentSymbol {
     // #Include %A_ScriptDir% ;Changes the working directory for subsequent #Includes and FileInstalls.
     // #Include %A_LineFile%\..\other.ahk.
 
-    public readonly warnMsg: string; // TODO diag of base diag
-    public readonly maybePathList: TPathMsg;
+    public readonly rawData: TRawData;
 
     public readonly IgnoreErrors: boolean;
     public readonly uri: vscode.Uri;
@@ -126,8 +133,6 @@ export class CAhkInclude extends vscode.DocumentSymbol {
         const path0: string = name.replace(/^\s*#include(Again)?\s/ui, '').trim();
         this.IgnoreErrors = (/^\*i\s/ui).test(path0); //  For example: #Include *i SpecialOptions.ahk
         const path1: string = path0.replace(/^\*i\s/ui, '').trim();
-        this.maybePathList = getMaybePath(path1, uri.fsPath);
-
-        this.warnMsg = setWarnMsg(path1);
+        this.rawData = getRawData(path1, uri.fsPath);
     }
 }

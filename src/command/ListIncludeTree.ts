@@ -1,6 +1,6 @@
 import path from 'node:path';
 import * as vscode from 'vscode';
-import type { CAhkInclude, TPathMsg } from '../AhkSymbol/CAhkInclude';
+import type { CAhkInclude, TRawData } from '../AhkSymbol/CAhkInclude';
 import { EInclude } from '../AhkSymbol/CAhkInclude';
 import { pm } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
@@ -35,9 +35,7 @@ function getTPickList(map: TIncludeMap): readonly TPick2[] {
     return items;
 }
 
-function getSearchPath(docPath: string, maybePathList: TPathMsg): string {
-    const { type, mayPath } = maybePathList;
-
+function getSearchPath(docPath: string, { type, mayPath }: TRawData): string {
     switch (type) {
         case EInclude.A_LineFile:
         case EInclude.Absolute:
@@ -48,7 +46,7 @@ function getSearchPath(docPath: string, maybePathList: TPathMsg): string {
             return path.join(path.dirname(docPath), mayPath);
 
         case EInclude.Lib:
-            return ''; // FIXME  EInclude.Lib:
+            return path.join(path.dirname(docPath), 'Lib', `${mayPath}.ahk`); // FIXME  EInclude.Lib:
 
         default:
             enumLog(type);
@@ -63,7 +61,7 @@ type TTreeResult = {
     searchPath: string;
 };
 
-function IncludeTree(docPath: string, searchStack: string[], IncludeMap: TIncludeMap, errMsg: string[]): TTreeResult[] {
+function IncludeTree(docPath: string, searchStack: string[], IncludeMap: TIncludeMap): TTreeResult[] {
     const deep: number = searchStack.length + 1;
 
     const list: CAhkInclude[] | undefined = IncludeMap.get(docPath);
@@ -71,28 +69,30 @@ function IncludeTree(docPath: string, searchStack: string[], IncludeMap: TInclud
 
     const result: TTreeResult[] = [];
 
-    for (const { name, maybePathList } of list) {
-        const searchPath: string = getSearchPath(docPath, maybePathList);
+    for (const { name, rawData } of list) {
+        const searchPath: string = getSearchPath(docPath, rawData);
 
         const hasFile: boolean = pm.DocMap.has(searchPath);
-        if (!hasFile) errMsg.push(name);
 
-        result.push({
-            deep,
-            name,
-            hasFile,
-            searchPath,
-        });
+        if (!hasFile) {
+            const { warnMsg } = rawData;
+            const showMsg = warnMsg === ''
+                ? 'can not resolve path'
+                : warnMsg;
 
-        if (searchPath === '') {
             result.push({
                 deep,
                 name,
                 hasFile: false,
-                searchPath: 'TODO of <Lib Mode>',
+                searchPath: showMsg,
             });
         } else {
-            result.push(...IncludeTree(searchPath, [...searchStack, searchPath], IncludeMap, errMsg));
+            result.push({
+                deep,
+                name,
+                hasFile,
+                searchPath,
+            }, ...IncludeTree(searchPath, [...searchStack, searchPath], IncludeMap));
         }
     }
 
@@ -133,22 +133,16 @@ export async function ListIncludeTree(): Promise<null> {
     if (select === undefined) return null;
 
     const t1: number = Date.now();
-    const errMsg: string[] = [];
 
     OutputChannel.clear();
     OutputChannel.appendLine([
         '[neko-help] List All #Include Tree',
         '',
         select.fsPath,
-        ...treeResult2StrList(IncludeTree(select.fsPath, [], map, errMsg)),
+        ...treeResult2StrList(IncludeTree(select.fsPath, [], map)),
         '\n',
         `Done in ${Date.now() - t1} ms`,
     ].join('\n'));
-
-    if (errMsg.length > 0) {
-        OutputChannel.appendLine('\n\n[neko-help] Error : can not resolve path');
-        OutputChannel.appendLine(errMsg.join('\n'));
-    }
 
     OutputChannel.show();
 

@@ -17,17 +17,7 @@ function devTestDA(): void {
 
     void UpdateCacheAsync(true)
         .then((ed: TAhkFileData[] | null): null => {
-            if (ed === null) return null;
-            const t2: number = Date.now();
-            // ---------------------------------------------
-            // The task be completed, please confirm!
-            // iMax is 80
-            // statistics len is 80
-            // sum is 13266
-            // avg is 165.825
-            // stdDev is 4.65235155593384
-            // ---------------------------------------------
-            DevModeData.push(t2 - t1);
+            if (ed !== null) DevModeData.push(Date.now() - t1);
             return null;
         })
         .catch((error: Error): void => {
@@ -56,10 +46,10 @@ function devTestEnd(iMax: number): void {
         `stdDev is ${stdDev}`,
         `[${statistics.join(', ')}]`,
         '---Min avg of 5 ---',
-        `subAvg is ${subAvg}`,
+        `subAvg is ${subAvg}`, // sample standard avg
         `subAvgArr len is [${subAvgArr.join(', ')}]`,
         '---Min std of 5 ---',
-        `subStd is ${subStd}`,
+        `subStd is ${subStd}`, // sample standard deviation
         `subStdArr len is [${subStdArr.join(', ')}]`,
         '---------------------------------------------',
     ].join('\n'));
@@ -98,3 +88,18 @@ export async function pressureTest(): Promise<null> {
     TimeoutList.push(setTimeout(devTestEnd, (maxTime + 5) * delay, maxTime));
     return null;
 }
+
+// ---------------------------------------------
+// The task be completed, please confirm!
+// iMax is 80
+// statistics len is 80
+// sum is 13154
+// avg is 164.425
+// stdDev is 5.2211231150278845
+// []
+// ---Min avg of 5 ---
+// subAvg is 161
+// subAvgArr len is [161, 162, 161, 160, 161]
+// ---Min std of 5 ---
+// subStd is 0.447213595499958
+// subStdArr len is [163, 164, 164, 164, 164]
