@@ -154,12 +154,11 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 deep--;
 
                 // eslint-disable-next-line no-tabs
-                // if (lStrTrim === '		}	}'.trim())
+                // } 	} else RunWait "%AhkPath%" %AhkSw% "%wk%",,Hide
 
-                // }}}}
                 const diffDeep: number | undefined = lStrTrim
                     .replaceAll(/\s/gu, '')
-                    .match(/^(\}+)$/u)
+                    .match(/^(\}+)/u)
                     ?.[1].length;
 
                 if (diffDeep !== undefined && diffDeep > 1) {

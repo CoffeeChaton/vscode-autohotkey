@@ -9,7 +9,10 @@ import { ELTrim } from '../../globalEnum';
 
 export function inLTrimRange(textTrimStart: string, LTrim: ELTrim): ELTrim {
     if (LTrim === ELTrim.none) {
-        if (textTrimStart.startsWith('(')) {
+        if (textTrimStart.startsWith('(') && !textTrimStart.includes(')')) {
+            // TODO fix of ) [v1.1.01+]: If a closing parenthesis appears in the continuation section's options
+            // (except as a parameter of the Join option),
+            // https://www.autohotkey.com/docs/Scripts.htm#continuation
             return (/^\(\s*\bLTrim\b/ui).test(textTrimStart)
                 ? ELTrim.FlagS
                 : ELTrim.noFlagS;

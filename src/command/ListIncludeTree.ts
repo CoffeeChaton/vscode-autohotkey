@@ -146,7 +146,7 @@ export async function ListIncludeTree(): Promise<null> {
     ].join('\n'));
 
     if (errMsg.length > 0) {
-        OutputChannel.appendLine('\n\n[neko-help] Error');
+        OutputChannel.appendLine('\n\n[neko-help] Error : can not resolve path');
         OutputChannel.appendLine(errMsg.join('\n'));
     }
 
