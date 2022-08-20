@@ -1,14 +1,20 @@
 import * as vscode from 'vscode';
 import type { TTokenStream } from '../../../globalEnum';
 import { ELTrim } from '../../../globalEnum';
+
 import type { CDiagBase } from './CDiagBase';
 
 // https://www.autohotkey.com/docs/Scripts.htm#continuation
 
+// Filter  Perceptrons
+
 function getLTrimDiag(DocStrMap: TTokenStream): CDiagBase[] {
     const diag: CDiagBase[] = [];
+
     for (const element of DocStrMap) {
-        const { LTrim } = element;
+        const { LTrim, displayErr } = element;
+        if (!displayErr) continue;
+
         if (LTrim === ELTrim.FlagS || LTrim === ELTrim.noFlagS) {
             // ( LTrim Join    ; Comment.
             const { textRaw, line } = element;

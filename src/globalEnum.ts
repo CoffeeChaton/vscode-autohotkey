@@ -28,21 +28,21 @@ export const enum EDiagDeep {
     multR = 2, // multiple closing braces "}"
 }
 
-export type TAhkTokenLine = {
-    readonly fistWordUp: string;
-    readonly lStr: string;
-    readonly textRaw: string;
-    readonly deep: number;
-    readonly detail: readonly EDetail[];
-    readonly line: number;
-    readonly LTrim: ELTrim;
-    readonly cll: 0 | 1;
-    readonly lineComment: string;
-    readonly diagDeep: EDiagDeep;
-    readonly displayErr: boolean;
-    readonly displayFnErr: boolean;
+export type TAhkTokenLine = DeepReadonly<{
+    fistWordUp: string;
+    lStr: string;
+    textRaw: string;
+    deep: number;
+    detail: readonly EDetail[];
+    line: number;
+    LTrim: ELTrim;
+    cll: 0 | 1;
+    lineComment: string;
+    diagDeep: EDiagDeep;
+    displayErr: boolean;
+    displayFnErr: boolean;
     // I know this is not Complete and correct Token.
-};
+}>;
 
 export type TAhkToken = TAhkTokenLine[];
 
