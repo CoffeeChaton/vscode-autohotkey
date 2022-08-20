@@ -5,8 +5,7 @@
     "name": "AutoHotkey",
     "patterns": [
         {
-            "match": "`[,%`;nrbtvaf:]",
-            "name": "constant.character.escape.ahk"
+            "include": "#escaped-char"
         },
         {
             "captures": {
@@ -66,9 +65,25 @@
             "name": "comment.block.slashstar.ahk"
         },
         {
-            "begin": "^\\s*\\([^\\)]*$",
+            "begin": "^\\s*\\(([^);]*)(;.*)?$",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.multiline.ahk"
+                },
+                "2": {
+                    "name": "comment.line.semicolon.ahk"
+                }
+            },
             "end": "^\\s*\\)",
-            "name": "string.ahk"
+            "name": "string.multiline.ahk",
+            "patterns": [
+                {
+                    "include": "#escaped-char"
+                },
+                {
+                    "include": "#percent-variable"
+                }
+            ]
         },
         {
             "captures": {
@@ -103,7 +118,7 @@
                     "name": "string.parameter.import.ahk"
                 }
             },
-            "match": "^\\s*#\\b(?i:include(?:Again)?)\\b\\s*(\\*i)?(.*)$",
+            "match": "^\\s*#(?i:include(?:Again)?)\\s+(\\*i)?(.*)$",
             "name": "keyword.control.import.ahk"
         },
         {
@@ -115,7 +130,7 @@
                     "name": "comment.line.semicolon.directive.ahk"
                 }
             },
-            "match": "#\\b(?i:allowsamelinecomments|clipboardtimeout|commentflag|Delimiter|errorstdout|Persistent|Requires|DerefChar|escapechar|hotkeyinterval|hotkeymodifiertimeout|hotstring|if|iftimeout|ifwinactive|ifwinexist|ifwinnotactive|ifwinnotexist|inputlevel|installkeybdhook|installmousehook|keyhistory|ltrim|maxhotkeysperinterval|maxmem|maxthreads|maxthreadsbuffer|maxthreadsperhotkey|menumaskkey|noenv|notrayicon|persistent|singleinstance|usehook|warn|winactivateforce)\\b([^;]*)(\\s+;.*)?$",
+            "match": "#\\b(?i:AllowSameLineComments|ClipboardTimeout|CommentFlag|Delimiter|ErrorStdOut|Persistent|Requires|DerefChar|EscapeChar|HotkeyInterval|HotkeyModifierTimeout|hotstring|if|IfTimeout|IfWinActive|IfWinExist|IfWinNotActive|IfWinNotExist|InputLevel|InstallKeybdHook|InstallMouseHook|KeyHistory|LTrim|MaxHotkeysPerInterval|maxmem|MaxThreads|MaxThreadsBuffer|MaxThreadsPerHotkey|MenuMaskKey|noenv|NoTrayIcon|persistent|SingleInstance|UseHook|warn|WinActivateForce)\\b([^;]*)(\\s+;.*)?$",
             "name": "keyword.control.directives.ahk"
         },
         {
@@ -191,6 +206,26 @@
         }
     ],
     "repository": {
+        "percent-variable": {
+            "match": "(%\\w+%)",
+            "captures": {
+                "1": {
+                    "name": "variable.reference.ahk"
+                }
+            }
+        },
+        "escaped-char": {
+            "patterns": [
+                {
+                    "match": "`[,%`;nrbtvaf]",
+                    "name": "constant.character.escape.ahk"
+                },
+                {
+                    "match": "`.",
+                    "name": "invalid.illegal.unknown.character.escape.ahk"
+                }
+            ]
+        },
         "stringQuotedDouble": {
             "begin": "(\")",
             "beginCaptures": {

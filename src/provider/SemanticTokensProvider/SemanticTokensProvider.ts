@@ -3,7 +3,6 @@ import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { DAList2SemanticHighlight } from './DAList2SemanticHighlight';
 import { GlobalHighlight } from './GlobalHighlight';
-import { inLTrimHighlight } from './inLTrimHighlight';
 import { pushToken, TokenModifiers, TokenTypes } from './tools';
 // https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers
 
@@ -22,7 +21,6 @@ function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticToken
     const {
         GValMap,
         AST,
-        DocStrMap,
     } = AhkFileData;
 
     const tokensBuilder: vscode.SemanticTokensBuilder = new vscode.SemanticTokensBuilder(legend);
@@ -30,7 +28,6 @@ function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticToken
     pushToken([
         ...DAList2SemanticHighlight(AST),
         ...GlobalHighlight(GValMap),
-        ...inLTrimHighlight(DocStrMap),
     ], tokensBuilder);
 
     const result: vscode.SemanticTokens = tokensBuilder.build();
