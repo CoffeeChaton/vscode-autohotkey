@@ -6,6 +6,7 @@ import { pm } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { enumLog } from '../tools/enumErr';
 import { collectInclude } from './ListAllInclude';
+import { diagOfIncludeTree } from './tools/diagOfIncludeTree';
 
 type TIncludeMap = Map<string, CAhkInclude[]>;
 
@@ -29,7 +30,7 @@ function getIncludeMap(): TIncludeMap {
 function getTPickList(map: TIncludeMap): readonly TPick2[] {
     const items: TPick2[] = [];
     // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
-    for (const [i, fsPath] of [...map.keys()].sort().entries()) {
+    for (const [i, fsPath] of [...map.keys()].sort().entries()) { // entries() is need i
         items.push({ label: `${i} -> ${fsPath}`, fsPath });
     }
     return items;
@@ -54,11 +55,12 @@ function getSearchPath(docPath: string, { type, mayPath }: TRawData): string {
     }
 }
 
-type TTreeResult = {
+export type TTreeResult = {
     deep: number;
     name: string;
     hasFile: boolean;
     searchPath: string;
+    startPos: string;
 };
 
 function IncludeTree(docPath: string, searchStack: string[], IncludeMap: TIncludeMap): TTreeResult[] {
@@ -69,9 +71,11 @@ function IncludeTree(docPath: string, searchStack: string[], IncludeMap: TInclud
 
     const result: TTreeResult[] = [];
 
-    for (const { name, rawData } of list) {
+    for (const { name, rawData, range } of list) {
         const searchPath: string = getSearchPath(docPath, rawData);
 
+        // [docPath, range.start.line + 1, range.start.character + 1];
+        const startPos = `${docPath}:${range.start.line + 1}:${range.start.character + 1}`;
         const hasFile: boolean = pm.DocMap.has(searchPath);
 
         if (!hasFile) {
@@ -85,6 +89,7 @@ function IncludeTree(docPath: string, searchStack: string[], IncludeMap: TInclud
                 name,
                 hasFile: false,
                 searchPath: showMsg,
+                startPos,
             });
         } else {
             result.push({
@@ -92,6 +97,7 @@ function IncludeTree(docPath: string, searchStack: string[], IncludeMap: TInclud
                 name,
                 hasFile,
                 searchPath,
+                startPos,
             }, ...IncludeTree(searchPath, [...searchStack, searchPath], IncludeMap));
         }
     }
@@ -127,20 +133,24 @@ function treeResult2StrList(result: TTreeResult[]): string[] {
 
 export async function ListIncludeTree(): Promise<null> {
     const map: TIncludeMap = getIncludeMap();
-    const select: TPick2 | undefined = await vscode.window.showQuickPick<TPick2>(getTPickList(map), {
+    const selectPath: TPick2 | undefined = await vscode.window.showQuickPick<TPick2>(getTPickList(map), {
         title: 'Select project entry, just support ahk_L v1',
     });
-    if (select === undefined) return null;
+    if (selectPath === undefined) return null;
 
     const t1: number = Date.now();
 
+    const result: TTreeResult[] = IncludeTree(selectPath.fsPath, [], map);
+    const diagList: string[] = diagOfIncludeTree(result, selectPath.fsPath);
     OutputChannel.clear();
     OutputChannel.appendLine([
+        '----------------------------------------',
         '[neko-help] List All #Include Tree',
         '',
-        select.fsPath,
-        ...treeResult2StrList(IncludeTree(select.fsPath, [], map)),
+        selectPath.fsPath,
+        ...treeResult2StrList(result),
         '\n',
+        ...diagList,
         `Done in ${Date.now() - t1} ms`,
     ].join('\n'));
 

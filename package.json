@@ -193,7 +193,7 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "pnpm run fmt && pnpm run test && pnpm run compile && pnpm run auto_fix",
+        "vscode:prepublish": "pnpm run fmt && pnpm run test && pnpm run auto_fix && pnpm run compile",
         "fmt": "dprint fmt",
         "lint": "eslint src",
         "auto_fix": "eslint --fix src",

@@ -1,13 +1,8 @@
 import * as vscode from 'vscode';
 import { pm } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { msgWithPos } from './tools/msgWithPos';
 import type { TPick } from './TPick';
-
-function msgWithPos(text: string, fsPath: string, startPos: vscode.Position): string {
-    const line: number = startPos.line + 1;
-    const col: number = startPos.character + 1;
-    return `${text} ;${fsPath}:${line}:${col}`;
-}
 
 function ListAllFunc(showLink: boolean): null {
     const t1: number = Date.now();
