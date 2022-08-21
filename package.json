@@ -2,7 +2,7 @@
     "name": "vscode-autohotkey-neko-help",
     "displayName": "AutoHotkey NekoHelp",
     "description": "AutoHotkey IntelliSense, format, linters, and language support for VS Code, ",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "publisher": "cat1122",
     "engines": {
         "vscode": "^1.70.0"
@@ -193,7 +193,7 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "node esbuild.config.js --minify",
+        "vscode:prepublish": "pnpm run fmt && pnpm run test && pnpm run compile && pnpm run auto_fix",
         "fmt": "dprint fmt",
         "lint": "eslint src",
         "auto_fix": "eslint --fix src",

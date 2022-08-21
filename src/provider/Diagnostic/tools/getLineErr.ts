@@ -1,44 +1,26 @@
-import type { TTokenStream } from '../../../globalEnum';
+import type { TAhkTokenLine, TTokenStream } from '../../../globalEnum';
 import type { CDiagBase } from './CDiagBase';
 import { assignErr } from './lineErr/assignErr';
 import { getCommandErr } from './lineErr/getCommandErr';
 import { getObjBaseErr } from './lineErr/getObjBaseErr';
-import type { TLineDiag, TLineErrDiagParam } from './lineErr/lineErrTools';
-import { EDiagLine } from './lineErr/lineErrTools';
 
-function getLineErrCore(lStr: string, fistWordUp: string, line: number): CDiagBase | null {
-    const lStrTrim: string = lStr.trim();
-    if (lStrTrim === '') return null;
+export function getLineErr(DocStrMap: TTokenStream): CDiagBase[] {
+    const errList: CDiagBase[] = [];
 
-    type TFnLineErr = (parm: TLineErrDiagParam) => TLineDiag;
-    const fnList: TFnLineErr[] = [getObjBaseErr, getCommandErr];
-    for (const fn of fnList) {
-        const err: TLineDiag = fn({
-            lStr,
-            lStrTrim,
-            fistWordUp,
-            line,
-        });
+    type TFn = (params: TAhkTokenLine) => CDiagBase | null;
+    const fnList: TFn[] = [assignErr, getObjBaseErr, getCommandErr]; // TODO getMultilineDiag
 
-        if (err === EDiagLine.OK) return null; // OK
+    for (const token of DocStrMap) {
+        if (!token.displayErr) continue;
 
-        if (err !== EDiagLine.miss) { // err
-            return err;
+        const lStrTrim: string = token.lStr.trim();
+        if (lStrTrim === '') continue;
+
+        for (const fn of fnList) {
+            const ed: CDiagBase | null = fn(token);
+            if (ed !== null) errList.push(ed);
         }
-        // err=== EDiagLine.miss
     }
-    return null;
-}
 
-export function getLineErr(DocStrMap: TTokenStream, line: number): CDiagBase | null {
-    const {
-        textRaw,
-        lStr,
-        detail,
-        fistWordUp,
-    } = DocStrMap[line];
-    const err0: CDiagBase | null = assignErr(textRaw, detail, line);
-    if (err0 !== null) return err0;
-
-    return getLineErrCore(lStr, fistWordUp, line);
+    return errList;
 }

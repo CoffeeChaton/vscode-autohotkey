@@ -38,28 +38,30 @@ export function FormatCore(
     const DiffMap: TDiffMap = new Map();
     for (
         const {
-            line,
-            textRaw,
-            lStr,
             detail,
-            LTrim,
+            line,
+            lStr,
+            multiline,
+            multilineFlag,
+            textRaw,
         } of DocStrMap
     ) {
         const textFix = lStr.trim();
 
         if (line >= fmtStart && line <= fmtEnd) {
             newTextList.push(fn_Warn_thisLineText_WARN({
-                detail,
-                textFix,
-                line,
-                occ,
                 deep,
-                LTrim,
-                textRaw,
-                switchRangeArray,
-                document,
-                options,
+                detail,
                 DiffMap,
+                document,
+                line,
+                multiline,
+                multilineFlag,
+                occ,
+                options,
+                switchRangeArray,
+                textFix,
+                textRaw,
             }));
         } else if (line > fmtEnd) {
             break;
@@ -77,7 +79,7 @@ export function FormatCore(
 
     fmtDiffInfo({
         DiffMap,
-        document,
+        fsPath: document.uri.fsPath,
         timeStart,
         from,
     });

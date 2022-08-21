@@ -12,15 +12,24 @@ export const enum EDetail {
     hasDoubleSemicolon = 8,
 }
 
-export const enum ELTrim {
+export const enum EMultiline {
+    // https://www.autohotkey.com/docs/Scripts.htm#continuation
     none = 0,
-    FlagS = 1,
-    FlagM = 2,
-    FlagE = 3,
-    noFlagS = 11,
-    noFlagM = 12,
-    noFlagE = 13,
+    start = 1,
+    mid = 2,
+    end = 3,
 }
+
+export type TMultilineFlag = {
+    Join: boolean;
+    LTrim: boolean;
+    RTrim0: boolean;
+    Comments: boolean;
+    '%': boolean;
+    ',': boolean;
+    '`': boolean;
+    unknown: boolean;
+} | null;
 
 export const enum EDiagDeep {
     none = 0,
@@ -35,7 +44,8 @@ export type TAhkTokenLine = DeepReadonly<{
     deep: number;
     detail: readonly EDetail[];
     line: number;
-    LTrim: ELTrim;
+    multiline: EMultiline;
+    multilineFlag: TMultilineFlag;
     cll: 0 | 1;
     lineComment: string;
     diagDeep: EDiagDeep;
@@ -46,7 +56,7 @@ export type TAhkTokenLine = DeepReadonly<{
 
 export type TAhkToken = TAhkTokenLine[];
 
-export type TTokenStream = DeepReadonly<TAhkToken>;
+export type TTokenStream = readonly TAhkTokenLine[];
 
 export type TFsPath = string; // vscode.uru.fsPath
 

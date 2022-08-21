@@ -1,16 +1,17 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
+import type { TAhkTokenLine } from '../../../../globalEnum';
 import { CDiagBase } from '../CDiagBase';
-import type { TLineDiag, TLineErrDiagParam } from './lineErrTools';
+import type { TLineDiag } from './lineErrTools';
 import { EDiagLine } from './lineErrTools';
 
-function getLoopErr(lStr: string, line: number): CDiagBase | EDiagLine {
+function getLoopErr(lStr: string, line: number): CDiagBase | null {
     const matchLoop: RegExpMatchArray | null = lStr.match(/^\s*Loop\b[\s,]+(\w+)/iu);
-    if (matchLoop === null) return EDiagLine.miss;
+    if (matchLoop === null) return null; // miss
 
     const SecondSection = matchLoop[1];
     if ((/^(?:\d+|Files|Parse|Read|Reg)$/ui).test(SecondSection)) {
-        return EDiagLine.OK;
+        return null; // OK
     }
 
     // eslint-disable-next-line no-magic-numbers
@@ -66,9 +67,9 @@ function getCommandErrFnReplace(fistWord: string, lStr: string, line: number): C
     return EDiagLine.miss;
 }
 
-function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): CDiagBase | EDiagLine.miss {
+function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): CDiagBase | null {
     // eslint-disable-next-line no-magic-numbers
-    if (fistWordUp.length < 5) return EDiagLine.miss;
+    if (fistWordUp.length < 5) return null; // miss
     type TCommandErr = {
         reg: RegExp;
         code: EDiagCode;
@@ -110,9 +111,9 @@ function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): CDi
     ];
 
     const find: TCommandErr | undefined = headMatch.find((v) => v.reg.test(fistWordUp));
-    if (find === undefined) return EDiagLine.miss;
+    if (find === undefined) return null; // miss
 
-    const colL = lStr.search(/\S/ui);
+    const colL: number = lStr.search(/\S/ui);
 
     return new CDiagBase({
         value: find.code,
@@ -122,14 +123,14 @@ function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): CDi
     });
 }
 
-export function getCommandErr(params: TLineErrDiagParam): CDiagBase | EDiagLine {
+export function getCommandErr(params: TAhkTokenLine): CDiagBase | null {
     const {
         lStr,
         fistWordUp,
         line,
     } = params;
 
-    if (fistWordUp.length === 0) return EDiagLine.miss;
+    if (fistWordUp.length === 0) return null; // miss
 
     if (fistWordUp === 'LOOP') {
         return getLoopErr(lStr, line);
@@ -155,7 +156,7 @@ export function getCommandErr(params: TLineErrDiagParam): CDiagBase | EDiagLine 
             // don't add Loop
         ].includes(fistWordUp)
     ) {
-        return EDiagLine.miss;
+        return null; // OK
     }
 
     // _commandHeadStatistics(fistWord);
@@ -164,3 +165,5 @@ export function getCommandErr(params: TLineErrDiagParam): CDiagBase | EDiagLine 
         ? fnReplaceErr
         : getOtherCommandErr(fistWordUp, lStr, line);
 }
+
+// TODO use hashMap replace this .ts

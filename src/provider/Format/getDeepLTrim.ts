@@ -1,23 +1,22 @@
-import { ELTrim } from '../../globalEnum';
+import type { TMultilineFlag } from '../../globalEnum';
+import { EMultiline } from '../../globalEnum';
+import { enumLog } from '../../tools/enumErr';
 
 // return deep of LTrim
-export function getDeepLTrim(LTrim: ELTrim): 0 | 1 | 2 {
-    switch (LTrim) {
-        case ELTrim.none:
+export function getDeepLTrim(Multiline: EMultiline, multilineFlag: TMultilineFlag): 0 | 1 | 2 {
+    switch (Multiline) {
+        case EMultiline.none:
             return 0;
-        case ELTrim.FlagS:
+        case EMultiline.start:
             return 1;
-        case ELTrim.FlagM:
-            return 2;
-        case ELTrim.FlagE:
-            return 1;
-        case ELTrim.noFlagS:
-            return 1;
-        case ELTrim.noFlagM:
-            return 0;
-        case ELTrim.noFlagE:
+        case EMultiline.mid:
+            return ((multilineFlag?.LTrim) ?? false)
+                ? 2
+                : 0;
+        case EMultiline.end:
             return 1;
         default:
+            enumLog(Multiline);
             return 0;
     }
 }

@@ -2,12 +2,12 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-statements */
 
-import type { TAhkTokenLine, TTokenStream } from '../globalEnum';
-import { EDetail, EDiagDeep, ELTrim } from '../globalEnum';
+import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum';
+import { EDetail, EDiagDeep, EMultiline } from '../globalEnum';
 import { getIgnore } from '../provider/Diagnostic/getIgnore';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
+import { getMultiline } from '../tools/str/getMultiline';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
-import { inLTrimRange } from '../tools/str/inLTrimRange';
 import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
 
 /**
@@ -19,7 +19,8 @@ import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
 export function Pretreatment(strArray: readonly string[], fileName: string): TTokenStream {
     const result: TAhkTokenLine[] = [];
     let CommentBlock = false;
-    let LTrim: ELTrim = ELTrim.none;
+    let multiline: EMultiline = EMultiline.none;
+    let multilineFlag: TMultilineFlag = null;
     let deep = 0;
     let line = -1;
     let ignoreLine = 0;
@@ -55,7 +56,8 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 line,
                 cll: 0,
                 lineComment: '',
-                LTrim,
+                multiline,
+                multilineFlag: null,
                 diagDeep: 0,
                 displayErr,
                 displayFnErr,
@@ -63,8 +65,8 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             continue;
         }
 
-        LTrim = inLTrimRange(textTrimStart, LTrim);
-        if (LTrim !== ELTrim.none) {
+        [multiline, multilineFlag] = getMultiline(textTrimStart, multiline, multilineFlag);
+        if (multiline !== EMultiline.none) {
             result.push({
                 fistWordUp: '',
                 lStr: '',
@@ -74,7 +76,8 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 line,
                 cll: 0,
                 lineComment: '',
-                LTrim,
+                multiline,
+                multilineFlag,
                 diagDeep: 0,
                 displayErr,
                 displayFnErr,
@@ -92,7 +95,8 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 line,
                 cll: 0,
                 lineComment: '',
-                LTrim,
+                multiline,
+                multilineFlag: null,
                 diagDeep: 0,
                 displayErr,
                 displayFnErr,
@@ -122,7 +126,8 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 line,
                 cll: 0,
                 lineComment,
-                LTrim,
+                multiline,
+                multilineFlag: null,
                 diagDeep: 0,
                 displayErr,
                 displayFnErr,
@@ -154,7 +159,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                 deep--;
 
                 // eslint-disable-next-line no-tabs
-                // } 	} else RunWait "%AhkPath%" %AhkSw% "%wk%",,Hide
+                // }   } else RunWait "%AhkPath%" %AhkSw% "%wk%",,Hide
 
                 const diffDeep: number | undefined = lStrTrim
                     .replaceAll(/\s/gu, '')
@@ -184,7 +189,8 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             line,
             cll,
             lineComment,
-            LTrim,
+            multiline,
+            multilineFlag: null,
             diagDeep,
             displayErr,
             displayFnErr,

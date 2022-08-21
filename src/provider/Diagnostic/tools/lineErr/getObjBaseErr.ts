@@ -1,27 +1,24 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
+import type { TAhkTokenLine } from '../../../../globalEnum';
 import { CDiagBase } from '../CDiagBase';
-import type { TLineErrDiagParam } from './lineErrTools';
-import { EDiagLine } from './lineErrTools';
 
-export function getObjBaseErr(params: TLineErrDiagParam): CDiagBase | EDiagLine.miss {
+export function getObjBaseErr(params: TAhkTokenLine): CDiagBase | null {
     // base property
     // Prototype pollution!
     // .base
     const {
         lStr,
-        lStrTrim,
         line,
     } = params;
 
     const baseLen: number = 'x.base'.length;
-    if (lStrTrim.length < baseLen) return EDiagLine.miss;
-    if (!lStrTrim.includes('.')) return EDiagLine.miss;
+    if (lStr.length < baseLen) return null;
+    if (!lStr.includes('.')) return null;
 
-    const colL = lStr.search(/\.base\b/ui);
-    if (colL === -1) { // not find
-        return EDiagLine.miss;
-    }
+    const colL: number = lStr.search(/\.base\b/ui);
+    if (colL === -1) return null; // not find
+
     return new CDiagBase({
         value: EDiagCode.code601,
         range: new vscode.Range(line, colL, line, colL + baseLen), // ".base" or "base:" len

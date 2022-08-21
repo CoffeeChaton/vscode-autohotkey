@@ -1,4 +1,4 @@
-import { ELTrim } from '../../globalEnum';
+import { EMultiline } from '../../globalEnum';
 import { isSetVarTradition } from '../../tools/str/removeSpecialChar';
 
 function textReplace(textElement: string): string {
@@ -30,8 +30,9 @@ function textReplace(textElement: string): string {
         .replaceAll(/\bIF\s*\(/ug, 'IF (')
         .replaceAll(/\bwhile\s*\(/ug, 'while (')
         .replaceAll(/\bWhile\s*\(/ug, 'While (')
-        .replaceAll(/\bWHILE\s*\(/ug, 'WHILE (')
-        .replaceAll(/ *;/ug, ' ;');
+        .replaceAll(/\bWHILE\s*\(/ug, 'WHILE (');
+    //  .replaceAll(/ *;/ug, ' ;')
+
     // \s === [ \f\n\r\t\v]
     // need more TEST & options
 }
@@ -75,13 +76,11 @@ function fnStrGroup(text: string): string {
     return head + newBody.trimStart();
 }
 
-export function lineReplace(text: string, textFix: string, CommentBlock: boolean, LTrim: ELTrim): string {
+export function lineReplace(text: string, textFix: string, CommentBlock: boolean, multiline: EMultiline): string {
     return (CommentBlock
             || textFix === ''
-            || LTrim === ELTrim.FlagS
-            || LTrim === ELTrim.FlagM
-            || LTrim === ELTrim.noFlagS
-            || LTrim === ELTrim.noFlagM
+            || multiline === EMultiline.start
+            || multiline === EMultiline.mid
             || isSetVarTradition(textFix) || textFix.startsWith(':') || textFix.includes('::'))
         ? text
         : fnStrGroup(text);

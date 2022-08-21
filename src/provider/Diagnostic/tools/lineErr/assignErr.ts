@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
+import type { TAhkTokenLine } from '../../../../globalEnum';
 import { EDetail } from '../../../../globalEnum';
 import { CDiagBase } from '../CDiagBase';
 
-export function assignErr(textRaw: string, detail: readonly EDetail[], line: number): CDiagBase | null {
+export function assignErr({ textRaw, detail, line }: TAhkTokenLine): CDiagBase | null {
     return detail.includes(EDetail.inSkipSign2)
         ? new CDiagBase({
             value: EDiagCode.code107,

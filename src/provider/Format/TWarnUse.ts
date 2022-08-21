@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { getFormatConfig } from '../../configUI';
-import type { DeepReadonly } from '../../globalEnum';
-import { EDetail, ELTrim } from '../../globalEnum';
+import type { DeepReadonly, EMultiline, TMultilineFlag } from '../../globalEnum';
+import { EDetail } from '../../globalEnum';
 import { ContinueLongLine } from './ContinueLongLine';
 import { lineReplace } from './fmtReplace';
 import { getDeepLTrim } from './getDeepLTrim';
@@ -15,7 +15,8 @@ type TWarnUse =
         line: number;
         occ: number;
         deep: number;
-        LTrim: ELTrim;
+        multiline: EMultiline;
+        multilineFlag: TMultilineFlag;
         textRaw: string;
         switchRangeArray: vscode.Range[];
         document: vscode.TextDocument;
@@ -30,14 +31,14 @@ function wrap(args: TWarnUse, text: string): vscode.TextEdit {
         detail,
         textFix,
         line,
-        LTrim,
+        multiline,
         textRaw,
         DiffMap,
     } = args;
 
     const CommentBlock: boolean = detail.includes(EDetail.inComment);
     const newText: string = getFormatConfig() // WTF
-        ? lineReplace(text, textFix, CommentBlock, LTrim)
+        ? lineReplace(text, textFix, CommentBlock, multiline)
         : text;
 
     if (newText !== text) {
@@ -56,19 +57,19 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
         line,
         occ,
         deep,
-        LTrim,
+        multiline,
+        multilineFlag,
         switchRangeArray,
         document,
         options, // by self
     } = args;
 
-    if (LTrim === ELTrim.FlagM || LTrim === ELTrim.noFlagM) {
+    if (multilineFlag !== null && !multilineFlag.LTrim) {
         return wrap(args, document.lineAt(line).text); // WTF**********
-        //    return wrap(args, textRaw.replace(/\r$/u, ''));
     }
 
     // const WarnLineBodyWarn: string = textRaw.replace(/\r$/u, '').trimStart();
-    const WarnLineBodyWarn = document.lineAt(line).text.trimStart();
+    const WarnLineBodyWarn: string = document.lineAt(line).text.trimStart();
     if (WarnLineBodyWarn === '') {
         return wrap(args, WarnLineBodyWarn);
     }
@@ -84,7 +85,7 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
 
     const deepFix = Math.max(
         0,
-        deep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(LTrim),
+        deep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(multiline, multilineFlag),
     );
 
     const TabSpaces = options.insertSpaces

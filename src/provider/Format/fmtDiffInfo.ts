@@ -1,13 +1,12 @@
 import * as path from 'node:path';
-import type * as vscode from 'vscode';
+import { EVersion } from '../../Enum/EVersion';
 import type { EFormatChannel } from '../../globalEnum';
-import { OutputChannel } from '../vscWindows/OutputChannel';
-import { fmtReplaceWarn } from './fmtReplaceWarn';
+import { OutputFormatChannel } from '../vscWindows/OutputChannel';
 import type { TDiffMap } from './TFormat';
 
 type TDiffParm = {
     DiffMap: TDiffMap;
-    document: vscode.TextDocument;
+    fsPath: string;
     timeStart: number;
     from: EFormatChannel;
 };
@@ -15,24 +14,30 @@ type TDiffParm = {
 export function fmtDiffInfo(
     {
         DiffMap,
-        document,
+        fsPath,
         timeStart,
         from,
     }: TDiffParm,
 ): void {
     if (DiffMap.size === 0) return;
 
-    const fileName: string = path.basename(document.uri.fsPath);
-    fmtReplaceWarn(timeStart, from, fileName);
+    const msg = [
+        '-----------Format Diff Start--------------------------------',
+        `${from} ${EVersion.formatRange} "${path.basename(fsPath)}", ${Date.now() - timeStart}ms`,
+    ];
 
-    OutputChannel.appendLine('-----------Format Diff Start--------------------------------');
-    for (const [ln, [oldStr, newStr]] of DiffMap) {
-        OutputChannel.appendLine(`line : ${ln}`);
-        OutputChannel.appendLine(oldStr);
-        OutputChannel.appendLine(newStr);
+    for (const [line, [oldStr, newStr]] of DiffMap) {
+        msg.push(
+            `line : ${line}`,
+            oldStr,
+            newStr,
+        );
     }
-    OutputChannel.appendLine('-----------Format Diff End----------------------------------');
-    OutputChannel.show();
+
+    msg.push('-----------Format Diff End----------------------------------');
+
+    OutputFormatChannel.appendLine(msg.join('\n'));
+    OutputFormatChannel.show();
     // do not callDiff(diffVar);
     // using setTimeout call.
 }

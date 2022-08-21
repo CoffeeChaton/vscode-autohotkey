@@ -1,7 +1,6 @@
 'use strict';
 
 const esbuild = require('esbuild');
-const minify = process.argv.includes('--minify');
 
 esbuild
     .build({
@@ -17,7 +16,7 @@ esbuild
         external: ['vscode'], // not bundle 'vscode'
         format: 'cjs',
         logLevel: 'info',
-        minify, //
+        minify: false, //
         outdir: 'dist',
         platform: 'node',
         sourcemap: true,

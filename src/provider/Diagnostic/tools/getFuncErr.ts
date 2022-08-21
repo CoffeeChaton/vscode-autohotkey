@@ -21,7 +21,6 @@ function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol, maxFnSize: number
 export function getFuncErr(
     DocStrMap: TTokenStream,
     funcCh: TAhkSymbolList,
-    displayErr: readonly boolean[],
     maxFnSize: number,
 ): CDiagBase[] {
     const digS: CDiagBase[] = [];
@@ -30,7 +29,7 @@ export function getFuncErr(
             case vscode.SymbolKind.Method:
             case vscode.SymbolKind.Function:
                 if (
-                    displayErr[func.range.start.line]
+                    DocStrMap[func.range.start.line].displayErr
                     && fnErrCheck(DocStrMap, func, maxFnSize)
                 ) {
                     digS.push(
@@ -44,7 +43,7 @@ export function getFuncErr(
                 }
                 break;
             case vscode.SymbolKind.Class:
-                digS.push(...getFuncErr(DocStrMap, func.children, displayErr, maxFnSize));
+                digS.push(...getFuncErr(DocStrMap, func.children, maxFnSize));
                 break;
             default:
                 break;

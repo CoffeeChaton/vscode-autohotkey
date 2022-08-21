@@ -7,13 +7,6 @@ import { getFuncErr } from './tools/getFuncErr';
 import { getLineErr } from './tools/getLineErr';
 import { getTreeErr } from './tools/getTreeErr';
 
-function getDisplayErrAndLineErr(DocStrMap: TTokenStream): CDiagBase[] {
-    return DocStrMap
-        .filter((x: TAhkTokenLine): boolean => x.displayErr)
-        .map((x: TAhkTokenLine): CDiagBase | null => getLineErr(DocStrMap, x.line))
-        .filter<CDiagBase>((x: CDiagBase | null): x is CDiagBase => x !== null);
-}
-
 const wm = new WeakMap<TTokenStream, readonly CDiagBase[]>();
 
 export function baseDiagnostic(
@@ -27,9 +20,9 @@ export function baseDiagnostic(
 
     const diagList: readonly CDiagBase[] = [
         ...getDeepErr(DocStrMap),
-        ...getDisplayErrAndLineErr(DocStrMap),
+        ...getLineErr(DocStrMap),
         ...getTreeErr(AST, displayErrList),
-        ...getFuncErr(DocStrMap, [...AST], displayErrList, getLintConfig().funcSize),
+        ...getFuncErr(DocStrMap, [...AST], getLintConfig().funcSize),
     ];
     // 8k lines without gc -> 3ms
     wm.set(DocStrMap, diagList);
