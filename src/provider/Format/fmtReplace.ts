@@ -30,8 +30,8 @@ function textReplace(textElement: string): string {
         .replaceAll(/\bIF\s*\(/ug, 'IF (')
         .replaceAll(/\bwhile\s*\(/ug, 'while (')
         .replaceAll(/\bWhile\s*\(/ug, 'While (')
-        .replaceAll(/\bWHILE\s*\(/ug, 'WHILE (');
-    //  .replaceAll(/ *;/ug, ' ;')
+        .replaceAll(/\bWHILE\s*\(/ug, 'WHILE (')
+        .replaceAll(/ *;/ug, ' ;');
 
     // \s === [ \f\n\r\t\v]
     // need more TEST & options
