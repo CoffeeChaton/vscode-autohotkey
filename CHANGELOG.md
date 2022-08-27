@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.0.4(2022-08-22)
+## 0.0.4(2022-08-27)
 
 - add option of `AhkNekoHelp.snippets.Command`
 - add Command of `List #Include Tree`
