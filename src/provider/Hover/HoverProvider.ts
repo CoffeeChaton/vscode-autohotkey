@@ -10,8 +10,9 @@ import { numberFindWinMsg } from '../../tools/Built-in/Windows_MessagesRe_Tools'
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStr } from '../../tools/isPosAtStr';
-import { DeepAnalysisHover } from './DeepAnalysisHover';
-import { HoverDirectives } from './HoverDirectives';
+import { DeepAnalysisHover } from './tools/DeepAnalysisHover';
+import { hoverMultiLine } from './tools/hover-multi-line';
+import { HoverDirectives } from './tools/HoverDirectives';
 
 function HoverOfFunc(wordUp: string, textRaw: string): vscode.MarkdownString | null {
     // eslint-disable-next-line security/detect-non-literal-regexp
@@ -32,6 +33,8 @@ function HoverProviderCore(
     position: vscode.Position,
 ): vscode.Hover | null {
     const { AST, DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const mdOfMultiLine: vscode.MarkdownString | null = hoverMultiLine(DocStrMap, position);
+    if (mdOfMultiLine !== null) return new vscode.Hover(mdOfMultiLine);
 
     // pos at Comment range...
     const { lStr, fistWordUp } = DocStrMap[position.line];

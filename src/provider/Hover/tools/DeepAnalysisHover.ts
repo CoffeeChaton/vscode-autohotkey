@@ -4,9 +4,9 @@ import type {
     TParamMetaOut,
     TTextMetaOut,
     TValMetaOut,
-} from '../../AhkSymbol/CAhkFunc';
-import { EPrefix, setMD } from '../../tools/MD/setMD';
-import { setPreFix } from '../../tools/str/setPreFix';
+} from '../../../AhkSymbol/CAhkFunc';
+import { EPrefix, setMD } from '../../../tools/MD/setMD';
+import { setPreFix } from '../../../tools/str/setPreFix';
 
 function PosInRange(arr: readonly vscode.Range[], position: vscode.Position): boolean {
     return arr.some((range: vscode.Range): boolean => range.contains(position));

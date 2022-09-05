@@ -44,6 +44,9 @@ export const enum EDiagCode {
     code112 = 112,
     code113 = 113,
     code114 = 114,
+    // 120~130 is Multi-line-Diag
+    code120 = 120,
+    code121 = 121,
     code201 = 201, // 200~299 is not expression // need use %
     code301 = 301, // 300~399 is func err
     // code501~599 warn user
@@ -91,11 +94,11 @@ export const Diags: DeepReadonly<TDiags> = {
         path: 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
     },
     110: {
-        msg: 'default : not find ',
+        msg: 'Default : not find ',
         path: 'https://www.autohotkey.com/docs/commands/Switch.htm',
     },
     111: {
-        msg: 'default : not find ',
+        msg: 'Default : not find ',
         path: 'https://www.autohotkey.com/docs/commands/Switch.htm',
     },
     112: {
@@ -107,8 +110,16 @@ export const Diags: DeepReadonly<TDiags> = {
         path: 'https://www.autohotkey.com/docs/commands/Switch.htm',
     },
     114: {
-        msg: 'switch name not find',
+        msg: 'Switch name not find',
         path: 'https://www.autohotkey.com/docs/commands/Switch.htm',
+    },
+    120: {
+        msg: 'unknown options of Multi-line',
+        path: 'https://www.autohotkey.com/docs/Scripts.htm#Join',
+    },
+    121: {
+        msg: 'Multi-line:join > 15 characters',
+        path: 'https://www.autohotkey.com/docs/Scripts.htm#Join',
     },
     201: {
         msg: 'Count cannot be an expression, use %',

@@ -13,3 +13,5 @@
 - add hover of `;@ahk-neko-ignore`
 - add test jest of `package.json.config` <---> `configUI.ts`
 - change `configUI.ts` fmt option to `enum`
+- Scanner: -> Token
+- Parser: -> AST

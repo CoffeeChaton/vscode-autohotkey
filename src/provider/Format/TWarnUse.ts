@@ -64,7 +64,7 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
         options, // by self
     } = args;
 
-    if (multilineFlag !== null && !multilineFlag.LTrim) {
+    if (multilineFlag !== null && multilineFlag.LTrim.length === 0) {
         return wrap(args, document.lineAt(line).text); // WTF**********
     }
 

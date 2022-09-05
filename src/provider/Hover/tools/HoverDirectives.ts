@@ -1,7 +1,7 @@
 import type * as vscode from 'vscode';
-import { CAhkDirectives } from '../../AhkSymbol/CAhkLine';
-import type { TAhkSymbolList, TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
-import { DirectivesMDMap } from '../../tools/Built-in/Directives';
+import { CAhkDirectives } from '../../../AhkSymbol/CAhkLine';
+import type { TAhkSymbolList, TAstRoot } from '../../../AhkSymbol/TAhkSymbolIn';
+import { DirectivesMDMap } from '../../../tools/Built-in/Directives';
 
 function findDirectivesWithPos(
     AST: Readonly<TAhkSymbolList>,

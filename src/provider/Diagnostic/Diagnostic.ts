@@ -5,6 +5,7 @@ import type { CDiagBase } from './tools/CDiagBase';
 import { getDeepErr } from './tools/getDeepErr';
 import { getFuncErr } from './tools/getFuncErr';
 import { getLineErr } from './tools/getLineErr';
+import { getMultilineDiag } from './tools/getMultilineDiag';
 import { getTreeErr } from './tools/getTreeErr';
 
 const wm = new WeakMap<TTokenStream, readonly CDiagBase[]>();
@@ -23,6 +24,7 @@ export function baseDiagnostic(
         ...getLineErr(DocStrMap),
         ...getTreeErr(AST, displayErrList),
         ...getFuncErr(DocStrMap, [...AST], getLintConfig().funcSize),
+        ...getMultilineDiag(DocStrMap),
     ];
     // 8k lines without gc -> 3ms
     wm.set(DocStrMap, diagList);

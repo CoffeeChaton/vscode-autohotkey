@@ -65,7 +65,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             continue;
         }
 
-        [multiline, multilineFlag] = getMultiline(textTrimStart, multiline, multilineFlag);
+        [multiline, multilineFlag] = getMultiline(textTrimStart, multiline, multilineFlag, textRaw);
         if (multiline !== EMultiline.none) {
             result.push({
                 fistWordUp: '',

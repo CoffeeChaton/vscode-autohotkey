@@ -10,9 +10,9 @@ export function getDeepLTrim(Multiline: EMultiline, multilineFlag: TMultilineFla
         case EMultiline.start:
             return 1;
         case EMultiline.mid:
-            return ((multilineFlag?.LTrim) ?? false)
-                ? 2
-                : 0;
+            if (multilineFlag === null) return 0;
+            if (multilineFlag.LTrim.length === 0) return 0;
+            return 2;
         case EMultiline.end:
             return 1;
         default:
