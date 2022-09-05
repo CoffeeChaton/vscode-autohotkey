@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.5(2022-09-05)
+
+- add [note](./note/README.md)
+- add diag of [multi-line](https://www.autohotkey.com/docs/Scripts.htm#continuation)
+  1. join > 15char
+  2. unknown option of multi-line
+
 ## 0.0.4(2022-08-27)
 
 - add option of `AhkNekoHelp.snippets.Command`
