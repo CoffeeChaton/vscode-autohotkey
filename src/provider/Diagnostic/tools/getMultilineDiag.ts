@@ -24,7 +24,7 @@ function MultilineDiagJoin(multilineFlag: NonNullable<TMultilineFlag>, line: num
     return multilineFlag
         .Join
         // eslint-disable-next-line no-magic-numbers
-        .filter(({ len }: TPos): boolean => len > 15)
+        .filter(({ len }: TPos): boolean => len > 19) // 15+ "join".len
         .map((Pos: TPos): CDiagBase => fnMakeDiag(Pos, EDiagCode.code121, line));
 }
 

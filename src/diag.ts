@@ -119,7 +119,7 @@ export const Diags: DeepReadonly<TDiags> = {
     },
     121: {
         msg: 'Multi-line:join > 15 characters',
-        path: 'https://www.autohotkey.com/docs/Scripts.htm#Join',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag121',
     },
     201: {
         msg: 'Count cannot be an expression, use %',

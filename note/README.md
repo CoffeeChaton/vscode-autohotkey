@@ -17,7 +17,7 @@
     },
     ```
 
-Otherwise, the word Join should be followed immediately by as many as `15` characters.
+the word `Join` should be followed immediately by as many as `15` characters.
 
 ![diag121](./img/diag121.png)
 
