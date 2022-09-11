@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import type { TTokenStream } from '../../globalEnum';
-import { EDetail } from '../../globalEnum';
 import { replacerSpace } from '../../tools/str/removeSpecialChar';
 
 // function getRVal(textRaw: string, ch: number, nameLen: number, ma2Len: number): string {
@@ -78,24 +77,16 @@ function refGlobal(gValMapBySelf: TGValMapPrivacy, strF: string, line: number): 
 export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
     const GValMap: TGValMapPrivacy = new Map<TValUpName, TGlobalVal>();
     let lastLineIsGlobal = false;
-    for (
-        const {
-            lStr,
-            line,
-            detail,
-            cll,
-        } of DocStrMap
-    ) {
-        if (detail.includes(EDetail.isGlobalLine)) {
-            lastLineIsGlobal = true;
-        } else if (lastLineIsGlobal && cll === 1) {
+    for (const { lStr, line, cll } of DocStrMap) {
+        if (lastLineIsGlobal && cll === 1) {
             lastLineIsGlobal = true;
         } else {
             lastLineIsGlobal = false;
             continue;
         }
+
         if (lStr.trim().toUpperCase() === 'GLOBAL') {
-            continue; // TODO GLOBAL && nextLine
+            continue; // FIXME GLOBAL && nextLine
         }
 
         const strF: string = lStr.replace(/^\s*\bglobal\b[,\s]+/ui, replacerSpace);

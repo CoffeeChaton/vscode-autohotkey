@@ -102,6 +102,12 @@ AutoHotKey language support for VS Code
 1. Snippets of your function.
    ![IntelliSenseFunc](image/IntelliSenseFunc.gif)
 
+2. Completion of function variables
+   ![Completion_of_function_variables.gif](image/Completion_of_function_variables.gif)
+
+3. Completion of `#Include`
+   ![Completion of Include](image/Completion_Include.gif)
+
 ## ListAllFunctions
 
 ![ListAllFunctions](image/ListAllFunctions.gif)

@@ -12,7 +12,6 @@ export const enum EDetail {
     inSkipSign2 = 4,
     deepAdd = 5,
     deepSubtract = 6,
-    isGlobalLine = 7,
     hasDoubleSemicolon = 8,
 }
 
@@ -80,3 +79,5 @@ export const enum EFormatChannel {
     byFormatOnType = 'Format OnType',
     // byDev = 'wait for dev',
 }
+
+// https://github.com/modfy/nominal

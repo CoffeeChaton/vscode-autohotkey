@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { EStr } from '../../../../Enum/EStr';
 import type { EPrefix } from '../../../../tools/MD/setMD';
 import { setMD } from '../../../../tools/MD/setMD';
 import type { ESnippetRecBecause, TSnippetRecMap } from '../ESnippetRecBecause';
@@ -31,7 +30,7 @@ export function setItemCore(
 
     const label: vscode.CompletionItemLabel = {
         label: recStr !== undefined
-            ? `${EStr.suggestStr} ${keyRawName}`
+            ? `✿ ${keyRawName}`
             : keyRawName,
         description: funcName,
     };

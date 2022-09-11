@@ -13,7 +13,7 @@ esbuild
         // watch: false,
         bundle: true,
         entryPoints: ['./src/extension.ts'],
-        external: ['vscode'], // not bundle 'vscode'
+        external: ['vscode', 'nominal-types'], // not bundle 'vscode' && https://github.com/modfy/nominal
         format: 'cjs',
         logLevel: 'info',
         minify: false, //

@@ -9,9 +9,17 @@ test('Check BuiltInFunctionObj ruler', () => {
         const v3 = !insert.startsWith(keyRawName);
         const v4 = !exp.join('\n').includes(keyRawName);
         if (v1 || v2 || v3 || v4) {
-            console.error('🚀 ~ test ~ v1~v4', v1, v2, v3, v4);
-            console.error('🚀 ~ test ~  k', k);
-            console.error('🚀 ~ test ~  v', v);
+            console.error(
+                '~ test ~ Check BuiltInFunctionObj ruler',
+                {
+                    v1,
+                    v2,
+                    v3,
+                    v4,
+                    k,
+                    v,
+                },
+            );
             expect(false).toBeTruthy();
         }
     }

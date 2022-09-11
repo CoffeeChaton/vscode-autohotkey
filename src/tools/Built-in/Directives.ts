@@ -26,6 +26,8 @@ export type THashTagUPKey =
     | 'IFWINEXIST'
     | 'IFWINNOTACTIVE'
     | 'IFWINNOTEXIST'
+    | 'INCLUDE'
+    | 'INCLUDEAGAIN'
     | 'INPUTLEVEL'
     | 'INSTALLKEYBDHOOK'
     | 'INSTALLMOUSEHOOK'
@@ -318,6 +320,32 @@ export const [SnippetDirectives, DirectivesMDMap] = ((): [TSnippetDirectivee, TD
                 '#IfWinNotActive WinTitle, WinText',
                 '#IfWinNotExist WinTitle, WinText',
                 '#If , Expression',
+            ],
+        },
+        INCLUDE: {
+            keyRawName: '#Include',
+            insert: '#Include',
+            doc: 'Causes the script to behave as though the specified file\'s contents are present at this exact position.',
+            recommended: true,
+            link: 'https://www.autohotkey.com/docs/commands/_Include.htm',
+            exp: [
+                '#Include FileOrDirName',
+                '#Include <LibName>',
+                '#IncludeAgain FileOrDirName',
+                '#include *i __debug.ahk',
+            ],
+        },
+        INCLUDEAGAIN: {
+            keyRawName: '#IncludeAgain',
+            insert: '#IncludeAgain',
+            doc: 'Causes the script to behave as though the specified file\'s contents are present at this exact position.',
+            recommended: true,
+            link: 'https://www.autohotkey.com/docs/commands/_Include.htm',
+            exp: [
+                '#Include FileOrDirName',
+                '#Include <LibName>',
+                '#IncludeAgain FileOrDirName',
+                '#include *i __debug.ahk',
             ],
         },
         INPUTLEVEL: {

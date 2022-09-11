@@ -1,5 +1,5 @@
 import type * as vscode from 'vscode';
-import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
+import type { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { getCode500Default, getCode502Default, getCode503Default } from '../../../configUI';
 import { diagColl } from '../../../core/ProjectManager';
 import type { TAhkTokenLine, TTokenStream } from '../../../globalEnum';
@@ -33,20 +33,22 @@ function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]):
         return cache.DADiagList;
     }
 
+    // FIXME WTF style
     const code500List: CDiagFn[] = []; // WTF...
     const code501List: CDiagFn[] = [];
     const code502List: CDiagFn[] = [];
     const code503List: CDiagFn[] = [];
     const code504List: CDiagFn[] = [];
+    const code505List: CDiagFn[] = [];
 
     for (const DA of DAList) {
-        if (!(DA instanceof CAhkFunc)) continue;
         const { paramMap, valMap } = DA;
         NeverUsedVar(valMap, code500List, code500Max, displayErrList);
         NeverUsedParam(paramMap, code501List, displayErrList);
         caseSensitivityVar(EPrefixC502.var, valMap, code502List, code502Max, displayErrList); // var case sensitivity
         caseSensitivityVar(EPrefixC502.param, paramMap, code503List, code503Max, displayErrList);
         paramVariadicErr(paramMap, code504List);
+        paramVariadicErr(paramMap, code505List);
     }
 
     const DADiagList: readonly CDiagFn[] = [
@@ -55,6 +57,7 @@ function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]):
         ...code502List,
         ...code503List,
         ...code504List,
+        ...code505List,
     ];
 
     wm.set(DAList, {

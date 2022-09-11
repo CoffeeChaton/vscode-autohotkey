@@ -8,9 +8,18 @@ test('Check Statement ruler', () => {
         const v3 = !body.includes(keyRawName);
         const v4 = !exp.join('\n').includes(keyRawName);
         if (v1 || v2 || v3 || v4) {
-            console.error('🚀 ~ test ~ v1~v4', v1, v2, v3, v4);
-            console.error('🚀 ~ test ~  k', k);
-            console.error('🚀 ~ test ~  v', v);
+            console.error(
+                '~ test ~ Check Statement ruler',
+                {
+                    v1,
+                    v2,
+                    v3,
+                    v4,
+                    k,
+                    v,
+                },
+            );
+
             expect(false).toBeTruthy();
         }
     }

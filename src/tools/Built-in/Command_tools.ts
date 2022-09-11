@@ -53,6 +53,12 @@ export function getSnippetCommand(lStr: string, position: vscode.Position): TSni
     //
 
     const opt: ECommandOption = getCommandOptions();
+
+    if (opt === ECommandOption.noSameFunc) {
+        const fnMap = getAllFunc();
+        return snippetCommand.filter((v) => !fnMap.has(v.upName));
+    }
+
     switch (opt) {
         case ECommandOption.All:
             return snippetCommand;
@@ -60,10 +66,6 @@ export function getSnippetCommand(lStr: string, position: vscode.Position): TSni
         case ECommandOption.Recommended:
             return snippetCommand.filter((v) => v.recommended);
 
-        case ECommandOption.noSameFunc: {
-            const fnMap = getAllFunc();
-            return snippetCommand.filter((v) => !fnMap.has(v.upName));
-        }
         case ECommandOption.notProvided:
             return [];
 

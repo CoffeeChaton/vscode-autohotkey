@@ -14,6 +14,7 @@ import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { isPosAtStrNext } from '../../tools/isPosAtStr';
 import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
+import { IncludeFsPath } from './Include_fsPath/Include_fsPath';
 import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
 import { getStartWithStr } from './util';
 
@@ -36,6 +37,10 @@ function CompletionItemCore(
     // const t1 = Date.now();
     const { AST, DocStrMap } = AhkFileData;
     const { lStr, textRaw } = DocStrMap[position.line];
+
+    if ((/^\s*#Include(Again)?\s/ui).test(lStr)) {
+        return IncludeFsPath(document.uri.fsPath);
+    }
 
     const topSymbol: TTopSymbol | undefined = AST.find((top: TTopSymbol): boolean => top.range.contains(position));
 

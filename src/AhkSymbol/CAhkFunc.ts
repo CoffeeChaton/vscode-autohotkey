@@ -18,7 +18,7 @@ export type TParamMetaIn = {
     defRangeList: vscode.Range[];
     refRangeList: vscode.Range[];
     c502Array: TC502New[];
-
+    parsedErrRange: vscode.Range | null;
     isByRef: boolean;
     isVariadic: boolean; // https://www.autohotkey.com/docs/Functions.htm#Variadic
     commentList: string[];

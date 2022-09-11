@@ -71,7 +71,7 @@ export function getFuncDocCore(
         : EMode.ahkMethod;
     const kindDetail = `(${kindStr})     of     ${fileName}\n`;
 
-    const classStackStr = classStack.length === 0
+    const classStackStr: string = classStack.length === 0
         ? ''
         : `class ${classStack.join('.')}\n\n`;
 

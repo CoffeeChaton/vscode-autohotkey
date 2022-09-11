@@ -36,9 +36,8 @@ function wrap(args: TWarnUse, text: string): vscode.TextEdit {
         DiffMap,
     } = args;
 
-    const CommentBlock: boolean = detail.includes(EDetail.inComment);
     const newText: string = getFormatConfig() // WTF
-        ? lineReplace(text, textFix, CommentBlock, multiline)
+        ? lineReplace(text, textFix, detail.includes(EDetail.inComment), multiline)
         : text;
 
     if (newText !== text) {

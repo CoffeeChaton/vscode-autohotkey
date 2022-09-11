@@ -77,6 +77,7 @@ export function activate(context: ExtensionContext): void {
         diagColl,
     );
     //
+    void commands.executeCommand('setContext', 'AhkNekoHelpExtension.showMyCommand', true);
     void UpdateCacheAsync(true); // not await
 }
 

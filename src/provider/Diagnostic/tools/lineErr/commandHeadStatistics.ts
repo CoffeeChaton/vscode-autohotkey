@@ -30,7 +30,6 @@ function _commandHeadStatistics(commandHead: string): void {
             OutputChannel.appendLine(`${k}: ${v}`);
         }
         OutputChannel.show();
-        console.log('🚀 ~ _commandHeadStatistics ~ e5', e5);
     }
 }
 

@@ -25,36 +25,28 @@ function getKeyRawName(param: string): TParamData {
     };
 }
 
-function checkParam(keyRawName: string, funcRawName: string, line: number): void {
-    if (!(/^\w+$/u).test(keyRawName)) {
-        const errCode = '--99--37--21--';
-        const errMsg = 'DeepAnalysis NekoHelp Unknown Syntax of ';
-        const errLoc = `${funcRawName}() line : ${line + 1}`;
-        const message = `${errMsg} args Error ${keyRawName}${errCode}${errLoc}`;
-        console.error('🚀 getParamDef ~ message', message);
-    }
-}
-
 function getParamDefNeed(
     param: string,
-    funcRawName: string,
     line: number,
     ch: number,
     lineComment: string,
 ): TParamMetaIn {
     const data: TParamData = getKeyRawName(param);
     const { isByRef, isVariadic, keyRawName } = data;
-    checkParam(keyRawName, funcRawName, line);
-
     const range: vscode.Range = new vscode.Range(
         new vscode.Position(line, ch),
         new vscode.Position(line, ch + keyRawName.length),
     );
 
+    const parsedErrRange: vscode.Range | null = !(/^\w+$/u).test(keyRawName)
+        ? range
+        : null;
+
     return {
         keyRawName,
         defRangeList: [range],
         refRangeList: [],
+        parsedErrRange,
         isByRef,
         isVariadic,
         c502Array: [0],
@@ -81,7 +73,7 @@ export function getParamDef(fnName: string, selectionRange: vscode.Range, DocStr
         if (lStrFix.trim() === '') break;
 
         const strF: string = lStrFix
-            .replaceAll(/:?=\s*[-+.\w]+/ug, replacerSpace); // Test 0x00ffffff  , -0.5 , 0.8
+            .replaceAll(/:?=\s*[-+]?[.\w]+/ug, replacerSpace); // Test 0x00ffffff  , -0.5 , 0.8
 
         const strF2: string = strF.replaceAll(/\bByRef\b/uig, replacerSpace);
 
@@ -92,7 +84,7 @@ export function getParamDef(fnName: string, selectionRange: vscode.Range, DocStr
             const find: string = param.replace(/\bByRef\b\s*/ui, '');
             const ch: number = strF2.indexOf(find, ma.index);
 
-            const ArgAnalysis: TParamMetaIn = getParamDefNeed(param, fnName, line, ch, lineComment);
+            const ArgAnalysis: TParamMetaIn = getParamDefNeed(param, line, ch, lineComment);
 
             const key: string = ArgAnalysis.keyRawName.toUpperCase();
             paramMap.set(key, ArgAnalysis);

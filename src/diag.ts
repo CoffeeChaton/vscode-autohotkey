@@ -9,6 +9,7 @@ export const enum EDiagCodeDA {
     code502 = 502, // var case sensitivity
     // code503 = 503, param case sensitivity
     code504 = 504, // Variadic param * >1
+    code505 = 505, // param parsed Error -> unknown style
 }
 
 export type TDiagsDA = {
@@ -34,6 +35,10 @@ export const DiagsDA: DeepReadonly<TDiagsDA> = {
     504: {
         msg: 'Note: The "variadic" parameter can only appear at the end of the formal parameter list.',
         path: 'https://www.autohotkey.com/docs/Functions.htm#Variadic',
+    },
+    505: {
+        msg: 'param parsed Error -> unknown style',
+        path: 'https://www.autohotkey.com/docs/Functions.htm#param',
     },
 };
 

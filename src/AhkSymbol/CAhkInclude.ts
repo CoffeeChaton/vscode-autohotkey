@@ -109,6 +109,7 @@ export class CAhkInclude extends vscode.DocumentSymbol {
     // #Include %A_ScriptDir% ;Changes the working directory for subsequent #Includes and FileInstalls.
     // #Include %A_LineFile%\..\other.ahk.
 
+    public readonly hashtag = 'INCLUDE'; //
     public readonly rawData: TRawData;
 
     public readonly IgnoreErrors: boolean;

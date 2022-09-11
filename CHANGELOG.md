@@ -1,5 +1,22 @@
 # Changelog
 
+## NEXT 0.0.6(2022-09-12)
+
+- add Diag `c505` of `param parsed Error -> unknown style`
+- add Completion of `#Include`
+  ![Completion of Include](image/Completion_Include.gif)
+
+- Fix: hover of `#Include`
+- Fix: until neko-help activate then show `explorer/context`
+- Fix: add ahk-doc type color
+
+```js
+/**
+ * @param {Object} options some msg
+ *         ^ Fix: add ahk-doc type color
+ */
+```
+
 ## 0.0.5(2022-09-05)
 
 - add [note](./note/README.md)
