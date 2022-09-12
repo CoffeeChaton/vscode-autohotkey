@@ -26,3 +26,4 @@ export function getObjBaseErr(params: TAhkTokenLine): CDiagBase | null {
         tags: [],
     });
 }
+// TODO {base: GMem} https://www.autohotkey.com/docs/Objects.htm#Custom_Objects

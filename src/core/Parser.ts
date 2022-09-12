@@ -1,10 +1,10 @@
 import { CAhkCase, CAhkDefault, CAhkSwitch } from '../AhkSymbol/CAhkSwitch';
-import { getCaseName, getSwitchName } from '../provider/SymbolProvider/getSwitchCaseName';
 import { getRange } from '../tools/range/getRange';
 import { getRangeCaseBlock } from '../tools/range/getRangeCaseBlock';
 import { getRangeOfLine } from '../tools/range/getRangeOfLine';
 import type { TFuncInput } from './getChildren';
 import { getChildren } from './getChildren';
+import { getCaseName, getSwitchName } from './ParserTools/getSwitchCaseName';
 import { ParserLine } from './ParserTools/ParserLine';
 
 export const ParserBlock = {

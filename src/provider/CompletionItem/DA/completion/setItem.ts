@@ -29,10 +29,10 @@ export function setItemCore(
     const recStr: ESnippetRecBecause | undefined = recMap.get(keyRawName);
 
     const label: vscode.CompletionItemLabel = {
-        label: recStr !== undefined
-            ? `✿ ${keyRawName}`
-            : keyRawName,
-        description: funcName,
+        label: keyRawName,
+        description: recStr !== undefined
+            ? `✿ ${funcName}`
+            : funcName,
     };
 
     const item: vscode.CompletionItem = new vscode.CompletionItem(label);

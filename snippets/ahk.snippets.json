@@ -1,108 +1,43 @@
 {
-    "Edit": {
-        "prefix": "Edit",
-        "body": "Edit",
-        "description": "Opens the current script for editing in the associated editor."
-    },
-    "Else": {
-        "prefix": "Else",
-        "body": "Else",
-        "description": "Specifies one or more statements to execute if an If statement evaluates to false."
-    },
-    "EnvUpdate": {
-        "prefix": "EnvUpdate",
-        "body": "EnvUpdate",
-        "description": "Notifies the OS and all running applications that environment variable(s) have changed."
-    },
-    "ExitApp": {
-        "prefix": "ExitApp",
-        "body": "ExitApp, ${1:[ ExitCode]}",
-        "description": "Terminates the script unconditionally."
-    },
-    "Pause": {
-        "prefix": "Pause",
-        "body": "Pause, ${1:[ On|Off|Toggle}, ${2:OperateOnUnderlyingThread?]}",
-        "description": "Pauses the script's current thread."
-    },
-    "Gosub": {
-        "prefix": "Gosub",
-        "body": "Gosub, ${1:Label}",
-        "description": "Jumps to the specified label and continues execution until Return is encountered."
-    },
-    "Goto": {
-        "prefix": "Goto",
-        "body": "Goto, ${1:Label}",
-        "description": "Jumps to the specified label and continues execution."
-    },
-    "If Between": {
-        "prefix": "If Between",
+    "If_between": {
+        "prefix": "If_between",
         "body": "If ${1:Var} between ${2:Low} and ${3:High}",
         "description": "Checks whether a variable's contents are numerically or alphabetically between two values (inclusive)."
     },
-    "If Contains": {
-        "prefix": "If Contains",
+    "If_contains": {
+        "prefix": "If_contains",
         "body": "If ${1:Var} [not] contains ${2:Value, Value2}",
         "description": "Checks whether a variable's contents match one of the items in a list."
     },
-    "If In": {
-        "prefix": "If In",
+    "If_in": {
+        "prefix": "If_in",
         "body": "If ${1:Var} in ${2:Value, Value2}",
         "description": "Checks whether a variable's contents match one of the items in a list."
     },
-    "If Is": {
-        "prefix": "If Is",
+    "If_is": {
+        "prefix": "If_is",
         "body": "If ${1:Var} is ${2:integer|float|number|digit|xdigit|alpha|upper|lower|alnum|space|time}",
         "description": "Checks whether a variable's contents are numeric, uppercase, etc."
     },
-    "ListHotkeys": {
-        "prefix": "ListHotkeys",
-        "body": "ListHotkeys",
-        "description": "Displays the hotkeys in use by the current script, whether their subroutines are currently running, and whether or not they use the keyboard or mouse hook."
-    },
-    "ListVars": {
-        "prefix": "ListVars",
-        "body": "ListVars",
-        "description": "Displays the script's variables: their names and current contents."
-    },
-    "Loop <file>": {
-        "prefix": "Loop <file>",
+    "Loop<file>": {
+        "prefix": "Loop<file>",
         "body": "Loop, ${1:Files [}, ${2:FilePattern}, ${3:Mode?]}",
         "description": "Retrieves the specified files or folders, one at a time."
     },
-    "Loop parse": {
-        "prefix": "Loop parse",
+    "LoopParse": {
+        "prefix": "LoopParse",
         "body": "Loop, ${1:Parse}, ${2:InputVar [}, ${3:Delimiters|CSV}, ${4:OmitChars]}",
         "description": "Retrieves substrings (fields) from a string, one at a time."
     },
-    "Loop read": {
-        "prefix": "Loop read",
+    "LoopRead": {
+        "prefix": "LoopRead",
         "body": "Loop, ${1:Read}, ${2:InputFile [}, ${3:OutputFile]}",
         "description": "Retrieves the lines in a text file, one at a time (performs better than FileReadLine)."
     },
-    "Loop reg": {
-        "prefix": "Loop reg",
+    "LoopReg": {
+        "prefix": "LoopReg",
         "body": "Loop, ${1:HKLM|HKU|HKCU|HKCR|HKCC [}, ${2:Key}, ${3:IncludeSubkeys?}, ${4:Recurse?]}",
         "description": "Retrieves the contents of the specified registry subkey, one item at a time."
-    },
-
-    "Reload": {
-        "prefix": "Reload",
-        "body": "Reload",
-        "description": "Replaces the currently running instance of the script with a new one."
-    },
-    "Return": {
-        "prefix": "Return",
-        "body": "Return",
-        "description": "Returns from a subroutine to which execution had previously jumped via function-call, Gosub, Hotkey activation, GroupActivate, or other means."
-    },
-    "Sleep": {
-        "prefix": "Sleep",
-        "body": "Sleep, ${1:Delay}",
-        "description": "Waits the specified amount of time before continuing."
-    },
-    "ProgramFiles": {
-        "prefix": "ProgramFiles",
-        "body": "ProgramFiles"
     },
     "Shift": {
         "prefix": "Shift",
@@ -390,14 +325,6 @@
         "prefix": "RGB",
         "body": "RGB"
     },
-    "LTrim": {
-        "prefix": "LTrim",
-        "body": "LTrim"
-    },
-    "RTrim": {
-        "prefix": "RTrim",
-        "body": "RTrim"
-    },
     "Join": {
         "prefix": "Join",
         "body": "Join"
@@ -446,21 +373,9 @@
         "prefix": "ahk_exe",
         "body": "ahk_exe"
     },
-    "Between": {
-        "prefix": "Between",
-        "body": "Between"
-    },
     "Contains": {
         "prefix": "Contains",
         "body": "Contains"
-    },
-    "In": {
-        "prefix": "In",
-        "body": "In"
-    },
-    "Is": {
-        "prefix": "Is",
-        "body": "Is"
     },
     "Integer": {
         "prefix": "Integer",
@@ -513,18 +428,6 @@
     "Date": {
         "prefix": "Date",
         "body": "Date"
-    },
-    "Not": {
-        "prefix": "Not",
-        "body": "Not"
-    },
-    "Or": {
-        "prefix": "Or",
-        "body": "Or"
-    },
-    "And": {
-        "prefix": "And",
-        "body": "And"
     },
     "AlwaysOnTop": {
         "prefix": "AlwaysOnTop",
@@ -630,18 +533,6 @@
         "prefix": "Status",
         "body": "Status"
     },
-    "static": {
-        "prefix": "static",
-        "body": "static"
-    },
-    "global": {
-        "prefix": "global",
-        "body": "global"
-    },
-    "local": {
-        "prefix": "local",
-        "body": "local"
-    },
     "ByRef": {
         "prefix": "ByRef",
         "body": "ByRef"
@@ -722,10 +613,6 @@
         "prefix": "ToggleEnable",
         "body": "ToggleEnable"
     },
-    "Default": {
-        "prefix": "Default",
-        "body": "Default"
-    },
     "NoDefault": {
         "prefix": "NoDefault",
         "body": "NoDefault"
@@ -757,10 +644,6 @@
     "Tip": {
         "prefix": "Tip",
         "body": "Tip"
-    },
-    "Click": {
-        "prefix": "Click",
-        "body": "Click"
     },
     "Show": {
         "prefix": "Show",

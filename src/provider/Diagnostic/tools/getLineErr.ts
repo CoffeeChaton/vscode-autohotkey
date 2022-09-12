@@ -8,7 +8,7 @@ export function getLineErr(DocStrMap: TTokenStream): CDiagBase[] {
     const errList: CDiagBase[] = [];
 
     type TFn = (params: TAhkTokenLine) => CDiagBase | null;
-    const fnList: TFn[] = [assignErr, getObjBaseErr, getCommandErr]; // TODO getMultilineDiag
+    const fnList: TFn[] = [assignErr, getObjBaseErr, getCommandErr];
 
     for (const token of DocStrMap) {
         if (!token.displayErr) continue;

@@ -3,8 +3,10 @@
 /* eslint-disable max-lines */
 /* eslint-disable no-template-curly-in-string */
 
+// TODO snippets/ahk.snippets.json
 const CommandList = [
     'AUTOTRIM',
+    'BETWEEN',
     'BLOCKINPUT',
     'CLASS',
     'CLICK',
@@ -27,10 +29,12 @@ const CommandList = [
     'DRIVE',
     'DRIVEGET',
     'DRIVESPACEFREE',
+    'EDIT',
     'ENVADD',
     'ENVGET',
     'ENVSET',
     'ENVSUB',
+    'ENVUPDATE',
     'EXIT',
     'EXITAPP',
     'FILECOPY',
@@ -59,6 +63,8 @@ const CommandList = [
     'FORMATTIME',
     'GETKEYSTATE',
     'GLOBAL',
+    'GOSUB',
+    'GOTO',
     'GROUPACTIVATE',
     'GROUPADD',
     'GROUPCLOSE',
@@ -87,6 +93,7 @@ const CommandList = [
     'MOUSEMOVE',
     'MSGBOX',
     'OUTPUTDEBUG',
+    'PAUSE',
     'PIXELGETCOLOR',
     'PIXELSEARCH',
     'POSTMESSAGE',
@@ -208,6 +215,21 @@ export const LineCommand: TLineCommand = {
             '; (default) On: tabs and spaces at the beginning and end of a Var2 are omitted from Var1 ',
             ';               Var1 = %Var2%',
             ';           Off: Such tabs and spaces are not omitted.',
+        ],
+    },
+    BETWEEN: {
+        keyRawName: 'between',
+        body: 'between',
+        doc: 'Determines whether [traditional assignments](https://www.autohotkey.com/docs/commands/SetEnv.htm "Deprecated. New scripts should use Var := Value instead.") like `Var1 = %Var2%` omit spaces and tabs from the beginning and end of _Var2_.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/AutoTrim.htm',
+        exp: [
+            'if Var between LowerBound and UpperBound',
+            'if Var not between LowerBound and UpperBound',
+            '; exp',
+            'var := 2',
+            'if var between 1 and 5',
+            '    MsgBox, % var "is in the range 1 to 5, inclusive."',
         ],
     },
     BLOCKINPUT: {
@@ -615,6 +637,16 @@ export const LineCommand: TLineCommand = {
             'MsgBox % FreeSpace//1024 ; MB -> GB',
         ],
     },
+    EDIT: {
+        keyRawName: 'Edit',
+        body: 'Edit',
+        doc: 'Opens the current script for editing in the associated editor.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Edit.htm',
+        exp: [
+            'Edit',
+        ],
+    },
     ENVADD: {
         keyRawName: 'EnvAdd',
         body: 'EnvAdd, ${1:Var}, ${2:Value} [, ${3:TimeUnits]}',
@@ -688,6 +720,16 @@ export const LineCommand: TLineCommand = {
             'var2 := 20040126',
             'EnvSub, var1, %var2%, Days',
             'MsgBox, %var1%  ; The answer will be 366 since 2004 is a leap year.',
+        ],
+    },
+    ENVUPDATE: {
+        keyRawName: 'EnvUpdate',
+        body: 'EnvUpdate',
+        doc: 'Notifies the OS and all running applications that [environment variable(s)](https://www.autohotkey.com/docs/Concepts.htm#environment-variables) have changed.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/EnvUpdate.htm',
+        exp: [
+            'EnvUpdate',
         ],
     },
     EXIT: {
@@ -1029,6 +1071,40 @@ export const LineCommand: TLineCommand = {
             'global LogFileName  ; This global variable was previously given a value somewhere outside this function.',
         ],
     },
+    GOSUB: {
+        keyRawName: 'Gosub',
+        body: 'Gosub, ${1:Label}',
+        doc: 'Jumps to the specified label and continues execution until [Return](https://www.autohotkey.com/docs/commands/Return.htm) is encountered.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/Gosub.htm',
+        exp: [
+            'Gosub, Label1 ',
+            '    MsgBox, The Label1 subroutine has returned (it is finished).',
+            'return',
+            '',
+            'Label1:',
+            '    MsgBox, The Label1 subroutine is now running.',
+            'return',
+        ],
+    },
+    GOTO: {
+        keyRawName: 'Goto',
+        body: 'Goto, ${1:Label}',
+        doc: 'Jumps to the specified label and continues execution.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/Goto.htm',
+        exp: [
+            'Goto, MyLabel',
+            '',
+            '; ...',
+            '',
+            'MyLabel:',
+            '',
+            'Sleep, 100',
+            '; ...',
+            '',
+        ],
+    },
     GROUPACTIVATE: {
         keyRawName: 'GroupActivate',
         body: 'GroupActivate, ${1:GroupName [}, ${2:R]}',
@@ -1200,6 +1276,19 @@ export const LineCommand: TLineCommand = {
         keyRawName: 'OutputDebug',
         body: 'OutputDebug, ${1:, Text}${2: % }$3',
         doc: 'Sends a string to the debugger (if any) for display.',
+    },
+    PAUSE: {
+        keyRawName: 'Pause',
+        body: 'Pause, [ ${1|On,Off,Toggle|}, ${2|0,1|} ]',
+        doc: 'Pauses the script\'s [current thread](https://www.autohotkey.com/docs/misc/Threads.htm).',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Pause.htm',
+        exp: [
+            'Pause , OnOffToggle, OperateOnUnderlyingThread',
+            '; exp',
+            'Pause::Pause  ; The Pause/Break key.',
+            '#p::Pause  ; Win+P',
+        ],
     },
     PIXELGETCOLOR: {
         keyRawName: 'PixelGetColor',

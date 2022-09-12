@@ -26,8 +26,7 @@ export function baseDiagnostic(
         ...getFuncErr(DocStrMap, [...AST], getLintConfig().funcSize),
         ...getMultilineDiag(DocStrMap),
     ];
-    // 8k lines without gc -> 3ms
+    // 8k lines without gc -> 7ms
     wm.set(DocStrMap, diagList);
     return diagList;
 }
-// TODO {base: GMem} https://www.autohotkey.com/docs/Objects.htm#Custom_Objects

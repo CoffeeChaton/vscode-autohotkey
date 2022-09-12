@@ -2,24 +2,6 @@
 /* eslint-disable max-lines */
 /* eslint-disable no-template-curly-in-string */
 
-// TODO
-type TodoKeyWord =
-    | 'class'
-    | 'critical'
-    | 'exit'
-    | 'exitApp'
-    | 'extends'
-    | 'global'
-    | 'gosub'
-    | 'goto'
-    | 'in'
-    | 'local'
-    | 'new'
-    | 'return'
-    | 'this'
-    | 'throw';
-// 'in', 'else', 'until', 'get', 'set', 'catch', 'finally', 'and', 'or'
-// TODO snippets/ahk.snippets.json
 export type TStatementKeyList =
     | 'AND'
     | 'BREAK'
@@ -28,21 +10,26 @@ export type TStatementKeyList =
     | 'CONTINUE'
     | 'DEFAULT'
     | 'ELSE'
+    | 'FALSE'
     | 'FINALLY'
     | 'FOR'
     | 'IF'
+    | 'IN'
+    | 'IS'
     | 'LOOP'
+    | 'NEW'
+    | 'NOT'
     | 'OR'
-    | 'PAUSE'
     | 'RELOAD'
     | 'RETURN'
     | 'SWITCH'
+    | 'THIS'
     | 'THROW'
+    | 'TRUE'
     | 'TRY'
     | 'UNTIL'
     | 'WHILE';
 // Loop <file>
-// critical https://www.autohotkey.com/docs/commands/Critical.htm
 
 export type TStatementElement<T extends TStatementKeyList> = {
     keyRawName: Capitalize<Lowercase<T>>;
@@ -61,17 +48,18 @@ export type TStatement = {
 export const Statement: TStatement = {
     AND: {
         keyRawName: 'And',
-        body: 'And',
+        body: 'and',
         doc: 'Both of these are **logical-AND**. For example: `x > 3 and x < 10`. To enhance performance, [short-circuit evaluation](https://www.autohotkey.com/docs/Functions.htm#ShortCircuit) is applied. Also, a line that begins with AND/OR/&&/|| (or any other operator) is automatically [appended to](https://www.autohotkey.com/docs/Scripts.htm#continuation) the line above it.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/Variables.htm#and',
         exp: [
-            'x > 3 And x < 10',
+            ';exp of "And"',
+            'x > 3 and x < 10',
             'x > 3 && x < 10',
             ';exp2',
-            'if (Color = "Red" or Color = "Green"  or Color = "Blue"   ; Comment.',
+            'if (Color = "Red" or Color = "Green" or Color = "Blue"        ; Comment.',
             '   or Color = "Black" or Color = "Gray" or Color = "White")   ; Comment.',
-            '   and ProductIsAvailableInColor(Product, Color)   ; Comment.',
+            '   and ProductIsAvailableInColor(Product, Color)              ; Comment.',
         ],
     },
     BREAK: {
@@ -97,7 +85,7 @@ export const Statement: TStatement = {
     },
     CASE: {
         keyRawName: 'Case',
-        body: 'Case ',
+        body: 'Case $0:',
         doc: 'Executes one case from a list of mutually exclusive candidates.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Switch.htm',
@@ -130,7 +118,7 @@ export const Statement: TStatement = {
     },
     CONTINUE: {
         keyRawName: 'Continue',
-        body: 'Continue',
+        body: 'continue',
         doc: 'Skips the rest of a [loop statement](https://www.autohotkey.com/docs/Language.htm#loop-statement)\'s current iteration and begins a new one.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Continue.htm',
@@ -151,7 +139,7 @@ export const Statement: TStatement = {
     },
     DEFAULT: {
         keyRawName: 'Default',
-        body: 'Default',
+        body: 'Default : $0',
         doc: 'Executes one case from a list of mutually exclusive candidates.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Switch.htm',
@@ -168,18 +156,30 @@ export const Statement: TStatement = {
     },
     ELSE: {
         keyRawName: 'Else',
-        body: 'Else',
+        body: 'else',
         doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if an [If statement](https://www.autohotkey.com/docs/Language.htm#if-statement) evaluates to false.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Else.htm',
         exp: [
-            'If (x = 1) {',
+            '; exp of "Else"',
+            'if (x = 1) {',
             '    ; ...',
-            '} Else If (x < y) {',
+            '} else if (x < y) {',
             '    ; ...',
-            '} Else {',
+            '} else {',
             '    ; ...',
             '}',
+        ],
+    },
+    FALSE: {
+        keyRawName: 'False',
+        body: 'false',
+        doc: 'Contain 1 and 0. They can be used to make a script more readable. For details, see [Boolean Values](https://www.autohotkey.com/docs/Concepts.htm#boolean).',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/Variables.htm#misc',
+        exp: [
+            'False',
+            'false',
         ],
     },
     FINALLY: {
@@ -215,18 +215,46 @@ export const Statement: TStatement = {
     },
     IF: {
         keyRawName: 'If',
-        body: 'If ($0)',
+        body: 'if ($0)',
         doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions) evaluates to true.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/IfExpression.htm',
         exp: [
-            'If (x = 1) {',
+            '; exp of "If"',
+            'if (x = 1) {',
             '    ; ...',
-            '} Else If (x < y) {',
+            '} else if (x < y) {',
             '    ; ...',
-            '} Else {',
+            '} else {',
             '    ; ...',
             '}',
+        ],
+    },
+    IN: {
+        keyRawName: 'In',
+        body: 'in',
+        doc: '',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/IfIn.htm',
+        exp: [
+            ';EXP of If In',
+            'if Var in MatchList',
+            'if Var not in MatchList',
+            '',
+            'if Var contains MatchList',
+            'if Var not contains MatchList',
+        ],
+    },
+    IS: {
+        keyRawName: 'Is',
+        body: 'is',
+        doc: '',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/IfIs.htm',
+        exp: [
+            ';EXP of If Is',
+            'if Var is Type',
+            'if Var is not Type',
         ],
     },
     LOOP: {
@@ -242,28 +270,59 @@ export const Statement: TStatement = {
             '}',
         ],
     },
+    NEW: {
+        keyRawName: 'New',
+        body: 'new',
+        doc: 'Creates a new object derived from another object.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/Variables.htm#new',
+        exp: [
+            'x := new y(z) ; (where y is a variable, not a function name)',
+            '',
+            '; https://www.autohotkey.com/docs/Objects.htm#Custom_NewDelete',
+            'm1 := new GMem(0, 20)',
+            '',
+            'class GMem',
+            '{',
+            '    __New(aFlags, aSize)',
+            '    {',
+            '        this.ptr := DllCall("GlobalAlloc", "UInt", aFlags, "Ptr", aSize, "Ptr")',
+            '        if !this.ptr',
+            '            return ""',
+            '        MsgBox % "New GMem of " aSize " bytes at address " this.ptr "."',
+            '        return this  ; This line can be omitted when using the \'new\' operator.',
+            '    }',
+            '',
+            '    __Delete()',
+            '    {',
+            '        MsgBox % "Delete GMem at address " this.ptr "."',
+            '        DllCall("GlobalFree", "Ptr", this.ptr)',
+            '    }',
+            '}',
+        ],
+    },
+    NOT: {
+        keyRawName: 'Not',
+        body: 'not',
+        doc: '**Logical-NOT**. Except for its lower precedence, this is the same as the **!** operator.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/Variables.htm#not',
+        exp: [
+            '; exp of "Not"',
+            'not (x = 3 or y = 3)',
+            '!(x = 3 or y = 3)',
+        ],
+    },
     OR: {
         keyRawName: 'Or',
-        body: 'Or',
+        body: 'or',
         doc: 'Both of these are **logical-OR**. For example: `x <= 3 or x >= 10`. To enhance performance, [short-circuit evaluation](https://www.autohotkey.com/docs/Functions.htm#ShortCircuit) is applied.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/Variables.htm#or',
         exp: [
-            'x <= 3 Or x >= 10',
+            '; exp of "Or"',
+            'x <= 3 or x >= 10',
             'x <= 3 || x >= 10',
-        ],
-    },
-    PAUSE: {
-        keyRawName: 'Pause',
-        body: 'Pause',
-        doc: 'Pauses the script\'s [current thread](https://www.autohotkey.com/docs/misc/Threads.htm).',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Pause.htm',
-        exp: [
-            'Pause , OnOffToggle, OperateOnUnderlyingThread',
-            '; exp',
-            'Pause::Pause  ; The Pause/Break key.',
-            '#p::Pause  ; Win+P',
         ],
     },
     RELOAD: {
@@ -318,6 +377,34 @@ export const Statement: TStatement = {
             '}',
         ],
     },
+    THIS: {
+        keyRawName: 'This',
+        body: 'this',
+        doc: 'this ... i can\'t find documentation for "this"',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/Objects.htm#Custom_NewDelete',
+        exp: [
+            'm1 := new GMem(0, 20)',
+            '',
+            'class GMem',
+            '{',
+            '    __New(aFlags, aSize)',
+            '    {',
+            '        this.ptr := DllCall("GlobalAlloc", "UInt", aFlags, "Ptr", aSize, "Ptr")',
+            '        if !this.ptr',
+            '            return ""',
+            '        MsgBox % "New GMem of " aSize " bytes at address " this.ptr "."',
+            '        return this  ; This line can be omitted when using the \'new\' operator.',
+            '    }',
+            '',
+            '    __Delete()',
+            '    {',
+            '        MsgBox % "Delete GMem at address " this.ptr "."',
+            '        DllCall("GlobalFree", "Ptr", this.ptr)',
+            '    }',
+            '}',
+        ],
+    },
     THROW: {
         keyRawName: 'Throw',
         body: 'Throw , $0',
@@ -330,6 +417,17 @@ export const Statement: TStatement = {
             'Throw MyVar',
             'Throw i + 1',
             'Throw { what: "Custom error", file: A_LineFile, line: A_LineNumber } ; Throws an object',
+        ],
+    },
+    TRUE: {
+        keyRawName: 'True',
+        body: 'true',
+        doc: 'Contain 1 and 0. They can be used to make a script more readable. For details, see [Boolean Values](https://www.autohotkey.com/docs/Concepts.htm#boolean).',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/Variables.htm#misc',
+        exp: [
+            'true',
+            'True',
         ],
     },
     TRY: {

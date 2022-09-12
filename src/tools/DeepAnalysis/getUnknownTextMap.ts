@@ -11,6 +11,9 @@ import type {
 } from '../../AhkSymbol/CAhkFunc';
 import type { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
+import { A_VariablesMDMap } from '../Built-in/A_Variables';
+import { CommandMDMap } from '../Built-in/Command_Tools';
+import { StatementMDMap } from '../Built-in/statement_vsc';
 import { newC502 } from './FnVar/def/diag/c502';
 
 function pushRef(
@@ -27,74 +30,6 @@ function pushRef(
     oldDef.c502Array.push(newC502(oldDef.keyRawName, keyRawName));
 }
 
-function getIgnoreList(): string[] {
-    return [
-        // DeepAnalysisAllFiles -> Word frequency statistics
-        'IF',
-        'ELSE',
-        'RETURN',
-
-        'STATIC',
-        'LOCAL',
-        'GLOBAL',
-
-        'SETBATCHLINES',
-        'SETTIMER',
-        'SLEEP',
-
-        'LISTVARS', // 'ListVars'.toUpperCase()
-        'SEND',
-
-        'SWITCH',
-        'CASE',
-        'DEFAULT', //
-        // FIXME: EDiagCodeDA.code501
-        // IniRead(Filename, Section, Key, Default = "") {
-        //     IniRead, v, %Filename%, %Section%, %Key%, %Default%
-        //     Return, v
-        // }
-
-        'TRUE',
-        'FALSE',
-
-        'FOR',
-        'IN',
-        'LOOP',
-        'WHILE',
-        'UNTIL',
-        'BREAK',
-        'CONTINUE',
-        'BETWEEN',
-
-        'MOUSEMOVE',
-        'CLICK',
-        'THIS',
-
-        'IN',
-        'NOT',
-        'AND',
-        'OR',
-
-        'TRY',
-        'THROW',
-        'CATCH',
-        'FINALLY',
-
-        'GOSUB',
-        'GOTO',
-
-        'CRITICAL',
-        'SUSPEND',
-        'THREAD',
-        'PAUSE',
-        'RELOAD',
-        // 'CLASS',
-        'NEW',
-
-        'MSGBOX',
-    ];
-}
-
 // eslint-disable-next-line max-params
 export function getUnknownTextMap(
     startLine: number,
@@ -105,9 +40,9 @@ export function getUnknownTextMap(
     GValMap: TGValMap,
     name: string,
 ): TTextMapIn {
-    const ignoreList: string[] = getIgnoreList();
+    const ignoreList: string[] = [];
     const textMap: TTextMapIn = new Map<string, TTextMetaIn>();
-    for (const { lStr, line, fistWordUp } of DocStrMap) {
+    for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;
         for (const v of lStr.matchAll(/(?<![.#])\b(\w+)\b(?!\()/gu)) {
@@ -115,9 +50,11 @@ export function getUnknownTextMap(
             const wordUp: string = keyRawName.toUpperCase();
             if (ignoreList.includes(wordUp)) continue;
             if (!textMap.has(wordUp)) {
-                if (fistWordUp === wordUp) continue;
+                if (CommandMDMap.has(wordUp) || A_VariablesMDMap.has(wordUp) || StatementMDMap.has(wordUp)) {
+                    continue;
+                }
                 if (
-                    (/^[A_\d]_/u).test(wordUp) // (A_Variables) or "str" or ( _*2 start varName EX: __varName) or (start with number EX: 0_VarName)
+                    (/^_+$/u).test(wordUp) // str
                     || (/^\d+$/u).test(wordUp) // just number
                     || (/^0X[\dA-F]+$/u).test(wordUp) // NumHexConst = 0 x [0-9a-fA-F]+
                     /*

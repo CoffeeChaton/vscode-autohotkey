@@ -1,7 +1,4 @@
 import * as vscode from 'vscode';
-import { ECommandOption, getCommandOptions } from '../../configUI';
-import { enumLog } from '../enumErr';
-import { getAllFunc } from '../Func/getAllFunc';
 import type { TCommandElement } from './Command';
 import { LineCommand } from './Command';
 import { CSnippetCommand } from './CSnippetCommand';
@@ -32,7 +29,7 @@ function commandElement2Md(Element: TCommandElement): vscode.MarkdownString {
 }
 
 type TCommandMDMap = ReadonlyMap<string, vscode.MarkdownString>;
-type TSnippetCommand = readonly CSnippetCommand[];
+export type TSnippetCommand = readonly CSnippetCommand[];
 
 export const [snippetCommand, CommandMDMap] = ((): [TSnippetCommand, TCommandMDMap] => {
     const map1 = new Map<string, vscode.MarkdownString>();
@@ -45,35 +42,6 @@ export const [snippetCommand, CommandMDMap] = ((): [TSnippetCommand, TCommandMDM
     }
     return [tempList, map1];
 })();
-
-export function getSnippetCommand(lStr: string, position: vscode.Position): TSnippetCommand {
-    const subStr: string = lStr.slice(0, position.character).trim();
-
-    if (!(/^\w*$/ui).test(subStr)) return [];
-    //
-
-    const opt: ECommandOption = getCommandOptions();
-
-    if (opt === ECommandOption.noSameFunc) {
-        const fnMap = getAllFunc();
-        return snippetCommand.filter((v) => !fnMap.has(v.upName));
-    }
-
-    switch (opt) {
-        case ECommandOption.All:
-            return snippetCommand;
-
-        case ECommandOption.Recommended:
-            return snippetCommand.filter((v) => v.recommended);
-
-        case ECommandOption.notProvided:
-            return [];
-
-        default:
-            enumLog(opt);
-            return [];
-    }
-}
 
 export function getHoverCommand(
     fistWordUp: string,

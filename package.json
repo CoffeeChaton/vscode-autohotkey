@@ -2,7 +2,7 @@
     "name": "vscode-autohotkey-neko-help",
     "displayName": "AutoHotkey NekoHelp",
     "description": "AutoHotkey IntelliSense, format, linters, and language support for VS Code, ",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "publisher": "cat1122",
     "engines": {
         "vscode": "^1.71.0"
@@ -120,7 +120,7 @@
                     "markdownEnumDescriptions": [
                         "Don't filter Command, Provides all entered commands.",
                         "filter not recommended Command. (Referral rules from AhkNekoHelp.)",
-                        "filter Command with the pack has same name function. exp: of ",
+                        "filter Command with the pack has same name function and not recommended Command",
                         "not provided any Command."
                     ]
                 },
@@ -220,7 +220,7 @@
         "dprint": "^0.32.1",
         "esbuild": "^0.15.7",
         "esbuild-copy-static-files": "^0.1.0",
-        "eslint": "^8.23.0",
+        "eslint": "^8.23.1",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-airbnb-typescript": "^17.0.0",

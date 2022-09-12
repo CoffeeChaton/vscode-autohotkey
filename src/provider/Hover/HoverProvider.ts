@@ -33,6 +33,8 @@ function HoverProviderCore(
     position: vscode.Position,
 ): vscode.Hover | null {
     const { AST, DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+
+    // ^\s*\( Trim
     const mdOfMultiLine: vscode.MarkdownString | null = hoverMultiLine(DocStrMap, position);
     if (mdOfMultiLine !== null) return new vscode.Hover(mdOfMultiLine);
 
@@ -50,6 +52,7 @@ function HoverProviderCore(
         return new vscode.Hover(AhkFunc.md);
     }
 
+    // AutoTrim, ${1|On,Off|}
     const CommandMd: vscode.MarkdownString | undefined = getHoverCommand(fistWordUp, position, lStr);
     if (CommandMd !== undefined) return new vscode.Hover(CommandMd);
 
@@ -60,10 +63,6 @@ function HoverProviderCore(
 
     const wordUp: string = document.getText(range).toUpperCase();
     const textRaw: string = document.lineAt(position).text;
-
-    // TODO https://www.autohotkey.com/docs/commands/index.htm
-    // const commands = getCommandsHover(document, position);
-    // if (commands !== null) return commands;
 
     if (AhkFunc !== null) {
         const DAmd: vscode.MarkdownString | null = DeepAnalysisHover(AhkFunc, wordUp, position);

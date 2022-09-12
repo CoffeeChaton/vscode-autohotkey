@@ -55,14 +55,9 @@
 // These functions are equivalent to built-in methods of the Object type. It is usually recommended to use the corresponding method instead.
 
 // TODO CommandList
-// Edit
 // EnvDiv
 // EnvMult
-// EnvUpdate
-// ExitApp
 // FileAppend
-// Gosub
-// Goto
 // IfEqual
 // IfExist
 // IfGreater
