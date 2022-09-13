@@ -173,8 +173,7 @@
             "name": "keyword.control.ahk"
         },
         {
-            "match": "(?x) \\b\r\n((0(x|X)[0-9a-fA-F]*)\r\n|(\r\n  ([0-9]+\\.?[0-9]*)\r\n  |(\\.[0-9]+)\r\n )((e|E)(\\+|-)?[0-9]+)?\r\n)\\b\r\n",
-            "name": "constant.numeric.ahk"
+            "include": "#numbers"
         },
         {
             "match": "\\+|-|\\*|\\^|/|&|#|!|~|\\|",
@@ -251,6 +250,29 @@
                 {
                     "match": "`[,%`;nrbtvaf:]",
                     "name": "constant.character.escape.ahk"
+                }
+            ]
+        },
+        "numbers": {
+            "patterns": [
+                {
+                    "match": "\\b(?<!\\.)(0[xX])[0-9a-fA-F]+\\b(?!\\.)",
+                    "name": "constant.numeric.hexadecimal.ahk",
+                    "captures": { "1": { "name": "keyword.other.unit.hexadecimal.ahk" } }
+                },
+                {
+                    "match": "\\b(?<!\\.)[0-9]+\\b(?!\\.)",
+                    "name": "constant.numeric.decimal.integers.ahk"
+                },
+                {
+                    "match": "\\b(?<!\\.)[0-9]+\\.[0-9]+(?:([eE])[+-]?[0-9]+)?\\b(?!\\.)",
+                    "name": "constant.numeric.decimal.scientific.ahk",
+                    "captures": { "1": { "name": "keyword.other.unit.hexadecimal.ahk" } }
+                },
+                {
+                    "match": "\\s\\.[0-9]+(?:([eE])[+-]?[0-9]+)?\\b(?!\\.)",
+                    "name": "constant.numeric.decimal.scientific.ahk",
+                    "captures": { "1": { "name": "keyword.other.unit.hexadecimal.ahk" } }
                 }
             ]
         }

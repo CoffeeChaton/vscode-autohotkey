@@ -90,3 +90,5 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): TFuncDefDa
     }
     return null;
 }
+
+// TODO bool IsFunction(LPTSTR aBuf, bool *aPendingFunctionHasBrace = NULL)

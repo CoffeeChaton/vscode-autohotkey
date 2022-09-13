@@ -34,5 +34,5 @@ out/
 pnpm-lock.yaml
 src/
 syntaxes/README.md
-TODO.md
+TODO/
 tsconfig.json

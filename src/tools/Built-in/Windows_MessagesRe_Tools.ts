@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { to0X, winMsgRe } from './Windows_Messages';
 
+// https://www.autohotkey.com/docs/Concepts.htm#numbers
 function str2Number(str: string): number | null {
     if ((/^0x[0-9A-F]+$/ui).test(str)) {
         // base 16

@@ -2,6 +2,7 @@ import type { TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
 import type { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
 
+// ACT_ASSIGNEXPR
 // := the walrus operator
 export function walrusOperator({
     lStr,

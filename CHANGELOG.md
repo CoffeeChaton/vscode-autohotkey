@@ -6,6 +6,7 @@
 - add Completion of `#Include`
   ![Completion of Include](image/Completion_Include.gif)
 
+- Fix: highlight of number
 - Fix: hover of `#Include`
 - Fix: until neko-help activate then show `explorer/context`
 - Fix: add ahk-doc type color
