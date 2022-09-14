@@ -5,38 +5,57 @@ import {
     winMsgRe,
 } from './Windows_Messages';
 
-test('Check Windows_Messages name ruler', () => {
-    for (const [wm, [base10, base16]] of winMsg.entries()) {
-        if (!wm.startsWith('WM_')) {
-            expect(false).toBeTruthy();
+describe('check Windows_Messages', () => {
+    it('check Windows_Messages name ruler', () => {
+        expect.hasAssertions();
+
+        let errState = 0;
+        for (const [wm, [base10, base16]] of winMsg.entries()) {
+            if (!wm.startsWith('WM_')) {
+                console.error('!wm.startsWith("WM_")', wm);
+                errState++;
+                break;
+            }
+            if (wm.toUpperCase() !== wm) {
+                console.error('wm.toUpperCase() !== wm', wm);
+                errState++;
+                break;
+            }
+            if (base16toNumber(base16) !== base10) {
+                console.error('base16toNumber(base16) !== base10', {
+                    wm,
+                    base16toNumber: base16toNumber(base16),
+                    base10,
+                });
+                errState++;
+                break;
+            }
         }
-        if (wm.toUpperCase() !== wm) {
-            expect(false).toBeTruthy();
-        }
-        if (base16toNumber(base16) !== base10) {
-            expect(false).toBeTruthy();
-        }
-    }
 
-    // https://www.autohotkey.com/docs/misc/SendMessageList.htm at 2022/7/23
+        expect(errState === 0).toBeTruthy();
 
-    // eslint-disable-next-line no-magic-numbers
-    if (winMsg.size !== 207) {
-        expect(false).toBeTruthy();
-    }
+        // https://www.autohotkey.com/docs/misc/SendMessageList.htm at 2022/7/23
 
-    // eslint-disable-next-line no-magic-numbers
-    if (winMsgRe.size !== 201) {
-        expect(false).toBeTruthy();
-    }
-});
+        // eslint-disable-next-line no-magic-numbers
+        expect(winMsg.size === 207).toBeTruthy();
 
-test('test 1000 to "0x03E8"', () => {
-    const number1000 = 1000;
-    expect(to0X(number1000) === '0x03E8').toBeTruthy();
-});
+        // eslint-disable-next-line no-magic-numbers
+        expect(winMsgRe.size === 201).toBeTruthy();
+    });
 
-test('test "0x03E8" to 1000', () => {
-    const number1000 = 1000;
-    expect(base16toNumber('0x03E8') === number1000).toBeTruthy();
+    it('1000 to "0x03E8"', () => {
+        expect.hasAssertions();
+
+        const number1000 = 1000;
+
+        expect(to0X(number1000) === '0x03E8').toBeTruthy();
+    });
+
+    it('"0x03E8" to 1000', () => {
+        expect.hasAssertions();
+
+        const number1000 = 1000;
+
+        expect(base16toNumber('0x03E8') === number1000).toBeTruthy();
+    });
 });

@@ -27,33 +27,34 @@
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
-    // "overrides": [
-    //     {
-    //         "env": {
-    //             "jest/globals": true
-    //         },
-    //         "extends": [
-    //             "plugin:jest/recommended",
-    //             "plugin:jest/all",
-    //             "plugin:jest-formatting/strict"
-    //         ],
-    //         "files": [
-    //             "**/*.test.ts"
-    //         ],
-    //         "plugins": [
-    //             "jest"
-    //         ],
-    //         "parserOptions": {
-    //             "project": [
-    //                 "./tsconfig.json"
-    //             ] // Specify it only for TypeScript files
-    //         },
-    //         "rules": {
-    //             "jest-formatting/padding-around-describe-blocks": "error",
-    //             "jest-formatting/padding-around-test-blocks": "error"
-    //         }
-    //     }
-    // ],
+    "overrides": [
+        {
+            "env": {
+                "jest/globals": true
+            },
+            "extends": [
+                "plugin:jest/recommended",
+                "plugin:jest/all",
+                "plugin:jest-formatting/strict"
+            ],
+            "files": [
+                "**/*.test.ts"
+            ],
+            "plugins": [
+                "jest"
+            ],
+            "parserOptions": {
+                "project": [
+                    "./tsconfig.json"
+                ] // Specify it only for TypeScript files
+            },
+            "rules": {
+                "jest-formatting/padding-around-describe-blocks": "error",
+                "jest-formatting/padding-around-test-blocks": "error",
+                "jest/no-conditional-in-test": "off"
+            }
+        }
+    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaFeatures": {

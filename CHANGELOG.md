@@ -1,5 +1,9 @@
 # Changelog
 
+## NEXT 0.0.7(2022-09-21)
+
+not plan now
+
 ## 0.0.6(2022-09-14)
 
 - add Diag `c302` of `Function name too long, name len > (255 -2) characters.`
