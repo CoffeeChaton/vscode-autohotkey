@@ -1,7 +1,8 @@
 # Changelog
 
-## NEXT 0.0.6(2022-09-12)
+## NEXT 0.0.6(2022-09-14)
 
+- add Diag `c302` of `Function name too long, name len > (255 -2) characters.`
 - add Diag `c505` of `param parsed Error -> unknown style`
 - add Completion of `#Include`
   ![Completion of Include](image/Completion_Include.gif)

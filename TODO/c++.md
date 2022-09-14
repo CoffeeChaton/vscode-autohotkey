@@ -1,3 +1,7 @@
+# It is expected to build a more appropriate language service based on the source code
+
+<https://github.com/Lexikos/AutoHotkey_L>
+
 ```c++
 class Line
 {
@@ -31,4 +35,16 @@ case ACT_MSGBOX:
 
 ```c++
 int FindNextDelimiter(LPCTSTR aBuf, TCHAR aDelimiter, int aStartIndex, LPCTSTR aLiteralMap)
+```
+
+```c++
+Func *Script::FindFuncInLibrary(LPTSTR aFuncName, size_t aFuncNameLength, bool &aErrorWasShown, bool &aFileWasFound, bool aIsAutoInclude)
+```
+
+```c++
+if (   !(pfunc = AddFunc(func_name, aFuncNameLength, true, left))   ) // L27:
+```
+
+```c++
+ResultType Script::AddLine(ActionTypeType aActionType, LPTSTR aArg[], int aArgc, LPTSTR aArgMap[])
 ```

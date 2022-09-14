@@ -54,6 +54,7 @@ export const enum EDiagCode {
     code121 = 121,
     code201 = 201, // 200~299 is not expression // need use %
     code301 = 301, // 300~399 is func err
+    code302 = 302,
     // code501~599 warn user
     code501 = 501, // DEFAULT:
     code502 = 502, // On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.
@@ -133,6 +134,10 @@ export const Diags: DeepReadonly<TDiags> = {
     301: {
         msg: 'function or Method is so big',
         path: 'https://www.autohotkey.com/docs/Functions.htm',
+    },
+    302: {
+        msg: 'Function name too long, name len > (255 -2) characters.',
+        path: 'https://github.com/Lexikos/AutoHotkey_L/blob/master/source/script.cpp#L8744',
     },
     501: {
         msg: 'did you mean switch case `default :` ? this way look like a `label:`.',

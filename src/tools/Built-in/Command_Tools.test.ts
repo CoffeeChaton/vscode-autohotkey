@@ -6,7 +6,7 @@ test('Check LineCommand ruler', () => {
 
         const v1 = k.toUpperCase() !== k;
         const v2 = keyRawName.toUpperCase() !== k;
-        const v3 = !body.includes(keyRawName);
+        const v3 = !body.toUpperCase().includes(keyRawName.toUpperCase());
         const v4 = (exp !== undefined) && !exp.join('\n').includes(keyRawName);
         if (v1 || v2 || v3 || v4) {
             console.error(
