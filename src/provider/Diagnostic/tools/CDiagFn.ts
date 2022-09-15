@@ -3,7 +3,7 @@ import type { EDiagCodeDA } from '../../../diag';
 import { DiagsDA } from '../../../diag';
 import { EDiagBase } from '../../../Enum/EDiagBase';
 
-type TDiagFnParam = {
+type TCDiagFnParam = {
     value: EDiagCodeDA;
     range: vscode.Range;
     severity: vscode.DiagnosticSeverity;
@@ -24,7 +24,7 @@ export class CDiagFn extends vscode.Diagnostic {
         severity,
         tags,
         message,
-    }: TDiagFnParam) {
+    }: TCDiagFnParam) {
         super(range, message, severity);
 
         const target: vscode.Uri = vscode.Uri.parse(DiagsDA[value].path);

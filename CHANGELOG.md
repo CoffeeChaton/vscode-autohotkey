@@ -2,7 +2,22 @@
 
 ## NEXT 0.0.7(2022-09-21)
 
-not plan now
+1. fix semantic-highlight of `value name` === `keyword`
+   ![img](image/CHANGELOG/v0-0-7-fix-semantic-highlight.png)
+
+   1. theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
+
+   2. exp code from [VA.ahk](https://github.com/ahkscript/VistaAudio/blob/master/VA.ahk#L465)
+
+2. add Diag `c506` of not support number formats [number](https://www.autohotkey.com/docs/Concepts.htm#numbers)
+
+> base10 `99` == base2 `0b1100011` == base8 `0o143` , but ahk v1 just support base10 base16
+>
+> AutoHotkey supports these number formats:
+>
+> - Decimal integers, such as `123`, `00123` or `-1`.
+> - Hexadecimal integers, such as `0x7B`, `0x007B` or `-0x1`.
+> - Decimal floating-point numbers, such as `3.14159`.
 
 ## 0.0.6(2022-09-14)
 

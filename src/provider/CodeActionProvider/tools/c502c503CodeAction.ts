@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { ParseDiagCaseMsg } from '../../tools/DeepAnalysis/Diag/caseSensitivityMagic';
-import type { CDiagFn } from '../Diagnostic/tools/CDiagFn';
+import { ParseDiagCaseMsg } from '../../../tools/DeepAnalysis/Diag/caseSensitivityMagic';
+import type { CDiagFn } from '../../Diagnostic/tools/CDiagFn';
 
 // replace ref like Def
 function getCA0(uri: vscode.Uri, defStr: string, refRange: vscode.Range): vscode.CodeAction {

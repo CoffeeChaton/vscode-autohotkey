@@ -4,8 +4,10 @@ import { getCode500Default, getCode502Default, getCode503Default } from '../../.
 import { diagColl } from '../../../core/ProjectManager';
 import type { TAhkTokenLine, TTokenStream } from '../../../globalEnum';
 import { CDiagFn } from '../../../provider/Diagnostic/tools/CDiagFn';
+import type { C506Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C506Class';
 import { caseSensitivityVar } from './caseSensitivity';
 import { EPrefixC502 } from './caseSensitivityMagic';
+import { C506DiagNumberStyle } from './otherDiag/C506DiagNumberStyle';
 import { NeverUsedParam, NeverUsedVar } from './param/paramNeverUsed';
 import { paramVariadicErr } from './param/paramVariadicErr';
 
@@ -40,15 +42,17 @@ function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]):
     const code503List: CDiagFn[] = [];
     const code504List: CDiagFn[] = [];
     const code505List: CDiagFn[] = [];
+    const code506List: C506Class[] = [];
 
     for (const DA of DAList) {
-        const { paramMap, valMap } = DA;
+        const { paramMap, valMap, textMap } = DA;
         NeverUsedVar(valMap, code500List, code500Max, displayErrList);
         NeverUsedParam(paramMap, code501List, displayErrList);
         caseSensitivityVar(EPrefixC502.var, valMap, code502List, code502Max, displayErrList); // var case sensitivity
         caseSensitivityVar(EPrefixC502.param, paramMap, code503List, code503Max, displayErrList);
         paramVariadicErr(paramMap, code504List);
         paramVariadicErr(paramMap, code505List);
+        C506DiagNumberStyle(textMap, code506List);
     }
 
     const DADiagList: readonly CDiagFn[] = [
@@ -58,6 +62,7 @@ function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]):
         ...code503List,
         ...code504List,
         ...code505List,
+        ...code506List,
     ];
 
     wm.set(DAList, {

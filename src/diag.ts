@@ -10,6 +10,7 @@ export const enum EDiagCodeDA {
     // code503 = 503, param case sensitivity
     code504 = 504, // Variadic param * >1
     code505 = 505, // param parsed Error -> unknown style
+    code506 = 506, // base8 base2 diag of not support number formats
 }
 
 export type TDiagsDA = {
@@ -39,6 +40,10 @@ export const DiagsDA: DeepReadonly<TDiagsDA> = {
     505: {
         msg: 'param parsed Error -> unknown style',
         path: 'https://www.autohotkey.com/docs/Functions.htm#param',
+    },
+    506: {
+        msg: 'not support of this number formats',
+        path: 'https://www.autohotkey.com/docs/Concepts.htm#numbers',
     },
 };
 

@@ -32,6 +32,7 @@ type TParseDiagCaseMsg = {
     refRange: vscode.Range;
 };
 
+// FIXME use new class replace CDiagFn
 export function ParseDiagCaseMsg(diag: CDiagFn): TParseDiagCaseMsg {
     const { message, range } = diag;
     //  var "A" is the same variable as "a" defined earlier (at [165, 20])

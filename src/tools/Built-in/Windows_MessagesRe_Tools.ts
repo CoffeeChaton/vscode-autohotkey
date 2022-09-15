@@ -18,7 +18,10 @@ function str2Number(str: string): number | null {
         // 0b11101: Binary
         return Number.parseInt(str, 2);
     }
-    if (!str.startsWith('0') && (/\d+/u).test(str)) {
+
+    // !str.startsWith('0') wtf... ahk 001 === 1
+    // https://www.autohotkey.com/docs/Concepts.htm#numbers
+    if ((/\d+/u).test(str)) {
         // base 10
         return Number.parseInt(str, 10);
     }

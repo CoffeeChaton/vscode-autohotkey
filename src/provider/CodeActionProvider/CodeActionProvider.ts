@@ -3,9 +3,11 @@ import { Diags, DiagsDA, EDiagCodeDA } from '../../diag';
 import { EDiagBase } from '../../Enum/EDiagBase';
 import { CDiagBase } from '../Diagnostic/tools/CDiagBase';
 import { CDiagFn } from '../Diagnostic/tools/CDiagFn';
-import { c501ignoreArgNeverUsed } from './c501ignoreArgNeverUsed';
-import { c502c503CodeAction } from './c502c503CodeAction';
+import { C506Class } from '../Diagnostic/tools/CDiagFnLib/C506Class';
 import { DependencyAnalysis } from './DependencyAnalysis';
+import { c501ignoreArgNeverUsed } from './tools/c501ignoreArgNeverUsed';
+import { c502c503CodeAction } from './tools/c502c503CodeAction';
+import { c506CodeAction } from './tools/c506CodeAction';
 
 function setIgnore(uri: vscode.Uri, diag: CDiagBase): vscode.CodeAction {
     const position: vscode.Position = new vscode.Position(diag.range.start.line, 0);
@@ -44,6 +46,10 @@ function codeActionOfDA(uri: vscode.Uri, diag: CDiagFn): vscode.CodeAction[] {
     }
     if (value === EDiagCodeDA.code502) {
         return [CA, ...c502c503CodeAction(uri, diag)];
+    }
+
+    if (diag instanceof C506Class) {
+        return [CA, ...c506CodeAction(uri, diag)];
     }
 
     return [CA];
