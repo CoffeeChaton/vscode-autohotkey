@@ -70,6 +70,7 @@ export function getUnknownTextMap(
                 continue;
             }
 
+            // FIXME: GValMapOldVal
             // const GValMapOldVal: TGlobalVal | undefined = GValMap.get(wordUp);
             // if (GValMapOldVal !== undefined) {
             //     if (

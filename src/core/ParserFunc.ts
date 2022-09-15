@@ -60,8 +60,8 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
     const AhkTokenList: TTokenStream = getDocStrMapMask(range, DocStrMap);
 
     const paramMap: TParamMapIn = getParamDef(name, selectionRange, AhkTokenList);
-    const startLine = selectionRange.end.line;
-    const endLine = range.end.line;
+    const startLine: number = selectionRange.end.line;
+    const endLine: number = range.end.line;
     // normal mode OK!
     // if is global mode
     // if is local mode

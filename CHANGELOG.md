@@ -2,11 +2,14 @@
 
 ## NEXT 0.0.7(2022-09-21)
 
+> // FIXME: GValMapOldVal
+> // FIXME :501 502 error
+
 ### 1. fix semantic-highlight of `value name` === `keyword`
 
 ![img](image/CHANGELOG/v0-0-7-fix-semantic-highlight.png)
 
-theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme), example code from [VA.ahk](https://github.com/ahkscript/VistaAudio/blob/master/VA.ahk#L465)
+_theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme), example code from [VA.ahk](https://github.com/ahkscript/VistaAudio/blob/master/VA.ahk#L465)_
 
 ### 2. add Diag `c506` of not support number formats [number](https://www.autohotkey.com/docs/Concepts.htm#numbers)
 
@@ -22,22 +25,23 @@ theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zh
 
 ![img](image/CHANGELOG/v0-0-7-highlight-of-Numbers.png)
 
-- theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
+_theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)_
+
 - `0x` and `e` use `keyword.other.unit`
-- other number ex `123` `007B` use `constant.numeric`
+- other number ex `123` `007B` `3.14159` use `constant.numeric.ahk`
 - exp of your `settings.json` ReadMore of [highlighting](https://code.visualstudio.com/docs/getstarted/themes#_editor-syntax-highlighting)
 
 ```jsonc
 "editor.tokenColorCustomizations": {
     "textMateRules": [
         {
-            "scope": "keyword.other.unit",
+            "scope": "keyword.other.unit.ahk",
             "settings": {
                 "foreground": "#D19A66"
             },
         },
         {
-            "scope": "constant.numeric",
+            "scope": "constant.numeric.ahk",
             "settings": {
                 "foreground": "#D19A66",
             }

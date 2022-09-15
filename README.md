@@ -123,28 +123,29 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 
 ![img](image/CHANGELOG/v0-0-7-highlight-of-Numbers.png)
 
-- theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
+_theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)_
+
 - `0x` and `e` use `keyword.other.unit`
-- other number ex `123` `007B` use `constant.numeric`
-- exp of your `settings.json` Read of [highlighting](https://code.visualstudio.com/docs/getstarted/themes#_editor-syntax-highlighting)
+- other number ex `123` `007B` `3.14159` use `constant.numeric.ahk`
+- exp of your `settings.json` ReadMore of [highlighting](https://code.visualstudio.com/docs/getstarted/themes#_editor-syntax-highlighting)
 
 ```jsonc
 "editor.tokenColorCustomizations": {
     "textMateRules": [
         {
-            "scope": "keyword.other.unit",
+            "scope": "keyword.other.unit.ahk",
             "settings": {
                 "foreground": "#D19A66"
             },
         },
         {
-            "scope": "constant.numeric",
+            "scope": "constant.numeric.ahk",
             "settings": {
                 "foreground": "#D19A66",
             }
         }
     ]
-},
+}
 ```
 
 ## Credits
