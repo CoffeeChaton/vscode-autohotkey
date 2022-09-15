@@ -1,10 +1,12 @@
 # vscode-autohotkey-NekoHelp
 
 > Base of [cweijan /vscode-autohotkey](https://github.com/cweijan/vscode-autohotkey)
+> Base of regexp match, not the principles of compilation, so parser has error.
 
 AutoHotKey language support for VS Code
 
 - [vscode-autohotkey-NekoHelp](#vscode-autohotkey-nekohelp)
+  - [Install](#install)
   - [FunctionSymbol](#functionsymbol)
   - [CodeSymbol](#codesymbol)
   - [GotoDefinition](#gotodefinition)
@@ -13,8 +15,13 @@ AutoHotKey language support for VS Code
   - [Diagnostic and lint](#diagnostic-and-lint)
   - [IntelliSense](#intellisense)
   - [ListAllFunctions](#listallfunctions)
+  - [Better highlight of Numbers](#better-highlight-of-numbers)
   - [Credits](#credits)
   - [otherSuggest](#othersuggest)
+
+## Install
+
+Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://marketplace.visualstudio.com/items?itemName=cat1122.vscode-autohotkey-neko-help).
 
 ## FunctionSymbol
 
@@ -111,6 +118,34 @@ AutoHotKey language support for VS Code
 ## ListAllFunctions
 
 ![ListAllFunctions](image/ListAllFunctions.gif)
+
+## Better highlight of Numbers
+
+![img](image/CHANGELOG/v0-0-7-highlight-of-Numbers.png)
+
+- theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
+- `0x` and `e` use `keyword.other.unit`
+- other number ex `123` `007B` use `constant.numeric`
+- exp of your `settings.json` Read of [highlighting](https://code.visualstudio.com/docs/getstarted/themes#_editor-syntax-highlighting)
+
+```jsonc
+"editor.tokenColorCustomizations": {
+    "textMateRules": [
+        {
+            "scope": "keyword.other.unit",
+            "settings": {
+                "foreground": "#D19A66"
+            },
+        },
+        {
+            "scope": "constant.numeric",
+            "settings": {
+                "foreground": "#D19A66",
+            }
+        }
+    ]
+},
+```
 
 ## Credits
 

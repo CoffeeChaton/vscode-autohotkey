@@ -2,14 +2,13 @@
 
 ## NEXT 0.0.7(2022-09-21)
 
-1. fix semantic-highlight of `value name` === `keyword`
-   ![img](image/CHANGELOG/v0-0-7-fix-semantic-highlight.png)
+### 1. fix semantic-highlight of `value name` === `keyword`
 
-   1. theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
+![img](image/CHANGELOG/v0-0-7-fix-semantic-highlight.png)
 
-   2. exp code from [VA.ahk](https://github.com/ahkscript/VistaAudio/blob/master/VA.ahk#L465)
+theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme), example code from [VA.ahk](https://github.com/ahkscript/VistaAudio/blob/master/VA.ahk#L465)
 
-2. add Diag `c506` of not support number formats [number](https://www.autohotkey.com/docs/Concepts.htm#numbers)
+### 2. add Diag `c506` of not support number formats [number](https://www.autohotkey.com/docs/Concepts.htm#numbers)
 
 > base10 `99` == base2 `0b1100011` == base8 `0o143` , but ahk v1 just support base10 base16
 >
@@ -19,7 +18,37 @@
 > - Hexadecimal integers, such as `0x7B`, `0x007B` or `-0x1`.
 > - Decimal floating-point numbers, such as `3.14159`.
 
+### 3. Better highlight of Numbers
+
+![img](image/CHANGELOG/v0-0-7-highlight-of-Numbers.png)
+
+- theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
+- `0x` and `e` use `keyword.other.unit`
+- other number ex `123` `007B` use `constant.numeric`
+- exp of your `settings.json` ReadMore of [highlighting](https://code.visualstudio.com/docs/getstarted/themes#_editor-syntax-highlighting)
+
+```jsonc
+"editor.tokenColorCustomizations": {
+    "textMateRules": [
+        {
+            "scope": "keyword.other.unit",
+            "settings": {
+                "foreground": "#D19A66"
+            },
+        },
+        {
+            "scope": "constant.numeric",
+            "settings": {
+                "foreground": "#D19A66",
+            }
+        }
+    ]
+}
+```
+
 ## 0.0.6(2022-09-14)
+
+<details>
 
 - add Diag `c302` of `Function name too long, name len > (255 -2) characters.`
 - add Diag `c505` of `param parsed Error -> unknown style`
@@ -37,6 +66,8 @@
  *         ^ Fix: add ahk-doc type color
  */
 ```
+
+</details>
 
 ## 0.0.5(2022-09-05)
 
