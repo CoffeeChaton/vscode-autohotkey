@@ -15,7 +15,7 @@ function commandElement2Md(Element: TCommandElement): vscode.MarkdownString {
         .appendCodeblock(body, 'ahk')
         .appendMarkdown(doc)
         .appendMarkdown('\n')
-        .appendMarkdown(`[(Read Doc)](${link ?? 'https://www.autohotkey.com/docs/commands/index.htm'})`); // FIXME
+        .appendMarkdown(`[(Read Doc)](${link ?? 'https://www.autohotkey.com/docs/commands/index.htm'})`); // TODO
 
     // .appendCodeblock(exp.join('\n'));
     if (exp !== undefined && exp.length > 0) {

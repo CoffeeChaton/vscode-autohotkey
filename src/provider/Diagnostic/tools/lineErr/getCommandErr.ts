@@ -166,4 +166,4 @@ export function getCommandErr(params: TAhkTokenLine): CDiagBase | null {
         : getOtherCommandErr(fistWordUp, lStr, line);
 }
 
-// TODO use hashMap replace this .ts
+// FIXME use hashMap replace this .ts

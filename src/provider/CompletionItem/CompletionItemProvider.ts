@@ -97,6 +97,3 @@ A dynamic variable reference may resolve to an existing global variable if no lo
 Commands that create pseudo-arrays may create all elements as global even if only the first element is declared.
 */
 // TODO https://www.autohotkey.com/docs/KeyList.htm
-
-// TODO #Include list fsPath List && suggest never #include
-// "./path"

@@ -59,9 +59,3 @@ export function NeverUsedVar(
         if (code500List.length >= code500Max) return;
     }
 }
-
-// FIXME: EDiagCodeDA.code501
-// IniRead(Filename, Section, Key, Default = "") {
-//     IniRead, v, %Filename%, %Section%, %Key%, %Default%
-//     Return, v
-// }

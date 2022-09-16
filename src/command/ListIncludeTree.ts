@@ -47,7 +47,7 @@ function getSearchPath(docPath: string, { type, mayPath }: TRawData): string {
             return path.join(path.dirname(docPath), mayPath);
 
         case EInclude.Lib:
-            return path.join(path.dirname(docPath), 'Lib', `${mayPath}.ahk`); // FIXME  EInclude.Lib:
+            return path.join(path.dirname(docPath), 'Lib', `${mayPath}.ahk`);
 
         default:
             enumLog(type);

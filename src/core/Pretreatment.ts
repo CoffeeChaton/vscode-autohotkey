@@ -45,7 +45,7 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
         ignoreLineP = temp.ignoreLineP;
         const displayErr = line > ignoreLine;
         const displayFnErr = line > ignoreLineP;
-        CommentBlock = inCommentBlock(textTrimStart, CommentBlock); /// TODO {CommentBlock,resultLn} | null
+        CommentBlock = inCommentBlock(textTrimStart, CommentBlock); // TODO {CommentBlock,resultLn} | null
         if (CommentBlock) {
             result.push({
                 fistWordUp: '',
@@ -205,4 +205,3 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
 // const cacheMap = new Map<THash, TLineErr | 0>();
 
 // LexicalAnalysisSimple
-// TODO use hash check line Unaffected && -> getChildren

@@ -174,7 +174,7 @@ export const Statement: TStatement = {
     FALSE: {
         keyRawName: 'False',
         body: 'false',
-        doc: 'Contain 1 and 0. They can be used to make a script more readable. For details, see [Boolean Values](https://www.autohotkey.com/docs/Concepts.htm#boolean).',
+        doc: '`0` to represent `false`. They can be used to make a script more readable. For details, see [Boolean Values](https://www.autohotkey.com/docs/Concepts.htm#boolean).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/Variables.htm#misc',
         exp: [
@@ -422,7 +422,7 @@ export const Statement: TStatement = {
     TRUE: {
         keyRawName: 'True',
         body: 'true',
-        doc: 'Contain 1 and 0. They can be used to make a script more readable. For details, see [Boolean Values](https://www.autohotkey.com/docs/Concepts.htm#boolean).',
+        doc: '`1` to represent `true`. They can be used to make a script more readable. For details, see [Boolean Values](https://www.autohotkey.com/docs/Concepts.htm#boolean).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/Variables.htm#misc',
         exp: [

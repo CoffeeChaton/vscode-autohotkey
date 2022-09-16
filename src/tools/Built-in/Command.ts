@@ -193,7 +193,7 @@ export type TCommandElement = {
     keyRawName: string;
     body: string;
     doc: string;
-    // FIXME: use DeepReadonly
+    // TODO: use DeepReadonly
     recommended?: boolean;
     link?: string;
     exp?: string[];
