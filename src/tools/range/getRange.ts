@@ -17,6 +17,12 @@ export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: n
     const searchLineFix = getSearchLineFix(DocStrMap, searchLine, RangeEnd);
     const startDeep = DocStrMap[searchLineFix].deep - 1;
     for (let line = searchLineFix + 1; line <= RangeEnd; line++) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (DocStrMap[line] === undefined) {
+            console.error('🚀 ~ getRange ~ DocStrMap[line - 1].textRaw', DocStrMap[line - 1].textRaw);
+
+            break;
+        }
         if (DocStrMap[line].deep <= startDeep) {
             const col = DocStrMap[line].lStr.lastIndexOf('}');
             return new vscode.Range(defLine, 0, line, col);

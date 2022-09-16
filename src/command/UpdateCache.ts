@@ -14,16 +14,14 @@ export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileDat
     const uriList: vscode.Uri[] | null = getUriList();
     if (uriList === null) return null;
 
-    const waitDocFullData: Thenable<TAhkFileData>[] = [];
+    const FileListData: TAhkFileData[] = [];
     for (const uri of uriList) {
-        waitDocFullData.push(
-            vscode.workspace
-                .openTextDocument(uri)
+        FileListData.push(
+            // eslint-disable-next-line no-await-in-loop
+            await vscode.workspace.openTextDocument(uri)
                 .then((doc: vscode.TextDocument): TAhkFileData => pm.updateDocDef(doc)),
         );
     }
-
-    const FileListData: TAhkFileData[] = await Promise.all(waitDocFullData);
 
     return FileListData;
 }

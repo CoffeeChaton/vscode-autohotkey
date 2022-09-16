@@ -6,6 +6,7 @@
   - [Diagnostic](#diagnostic)
     - [diag121](#diag121)
     - [diag of c506](#diag-of-c506)
+  - [DEV note](#dev-note)
 
 ## Diagnostic
 
@@ -35,3 +36,9 @@ Diag `c506` of not support number formats [number](https://www.autohotkey.com/do
 > - Decimal integers, such as `123`, `00123` or `-1`.
 > - Hexadecimal integers, such as `0x7B`, `0x007B` or `-0x1`.
 > - Decimal floating-point numbers, such as `3.14159`.
+
+## DEV note
+
+<https://www.autohotkey.com/docs/Language.htm#commands-vs-functions>
+
+> In AutoHotkey v1, it is currently not possible to call a command from an expression, or to call a function using the command syntax. However, several commands have a function replacement.

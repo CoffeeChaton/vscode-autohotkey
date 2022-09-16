@@ -41,6 +41,15 @@ export type TMultilineFlag =
         unknown: TPos[];
         L: number; // (
         R: number; // ;
+
+        //
+        blockLineStart: number;
+        blockLineEnd: number;
+        /**
+         * false : end with ')'
+         * true : end with ')' and '#' expression syntax (recommended):
+         */
+        isExpress: boolean;
     }>
     | null;
 

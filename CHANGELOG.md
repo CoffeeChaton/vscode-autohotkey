@@ -4,6 +4,7 @@
 
 > // FIXME: GValMapOldVal
 > // FIXME :501 502 error
+> // TODO: TMultilineFlag
 
 ### 1. fix semantic-highlight of `value name` === `keyword`
 
@@ -47,6 +48,26 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
             }
         }
     ]
+}
+```
+
+### 4. fix bug of getRange()
+
+```ahk
+WM_COMMAND(wParam, lParam)
+{
+    static view := {
+    (Join,
+        65406: "Lines"
+        65407: "Variables"
+        65408: "Hotkeys"
+        65409: "KeyHistory"
+    )}
+    ;^ -----------------------------------------here this ...case
+    if (wParam = 65410) ; Refresh
+        return Refresh()
+    if view[wParam]
+        return SetView(view[wParam])
 }
 ```
 

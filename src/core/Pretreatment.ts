@@ -65,8 +65,15 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
             continue;
         }
 
-        [multiline, multilineFlag] = getMultiline(textTrimStart, multiline, multilineFlag, textRaw);
-        if (multiline !== EMultiline.none) {
+        [multiline, multilineFlag] = getMultiline({
+            textTrimStart,
+            multiline,
+            multilineFlag,
+            textRaw,
+            strArray,
+            line,
+        });
+        if (multiline !== EMultiline.none && multiline !== EMultiline.end) {
             result.push({
                 fistWordUp: '',
                 lStr: '',
@@ -153,15 +160,37 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
                     diagDeep = EDiagDeep.multL;
                 }
             }
+
+            /**
+             *  // case of this ....
+             *
+             * WM_COMMAND(wParam, lParam)
+             * {
+             *    static view := {
+             *    (Join,
+             *        65406: "Lines"
+             *        65407: "Variables"
+             *        65408: "Hotkeys"
+             *        65409: "KeyHistory"
+             *    )}
+             * ;  ^ -----------------------------------------here this ...case
+             *    if (wParam = 65410) ; Refresh
+             *        return Refresh()
+             *    if view[wParam]
+             *        return SetView(view[wParam])
+             * }
+             */
+            const lStrTrimFix = lStrTrim.replace(/^\)\s*/u, '');
+
             // ^}
-            if (lStrTrim.startsWith('}')) {
+            if (lStrTrimFix.startsWith('}')) {
                 detail.push(EDetail.deepSubtract);
                 deep--;
 
                 // eslint-disable-next-line no-tabs
                 // }   } else RunWait "%AhkPath%" %AhkSw% "%wk%",,Hide
 
-                const diffDeep: number | undefined = lStrTrim
+                const diffDeep: number | undefined = lStrTrimFix
                     .replaceAll(/\s/gu, '')
                     .match(/^(\}+)/u)
                     ?.[1].length;
