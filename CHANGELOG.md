@@ -3,19 +3,18 @@
 ## NEXT 0.0.7(2022-09-21)
 
 > // FIXME: GValMapOldVal
-> // FIXME :501 502 error
 > // TODO: TMultilineFlag
 
 ### 1. fix semantic-highlight of `value name` === `keyword`
 
 ![img](image/CHANGELOG/v0-0-7-fix-semantic-highlight.png)
 
-_theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme), example code from [VA.ahk](https://github.com/ahkscript/VistaAudio/blob/master/VA.ahk#L465)_
+> _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme), example code from [VA.ahk](https://github.com/ahkscript/VistaAudio/blob/master/VA.ahk#L465)_
 
 ### 2. add Diag `c506` of not support number formats [number](https://www.autohotkey.com/docs/Concepts.htm#numbers)
 
-> base10 `99` == base2 `0b1100011` == base8 `0o143` , but ahk v1 just support base10 base16
->
+base10 `99` == base2 `0b1100011` == base8 `0o143` , but ahk v1 just support base10 and base16
+
 > AutoHotkey supports these number formats:
 >
 > - Decimal integers, such as `123`, `00123` or `-1`.
@@ -26,30 +25,9 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
 
 ![img](image/CHANGELOG/v0-0-7-highlight-of-Numbers.png)
 
-_theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)_
+> _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)_
 
-- `0x` and `e` use `keyword.other.unit`
-- other number ex `123` `007B` `3.14159` use `constant.numeric.ahk`
-- exp of your `settings.json` ReadMore of [highlighting](https://code.visualstudio.com/docs/getstarted/themes#_editor-syntax-highlighting)
-
-```jsonc
-"editor.tokenColorCustomizations": {
-    "textMateRules": [
-        {
-            "scope": "keyword.other.unit.ahk",
-            "settings": {
-                "foreground": "#E06C75"
-            },
-        },
-        {
-            "scope": "constant.numeric.ahk",
-            "settings": {
-                "foreground": "#D19A66",
-            }
-        }
-    ]
-}
-```
+[Read More](./README.md#better-highlight-of-numbers)
 
 ### 4. fix bug of getRange()
 
@@ -72,6 +50,18 @@ WM_COMMAND(wParam, lParam)
     if view[wParam]
         return SetView(view[wParam])
 } ;<------ range of this line. OK!
+```
+
+### 5. break change , suggest varName of +-5 line
+
+> Editor › Suggest: Locality Bonus </br>
+> Controls whether sorting favors words that appear close to the cursor.
+
+```jsonc
+// settings.json
+{
+    "editor.suggest.localityBonus": true
+}
 ```
 
 ## 0.0.6(2022-09-14)

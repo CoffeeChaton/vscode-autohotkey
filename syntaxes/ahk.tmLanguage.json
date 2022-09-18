@@ -258,21 +258,21 @@
                 {
                     "match": "\\b(?<!\\.)(0[xX])[0-9a-fA-F]+\\b(?!\\.)",
                     "name": "constant.numeric.hexadecimal.ahk",
-                    "captures": { "1": { "name": "keyword.other.unit.hexadecimal.ahk" } }
+                    "captures": { "1": { "name": "keyword.other.unit.numeric.hexadecimal.ahk" } }
                 },
                 {
                     "match": "\\b(?<!\\.)[0-9]+\\b(?!\\.)",
-                    "name": "constant.numeric.decimal.integers.ahk"
+                    "name": "constant.numeric.decimal.ahk"
                 },
                 {
                     "match": "\\b(?<!\\.)[0-9]+\\.[0-9]+(?:([eE])[+-]?[0-9]+)?\\b(?!\\.)",
-                    "name": "constant.numeric.decimal.scientific.ahk",
-                    "captures": { "1": { "name": "keyword.other.unit.scientific.ahk" } }
+                    "name": "constant.numeric.decimal.ahk",
+                    "captures": { "1": { "name": "keyword.other.unit.numeric.decimal.ahk" } }
                 },
                 {
                     "match": "\\s\\.[0-9]+(?:([eE])[+-]?[0-9]+)?\\b(?!\\.)",
-                    "name": "constant.numeric.decimal.scientific.ahk",
-                    "captures": { "1": { "name": "keyword.other.unit.scientific.ahk" } }
+                    "name": "constant.numeric.decimal.ahk",
+                    "captures": { "1": { "name": "keyword.other.unit.numeric.decimal.ahk" } }
                 }
             ]
         }

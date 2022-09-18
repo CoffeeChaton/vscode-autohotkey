@@ -126,25 +126,41 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)_
 
 - `0x` and `e` use `keyword.other.unit`
-- other number ex `123` `007B` `3.14159` use `constant.numeric.ahk`
+- other number ex `123` `007B` `3.14159` use `constant.numeric`
 - exp of your `settings.json` ReadMore of [highlighting](https://code.visualstudio.com/docs/getstarted/themes#_editor-syntax-highlighting)
+- [Source code](./syntaxes/ahk.tmLanguage.json)
 
 ```jsonc
-"editor.tokenColorCustomizations": {
-    "textMateRules": [
-        {
-            "scope": "keyword.other.unit.ahk",
-            "settings": {
-                "foreground": "#E06C75"
+// settings.json
+{
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "keyword.other.unit.numeric.hexadecimal.ahk",
+                "settings": {
+                    "foreground": "#E06C75"
+                }
             },
-        },
-        {
-            "scope": "constant.numeric.ahk",
-            "settings": {
-                "foreground": "#D19A66",
+            {
+                "scope": "keyword.other.unit.numeric.decimal.ahk",
+                "settings": {
+                    "foreground": "#E06C75"
+                }
+            },
+            {
+                "scope": "constant.numeric.hexadecimal.ahk",
+                "settings": {
+                    "foreground": "#D19A66"
+                }
+            },
+            {
+                "scope": "constant.numeric.decimal.ahk",
+                "settings": {
+                    "foreground": "#D19A66"
+                }
             }
-        }
-    ]
+        ]
+    }
 }
 ```
 
