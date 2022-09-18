@@ -4,9 +4,10 @@ import { getCode500Default, getCode502Default, getCode503Default } from '../../.
 import { diagColl } from '../../../core/ProjectManager';
 import type { TAhkTokenLine, TTokenStream } from '../../../globalEnum';
 import { CDiagFn } from '../../../provider/Diagnostic/tools/CDiagFn';
+import type { C502Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C502Class';
+import { EPrefixC502 } from '../../../provider/Diagnostic/tools/CDiagFnLib/C502Class';
 import type { C506Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C506Class';
 import { caseSensitivityVar } from './caseSensitivity';
-import { EPrefixC502 } from './caseSensitivityMagic';
 import { C506DiagNumberStyle } from './otherDiag/C506DiagNumberStyle';
 import { NeverUsedParam, NeverUsedVar } from './param/paramNeverUsed';
 import { paramVariadicErr } from './param/paramVariadicErr';
@@ -21,9 +22,9 @@ type TDaDiagCache = {
 const wm = new WeakMap<CAhkFunc[], TDaDiagCache>();
 
 function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]): readonly CDiagFn[] {
-    const code500Max = getCode500Default();
-    const code502Max = getCode502Default();
-    const code503Max = getCode503Default();
+    const code500Max: number = getCode500Default();
+    const code502Max: number = getCode502Default();
+    const code503Max: number = getCode503Default();
 
     const cache: TDaDiagCache | undefined = wm.get(DAList);
     if (
@@ -38,8 +39,8 @@ function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]):
     // FIXME WTF style
     const code500List: CDiagFn[] = []; // WTF...
     const code501List: CDiagFn[] = [];
-    const code502List: CDiagFn[] = [];
-    const code503List: CDiagFn[] = [];
+    const code502List: C502Class[] = [];
+    const code503List: C502Class[] = [];
     const code504List: CDiagFn[] = [];
     const code505List: CDiagFn[] = [];
     const code506List: C506Class[] = [];

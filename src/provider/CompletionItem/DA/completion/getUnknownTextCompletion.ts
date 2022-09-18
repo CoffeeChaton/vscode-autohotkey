@@ -6,17 +6,20 @@ import { setItemCore } from './setItem';
 export function getUnknownTextCompletion(
     textMap: TTextMapOut,
     funcName: string,
+    kind: vscode.SymbolKind.Function | vscode.SymbolKind.Method,
 ): vscode.CompletionItem[] {
+    const recMap = new Map();
     return [...textMap.values()].map((v: TTextMetaOut): vscode.CompletionItem => {
         const { keyRawName, refRangeList } = v;
         const item: vscode.CompletionItem = setItemCore({
             prefix: EPrefix.unKnownText,
-            recMap: new Map(),
+            recMap,
             keyRawName,
             funcName,
             refRangeList,
             defRangeList: [],
-            kind: vscode.CompletionItemKind.Text,
+            snipKind: vscode.CompletionItemKind.Text,
+            kind,
             commentList: [],
         });
         return item;

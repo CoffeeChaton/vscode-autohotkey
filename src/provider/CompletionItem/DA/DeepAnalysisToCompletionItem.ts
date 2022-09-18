@@ -11,14 +11,20 @@ export function DeepAnalysisToCompletionItem(
     position: vscode.Position,
     inputStr: string,
 ): vscode.CompletionItem[] {
-    const { paramMap, valMap, textMap } = DA;
+    const {
+        paramMap,
+        valMap,
+        textMap,
+        kind,
+    } = DA;
     const { name, range } = DA;
     const recMap: TSnippetRecMap = getRecMap(DA, position, range, inputStr);
 
+    // FIXME Eliminate similar code
     return [
-        ...getParamCompletion(paramMap, name, recMap),
-        ...getValCompletion(valMap, name, recMap),
-        ...getUnknownTextCompletion(textMap, name),
+        ...getParamCompletion(paramMap, name, recMap, kind),
+        ...getValCompletion(valMap, name, recMap, kind),
+        ...getUnknownTextCompletion(textMap, name, kind),
     ];
 }
 

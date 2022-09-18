@@ -3,6 +3,7 @@ import { Diags, DiagsDA, EDiagCodeDA } from '../../diag';
 import { EDiagBase } from '../../Enum/EDiagBase';
 import { CDiagBase } from '../Diagnostic/tools/CDiagBase';
 import { CDiagFn } from '../Diagnostic/tools/CDiagFn';
+import { C502Class } from '../Diagnostic/tools/CDiagFnLib/C502Class';
 import { C506Class } from '../Diagnostic/tools/CDiagFnLib/C506Class';
 import { DependencyAnalysis } from './DependencyAnalysis';
 import { c501ignoreArgNeverUsed } from './tools/c501ignoreArgNeverUsed';
@@ -44,7 +45,7 @@ function codeActionOfDA(uri: vscode.Uri, diag: CDiagFn): vscode.CodeAction[] {
     if (value === EDiagCodeDA.code501) {
         return [CA, c501ignoreArgNeverUsed(uri, range.start)];
     }
-    if (value === EDiagCodeDA.code502) {
+    if (diag instanceof C502Class) {
         return [CA, ...c502c503CodeAction(uri, diag)];
     }
 

@@ -135,7 +135,7 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
         {
             "scope": "keyword.other.unit.ahk",
             "settings": {
-                "foreground": "#D19A66"
+                "foreground": "#E06C75"
             },
         },
         {

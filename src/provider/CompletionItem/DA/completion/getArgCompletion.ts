@@ -8,6 +8,7 @@ export function getParamCompletion(
     paramMap: TParamMapOut,
     funcName: string,
     recMap: TSnippetRecMap,
+    kind: vscode.SymbolKind.Function | vscode.SymbolKind.Method,
 ): vscode.CompletionItem[] {
     return [...paramMap.values()].map((v: TParamMetaOut): vscode.CompletionItem => {
         const {
@@ -25,7 +26,8 @@ export function getParamCompletion(
             funcName,
             refRangeList,
             defRangeList,
-            kind: vscode.CompletionItemKind.Variable,
+            snipKind: vscode.CompletionItemKind.Variable,
+            kind,
             commentList,
         });
     });

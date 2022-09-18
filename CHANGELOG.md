@@ -38,7 +38,7 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
         {
             "scope": "keyword.other.unit.ahk",
             "settings": {
-                "foreground": "#D19A66"
+                "foreground": "#E06C75"
             },
         },
         {
@@ -52,6 +52,9 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
 ```
 
 ### 4. fix bug of getRange()
+
+- Fix the error when `Multi-line` and `getRange()` are used together
+- now the range of `WM_COMMAND()` is normal.
 
 ```ahk
 WM_COMMAND(wParam, lParam)
@@ -68,7 +71,7 @@ WM_COMMAND(wParam, lParam)
         return Refresh()
     if view[wParam]
         return SetView(view[wParam])
-}
+} ;<------ range of this line. OK!
 ```
 
 ## 0.0.6(2022-09-14)

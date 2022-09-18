@@ -42,7 +42,7 @@ export function numberFindWinMsg(wordUp: string): vscode.MarkdownString | null {
     const body = msg.join(fail) + fail;
 
     const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
-        .appendMarkdown(`${number} , did you mean ?`)
+        .appendMarkdown('Did you mean ?')
         .appendCodeblock(body, 'ahk')
         .appendMarkdown('\n\n')
         .appendMarkdown('[Read More of Windows Messages](https://www.autohotkey.com/docs/misc/SendMessageList.htm)');

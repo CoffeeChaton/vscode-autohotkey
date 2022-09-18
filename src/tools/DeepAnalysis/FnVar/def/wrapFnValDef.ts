@@ -1,6 +1,6 @@
 import type * as vscode from 'vscode';
 import type { TValMapIn, TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
-import { newC502 } from './diag/c502';
+import { newC502 } from './c502';
 
 type TGetValue = {
     RawNameNew: string;

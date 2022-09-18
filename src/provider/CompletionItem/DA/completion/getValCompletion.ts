@@ -8,6 +8,7 @@ export function getValCompletion(
     valMap: TValMapOut,
     funcName: string,
     recMap: TSnippetRecMap,
+    kind: vscode.SymbolKind.Function | vscode.SymbolKind.Method,
 ): vscode.CompletionItem[] {
     return [...valMap.values()].map((v: TValMetaOut): vscode.CompletionItem => {
         const {
@@ -25,7 +26,8 @@ export function getValCompletion(
             funcName,
             refRangeList,
             defRangeList,
-            kind: vscode.CompletionItemKind.Variable,
+            snipKind: vscode.CompletionItemKind.Variable,
+            kind,
             commentList,
         });
         return item;

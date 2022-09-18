@@ -62,8 +62,18 @@ export const enum EDiagCode {
     code302 = 302,
     // code501~599 warn user
     code501 = 501, // DEFAULT:
-    code502 = 502, // On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.
-    code503 = 503, // Unknown #Directives
+
+    /**
+     * Label name of `On:` , `Off:`
+     *
+     * On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.
+     */
+    code502 = 502,
+
+    /**
+     * Unknown #Directives
+     */
+    code503 = 503,
     code601 = 601, // 601 is Prototype pollution!
     code700 = 700, // 700 is Command -> func
     // code701 = 701, // 701~799 is Command error

@@ -14,7 +14,7 @@ import type { TTokenStream } from '../../globalEnum';
 import { A_VariablesMDMap } from '../Built-in/A_Variables';
 import { CommandMDMap } from '../Built-in/Command_Tools';
 import { StatementMDMap } from '../Built-in/statement_vsc';
-import { newC502 } from './FnVar/def/diag/c502';
+import { newC502 } from './FnVar/def/c502';
 
 function pushRef(
     oldDef: TParamMetaIn | TValMetaIn,
