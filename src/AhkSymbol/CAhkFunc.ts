@@ -44,6 +44,7 @@ export type TValMapOut = ReadonlyMap<TUpName, TValMetaOut>; // k = valNameUP
 
 export type TTextMetaIn = {
     keyRawName: string;
+    // defRangeList: never[];
     refRangeList: vscode.Range[];
 };
 export type TTextMetaOut = DeepReadonly<TTextMetaIn>;

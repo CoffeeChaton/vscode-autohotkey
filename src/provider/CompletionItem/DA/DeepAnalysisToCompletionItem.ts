@@ -8,7 +8,6 @@ import { getRecMap } from './rec/getRecMap';
 
 export function DeepAnalysisToCompletionItem(
     DA: CAhkFunc,
-    position: vscode.Position,
     inputStr: string,
 ): vscode.CompletionItem[] {
     const {
@@ -17,10 +16,9 @@ export function DeepAnalysisToCompletionItem(
         textMap,
         kind,
     } = DA;
-    const { name, range } = DA;
-    const recMap: TSnippetRecMap = getRecMap(DA, position, range, inputStr);
+    const { name } = DA;
+    const recMap: TSnippetRecMap = getRecMap(DA, inputStr);
 
-    // FIXME Eliminate similar code
     return [
         ...getParamCompletion(paramMap, name, recMap, kind),
         ...getValCompletion(valMap, name, recMap, kind),

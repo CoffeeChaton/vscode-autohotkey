@@ -70,7 +70,7 @@ function CompletionItemCore(
             // ...globalValCompletion(document, position, inputStr),
         );
 
-        if (DA !== null) completions.push(...DeepAnalysisToCompletionItem(DA, position, inputStr));
+        if (DA !== null) completions.push(...DeepAnalysisToCompletionItem(DA, inputStr));
     }
 
     return completions;

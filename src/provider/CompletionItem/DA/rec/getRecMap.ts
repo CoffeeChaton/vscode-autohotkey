@@ -1,22 +1,15 @@
-import type * as vscode from 'vscode';
 import type { CAhkFunc } from '../../../../AhkSymbol/CAhkFunc';
 import type { TSnippetRecMap } from '../ESnippetRecBecause';
-import { setParaRec } from './setParaRec';
-import { getContextRange, setVarRec } from './setVarRec';
+import { setParamRec } from './setParamRec';
+import { setVarRec } from './setVarRec';
 
-export function getRecMap(
-    ed: CAhkFunc,
-    position: vscode.Position,
-    RARange: vscode.Range,
-    inputStr: string,
-): TSnippetRecMap {
+export function getRecMap(ed: CAhkFunc, inputStr: string): TSnippetRecMap {
     const { paramMap, valMap } = ed;
     const Rec: TSnippetRecMap = new Map();
 
-    setParaRec(Rec, paramMap, inputStr);
+    setParamRec(Rec, paramMap, inputStr);
 
-    const contextRange: vscode.Range = getContextRange(position, RARange); // +-5 line
-    setVarRec(Rec, valMap, inputStr, contextRange);
+    setVarRec(Rec, valMap, inputStr);
 
     return Rec;
 }
