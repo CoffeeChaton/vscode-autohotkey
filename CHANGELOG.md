@@ -1,15 +1,19 @@
 # Changelog
 
-## NEXT 0.0.7(2022-09-21)
+## NEXT 0.0.8(2022-09-30)
 
+> // FIXME: goto Def of class
 > // FIXME: GValMapOldVal
-> // TODO: TMultilineFlag
+> // TODO: TMultilineFlag highlight
+
+## 0.0.7(2022-09-19)
 
 ### 1. fix semantic-highlight of `value name` === `keyword`
 
 ![img](image/CHANGELOG/v0-0-7-fix-semantic-highlight.png)
 
-> _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme), example code from [VA.ahk](https://github.com/ahkscript/VistaAudio/blob/master/VA.ahk#L465)_
+> _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
+> example code from [VA.ahk](https://github.com/ahkscript/VistaAudio/blob/master/VA.ahk#L465)_
 
 ### 2. add Diag `c506` of not support number formats [number](https://www.autohotkey.com/docs/Concepts.htm#numbers)
 
@@ -52,7 +56,9 @@ WM_COMMAND(wParam, lParam)
 } ;<------ range of this line. OK!
 ```
 
-### 5. break change , suggest varName of +-5 line
+### 5. break change , remove of `suggest varName of +-5 line`
+
+because of vscode.settings options provided
 
 > Editor › Suggest: Locality Bonus </br>
 > Controls whether sorting favors words that appear close to the cursor.
