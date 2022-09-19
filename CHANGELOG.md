@@ -3,8 +3,9 @@
 ## NEXT 0.0.8(2022-09-30)
 
 - add goto Def of class name
+- add list all references of class name
+- add hover of class name
 
-> // TODO: goto all references of class</br>
 > // FIXME: GValMapOldVal</br>
 > // TODO: TMultilineFlag highlight</br>
 

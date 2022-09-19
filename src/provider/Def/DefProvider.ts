@@ -7,6 +7,7 @@ import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { getClassDef } from './getClassDef';
 import { getValDefInFunc } from './getValDefInFunc';
+import { isPosAtMethodName } from './isPosAtMethodName';
 
 type TFnFindCol = (lineStr: string) => IterableIterator<RegExpMatchArray>;
 
@@ -37,12 +38,6 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
     }
     console.log(`🚀 list all using of "${wordUp}"`, Date.now() - timeStart, 'ms'); // ssd -> 9~11ms (if not gc)
     return List;
-}
-
-function isPosAtMethodName(DA: CAhkFunc | null, position: vscode.Position): boolean {
-    return DA !== null
-        && DA.kind === vscode.SymbolKind.Method
-        && DA.nameRange.contains(position);
 }
 
 // TODO: spilt this func, just need input ahkFunc
@@ -104,7 +99,7 @@ function DefProviderCore(
     const userDefFuncLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
     if (userDefFuncLink !== null) return userDefFuncLink;
 
-    const classDef: vscode.Location[] | null = getClassDef(document, position, wordUp, listAllUsing);
+    const classDef: vscode.Location[] | null = getClassDef(wordUp, listAllUsing);
     if (classDef !== null) return classDef; // class name is variable name, should before function.variable name
 
     const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);

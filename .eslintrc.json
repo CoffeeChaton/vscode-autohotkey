@@ -73,7 +73,6 @@
         "fp",
         "immutable",
         "import",
-        "no-setter-return",
         "promise",
         "security",
         "unicorn"

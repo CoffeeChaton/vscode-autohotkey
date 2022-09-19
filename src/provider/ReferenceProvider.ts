@@ -1,6 +1,7 @@
 import type * as vscode from 'vscode';
 import { isPosAtStr } from '../tools/isPosAtStr';
 import { userDefFunc } from './Def/DefProvider';
+import { getClassDef } from './Def/getClassDef';
 import { getValDefInFunc } from './Def/getValDefInFunc';
 
 function ReferenceProviderCore(
@@ -17,6 +18,9 @@ function ReferenceProviderCore(
     const listAllUsing = true;
     const userDefLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
     if (userDefLink !== null) return userDefLink;
+
+    const classDef: vscode.Location[] | null = getClassDef(wordUp, listAllUsing);
+    if (classDef !== null) return classDef; // class name is variable name, should before function.variable name
 
     const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
     if (valInFunc !== null) return valInFunc;

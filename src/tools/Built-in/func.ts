@@ -97,6 +97,7 @@ export const UPKeyList = [
     //
     'ABS',
     'ACOS',
+    'ARRAY',
     'ASC',
     'ASIN',
     'ATAN',
@@ -193,6 +194,17 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFuncbj> = {
             'OutputDebug % ACos(0.5)     ; 1.047198',
             'OutputDebug % pi            ; 3.141593',
             'OutputDebug % ACos(pi / 6)  ; 1.019727',
+        ],
+    },
+    ARRAY: {
+        group: 'Misc.',
+        keyRawName: 'Array',
+        link: 'https://www.autohotkey.com/docs/Objects.htm#Usage_Simple_Arrays',
+        msg: ' Create an array',
+        insert: 'Array($0)', // (!_tcsicmp(suffix, _T("Array")))
+        exp: [
+            'Array1 := [Item1, Item2, ..., ItemN]',
+            'Array2 := Array(Item1, Item2, ..., ItemN)',
         ],
     },
     ASC: {

@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { pm } from '../../core/ProjectManager';
@@ -12,6 +13,7 @@ import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStr } from '../../tools/isPosAtStr';
 import { DeepAnalysisHover } from './tools/DeepAnalysisHover';
 import { hoverMultiLine } from './tools/hover-multi-line';
+import { hoverClassName } from './tools/hoverClassName';
 import { HoverDirectives } from './tools/HoverDirectives';
 
 function HoverOfFunc(wordUp: string, textRaw: string): vscode.MarkdownString | null {
@@ -63,6 +65,9 @@ function HoverProviderCore(
 
     const wordUp: string = document.getText(range).toUpperCase();
     const textRaw: string = document.lineAt(position).text;
+
+    const ahkClassMd: vscode.MarkdownString | null = hoverClassName(document, position, wordUp);
+    if (ahkClassMd !== null) return new vscode.Hover(ahkClassMd);
 
     if (AhkFunc !== null) {
         const DAmd: vscode.MarkdownString | null = DeepAnalysisHover(AhkFunc, wordUp, position);
