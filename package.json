@@ -2,7 +2,7 @@
     "name": "vscode-autohotkey-neko-help",
     "displayName": "AutoHotkey NekoHelp",
     "description": "AutoHotkey IntelliSense, format, linters, and language support for VS Code, ",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "publisher": "cat1122",
     "engines": {
         "vscode": "^1.71.0"

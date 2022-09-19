@@ -2,9 +2,11 @@
 
 ## NEXT 0.0.8(2022-09-30)
 
-> // FIXME: goto Def of class
-> // FIXME: GValMapOldVal
-> // TODO: TMultilineFlag highlight
+- add goto Def of class name
+
+> // TODO: goto all references of class</br>
+> // FIXME: GValMapOldVal</br>
+> // TODO: TMultilineFlag highlight</br>
 
 ## 0.0.7(2022-09-19)
 

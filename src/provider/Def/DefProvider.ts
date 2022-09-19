@@ -5,6 +5,7 @@ import { pm } from '../../core/ProjectManager';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
+import { getClassDef } from './getClassDef';
 import { getValDefInFunc } from './getValDefInFunc';
 
 type TFnFindCol = (lineStr: string) => IterableIterator<RegExpMatchArray>;
@@ -100,8 +101,11 @@ function DefProviderCore(
 
     const listAllUsing = false;
 
-    const userDefLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
-    if (userDefLink !== null) return userDefLink;
+    const userDefFuncLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
+    if (userDefFuncLink !== null) return userDefFuncLink;
+
+    const classDef: vscode.Location[] | null = getClassDef(document, position, wordUp, listAllUsing);
+    if (classDef !== null) return classDef; // class name is variable name, should before function.variable name
 
     const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
     if (valInFunc !== null) return valInFunc;
