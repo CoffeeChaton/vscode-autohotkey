@@ -4,7 +4,7 @@ import { pm } from '../../core/ProjectManager';
 import type { TAllClassMap } from '../../tools/getAllClass';
 import { getAllClass } from '../../tools/getAllClass';
 
-function getClassRef(timeStart: number, wordUp: string): vscode.Location[] {
+function getClassRef(wordUp: string): vscode.Location[] {
     // eslint-disable-next-line security/detect-non-literal-regexp
     const reg = new RegExp(`\\b(${wordUp})\\b`, 'iug');
     const refFn = (lineStr: string): IterableIterator<RegExpMatchArray> => lineStr.matchAll(reg);
@@ -28,28 +28,23 @@ function getClassRef(timeStart: number, wordUp: string): vscode.Location[] {
             }
         }
     }
-    console.log(`🚀 list all using of class "${wordUp}"`, Date.now() - timeStart, 'ms'); // ssd -> 9~11ms (if not gc)
-    return List;
+
+    return List; // ssd -> 9~11ms (if not gc)
 }
 
 export function getClassDef(
     wordUp: string,
     listAllUsing: boolean,
 ): vscode.Location[] | null {
-    const timeStart: number = Date.now();
-
     const classMap: TAllClassMap = getAllClass();
     const classDef: CAhkClass | undefined = classMap.get(wordUp);
     if (classDef === undefined) {
         return null;
     }
 
-    if (!listAllUsing) {
-        console.log(`🚀 goto def of class "${wordUp}"`, Date.now() - timeStart, 'ms'); // ssd -> 0~1ms
-        return [new vscode.Location(classDef.uri, classDef.selectionRange)];
-    }
-
-    return getClassRef(timeStart, wordUp);
+    return listAllUsing
+        ? getClassRef(wordUp)
+        : [new vscode.Location(classDef.uri, classDef.selectionRange)]; // ssd -> 0~1 ms
 }
 
 // new CoI.__Tabs(tabs)

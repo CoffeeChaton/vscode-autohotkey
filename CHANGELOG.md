@@ -6,8 +6,8 @@
 - add list all references of class name
 - add hover of class name
 
-> // FIXME: GValMapOldVal</br>
-> // TODO: TMultilineFlag highlight</br>
+> // TODO: GValMapOldVal</br>
+> // TODO: `"name": "keyword.multiline.ahk"` with highlight `style1` `style2` </br>
 
 ## 0.0.7(2022-09-19)
 
