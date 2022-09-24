@@ -14,6 +14,7 @@ import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { isPosAtStrNext } from '../../tools/isPosAtStr';
 import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
+import { globalValCompletion } from './global/globalValCompletion';
 import { IncludeFsPath } from './Include_fsPath/Include_fsPath';
 import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
 import { getStartWithStr } from './util';
@@ -52,6 +53,7 @@ function CompletionItemCore(
         ...ahkSend(document, position), // '{'
         ...Completion2Directives(lStr, position),
         ...getSnippetCommand(lStr, position),
+        ...globalValCompletion(DocStrMap, position),
     ];
 
     if (PartStr !== null) {

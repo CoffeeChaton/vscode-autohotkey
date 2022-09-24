@@ -15,6 +15,7 @@ import { DeepAnalysisHover } from './tools/DeepAnalysisHover';
 import { hoverMultiLine } from './tools/hover-multi-line';
 import { hoverClassName } from './tools/hoverClassName';
 import { HoverDirectives } from './tools/HoverDirectives';
+import { hoverGlobalVar } from './tools/hoverGlobalVar';
 
 function HoverOfFunc(wordUp: string, textRaw: string): vscode.MarkdownString | null {
     // eslint-disable-next-line security/detect-non-literal-regexp
@@ -83,6 +84,7 @@ function HoverProviderCore(
         getHoverCommand2,
         getHoverStatement,
         hoverAVar,
+        hoverGlobalVar,
         hover2winMsgMd,
         numberFindWinMsg,
     ];

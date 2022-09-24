@@ -48,3 +48,30 @@ if (   !(pfunc = AddFunc(func_name, aFuncNameLength, true, left))   ) // L27:
 ```c++
 ResultType Script::AddLine(ActionTypeType aActionType, LPTSTR aArg[], int aArgc, LPTSTR aArgMap[])
 ```
+
+```c++
+if (g_Warn_Unreachable)
+switch (line->mActionType)
+{
+case ACT_RETURN:
+case ACT_BREAK:
+case ACT_CONTINUE:
+case ACT_GOTO:
+case ACT_THROW:
+case ACT_EXIT:
+```
+
+```c++
+Line *Script::PreparseBlocks(Line *aStartingLine, ExecUntilMode aMode, Line *aParentLine, const AttributeType aLoopType)
+
+PreparseError(_T("Expected Case/Default"));
+```
+
+```c++
+ case ACT_ASSIGN:
+  // Note: This line's args have not yet been dereferenced in this case (i.e. ExpandArgs() hasn't been
+  // called).  The below function will handle that if it is needed.
+  return PerformAssign();  // It will report any errors for us.
+
+ case ACT_ASSIGNEXPR:
+```

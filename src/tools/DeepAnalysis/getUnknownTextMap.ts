@@ -9,7 +9,7 @@ import type {
     TValMapIn,
     TValMetaIn,
 } from '../../AhkSymbol/CAhkFunc';
-import type { TGValMap } from '../../core/ParserTools/ahkGlobalDef';
+import type { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
 import { A_VariablesMDMap } from '../Built-in/A_Variables';
 import { CommandMDMap } from '../Built-in/Command_Tools';
@@ -70,17 +70,22 @@ export function getUnknownTextMap(
                 continue;
             }
 
-            // FIXME: GValMapOldVal
-            // const GValMapOldVal: TGlobalVal | undefined = GValMap.get(wordUp);
-            // if (GValMapOldVal !== undefined) {
-            //     if (
-            //         !GValMapOldVal.defRangeList.some((r: vscode.Range): boolean => r.contains(range))
-            //         && !GValMapOldVal.refRangeList.some((r: vscode.Range): boolean => r.contains(range))
-            //     ) {
-            //         GValMapOldVal.refRangeList.push(range);
-            //     }
-            //     continue;
-            // } // keep before valMap && paramMap
+            const GValMapOldVal: TGlobalVal | undefined = GValMap.get(wordUp);
+            if (GValMapOldVal !== undefined) {
+                const startPosOfGlobal: vscode.Position = new vscode.Position(line, character);
+                if (
+                    !GValMapOldVal.defRangeList.some((r: vscode.Range): boolean => r.contains(startPosOfGlobal))
+                    && !GValMapOldVal.refRangeList.some((r: vscode.Range): boolean => r.contains(startPosOfGlobal))
+                ) {
+                    GValMapOldVal.refRangeList.push(
+                        new vscode.Range(
+                            startPosOfGlobal,
+                            new vscode.Position(line, character + wordUp.length),
+                        ),
+                    );
+                }
+                continue;
+            } // keep before valMap && paramMap
 
             const oldVal: TValMetaIn | undefined = valMap.get(wordUp);
             if (oldVal !== undefined) {

@@ -13,7 +13,8 @@ export type TGlobalVal = {
     defRangeList: vscode.Range[];
     refRangeList: vscode.Range[];
     rawName: string; // -> GVar
-    // c502 list ?
+    // TODO c502 list ? until were?
+    // TODO add ahk-doc ?
 };
 
 type TValUpName = string;
@@ -77,16 +78,38 @@ function refGlobal(gValMapBySelf: TGValMapPrivacy, strF: string, line: number): 
 export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
     const GValMap: TGValMapPrivacy = new Map<TValUpName, TGlobalVal>();
     let lastLineIsGlobal = false;
-    for (const { lStr, line, cll } of DocStrMap) {
-        if (lastLineIsGlobal && cll === 1) {
+    let globalBlockDeep = 0;
+
+    for (
+        const {
+            lStr,
+            line,
+            cll,
+            fistWordUp,
+            deep,
+        } of DocStrMap
+    ) {
+        if (fistWordUp === 'GLOBAL') {
             lastLineIsGlobal = true;
+
+            if (lStr.trim().toUpperCase() === 'GLOBAL') {
+                globalBlockDeep = deep;
+                continue; // FIXME GLOBAL && nextLine
+            }
+        } else if (lastLineIsGlobal && cll === 1) {
+            lastLineIsGlobal = true;
+        } else if (globalBlockDeep > 0) {
+            // wtf...
+            if (deep > globalBlockDeep) {
+                lastLineIsGlobal = false;
+                globalBlockDeep = 0;
+                continue;
+            } else {
+                lastLineIsGlobal = true;
+            }
         } else {
             lastLineIsGlobal = false;
             continue;
-        }
-
-        if (lStr.trim().toUpperCase() === 'GLOBAL') {
-            continue; // FIXME GLOBAL && nextLine
         }
 
         const strF: string = lStr.replace(/^\s*\bglobal\b[,\s]+/ui, replacerSpace);
@@ -97,7 +120,9 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
             refGlobal(GValMap, strF, line);
         }
     }
-
+    // for (const [k, v] of GValMap) {
+    //     console.log('🚀 ~ ahkGlobalMain ~  [k, v]', { k, v });
+    // }
     return GValMap;
 }
 

@@ -1,13 +1,16 @@
 # Changelog
 
-## NEXT 0.0.8(2022-09-30)
+## NEXT 0.0.9(2022-09-30)
 
-- add goto Def of class name
-- add list all references of class name
-- add hover of class name
-
-> // TODO: GValMapOldVal</br>
 > // TODO: `"name": "keyword.multiline.ahk"` with highlight `style1` `style2` </br>
+
+## 0.0.8(2022-09-25)
+
+- add Completion of Global variables
+- add goto Def of class name
+- add hover of class name
+- add hover of Global variables
+- add list all references of ahk-class via `shift+F12`
 
 ## 0.0.7(2022-09-19)
 
