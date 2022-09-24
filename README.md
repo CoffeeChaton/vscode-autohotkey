@@ -51,6 +51,7 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 3. Peek Definition (via `Alt+F12`)
 4. Go to References (via `shift+F12`)
    ![ListAllReferences](image/ListAllReferences.gif)
+5. Go to Symbol (via `ctrl+T`)
 
 ## Hover
 

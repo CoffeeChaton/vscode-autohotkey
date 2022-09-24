@@ -35,7 +35,7 @@ function WorkspaceSymbolCore(): vscode.SymbolInformation[] {
 }
 
 /**
- * ctrl + T, list All Symbol
+ * ctrl + T, go to Symbol in Workspace
  */
 export const WorkspaceSymbolProvider: vscode.WorkspaceSymbolProvider = {
     provideWorkspaceSymbols(
