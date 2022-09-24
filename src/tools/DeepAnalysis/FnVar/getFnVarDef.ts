@@ -2,6 +2,7 @@ import type { TParamMapIn, TValMapIn, TValMetaIn } from '../../../AhkSymbol/CAhk
 import type { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../../globalEnum';
 import { forLoop } from './def/forLoop';
+import { OutputVarCommandBase } from './def/OutputVarCommandBase';
 import { varSetCapacityFunc } from './def/varSetCapacityFunc';
 import { walrusOperator } from './def/walrusOperator';
 import type { TGetFnDefNeed } from './TFnVarDef';
@@ -14,7 +15,14 @@ export function getFnVarDef(
     GValMap: TGValMap,
 ): TValMapIn {
     const valMap: TValMapIn = new Map<string, TValMetaIn>();
-    for (const { lStr, line, lineComment } of DocStrMap) {
+    for (
+        const {
+            lStr,
+            line,
+            lineComment,
+            fistWordUp,
+        } of DocStrMap
+    ) {
         if (line <= startLine) continue; // in arg Range
         if (line > endLine) break;
 
@@ -28,11 +36,12 @@ export function getFnVarDef(
             paramMap,
             GValMap,
             lStrTrimLen,
-            comment: lineComment,
+            lineComment,
         };
         walrusOperator(need); // :=
         varSetCapacityFunc(need); // VarSetCapacity(varName) or NumGet(varName) or NumGet(&varName)
         forLoop(need); // for var1 , var2 in
+        OutputVarCommandBase(need, fistWordUp);
     }
 
     return valMap;

@@ -10,7 +10,7 @@ function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {
         valMap,
         paramMap,
         GValMap,
-        comment,
+        lineComment,
     } = arg;
 
     const UpName: string = RawName.toUpperCase();
@@ -25,7 +25,7 @@ function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {
         RawNameNew: RawName,
         valMap,
         defRange,
-        lineComment: comment,
+        lineComment,
     });
     valMap.set(UpName, value);
 }

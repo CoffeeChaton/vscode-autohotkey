@@ -2,6 +2,8 @@
 
 ## NEXT 0.0.9(2022-09-30)
 
+- fix : OutputVar Command set variables
+
 > // TODO: `"name": "keyword.multiline.ahk"` with highlight `style1` `style2` </br>
 
 ## 0.0.8(2022-09-25)

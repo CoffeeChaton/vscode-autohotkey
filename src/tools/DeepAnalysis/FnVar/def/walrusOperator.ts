@@ -11,7 +11,7 @@ export function walrusOperator({
     paramMap,
     GValMap,
     lStrTrimLen,
-    comment,
+    lineComment,
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line no-magic-numbers
     if (lStrTrimLen < 4) return; // A:= ----> len 3
@@ -25,7 +25,7 @@ export function walrusOperator({
         const UpName: string = RawName.toUpperCase();
         if (paramMap.has(UpName) || GValMap.has(UpName)) continue;
 
-        const value: TValMetaIn = getValMeta(line, character, RawName, valMap, comment);
+        const value: TValMetaIn = getValMeta(line, character, RawName, valMap, lineComment);
         valMap.set(UpName, value);
     }
 }
