@@ -4,8 +4,12 @@ import { getCode500Default, getCode502Default, getCode503Default } from '../../.
 import { diagColl } from '../../../core/ProjectManager';
 import type { TAhkTokenLine, TTokenStream } from '../../../globalEnum';
 import { CDiagFn } from '../../../provider/Diagnostic/tools/CDiagFn';
+import type { C500Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C500Class';
+import type { C501Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C501Class';
 import type { C502Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C502Class';
 import { EPrefixC502 } from '../../../provider/Diagnostic/tools/CDiagFnLib/C502Class';
+import type { C504Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C504Class';
+import type { C505Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C505Class';
 import type { C506Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C506Class';
 import { caseSensitivityVar } from './caseSensitivity';
 import { C506DiagNumberStyle } from './otherDiag/C506DiagNumberStyle';
@@ -38,12 +42,12 @@ function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]):
     }
 
     // FIXME WTF style
-    const code500List: CDiagFn[] = []; // WTF...
-    const code501List: CDiagFn[] = [];
+    const code500List: C500Class[] = [];
+    const code501List: C501Class[] = [];
     const code502List: C502Class[] = [];
-    const code503List: C502Class[] = [];
-    const code504List: CDiagFn[] = [];
-    const code505List: CDiagFn[] = [];
+    const code503List: C502Class[] = []; // 502 .eq. 503
+    const code504List: C504Class[] = [];
+    const code505List: C505Class[] = [];
     const code506List: C506Class[] = [];
 
     for (const DA of DAList) {
@@ -55,6 +59,10 @@ function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]):
         paramVariadicErr(paramMap, code504List);
         c505ErrParamParsedError(paramMap, code505List);
         C506DiagNumberStyle(textMap, code506List);
+        // if (paramMap.size > 12) {
+        //     console.log('🚀 ~ diagDAFileCore ~  DA.name', DA.selectionRangeText);
+        // }
+        // https://stackoverflow.com/questions/12684985/why-doesnt-autohotkey-support-default-parameters-in-the-middle-of-the-parameter
     }
 
     const DADiagList: readonly CDiagFn[] = [

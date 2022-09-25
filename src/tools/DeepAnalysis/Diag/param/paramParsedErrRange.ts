@@ -1,20 +1,10 @@
-import * as vscode from 'vscode';
 import type { TParamMapOut } from '../../../../AhkSymbol/CAhkFunc';
-import { DiagsDA, EDiagCodeDA } from '../../../../diag';
-import { CDiagFn } from '../../../../provider/Diagnostic/tools/CDiagFn';
+import { C505Class } from '../../../../provider/Diagnostic/tools/CDiagFnLib/C505Class';
 
-export function c505ErrParamParsedError(paramMap: TParamMapOut, code505List: CDiagFn[]): void {
+export function c505ErrParamParsedError(paramMap: TParamMapOut, code505List: C505Class[]): void {
     for (const { parsedErrRange } of paramMap.values()) {
         if (parsedErrRange !== null) {
-            code505List.push(
-                new CDiagFn({
-                    value: EDiagCodeDA.code505,
-                    range: parsedErrRange,
-                    severity: vscode.DiagnosticSeverity.Error,
-                    tags: [],
-                    message: DiagsDA[EDiagCodeDA.code505].msg,
-                }),
-            );
+            code505List.push(new C505Class(parsedErrRange));
         }
     }
 }

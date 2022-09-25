@@ -1,11 +1,10 @@
-import * as vscode from 'vscode';
 import type { TParamMapOut, TValMapOut } from '../../../../AhkSymbol/CAhkFunc';
-import { DiagsDA, EDiagCodeDA } from '../../../../diag';
-import { CDiagFn } from '../../../../provider/Diagnostic/tools/CDiagFn';
+import { C500Class } from '../../../../provider/Diagnostic/tools/CDiagFnLib/C500Class';
+import { C501Class } from '../../../../provider/Diagnostic/tools/CDiagFnLib/C501Class';
 
 export function NeverUsedParam(
     paramMap: TParamMapOut,
-    code501List: CDiagFn[],
+    code501List: C501Class[],
     displayErrList: readonly boolean[],
 ): void {
     for (const v of paramMap.values()) {
@@ -13,21 +12,13 @@ export function NeverUsedParam(
         if (v.keyRawName.startsWith('_')) continue;
         if (!displayErrList[v.defRangeList[0].start.line]) continue;
 
-        code501List.push(
-            new CDiagFn({
-                value: EDiagCodeDA.code501,
-                range: v.defRangeList[0],
-                severity: vscode.DiagnosticSeverity.Warning,
-                tags: [vscode.DiagnosticTag.Unnecessary],
-                message: DiagsDA[EDiagCodeDA.code501].msg,
-            }),
-        );
+        code501List.push(new C501Class(v.defRangeList));
     }
 }
 
 export function NeverUsedVar(
     valMap: TValMapOut,
-    code500List: CDiagFn[],
+    code500List: C500Class[],
     code500Max: number,
     displayErrList: readonly boolean[],
 ): void {
@@ -47,15 +38,7 @@ export function NeverUsedVar(
             continue;
         }
 
-        code500List.push(
-            new CDiagFn({
-                value: EDiagCodeDA.code500,
-                range: v.defRangeList[0],
-                severity: vscode.DiagnosticSeverity.Warning,
-                tags: [vscode.DiagnosticTag.Unnecessary],
-                message: DiagsDA[EDiagCodeDA.code500].msg,
-            }),
-        );
+        code500List.push(new C500Class(v.defRangeList));
         if (code500List.length >= code500Max) return;
     }
 }
