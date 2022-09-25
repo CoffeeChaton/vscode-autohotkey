@@ -2,6 +2,11 @@
 /* eslint-disable no-magic-numbers */
 import type { DeepReadonly } from './globalEnum';
 
+// TODO Literal commas and percent signs must be escaped (e.g. `%)"
+// ScriptError(_T("Global variables must not be declared in this function."), aLineText);
+// ScriptError(_T("Local variables must not be declared in this function."), aLineText);
+// "Too many params, param_start > 10
+// Duplicate parameter.
 export const enum EDiagCodeDA {
     // 501~599 Analysis Func or Method
     code500 = 500, // var is assigned but never used.
@@ -11,6 +16,7 @@ export const enum EDiagCodeDA {
     code504 = 504, // Variadic param * >1
     code505 = 505, // param parsed Error -> unknown style
     code506 = 506, // base8 base2 diag of not support number formats
+    // code511 = 511, //  paramMapSize > 10
 }
 
 export type TDiagsDA = {

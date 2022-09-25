@@ -2,7 +2,8 @@
 
 ## NEXT 0.0.9(2022-09-30)
 
-- fix : OutputVar Command set variables
+- add OutputVar Command set variables exp `FileGetShortcut, LinkFile , OutTarget, OutDir ...`, can semantic-highlight of `Out`.
+- add diag `c505` err of param unknown name style .
 
 > // TODO: `"name": "keyword.multiline.ahk"` with highlight `style1` `style2` </br>
 

@@ -10,6 +10,7 @@ import type { C506Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C5
 import { caseSensitivityVar } from './caseSensitivity';
 import { C506DiagNumberStyle } from './otherDiag/C506DiagNumberStyle';
 import { NeverUsedParam, NeverUsedVar } from './param/paramNeverUsed';
+import { c505ErrParamParsedError } from './param/paramParsedErrRange';
 import { paramVariadicErr } from './param/paramVariadicErr';
 
 type TDaDiagCache = {
@@ -52,7 +53,7 @@ function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]):
         caseSensitivityVar(EPrefixC502.var, valMap, code502List, code502Max, displayErrList); // var case sensitivity
         caseSensitivityVar(EPrefixC502.param, paramMap, code503List, code503Max, displayErrList);
         paramVariadicErr(paramMap, code504List);
-        paramVariadicErr(paramMap, code505List);
+        c505ErrParamParsedError(paramMap, code505List);
         C506DiagNumberStyle(textMap, code506List);
     }
 

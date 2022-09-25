@@ -3,7 +3,7 @@ import type { TParamMapOut } from '../../../../AhkSymbol/CAhkFunc';
 import { DiagsDA, EDiagCodeDA } from '../../../../diag';
 import { CDiagFn } from '../../../../provider/Diagnostic/tools/CDiagFn';
 
-export function paramVariadicErr(paramMap: TParamMapOut, code505List: CDiagFn[]): void {
+export function c505ErrParamParsedError(paramMap: TParamMapOut, code505List: CDiagFn[]): void {
     for (const { parsedErrRange } of paramMap.values()) {
         if (parsedErrRange !== null) {
             code505List.push(
