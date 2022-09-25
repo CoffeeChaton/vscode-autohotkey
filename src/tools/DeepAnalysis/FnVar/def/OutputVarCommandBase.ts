@@ -4,25 +4,6 @@ import type { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
 /* cSpell:disable */
 
-const oneByOneReRuler = [
-    'FILEGETSHORTCUT',
-    'IMAGESEARCH',
-    'MOUSEGETPOS',
-    'PIXELSEARCH',
-    'RUN',
-    'SPLITPATH',
-    'STRINGGETPOS',
-    'STRINGLEFT',
-    'STRINGLEN',
-    'STRINGLOWER',
-    'STRINGMID',
-    'STRINGREPLACE',
-    'STRINGRIGHT',
-    'STRINGTRIMLEFT',
-    'STRINGTRIMRIGHT',
-    'STRINGUPPER',
-];
-
 const OutputVarCommandMap: ReadonlyMap<string, RegExp> = new Map([
     // usually case exp: EnvGet, v, %EnvVarName%
     'CONTROLGET',
@@ -51,6 +32,16 @@ const OutputVarCommandMap: ReadonlyMap<string, RegExp> = new Map([
     'SOUNDGET',
     'SOUNDGETWAVEVOLUME',
     'STATUSBARGETTEXT',
+    'STRINGGETPOS',
+    'STRINGLEFT',
+    'STRINGLEN',
+    'STRINGLOWER',
+    'STRINGMID',
+    'STRINGREPLACE',
+    'STRINGRIGHT',
+    'STRINGTRIMLEFT',
+    'STRINGTRIMRIGHT',
+    'STRINGUPPER',
     'SYSGET',
     'TRANSFORM',
     'WINGET',
@@ -81,6 +72,7 @@ export function OutputVarCommandBase(arg: TGetFnDefNeed, fistWordUp: string): nu
         lineComment,
     } = arg;
 
+    // TODO remove ...regexp
     const lStrFix = lStr.replace(regexp, replacerSpace);
 
     const v: RegExpMatchArray | null = lStrFix.match(/\b(\w+)\b/ui);

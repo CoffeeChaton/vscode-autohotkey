@@ -10,11 +10,10 @@
  * @param aBuf as LPCTSTR
  * @param aDelimiter as TCHAR
  * @param aStartIndex as Int
- * @param aLiteralMap as LPCTSTR
  * @returns Returns the index of the next delimiter, If not found, returns the length of aBuf.
  * @from https://github.com/Lexikos/AutoHotkey_L/blob/master/source/util.cpp#L2788
  */
-export function FindExprDelim(aBuf: string, aDelimiter: string, aStartIndex: number, aLiteralMap: string): number {
+export function FindExprDelim(aBuf: string, aDelimiter: string, aStartIndex: number): number {
     let close_char = '';
 
     for (let mark = aStartIndex; mark <= aBuf.length; ++mark) {
@@ -49,7 +48,7 @@ export function FindExprDelim(aBuf: string, aDelimiter: string, aStartIndex: num
                 if (aDelimiter !== ':') continue; // The following isn't needed in this case.
                 // Scan for the corresponding ':' (or some other closing symbol if that's missing)
                 // so that it won't terminate the sub-expression.
-                mark = FindExprDelim(aBuf, ':', mark + 1, aLiteralMap);
+                mark = FindExprDelim(aBuf, ':', mark + 1);
                 //    if (!aBuf[mark]) {
                 if (mark > aBuf.length) { // i.e. it isn't safe to do ++mark.
                     return mark;
@@ -70,7 +69,7 @@ export function FindExprDelim(aBuf: string, aDelimiter: string, aStartIndex: num
                 continue;
         }
         // Since above didn't "return" or "continue":
-        mark = FindExprDelim(aBuf, close_char, mark + 1, aLiteralMap);
+        mark = FindExprDelim(aBuf, close_char, mark + 1);
         if (mark > aBuf.length) { // i.e. it isn't safe to do ++mark.
             return mark;
         } // See case '\0' for comments.

@@ -3,6 +3,7 @@ import type { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../../globalEnum';
 import { forLoop } from './def/forLoop';
 import { OutputVarCommandBase } from './def/OutputVarCommandBase';
+import { OutputVarCommandPlus } from './def/OutputVarCommandPlus';
 import { varSetCapacityFunc } from './def/varSetCapacityFunc';
 import { walrusOperator } from './def/walrusOperator';
 import type { TGetFnDefNeed } from './TFnVarDef';
@@ -42,6 +43,7 @@ export function getFnVarDef(
         varSetCapacityFunc(need); // VarSetCapacity(varName) or NumGet(varName) or NumGet(&varName)
         forLoop(need); // for var1 , var2 in
         OutputVarCommandBase(need, fistWordUp);
+        OutputVarCommandPlus(need, fistWordUp);
     }
 
     return valMap;
