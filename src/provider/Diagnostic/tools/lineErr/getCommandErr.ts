@@ -1,11 +1,9 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import type { TAhkTokenLine } from '../../../../globalEnum';
-import { Code700Map } from '../../../../tools/Built-in/Command_Tools';
+import { CommandErrMap } from '../../../../tools/Built-in/Command_Tools';
 import { StatementMDMap } from '../../../../tools/Built-in/statement_vsc';
 import { CDiagBase } from '../CDiagBase';
-import type { TLineDiag } from './lineErrTools';
-import { EDiagLine } from './lineErrTools';
 
 function getLoopErr(lStr: string, line: number): CDiagBase | null {
     const matchLoop: RegExpMatchArray | null = lStr.match(/^\s*Loop\b[\s,]+(\w+)/iu);
@@ -49,18 +47,15 @@ function getLoopErr(lStr: string, line: number): CDiagBase | null {
     });
 }
 
-function getCommandErrFnReplace(fistWord: string, lStr: string, line: number): CDiagBase | EDiagLine.miss {
+function getCommandErrFnReplace(fistWordUp: string, lStr: string, line: number): CDiagBase {
     // // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
-    if (Code700Map.has(fistWord)) {
-        const colL = lStr.search(/\S/u);
-        return new CDiagBase({
-            value: EDiagCode.code700,
-            range: new vscode.Range(line, colL, line, colL + fistWord.length),
-            severity: vscode.DiagnosticSeverity.Warning,
-            tags: [vscode.DiagnosticTag.Deprecated],
-        });
-    }
-    return EDiagLine.miss;
+    const colL: number = lStr.search(/\S/u);
+    return new CDiagBase({
+        value: EDiagCode.code700,
+        range: new vscode.Range(line, colL, line, colL + fistWordUp.length),
+        severity: vscode.DiagnosticSeverity.Warning,
+        tags: [vscode.DiagnosticTag.Deprecated],
+    });
 }
 
 function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): CDiagBase | null {
@@ -81,7 +76,7 @@ function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): CDi
         },
         {
             reg: /^If(?:Equal|NotEqual|Less|LessOrEqual|Greater|GreaterOrEqual)$/ui,
-            code: EDiagCode.code806,
+            code: EDiagCode.code806, // FIXME
         },
         {
             reg: /^SplashImage|Progress$/ui,
@@ -104,6 +99,8 @@ function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): CDi
             code: EDiagCode.code824,
         },
         // Reg,,,... i need to Count colon  ??
+        // New: RegRead, OutputVar, KeyName , ValueName
+        // Old: RegRead, OutputVar, RootKey, SubKey , ValueName
     ];
 
     const find: TCommandErr | undefined = headMatch.find((v) => v.reg.test(fistWordUp));
@@ -133,9 +130,8 @@ export function getCommandErr(params: TAhkTokenLine): CDiagBase | null {
         return getLoopErr(lStr, line);
     }
 
-    // _commandHeadStatistics(fistWord);
-    const fnReplaceErr: TLineDiag = getCommandErrFnReplace(fistWordUp, lStr, line);
-    if (fnReplaceErr !== EDiagLine.miss) return fnReplaceErr;
+    const diag: EDiagCode | undefined = CommandErrMap.get(fistWordUp);
+    if (diag === EDiagCode.code700) return getCommandErrFnReplace(fistWordUp, lStr, line);
 
     const OtherCommandErr: CDiagBase | null = getOtherCommandErr(fistWordUp, lStr, line);
     if (OtherCommandErr !== null) return OtherCommandErr;
