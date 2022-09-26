@@ -2,6 +2,8 @@
 
 ## NEXT 0.0.9(2022-09-30)
 
+- FIXME: `reg: /^If(?:Equal|NotEqual|Less|LessOrEqual|Greater|GreaterOrEqual)$/ui,`
+- fix: hover of msgbox() has document error
 - add OutputVar Command set variables exp `FileGetShortcut, LinkFile , OutTarget, OutDir ...`, can semantic-highlight of `Out`.
 - add diag `c505` err of param unknown name style .
 

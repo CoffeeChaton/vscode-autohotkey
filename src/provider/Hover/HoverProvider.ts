@@ -21,7 +21,7 @@ function HoverOfFunc(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.MarkdownString | null {
-    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`#%])\b\w+\b\(/u);
+    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`#%])\b\w+\b(?=\()/u);
     if (range === undefined) return null;
 
     const wordUp: string = document.getText(range).toUpperCase();
@@ -65,7 +65,7 @@ function HoverProviderCore(
     const haveFunc: vscode.MarkdownString | null = HoverOfFunc(document, position);
     if (haveFunc !== null) return new vscode.Hover(haveFunc);
 
-    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b[^(]/u);
+    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b(?!\()/u);
     if (range === undefined) return null;
 
     if (isPosAtStrNext(textRaw, lStr, position)) return null;
