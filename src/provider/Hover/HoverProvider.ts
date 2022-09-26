@@ -10,25 +10,28 @@ import { hover2winMsgMd } from '../../tools/Built-in/Windows_Messages_Tools';
 import { numberFindWinMsg } from '../../tools/Built-in/Windows_MessagesRe_Tools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
-import { isPosAtStr } from '../../tools/isPosAtStr';
+import { isPosAtStrNext } from '../../tools/isPosAtStr';
 import { DeepAnalysisHover } from './tools/DeepAnalysisHover';
 import { hoverMultiLine } from './tools/hover-multi-line';
 import { hoverClassName } from './tools/hoverClassName';
 import { HoverDirectives } from './tools/HoverDirectives';
 import { hoverGlobalVar } from './tools/hoverGlobalVar';
 
-function HoverOfFunc(wordUp: string, textRaw: string): vscode.MarkdownString | null {
-    // eslint-disable-next-line security/detect-non-literal-regexp
-    const testOfFunc = new RegExp(`(?<![.%\`#])(${wordUp})\\(`, 'iu'); // not search class.Method()
-    if (!testOfFunc.test(textRaw)) return null;
+function HoverOfFunc(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+): vscode.MarkdownString | null {
+    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`#%])\b\w+\b\(/u);
+    if (range === undefined) return null;
 
+    const wordUp: string = document.getText(range).toUpperCase();
     const DA: CAhkFunc | null = getFuncWithName(wordUp);
     if (DA !== null) return DA.md;
 
     const BuiltInFuncMD: vscode.MarkdownString | undefined = BuiltInFuncMDMap.get(wordUp);
     if (BuiltInFuncMD !== undefined) return BuiltInFuncMD;
 
-    return null;
+    return null; // not userDefFunc of BiFunc
 }
 
 function HoverProviderCore(
@@ -42,7 +45,7 @@ function HoverProviderCore(
     if (mdOfMultiLine !== null) return new vscode.Hover(mdOfMultiLine);
 
     // pos at Comment range...
-    const { lStr, fistWordUp } = DocStrMap[position.line];
+    const { lStr, fistWordUp, textRaw } = DocStrMap[position.line];
     if (position.character > lStr.length) return null;
 
     // ex: #Warn
@@ -59,13 +62,15 @@ function HoverProviderCore(
     const CommandMd: vscode.MarkdownString | undefined = getHoverCommand(fistWordUp, position, lStr);
     if (CommandMd !== undefined) return new vscode.Hover(CommandMd);
 
-    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/u);
+    const haveFunc: vscode.MarkdownString | null = HoverOfFunc(document, position);
+    if (haveFunc !== null) return new vscode.Hover(haveFunc);
+
+    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b[^(]/u);
     if (range === undefined) return null;
 
-    if (isPosAtStr(document, position)) return null;
+    if (isPosAtStrNext(textRaw, lStr, position)) return null;
 
     const wordUp: string = document.getText(range).toUpperCase();
-    const textRaw: string = document.lineAt(position).text;
 
     const ahkClassMd: vscode.MarkdownString | null = hoverClassName(document, position, wordUp);
     if (ahkClassMd !== null) return new vscode.Hover(ahkClassMd);
@@ -75,10 +80,7 @@ function HoverProviderCore(
         if (DAmd !== null) return new vscode.Hover(DAmd);
     }
 
-    const haveFunc: vscode.MarkdownString | null = HoverOfFunc(wordUp, textRaw);
-    if (haveFunc !== null) return new vscode.Hover(haveFunc);
-
-    //
+    // FIXME ... please
     type TFn = (wordUp: string) => vscode.MarkdownString | null | undefined;
     const fnList: TFn[] = [
         getHoverCommand2,
