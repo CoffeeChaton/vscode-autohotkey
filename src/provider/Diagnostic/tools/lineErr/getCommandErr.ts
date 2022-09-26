@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import type { TAhkTokenLine } from '../../../../globalEnum';
+import { Code700Map } from '../../../../tools/Built-in/Command_Tools';
+import { StatementMDMap } from '../../../../tools/Built-in/statement_vsc';
 import { CDiagBase } from '../CDiagBase';
 import type { TLineDiag } from './lineErrTools';
 import { EDiagLine } from './lineErrTools';
@@ -48,14 +50,8 @@ function getLoopErr(lStr: string, line: number): CDiagBase | null {
 }
 
 function getCommandErrFnReplace(fistWord: string, lStr: string, line: number): CDiagBase | EDiagLine.miss {
-    // eslint-disable-next-line no-magic-numbers
-    if (fistWord.length < 3) return EDiagLine.miss;
-    // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
-    if (
-        (/^(?:File(Append|GetAttrib|Read)|GetKeyState|If(?:Not)?(?:Exist|InString)|IfWin(?:Not)?(?:Active|Exist))$/ui)
-            .test(fistWord)
-        || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/ui).test(fistWord)
-    ) {
+    // // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
+    if (Code700Map.has(fistWord)) {
         const colL = lStr.search(/\S/u);
         return new CDiagBase({
             value: EDiagCode.code700,
@@ -130,40 +126,25 @@ export function getCommandErr(params: TAhkTokenLine): CDiagBase | null {
         line,
     } = params;
 
-    if (fistWordUp.length === 0) return null; // miss
+    if (fistWordUp === '') return null; // miss
+    if (StatementMDMap.has(fistWordUp)) return null;
 
     if (fistWordUp === 'LOOP') {
         return getLoopErr(lStr, line);
     }
 
-    if (
-        [
-            'SWITCH',
-            'CASE',
-            'DEFAULT',
-            'IF',
-            'WHILE',
-            'ELSE',
-            'RETURN',
-            'BREAK',
-            'FOR',
-            'SLEEP',
-            'STATIC',
-            'GLOBAL',
-            // SEND ?
-            // FOR ?
-            // MOUSEMOVE ?
-            // don't add Loop
-        ].includes(fistWordUp)
-    ) {
-        return null; // OK
-    }
-
     // _commandHeadStatistics(fistWord);
     const fnReplaceErr: TLineDiag = getCommandErrFnReplace(fistWordUp, lStr, line);
-    return fnReplaceErr !== EDiagLine.miss
-        ? fnReplaceErr
-        : getOtherCommandErr(fistWordUp, lStr, line);
+    if (fnReplaceErr !== EDiagLine.miss) return fnReplaceErr;
+
+    const OtherCommandErr: CDiagBase | null = getOtherCommandErr(fistWordUp, lStr, line);
+    if (OtherCommandErr !== null) return OtherCommandErr;
+
+    // if (!CommandMDMap.has(fistWordUp)) {
+    //     console.log('🚀 ~ Pretreatment ~ fistWordUp', fistWordUp);
+    // }
+
+    return null;
 }
 
 // FIXME use hashMap replace this .ts

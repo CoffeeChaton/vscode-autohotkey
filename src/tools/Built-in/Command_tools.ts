@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { EDiagCode } from '../../diag';
 import type { TCommandElement } from './Command';
 import { LineCommand } from './Command';
 import { CSnippetCommand } from './CSnippetCommand';
@@ -30,17 +31,23 @@ function commandElement2Md(Element: TCommandElement): vscode.MarkdownString {
 
 type TCommandMDMap = ReadonlyMap<string, vscode.MarkdownString>;
 export type TSnippetCommand = readonly CSnippetCommand[];
+type TCode700Map = ReadonlySet<string>;
 
-export const [snippetCommand, CommandMDMap] = ((): [TSnippetCommand, TCommandMDMap] => {
+export const [snippetCommand, CommandMDMap, Code700Map] = ((): [TSnippetCommand, TCommandMDMap, TCode700Map] => {
     const map1 = new Map<string, vscode.MarkdownString>();
     const tempList: CSnippetCommand[] = [];
+    const tempSet = new Set<string>();
     for (const [k, v] of Object.entries(LineCommand)) {
         const md: vscode.MarkdownString = commandElement2Md(v);
         map1.set(k, md);
 
         tempList.push(new CSnippetCommand(k, v, md));
+        const { diag } = v;
+        if (diag !== undefined && diag === EDiagCode.code700) {
+            tempSet.add(k);
+        }
     }
-    return [tempList, map1];
+    return [tempList, map1, tempSet];
 })();
 
 export function getHoverCommand(

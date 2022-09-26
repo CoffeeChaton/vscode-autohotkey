@@ -3,6 +3,8 @@
 /* eslint-disable max-lines */
 /* eslint-disable no-template-curly-in-string */
 
+import { EDiagCode } from '../../diag';
+
 // TODO snippets/ahk.snippets.json
 const CommandList = [
     'AUTOTRIM',
@@ -37,6 +39,7 @@ const CommandList = [
     'ENVUPDATE',
     'EXIT',
     'EXITAPP',
+    'FILEAPPEND',
     'FILECOPY',
     'FILECOPYDIR',
     'FILECREATEDIR',
@@ -73,7 +76,15 @@ const CommandList = [
     'GUICONTROL',
     'GUICONTROLGET',
     'HOTKEY',
+    'IFEXIST',
+    'IFINSTRING',
     'IFMSGBOX',
+    'IFNOTEXIST',
+    'IFNOTINSTRING',
+    'IFWINACTIVE',
+    'IFWINEXIST',
+    'IFWINNOTACTIVE',
+    'IFWINNOTEXIST',
     'IMAGESEARCH',
     'INIDELETE',
     'INIREAD',
@@ -149,6 +160,7 @@ const CommandList = [
     'STRINGMID',
     'STRINGREPLACE',
     'STRINGRIGHT',
+    'STRINGSPLIT',
     'STRINGTRIMLEFT',
     'STRINGTRIMRIGHT',
     'STRINGUPPER',
@@ -197,6 +209,7 @@ export type TCommandElement = {
     recommended?: boolean;
     link?: string;
     exp?: string[];
+    diag?: EDiagCode;
 };
 
 type TLineCommand = {
@@ -773,6 +786,26 @@ export const LineCommand: TLineCommand = {
             '#x::ExitApp  ; Win+X',
         ],
     },
+    FILEAPPEND: {
+        keyRawName: 'FileAppend',
+        body: 'FileAppend [, ${1:Text}, ${2:Filename}, ${3:Encoding}]',
+        doc: 'Writes text to the end of a file (first creating the file, if necessary).',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/FileAppend.htm',
+        exp: [
+            'FileAppend , Text, Filename, Encoding',
+            '',
+            'Var := "~~ your var~~"',
+            'FileAppend,',
+            '(',
+            'A line of text.',
+            'By default, the hard carriage return (Enter) between the previous line and this one will be written to the file.',
+            '    This line is indented with a tab; by default, that tab will also be written to the file.',
+            'Variable references such as %Var% are expanded by default.',
+            '), D:\\My File.txt',
+        ],
+        diag: EDiagCode.code700,
+    },
     FILECOPY: {
         keyRawName: 'FileCopy',
         body: 'FileCopy, ${1:Source}, ${2:Dest} [, ${3|0,1|}]',
@@ -901,7 +934,7 @@ export const LineCommand: TLineCommand = {
             '- C = COMPRESSED\n',
             '- T = TEMPORARY\n',
         ].join('\n'),
-        recommended: true,
+        recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/FileGetAttrib.htm',
         exp: [
             'FileGetAttrib, OutputVar , Filename',
@@ -913,6 +946,7 @@ export const LineCommand: TLineCommand = {
             'if InStr(Attributes, "H")',
             '    MsgBox The file is hidden.',
         ],
+        diag: EDiagCode.code700,
     },
     FILEGETSHORTCUT: {
         keyRawName: 'FileGetShortcut',
@@ -997,10 +1031,11 @@ export const LineCommand: TLineCommand = {
         keyRawName: 'FileRead',
         body: 'FileRead, ${1:OutputVar}, ${2:Filename}',
         doc: 'Reads a file\'s contents into a [variable](https://www.autohotkey.com/docs/Variables.htm).',
-        recommended: true,
+        recommended: false,
         exp: [
             'FileRead, OutputVar, % "C:\\My Documents\\My File.txt"',
         ],
+        diag: EDiagCode.code700,
     },
     FILEREADLINE: {
         keyRawName: 'FileReadLine',
@@ -1060,6 +1095,7 @@ export const LineCommand: TLineCommand = {
             ' ',
             'KeyIsDown := GetKeyState(KeyName , Mode)',
         ],
+        diag: EDiagCode.code700,
     },
     GLOBAL: {
         keyRawName: 'global',
@@ -1146,10 +1182,114 @@ export const LineCommand: TLineCommand = {
         body: 'Hotkey, ${1:KeyName [}, ${2:Label}, ${3:Options]}',
         doc: 'Creates, modifies, enables, or disables a hotkey while the script is running.',
     },
+    IFEXIST: {
+        keyRawName: 'IfExist',
+        body: 'IfExist, ${1:FilePattern}',
+        doc: 'Checks for the existence of a file or folder.',
+        recommended: false,
+        diag: EDiagCode.code700,
+        link: 'https://www.autohotkey.com/docs/commands/IfExist.htm',
+        exp: [
+            'IfExist, FilePattern',
+            'IfNotExist, FilePattern',
+            '',
+            ';exp',
+            'IfExist, D:\\Docs\\*.txt',
+            '    MsgBox, At least one .txt file exists.',
+        ],
+    },
+    IFINSTRING: {
+        keyRawName: 'IfInString',
+        body: 'IfInString, ${1:Var}, ${2:SearchString}',
+        doc: 'Checks if a [variable](https://www.autohotkey.com/docs/Variables.htm) contains the specified string.',
+        recommended: false,
+        diag: EDiagCode.code700,
+        link: 'https://www.autohotkey.com/docs/commands/IfInString.htm',
+        exp: [
+            'IfInString, Var, SearchString',
+            'IfNotInString, Var, SearchString',
+        ],
+    },
     IFMSGBOX: {
         keyRawName: 'IfMsgBox',
         body: 'IfMsgBox, ${1:Yes|No|OK|Cancel|Abort|Ignore|Retry|Timeout}',
         doc: 'Checks which button was pushed by the user during the most recent MsgBox command.',
+    },
+    IFNOTEXIST: {
+        keyRawName: 'IfNotExist',
+        body: 'IfNotExist, ${1:FilePattern}',
+        doc: 'Checks for the existence of a file or folder.',
+        recommended: false,
+        diag: EDiagCode.code700,
+        link: 'https://www.autohotkey.com/docs/commands/IfExist.htm',
+        exp: [
+            'IfExist, FilePattern',
+            'IfNotExist, FilePattern',
+            '',
+            ';exp',
+            'IfExist, D:\\Docs\\*.txt',
+            '    MsgBox, At least one .txt file exists.',
+        ],
+    },
+    IFNOTINSTRING: {
+        keyRawName: 'IfNotInString',
+        body: 'IfNotInString, ${1:Var}, ${2:SearchString}',
+        doc: 'Checks if a [variable](https://www.autohotkey.com/docs/Variables.htm) contains the specified string.',
+        recommended: false,
+        diag: EDiagCode.code700,
+        link: 'https://www.autohotkey.com/docs/commands/IfInString.htm',
+        exp: [
+            'IfInString, Var, SearchString',
+            'IfNotInString, Var, SearchString',
+        ],
+    },
+    IFWINACTIVE: {
+        keyRawName: 'IfWinActive',
+        body: 'IfWinActive [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
+        doc: 'Checks if the specified window exists and is currently active (foremost).',
+        recommended: false,
+        diag: EDiagCode.code700,
+        link: 'https://www.autohotkey.com/docs/commands/IfWinActive.htm',
+        exp: [
+            'IfWinActive [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+            'IfWinNotActive [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
+    },
+    IFWINEXIST: {
+        keyRawName: 'IfWinExist',
+        body: 'IfWinExist [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
+        doc: 'Checks if the specified window exists.',
+        recommended: false,
+        diag: EDiagCode.code700,
+        link: 'https://www.autohotkey.com/docs/commands/IfWinExist.htm',
+        exp: [
+            'IfWinExist [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+            'IfWinNotExist [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
+    },
+    IFWINNOTACTIVE: {
+        keyRawName: 'IfWinNotActive',
+        body: 'IfWinNotActive [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
+        doc: 'Checks if the specified window exists and is currently active (foremost).',
+        recommended: false,
+        diag: EDiagCode.code700,
+        link: 'https://www.autohotkey.com/docs/commands/IfWinActive.htm',
+        exp: [
+            'IfWinActive [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+            'IfWinNotActive [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
+    },
+    IFWINNOTEXIST: {
+        keyRawName: 'IfWinNotExist',
+        body: 'IfWinNotExist  [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
+        doc: 'Checks if the specified window exists.',
+        recommended: false,
+        diag: EDiagCode.code700,
+        link: 'https://www.autohotkey.com/docs/commands/IfWinExist.htm',
+        exp: [
+            'IfWinExist [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+            'IfWinNotExist [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     IMAGESEARCH: {
         keyRawName: 'ImageSearch',
@@ -1565,6 +1705,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringGetPos.htm',
         exp: ['StringGetPos, OutputVar, InputVar, SearchText [, Occurrence, Offset]'],
+        diag: EDiagCode.code700,
     },
     STRINGLEFT: {
         keyRawName: 'StringLeft',
@@ -1573,6 +1714,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
         exp: ['StringLeft, OutputVar, InputVar, Count'],
+        diag: EDiagCode.code700,
     },
     STRINGLEN: {
         keyRawName: 'StringLen',
@@ -1581,6 +1723,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLen.htm',
         exp: ['StringLen, OutputVar, InputVar'],
+        diag: EDiagCode.code700,
     },
     STRINGLOWER: {
         keyRawName: 'StringLower',
@@ -1589,6 +1732,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLower.htm',
         exp: ['StringLower, OutputVar, InputVar , T'],
+        diag: EDiagCode.code700,
     },
     STRINGMID: {
         keyRawName: 'StringMid',
@@ -1597,6 +1741,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringMid.htm',
         exp: ['StringMid, OutputVar, InputVar, StartChar , Count, L'],
+        diag: EDiagCode.code700,
     },
     STRINGREPLACE: {
         keyRawName: 'StringReplace',
@@ -1605,6 +1750,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringReplace.htm',
         exp: ['StringReplace, OutputVar, InputVar, SearchText , ReplaceText, ReplaceAll'],
+        diag: EDiagCode.code700,
     },
     STRINGRIGHT: {
         keyRawName: 'StringRight',
@@ -1613,6 +1759,16 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
         exp: ['StringRight, OutputVar, InputVar, Count'],
+        diag: EDiagCode.code700,
+    },
+    STRINGSPLIT: {
+        keyRawName: 'StringSplit',
+        body: 'StringSplit, ${1:OutputArray}, ${2:InputVar} [, ${3:Delimiters}, ${4:OmitChars}]',
+        doc: 'Retrieves a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
+        exp: ['StringSplit, OutputArray, InputVar [, Delimiters, OmitChars]'],
+        diag: EDiagCode.code700,
     },
     STRINGTRIMLEFT: {
         keyRawName: 'StringTrimLeft',
@@ -1621,6 +1777,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringTrimLeft.htm',
         exp: ['StringTrimLeft, OutputVar, InputVar, Count'],
+        diag: EDiagCode.code700,
     },
     STRINGTRIMRIGHT: {
         keyRawName: 'StringTrimRight',
@@ -1629,6 +1786,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringTrimLeft.htm',
         exp: ['StringTrimRight, OutputVar, InputVar, Count'],
+        diag: EDiagCode.code700,
     },
     STRINGUPPER: {
         keyRawName: 'StringUpper',
@@ -1637,6 +1795,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLower.htm',
         exp: ['StringUpper, OutputVar, InputVar , T'],
+        diag: EDiagCode.code700,
     },
     SUSPEND: {
         keyRawName: 'Suspend',
