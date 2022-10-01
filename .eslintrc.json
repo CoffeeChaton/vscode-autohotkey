@@ -81,6 +81,7 @@
     ],
     "root": true,
     "rules": {
+        "unicorn/switch-case-braces": ["error", "avoid"],
         "comma-dangle": "off",
         "@typescript-eslint/comma-dangle": "off",
         "@typescript-eslint/adjacent-overload-signatures": "warn",
@@ -316,13 +317,7 @@
         "no-unmodified-loop-condition": "error",
         "no-unneeded-ternary": "error",
         "no-unused-expressions": "error",
-        "no-unused-vars": [
-            "warn",
-            {
-                "argsIgnorePattern": "^_",
-                "varsIgnorePattern": "^_"
-            }
-        ],
+        "no-unused-vars": "off",
         "no-useless-backreference": "error",
         "no-useless-concat": "warn",
         "no-useless-return": "error",
