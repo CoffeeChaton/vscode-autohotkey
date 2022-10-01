@@ -13,9 +13,6 @@ export function getLineErr(DocStrMap: TTokenStream): CDiagBase[] {
     for (const token of DocStrMap) {
         if (!token.displayErr) continue;
 
-        const lStrTrim: string = token.lStr.trim();
-        if (lStrTrim === '') continue;
-
         for (const fn of fnList) {
             const ed: CDiagBase | null = fn(token);
             if (ed !== null) errList.push(ed);
