@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.10(2022-10-01)
+
+- fix: Completion of class [Completion of class](image/Completion_class.gif)
+
 ## 0.0.9(2022-10-01)
 
 - add diag `107` [note](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag107)

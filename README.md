@@ -116,6 +116,9 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 3. Completion of `#Include`
    ![Completion of Include](image/Completion_Include.gif)
 
+4. Completion of `class`
+   ![Completion of class](image/Completion_class.gif)
+
 ## ListAllFunctions
 
 ![ListAllFunctions](image/ListAllFunctions.gif)
