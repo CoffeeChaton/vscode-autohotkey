@@ -1,47 +1,71 @@
+/* cSpell:disable */
 import * as vscode from 'vscode';
 import { CAhkLabel } from '../../../../AhkSymbol/CAhkLine';
 import type { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../../diag';
 import { CDiagBase } from '../CDiagBase';
 
+type TDiagMsg = {
+    code: EDiagCode;
+    // severity: vscode.DiagnosticSeverity.Warning,
+    tags: vscode.DiagnosticTag[];
+};
+
+const DiagLabelErrMap: ReadonlyMap<string, TDiagMsg> = new Map([
+    ['ONCLIPBOARDCHANGE:', {
+        code: EDiagCode.code811,
+        tags: [vscode.DiagnosticTag.Deprecated],
+    }],
+    ['DEFAULT:', {
+        code: EDiagCode.code501,
+        tags: [],
+    }],
+    ['ON:', {
+        code: EDiagCode.code502,
+        tags: [],
+    }],
+    ['OFF:', {
+        code: EDiagCode.code502,
+        tags: [],
+    }],
+    ['TOGGLE:', {
+        code: EDiagCode.code502,
+        tags: [],
+    }],
+    ['SHIFTALTTAB:', {
+        code: EDiagCode.code502,
+        tags: [],
+    }],
+    ['ALTTAB:', {
+        code: EDiagCode.code502,
+        tags: [],
+    }],
+    ['ALTTABANDMENU:', {
+        code: EDiagCode.code502,
+        tags: [],
+    }],
+    ['ALTTABMENUDISMISS:', {
+        code: EDiagCode.code502,
+        tags: [],
+    }],
+]);
+
 export function getLabelErr(ch: TAhkSymbol): CDiagBase[] {
     if (!(ch instanceof CAhkLabel)) return [];
 
-    const labName: string = ch.name.toUpperCase();
+    /**
+     * exp : `LABEL:` or `THIS_IS_A_LABEL:`
+     */
+    const labUpName: string = ch.name.toUpperCase();
 
-    type TLabelErr = {
-        reg: RegExp;
-        code: EDiagCode;
-        tags: vscode.DiagnosticTag[];
-    };
-    const rulerMatch: TLabelErr[] = [
-        {
-            reg: /^DEFAULT:$/ui,
-            code: EDiagCode.code501,
-            tags: [],
-        },
-        {
-            reg: /^OnClipboardChange:$/ui,
-            code: EDiagCode.code811,
-            tags: [vscode.DiagnosticTag.Deprecated],
-        },
-        {
-            // if ((/^On|Off|Toggle|ShiftAltTab|AltTab|AltTabAndMenu|AltTabMenuDismiss$/ui).test(labName)) {
-            reg: /^(On|Off|Toggle|ShiftAltTab|AltTab(AndMenu|MenuDismiss)?):$/ui,
-            code: EDiagCode.code502,
-            tags: [],
-        },
+    const v2: TDiagMsg | undefined = DiagLabelErrMap.get(labUpName);
+    if (v2 === undefined) return [];
+    return [
+        new CDiagBase({
+            value: v2.code,
+            range: ch.selectionRange,
+            severity: vscode.DiagnosticSeverity.Warning,
+            tags: v2.tags,
+        }),
     ];
-
-    const v2: TLabelErr | undefined = rulerMatch.find((v) => v.reg.test(labName));
-    return (v2 !== undefined)
-        ? [
-            new CDiagBase({
-                value: v2.code,
-                range: ch.selectionRange,
-                severity: vscode.DiagnosticSeverity.Warning,
-                tags: v2.tags,
-            }),
-        ]
-        : [];
 }
