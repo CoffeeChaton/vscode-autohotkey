@@ -118,7 +118,7 @@ export type TDiags = {
 export const Diags: DeepReadonly<TDiags> = {
     107: {
         msg: 'assign warning',
-        path: 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag107',
     },
     110: {
         msg: 'Default : not find ',

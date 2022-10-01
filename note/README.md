@@ -4,11 +4,27 @@
 
 - [neko-help-note](#neko-help-note)
   - [Diagnostic](#diagnostic)
+    - [diag107](#diag107)
     - [diag121](#diag121)
     - [diag of c506](#diag-of-c506)
   - [DEV note](#dev-note)
 
 ## Diagnostic
+
+### diag107
+
+    ```js
+    107: {
+        msg: 'assign warning',
+        path: 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
+    },
+    ```
+
+![diag107](./img/diag107.png)
+
+> Can you guess the correct result? Without auto diag.
+
+try it [diag107](./ahk/diag107.ahk)
 
 ### diag121
 
@@ -41,4 +57,4 @@ Diag `c506` of not support number formats [number](https://www.autohotkey.com/do
 
 <https://www.autohotkey.com/docs/Language.htm#commands-vs-functions>
 
-> In AutoHotkey v1, it is currently not possible to call a command from an expression, or to call a function using the command syntax. However, several commands have a function replacement.
+> In AutoHotkey v1, it is currently not possible to call a command from an expression, or to call a function using the command syntax.
