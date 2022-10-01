@@ -26,11 +26,6 @@ export function getLabelErr(ch: TAhkSymbol): CDiagBase[] {
             tags: [vscode.DiagnosticTag.Deprecated],
         },
         {
-            reg: /^OnExit:$/ui,
-            code: EDiagCode.code812,
-            tags: [vscode.DiagnosticTag.Deprecated],
-        },
-        {
             // if ((/^On|Off|Toggle|ShiftAltTab|AltTab|AltTabAndMenu|AltTabMenuDismiss$/ui).test(labName)) {
             reg: /^(On|Off|Toggle|ShiftAltTab|AltTab(AndMenu|MenuDismiss)?):$/ui,
             code: EDiagCode.code502,

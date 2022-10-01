@@ -54,33 +54,6 @@
 // ObjSetCapacity()
 // These functions are equivalent to built-in methods of the Object type. It is usually recommended to use the corresponding method instead.
 
-// TODO CommandList
-// EnvDiv
-// EnvMult
-// FileAppend
-// IfEqual
-// IfExist
-// IfGreater
-// IfGreaterOrEqual
-// IfInString
-// IfLess
-// IfLessOrEqual
-// IfMsgBox
-// IfNotEqual
-// IfNotExist
-// IfNotInString
-// IfWinActive
-// IfWinExist
-// IfWinNotActive
-// IfWinNotExist
-// ListHotkeys
-// ListVars
-// Progress
-// SetEnv
-// SplashImage
-// SplashTextOff
-// StringSplit
-
 const TODO = {
     Clipboard: {
         body: 'Clipboard',
@@ -97,16 +70,7 @@ const TODO = {
         group: 'Misc.',
         uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
     },
-    False: {
-        body: 'False',
-        group: 'Misc.',
-        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
-    },
-    True: {
-        body: 'True',
-        group: 'Misc.',
-        uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
-    },
 } as const;
 
 // ${3|Seconds,Minutes,Hours,Days|}
+// Var *Script::FindOrAddVar(LPTSTR aVarName, size_t aVarNameLength, int aScope)

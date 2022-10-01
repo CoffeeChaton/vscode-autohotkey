@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import type { TAhkTokenLine } from '../../../../globalEnum';
 import { CommandErrMap } from '../../../../tools/Built-in/Command_Tools';
-import { StatementMDMap } from '../../../../tools/Built-in/statement_vsc';
 import { CDiagBase } from '../CDiagBase';
 
 function getLoopErr(lStr: string, line: number): CDiagBase | null {
@@ -47,75 +46,6 @@ function getLoopErr(lStr: string, line: number): CDiagBase | null {
     });
 }
 
-function getCommandErrFnReplace(fistWordUp: string, lStr: string, line: number): CDiagBase {
-    // // Command -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
-    const colL: number = lStr.search(/\S/u);
-    return new CDiagBase({
-        value: EDiagCode.code700,
-        range: new vscode.Range(line, colL, line, colL + fistWordUp.length),
-        severity: vscode.DiagnosticSeverity.Warning,
-        tags: [vscode.DiagnosticTag.Deprecated],
-    });
-}
-
-function getOtherCommandErr(fistWordUp: string, lStr: string, line: number): CDiagBase | null {
-    // eslint-disable-next-line no-magic-numbers
-    if (fistWordUp.length < 5) return null; // miss
-    type TCommandErr = {
-        reg: RegExp;
-        code: EDiagCode;
-    };
-    const headMatch: TCommandErr[] = [
-        {
-            reg: /^EnvDiv$/ui,
-            code: EDiagCode.code803,
-        },
-        {
-            reg: /^EnvMult$/ui,
-            code: EDiagCode.code804,
-        },
-        {
-            reg: /^If(?:Equal|NotEqual|Less|LessOrEqual|Greater|GreaterOrEqual)$/ui,
-            code: EDiagCode.code806, // FIXME
-        },
-        {
-            reg: /^SplashImage|Progress$/ui,
-            code: EDiagCode.code813,
-        },
-        {
-            reg: /^SetEnv$/ui,
-            code: EDiagCode.code814,
-        },
-        {
-            reg: /^SetFormat$/ui,
-            code: EDiagCode.code815,
-        },
-        {
-            reg: /^SplashText(?:On|Off)$/ui,
-            code: EDiagCode.code816,
-        },
-        {
-            reg: /^Transform$/ui,
-            code: EDiagCode.code824,
-        },
-        // Reg,,,... i need to Count colon  ??
-        // New: RegRead, OutputVar, KeyName , ValueName
-        // Old: RegRead, OutputVar, RootKey, SubKey , ValueName
-    ];
-
-    const find: TCommandErr | undefined = headMatch.find((v) => v.reg.test(fistWordUp));
-    if (find === undefined) return null; // miss
-
-    const colL: number = lStr.search(/\S/ui);
-
-    return new CDiagBase({
-        value: find.code,
-        range: new vscode.Range(line, colL, line, colL + fistWordUp.length),
-        severity: vscode.DiagnosticSeverity.Warning,
-        tags: [vscode.DiagnosticTag.Deprecated],
-    });
-}
-
 export function getCommandErr(params: TAhkTokenLine): CDiagBase | null {
     const {
         lStr,
@@ -124,23 +54,23 @@ export function getCommandErr(params: TAhkTokenLine): CDiagBase | null {
     } = params;
 
     if (fistWordUp === '') return null; // miss
-    if (StatementMDMap.has(fistWordUp)) return null;
-
     if (fistWordUp === 'LOOP') {
         return getLoopErr(lStr, line);
     }
 
     const diag: EDiagCode | undefined = CommandErrMap.get(fistWordUp);
-    if (diag === EDiagCode.code700) return getCommandErrFnReplace(fistWordUp, lStr, line);
-
-    const OtherCommandErr: CDiagBase | null = getOtherCommandErr(fistWordUp, lStr, line);
-    if (OtherCommandErr !== null) return OtherCommandErr;
-
+    if (diag !== undefined) {
+        const colL: number = lStr.search(/\S/ui);
+        return new CDiagBase({
+            value: diag,
+            range: new vscode.Range(line, colL, line, colL + fistWordUp.length),
+            severity: vscode.DiagnosticSeverity.Warning,
+            tags: [vscode.DiagnosticTag.Deprecated],
+        });
+    }
+    // if (StatementMDMap.has(fistWordUp)) return null;
     // if (!CommandMDMap.has(fistWordUp)) {
     //     console.log('🚀 ~ Pretreatment ~ fistWordUp', fistWordUp);
     // }
-
     return null;
 }
-
-// FIXME use hashMap replace this .ts

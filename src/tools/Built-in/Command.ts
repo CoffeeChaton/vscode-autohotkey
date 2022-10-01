@@ -5,14 +5,19 @@
 
 import { EDiagCode } from '../../diag';
 
-// TODO snippets/ahk.snippets.json
+// TODO: if g_act have ... rm statement
+
 type TCommandKeyList =
     | 'AUTOTRIM'
     | 'BETWEEN'
     | 'BLOCKINPUT'
+    | 'BREAK'
+    | 'CASE'
+    | 'CATCH'
     | 'CLASS'
     | 'CLICK'
     | 'CLIPWAIT'
+    | 'CONTINUE'
     | 'CONTROL'
     | 'CONTROLCLICK'
     | 'CONTROLFOCUS'
@@ -32,6 +37,7 @@ type TCommandKeyList =
     | 'DRIVEGET'
     | 'DRIVESPACEFREE'
     | 'EDIT'
+    | 'ELSE'
     | 'ENVADD'
     | 'ENVDIV'
     | 'ENVGET'
@@ -65,6 +71,8 @@ type TCommandKeyList =
     | 'FILESELECTFOLDER'
     | 'FILESETATTRIB'
     | 'FILESETTIME'
+    | 'FINALLY'
+    | 'FOR'
     | 'FORMATTIME'
     | 'GETKEYSTATE'
     | 'GLOBAL'
@@ -78,9 +86,15 @@ type TCommandKeyList =
     | 'GUICONTROL'
     | 'GUICONTROLGET'
     | 'HOTKEY'
+    | 'IFEQUAL'
     | 'IFEXIST'
+    | 'IFGREATER'
+    | 'IFGREATEROREQUAL'
     | 'IFINSTRING'
+    | 'IFLESS'
+    | 'IFLESSOREQUAL'
     | 'IFMSGBOX'
+    | 'IFNOTEQUAL'
     | 'IFNOTEXIST'
     | 'IFNOTINSTRING'
     | 'IFWINACTIVE'
@@ -99,22 +113,27 @@ type TCommandKeyList =
     | 'LISTLINES'
     | 'LISTVARS'
     | 'LOCAL'
+    | 'LOOP'
     | 'MENU'
     | 'MOUSECLICK'
     | 'MOUSECLICKDRAG'
     | 'MOUSEGETPOS'
     | 'MOUSEMOVE'
     | 'MSGBOX'
+    | 'ONEXIT'
     | 'OUTPUTDEBUG'
     | 'PAUSE'
     | 'PIXELGETCOLOR'
     | 'PIXELSEARCH'
     | 'POSTMESSAGE'
     | 'PROCESS'
+    | 'PROGRESS'
     | 'RANDOM'
     | 'REGDELETE'
     | 'REGREAD'
     | 'REGWRITE'
+    | 'RELOAD'
+    | 'RETURN'
     | 'RUN'
     | 'RUNAS'
     | 'RUNWAIT'
@@ -130,6 +149,7 @@ type TCommandKeyList =
     | 'SETCAPSLOCKSTATE'
     | 'SETCONTROLDELAY'
     | 'SETDEFAULTMOUSESPEED'
+    | 'SETENV'
     | 'SETFORMAT'
     | 'SETKEYDELAY'
     | 'SETMOUSEDELAY'
@@ -150,6 +170,9 @@ type TCommandKeyList =
     | 'SOUNDPLAY'
     | 'SOUNDSET'
     | 'SOUNDSETWAVEVOLUME'
+    | 'SPLASHIMAGE'
+    | 'SPLASHTEXTOFF'
+    | 'SPLASHTEXTON'
     | 'SPLITPATH'
     | 'STATIC'
     | 'STATUSBARGETTEXT'
@@ -167,12 +190,17 @@ type TCommandKeyList =
     | 'STRINGTRIMRIGHT'
     | 'STRINGUPPER'
     | 'SUSPEND'
+    | 'SWITCH'
     | 'SYSGET'
     | 'THREAD'
+    | 'THROW'
     | 'TOOLTIP'
     | 'TRANSFORM'
     | 'TRAYTIP'
+    | 'TRY'
+    | 'UNTIL'
     | 'URLDOWNLOADTOFILE'
+    | 'WHILE'
     | 'WINACTIVATE'
     | 'WINACTIVATEBOTTOM'
     | 'WINCLOSE'
@@ -264,6 +292,60 @@ export const LineCommand: TLineCommand = {
             ';  MouseMoveOff',
         ],
     },
+    BREAK: {
+        keyRawName: 'Break',
+        body: 'Break',
+        doc: 'Exits (terminates) any type of [loop statement](https://www.autohotkey.com/docs/Language.htm#loop-statement).',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Break.htm',
+        exp: [
+            'Break [, LoopLabel]',
+            '',
+            ';exp',
+            'Loop',
+            '{',
+            '    ; ...',
+            '    if (var > 25)',
+            '        break',
+            '    ; ...',
+            '    if (var <= 5)',
+            '        continue',
+            '}',
+        ],
+    },
+    CASE: {
+        keyRawName: 'Case',
+        body: 'Case $0:',
+        doc: 'Executes one case from a list of mutually exclusive candidates.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Switch.htm',
+        exp: [
+            'Switch UserInput {',
+            '    Case "btw":   MsgBox % "by the way"',
+            '    Case "otoh":  MsgBox % "on the other hand"',
+            '    Case "fl":    MsgBox % "Florida" Send, {backspace 3}Florida',
+            '    Case "ca":    MsgBox % "California"  Send, {backspace 3}California',
+            '    Case "ahk":   Run, % "https://www.autohotkey.com"',
+            '    Default :     MsgBox % "default"',
+            '}',
+        ],
+    },
+    CATCH: {
+        keyRawName: 'Catch',
+        body: 'Catch, $0',
+        doc: 'Specifies the code to execute if an exception is raised during execution of a [try](https://www.autohotkey.com/docs/commands/Try.htm) statement.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Catch.htm',
+        exp: [
+            'Try {',
+            '    ...',
+            '} Catch e {',
+            '    ...',
+            '} Finally {',
+            '    ...',
+            '}',
+        ],
+    },
     CLASS: {
         keyRawName: 'Class',
         body: 'Class',
@@ -337,6 +419,23 @@ export const LineCommand: TLineCommand = {
             ';            Else wait sec',
             ';  WaitForAnyData : ',
             '',
+        ],
+    },
+    CONTINUE: {
+        keyRawName: 'Continue',
+        body: 'Continue',
+        doc: 'Skips the rest of a [loop statement](https://www.autohotkey.com/docs/Language.htm#loop-statement)\'s current iteration and begins a new one.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Continue.htm',
+        exp: [
+            'Continue , LoopLabel',
+            '',
+            'Loop, 10',
+            '{',
+            '    if (A_Index <= 5)',
+            '        continue',
+            '    MsgBox %A_Index%',
+            '}',
         ],
     },
     CONTROL: {
@@ -657,6 +756,23 @@ export const LineCommand: TLineCommand = {
         link: 'https://www.autohotkey.com/docs/commands/Edit.htm',
         exp: [
             'Edit',
+        ],
+    },
+    ELSE: {
+        keyRawName: 'Else',
+        body: 'else',
+        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if an [If statement](https://www.autohotkey.com/docs/Language.htm#if-statement) evaluates to false.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Else.htm',
+        exp: [
+            '; exp of "Else"',
+            'if (x = 1) {',
+            '    ; ...',
+            '} else if (x < y) {',
+            '    ; ...',
+            '} else {',
+            '    ; ...',
+            '}',
         ],
     },
     ENVADD: {
@@ -1104,6 +1220,37 @@ export const LineCommand: TLineCommand = {
             'FileSetTime, ${1:[ YYYYMMDDHH24MISS}, ${2:FilePattern}, ${3:WhichTime (M|C|A)}, ${4:OperateOnFolders?}, ${5:Recurse?]}',
         doc: 'Changes the datetime stamp of one or more files or folders. Wildcards are supported.',
     },
+    FINALLY: {
+        keyRawName: 'Finally',
+        body: 'Finally',
+        doc: 'Ensures that one or more statements are always executed after a [Try](https://www.autohotkey.com/docs/commands/Try.htm) statement finishes.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Finally.htm',
+        exp: [
+            'Try {',
+            '    ...',
+            '} Catch e {',
+            '    ...',
+            '} Finally {',
+            '    ...',
+            '}',
+        ],
+    },
+    FOR: {
+        keyRawName: 'For',
+        body: 'For ${1:Key}, ${2:Value} in ${3:Expression} {\n}',
+        doc: 'Repeats a series of commands once for each key-value pair in an object.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/For.htm',
+        exp: [
+            'For Key [, Value] in Expression',
+            ';',
+            '; exp',
+            'For Key , Value in ["A", "B", "C"] {',
+            '    MsgBox % Key " & " Value',
+            '}',
+        ],
+    },
     FORMATTIME: {
         keyRawName: 'FormatTime',
         body: 'FormatTime, ${1:OutputVar [}, ${2:YYYYMMDDHH24MISS}, ${3:Format]}',
@@ -1207,6 +1354,15 @@ export const LineCommand: TLineCommand = {
         body: 'Hotkey, ${1:KeyName [}, ${2:Label}, ${3:Options]}',
         doc: 'Creates, modifies, enables, or disables a hotkey while the script is running.',
     },
+    IFEQUAL: {
+        keyRawName: 'IfEqual',
+        body: 'IfEqual, ${1:Var} [, ${2:Value} ]',
+        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
+        recommended: false,
+        diag: EDiagCode.code806,
+        link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
+        exp: ['IfEqual, Var , Value ; if Var = Value'],
+    },
     IFEXIST: {
         keyRawName: 'IfExist',
         body: 'IfExist, ${1:FilePattern}',
@@ -1223,6 +1379,24 @@ export const LineCommand: TLineCommand = {
             '    MsgBox, At least one .txt file exists.',
         ],
     },
+    IFGREATER: {
+        keyRawName: 'IfGreater',
+        body: 'IfGreater, ${1:Var} [, ${2:Value} ]',
+        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
+        recommended: false,
+        diag: EDiagCode.code806,
+        link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
+        exp: ['IfGreater, Var , Value ; if Var > Value'],
+    },
+    IFGREATEROREQUAL: {
+        keyRawName: 'IfGreaterOrEqual',
+        body: 'IfGreaterOrEqual, ${1:Var} [, ${2:Value} ]',
+        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
+        recommended: false,
+        diag: EDiagCode.code806,
+        link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
+        exp: ['IfGreaterOrEqual, Var , Value ; if Var >= Value'],
+    },
     IFINSTRING: {
         keyRawName: 'IfInString',
         body: 'IfInString, ${1:Var}, ${2:SearchString}',
@@ -1235,10 +1409,37 @@ export const LineCommand: TLineCommand = {
             'IfNotInString, Var, SearchString',
         ],
     },
+    IFLESS: {
+        keyRawName: 'IfLess',
+        body: 'IfLess, ${1:Var} [, ${2:Value} ]',
+        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
+        recommended: false,
+        diag: EDiagCode.code806,
+        link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
+        exp: ['IfLess, Var , Value ; if Var < Value'],
+    },
+    IFLESSOREQUAL: {
+        keyRawName: 'IfLessOrEqual',
+        body: 'IfLessOrEqual, ${1:Var} [, ${2:Value} ]',
+        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
+        recommended: false,
+        diag: EDiagCode.code806,
+        link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
+        exp: ['IfLessOrEqual, Var , Value ; if Var <= Value'],
+    },
     IFMSGBOX: {
         keyRawName: 'IfMsgBox',
         body: 'IfMsgBox, ${1:Yes|No|OK|Cancel|Abort|Ignore|Retry|Timeout}',
         doc: 'Checks which button was pushed by the user during the most recent MsgBox command.',
+    },
+    IFNOTEQUAL: {
+        keyRawName: 'IfNotEqual',
+        body: 'IfNotEqual, ${1:Var} [, ${2:Value} ]',
+        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
+        recommended: false,
+        diag: EDiagCode.code806,
+        link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
+        exp: ['IfNotEqual, Var , Value ; if Var != Value'],
     },
     IFNOTEXIST: {
         keyRawName: 'IfNotExist',
@@ -1389,6 +1590,32 @@ export const LineCommand: TLineCommand = {
             'Local b := 0',
         ],
     },
+    LOOP: {
+        keyRawName: 'Loop',
+        body: 'Loop, ${1:number}',
+        doc: 'Performs a series of commands repeatedly: either the specified number of times or until [break](https://www.autohotkey.com/docs/commands/Break.htm) is encountered.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Loop.htm',
+        exp: [
+            'Loop, 3 {',
+            '    MsgBox, % "Iteration number is " A_Index "!"  ; A_Index will be 1, 2, then 3',
+            '    Sleep, 100',
+            '}',
+            '; ---',
+            'iMax := 5',
+            'Loop, % iMax + 2 {',
+            '    MsgBox, % "Iteration number is " A_Index "!" ; 1 to 7',
+            '    Sleep, 100',
+            '}',
+            '',
+            ';--- loop 0',
+            'Loop, iMax { ; Count cannot be an expression, use %',
+            '    MsgBox, % "never loop "  A_Index ; loop 0',
+            '    Sleep, 100',
+            '}',
+            '',
+        ],
+    },
     MENU: {
         keyRawName: 'Menu',
         body: 'Menu, ${1:MenuName}, ${2:Cmd [}, ${3:P3}, ${4:P4}, ${5:P5]}',
@@ -1444,6 +1671,20 @@ export const LineCommand: TLineCommand = {
             'MsgBox, % 0x1 + 0x20 ,% "exp2" ,% "Do you need help?"',
         ],
     },
+    ONEXIT: {
+        keyRawName: 'OnExit',
+        body: 'OnExit [, ${1:Label}]',
+        doc: 'Specifies a [callback function](https://www.autohotkey.com/docs/Functions.htm) or [subroutine](https://www.autohotkey.com/docs/commands/Gosub.htm) to run automatically when the script exits.',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/OnExit.htm#command',
+        exp: [
+            'OnExit , Label',
+            'OnExit [, Label]',
+            '',
+            'OnExit(Func , AddRemove)',
+        ],
+        diag: EDiagCode.code812,
+    },
     OUTPUTDEBUG: {
         keyRawName: 'OutputDebug',
         body: 'OutputDebug, ${1:, Text}${2: % }$3',
@@ -1484,6 +1725,18 @@ export const LineCommand: TLineCommand = {
         body: 'Process, ${1:Cmd}, ${2:PID-or-Name [}, ${3:Param3]}',
         doc: 'Performs one of the following operations on a process: checks if it exists; changes its priority; closes it; waits for it to close.',
     },
+    PROGRESS: {
+        keyRawName: 'Progress',
+        body: 'Progress, Off',
+        doc: 'Creates or updates a window containing a progress bar or an image.',
+        recommended: false,
+        diag: EDiagCode.code813,
+        link: 'https://www.autohotkey.com/docs/commands/Progress.htm',
+        exp: [
+            'Progress, Off',
+            'Progress, ProgressParam1 [, SubText, MainText, WinTitle, FontName]',
+        ],
+    },
     RANDOM: {
         keyRawName: 'Random',
         body: 'Random, ${1:OutputVar [}, ${2:Min}, ${3:Max]}',
@@ -1504,6 +1757,32 @@ export const LineCommand: TLineCommand = {
         body:
             'RegWrite, ${1:REG_SZ|REG_EXPAND_SZ|REG_MULTI_SZ|REG_DWORD|REG_BINARY}, ${2:HKLM|HKU|HKCU|HKCR|HKCC}, ${3:SubKey [}, ${4:ValueName}, ${5:Value]}',
         doc: 'Writes a value to the registry.',
+    },
+    RELOAD: {
+        keyRawName: 'Reload',
+        body: 'Reload',
+        doc: 'Replaces the currently running instance of the script with a new one.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Reload.htm',
+        exp: [
+            '^!r::Reload  ; Ctrl+Alt+R',
+        ],
+    },
+    RETURN: {
+        keyRawName: 'Return',
+        body: 'Return',
+        doc: 'Returns from a subroutine to which execution had previously jumped via [function-call](https://www.autohotkey.com/docs/Functions.htm), [Gosub](https://www.autohotkey.com/docs/commands/Gosub.htm), [Hotkey](https://www.autohotkey.com/docs/Hotkeys.htm) activation, [GroupActivate](https://www.autohotkey.com/docs/commands/GroupActivate.htm), or other means.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Return.htm',
+        exp: [
+            '     Return 3',
+            '     Return "literal string"',
+            '     Return MyVar ',
+            '     Return i + 1',
+            '     Return true  ; Returns the number 1 to mean "true".',
+            '     Return ItemCount < MaxItems  ; Returns a true or false value.',
+            '     Return FindColor(TargetColor)',
+        ],
     },
     RUN: {
         keyRawName: 'Run',
@@ -1581,13 +1860,27 @@ export const LineCommand: TLineCommand = {
         body: 'SetDefaultMouseSpeed, ${1:Speed}',
         doc: 'Sets the mouse speed that will be used if unspecified in Click and MouseMove/Click/Drag.',
     },
+    SETENV: {
+        keyRawName: 'SetEnv',
+        body: 'SetEnv, Var, Value',
+        doc: 'Assigns the specified value to a [variable](https://www.autohotkey.com/docs/Variables.htm).',
+        recommended: false,
+        link: 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
+        exp: [
+            'SetEnv, Var, Value',
+            'Var = Value',
+            'Var := "Value"',
+        ],
+        diag: EDiagCode.code814,
+    },
     SETFORMAT: {
         keyRawName: 'SetFormat',
         body: 'SetFormat, NumberType, Format',
-        doc: '**Deprecated:** This command is not recommended for use in new scripts. Use the [Format](https://www.autohotkey.com/docs/commands/Format.htm) function instead.',
+        doc: 'Sets the format of integers and floating point numbers generated by math operations.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/SetFormat.htm',
         exp: ['SetFormat, NumberType, Format'],
+        diag: EDiagCode.code815,
     },
     SETKEYDELAY: {
         keyRawName: 'SetKeyDelay',
@@ -1681,8 +1974,38 @@ export const LineCommand: TLineCommand = {
     },
     SOUNDSETWAVEVOLUME: {
         keyRawName: 'SoundSetWaveVolume',
-        body: 'SoundSetWaveVolume, ${1:Percent [}, ${2:DeviceNumber]}',
+        body: 'SoundSetWaveVolume, ${1:Percent}, [ ${2:DeviceNumber]}',
         doc: 'Changes the wave output volume for a sound device.',
+    },
+    SPLASHIMAGE: {
+        keyRawName: 'SplashImage',
+        body: 'SplashImage, Off',
+        doc: 'Creates or updates a window containing a progress bar or an image.',
+        recommended: false,
+        diag: EDiagCode.code813,
+        link: 'https://www.autohotkey.com/docs/commands/Progress.htm',
+        exp: [
+            'SplashImage, Off',
+            'SplashImage [, ImageFile, Options, SubText, MainText, WinTitle, FontName]',
+        ],
+    },
+    SPLASHTEXTOFF: {
+        keyRawName: 'SplashTextOff',
+        body: 'SplashTextOff',
+        doc: 'Creates or removes a customizable text popup window.',
+        recommended: false,
+        diag: EDiagCode.code816,
+        link: 'https://www.autohotkey.com/docs/commands/SplashTextOn.htm',
+        exp: ['SplashTextOff'],
+    },
+    SPLASHTEXTON: {
+        keyRawName: 'SplashTextOn',
+        body: 'SplashTextOn [, ${1:Width}, ${2:Height}, ${3:Title}, ${4:Text}]',
+        doc: 'Creates or removes a customizable text popup window.',
+        recommended: false,
+        diag: EDiagCode.code816,
+        link: 'https://www.autohotkey.com/docs/commands/SplashTextOn.htm',
+        exp: ['SplashTextOn , Width, Height, Title, Text'],
     },
     SPLITPATH: {
         keyRawName: 'SplitPath',
@@ -1827,6 +2150,32 @@ export const LineCommand: TLineCommand = {
         body: 'Suspend, ${1:[ On|Off|Toggle|Permit]}',
         doc: 'Disables or enables all or selected hotkeys and hotstrings.',
     },
+    SWITCH: {
+        keyRawName: 'Switch',
+        body: [
+            'Switch ${1:key} {',
+            'Case ${2:val1}:',
+            '    $0',
+            'Case ${3:val2}, ${4:val3}:',
+            '    ',
+            'Default :',
+            '    ',
+            '}',
+        ].join('\n'),
+        doc: 'Executes one case from a list of mutually exclusive candidates.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Switch.htm',
+        exp: [
+            'Switch UserInput {',
+            '    Case "btw":   MsgBox % "by the way"',
+            '    Case "otoh":  MsgBox % "on the other hand"',
+            '    Case "fl":    MsgBox % "Florida" Send, {backspace 3}Florida',
+            '    Case "ca":    MsgBox % "California"  Send, {backspace 3}California',
+            '    Case "ahk":   Run, % "https://www.autohotkey.com"',
+            '    Default :     MsgBox % "default"',
+            '}',
+        ],
+    },
     SYSGET: {
         keyRawName: 'SysGet',
         body: 'SysGet, ${1:OutputVar}, ${2:Sub-command [}, ${3:Param3]}',
@@ -1836,6 +2185,20 @@ export const LineCommand: TLineCommand = {
         keyRawName: 'Thread',
         body: 'Thread, ${1:NoTimers|Priority|Interrupt}',
         doc: 'Sets the priority or interruptibility of threads. It can also temporarily disable all timers.',
+    },
+    THROW: {
+        keyRawName: 'Throw',
+        body: 'Throw , $0',
+        doc: 'Signals the occurrence of an error. This signal can be caught by a [try](https://www.autohotkey.com/docs/commands/Try.htm)\\-[catch](https://www.autohotkey.com/docs/commands/Catch.htm) statement.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Throw.htm',
+        exp: [
+            'Throw 3',
+            'Throw "literal string"',
+            'Throw MyVar',
+            'Throw i + 1',
+            'Throw { what: "Custom error", file: A_LineFile, line: A_LineNumber } ; Throws an object',
+        ],
     },
     TOOLTIP: {
         keyRawName: 'ToolTip',
@@ -1849,18 +2212,71 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/Transform.htm',
         exp: ['Transform, OutputVar, SubCommand, Value1 [, Value2]'],
+        diag: EDiagCode.code824,
     },
     TRAYTIP: {
         keyRawName: 'TrayTip',
         body: 'TrayTip, ${1:[ Title}, ${2:Text}, ${3:Seconds}, ${4:Options]}',
         doc: 'Creates a balloon message window near the tray icon. On Windows 10, a toast notification may be shown instead.',
     },
+    TRY: {
+        keyRawName: 'Try',
+        body: 'Try',
+        doc: 'Guards one or more statements (commands or expressions) against runtime errors and exceptions thrown by the [throw](https://www.autohotkey.com/docs/commands/Throw.htm) command.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Try.htm',
+        exp: [
+            'Try {',
+            '    ...',
+            '} Catch e {',
+            '    ...',
+            '} Finally {',
+            '    ...',
+            '}',
+        ],
+    },
+    UNTIL: {
+        keyRawName: 'Until',
+        body: 'Until $0',
+        doc: 'Applies a condition to the continuation of a Loop or For-loop.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Until.htm',
+        exp: [
+            'Loop {',
+            '    ...',
+            '} Until Expression',
+        ],
+    },
     URLDOWNLOADTOFILE: {
         keyRawName: 'UrlDownloadToFile',
         body: 'UrlDownloadToFile, ${1:URL}, ${2:Filename}',
         doc: 'Downloads a file from the Internet.',
     },
-
+    WHILE: {
+        keyRawName: 'While',
+        body: 'While ($0) {\n    \n}',
+        doc: 'Performs a series of commands repeatedly until the specified [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions) evaluates to false.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/While.htm',
+        exp: [
+            ';exp1 As the user drags the left mouse button, a tooltip displays the size of the region inside the drag-area.',
+            '',
+            'CoordMode, Mouse, Screen',
+            '',
+            '~LButton::fn_lb1()',
+            '',
+            'fn_lb1(){',
+            '    MouseGetPos, begin_x, begin_y',
+            '    While GetKeyState("LButton")',
+            '    {',
+            '        MouseGetPos, x, y',
+            '        ToolTip, % begin_x ", " begin_y "`n" Abs(begin_x-x) " x " Abs(begin_y-y)',
+            '        Sleep, 10',
+            '    }',
+            '    ToolTip',
+            '}',
+        ],
+    },
     WINACTIVATE: {
         keyRawName: 'WinActivate',
         body: 'WinActivate, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',

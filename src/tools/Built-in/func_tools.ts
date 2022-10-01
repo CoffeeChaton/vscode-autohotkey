@@ -1,31 +1,22 @@
+/* eslint-disable max-lines-per-function */
 /* eslint no-magic-numbers: ["error", { "ignore": [0,3] }] */
 import * as vscode from 'vscode';
-import type { TBuiltInFuncElement } from './func';
 import { BuiltInFunctionObj } from './func';
-
-function Bif2Md(element: TBuiltInFuncElement): vscode.MarkdownString {
-    const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
-        .appendMarkdown(`Built-in Function (${element.group})`)
-        .appendCodeblock(`${element.keyRawName}()`, 'ahk')
-        .appendMarkdown(element.msg)
-        .appendMarkdown('\n')
-        .appendMarkdown(`[(Read Doc)](${element.link})`)
-        .appendMarkdown('\n\n***')
-        .appendMarkdown('\n\n*exp:*')
-        .appendCodeblock(element.exp.join('\n'));
-
-    md.supportHtml = true;
-    return md;
-}
 
 const baseGroup = ['COM', 'IL_', 'LV_', 'OBJ', 'SB_', 'TV_', '_'] as const;
 
 type TrGroup = typeof baseGroup[number];
 
 type TSnip = { readonly [k in TrGroup]: readonly vscode.CompletionItem[] };
-type TMap = ReadonlyMap<string, vscode.MarkdownString>;
 
-export const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TMap] => {
+type TBiFuncMsg = {
+    readonly md: vscode.MarkdownString;
+    readonly keyRawName: string;
+};
+type TBiFuncMap = ReadonlyMap<string, TBiFuncMsg>;
+
+//
+export const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TBiFuncMap] => {
     // initialize
     type TSnipTemp = { [k in TrGroup]: vscode.CompletionItem[] };
 
@@ -39,12 +30,33 @@ export const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TMap] => {
         _: [],
     };
 
-    const map2: Map<string, vscode.MarkdownString> = new Map<string, vscode.MarkdownString>();
+    const map2 = new Map<string, TBiFuncMsg>();
 
-    for (const [k, v] of Object.entries(BuiltInFunctionObj)) {
-        const md: vscode.MarkdownString = Bif2Md(v);
-        map2.set(k, md);
+    type TV = typeof BuiltInFunctionObj[keyof typeof BuiltInFunctionObj];
 
+    const makeMd = (v: TV): vscode.MarkdownString => {
+        const {
+            keyRawName,
+            group,
+            msg,
+            link,
+            exp,
+        } = v;
+        const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
+            .appendMarkdown(`Built-in Function (${group})`)
+            .appendCodeblock(`${keyRawName}()`, 'ahk')
+            .appendMarkdown(msg)
+            .appendMarkdown('\n')
+            .appendMarkdown(`[(Read Doc)](${link})`)
+            .appendMarkdown('\n\n***')
+            .appendMarkdown('\n\n*exp:*')
+            .appendCodeblock(exp.join('\n'));
+
+        md.supportHtml = true;
+        return md;
+    };
+
+    const makeSnip = (v: TV, md: vscode.MarkdownString): vscode.CompletionItem => {
         const { keyRawName, group, insert } = v;
         const item: vscode.CompletionItem = new vscode.CompletionItem({
             label: `${keyRawName}()`, // Left
@@ -55,6 +67,16 @@ export const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TMap] => {
 
         item.detail = 'Built-in Function (neko-help)';
         item.documentation = md;
+
+        return item;
+    };
+
+    for (const [k, v] of Object.entries(BuiltInFunctionObj)) {
+        const { keyRawName } = v;
+        const md: vscode.MarkdownString = makeMd(v);
+        map2.set(k, { keyRawName, md });
+
+        const item: vscode.CompletionItem = makeSnip(v, md);
 
         const head = k.slice(0, 3);
         const index: TrGroup = baseGroup.find((search: TrGroup) => search === head) ?? '_';

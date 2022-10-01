@@ -28,7 +28,7 @@ function HoverOfFunc(
     const DA: CAhkFunc | null = getFuncWithName(wordUp);
     if (DA !== null) return DA.md;
 
-    const BuiltInFuncMD: vscode.MarkdownString | undefined = BuiltInFuncMDMap.get(wordUp);
+    const BuiltInFuncMD: vscode.MarkdownString | undefined = BuiltInFuncMDMap.get(wordUp)?.md;
     if (BuiltInFuncMD !== undefined) return BuiltInFuncMD;
 
     return null; // not userDefFunc of BiFunc

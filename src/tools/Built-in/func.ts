@@ -28,7 +28,7 @@ type TElementGroup =
     | 'TreeView'
     | 'Window'; // OBJ_XX
 
-export type TBuiltInFuncElement = DeepReadonly<{
+type TBuiltInFuncElement = DeepReadonly<{
     keyRawName: string;
     group: TElementGroup;
     link: string;
@@ -37,129 +37,119 @@ export type TBuiltInFuncElement = DeepReadonly<{
     exp: string[];
 }>;
 
-export const UPKeyList = [
-    //
-    'COMOBJACTIVE',
-    'COMOBJARRAY',
-    'COMOBJCONNECT',
-    'COMOBJCREATE',
-    'COMOBJECT',
-    'COMOBJENWRAP',
-    'COMOBJERROR',
-    'COMOBJFLAGS',
-    'COMOBJGET',
-    'COMOBJMISSING',
-    'COMOBJQUERY',
-    'COMOBJTYPE',
-    'COMOBJUNWRAP',
-    'COMOBJVALUE',
-    //
-    'IL_ADD',
-    'IL_CREATE',
-    'IL_DESTROY',
-    //
-    'LV_ADD',
-    'LV_DELETE',
-    'LV_DELETECOL',
-    'LV_GETCOUNT',
-    'LV_GETNEXT',
-    'LV_GETTEXT',
-    'LV_INSERT',
-    'LV_INSERTCOL',
-    'LV_MODIFY',
-    'LV_MODIFYCOL',
-    'LV_SETIMAGELIST',
-    //
-    'OBJADDREF',
-    'OBJBINDMETHOD',
-    'OBJGETBASE',
-    'OBJRAWGET',
-    'OBJRAWSET',
-    'OBJRELEASE',
-    'OBJSETBASE',
-    //
-    'SB_SETICON',
-    'SB_SETPARTS',
-    'SB_SETTEXT',
-    //
-    'TV_ADD',
-    'TV_DELETE',
-    'TV_GET',
-    'TV_GETCHILD',
-    'TV_GETCOUNT',
-    'TV_GETNEXT',
-    'TV_GETPARENT',
-    'TV_GETPREV',
-    'TV_GETSELECTION',
-    'TV_GETTEXT',
-    'TV_MODIFY',
-    'TV_SETIMAGELIST',
-    //
-    'ABS',
-    'ACOS',
-    'ARRAY',
-    'ASC',
-    'ASIN',
-    'ATAN',
-    'CEIL',
-    'CHR',
-    'COS',
-    'DLLCALL',
-    'EXCEPTION',
-    'EXP',
-    'FILEEXIST',
-    'FILEOPEN',
-    'FLOOR',
-    'FORMAT',
-    'FUNC',
-    'GETKEYNAME',
-    'GETKEYSC',
-    'GETKEYSTATE',
-    'GETKEYVK',
-    'HOTSTRING',
-    'INPUTHOOK',
-    'INSTR',
-    'ISBYREF',
-    'ISFUNC',
-    'ISLABEL',
-    'ISOBJECT',
-    'LN',
-    'LOADPICTURE',
-    'LOG',
-    'LTRIM',
-    'MAX',
-    'MENUGETHANDLE',
-    'MENUGETNAME',
-    'MIN',
-    'MOD',
-    'NUMGET',
-    'NUMPUT',
-    'ONCLIPBOARDCHANGE',
-    'ONERROR',
-    'ONEXIT',
-    'ONMESSAGE',
-    'ORD',
-    'REGEXMATCH',
-    'REGEXREPLACE',
-    'REGISTERCALLBACK',
-    'ROUND',
-    'RTRIM',
-    'SIN',
-    'SQRT',
-    'STRGET',
-    'STRLEN',
-    'STRPUT',
-    'STRREPLACE',
-    'STRSPLIT',
-    'SUBSTR',
-    'TAN',
-    'TRIM',
-    'VARSETCAPACITY',
-    'WINACTIVE',
-    'WINEXIST',
-] as const;
-
-export type TUPKey = typeof UPKeyList[number];
+type TUPKey =
+    | 'ABS'
+    | 'ACOS'
+    | 'ARRAY'
+    | 'ASC'
+    | 'ASIN'
+    | 'ATAN'
+    | 'CEIL'
+    | 'CHR'
+    | 'COMOBJACTIVE'
+    | 'COMOBJARRAY'
+    | 'COMOBJCONNECT'
+    | 'COMOBJCREATE'
+    | 'COMOBJECT'
+    | 'COMOBJENWRAP'
+    | 'COMOBJERROR'
+    | 'COMOBJFLAGS'
+    | 'COMOBJGET'
+    | 'COMOBJMISSING'
+    | 'COMOBJQUERY'
+    | 'COMOBJTYPE'
+    | 'COMOBJUNWRAP'
+    | 'COMOBJVALUE'
+    | 'COS'
+    | 'DLLCALL'
+    | 'EXCEPTION'
+    | 'EXP'
+    | 'FILEEXIST'
+    | 'FILEOPEN'
+    | 'FLOOR'
+    | 'FORMAT'
+    | 'FUNC'
+    | 'GETKEYNAME'
+    | 'GETKEYSC'
+    | 'GETKEYSTATE'
+    | 'GETKEYVK'
+    | 'HOTSTRING'
+    | 'IL_ADD'
+    | 'IL_CREATE'
+    | 'IL_DESTROY'
+    | 'INPUTHOOK'
+    | 'INSTR'
+    | 'ISBYREF'
+    | 'ISFUNC'
+    | 'ISLABEL'
+    | 'ISOBJECT'
+    | 'LN'
+    | 'LOADPICTURE'
+    | 'LOG'
+    | 'LTRIM'
+    | 'LV_ADD'
+    | 'LV_DELETE'
+    | 'LV_DELETECOL'
+    | 'LV_GETCOUNT'
+    | 'LV_GETNEXT'
+    | 'LV_GETTEXT'
+    | 'LV_INSERT'
+    | 'LV_INSERTCOL'
+    | 'LV_MODIFY'
+    | 'LV_MODIFYCOL'
+    | 'LV_SETIMAGELIST'
+    | 'MAX'
+    | 'MENUGETHANDLE'
+    | 'MENUGETNAME'
+    | 'MIN'
+    | 'MOD'
+    | 'NUMGET'
+    | 'NUMPUT'
+    | 'OBJADDREF'
+    | 'OBJBINDMETHOD'
+    | 'OBJGETBASE'
+    | 'OBJRAWGET'
+    | 'OBJRAWSET'
+    | 'OBJRELEASE'
+    | 'OBJSETBASE'
+    | 'ONCLIPBOARDCHANGE'
+    | 'ONERROR'
+    | 'ONEXIT'
+    | 'ONMESSAGE'
+    | 'ORD'
+    | 'REGEXMATCH'
+    | 'REGEXREPLACE'
+    | 'REGISTERCALLBACK'
+    | 'ROUND'
+    | 'RTRIM'
+    | 'SB_SETICON'
+    | 'SB_SETPARTS'
+    | 'SB_SETTEXT'
+    | 'SIN'
+    | 'SQRT'
+    | 'STRGET'
+    | 'STRLEN'
+    | 'STRPUT'
+    | 'STRREPLACE'
+    | 'STRSPLIT'
+    | 'SUBSTR'
+    | 'TAN'
+    | 'TRIM'
+    | 'TV_ADD'
+    | 'TV_DELETE'
+    | 'TV_GET'
+    | 'TV_GETCHILD'
+    | 'TV_GETCOUNT'
+    | 'TV_GETNEXT'
+    | 'TV_GETPARENT'
+    | 'TV_GETPREV'
+    | 'TV_GETSELECTION'
+    | 'TV_GETTEXT'
+    | 'TV_MODIFY'
+    | 'TV_SETIMAGELIST'
+    | 'VARSETCAPACITY'
+    | 'WINACTIVE'
+    | 'WINEXIST';
 
 type TBuiltInFuncbj = {
     [k in TUPKey]: TBuiltInFuncElement;

@@ -1,8 +1,7 @@
 import * as path from 'node:path';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TTokenStream } from '../../globalEnum';
-import type { TBuiltInFuncElement, TUPKey } from '../../tools/Built-in/func';
-import { BuiltInFunctionObj, UPKeyList } from '../../tools/Built-in/func';
+import { BuiltInFuncMDMap } from '../../tools/Built-in/func_tools';
 import type { TFullFuncMap } from '../../tools/Func/getAllFunc';
 
 type TMsg = {
@@ -41,14 +40,10 @@ function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): string {
         return `${DA.name}(...) ; ${fileName}`;
     }
 
-    const UPKey: TUPKey | undefined = UPKeyList.find((v: TUPKey) => v === keyUp);
-    if (UPKey !== undefined) {
-        const BuiltInFunc: TBuiltInFuncElement = BuiltInFunctionObj[UPKey];
-        return `${BuiltInFunc.keyRawName}(...) ; "Built-in Functions"`;
-    }
-
-    // else
-    return `${keyUp}(...) ; >>>>>>>>>>>>>> unknown function <<<<<<<<<<<<<<<<<<<`;
+    const keyRawName: string | undefined = BuiltInFuncMDMap.get(keyUp)?.keyRawName;
+    return keyRawName !== undefined
+        ? `${keyRawName}(...) ; "Built-in Functions"`
+        : `${keyUp}(...) ; >>>>>>>>>>>>>> unknown function <<<<<<<<<<<<<<<<<<<`;
 }
 
 export function AnalyzeRefFunc(AhkTokenList: TTokenStream, fullFuncMap: TFullFuncMap): string[] {
