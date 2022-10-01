@@ -44,14 +44,8 @@ export function getFnVarDef(
         forLoop(need); // for var1 , var2 in
         OutputVarCommandBase(need, fistWordUp);
         OutputVarCommandPlus(need, fistWordUp);
-        // TODO: Catch , OutputVar
 
-        // if i have time... maybe?
-        //
-        // LV_GetText(OutputVar,
-        // TV_GetText(OutputVar, ItemID)
-
-        // not plan
+        // not plan to support this case....
         // DllCall("DllFile\Function" , Type1, Arg1, Type2, Arg2, "Cdecl ReturnType")
         // ----------------------------------------------------------------^
         // FoundPos := RegExMatch(Haystack, NeedleRegEx , OutputVar, StartingPos := 1)

@@ -6,6 +6,7 @@ import { getValMeta } from './getValMeta';
 
 const OutputVarCommandMap: ReadonlyMap<string, RegExp> = new Map([
     // usually case exp: EnvGet, v, %EnvVarName%
+    'CATCH',
     'CONTROLGET',
     'CONTROLGETFOCUS',
     'CONTROLGETTEXT',

@@ -2,7 +2,11 @@ import type { TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
 import type { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
 
+// NumGet(VarOrAddress [, Offset := 0, Type := "UPtr"])
 // VarSetCapacity(varName)
+// TV_GetText(OutputVar, ItemID)
+// LV_GetText(OutputVar, RowNumber [, ColumnNumber])
+
 export function varSetCapacityFunc({
     lStr,
     valMap,
@@ -14,8 +18,11 @@ export function varSetCapacityFunc({
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line no-magic-numbers
     if (lStrTrimLen < 8) return; // 'NumGet('.length
+
     if (!lStr.includes('(')) return;
-    for (const v of lStr.matchAll(/(?<![.%`])\b(?:VarSetCapacity|NumGet)\b\(\s*&?(\w+)\b(?!\()/gui)) {
+    for (
+        const v of lStr.matchAll(/(?<![.%`])\b(?:VarSetCapacity|NumGet|TV_GetText|LV_GetText)\b\(\s*&?(\w+)\b(?!\()/gui)
+    ) {
         const ch: number | undefined = v.index;
         if (ch === undefined) continue;
 
@@ -23,7 +30,7 @@ export function varSetCapacityFunc({
         const UpName: string = RawName.toUpperCase();
         if (paramMap.has(UpName) || GValMap.has(UpName)) continue;
 
-        const character: number = ch + v[0].indexOf(RawName);
+        const character: number = ch + v[0].indexOf(RawName, v[0].indexOf('('));
 
         const value: TValMetaIn = getValMeta(line, character, RawName, valMap, lineComment);
         valMap.set(RawName.toUpperCase(), value);
