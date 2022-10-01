@@ -11,7 +11,13 @@ const snippetCommandFilter: readonly CSnippetCommand[] = snippetCommand.filter((
 export function getSnippetCommand(lStr: string, position: vscode.Position): TSnippetCommand {
     const subStr: string = lStr.slice(0, position.character).trim();
 
-    if (!(/^\w*$/ui).test(subStr)) return [];
+    const isOK: boolean = (/^\w*$/u).test(subStr)
+        || (/^case\s[^:]+:/iu).test(subStr)
+        || (/^default\s*:/iu).test(subStr)
+        || (/::\s*\w*$/iu).test(subStr); // allow hotstring or hotkey
+
+    if (!isOK) return [];
+
     //
     const opt: ECommandOption = getCommandOptions();
 

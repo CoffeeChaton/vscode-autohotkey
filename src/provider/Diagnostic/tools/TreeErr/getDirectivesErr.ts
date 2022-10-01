@@ -8,18 +8,20 @@ import type { THashTagUPKey } from '../../../../tools/Built-in/Directives';
 import { DirectivesMDMap } from '../../../../tools/Built-in/Directives';
 import { CDiagBase } from '../CDiagBase';
 
-export function getDirectivesErr(ch: TAhkSymbol): CDiagBase[] {
-    // err of #Directives
-    if (!(ch instanceof CAhkDirectives)) return [];
+type TDiagMsg = {
+    value: EDiagCode;
+    severity: vscode.DiagnosticSeverity;
+    tags: vscode.DiagnosticTag[];
+};
 
+const DiagDirectivesMap: ReadonlyMap<string, TDiagMsg> = ((): ReadonlyMap<string, TDiagMsg> => {
     type TRulerErr = {
         str: THashTagUPKey;
         value: EDiagCode;
         severity: vscode.DiagnosticSeverity;
         tags: vscode.DiagnosticTag[];
     };
-
-    const rulerMatch: TRulerErr[] = [
+    const arr: TRulerErr[] = [
         {
             // change of ` https://www.autohotkey.com/docs/commands/_EscapeChar.htm
             str: 'ESCAPECHAR',
@@ -73,8 +75,27 @@ export function getDirectivesErr(ch: TAhkSymbol): CDiagBase[] {
         },
     ];
 
+    const map = new Map<string, TDiagMsg>();
+    for (
+        const {
+            str,
+            value,
+            severity,
+            tags,
+        } of arr
+    ) {
+        map.set(str, { value, severity, tags });
+    }
+
+    return map;
+})();
+
+export function getDirectivesErr(ch: TAhkSymbol): CDiagBase[] {
+    // err of #Directives
+    if (!(ch instanceof CAhkDirectives)) return [];
+
     const { hashtag, selectionRange } = ch;
-    const v: TRulerErr | undefined = rulerMatch.find((element) => element.str === hashtag);
+    const v: TDiagMsg | undefined = DiagDirectivesMap.get(hashtag);
     if (v !== undefined) {
         const { value, severity, tags } = v;
         return [

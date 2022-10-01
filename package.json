@@ -27,7 +27,7 @@
     "license": "GNU GPLV2",
     "icon": "icon.png",
     "galleryBanner": {
-        "color": "#5c2d91",
+        "color": "#b09df5",
         "theme": "dark"
     },
     "keywords": [
@@ -234,7 +234,7 @@
         "eslint-plugin-react": "^7.31.8",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-security": "^1.5.0",
-        "eslint-plugin-unicorn": "^43.0.2",
+        "eslint-plugin-unicorn": "^44.0.0",
         "fs": "0.0.1-security",
         "jest": "^29.1.2",
         "readonly-types": "^3.0.0",

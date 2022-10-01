@@ -5,7 +5,7 @@
 export type TStatementKeyList =
     | 'AND'
     | 'CONTINUE'
-    | 'DEFAULT'
+    | 'ELSE'
     | 'FALSE'
     | 'IF'
     | 'IN'
@@ -69,20 +69,20 @@ export const Statement: TStatement = {
             '}',
         ],
     },
-    DEFAULT: {
-        keyRawName: 'Default',
-        body: 'Default : $0',
-        doc: 'Executes one case from a list of mutually exclusive candidates.',
+    ELSE: {
+        keyRawName: 'Else',
+        body: 'else',
+        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if an [If statement](https://www.autohotkey.com/docs/Language.htm#if-statement) evaluates to false.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Switch.htm',
+        link: 'https://www.autohotkey.com/docs/commands/Else.htm',
         exp: [
-            'Switch UserInput {',
-            '    Case "btw":   MsgBox % "by the way"',
-            '    Case "otoh":  MsgBox % "on the other hand"',
-            '    Case "fl":    MsgBox % "Florida" Send, {backspace 3}Florida',
-            '    Case "ca":    MsgBox % "California"  Send, {backspace 3}California',
-            '    Case "ahk":   Run, % "https://www.autohotkey.com"',
-            '    Default :     MsgBox % "default"',
+            '; exp of "Else"',
+            'if (x = 1) {',
+            '    ; ...',
+            '} else if (x < y) {',
+            '    ; ...',
+            '} else {',
+            '    ; ...',
             '}',
         ],
     },
