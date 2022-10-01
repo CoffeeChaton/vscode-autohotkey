@@ -1,14 +1,12 @@
 # Changelog
 
-## NEXT 0.0.9(2022-10-01)
+## 0.0.9(2022-10-01)
 
 - add diag `107` [note](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag107)
 - add diag `c505` err of param unknown name style.
 - add OutputVar Command set variables exp `FileGetShortcut, LinkFile , OutTarget, OutDir ...`, can semantic-highlight of `Out`.
 - fix: hover of msgbox() has document error
 - perf: diag of `getCommandErr()` and `getLabelErr()` use hashMap replace regexp.
-
-> // TODO: `"name": "keyword.multiline.ahk"` with highlight `style1` `style2` </br>
 
 ## 0.0.8(2022-09-25)
 

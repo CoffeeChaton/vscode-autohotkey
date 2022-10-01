@@ -14,3 +14,4 @@
 - list all func add some Data at tail
 - Parser: -> AST
 - Scanner: -> Token
+- `"name": "keyword.multiline.ahk"` with highlight `style1` `style2`
