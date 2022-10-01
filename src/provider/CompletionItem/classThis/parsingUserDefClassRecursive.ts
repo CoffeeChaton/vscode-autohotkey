@@ -45,10 +45,8 @@ export function parsingUserDefClassRecursive(
         //
         if (ChapterArr.length === deep) {
             itemS.push(wrapItem(ch, newTrack));
-        }
-
-        // track
-        if (
+        } else if (
+            // track
             ch.kind === vscode.SymbolKind.Class
             && ChapterArr[deep].toUpperCase() === ch.upName
         ) {
