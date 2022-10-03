@@ -2,7 +2,7 @@
     "name": "vscode-autohotkey-neko-help",
     "displayName": "AutoHotkey NekoHelp",
     "description": "AutoHotkey IntelliSense, format, linters, and language support for VS Code, ",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "publisher": "cat1122",
     "engines": {
         "vscode": "^1.71.0"
@@ -197,20 +197,23 @@
         "fmt": "dprint fmt",
         "lint": "eslint src",
         "auto_fix": "eslint --fix src",
+        "compile_dev": "node esbuild.config.js --isDev",
         "compile": "node esbuild.config.js",
         "watch": "tsc -watch -p ./",
-        "test_vsc": "pnpm run compile && node ./node_modules/vscode/bin/test",
+        "test_vsc": "pnpm run compile && node ./dist/test/runTest.js",
         "test": "jest",
         "up_dprint_config": "dprint config update",
         "up": "pnpm up -L",
-        "package": "pnpm vsce package --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp --baseImagesUrl https://raw.githubusercontent.com/CoffeeChaton/vscode-autohotkey-NekoHelp/master/"
+        "pnpm clean cache": "pnpm store prune",
+        "package": "pnpm vsce package --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp --baseImagesUrl https://raw.githubusercontent.com/CoffeeChaton/vscode-autohotkey-NekoHelp/master/",
+        "package-pre": "pnpm vsce package --pre-release --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp --baseImagesUrl https://raw.githubusercontent.com/CoffeeChaton/vscode-autohotkey-NekoHelp/master/"
     },
     "devDependencies": {
         "@swc/core": "^1.3.4",
         "@swc/jest": "^0.2.23",
         "@types/assert": "^1.5.6",
         "@types/jest": "^29.1.1",
-        "@types/node": "^18.7.23",
+        "@types/node": "^18.8.0",
         "@types/vscode": "^1.71.0",
         "@typescript-eslint/eslint-plugin": "^5.38.1",
         "@typescript-eslint/parser": "^5.38.1",

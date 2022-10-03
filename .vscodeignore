@@ -22,6 +22,8 @@
 *.vsix
 coverage/
 cspell.json
+dist/extension.js.map
+dist/test/
 dprint.json
 esbuild.config.js
 esbuildTarget.json
@@ -36,3 +38,4 @@ src/
 syntaxes/README.md
 TODO/
 tsconfig.json
+vscode-autohotkey-neko-help*

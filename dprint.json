@@ -4,7 +4,8 @@
         "**/coverage",
         "**/dist",
         "**/node_modules",
-        "**/out"
+        "**/out",
+        "**/.vscode-test"
     ],
     "includes": [
         "**/*.{ts,tsx,js,jsx,cjs,mjs,json,md,toml}"

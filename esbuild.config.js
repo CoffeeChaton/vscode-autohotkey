@@ -1,6 +1,8 @@
 'use strict';
 
 const esbuild = require('esbuild');
+const args = process.argv.slice(2);
+const isDev = args.includes('--isDev');
 
 esbuild
     .build({
@@ -12,15 +14,15 @@ esbuild
         // tsconfig
         // watch: false,
         bundle: true,
-        entryPoints: ['./src/extension.ts'],
-        external: ['vscode', 'nominal-types'], // not bundle 'vscode' && https://github.com/modfy/nominal
+        entryPoints: ['./src/extension.ts', './src/test/runTest.ts', './src/test/suite/index.ts'],
+        external: ['vscode', '@vscode/test-electron'], // not bundle 'vscode' && https://github.com/modfy/nominal
         format: 'cjs',
         logLevel: 'info',
-        minify: false, //
+        minify: !isDev, //
         outdir: 'dist',
         platform: 'node',
-        sourcemap: true,
-        target: ['es2021', 'node16.13'],
+        sourcemap: isDev,
+        target: ['es2021', 'node16.14'],
         treeShaking: true,
     })
     .then(() => process.exit(0))

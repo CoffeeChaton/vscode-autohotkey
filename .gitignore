@@ -2,6 +2,7 @@
 .eslintcache
 .history/
 .idea/
+.vscode-test/
 .VSCodeCounter/
 *.cpuprofile
 *.heapprofile
@@ -12,3 +13,4 @@ dist/
 esbuildTarget.json
 node_modules/
 out/
+vscode-autohotkey-neko-help*
