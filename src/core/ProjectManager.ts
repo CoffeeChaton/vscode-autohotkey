@@ -1,8 +1,6 @@
 /* eslint-disable max-lines-per-function */
-import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { ECommand } from '../command/ECommand';
-import { showTimeSpend } from '../configUI';
 import type { TFsPath } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import type { TMemo } from './BaseScanMemo/getFileAST';
@@ -88,8 +86,6 @@ export const pm = {
             pm.DocMap.set(fsPath, UpDateDocDefReturn);
             diagColl.set(uri, [...UpDateDocDefReturn.baseDiag]);
         }
-
-        showTimeSpend(path.basename(fsPath));
 
         return UpDateDocDefReturn;
     },
