@@ -46,7 +46,6 @@ export function getUnknownTextMap(
     GValMap: TGValMap,
     name: string,
 ): TTextMapIn {
-    const ignoreList: string[] = [];
     const textMap: TTextMapIn = new Map<string, TTextMetaIn>();
     for (const { lStr, line } of DocStrMap) {
         if (line <= startLine) continue; // in arg Range
@@ -99,12 +98,10 @@ export function getUnknownTextMap(
                 continue;
             }
 
-            if (!textMap.has(wordUp)) {
-                if (CommandMDMap.has(wordUp) || A_VariablesMDMap.has(wordUp) || StatementMDMap.has(wordUp)) {
-                    continue;
-                }
-                if (
-                    (/^_+$/u).test(wordUp) // str
+            if (
+                !textMap.has(wordUp) && (
+                    CommandMDMap.has(wordUp) || A_VariablesMDMap.has(wordUp) || StatementMDMap.has(wordUp)
+                    || (/^_+$/u).test(wordUp) // str
                     || (/^\d+$/u).test(wordUp) // just number
                     || (/^0X[\dA-F]+$/u).test(wordUp) // NumHexConst = 0 x [0-9a-fA-F]+
                     /*
@@ -113,12 +110,10 @@ export function getUnknownTextMap(
                      * let binaryLiteral: number = 0b1010; // diag this
                      * let octalLiteral: number = 0o744; // diag this
                      */
-                ) {
-                    ignoreList.push(wordUp);
-                    continue;
-                }
+                )
+            ) {
+                continue;
             }
-            if (ignoreList.includes(wordUp)) continue;
 
             const startPos: vscode.Position = new vscode.Position(line, character);
             const range: vscode.Range = new vscode.Range(
