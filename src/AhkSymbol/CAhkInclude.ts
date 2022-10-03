@@ -130,7 +130,6 @@ export class CAhkInclude extends vscode.DocumentSymbol {
         super(name, '', vscode.SymbolKind.Module, range, selectionRange);
         this.uri = uri;
 
-        // RegExMatch(tLine, "i)^#Include(Again)?[ \t]*[, \t]\s*(.*)$", o)
         const path0: string = name.replace(/^\s*#include(Again)?\s/ui, '').trim();
         this.IgnoreErrors = (/^\*i\s/ui).test(path0); //  For example: #Include *i SpecialOptions.ahk
         const path1: string = path0.replace(/^\*i\s/ui, '').trim();

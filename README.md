@@ -1,7 +1,7 @@
 # vscode-autohotkey-NekoHelp
 
-> Base of [cweijan /vscode-autohotkey](https://github.com/cweijan/vscode-autohotkey)
-> Base of regexp match, not the principles of compilation, so parser has error.
+> Base of [cweijan /vscode-autohotkey](https://github.com/cweijan/vscode-autohotkey)</br>
+> Base of regexp match, not the principles of compilation, so parser inaccurate.
 
 AutoHotKey language support for VS Code
 
@@ -14,8 +14,13 @@ AutoHotKey language support for VS Code
   - [CodeFormat](#codeformat)
   - [Diagnostic and lint](#diagnostic-and-lint)
   - [IntelliSense](#intellisense)
+    - [1. Snippets of your function](#1-snippets-of-your-function)
+    - [2. Completion of function variables](#2-completion-of-function-variables)
+    - [3. Completion of `#Include`](#3-completion-of-include)
+    - [4. Completion of `class`](#4-completion-of-class)
   - [ListAllFunctions](#listallfunctions)
   - [Better highlight of Numbers](#better-highlight-of-numbers)
+  - [Privacy Statement](#privacy-statement)
   - [Credits](#credits)
   - [otherSuggest](#othersuggest)
 
@@ -50,8 +55,9 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 2. open the definition to the side with ( via `Ctrl+Alt+Click` )
 3. Peek Definition (via `Alt+F12`)
 4. Go to References (via `shift+F12`)
-   ![ListAllReferences](image/ListAllReferences.gif)
 5. Go to Symbol (via `ctrl+T`)
+
+   ![ListAllReferences](image/ListAllReferences.gif)
 
 ## Hover
 
@@ -107,17 +113,21 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 
 ## IntelliSense
 
-1. Snippets of your function.
-   ![IntelliSenseFunc](image/IntelliSenseFunc.gif)
+### 1. Snippets of your function
 
-2. Completion of function variables
-   ![Completion_of_function_variables.gif](image/Completion_of_function_variables.gif)
+![IntelliSenseFunc](image/IntelliSenseFunc.gif)
 
-3. Completion of `#Include`
-   ![Completion of Include](image/Completion_Include.gif)
+### 2. Completion of function variables
 
-4. Completion of `class`
-   ![Completion of class](image/Completion_class.gif)
+![Completion_of_function_variables.gif](image/Completion_of_function_variables.gif)
+
+### 3. Completion of `#Include`
+
+![Completion of Include](image/Completion_Include.gif)
+
+### 4. Completion of `class`
+
+![Completion of class](image/Completion_class.gif)
 
 ## ListAllFunctions
 
@@ -168,9 +178,11 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
 }
 ```
 
-## Credits
+## Privacy Statement
 
-Previous extensions:
+- //FIXME: add some things here
+
+## Credits
 
 - [AutoHotkey Plus by cweijan](https://github.com/cweijan/vscode-autohotkey)
 - [AutoHotkey by stef-levesque](https://github.com/stef-levesque/vscode-autohotkey)

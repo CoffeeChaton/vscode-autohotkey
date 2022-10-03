@@ -40,8 +40,6 @@ export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
         Obj.ahkBase = true;
         return Obj;
     }
-    // := RegExMatch(Haystack, NeedleRegEx  https://www.autohotkey.com/docs/commands/RegExMatch.htm#MatchObject
-    // NeedleRegEx = "O)"
 
     return Obj;
 }

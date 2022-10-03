@@ -7,6 +7,7 @@
     - [diag107](#diag107)
     - [diag121](#diag121)
     - [diag of c506](#diag-of-c506)
+  - [about str or %](#about-str-or-)
   - [DEV note](#dev-note)
 
 ## Diagnostic
@@ -52,6 +53,11 @@ Diag `c506` of not support number formats [number](https://www.autohotkey.com/do
 > - Decimal integers, such as `123`, `00123` or `-1`.
 > - Hexadecimal integers, such as `0x7B`, `0x007B` or `-0x1`.
 > - Decimal floating-point numbers, such as `3.14159`.
+
+## about str or %
+
+i love `% "str"` style.
+<https://www.autohotkey.com/boards/viewtopic.php?f=7&t=48726>
 
 ## DEV note
 

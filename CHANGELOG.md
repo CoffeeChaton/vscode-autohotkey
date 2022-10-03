@@ -1,5 +1,14 @@
 # Changelog
 
+## NEXT 0.0.11(2022-10-15)
+
+- add: // TODO `.msgbox` this variables
+- add: // TODO search all `labels:`
+- add: // TODO README.md `Privacy Statement`
+- add: // TODO test_vsc
+- fix: catch user deg regexp errors of `AhkNekoHelp.baseScan.IgnoredList` and `AhkNekoHelp.snippets.blockFilesList`
+- fix: not diag first line problem.
+
 ## 0.0.10(2022-10-01)
 
 - fix: Completion of class [Completion of class](image/Completion_class.gif)
