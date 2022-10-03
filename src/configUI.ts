@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import type { DeepReadonly } from './globalEnum';
+import { OutputChannel } from './provider/vscWindows/OutputChannel';
 
 export const enum ECommandOption {
     All = 0, // "Don't filter Command, Provides all entered commands.",
@@ -79,6 +80,7 @@ function getConfig(): TConfigs {
         useSymbolProvider: getConfigs<boolean>('useSymbolProvider'),
     } as const;
 
+    statusBarItem.color = ed.statusBarDisplayColor;
     return ed;
 }
 
@@ -92,10 +94,8 @@ export function configChangEvent(): void {
 /*
     ---set end---
 */
-
 export function showTimeSpend(showText: string): void {
     statusBarItem.text = `$(heart) ${showText}`;
-    statusBarItem.color = config.statusBarDisplayColor;
     statusBarItem.show();
 }
 
@@ -117,8 +117,8 @@ export function useSymbolProvider(): boolean {
 
 const wm = new WeakMap<readonly string[], readonly RegExp[]>();
 
-function str2RegexList(key: readonly string[]): readonly RegExp[] {
-    const cache: readonly RegExp[] | undefined = wm.get(key);
+function str2RegexList(strList: readonly string[]): readonly RegExp[] {
+    const cache: readonly RegExp[] | undefined = wm.get(strList);
     if (cache !== undefined) return cache;
 
     // "/\\.",
@@ -129,10 +129,29 @@ function str2RegexList(key: readonly string[]): readonly RegExp[] {
     // "/IMG$"
     // "/Gdip_.*\\.ahk$",
 
-    // eslint-disable-next-line security/detect-non-literal-regexp
-    const regexList: readonly RegExp[] = key.map((str: string): RegExp => new RegExp(str, 'u'));
+    let errRuler = '';
+    const regexList: RegExp[] = [];
+    try {
+        for (const str of strList) {
+            errRuler = str;
+            // eslint-disable-next-line security/detect-non-literal-regexp
+            const re = new RegExp(str, 'u');
+            regexList.push(re);
+        }
+    } catch (error: unknown) {
+        let message = 'Unknown Error';
+        if (error instanceof Error) {
+            message = error.message;
+        }
+        console.error(error);
+        OutputChannel.appendLine(';AhkNekoHelp.baseScan.IgnoredList Error Start------------');
+        OutputChannel.appendLine(`has error of this ruler: "${errRuler}"`);
+        OutputChannel.appendLine(message);
+        OutputChannel.appendLine(';AhkNekoHelp.baseScan.IgnoredList Error End--------------');
+        OutputChannel.show();
+    }
 
-    wm.set(key, regexList);
+    wm.set(strList, regexList);
     return regexList;
 }
 
