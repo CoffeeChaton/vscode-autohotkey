@@ -23,8 +23,8 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
     let multilineFlag: TMultilineFlag = null;
     let deep = 0;
     let line = -1;
-    let ignoreLine = 0;
-    let ignoreLineP = 0;
+    let ignoreLine = -1;
+    let ignoreLineP = -1;
 
     for (const textRaw of strArray) {
         line++;
