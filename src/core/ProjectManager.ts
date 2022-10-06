@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { ECommand } from '../command/ECommand';
 import type { TFsPath } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { isAhk } from '../tools/fsTools/isAhk';
 import type { TMemo } from './BaseScanMemo/getFileAST';
 import { BaseScanMemo, getFileAST } from './BaseScanMemo/getFileAST';
 
@@ -41,7 +42,7 @@ export const pm = {
 
     createMap(e: vscode.FileCreateEvent): void {
         for (const uri of e.files) {
-            if (uri.fsPath.endsWith('.ahk')) {
+            if (isAhk(uri.fsPath)) {
                 void vscode.workspace
                     .openTextDocument(uri)
                     .then((doc: vscode.TextDocument): TAhkFileData => pm.updateDocDef(doc));
@@ -51,7 +52,7 @@ export const pm = {
 
     async renameFiles(e: vscode.FileRenameEvent): Promise<void> {
         const eventMsg: string[] = e.files
-            .filter(({ oldUri, newUri }): boolean => oldUri.fsPath.endsWith('.ahk') || newUri.fsPath.endsWith('.ahk'))
+            .filter(({ oldUri, newUri }): boolean => isAhk(oldUri.fsPath) || isAhk(newUri.fsPath))
             .map(({ oldUri, newUri }): string => `    ${oldUri.fsPath} \n -> ${newUri.fsPath}`);
 
         if (eventMsg.length === 0) return;
@@ -81,7 +82,7 @@ export const pm = {
         if (
             scheme === 'file'
             && !fsPath.startsWith('\\')
-            && fsPath.endsWith('.ahk')
+            && isAhk(fsPath)
         ) {
             pm.DocMap.set(fsPath, UpDateDocDefReturn);
             diagColl.set(uri, [...UpDateDocDefReturn.baseDiag]);
@@ -101,10 +102,10 @@ export function delOldCache(uri: vscode.Uri): void {
 function renameFileNameBefore(e: vscode.FileRenameEvent): Thenable<vscode.TextDocument>[] {
     const docList0: Thenable<vscode.TextDocument>[] = [];
     for (const { oldUri, newUri } of e.files) {
-        if (oldUri.fsPath.endsWith('.ahk')) {
+        if (isAhk(oldUri.fsPath)) {
             delOldCache(oldUri); // ...not't open old .ahk
         }
-        if (newUri.fsPath.endsWith('.ahk')) {
+        if (isAhk(newUri.fsPath)) {
             docList0.push(vscode.workspace.openTextDocument(newUri));
         }
     }

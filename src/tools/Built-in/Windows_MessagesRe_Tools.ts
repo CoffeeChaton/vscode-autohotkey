@@ -8,16 +8,16 @@ function str2Number(str: string): number | null {
         // 0x1D: Hexadecimal
         return Number.parseInt(str, 16);
     }
-    if ((/^0o[0-7]+$/ui).test(str)) {
-        // base 8
-        // 0o35: Octal, denoted by an o
-        return Number.parseInt(str, 8);
-    }
-    if ((/^0b[0-1]+$/ui).test(str)) {
-        // base 2
-        // 0b11101: Binary
-        return Number.parseInt(str, 2);
-    }
+    // if ((/^0o[0-7]+$/ui).test(str)) {
+    //     // base 8
+    //     // 0o35: Octal, denoted by an o
+    //     return Number.parseInt(str, 8);
+    // }
+    // if ((/^0b[0-1]+$/ui).test(str)) {
+    //     // base 2
+    //     // 0b11101: Binary
+    //     return Number.parseInt(str, 2);
+    // }
 
     // !str.startsWith('0') wtf... ahk 001 === 1
     // https://www.autohotkey.com/docs/Concepts.htm#numbers

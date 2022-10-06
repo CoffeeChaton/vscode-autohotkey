@@ -3,6 +3,7 @@ import * as fs from 'node:fs';
 import * as vscode from 'vscode';
 import { getIgnoredList } from '../../configUI';
 import { getWorkspaceFolders } from './getWorkspaceFolders';
+import { isAhk } from './isAhk';
 
 type TFsPath = string;
 
@@ -24,7 +25,7 @@ function CollectorFsPath(fsPath: TFsPath, blockList: readonly RegExp[], Collecto
                 CollectorFsPath(fsPathNext, blockList, Collector);
             }
         }
-    } else if (Stats.isFile() && fsPath.endsWith('.ahk')) {
+    } else if (Stats.isFile() && isAhk(fsPath)) {
         Collector.add(fsPath);
     }
 }
@@ -43,3 +44,10 @@ export function getUriList(): vscode.Uri[] | null {
 
     return [...Collector].map((path0: string): vscode.Uri => vscode.Uri.file(path0));
 }
+// ---Min avg of 5 ---
+// subAvg is 177.4
+// subAvgArr len is [175, 179, 179, 176, 178]
+// ---Min std of 5 ---
+// subStd is 0.447213595499958
+// subStdArr len is [180, 179, 180, 180, 180]
+// ---------------------------------------------

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { Diags, DiagsDA, EDiagCodeDA } from '../../diag';
 import { EDiagBase } from '../../Enum/EDiagBase';
+import { isAhk } from '../../tools/fsTools/isAhk';
 import { CDiagBase } from '../Diagnostic/tools/CDiagBase';
 import { CDiagFn } from '../Diagnostic/tools/CDiagFn';
 import { C502Class } from '../Diagnostic/tools/CDiagFnLib/C502Class';
@@ -57,7 +58,7 @@ function codeActionOfDA(uri: vscode.Uri, diag: CDiagFn): vscode.CodeAction[] {
 }
 
 function fixDiag(uri: vscode.Uri, diagnostics: readonly vscode.Diagnostic[]): vscode.CodeAction[] {
-    if (!uri.fsPath.endsWith('.ahk')) return [];
+    if (!isAhk(uri.fsPath)) return [];
 
     const CAList: vscode.CodeAction[] = [];
     for (const diag of diagnostics) {

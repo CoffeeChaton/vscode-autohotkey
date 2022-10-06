@@ -4,6 +4,7 @@ import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TFsPath, TTokenStream } from '../../globalEnum';
 import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
 import type { CDiagBase } from '../../provider/Diagnostic/tools/CDiagBase';
+import { isAhk } from '../../tools/fsTools/isAhk';
 import { getChildren } from '../getChildren';
 import { getClass } from '../getClass';
 import { ParserBlock } from '../Parser';
@@ -63,7 +64,7 @@ export const BaseScanMemo = {
     },
 
     setMemo(fsPath: TFsPath, AhkCache: TMemo): void {
-        if (!fsPath.endsWith('.ahk')) return;
+        if (!isAhk(fsPath)) return;
 
         const oldCache: TMemo[] = this.memoSizeFix(fsPath);
         oldCache.push(AhkCache);

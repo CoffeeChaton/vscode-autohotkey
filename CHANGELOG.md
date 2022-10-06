@@ -8,6 +8,7 @@
 - add: // TODO test_vsc
 - fix: catch user deg regexp errors of `AhkNekoHelp.baseScan.IgnoredList` and `AhkNekoHelp.snippets.blockFilesList`
 - fix: not diag first line problem.
+- fix: file name like `.AHK` support
 
 ## 0.0.10(2022-10-01)
 
