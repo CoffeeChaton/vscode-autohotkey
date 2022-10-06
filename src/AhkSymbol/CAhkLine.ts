@@ -79,12 +79,27 @@ export class CAhkHotString extends vscode.DocumentSymbol {
     }
 }
 
+/**
+ * AHK_L will auto diag of Duplicate label.
+ *
+ * auto diag1
+ * ```c++
+ *     return ScriptError(_T("Duplicate label."), aLabelName);
+ * ```
+ * auto diag2
+ * ```c++
+ *     LineError(_T("A Goto/Gosub must not jump into a block that doesn't enclose it."));
+ * ```
+ */
 export class CAhkLabel extends vscode.DocumentSymbol {
     // https://www.autohotkey.com/docs/misc/Labels.htm
     // Label names must be unique throughout the whole script.
-    // not be used: On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.
     public readonly uri: vscode.Uri;
 
+    /**
+     * label: -> LABEL
+     */
+    public readonly upName: string;
     declare public readonly kind: vscode.SymbolKind.Namespace;
     declare public readonly detail: 'label';
     declare public readonly children: never[];
@@ -99,6 +114,7 @@ export class CAhkLabel extends vscode.DocumentSymbol {
     ) {
         super(name, 'label', vscode.SymbolKind.Namespace, range, selectionRange);
         this.uri = uri;
+        this.upName = name.slice(0, -1).toUpperCase();
     }
 }
 

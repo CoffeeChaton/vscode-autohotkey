@@ -3,9 +3,9 @@
 ## NEXT 0.0.11(2022-10-15)
 
 - add: // TODO `.msgbox` this variables
-- add: // TODO search all `labels:`
-- add: README.md `Privacy Statement`
+- add: goto def of `labels:` // TODO list all ref of `labels:`
 - add: // TODO test_vsc
+- add: README.md `Privacy Statement`
 - fix: catch user deg regexp errors of `AhkNekoHelp.baseScan.IgnoredList` and `AhkNekoHelp.snippets.blockFilesList`
 - fix: not diag first line problem.
 - fix: file name like `.AHK` support

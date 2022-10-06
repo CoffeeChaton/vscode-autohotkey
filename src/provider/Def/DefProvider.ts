@@ -6,6 +6,7 @@ import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { getClassDef } from './getClassDef';
+import { getDefWithLabel } from './getDefWithLabel';
 import { getValDefInFunc } from './getValDefInFunc';
 import { isPosAtMethodName } from './isPosAtMethodName';
 
@@ -94,6 +95,8 @@ function DefProviderCore(
     if (range === undefined) return null;
     const wordUp: string = document.getText(range).toUpperCase();
 
+    if ((/^0x[A-F\d]+$/ui).test(wordUp) || (/^\d+$/ui).test(wordUp)) return null;
+
     const listAllUsing = false;
 
     const userDefFuncLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
@@ -101,6 +104,9 @@ function DefProviderCore(
 
     const classDef: vscode.Location[] | null = getClassDef(wordUp, listAllUsing);
     if (classDef !== null) return classDef; // class name is variable name, should before function.variable name
+
+    const LabelDef: vscode.Location[] | null = getDefWithLabel(document, position, wordUp);
+    if (LabelDef !== null) return LabelDef;
 
     const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
     if (valInFunc !== null) return valInFunc;

@@ -2,8 +2,9 @@
 
 module.exports = {
     rootDir: './src',
-    verbose: true,
+    verbose: false,
     bail: true,
+    clearMocks: true,
     coverageDirectory: 'coverage',
     // preset: 'ts-jest',
     testEnvironment: 'node',

@@ -80,7 +80,6 @@ function HoverProviderCore(
         if (DAmd !== null) return new vscode.Hover(DAmd);
     }
 
-    // FIXME ... please
     type TFn = (wordUp: string) => vscode.MarkdownString | null | undefined;
     const fnList: TFn[] = [
         getHoverCommand2,
