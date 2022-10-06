@@ -180,7 +180,8 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
 
 ## Privacy Statement
 
-- //FIXME: add some things here
+- just scan workspaces or open file. not auto scan [A_Desktop](https://www.autohotkey.com/docs/Variables.htm#Desktop) or [A_MyDocuments](https://www.autohotkey.com/docs/Variables.htm#MyDocuments) or any file without workspaces.
+- if you need user [local library](https://www.autohotkey.com/docs/Functions.htm#lib) , this Extensions support [Multi-root Workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces)
 
 ## Credits
 

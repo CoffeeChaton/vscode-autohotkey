@@ -4,7 +4,7 @@
 
 - add: // TODO `.msgbox` this variables
 - add: // TODO search all `labels:`
-- add: // TODO README.md `Privacy Statement`
+- add: README.md `Privacy Statement`
 - add: // TODO test_vsc
 - fix: catch user deg regexp errors of `AhkNekoHelp.baseScan.IgnoredList` and `AhkNekoHelp.snippets.blockFilesList`
 - fix: not diag first line problem.
