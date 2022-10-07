@@ -1,19 +1,18 @@
 import * as vscode from 'vscode';
+import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { CAhkLabel } from '../../AhkSymbol/CAhkLine';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
+import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { findLabel } from '../../tools/labels';
 
 function getDefWithLabelCore(wordUpCase: string): vscode.Location[] | null {
-    const timeStart = Date.now();
     const label: CAhkLabel | null = findLabel(wordUpCase);
     if (label === null) {
         return null;
     }
     const { range, uri } = label;
     const Location: vscode.Location = new vscode.Location(uri, range);
-    //
-    console.log(`🚀 goto def of "${wordUpCase}"`, Date.now() - timeStart, 'ms'); // ssd -> 4ms
     return [Location];
 }
 
@@ -42,21 +41,46 @@ export function getDefWithLabel(
     const { lStr } = DocStrMap[position.line];
     const lStrFix: string = lStr.slice(0, Math.max(0, position.character));
 
-    // i don't wtf of this case..
-    // SetTimer , LabelOrFunc, PeriodOnOffDelete, Priority
-    if ((/\b(goto|goSub|Break|Continue)\b[\s,].*\w+$/ui).test(lStrFix)) {
+    if ((/\b(?:goto|goSub|Break|Continue)\b[\s,]+\w+$/ui).test(lStrFix)) {
         return getDefWithLabelCore(wordUpCase);
+    }
+
+    const ma: RegExpMatchArray | null = lStrFix.match(/\b(SetTimer\b[\s,%]+)\w+$/ui);
+    if (ma !== null) {
+        /**
+         * ma1 has "%" -> aVar->HasObject()  ----> getValDefInFunc()
+         *
+         * ```c++
+         * IObject *Script::FindCallable(LPTSTR aLabelName, Var *aVar, int aParamCount) {
+         *     if (aVar && aVar->HasObject())
+         *     if (Label *label = FindLabel(aLabelName))
+         *     if (Func *func = FindFunc(aLabelName))
+         *     //...
+         * }
+         * ```
+         */
+        const ma1: string = ma[1];
+        if (ma1.includes('%')) {
+            // no search funcObj in this way.  ----> getValDefInFunc()
+            return null;
+        }
+
+        /**
+         * ```c++
+         * if (Label *label = FindLabel(aLabelName))
+         * ```
+         */
+        const label: vscode.Location[] | null = getDefWithLabelCore(wordUpCase);
+        if (label !== null) return label;
+
+        /**
+         * ```c++
+         * if (Func *func = FindFunc(aLabelName))
+         * ```
+         */
+        const fn: CAhkFunc | null = getFuncWithName(wordUpCase);
+        if (fn !== null) return [new vscode.Location(fn.uri, fn.range)];
     }
 
     return null;
 }
-
-/**
- * ```c++
- *    Label *Line::GetJumpTarget(bool aIsDereferenced)
- * ```
- * or this...
- * ```c++
- *     IObject *Script::FindCallable(LPTSTR aLabelName, Var *aVar, int aParamCount)
- * ```
- */

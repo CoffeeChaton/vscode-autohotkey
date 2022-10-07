@@ -4,7 +4,7 @@
 
 - add: // TODO `.msgbox` this variables
 - add: goto def of `labels:` // TODO list all ref of `labels:`
-- add: // TODO test_vsc
+- add: goto def of `SetTimer, funcName`
 - add: README.md `Privacy Statement`
 - fix: catch user deg regexp errors of `AhkNekoHelp.baseScan.IgnoredList` and `AhkNekoHelp.snippets.blockFilesList`
 - fix: not diag first line problem.

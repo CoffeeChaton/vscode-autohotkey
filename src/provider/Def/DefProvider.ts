@@ -61,9 +61,13 @@ export function userDefFunc(
     if (funcSymbol === null) return null;
 
     const ahkFunc = {
-        // funcName( | "funcName"
+        // funcName( | "funcName" | SetTimer, funcName
         // eslint-disable-next-line security/detect-non-literal-regexp
-        reg: new RegExp(`(?:(?<![.\`%])\\b(${wordUp})\\b\\()|(?:(?<=")(${wordUp})")`, 'iug'),
+        reg: new RegExp(
+            `(?:(?<![.\`%])\\b(${wordUp})\\b\\()|(?:(?<=")(${wordUp})")|(?:(?<=SetTimer[\\s,]+)\\b(${wordUp})\\b)`,
+            //                             funcName(              "funcName"                  SetTimer, funcName
+            'iug',
+        ),
         refFn: (lineStr: string): IterableIterator<RegExpMatchArray> => lineStr.matchAll(ahkFunc.reg),
     } as const;
 
