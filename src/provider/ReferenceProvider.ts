@@ -2,6 +2,7 @@ import type * as vscode from 'vscode';
 import { isPosAtStr } from '../tools/isPosAtStr';
 import { userDefFunc } from './Def/DefProvider';
 import { getClassDef } from './Def/getClassDef';
+import { posAtLabelDef } from './Def/getDefWithLabel';
 import { getValDefInFunc } from './Def/getValDefInFunc';
 
 function ReferenceProviderCore(
@@ -13,7 +14,9 @@ function ReferenceProviderCore(
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/ui);
     if (range === undefined) return null;
     const wordUp: string = document.getText(range).toUpperCase();
-    // TODO class.Method, this.classVar,GoSub, GoTo, ahk Built-in func
+
+    const labelRef: vscode.Location[] | null = posAtLabelDef(document, position, wordUp);
+    if (labelRef !== null) return labelRef;
 
     const listAllUsing = true;
     const userDefLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);

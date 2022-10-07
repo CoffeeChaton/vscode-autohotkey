@@ -180,14 +180,17 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
 
 ## Privacy Statement
 
-- just scan workspaces or open file. not auto scan [A_Desktop](https://www.autohotkey.com/docs/Variables.htm#Desktop) or [A_MyDocuments](https://www.autohotkey.com/docs/Variables.htm#MyDocuments) or any file without workspaces.
-- if you need user [local library](https://www.autohotkey.com/docs/Functions.htm#lib) , this Extensions support [Multi-root Workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces)
+- Do not upload any information.
+- without vscode, 0 dependencies, Safe and Privacy.
+- just scan workspaces or open file. not auto scan like [A_Desktop](https://www.autohotkey.com/docs/Variables.htm#Desktop) or [A_MyDocuments](https://www.autohotkey.com/docs/Variables.htm#MyDocuments) or any file without workspaces.
+- If you need to place .ahk in other folders, this Extensions support [Multi-root Workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces).
 
 ## Credits
 
 - [AutoHotkey Plus by cweijan](https://github.com/cweijan/vscode-autohotkey)
 - [AutoHotkey by stef-levesque](https://github.com/stef-levesque/vscode-autohotkey)
 - [AutoHotkey_L-Docs](https://github.com/Lexikos/AutoHotkey_L-Docs)
+- [AutoHotkey_L](https://github.com/Lexikos/AutoHotkey_L)
 
 ## otherSuggest
 

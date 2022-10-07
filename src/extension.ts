@@ -102,3 +102,5 @@ FoldingRangeProvider
 // TODO %A_ScriptDir%\Lib\  ; Local library - requires [v1.0.90+].
 //      %A_MyDocuments%\AutoHotkey\Lib\  ; User library.
 //      directory-of-the-currently-running-AutoHotkey.exe\Lib\  ; Standard library.
+
+// l10n https://code.visualstudio.com/updates/v1_72#_localization-as-part-of-the-api

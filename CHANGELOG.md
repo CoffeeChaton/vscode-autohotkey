@@ -3,7 +3,7 @@
 ## NEXT 0.0.11(2022-10-15)
 
 - add: // TODO `.msgbox` this variables
-- add: goto def of `labels:` // TODO list all ref of `labels:`
+- add: goto def of `labels:` and list all ref.
 - add: goto def of `SetTimer, funcName`
 - add: README.md `Privacy Statement`
 - fix: catch user deg regexp errors of `AhkNekoHelp.baseScan.IgnoredList` and `AhkNekoHelp.snippets.blockFilesList`

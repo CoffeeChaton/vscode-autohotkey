@@ -6,6 +6,50 @@ import { pm } from '../../core/ProjectManager';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { findLabel } from '../../tools/labels';
 
+function getLabelRef(wordUp: string): vscode.Location[] {
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    const reg = new RegExp(`\\b((?:goto|goSub|Break|Continue|SetTimer)\\b[\\s,]+)\\b${wordUp}\\b`, 'iu');
+    const refFn = (lineStr: string): RegExpMatchArray | null => lineStr.match(reg);
+
+    const List: vscode.Location[] = [];
+    for (const { DocStrMap, uri } of pm.getDocMapValue()) {
+        for (const { line, lStr } of DocStrMap) {
+            const ma: RegExpMatchArray | null = refFn(lStr);
+            if (ma === null) continue;
+            const { index } = ma;
+            if (index === undefined) continue;
+            const col: number = ma[1].length + index;
+
+            List.push(
+                new vscode.Location(
+                    uri,
+                    new vscode.Range(
+                        new vscode.Position(line, col),
+                        new vscode.Position(line, col + wordUp.length),
+                    ),
+                ),
+            );
+        }
+    }
+
+    return List;
+}
+
+export function posAtLabelDef(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    wordUp: string,
+): vscode.Location[] | null {
+    const AhkFileData: TAhkFileData = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const { DocStrMap } = AhkFileData;
+    const { lStr } = DocStrMap[position.line];
+
+    if ((/^\w+:$/u).test(lStr.trim())) {
+        return getLabelRef(wordUp);
+    }
+    return null;
+}
+
 function getDefWithLabelCore(wordUpCase: string): vscode.Location[] | null {
     const label: CAhkLabel | null = findLabel(wordUpCase);
     if (label === null) {
@@ -41,11 +85,15 @@ export function getDefWithLabel(
     const { lStr } = DocStrMap[position.line];
     const lStrFix: string = lStr.slice(0, Math.max(0, position.character));
 
-    if ((/\b(?:goto|goSub|Break|Continue)\b[\s,]+\w+$/ui).test(lStrFix)) {
+    if ((/^\w+:$/u).test(lStr.trim())) {
+        return [new vscode.Location(document.uri, position)]; // let auto call Ref
+    }
+
+    if ((/\b(?:goto|goSub|Break|Continue)\b[\s,]+\w*$/ui).test(lStrFix)) {
         return getDefWithLabelCore(wordUpCase);
     }
 
-    const ma: RegExpMatchArray | null = lStrFix.match(/\b(SetTimer\b[\s,%]+)\w+$/ui);
+    const ma: RegExpMatchArray | null = lStrFix.match(/\b(SetTimer\b[\s,%]+)\w*$/ui);
     if (ma !== null) {
         /**
          * ma1 has "%" -> aVar->HasObject()  ----> getValDefInFunc()
