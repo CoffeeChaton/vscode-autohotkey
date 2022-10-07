@@ -1,7 +1,6 @@
 import type * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
-import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { getSnippetStartWihA } from '../../tools/Built-in/A_Variables';
 import { Completion2Directives } from '../../tools/Built-in/Directives';
@@ -33,15 +32,10 @@ function CompletionItemCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.CompletionItem[] {
-    const AhkFileData: TAhkFileData = pm.updateDocDef(document);
-
-    // const t1 = Date.now();
-    const { AST, DocStrMap } = AhkFileData;
+    const { AST, DocStrMap } = pm.updateDocDef(document);
     const { lStr, textRaw } = DocStrMap[position.line];
 
-    if ((/^\s*#Include(Again)?\s/ui).test(lStr)) {
-        return IncludeFsPath(document.uri.fsPath);
-    }
+    if ((/^\s*#Include(Again)?\s/ui).test(lStr)) return IncludeFsPath(document.uri.fsPath);
 
     const topSymbol: TTopSymbol | undefined = AST.find((top: TTopSymbol): boolean => top.range.contains(position));
 
