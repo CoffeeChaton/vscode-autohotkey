@@ -66,21 +66,29 @@ export const enum EDiagCode {
     code201 = 201, // 200~299 is not expression // need use %
     code301 = 301, // 300~399 is func err
     code302 = 302,
-    // code501~599 warn user
-    code501 = 501, // DEFAULT:
+    // code600~699 warn user
+    /**
+     * `.base`  Prototype pollution!
+     */
+    code600 = 600,
+
+    /**
+     * label like `DEFAULT:`
+     */
+    code601 = 601, // DEFAULT:
 
     /**
      * Label name of `On:` , `Off:`
      *
      * On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.
      */
-    code502 = 502,
+    code602 = 602,
 
     /**
      * Unknown #Directives
      */
-    code503 = 503,
-    code601 = 601, // 601 is Prototype pollution!
+    code603 = 603,
+
     code700 = 700, // 700 is Command -> func
     // code701 = 701, // 701~799 is Command error
     // 800~899 is Deprecated / Old Syntax
@@ -160,21 +168,21 @@ export const Diags: DeepReadonly<TDiags> = {
         msg: 'Function name too long, name len > (255 -2) characters.',
         path: 'https://github.com/Lexikos/AutoHotkey_L/blob/master/source/script.cpp#L8744',
     },
-    501: {
+    600: {
+        msg: 'Alert Prototype Pollution!! Suggest to use class replace',
+        path: 'https://www.autohotkey.com/docs/Objects.htm#Custom_Classes',
+    },
+    601: {
         msg: 'did you mean switch case `default :` ? this way look like a `label:`.',
         path: 'https://www.autohotkey.com/docs/misc/Labels.htm#syntax-and-usage=',
     },
-    502: {
+    602: {
         msg: 'recommended that the following names not be used: On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.',
         path: 'https://www.autohotkey.com/docs/misc/Labels.htm#syntax-and-usage=',
     },
-    503: {
+    603: {
         msg: 'Unknown #Directives',
         path: 'https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm',
-    },
-    601: {
-        msg: 'Alert Prototype Pollution!! Suggest to use class replace',
-        path: 'https://www.autohotkey.com/docs/Objects.htm#Custom_Classes',
     },
     700: {
         msg: 'try to use function replace Command(obsolete code)',

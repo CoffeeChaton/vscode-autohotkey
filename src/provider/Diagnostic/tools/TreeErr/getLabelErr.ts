@@ -17,35 +17,35 @@ const DiagLabelErrMap: ReadonlyMap<string, TDiagMsg> = new Map([
         tags: [vscode.DiagnosticTag.Deprecated],
     }],
     ['DEFAULT:', {
-        code: EDiagCode.code501,
+        code: EDiagCode.code601,
         tags: [],
     }],
     ['ON:', {
-        code: EDiagCode.code502,
+        code: EDiagCode.code602,
         tags: [],
     }],
     ['OFF:', {
-        code: EDiagCode.code502,
+        code: EDiagCode.code602,
         tags: [],
     }],
     ['TOGGLE:', {
-        code: EDiagCode.code502,
+        code: EDiagCode.code602,
         tags: [],
     }],
     ['SHIFTALTTAB:', {
-        code: EDiagCode.code502,
+        code: EDiagCode.code602,
         tags: [],
     }],
     ['ALTTAB:', {
-        code: EDiagCode.code502,
+        code: EDiagCode.code602,
         tags: [],
     }],
     ['ALTTABANDMENU:', {
-        code: EDiagCode.code502,
+        code: EDiagCode.code602,
         tags: [],
     }],
     ['ALTTABMENUDISMISS:', {
-        code: EDiagCode.code502,
+        code: EDiagCode.code602,
         tags: [],
     }],
 ]);
@@ -59,13 +59,15 @@ export function getLabelErr(ch: TAhkSymbol): CDiagBase[] {
     const labUpName: string = ch.name.toUpperCase();
 
     const v2: TDiagMsg | undefined = DiagLabelErrMap.get(labUpName);
-    if (v2 === undefined) return [];
-    return [
-        new CDiagBase({
-            value: v2.code,
-            range: ch.selectionRange,
-            severity: vscode.DiagnosticSeverity.Warning,
-            tags: v2.tags,
-        }),
-    ];
+
+    return v2 === undefined
+        ? []
+        : [
+            new CDiagBase({
+                value: v2.code,
+                range: ch.selectionRange,
+                severity: vscode.DiagnosticSeverity.Warning,
+                tags: v2.tags,
+            }),
+        ];
 }

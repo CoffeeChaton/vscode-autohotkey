@@ -113,7 +113,7 @@ export function getDirectivesErr(ch: TAhkSymbol): CDiagBase[] {
         ? []
         : [
             new CDiagBase({
-                value: EDiagCode.code503,
+                value: EDiagCode.code603,
                 range: selectionRange,
                 severity: vscode.DiagnosticSeverity.Warning,
                 tags: [],

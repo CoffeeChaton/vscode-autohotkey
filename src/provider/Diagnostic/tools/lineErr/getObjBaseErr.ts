@@ -12,15 +12,14 @@ export function getObjBaseErr(params: TAhkTokenLine): CDiagBase | null {
         line,
     } = params;
 
-    const baseLen: number = 'x.base'.length;
-    if (lStr.length < baseLen) return null;
-    if (!lStr.includes('.')) return null;
+    const baseLen = 6; // 'x.base'.length;
 
+    if (lStr.length < baseLen || !lStr.includes('.')) return null;
     const colL: number = lStr.search(/\.base\b/ui);
     if (colL === -1) return null; // not find
 
     return new CDiagBase({
-        value: EDiagCode.code601,
+        value: EDiagCode.code600,
         range: new vscode.Range(line, colL, line, colL + baseLen), // ".base" or "base:" len
         severity: vscode.DiagnosticSeverity.Warning,
         tags: [],

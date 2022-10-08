@@ -36,7 +36,7 @@ export const [snippetCommand, CommandMDMap, CommandErrMap] = ((): [TSnippetComma
             const { msg, path } = Diags[diag];
             md
                 .appendMarkdown(`\n\n***\n\n**warn:** ${msg}`)
-                .appendMarkdown(`[(Read Warn)](${path})`);
+                .appendMarkdown(`[(Read Warn ${diag})](${path})`);
         }
         md.supportHtml = true;
         return md;

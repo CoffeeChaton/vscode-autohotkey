@@ -16,7 +16,7 @@ import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
  * @param fileName just debug of deep < 0
  * @returns FFullDocTokenDocStream
  */
-export function Pretreatment(strArray: readonly string[], fileName: string): TTokenStream {
+export function Pretreatment(strArray: readonly string[], _fileName: string): TTokenStream {
     const result: TAhkTokenLine[] = [];
     let CommentBlock = false;
     let multiline: EMultiline = EMultiline.none;
@@ -30,9 +30,9 @@ export function Pretreatment(strArray: readonly string[], fileName: string): TTo
         line++;
         const textTrimStart: string = textRaw.trimStart();
         if (deep < 0) {
-            console.warn('Pretreatment -> line , deep < 0, fsPath', fileName);
-            console.warn('Pretreatment -> line , deep < 0, line', line);
-            console.warn('Pretreatment -> line , deep < 0, textTrimStart', textTrimStart);
+            // console.warn('Pretreatment -> line , deep < 0, fsPath', fileName);
+            // console.warn('Pretreatment -> line , deep < 0, line', line);
+            // console.warn('Pretreatment -> line , deep < 0, textTrimStart', textTrimStart);
             deep = 0;
         }
         const temp = getIgnore({
