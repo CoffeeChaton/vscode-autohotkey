@@ -12,9 +12,7 @@
     ],
     "incremental": true,
     "indentWidth": 4,
-    "json": {},
     "lineWidth": 120,
-    "markdown": {},
     "newLineKind": "crlf",
     "plugins": [
         "https://plugins.dprint.dev/dockerfile-0.3.0.wasm",
@@ -23,7 +21,6 @@
         "https://plugins.dprint.dev/toml-0.5.4.wasm",
         "https://plugins.dprint.dev/typescript-0.74.0.wasm"
     ],
-    "toml": {},
     "typescript": {
         "binaryExpression.operatorPosition": "nextLine",
         "importDeclaration.preferSingleLine": false, // keep eslint <-> dprint friendly

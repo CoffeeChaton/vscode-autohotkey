@@ -65,7 +65,7 @@ function ListAllFuncSort(reverse: boolean): null {
     return null;
 }
 
-export async function ListAllFuncMain(): Promise<void> {
+export function ListAllFuncMain(): void {
     type TCommand = TPick<void>;
 
     const items: TCommand[] = [
@@ -75,7 +75,6 @@ export async function ListAllFuncMain(): Promise<void> {
         { label: '4 -> list all Function() sort z -> a', fn: (): null => ListAllFuncSort(true) },
     ];
 
-    const pick: TPick<void> | undefined = await vscode.window.showQuickPick<TCommand>(items);
-
-    await pick?.fn();
+    void vscode.window.showQuickPick<TCommand>(items)
+        .then((pick: TPick<void> | undefined): undefined => void pick?.fn());
 }

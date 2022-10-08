@@ -2,12 +2,14 @@
 
 ## NEXT 0.0.11(2022-10-15)
 
+- TODO: goto References `SetTimer, funcName`
 - add: goto def of `labels:` and list all ref.
 - add: goto def of `funcName` at case `SetTimer, funcName`
 - add: README.md `Privacy Statement`
 - fix: catch user deg regexp errors of `AhkNekoHelp.baseScan.IgnoredList` and `AhkNekoHelp.snippets.blockFilesList`
 - fix: not diag first line problem.
 - fix: file name like `.AHK` support
+- break-change: remove support for `global` func.
 - perf: OutputVarCommandBase && OutputVarCommandPlus
 
 ## 0.0.10(2022-10-01)
