@@ -103,14 +103,14 @@ function DefProviderCore(
 
     const listAllUsing = false;
 
+    const LabelDef: vscode.Location[] | null = getDefWithLabel(document, position, wordUp);
+    if (LabelDef !== null) return LabelDef;
+
     const userDefFuncLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
     if (userDefFuncLink !== null) return userDefFuncLink;
 
     const classDef: vscode.Location[] | null = getClassDef(wordUp, listAllUsing);
     if (classDef !== null) return classDef; // class name is variable name, should before function.variable name
-
-    const LabelDef: vscode.Location[] | null = getDefWithLabel(document, position, wordUp);
-    if (LabelDef !== null) return LabelDef;
 
     const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
     if (valInFunc !== null) return valInFunc;

@@ -6,7 +6,7 @@
   - [Diagnostic](#diagnostic)
     - [diag107](#diag107)
     - [diag121](#diag121)
-    - [diag of c506](#diag-of-c506)
+    - [diag506](#diag506)
   - [about str or %](#about-str-or-)
   - [DEV note](#dev-note)
 
@@ -42,7 +42,14 @@ the word `Join` should be followed immediately by as many as `15` characters.
 
 some idea [diag121](./ahk/diag121.ahk)
 
-### diag of c506
+### diag506
+
+    ```js
+    506: {
+        msg: 'not support of this number formats',
+        path: 'https://www.autohotkey.com/docs/Concepts.htm#numbers',
+    },
+    ```
 
 Diag `c506` of not support number formats [number](https://www.autohotkey.com/docs/Concepts.htm#numbers)
 
