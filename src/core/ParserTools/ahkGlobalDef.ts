@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import type { TTokenStream } from '../../globalEnum';
 import { replacerSpace } from '../../tools/str/removeSpecialChar';
+import type { TVarData } from './varMixedAnnouncement';
+import { varMixedAnnouncement } from './varMixedAnnouncement';
 
 // function getRVal(textRaw: string, ch: number, nameLen: number, ma2Len: number): string {
 //     const position: number = ch + nameLen;
@@ -17,66 +19,12 @@ export type TGlobalVal = {
     // TODO add ahk-doc ?
 };
 
-type TValUpName = string;
-type TGValMapPrivacy = Map<TValUpName, TGlobalVal>;
-export type TGValMap = ReadonlyMap<TValUpName, TGlobalVal>;
-
-type TGlobalValReadonly = Readonly<TGlobalVal>;
-export type TGValMapReadOnly = ReadonlyMap<TValUpName, TGlobalValReadonly>;
-
-function setRangeGlobal(strF: string, rawName: string, ma: RegExpMatchArray, line: number): vscode.Range {
-    const ch: number = strF.indexOf(rawName, ma.index);
-    const refRange: vscode.Range = new vscode.Range(
-        new vscode.Position(line, ch),
-        new vscode.Position(line, ch + rawName.length),
-    );
-    return refRange;
-}
-
-function defGlobal(gValMapBySelf: TGValMapPrivacy, strF: string, line: number): void {
-    for (const ma of strF.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gui)) {
-        const rawName: string = ma[1].trim();
-        if (rawName === '') continue;
-
-        const ValUpName: string = rawName.toUpperCase();
-        const defRange: vscode.Range = setRangeGlobal(strF, rawName, ma, line);
-        const oldVal: TGlobalVal | undefined = gValMapBySelf.get(ValUpName);
-
-        if (oldVal !== undefined) {
-            oldVal.defRangeList.push(defRange);
-        } else {
-            gValMapBySelf.set(ValUpName, {
-                defRangeList: [defRange],
-                refRangeList: [],
-                rawName,
-            });
-        }
-    }
-}
-
-function refGlobal(gValMapBySelf: TGValMapPrivacy, strF: string, line: number): void {
-    for (const ma of strF.matchAll(/\s*([^,]+),?/uig)) {
-        const rawName: string = ma[1].trim();
-        if (rawName === '') continue;
-
-        const ValUpName: string = rawName.toUpperCase();
-        const refRange: vscode.Range = setRangeGlobal(strF, rawName, ma, line);
-        const oldVal: TGlobalVal | undefined = gValMapBySelf.get(ValUpName);
-
-        if (oldVal !== undefined) {
-            oldVal.refRangeList.push(refRange);
-        } else {
-            gValMapBySelf.set(ValUpName, {
-                defRangeList: [],
-                refRangeList: [refRange],
-                rawName,
-            });
-        }
-    }
-}
+type TUpName = string;
+export type TGValMap = ReadonlyMap<TUpName, TGlobalVal>;
+export type TGValMapReadOnly = ReadonlyMap<TUpName, Readonly<TGlobalVal>>;
 
 export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
-    const GValMap: TGValMapPrivacy = new Map<TValUpName, TGlobalVal>();
+    const GValMap = new Map<TUpName, TGlobalVal>();
     let lastLineIsGlobal = false;
 
     for (
@@ -88,6 +36,7 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
         } of DocStrMap
     ) {
         if (fistWordUp === 'GLOBAL') {
+            if ((/^\s*\bGLOBAL$/ui).test(lStr)) continue;
             lastLineIsGlobal = true;
         } else if (lastLineIsGlobal && cll === 1) {
             lastLineIsGlobal = true;
@@ -98,10 +47,25 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
 
         const strF: string = lStr.replace(/^\s*\bglobal\b[,\s]+/ui, replacerSpace);
 
-        if (strF.includes(':=')) {
-            defGlobal(GValMap, strF, line);
-        } else {
-            refGlobal(GValMap, strF, line);
+        const varDataList: TVarData[] = varMixedAnnouncement(strF);
+        for (const { ch, rawName } of varDataList) {
+            const range: vscode.Range = new vscode.Range(
+                new vscode.Position(line, ch),
+                new vscode.Position(line, ch + rawName.length),
+            );
+
+            const ValUpName: string = rawName.toUpperCase();
+            const oldVal: TGlobalVal | undefined = GValMap.get(ValUpName);
+
+            if (oldVal !== undefined) {
+                oldVal.defRangeList.push(range);
+            } else {
+                GValMap.set(ValUpName, {
+                    defRangeList: [range],
+                    refRangeList: [],
+                    rawName,
+                });
+            }
         }
     }
     // for (const [k, v] of GValMap) {
@@ -109,7 +73,3 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
     // }
     return GValMap;
 }
-
-// just ref; global GLOBAL_VAL
-// def; global GLOBAL_VAL := 0
-// ref && user; -> GLOBAL_VAL := 0

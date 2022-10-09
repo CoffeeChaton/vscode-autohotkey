@@ -1,33 +1,9 @@
 /* eslint-disable no-magic-numbers */
 /* cSpell:disable */
-import { FindExprDelim } from '../../../zFromCpp/FindExprDelim';
 import type { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
-
-type TScanData = {
-    RawNameNew: string;
-    lPos: number;
-};
-
-function spiltCommandAll(lStr: string): TScanData[] {
-    const lStrLen: number = lStr.length;
-
-    const AllCut: TScanData[] = [];
-    let make = -1;
-    do {
-        const oldMake: number = make + 1;
-        make = FindExprDelim(lStr, ',', make + 1);
-        const partStr: string = lStr.slice(oldMake, make);
-        const RawNameNew: string = partStr.trim();
-
-        AllCut.push({
-            RawNameNew,
-            lPos: oldMake + partStr.indexOf(RawNameNew),
-        });
-    } while (make !== lStrLen);
-
-    return AllCut;
-}
+import type { TScanData } from './spiltCommandAll';
+import { spiltCommandAll } from './spiltCommandAll';
 
 function pickCommand(needArr: number[], AllCut: TScanData[]): TScanData[] {
     const needPartScan: TScanData[] = [];
@@ -89,3 +65,6 @@ export function OutputVarCommandPlus(arg: TGetFnDefNeed, fistWordUp: string): nu
     }
     return null;
 }
+
+// not plan to support
+// GuiControl ,, ControlID , value https://www.autohotkey.com/docs/commands/GuiControl.htm#Blank

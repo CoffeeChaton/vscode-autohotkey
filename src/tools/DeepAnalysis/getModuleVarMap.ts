@@ -11,7 +11,7 @@ import type {
 import {
     CAhkFunc,
 } from '../../AhkSymbol/CAhkFunc';
-import type { TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
 import { getFnVarDef } from './FnVar/getFnVarDef';
@@ -20,25 +20,16 @@ import { getUnknownTextMap } from './getUnknownTextMap';
 export type TModuleVar = {
     readonly ModuleValMap: TValMapOut;
     readonly ModuleTextMap: TTextMapOut;
+    readonly allowList: readonly boolean[];
 };
 
 function getModuleAllowList(DocStrMap: TTokenStream, AST: TAstRoot): readonly boolean[] {
-    const rangeList: vscode.Range[] = [];
-    for (const AhkSymbol of AST) {
-        if (AhkSymbol instanceof CAhkFunc) {
-            rangeList.push(AhkSymbol.range);
-        } else if (AhkSymbol instanceof CAhkClass) {
-            rangeList.push(AhkSymbol.range);
-        }
-    }
+    const rangeList: readonly vscode.Range[] = AST
+        .filter((TopSymbol: TTopSymbol): boolean => TopSymbol instanceof CAhkFunc || TopSymbol instanceof CAhkClass)
+        .map((TopSymbol: TTopSymbol): vscode.Range => TopSymbol.range);
 
     if (rangeList.length === 0) {
-        const len = DocStrMap.length;
-        const arr: true[] = [];
-        for (let index = 0; index < len; index++) {
-            arr.push(true); // i don't why ts think ->  Array.from().fill(true) is unknown[]...
-        }
-        return arr;
+        return DocStrMap.map(() => true);
     }
 
     let i = 0; // refer to rangeList i
@@ -76,5 +67,6 @@ export function getModuleVarMap(
     return {
         ModuleValMap,
         ModuleTextMap,
+        allowList,
     };
 }

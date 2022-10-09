@@ -5,9 +5,9 @@ import type {
     TTextMetaOut,
     TValMetaOut,
 } from '../../AhkSymbol/CAhkFunc';
-import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
+import type { TModuleVar } from '../../tools/DeepAnalysis/getModuleVarMap';
 
 function rangeList2LocList(rangeList: readonly vscode.Range[], uri: vscode.Uri): vscode.Location[] {
     return rangeList.map((range) => new vscode.Location(uri, range));
@@ -24,21 +24,32 @@ function metaRangeList(
         return rangeList2LocList([...defRangeList, ...refRangeList], uri);
     }
 
-    if (defRangeList[0].contains(position)) {
-        // // <
-        // // when I open "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
-        // // why vscode can't Identify range.contains(position)
-        // //      , and auto let F12 -> shift F12 ?
-        // //           (auto let goto Def -> Ref)
-        // // What else I need to read/Do?
-        // // return [...defRangeList, ...refRangeList];
-        // // >
-        // OK..i know who to go to References...
-        // keep uri as old uri && return old pos/range
-        // don't new vscode.Uri.file()
-        return [new vscode.Location(uri, position)];
+    return defRangeList[0].contains(position)
+        ? [new vscode.Location(uri, position)]
+        : rangeList2LocList(defRangeList, uri);
+}
+
+function getModuleVarDef(
+    ModuleVar: TModuleVar,
+    position: vscode.Position,
+    wordUp: string,
+    listAllUsing: boolean,
+    uri: vscode.Uri,
+): vscode.Location[] | null {
+    if (!ModuleVar.allowList[position.line]) return null;
+
+    const { ModuleValMap, ModuleTextMap } = ModuleVar;
+
+    const valMeta: TValMetaOut | undefined = ModuleValMap.get(wordUp);
+    if (valMeta !== undefined) {
+        const { defRangeList, refRangeList } = valMeta;
+        return metaRangeList(defRangeList, refRangeList, listAllUsing, position, uri);
     }
-    return rangeList2LocList(defRangeList, uri);
+
+    const textList: TTextMetaOut | undefined = ModuleTextMap.get(wordUp);
+    return textList !== undefined
+        ? rangeList2LocList(textList.refRangeList, uri)
+        : null;
 }
 
 export function getValDefInFunc(
@@ -48,11 +59,10 @@ export function getValDefInFunc(
     listAllUsing: boolean,
 ): vscode.Location[] | null {
     const { uri } = document;
-    const AhkFileData: TAhkFileData = pm.getDocMap(uri.fsPath) ?? pm.updateDocDef(document);
-    const { AST } = AhkFileData;
+    const { AST, ModuleVar } = pm.getDocMap(uri.fsPath) ?? pm.updateDocDef(document);
 
     const DA: CAhkFunc | null = getDAWithPos(AST, position);
-    if (DA === null) return null;
+    if (DA === null) return getModuleVarDef(ModuleVar, position, wordUp, listAllUsing, uri);
     if (DA.nameRange.contains(position)) return null; // fnName === val
 
     const {
@@ -73,7 +83,6 @@ export function getValDefInFunc(
     }
 
     const textList: TTextMetaOut | undefined = textMap.get(wordUp);
-
     return textList !== undefined
         ? rangeList2LocList(textList.refRangeList, uri)
         : null;
