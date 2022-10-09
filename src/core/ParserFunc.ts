@@ -24,6 +24,19 @@ function getFuncDetail(line: number, DocStrMap: TTokenStream): string {
         : '';
 }
 
+function getAllowsListOfFunc(DocStrMap: TTokenStream, startLine: number, endLine: number): readonly boolean[] {
+    const allowList: boolean[] = [];
+    for (const { line } of DocStrMap) {
+        if (line <= startLine) {
+            allowList.push(false);
+        } else if (line > startLine && line < endLine) {
+            allowList.push(true);
+        } else if (line >= endLine) {
+            break;
+        }
+    }
+    return allowList;
+}
 // TODO spilt this func
 // eslint-disable-next-line max-lines-per-function
 export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
@@ -66,8 +79,10 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
     // if is global mode
     // if is local mode
     // if is static mode
-    const valMap: TValMapIn = getFnVarDef(startLine, endLine, AhkTokenList, paramMap, GValMap);
-    const textMap: TTextMapIn = getUnknownTextMap(startLine, endLine, AhkTokenList, paramMap, valMap, GValMap, name); // eval!!
+    const allowList: readonly boolean[] = getAllowsListOfFunc(DocStrMap, startLine, endLine);
+
+    const valMap: TValMapIn = getFnVarDef(allowList, AhkTokenList, paramMap, GValMap);
+    const textMap: TTextMapIn = getUnknownTextMap(allowList, AhkTokenList, paramMap, valMap, GValMap, name); // eval!!
 
     const selectionRangeText: string = document.getText(selectionRange);
     const fileName: string = path.basename(document.uri.fsPath);

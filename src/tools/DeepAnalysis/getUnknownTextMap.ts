@@ -38,8 +38,7 @@ function pushRef(
 
 // eslint-disable-next-line max-params
 export function getUnknownTextMap(
-    startLine: number,
-    endLine: number,
+    allowList: readonly boolean[],
     DocStrMap: TTokenStream,
     paramMap: TParamMapIn,
     valMap: TValMapIn,
@@ -48,8 +47,9 @@ export function getUnknownTextMap(
 ): TTextMapIn {
     const textMap: TTextMapIn = new Map<string, TTextMetaIn>();
     for (const { lStr, line } of DocStrMap) {
-        if (line <= startLine) continue; // in arg Range
-        if (line > endLine) break;
+        if (!allowList[line]) continue; // in arg Range
+        if (line > allowList.length) break;
+
         for (const v of lStr.matchAll(/(?<![.#])\b(\w+)\b(?!\()/gu)) {
             const keyRawName: string = v[1];
             const wordUp: string = keyRawName.toUpperCase();

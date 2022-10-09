@@ -9,8 +9,7 @@ import { walrusOperator } from './def/walrusOperator';
 import type { TGetFnDefNeed } from './TFnVarDef';
 
 export function getFnVarDef(
-    startLine: number,
-    endLine: number,
+    allowList: readonly boolean[],
     DocStrMap: TTokenStream,
     paramMap: TParamMapIn,
     GValMap: TGValMap,
@@ -24,8 +23,8 @@ export function getFnVarDef(
             fistWordUp,
         } of DocStrMap
     ) {
-        if (line <= startLine) continue; // in arg Range
-        if (line > endLine) break;
+        if (!allowList[line]) continue; // in arg Range
+        if (line > allowList.length) break;
 
         const lStrTrimLen: number = lStr.trim().length;
         if (lStrTrimLen < 2) continue; // a=b need length >=3
