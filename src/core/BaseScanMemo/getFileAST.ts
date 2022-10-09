@@ -4,6 +4,8 @@ import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TFsPath, TTokenStream } from '../../globalEnum';
 import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
 import type { CDiagBase } from '../../provider/Diagnostic/tools/CDiagBase';
+import type { TModuleVar } from '../../tools/DeepAnalysis/getModuleVarMap';
+import { getModuleVarMap } from '../../tools/DeepAnalysis/getModuleVarMap';
 import { isAhk } from '../../tools/fsTools/isAhk';
 import { getChildren } from '../getChildren';
 import { getClass } from '../getClass';
@@ -28,6 +30,7 @@ export type TMemo = Readonly<{
     readonly DocFullSize: number;
     readonly baseDiag: readonly CDiagBase[];
     readonly uri: vscode.Uri;
+    readonly ModuleVar: TModuleVar;
 }>;
 
 function strListDeepEq(DocStrMap: TTokenStream, fullTextList: readonly string[]): boolean {
@@ -113,6 +116,7 @@ export function getFileAST(document: vscode.TextDocument): TMemo {
         baseDiag: baseDiagnostic(DocStrMap, AST),
         DocFullSize,
         uri: document.uri,
+        ModuleVar: getModuleVarMap(DocStrMap, GValMap, AST, fsPath),
     };
     BaseScanMemo.setMemo(fsPath, AhkCache);
     return AhkCache;

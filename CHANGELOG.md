@@ -2,9 +2,9 @@
 
 ## NEXT 0.0.12(2022-10-31)
 
+- add: ModuleVarSemantic
 - TODO: goto References `SetTimer, funcName`, filter ad funcName === labelName case
-- TODO: DA to all range
-- TODO:add global/local/normal/static of variables-property
+- TODO: add global/local/normal/static of variables-property
 
 ## 0.0.11(2022-10-09)
 
