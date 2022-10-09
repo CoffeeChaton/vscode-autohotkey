@@ -1,15 +1,20 @@
 # Changelog
 
-## NEXT 0.0.11(2022-10-15)
+## NEXT 0.0.12(2022-10-31)
 
-- TODO: goto References `SetTimer, funcName`
-- add: goto def of `labels:` and list all ref.
+- TODO: goto References `SetTimer, funcName`, filter ad funcName === labelName case
+- TODO: DA to all range
+- TODO:add global/local/normal/static of variables-property
+
+## 0.0.11(2022-10-09)
+
 - add: goto def of `funcName` at case `SetTimer, funcName`
+- add: goto def of `labels:` and list all ref.
 - add: README.md `Privacy Statement`
-- fix: catch user deg regexp errors of `AhkNekoHelp.baseScan.IgnoredList` and `AhkNekoHelp.snippets.blockFilesList`
-- fix: not diag first line problem.
-- fix: file name like `.AHK` support
 - break-change: remove support for `global` func.
+- fix: catch user deg regexp errors of `AhkNekoHelp.baseScan.IgnoredList` and `AhkNekoHelp.snippets.blockFilesList`
+- fix: file name like `.AHK` support
+- fix: not diag first line problem.
 - perf: OutputVarCommandBase && OutputVarCommandPlus
 
 ## 0.0.10(2022-10-01)

@@ -15,7 +15,7 @@ export function walrusOperator({
 }: TGetFnDefNeed): void {
     // eslint-disable-next-line no-magic-numbers
     if (lStrTrimLen < 4) return; // A:= ----> len 3
-    if (!lStr.includes(':=')) return;
+    if (!lStr.includes(':=')) return; // TODO did i need to support .= += -= /= ?
 
     for (const v of lStr.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gu)) {
         const character: number | undefined = v.index;

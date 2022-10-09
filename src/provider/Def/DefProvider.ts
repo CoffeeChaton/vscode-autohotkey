@@ -69,6 +69,7 @@ export function userDefFunc(
             'iug',
         ),
         refFn: (lineStr: string): IterableIterator<RegExpMatchArray> => lineStr.matchAll(ahkFunc.reg),
+        // FixME refactor this
     } as const;
 
     if (document.getWordRangeAtPosition(position, ahkFunc.reg) === undefined) return null;
