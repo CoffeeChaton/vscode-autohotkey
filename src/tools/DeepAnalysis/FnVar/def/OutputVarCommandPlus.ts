@@ -54,13 +54,24 @@ export function OutputVarCommandPlus(arg: TGetFnDefNeed, fistWordUp: string): nu
             GValMap,
             valMap,
             lineComment,
+            fnMode,
         } = arg;
 
         for (const { RawNameNew, lPos } of pickCommand(needArr, spiltCommandAll(lStr))) {
             const UpName: string = RawNameNew.toUpperCase();
             if (paramMap.has(UpName) || GValMap.has(UpName)) continue;
 
-            valMap.set(UpName, getValMeta(line, lPos, RawNameNew, valMap, lineComment));
+            valMap.set(
+                UpName,
+                getValMeta({
+                    line,
+                    character: lPos,
+                    RawName: RawNameNew,
+                    valMap,
+                    lineComment,
+                    fnMode,
+                }),
+            );
         }
     }
     return null;

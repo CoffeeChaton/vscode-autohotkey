@@ -70,18 +70,26 @@ export function OutputVarCommandBase(arg: TGetFnDefNeed, fistWordUp: string): nu
         GValMap,
         valMap,
         lineComment,
+        fnMode,
     } = arg;
 
     const deep0 = lStr.search(/\S/u);
     const ma: RegExpMatchArray | null = lStr.slice(deep0 + quickMake).match(/\b(\w+)\b/u);
     if (ma === null) return null;
 
-    const lPos: number = (ma.index ?? 0) + deep0 + quickMake;
-    const RawNameNew: string = ma[1];
-    const UpName: string = RawNameNew.toUpperCase();
+    const character: number = (ma.index ?? 0) + deep0 + quickMake;
+    const RawName: string = ma[1];
+    const UpName: string = RawName.toUpperCase();
     if (paramMap.has(UpName) || GValMap.has(UpName)) return null;
 
-    const value: TValMetaIn = getValMeta(line, lPos, RawNameNew, valMap, lineComment);
+    const value: TValMetaIn = getValMeta({
+        line,
+        character,
+        RawName,
+        valMap,
+        lineComment,
+        fnMode,
+    });
     valMap.set(UpName, value);
     return null;
 }

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import type { DeepReadonly } from '../globalEnum';
+import type { EFnMode } from '../tools/DeepAnalysis/FnVar/EFnMode';
 import type { TLineClass } from './CAhkLine';
 import type { CAhkSwitch } from './CAhkSwitch';
 
@@ -35,6 +36,7 @@ export type TValMetaIn = {
     refRangeList: vscode.Range[];
     c502Array: TC502New[];
     commentList: string[];
+    fnMode: EFnMode;
 };
 export type TValMetaOut = DeepReadonly<TValMetaIn>;
 

@@ -8,14 +8,14 @@ function globalValCompletionCore(): vscode.CompletionItem[] {
     const map: TGlobalVarUpNameMap = getGlobalUpNameMap();
 
     const need: vscode.CompletionItem[] = [];
-    for (const { fsPathList, rawName } of map.values()) {
+    for (const { fsPathList, keyRawName } of map.values()) {
         //
         const item: vscode.CompletionItem = new vscode.CompletionItem({
-            label: `${rawName}`,
+            label: `${keyRawName}`,
             description: 'Global',
         });
 
-        item.insertText = rawName;
+        item.insertText = keyRawName;
         item.detail = 'neko help';
 
         item.kind = vscode.CompletionItemKind.Variable;
@@ -26,7 +26,7 @@ function globalValCompletionCore(): vscode.CompletionItem[] {
             .sort()
             .join('\n');
         item.documentation = new vscode.MarkdownString('', true)
-            .appendCodeblock(`global ${rawName}`)
+            .appendCodeblock(`global ${keyRawName}`)
             .appendMarkdown('is def/ref at\n')
             .appendMarkdown(list);
 

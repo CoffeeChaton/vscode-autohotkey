@@ -82,6 +82,9 @@ export function getValDefInFunc(
         return metaRangeList(defRangeList, refRangeList, listAllUsing, position, uri);
     }
 
+    const ModuleVarDef: vscode.Location[] | null = getModuleVarDef(ModuleVar, position, wordUp, listAllUsing, uri);
+    if (ModuleVarDef !== null) return ModuleVarDef;
+
     const textList: TTextMetaOut | undefined = textMap.get(wordUp);
     return textList !== undefined
         ? rangeList2LocList(textList.refRangeList, uri)

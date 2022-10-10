@@ -1,5 +1,6 @@
 import type * as vscode from 'vscode';
 import type { TValMapIn, TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
+import type { EFnMode } from '../EFnMode';
 import { newC502 } from './c502';
 
 type TGetValue = {
@@ -7,6 +8,7 @@ type TGetValue = {
     valMap: TValMapIn;
     defRange: vscode.Range;
     lineComment: string;
+    fnMode: EFnMode;
 };
 
 export function wrapFnValDef({
@@ -14,6 +16,7 @@ export function wrapFnValDef({
     valMap,
     defRange,
     lineComment,
+    fnMode,
 }: TGetValue): TValMetaIn {
     const oldVal: TValMetaIn | undefined = valMap.get(RawNameNew.toUpperCase());
     if (oldVal !== undefined) {
@@ -34,5 +37,6 @@ export function wrapFnValDef({
                 ? lineComment.slice(1)
                 : '',
         ],
+        fnMode,
     };
 }

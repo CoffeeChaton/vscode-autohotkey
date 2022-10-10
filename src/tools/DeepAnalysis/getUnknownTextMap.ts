@@ -73,15 +73,16 @@ export function getUnknownTextMap(
             if (GValMapOldVal !== undefined) {
                 const startPosOfGlobal: vscode.Position = new vscode.Position(line, character);
                 if (
-                    !GValMapOldVal.defRangeList.some((r: vscode.Range): boolean => r.contains(startPosOfGlobal))
-                    && !GValMapOldVal.refRangeList.some((r: vscode.Range): boolean => r.contains(startPosOfGlobal))
+                    !GValMapOldVal.defRangeList.some(({ range }): boolean => range.contains(startPosOfGlobal))
+                    && !GValMapOldVal.refRangeList.some(({ range }): boolean => range.contains(startPosOfGlobal))
                 ) {
-                    GValMapOldVal.refRangeList.push(
-                        new vscode.Range(
+                    GValMapOldVal.refRangeList.push({
+                        rawName: keyRawName,
+                        range: new vscode.Range(
                             startPosOfGlobal,
                             new vscode.Position(line, character + wordUp.length),
                         ),
-                    );
+                    });
                 }
                 continue;
             } // keep before valMap && paramMap

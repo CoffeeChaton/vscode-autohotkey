@@ -2,7 +2,7 @@
 
 ## NEXT 0.0.12(2022-10-31)
 
-- add: ModuleVarSemantic
+- add: Module Var `Semantic` `gotoDef` `list all ref`
 - TODO: goto References `SetTimer, funcName`, filter ad funcName === labelName case
 - TODO: add global/local/normal/static of variables-property
 

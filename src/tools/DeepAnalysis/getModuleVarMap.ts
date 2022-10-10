@@ -7,6 +7,7 @@ import type {
     TTextMapOut,
     TValMapIn,
     TValMapOut,
+    TValMetaIn,
 } from '../../AhkSymbol/CAhkFunc';
 import {
     CAhkFunc,
@@ -14,6 +15,8 @@ import {
 import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
+import { wrapFnValDef } from './FnVar/def/wrapFnValDef';
+import { EFnMode } from './FnVar/EFnMode';
 import { getFnVarDef } from './FnVar/getFnVarDef';
 import { getUnknownTextMap } from './getUnknownTextMap';
 
@@ -59,10 +62,25 @@ export function getModuleVarMap(
     const AhkTokenList: TTokenStream = DocStrMap;
     const paramMap: TParamMapIn = new Map();
     const name: string = path.basename(fsPath);
+    const nullMap = new Map();
 
     const allowList: readonly boolean[] = getModuleAllowList(DocStrMap, AST);
-    const ModuleValMap: TValMapIn = getFnVarDef(allowList, AhkTokenList, paramMap, GValMap);
+    const ModuleValMap: TValMapIn = getFnVarDef(allowList, AhkTokenList, paramMap, nullMap, EFnMode.global);
     const ModuleTextMap: TTextMapIn = getUnknownTextMap(allowList, AhkTokenList, paramMap, ModuleValMap, GValMap, name);
+
+    for (const [upName, GlobalVal] of GValMap) {
+        const { defRangeList, refRangeList } = GlobalVal;
+        for (const { rawName, range } of [...defRangeList, ...refRangeList]) {
+            const value: TValMetaIn = wrapFnValDef({
+                RawNameNew: rawName,
+                valMap: ModuleValMap,
+                defRange: range,
+                lineComment: '',
+                fnMode: EFnMode.global,
+            });
+            ModuleValMap.set(upName, value);
+        }
+    }
 
     return {
         ModuleValMap,

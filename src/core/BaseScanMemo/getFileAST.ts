@@ -11,7 +11,7 @@ import { getChildren } from '../getChildren';
 import { getClass } from '../getClass';
 import { ParserBlock } from '../Parser';
 import { getFunc } from '../ParserFunc';
-import type { TGValMap, TGValMapReadOnly } from '../ParserTools/ahkGlobalDef';
+import type { TGValMap } from '../ParserTools/ahkGlobalDef';
 import { ahkGlobalMain } from '../ParserTools/ahkGlobalDef';
 import { ParserLine } from '../ParserTools/ParserLine';
 import { Pretreatment } from '../Pretreatment';
@@ -25,7 +25,6 @@ class CTopClass extends vscode.DocumentSymbol {
 
 export type TMemo = Readonly<{
     readonly AST: TAstRoot;
-    readonly GValMap: TGValMapReadOnly;
     readonly DocStrMap: TTokenStream;
     readonly DocFullSize: number;
     readonly baseDiag: readonly CDiagBase[];
@@ -110,7 +109,6 @@ export function getFileAST(document: vscode.TextDocument): TMemo {
     );
 
     const AhkCache: TMemo = {
-        GValMap,
         DocStrMap,
         AST,
         baseDiag: baseDiagnostic(DocStrMap, AST),

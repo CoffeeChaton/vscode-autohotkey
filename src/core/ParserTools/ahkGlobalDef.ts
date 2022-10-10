@@ -11,10 +11,14 @@ import { varMixedAnnouncement } from './varMixedAnnouncement';
 //     return rVal;
 // }
 
+type TGValData = {
+    rawName: string;
+    range: vscode.Range;
+};
+
 export type TGlobalVal = {
-    defRangeList: vscode.Range[];
-    refRangeList: vscode.Range[];
-    rawName: string; // -> GVar
+    defRangeList: TGValData[];
+    refRangeList: TGValData[];
     // TODO c502 list ? until were?
     // TODO add ahk-doc ?
 };
@@ -56,14 +60,17 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
 
             const ValUpName: string = rawName.toUpperCase();
             const oldVal: TGlobalVal | undefined = GValMap.get(ValUpName);
+            const element: TGValData = {
+                rawName,
+                range,
+            };
 
             if (oldVal !== undefined) {
-                oldVal.defRangeList.push(range);
+                oldVal.defRangeList.push(element);
             } else {
                 GValMap.set(ValUpName, {
-                    defRangeList: [range],
+                    defRangeList: [element],
                     refRangeList: [],
-                    rawName,
                 });
             }
         }
