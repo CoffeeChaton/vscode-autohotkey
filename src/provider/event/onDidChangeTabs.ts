@@ -13,8 +13,8 @@ export function onDidChangeActiveTab(e: vscode.TextEditor | undefined): undefine
     const { document } = e;
     const { uri } = document;
     if (isAhkTab(uri)) {
-        const { AST, DocStrMap } = pm.getDocMap(uri.fsPath) ?? pm.updateDocDef(document);
-        digDAFile(getDAList(AST), uri, DocStrMap);
+        const { AST, DocStrMap, ModuleVar } = pm.getDocMap(uri.fsPath) ?? pm.updateDocDef(document);
+        digDAFile(getDAList(AST), ModuleVar, uri, DocStrMap);
     }
 
     return undefined;

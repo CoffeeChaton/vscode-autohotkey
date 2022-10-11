@@ -62,21 +62,26 @@
             "type": "object",
             "title": "AhkNekoHelp",
             "properties": {
-                "AhkNekoHelp.Diag.WarningCap.code500": {
+                "AhkNekoHelp.Diag.useModuleValDiag": {
+                    "type": "boolean",
+                    "default": false,
+                    "markdownDescription": "beta test: try to Diag [5xx](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/src/diag.ts#L29) at all file"
+                },
+                "AhkNekoHelp.Diag.code500": {
                     "type": "number",
                     "default": 20,
                     "minimum": 0,
                     "maximum": 999,
                     "markdownDescription": "(code500) var is assigned but never used, a file max warn number. use ```0``` to close warn."
                 },
-                "AhkNekoHelp.Diag.WarningCap.code502": {
+                "AhkNekoHelp.Diag.code502": {
                     "type": "number",
                     "default": 10,
                     "minimum": 0,
                     "maximum": 999,
                     "markdownDescription": "(code502) case sensitivity check of variable, a file max warn number. use ```0``` to close warn."
                 },
-                "AhkNekoHelp.Diag.WarningCap.code503": {
+                "AhkNekoHelp.Diag.code503": {
                     "type": "number",
                     "default": 10,
                     "minimum": 0,
@@ -212,10 +217,10 @@
         "@swc/jest": "^0.2.23",
         "@types/assert": "^1.5.6",
         "@types/jest": "^29.1.2",
-        "@types/node": "^18.8.3",
+        "@types/node": "^18.8.4",
         "@types/vscode": "^1.72.0",
-        "@typescript-eslint/eslint-plugin": "^5.39.0",
-        "@typescript-eslint/parser": "^5.39.0",
+        "@typescript-eslint/eslint-plugin": "^5.40.0",
+        "@typescript-eslint/parser": "^5.40.0",
         "@vscode/test-electron": "^2.1.5",
         "dprint": "^0.32.1",
         "esbuild": "^0.15.10",

@@ -24,11 +24,10 @@ type TempConfigs = {
         CommandOption: ECommandOption;
     };
     Diag: {
-        WarningCap: {
-            code500: number; // NeverUsedVar
-            code502: number; // of var
-            code503: number; // of param
-        };
+        useModuleValDiag: boolean;
+        code500Max: number; // NeverUsedVar
+        code502Max: number; // of var
+        code503Max: number; // of param
     };
     useCodeLens: boolean;
     useSymbolProvider: boolean;
@@ -70,11 +69,10 @@ function getConfig(): TConfigs {
             CommandOption: getConfigs<ECommandOption>('snippets.CommandOption'),
         },
         Diag: {
-            WarningCap: {
-                code500: getConfigs<number>('Diag.WarningCap.code500'), // NeverUsedVar
-                code502: getConfigs<number>('Diag.WarningCap.code502'), // of var
-                code503: getConfigs<number>('Diag.WarningCap.code503'), // of param
-            },
+            useModuleValDiag: getConfigs<boolean>('Diag.useModuleValDiag'),
+            code500Max: getConfigs<number>('Diag.code500'), // NeverUsedVar
+            code502Max: getConfigs<number>('Diag.code502'), // of var
+            code503Max: getConfigs<number>('Diag.code503'), // of param
         },
         useCodeLens: getConfigs<boolean>('useCodeLens'),
         useSymbolProvider: getConfigs<boolean>('useSymbolProvider'),
@@ -166,25 +164,9 @@ export function getSnippetBlockFilesList(): readonly RegExp[] {
 export function getCommandOptions(): ECommandOption {
     return config.snippets.CommandOption;
 }
-/**
- * NeverUsedVar
- */
-export function getCode500Default(): number {
-    return config.Diag.WarningCap.code500;
-}
 
-/**
- * of var.
- */
-export function getCode502Default(): number {
-    return config.Diag.WarningCap.code502;
-}
-
-/**
- * of param.
- */
-export function getCode503Default(): number {
-    return config.Diag.WarningCap.code503;
+export function getDiagConfig(): TConfigs['Diag'] {
+    return config.Diag;
 }
 
 // vscode.window.setStatusBarMessage(timeSpend);

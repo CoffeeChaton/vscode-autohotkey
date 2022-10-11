@@ -8,6 +8,7 @@ import type {
 import { pm } from '../../core/ProjectManager';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import type { TModuleVar } from '../../tools/DeepAnalysis/getModuleVarMap';
+import { searchAllModuleVarRef } from './searchAllModuleVarRef';
 
 function rangeList2LocList(rangeList: readonly vscode.Range[], uri: vscode.Uri): vscode.Location[] {
     return rangeList.map((range) => new vscode.Location(uri, range));
@@ -36,14 +37,17 @@ function getModuleVarDef(
     listAllUsing: boolean,
     uri: vscode.Uri,
 ): vscode.Location[] | null {
-    if (!ModuleVar.allowList[position.line]) return null;
-
     const { ModuleValMap, ModuleTextMap } = ModuleVar;
 
     const valMeta: TValMetaOut | undefined = ModuleValMap.get(wordUp);
     if (valMeta !== undefined) {
-        const { defRangeList, refRangeList } = valMeta;
-        return metaRangeList(defRangeList, refRangeList, listAllUsing, position, uri);
+        if (listAllUsing) {
+            return searchAllModuleVarRef(wordUp);
+        }
+        const { defRangeList } = valMeta;
+        return defRangeList[0].contains(position)
+            ? [new vscode.Location(uri, position)]
+            : rangeList2LocList(defRangeList, uri);
     }
 
     const textList: TTextMetaOut | undefined = ModuleTextMap.get(wordUp);

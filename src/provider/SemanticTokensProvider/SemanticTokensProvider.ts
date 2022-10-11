@@ -1,6 +1,4 @@
-import * as path from 'node:path';
 import * as vscode from 'vscode';
-import { showTimeSpend } from '../../configUI';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { DAList2SemanticHighlight } from './DAList2SemanticHighlight';
@@ -17,7 +15,6 @@ const wm = new WeakMap<TAhkFileData, vscode.SemanticTokens>();
 
 function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticTokens {
     const AhkFileData: TAhkFileData = pm.updateDocDef(document);
-    showTimeSpend(path.basename(document.uri.fsPath));
     const cache: vscode.SemanticTokens | undefined = wm.get(AhkFileData);
     if (cache !== undefined) return cache;
 

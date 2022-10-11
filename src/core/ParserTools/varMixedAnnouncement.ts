@@ -29,6 +29,13 @@ function matchStr(RawNameNew: string, key: string): number {
     return i;
 }
 
+/**
+ * ```ahk
+ * static li := {btn: {oc:1, ari:2, ync:3, yn:4, rc:5, ctc:6}, ico: {"x":16, "?":32, "!":48, "i":64}},b9,c5
+ *
+ * li,b9,c5 is variable
+ * ```
+ */
 export function varMixedAnnouncement(strF: string, objDeepRaw: number): TVarDataResult {
     const varDataList: TVarData[] = [];
 

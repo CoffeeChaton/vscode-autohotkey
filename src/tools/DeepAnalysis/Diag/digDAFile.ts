@@ -1,6 +1,7 @@
+/* eslint-disable max-lines-per-function */
 import type * as vscode from 'vscode';
 import type { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
-import { getCode500Default, getCode502Default, getCode503Default } from '../../../configUI';
+import { getDiagConfig } from '../../../configUI';
 import { diagColl } from '../../../core/ProjectManager';
 import type { TAhkTokenLine, TTokenStream } from '../../../globalEnum';
 import { CDiagFn } from '../../../provider/Diagnostic/tools/CDiagFn';
@@ -11,6 +12,7 @@ import { EPrefixC502 } from '../../../provider/Diagnostic/tools/CDiagFnLib/C502C
 import type { C504Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C504Class';
 import type { C505Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C505Class';
 import type { C506Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C506Class';
+import type { TModuleVar } from '../getModuleVarMap';
 import { caseSensitivityVar } from './caseSensitivity';
 import { C506DiagNumberStyle } from './otherDiag/C506DiagNumberStyle';
 import { NeverUsedParam, NeverUsedVar } from './param/paramNeverUsed';
@@ -22,14 +24,22 @@ type TDaDiagCache = {
     code500Max: number;
     code502Max: number;
     code503Max: number;
+    useModuleValDiag: boolean;
 };
 
 const wm = new WeakMap<CAhkFunc[], TDaDiagCache>();
 
-function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]): readonly CDiagFn[] {
-    const code500Max: number = getCode500Default();
-    const code502Max: number = getCode502Default();
-    const code503Max: number = getCode503Default();
+function diagDAFileCore(
+    DAList: CAhkFunc[],
+    ModuleVar: TModuleVar,
+    displayErrList: readonly boolean[],
+): readonly CDiagFn[] {
+    const {
+        code500Max,
+        code502Max,
+        code503Max,
+        useModuleValDiag,
+    } = getDiagConfig();
 
     const cache: TDaDiagCache | undefined = wm.get(DAList);
     if (
@@ -37,6 +47,7 @@ function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]):
         && cache.code500Max === code500Max
         && cache.code502Max === code502Max
         && cache.code503Max === code503Max
+        && cache.useModuleValDiag === useModuleValDiag
     ) {
         return cache.DADiagList;
     }
@@ -64,6 +75,12 @@ function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]):
         // }
         // https://stackoverflow.com/questions/12684985/why-doesnt-autohotkey-support-default-parameters-in-the-middle-of-the-parameter
     }
+    if (useModuleValDiag) {
+        const { ModuleValMap, ModuleTextMap } = ModuleVar;
+        NeverUsedVar(ModuleValMap, code500List, code500Max, displayErrList);
+        caseSensitivityVar(EPrefixC502.var, ModuleValMap, code502List, code502Max, displayErrList);
+        C506DiagNumberStyle(ModuleTextMap, code506List);
+    }
 
     const DADiagList: readonly CDiagFn[] = [
         ...code500List,
@@ -80,19 +97,20 @@ function diagDAFileCore(DAList: CAhkFunc[], displayErrList: readonly boolean[]):
         code500Max,
         code502Max,
         code503Max,
+        useModuleValDiag,
     });
     return DADiagList;
 }
 
-export function digDAFile(DAList: CAhkFunc[], uri: vscode.Uri, DocStrMap: TTokenStream): void {
-    const baseDiag = (diagColl.get(uri) ?? [])
-        .filter((diag): boolean => !(diag instanceof CDiagFn));
+export function digDAFile(DAList: CAhkFunc[], ModuleVar: TModuleVar, uri: vscode.Uri, DocStrMap: TTokenStream): void {
+    const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) ?? [])
+        .filter((diag: vscode.Diagnostic): boolean => !(diag instanceof CDiagFn));
 
     const displayFnErrList: readonly boolean[] = DocStrMap
         .map(({ displayFnErr }: TAhkTokenLine): boolean => displayFnErr);
 
     diagColl.set(uri, [
         ...baseDiag,
-        ...diagDAFileCore(DAList, displayFnErrList),
+        ...diagDAFileCore(DAList, ModuleVar, displayFnErrList),
     ]);
 }

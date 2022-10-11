@@ -3,8 +3,9 @@
 ## NEXT 0.0.12(2022-10-31)
 
 - add: Module Var `Semantic` `gotoDef` `list all ref`
+- add: global/local/normal/static of variables-property
+- add: config of `"AhkNekoHelp.Diag.useModuleValDiag"`
 - TODO: goto References `SetTimer, funcName`, filter ad funcName === labelName case
-- TODO: add global/local/normal/static of variables-property
 
 ## 0.0.11(2022-10-09)
 
