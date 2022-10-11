@@ -65,6 +65,7 @@ export function getFnVarDef(
 ): TValMapIn {
     let fnMode: EFnMode = fnModeDefault;
     let fistWordVarMix: '' | 'GLOBAL' | 'LOCAL' | 'STATIC' = '';
+    let objDeepRaw = 0;
 
     const valMap: TValMapIn = new Map<string, TValMetaIn>();
     for (
@@ -87,10 +88,11 @@ export function getFnVarDef(
         }
 
         if (
-            lStrTrimLen > 'LOCAL'.length
+            lStrTrimLen > 'STATIC'.length
             && (fistWordUp === 'STATIC' || fistWordUp === 'LOCAL' || fistWordUp === 'GLOBAL')
         ) {
             fistWordVarMix = fistWordUp;
+            objDeepRaw = 0;
         } else if (fistWordVarMix !== '' && cll === 1) {
             // nothing
             // fistWordVarMix = the last line fistWordUp
@@ -101,10 +103,12 @@ export function getFnVarDef(
         if (fistWordVarMix === 'GLOBAL') continue;
 
         if (fistWordVarMix === 'LOCAL' || fistWordVarMix === 'STATIC') {
-            const varDataList = varMixedAnnouncement(lStr.replace(/^\s*\b(?:static|local)\b[,\s]+/ui, replacerSpace));
-            if (varDataList.length > 0) {
-                console.log('🚀 varDataList', varDataList, lStr);
-            }
+            const { varDataList, objDeep } = varMixedAnnouncement(
+                lStr.replace(/^\s*\b(?:static|local)\b[,\s]+/ui, replacerSpace),
+                objDeepRaw,
+            );
+            objDeepRaw = objDeep;
+
             setVarMix({
                 varDataList,
                 line,

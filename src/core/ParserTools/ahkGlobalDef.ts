@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import type { TTokenStream } from '../../globalEnum';
 import { replacerSpace } from '../../tools/str/removeSpecialChar';
-import type { TVarData } from './varMixedAnnouncement';
 import { varMixedAnnouncement } from './varMixedAnnouncement';
 
 // function getRVal(textRaw: string, ch: number, nameLen: number, ma2Len: number): string {
@@ -30,7 +29,7 @@ export type TGValMapReadOnly = ReadonlyMap<TUpName, Readonly<TGlobalVal>>;
 export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
     const GValMap = new Map<TUpName, TGlobalVal>();
     let lastLineIsGlobal = false;
-
+    let objDeepRaw = 0;
     for (
         const {
             lStr,
@@ -42,6 +41,7 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
         if (fistWordUp === 'GLOBAL') {
             if ((/^\s*\bGLOBAL$/ui).test(lStr)) continue;
             lastLineIsGlobal = true;
+            objDeepRaw = 0;
         } else if (lastLineIsGlobal && cll === 1) {
             lastLineIsGlobal = true;
         } else {
@@ -51,7 +51,8 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
 
         const strF: string = lStr.replace(/^\s*\bglobal\b[,\s]+/ui, replacerSpace);
 
-        const varDataList: TVarData[] = varMixedAnnouncement(strF);
+        const { varDataList, objDeep } = varMixedAnnouncement(strF, objDeepRaw);
+        objDeepRaw = objDeep;
         for (const { ch, rawName } of varDataList) {
             const range: vscode.Range = new vscode.Range(
                 new vscode.Position(line, ch),

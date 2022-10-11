@@ -202,9 +202,7 @@
         "watch": "tsc -watch -p ./",
         "test_vsc": "pnpm run compile && node ./dist/test/runTest.js",
         "test": "jest",
-        "up_dprint_config": "dprint config update",
-        "up_dprint": "dprint upgrade",
-        "up": "pnpm up -L",
+        "up": "pnpm up -L && dprint upgrade && dprint config update",
         "pnpm clean cache": "pnpm store prune",
         "package": "pnpm vsce package --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp --baseImagesUrl https://raw.githubusercontent.com/CoffeeChaton/vscode-autohotkey-NekoHelp/master/",
         "package-pre": "pnpm vsce package --pre-release --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp --baseImagesUrl https://raw.githubusercontent.com/CoffeeChaton/vscode-autohotkey-NekoHelp/master/"

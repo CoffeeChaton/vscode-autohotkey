@@ -585,8 +585,7 @@ export const LineCommand: TLineCommand = {
             'ControlMove, Control, X, Y, Width, Height [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
             '',
             ';exp',
-            'fn_1 := Func("fn_ControlMoveTimer")^$',
-            'SetTimer, %fn_1%',
+            'SetTimer, fn_ControlMoveTimer',
             'InputBox, OutputVar, % "My Input Box"',
             'return',
             '',
@@ -1914,7 +1913,7 @@ export const LineCommand: TLineCommand = {
     },
     SETTIMER: {
         keyRawName: 'SetTimer',
-        body: 'SetTimer [, ${1:LabelOrFunc}, ${2:|Period,On,Off|}]',
+        body: 'SetTimer [, ${1:LabelOrFunc}, ${2|Period,On,Off|}]',
         doc: 'Causes a subroutine to be launched automatically and repeatedly at a specified time interval.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/SetTimer.htm',

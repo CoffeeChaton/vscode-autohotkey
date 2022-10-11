@@ -16,11 +16,27 @@ function isLookLikeVar(rawName: string): boolean {
     );
 }
 
-// FIXME: var := {obj:something, k:v}
-export function varMixedAnnouncement(strF: string): TVarData[] {
+type TVarDataResult = {
+    varDataList: TVarData[];
+    objDeep: number;
+};
+
+function matchStr(RawNameNew: string, key: string): number {
+    let i = 0;
+    for (const str of RawNameNew) {
+        if (str === key) i++;
+    }
+    return i;
+}
+
+export function varMixedAnnouncement(strF: string, objDeepRaw: number): TVarDataResult {
     const varDataList: TVarData[] = [];
 
+    let objDeep = objDeepRaw;
     for (const { RawNameNew, lPos } of spiltCommandAll(strF)) {
+        if (RawNameNew.includes('{')) objDeep += matchStr(RawNameNew, '{');
+        if (RawNameNew.includes('}')) objDeep -= matchStr(RawNameNew, '}');
+
         if (RawNameNew.includes(':=')) {
             for (const ma of RawNameNew.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gui)) {
                 const rawName: string = ma[1].trim();
@@ -31,7 +47,7 @@ export function varMixedAnnouncement(strF: string): TVarData[] {
                     });
                 }
             }
-        } else {
+        } else if (objDeep === 0) {
             const rawName: string = RawNameNew.trim();
             if (isLookLikeVar(rawName)) {
                 varDataList.push({
@@ -42,5 +58,8 @@ export function varMixedAnnouncement(strF: string): TVarData[] {
         }
     }
 
-    return varDataList;
+    return {
+        varDataList,
+        objDeep,
+    };
 }
