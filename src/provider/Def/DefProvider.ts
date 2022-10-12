@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
@@ -50,8 +49,7 @@ export function userDefFunc(
 ): vscode.Location[] | null {
     const timeStart: number = Date.now();
 
-    const AhkFileData: TAhkFileData = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
-    const { AST } = AhkFileData;
+    const { AST } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
 
     if (isPosAtMethodName(getDAWithPos(AST, position), position)) {
         return null;

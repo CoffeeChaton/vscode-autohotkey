@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { isPosAtStr } from '../isPosAtStr';
-import { getLStr } from '../str/removeSpecialChar';
+import { pm } from '../../core/ProjectManager';
+import { isPosAtStrNext } from '../isPosAtStr';
 import { A_Send } from './Send';
 
 const sendBigBlock: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => {
@@ -33,12 +33,12 @@ const sendBigBlock: readonly vscode.CompletionItem[] = ((): readonly vscode.Comp
 })();
 
 export function ahkSend(document: vscode.TextDocument, position: vscode.Position): readonly vscode.CompletionItem[] {
-    const textRaw = document.lineAt(position).text;
-    const lStr = getLStr(textRaw);
+    const { DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const { textRaw, lStr } = DocStrMap[position.line];
     if (
         (/\b(?:Control)?Send(?:Input|Play|Event)?\b/ui).test(lStr)
         || lStr.includes('::')
-        || isPosAtStr(document, position)
+        || isPosAtStrNext(textRaw, lStr, position)
     ) {
         return sendBigBlock;
     }

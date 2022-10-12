@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { CAhkLabel } from '../../AhkSymbol/CAhkLine';
-import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { findLabel } from '../../tools/labels';
@@ -40,8 +39,7 @@ export function posAtLabelDef(
     position: vscode.Position,
     wordUp: string,
 ): vscode.Location[] | null {
-    const AhkFileData: TAhkFileData = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
-    const { DocStrMap } = AhkFileData;
+    const { DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
     const { lStr } = DocStrMap[position.line];
 
     if ((/^\w+:$/u).test(lStr.trim())) {
@@ -80,8 +78,7 @@ export function getDefWithLabel(
     position: vscode.Position,
     wordUpCase: string,
 ): vscode.Location[] | null {
-    const AhkFileData: TAhkFileData = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
-    const { DocStrMap } = AhkFileData;
+    const { DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
     const { lStr } = DocStrMap[position.line];
     const lStrFix: string = lStr.slice(0, Math.max(0, position.character));
 

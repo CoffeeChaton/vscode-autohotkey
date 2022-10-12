@@ -1046,7 +1046,7 @@ export const LineCommand: TLineCommand = {
             '**UTF-8-RAW:** As above, but no byte order mark is written when a new file is created.\n',
             '**UTF-16:** Unicode UTF-16 with little endian byte order, equivalent to CP1200.\n',
             '**UTF-16-RAW:** As above, but no byte order mark is written when a new file is created.\n',
-            '**CP_nnn_:** A code page with numeric identifier _nnn_. See [Code Page Identifiers](http://msdn.microsoft.com/en-us/library/dd317756.aspx).\n',
+            '**CP_nnn_:** A code page with numeric identifier _nnn_. See [Code Page Identifiers](https://msdn.microsoft.com/en-us/library/dd317756.aspx).\n',
         ].join('\n'),
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileEncoding.htm',

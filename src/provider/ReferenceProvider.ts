@@ -1,5 +1,6 @@
 import type * as vscode from 'vscode';
-import { isPosAtStr } from '../tools/isPosAtStr';
+import { pm } from '../core/ProjectManager';
+import { isPosAtStrNext } from '../tools/isPosAtStr';
 import { userDefFunc } from './Def/DefProvider';
 import { getClassDef } from './Def/getClassDef';
 import { posAtLabelDef } from './Def/getDefWithLabel';
@@ -9,7 +10,9 @@ function ReferenceProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Location[] | null {
-    if (isPosAtStr(document, position)) return null;
+    const { DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const { textRaw, lStr } = DocStrMap[position.line];
+    if (isPosAtStrNext(textRaw, lStr, position)) return null;
 
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/ui);
     if (range === undefined) return null;
