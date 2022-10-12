@@ -27,12 +27,11 @@ export function getValMeta(
         new vscode.Position(line, character + RawName.length),
     );
 
-    const value: TValMetaIn = wrapFnValDef({
+    return wrapFnValDef({
         RawNameNew: RawName,
         valMap,
         defRange,
         lineComment,
         fnMode,
     });
-    return value;
 }

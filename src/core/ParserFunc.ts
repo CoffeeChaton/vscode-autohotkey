@@ -38,6 +38,7 @@ function getAllowsListOfFunc(DocStrMap: TTokenStream, startLine: number, endLine
     }
     return allowList;
 }
+
 // TODO spilt this func
 // eslint-disable-next-line max-lines-per-function
 export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
@@ -88,7 +89,7 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
     const selectionRangeText: string = document.getText(selectionRange);
     const fileName: string = path.basename(document.uri.fsPath);
 
-    const myFn2: CAhkFunc = new CAhkFunc({
+    return new CAhkFunc({
         name,
         detail: getFuncDetail(line, DocStrMap),
         range,
@@ -110,5 +111,4 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
         ),
         fnMode,
     });
-    return myFn2;
 }

@@ -12,7 +12,7 @@ import type {
 import type { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
 import { A_VariablesMDMap } from '../Built-in/A_Variables';
-import { CommandMDMap } from '../Built-in/Command_Tools';
+import { CommandMDMap } from '../Built-in/Command_tools';
 import { StatementMDMap } from '../Built-in/statement_vsc';
 import { newC502 } from './FnVar/def/c502';
 

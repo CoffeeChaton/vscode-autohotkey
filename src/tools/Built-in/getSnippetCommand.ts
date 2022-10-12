@@ -2,8 +2,8 @@ import type * as vscode from 'vscode';
 import { ECommandOption, getCommandOptions } from '../../configUI';
 import { enumLog } from '../enumErr';
 import { getAllFunc } from '../Func/getAllFunc';
-import type { TSnippetCommand } from './Command_Tools';
-import { snippetCommand } from './Command_Tools';
+import type { TSnippetCommand } from './Command_tools';
+import { snippetCommand } from './Command_tools';
 import type { CSnippetCommand } from './CSnippetCommand';
 
 const snippetCommandFilter: readonly CSnippetCommand[] = snippetCommand.filter((v) => v.recommended);

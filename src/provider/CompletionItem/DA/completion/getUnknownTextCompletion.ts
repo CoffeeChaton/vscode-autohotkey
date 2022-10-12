@@ -11,7 +11,7 @@ export function getUnknownTextCompletion(
     const recMap = new Map();
     return [...textMap.values()].map((v: TTextMetaOut): vscode.CompletionItem => {
         const { keyRawName, refRangeList } = v;
-        const item: vscode.CompletionItem = setItemCore({
+        return setItemCore({
             prefix: EPrefix.unKnownText,
             recMap,
             keyRawName,
@@ -22,6 +22,5 @@ export function getUnknownTextCompletion(
             kind,
             commentList: [],
         });
-        return item;
     });
 }

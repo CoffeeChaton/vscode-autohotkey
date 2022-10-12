@@ -17,6 +17,7 @@ type TC502Data = Readonly<{
 
 export class C502Class extends CDiagFn {
     public readonly c502Data: TC502Data;
+
     //
     public constructor(c502Data: TC502Data) {
         const {

@@ -18,6 +18,7 @@ export class CAhkClassInstanceVar extends vscode.DocumentSymbol {
     declare public readonly kind: vscode.SymbolKind.Variable;
     declare public readonly detail: 'Instance Var' | 'static ClassVar';
     declare public readonly children: [];
+
     public constructor(
         {
             range,
@@ -42,6 +43,7 @@ export class CAhkClassGetSet extends vscode.DocumentSymbol {
     declare public readonly kind: vscode.SymbolKind.Property;
     declare public readonly detail: 'Property';
     declare public readonly children: [];
+
     public constructor(
         {
             name,
@@ -74,6 +76,7 @@ export class CAhkClass extends vscode.DocumentSymbol {
     declare public readonly kind: vscode.SymbolKind.Class;
     declare public readonly children: TClassChildren[];
     declare public readonly detail: '';
+
     public constructor(
         {
             //  md: vscode.MarkdownString
@@ -101,6 +104,7 @@ export class CAhkClass extends vscode.DocumentSymbol {
         this.children = ch;
         this.Base = Base;
     }
+
     // m1 := new GMem(0, 20) ; OK!
     // m2 := {base: GMem}.__New(0, 30) ; no support
 

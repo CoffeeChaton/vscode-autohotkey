@@ -126,13 +126,12 @@ export function ParserLine(FuncInput: TFuncInput): CAhkComment | TLineClass | nu
         const name: string | null = getName(strTrim);
         if (name === null) continue;
 
-        const ed: TLineClass = new ClassName({
+        return new ClassName({
             name,
             range: getRangeOfLine(line, lStr, textRaw.length),
             selectionRange: getRangeOfLine(line, lStr, lStr.length),
             uri: document.uri,
         });
-        return ed;
     }
     return null;
 }

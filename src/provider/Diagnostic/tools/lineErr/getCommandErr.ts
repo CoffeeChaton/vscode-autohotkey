@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import type { TAhkTokenLine } from '../../../../globalEnum';
-import { CommandErrMap } from '../../../../tools/Built-in/Command_Tools';
+import { CommandErrMap } from '../../../../tools/Built-in/Command_tools';
 import { CDiagBase } from '../CDiagBase';
 
 function getLoopErr(lStr: string, line: number): CDiagBase | null {

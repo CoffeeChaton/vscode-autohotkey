@@ -5,7 +5,12 @@ export function C506DiagNumberStyle(textMap: TTextMapOut, code506List: C506Class
     for (const [keyUpName, v] of textMap) {
         if ((/^0o[0-7]+$/ui).test(keyUpName) || (/^0b[0-1]+$/ui).test(keyUpName)) {
             for (const range of v.refRangeList) {
-                code506List.push(new C506Class({ range, keyUpName }));
+                code506List.push(
+                    new C506Class({
+                        range,
+                        keyUpName,
+                    }),
+                );
             }
         }
     }

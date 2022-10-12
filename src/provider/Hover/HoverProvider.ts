@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { pm } from '../../core/ProjectManager';
 import { hoverAVar } from '../../tools/Built-in/A_Variables';
-import { getHoverCommand, getHoverCommand2 } from '../../tools/Built-in/Command_Tools';
+import { getHoverCommand, getHoverCommand2 } from '../../tools/Built-in/Command_tools';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func_tools';
 import { getHoverStatement } from '../../tools/Built-in/statement_vsc';
 import { hover2winMsgMd } from '../../tools/Built-in/Windows_Messages_Tools';

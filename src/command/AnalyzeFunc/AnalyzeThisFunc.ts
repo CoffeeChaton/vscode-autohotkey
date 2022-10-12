@@ -19,6 +19,7 @@ function showElement(map: TParamMapOut | TTextMapOut | TValMapOut): string {
         .map((e): string => e.keyRawName)
         .join(', ');
 }
+
 // --------
 
 async function fmtAnalyze(document: vscode.TextDocument): Promise<void> {

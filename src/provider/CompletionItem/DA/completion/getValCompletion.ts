@@ -19,7 +19,7 @@ export function getValCompletion(
             // ahkValType,
         } = v;
         // const typeValType = getAhkTypeName(ahkValType);
-        const item: vscode.CompletionItem = setItemCore({
+        return setItemCore({
             prefix: EPrefix.var,
             recMap,
             keyRawName,
@@ -30,6 +30,5 @@ export function getValCompletion(
             kind,
             commentList,
         });
-        return item;
     });
 }

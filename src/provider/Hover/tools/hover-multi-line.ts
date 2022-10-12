@@ -22,7 +22,7 @@ mdOfMultiLine116.appendCodeblock(
         'output =',
         '( LTrim',
         '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">',
-        '<html>',
+        '<html lang="en">',
         '<body>',
         '<object type="text/site properties">',
         '<param name="Window Styles" value="0x800025">',

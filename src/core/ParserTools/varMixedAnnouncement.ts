@@ -6,13 +6,11 @@ export type TVarData = {
 };
 
 function isLookLikeVar(rawName: string): boolean {
-    return (
-        !(
-            !(/^\w+$/u).test(rawName)
-            || (/^_+$/u).test(rawName) // str
-            || (/^\d+$/u).test(rawName) // just number
-            || (/^0X[\dA-F]+$/ui).test(rawName)
-        ) // NumHexConst = 0 x [0-9a-fA-F]+
+    return !(
+        !(/^\w+$/u).test(rawName)
+        || (/^_+$/u).test(rawName) // str
+        || (/^\d+$/u).test(rawName) // just number
+        || (/^0X[\dA-F]+$/ui).test(rawName) // NumHexConst = 0 x [0-9a-fA-F]+
     );
 }
 

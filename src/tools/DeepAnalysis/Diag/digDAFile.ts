@@ -61,8 +61,7 @@ function diagDAFileCore(
     const code505List: C505Class[] = [];
     const code506List: C506Class[] = [];
 
-    for (const DA of DAList) {
-        const { paramMap, valMap, textMap } = DA;
+    for (const { paramMap, valMap, textMap } of DAList) {
         NeverUsedVar(valMap, code500List, code500Max, displayErrList);
         NeverUsedParam(paramMap, code501List, displayErrList);
         caseSensitivityVar(EPrefixC502.var, valMap, code502List, code502Max, displayErrList); // var case sensitivity

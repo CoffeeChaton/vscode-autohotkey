@@ -9,9 +9,7 @@ import type {
     TValMapOut,
     TValMetaIn,
 } from '../../AhkSymbol/CAhkFunc';
-import {
-    CAhkFunc,
-} from '../../AhkSymbol/CAhkFunc';
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
@@ -55,8 +53,7 @@ function getModuleAllowList(DocStrMap: TTokenStream, AST: TAstRoot): readonly bo
 }
 
 function moveGValMap2ModuleMap(GValMap: TGValMap, ModuleValMap: TValMapIn): void {
-    for (const [upName, GlobalVal] of GValMap) {
-        const { defRangeList, refRangeList } = GlobalVal;
+    for (const [upName, { defRangeList, refRangeList }] of GValMap) {
         for (const { rawName, range } of [...defRangeList, ...refRangeList]) {
             const value: TValMetaIn = wrapFnValDef({
                 RawNameNew: rawName,

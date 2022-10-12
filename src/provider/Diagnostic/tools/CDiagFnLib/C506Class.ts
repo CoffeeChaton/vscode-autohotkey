@@ -20,6 +20,7 @@ type TC506Param = {
 
 export class C506Class extends CDiagFn {
     public readonly keyUpName: string;
+
     //
     public constructor(c506Param: TC506Param) {
         const { range, keyUpName } = c506Param;

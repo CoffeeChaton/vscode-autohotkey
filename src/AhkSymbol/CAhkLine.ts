@@ -124,6 +124,7 @@ export class CAhkComment extends vscode.DocumentSymbol {
     declare public readonly kind: vscode.SymbolKind.Package;
     declare public readonly detail: '';
     declare public readonly children: never[];
+
     public constructor(
         {
             name,

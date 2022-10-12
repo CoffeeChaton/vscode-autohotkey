@@ -31,8 +31,7 @@ function getParamDefNeed(
     ch: number,
     lineComment: string,
 ): TParamMetaIn {
-    const data: TParamData = getKeyRawName(param);
-    const { isByRef, isVariadic, keyRawName } = data;
+    const { isByRef, isVariadic, keyRawName } = getKeyRawName(param);
     const range: vscode.Range = new vscode.Range(
         new vscode.Position(line, ch),
         new vscode.Position(line, ch + keyRawName.length),

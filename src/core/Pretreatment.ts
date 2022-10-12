@@ -13,7 +13,7 @@ import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
 /**
  * @param strArray keep this with readonly string[], don't use String, because of copy.
  *  and without str.spilt(\r?\n), I hate \r
- * @param fileName just debug of deep < 0
+ * @param _fileName just debug of deep < 0
  * @returns FFullDocTokenDocStream
  */
 export function Pretreatment(strArray: readonly string[], _fileName: string): TTokenStream {
