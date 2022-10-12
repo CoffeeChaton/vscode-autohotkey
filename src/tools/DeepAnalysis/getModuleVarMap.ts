@@ -18,6 +18,7 @@ import type { TTokenStream } from '../../globalEnum';
 import { wrapFnValDef } from './FnVar/def/wrapFnValDef';
 import { EFnMode } from './FnVar/EFnMode';
 import { getFnVarDef } from './FnVar/getFnVarDef';
+import { getDAList } from './getDAList';
 import { getUnknownTextMap } from './getUnknownTextMap';
 
 export type TModuleVar = {
@@ -53,21 +54,7 @@ function getModuleAllowList(DocStrMap: TTokenStream, AST: TAstRoot): readonly bo
     return allowList;
 }
 
-export function getModuleVarMap(
-    DocStrMap: TTokenStream,
-    GValMap: TGValMap,
-    AST: TAstRoot,
-    fsPath: string,
-): TModuleVar {
-    const AhkTokenList: TTokenStream = DocStrMap;
-    const paramMap: TParamMapIn = new Map();
-    const name: string = path.basename(fsPath);
-    const nullMap = new Map();
-
-    const allowList: readonly boolean[] = getModuleAllowList(DocStrMap, AST);
-    const ModuleValMap: TValMapIn = getFnVarDef(allowList, AhkTokenList, paramMap, nullMap, EFnMode.global);
-    const ModuleTextMap: TTextMapIn = getUnknownTextMap(allowList, AhkTokenList, paramMap, ModuleValMap, GValMap, name);
-
+function moveGValMap2ModuleMap(GValMap: TGValMap, ModuleValMap: TValMapIn): void {
     for (const [upName, GlobalVal] of GValMap) {
         const { defRangeList, refRangeList } = GlobalVal;
         for (const { rawName, range } of [...defRangeList, ...refRangeList]) {
@@ -81,9 +68,42 @@ export function getModuleVarMap(
             ModuleValMap.set(upName, value);
         }
     }
+}
+
+function moveTextMap2ModuleMap(AST: TAstRoot, valMap: TValMapIn): void {
+    const DAList: CAhkFunc[] = getDAList(AST);
+    for (const vv of DAList) {
+        const textMapRW: TTextMapIn = vv.textMap as TTextMapIn; // eval
+        if (vv.fnMode === EFnMode.forceLocal) continue;
+        for (const [k, v] of textMapRW) {
+            const oldVal: TValMetaIn | undefined = valMap.get(k);
+            if (oldVal === undefined) continue;
+            oldVal.refRangeList.push(...v.refRangeList);
+            textMapRW.delete(k);
+        }
+    }
+}
+
+export function getModuleVarMap(
+    DocStrMap: TTokenStream,
+    GValMap: TGValMap,
+    AST: TAstRoot,
+    fsPath: string,
+): TModuleVar {
+    const AhkTokenList: TTokenStream = DocStrMap;
+    const paramMap: TParamMapIn = new Map();
+    const name: string = path.basename(fsPath);
+    const nullMap = new Map();
+
+    const allowList: readonly boolean[] = getModuleAllowList(DocStrMap, AST);
+    const { valMap } = getFnVarDef(allowList, AhkTokenList, paramMap, nullMap, EFnMode.global);
+    const ModuleTextMap: TTextMapIn = getUnknownTextMap(allowList, AhkTokenList, paramMap, valMap, GValMap, name);
+
+    moveGValMap2ModuleMap(GValMap, valMap);
+    moveTextMap2ModuleMap(AST, valMap);
 
     return {
-        ModuleValMap,
+        ModuleValMap: valMap,
         ModuleTextMap,
         allowList,
     };

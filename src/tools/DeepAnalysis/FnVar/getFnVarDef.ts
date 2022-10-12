@@ -56,13 +56,18 @@ function setFnMode(fistWordUp: string, lStrTrimLen: number, fnMode: EFnMode): EF
     return fnMode;
 }
 
+type TFnVarDef = {
+    valMap: TValMapIn;
+    fnMode: EFnMode;
+};
+
 export function getFnVarDef(
     allowList: readonly boolean[],
     DocStrMap: TTokenStream,
     paramMap: TParamMapIn,
     GValMap: TGValMap,
     fnModeDefault: EFnMode,
-): TValMapIn {
+): TFnVarDef {
     let fnMode: EFnMode = fnModeDefault;
     let fistWordVarMix: '' | 'GLOBAL' | 'LOCAL' | 'STATIC' = '';
     let objDeepRaw = 0;
@@ -145,5 +150,8 @@ export function getFnVarDef(
         //                     ^ ...WTF?
     }
 
-    return valMap;
+    return {
+        valMap,
+        fnMode,
+    };
 }

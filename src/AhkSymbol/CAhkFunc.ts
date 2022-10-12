@@ -71,12 +71,14 @@ type TCAhkFuncParam = {
     textMap: TTextMapOut;
     ch: (CAhkSwitch | TLineClass)[];
     nameRange: vscode.Range;
+    fnMode: EFnMode;
 };
 
 // AhkSymbol instanceof CAhkFunc
 
 export class CAhkFunc extends vscode.DocumentSymbol {
     // readonly name...
+    public readonly fnMode: EFnMode;
     public readonly nameRange: vscode.Range;
     public readonly selectionRangeText: string;
     public readonly md: vscode.MarkdownString;
@@ -105,6 +107,7 @@ export class CAhkFunc extends vscode.DocumentSymbol {
             textMap,
             ch,
             nameRange,
+            fnMode,
         }: TCAhkFuncParam,
     ) {
         const kind = defStack.length === 0
@@ -122,5 +125,6 @@ export class CAhkFunc extends vscode.DocumentSymbol {
         this.children = ch;
 
         this.nameRange = nameRange;
+        this.fnMode = fnMode;
     }
 }

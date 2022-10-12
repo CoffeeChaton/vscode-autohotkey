@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
-import type { TParamMapIn, TTextMapIn, TValMapIn } from '../AhkSymbol/CAhkFunc';
+import type { TParamMapIn, TTextMapIn } from '../AhkSymbol/CAhkFunc';
 import { CAhkFunc } from '../AhkSymbol/CAhkFunc';
 import type { TTokenStream } from '../globalEnum';
 import { EFnMode } from '../tools/DeepAnalysis/FnVar/EFnMode';
@@ -82,7 +82,7 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
     // if is static mode
     const allowList: readonly boolean[] = getAllowsListOfFunc(DocStrMap, startLine, endLine);
 
-    const valMap: TValMapIn = getFnVarDef(allowList, AhkTokenList, paramMap, GValMap, EFnMode.normal);
+    const { valMap, fnMode } = getFnVarDef(allowList, AhkTokenList, paramMap, GValMap, EFnMode.normal);
     const textMap: TTextMapIn = getUnknownTextMap(allowList, AhkTokenList, paramMap, valMap, GValMap, name); // eval!!
 
     const selectionRangeText: string = document.getText(selectionRange);
@@ -108,6 +108,7 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
                 col,
             ),
         ),
+        fnMode,
     });
     return myFn2;
 }
