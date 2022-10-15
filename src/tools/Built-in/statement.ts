@@ -23,7 +23,7 @@ export type TStatementElement<T extends TStatementKeyList> = {
     doc: string;
 
     recommended: boolean;
-    link: string;
+    link: `https://www.autohotkey.com/${string}`;
     exp: string[];
 };
 

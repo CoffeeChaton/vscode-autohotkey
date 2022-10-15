@@ -54,7 +54,7 @@ type TElement = DeepReadonly<{
     doc: string;
 
     recommended: boolean;
-    link: string;
+    link: `https://www.autohotkey.com/${string}`;
     exp: string[];
 }>;
 
