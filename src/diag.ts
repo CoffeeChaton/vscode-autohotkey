@@ -22,7 +22,7 @@ export const enum EDiagCodeDA {
 export type TDiagsDA = {
     [k in EDiagCodeDA]: {
         msg: string;
-        path: string;
+        path: `https://www.autohotkey.com/docs/${string}`;
     };
 };
 
@@ -116,10 +116,13 @@ export const enum EDiagCode {
     code909 = 909, // }}} of one Line
 }
 
+type TLink =
+    | `https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#${string}`
+    | `https://www.autohotkey.com/docs/${string}`;
 export type TDiags = {
     [k in EDiagCode]: {
         msg: string;
-        path: string;
+        path: TLink;
     };
 };
 
@@ -166,7 +169,7 @@ export const Diags: DeepReadonly<TDiags> = {
     },
     302: {
         msg: 'Function name too long, name len > (255 -2) characters.',
-        path: 'https://github.com/Lexikos/AutoHotkey_L/blob/master/source/script.cpp#L8744',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag302',
     },
     600: {
         msg: 'Alert Prototype Pollution!! Suggest to use class replace',

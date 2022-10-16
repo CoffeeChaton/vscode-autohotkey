@@ -7,6 +7,8 @@ describe('check LineCommand ruler', () => {
         expect.hasAssertions();
 
         let errState = 0;
+        let a = 0;
+        let b = 0;
         for (const [k, v] of Object.entries(LineCommand)) {
             const {
                 keyRawName,
@@ -15,7 +17,10 @@ describe('check LineCommand ruler', () => {
                 diag,
                 recommended,
             } = v;
-
+            a++;
+            if (exp !== undefined) {
+                b++;
+            }
             const v1 = k.toUpperCase() !== k;
             const v2 = keyRawName.toUpperCase() !== k;
             const v3 = !body.toUpperCase().includes(keyRawName.toUpperCase());
@@ -38,6 +43,7 @@ describe('check LineCommand ruler', () => {
                 break;
             }
         }
+        console.log('🚀 ~ file: Command.test.ts ~ line 48 ~ it ~ errState', { b, a, '%': b / a });
 
         expect(errState === 0).toBeTruthy();
     });

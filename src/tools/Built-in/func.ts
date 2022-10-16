@@ -31,7 +31,7 @@ type TElementGroup =
 type TBuiltInFuncElement = DeepReadonly<{
     keyRawName: string;
     group: TElementGroup;
-    link: `https://www.autohotkey.com/${string}`;
+    link: `https://www.autohotkey.com/docs/${string}`;
     msg: string;
     insert: string;
     exp: string[];

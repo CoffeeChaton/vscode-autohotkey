@@ -11,7 +11,7 @@ const sendBigBlock: readonly vscode.CompletionItem[] = ((): readonly vscode.Comp
             icon,
             doc,
             body: insertText,
-            uri,
+            link: uri,
         } = v;
         const item = new vscode.CompletionItem({
             label, // Left

@@ -21,9 +21,8 @@ export const [snippetCommand, CommandMDMap, CommandErrMap] = ((): [TSnippetComma
         const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
             .appendMarkdown('Command')
             .appendCodeblock(body, 'ahk')
-            .appendMarkdown(doc)
-            .appendMarkdown('\n')
-            .appendMarkdown(`[(Read Doc)](${link ?? 'https://www.autohotkey.com/docs/commands/index.htm'})`); // TODO
+            .appendMarkdown(`[(Read Doc)](${link ?? 'https://www.autohotkey.com/docs/commands/index.htm'})\n\n`) // TODO
+            .appendMarkdown(doc);
 
         // .appendCodeblock(exp.join('\n'));
         if (exp !== undefined && exp.length > 0) {

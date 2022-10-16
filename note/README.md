@@ -6,6 +6,7 @@
   - [Diagnostic](#diagnostic)
     - [diag107](#diag107)
     - [diag121](#diag121)
+    - [diag302](#diag302)
     - [diag506](#diag506)
   - [about str or %](#about-str-or-)
   - [DEV note](#dev-note)
@@ -41,6 +42,15 @@ the word `Join` should be followed immediately by as many as `15` characters.
 ![diag121](./img/diag121.png)
 
 some idea [diag121](./ahk/diag121.ahk)
+
+### diag302
+
+    ````js
+    302: {
+        msg: 'Function name too long, name len > (255 -2) characters.',
+        path: 'https://github.com/Lexikos/AutoHotkey_L/blob/master/source/script.cpp#L8744',
+    },
+    ```
 
 ### diag506
 

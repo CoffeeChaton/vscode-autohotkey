@@ -7,7 +7,7 @@ import * as vscode from 'vscode';
 type TA_Element = {
     body: string;
     group: 'Date' | 'GUI' | 'Hotkeys' | 'Loop' | 'Misc.' | 'OS' | 'Script' | 'Setting' | 'Spec' | 'User Idle Time';
-    uri: string;
+    uri: `https://www.autohotkey.com/docs/${string}`;
     // TODO add msg? https://www.autohotkey.com/docs/Variables.htm#BuiltIn
 };
 
