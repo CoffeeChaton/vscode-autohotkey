@@ -2350,7 +2350,8 @@ export const LineCommand: TLineCommand = {
     },
     RUNWAIT: {
         keyRawName: 'RunWait',
-        body: 'RunWait, ${1:Target} [, ${2:WorkingDir}, % "${3:Max Min Hide UseErrorLevel}", ${4:OutputVarPID}]',
+        body:
+            'RunWait, % "${1:ReadMe.docx}" [, % "${2:D:\\document}", % "${3:Max Min Hide UseErrorLevel}", ${4:OutputVarPID}]',
         doc: 'Unlike Run, RunWait will wait until the program finishes before continuing.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Run.htm',
