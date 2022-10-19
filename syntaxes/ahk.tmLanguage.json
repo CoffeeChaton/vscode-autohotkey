@@ -203,7 +203,7 @@
             "include": "#stringQuotedDouble"
         },
         {
-            "match": "\\w+\\(",
+            "match": "\\w+(?=\\()",
             "name": "entity.name.function.ahk"
         }
     ],

@@ -9,6 +9,7 @@
     - [diag302](#diag302)
     - [diag506](#diag506)
   - [about str or %](#about-str-or-)
+  - [about ahk class](#about-ahk-class)
   - [DEV note](#dev-note)
 
 ## Diagnostic
@@ -45,7 +46,7 @@ some idea [diag121](./ahk/diag121.ahk)
 
 ### diag302
 
-    ````js
+    ```js
     302: {
         msg: 'Function name too long, name len > (255 -2) characters.',
         path: 'https://github.com/Lexikos/AutoHotkey_L/blob/master/source/script.cpp#L8744',
@@ -75,6 +76,25 @@ Diag `c506` of not support number formats [number](https://www.autohotkey.com/do
 
 i love `% "str"` style.
 <https://www.autohotkey.com/boards/viewtopic.php?f=7&t=48726>
+
+## about ahk class
+
+![class_Provider](./img/class_Provider.png)
+
+> try it [class_Provider](./ahk/class_Provider.ahk)
+
+- `go to def` `find all ref` just support `topClass`, only [IntelliSense](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp#4-completion-of-class) support `NestedClass` of `Method()` now.
+- move to line `26` `30` `35` `44` try to `go to def`.
+- move to line `1` `12` try to `find all ref`.
+- if you need to use [IntelliSense](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp#4-completion-of-class) of `a2` now, you need to write `a2 := new XXX` at new line, variable tracking not supported `? :` now.
+
+  ```ahk
+  if (OutputVar > 0.5){
+    a2 := new C1
+  } else {
+    a2 := new C2
+  }
+  ```
 
 ## DEV note
 
