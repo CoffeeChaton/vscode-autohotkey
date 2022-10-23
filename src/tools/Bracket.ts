@@ -1,7 +1,7 @@
 /**
- * A1: "{"
- * A2 : "["
- * A3: "("
+ * - A0: "{"
+ * - A1 : "["
+ * - A2: "("
  */
 export type TBrackets = [number, number, number];
 
@@ -16,6 +16,11 @@ const BracketMap: TMap = new Map([
     [')', [2, -1]],
 ]);
 
+/**
+ * - A0: "{"
+ * - A1 : "["
+ * - A2: "("
+ */
 export function calcBracket(partStr: string, list: TBrackets): TBrackets {
     const newBrackets: TBrackets = [...list];
 
