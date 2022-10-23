@@ -1,7 +1,12 @@
 import * as vscode from 'vscode';
 import { getFormatConfig } from '../../configUI';
-import type { DeepReadonly, EMultiline, TMultilineFlag } from '../../globalEnum';
-import { EDetail } from '../../globalEnum';
+import type {
+    DeepReadonly,
+    EDetail,
+    EMultiline,
+    TMultilineFlag,
+} from '../../globalEnum';
+
 import { ContinueLongLine } from './ContinueLongLine';
 import { lineReplace } from './fmtReplace';
 import { getDeepLTrim } from './getDeepLTrim';
@@ -11,7 +16,7 @@ import type { TDiffMap } from './TFormat';
 type TWarnUse =
     & DeepReadonly<{
         detail: readonly EDetail[];
-        textFix: string;
+        lStrTrim: string;
         line: number;
         occ: number;
         deep: number;
@@ -29,7 +34,7 @@ type TWarnUse =
 function wrap(args: TWarnUse, text: string): vscode.TextEdit {
     const {
         detail,
-        textFix,
+        lStrTrim,
         line,
         multiline,
         textRaw,
@@ -37,7 +42,12 @@ function wrap(args: TWarnUse, text: string): vscode.TextEdit {
     } = args;
 
     const newText: string = getFormatConfig() // WTF
-        ? lineReplace(text, textFix, detail.includes(EDetail.inComment), multiline)
+        ? lineReplace({
+            text,
+            lStrTrim,
+            detail,
+            multiline,
+        })
         : text;
 
     if (newText !== text) {
@@ -52,7 +62,7 @@ function wrap(args: TWarnUse, text: string): vscode.TextEdit {
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
     const {
-        textFix,
+        lStrTrim,
         line,
         occ,
         deep,
@@ -73,12 +83,12 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
         return wrap(args, WarnLineBodyWarn);
     }
 
-    const switchDeep = inSwitchBlock(textFix, line, switchRangeArray);
+    const switchDeep = inSwitchBlock(lStrTrim, line, switchRangeArray);
     const LineDeep: 0 | 1 = (occ !== 0)
         ? 0
-        : ContinueLongLine(textFix);
+        : ContinueLongLine(lStrTrim);
 
-    const curlyBracketsChange: -1 | 0 = textFix.startsWith('}') || (occ > 0 && textFix.startsWith('{'))
+    const curlyBracketsChange: -1 | 0 = lStrTrim.startsWith('}') || (occ > 0 && lStrTrim.startsWith('{'))
         ? -1
         : 0;
 
