@@ -8,8 +8,10 @@ import { getIgnore } from '../provider/Diagnostic/getIgnore';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
 import { getMultiline } from '../tools/str/getMultiline';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
-import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
+import { getLStr } from '../tools/str/removeSpecialChar';
+import { isSetVarTradition, SetVarTradition } from '../tools/str/traditionSetVar';
 import { getFistWordUpData } from './getFistWordUpData';
+import { callDeep } from './ParserTools/calcDeep';
 
 /**
  * @param strArray keep this with readonly string[], don't use String, because of copy.
@@ -99,7 +101,7 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
             result.push({
                 fistWordUpCol: -1,
                 fistWordUp: '',
-                lStr: '',
+                lStr: SetVarTradition(textRaw),
                 deep,
                 textRaw,
                 detail: [EDetail.inSkipSign2],
@@ -154,12 +156,8 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
                 detail.push(EDetail.deepAdd);
                 deep++;
                 // {{{{
-                const addDeep: number | undefined = lStrTrim
-                    .replaceAll(/\s/gu, '')
-                    .match(/^(\{+)$/u)
-                    ?.[1].length;
-
-                if (addDeep !== undefined && addDeep > 1) {
+                const addDeep: number = callDeep(lStrTrim, '{');
+                if (addDeep > 1) {
                     deep--;
                     deep += addDeep;
                     diagDeep = EDiagDeep.multL;
@@ -195,12 +193,8 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
                 // eslint-disable-next-line no-tabs
                 // }   } else RunWait "%AhkPath%" %AhkSw% "%wk%",,Hide
 
-                const diffDeep: number | undefined = lStrTrimFix
-                    .replaceAll(/\s/gu, '')
-                    .match(/^(\}+)/u)
-                    ?.[1].length;
-
-                if (diffDeep !== undefined && diffDeep > 1) {
+                const diffDeep: number = callDeep(lStrTrimFix, '}');
+                if (diffDeep > 1) {
                     deep++;
                     deep -= diffDeep;
                     diagDeep = EDiagDeep.multR;

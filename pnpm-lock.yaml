@@ -627,7 +627,7 @@ packages:
     resolution: {integrity: sha512-3Ab5HgYIIAnS0HjqJHQYZS+zXc4tUmTmBH3z83ajI6afXp8X3ZtdLX+nXx+I7LNkJD7uN9LAVhgnjDgZa2z0kA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@sinclair/typebox': 0.24.48
+      '@sinclair/typebox': 0.24.50
     dev: true
 
   /@jest/source-map/29.2.0:
@@ -776,8 +776,8 @@ packages:
       tslib: 2.4.0
     dev: true
 
-  /@sinclair/typebox/0.24.48:
-    resolution: {integrity: sha512-WPGpRNHbkOsfBDmh8QHU7a5NWzEuYNThST8x1cISvX0RpP+1+V8zjuJqNwGJkHGIlhdIIhv6qVYqXz2q5/gjAA==}
+  /@sinclair/typebox/0.24.50:
+    resolution: {integrity: sha512-k8ETQOOQDg5FtK7y9KJWpsGLik+QlPmIi8zzl/dGUgshV2QitprkFlCR/AemjWOTyKn9UwSSGRTzLVotvgCjYQ==}
     dev: true
 
   /@sinonjs/commons/1.8.3:

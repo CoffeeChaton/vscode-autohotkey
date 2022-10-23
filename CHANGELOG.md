@@ -1,8 +1,14 @@
 # Changelog
 
+## NEXT 0.0.13()
+
+- TODO: add `this.fn()` goto def
+- TODO: add `RegExMatch((Text := q.Read()), "OU)([^\x00-\x7F])", Found)` of `Found`...
+- TODO: add [ErrorLevel](https://www.autohotkey.com/docs/misc/ErrorLevel.htm)
+
 ## NEXT 0.0.12(2022-10-31)
 
-- add: Module Var `Semantic` `gotoDef` `list all ref`
+- add: Module Var `Semantic` `gotoDef` `list all ref` `Completion`
 - add: global/local/normal/static of variables-property
 - add: config of `"AhkNekoHelp.Diag.useModuleValDiag"`
 - add: `func` goto def / find all ref of `SetTimer` and `hotkey`
@@ -24,8 +30,7 @@ hotkey, KeyName , Label_or_fnName, Options
 - add : doc of `clipboard` `clipboardall` `comspec` `errorlevel` `false` `programfiles` `true`
 - add : doc of Command `181/218 = 83%`
 - fix : Command of `} Command` of `{ Command`
-- FIXME: fix `var =` warn
-- TODO: add `this.fn()` goto def
+- fix : `var =` warn
 
 ## 0.0.11(2022-10-09)
 
