@@ -15,8 +15,9 @@ export function DeepAnalysisToCompletionItem(
         valMap,
         textMap,
         kind,
+        name,
     } = DA;
-    const { name } = DA;
+
     const recMap: TSnippetRecMap = getRecMap(DA, inputStr);
 
     return [
