@@ -3,7 +3,8 @@ import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { pm } from '../../core/ProjectManager';
 import { hoverAVar } from '../../tools/Built-in/A_Variables';
-import { getHoverCommand, getHoverCommand2 } from '../../tools/Built-in/Command_tools';
+import { hoverBiVar } from '../../tools/Built-in/BiVariables';
+import { getHoverCommand2 } from '../../tools/Built-in/Command_tools';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func_tools';
 import { getHoverStatement } from '../../tools/Built-in/statement_vsc';
 import { hover2winMsgMd } from '../../tools/Built-in/Windows_Messages_Tools';
@@ -45,7 +46,7 @@ function HoverProviderCore(
     if (mdOfMultiLine !== null) return new vscode.Hover(mdOfMultiLine);
 
     // pos at Comment range...
-    const { lStr, fistWordUp, textRaw } = DocStrMap[position.line];
+    const { lStr, textRaw } = DocStrMap[position.line];
     if (position.character > lStr.length) return null;
 
     // ex: #Warn
@@ -57,10 +58,6 @@ function HoverProviderCore(
     if (AhkFunc !== null && AhkFunc.nameRange.contains(position)) {
         return new vscode.Hover(AhkFunc.md);
     }
-
-    // AutoTrim, ${1|On,Off|}
-    const CommandMd: vscode.MarkdownString | undefined = getHoverCommand(fistWordUp, position, lStr);
-    if (CommandMd !== undefined) return new vscode.Hover(CommandMd);
 
     const haveFunc: vscode.MarkdownString | null = HoverOfFunc(document, position);
     if (haveFunc !== null) return new vscode.Hover(haveFunc);
@@ -85,6 +82,7 @@ function HoverProviderCore(
         getHoverCommand2,
         getHoverStatement,
         hoverAVar,
+        hoverBiVar,
         hoverGlobalVar,
         hover2winMsgMd,
         numberFindWinMsg,

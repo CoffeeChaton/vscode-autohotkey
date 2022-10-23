@@ -11,7 +11,6 @@ type TCommandKeyList =
     | 'AUTOTRIM'
     | 'BETWEEN'
     | 'BLOCKINPUT'
-    | 'BREAK'
     | 'CASE'
     | 'CATCH'
     | 'CLASS'
@@ -290,27 +289,6 @@ export const LineCommand: TLineCommand = {
             'BlockInput, MouseMove  ; [v1.0.43.11+]',
             ';  MouseMove',
             ';  MouseMoveOff',
-        ],
-    },
-    BREAK: {
-        keyRawName: 'Break',
-        body: 'Break',
-        doc: 'Exits (terminates) any type of [loop statement](https://www.autohotkey.com/docs/Language.htm#loop-statement).',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Break.htm',
-        exp: [
-            'Break [, LoopLabel]',
-            '',
-            ';exp',
-            'Loop',
-            '{',
-            '    ; ...',
-            '    if (var > 25)',
-            '        break',
-            '    ; ...',
-            '    if (var <= 5)',
-            '        continue',
-            '}',
         ],
     },
     CASE: {
@@ -1644,12 +1622,12 @@ export const LineCommand: TLineCommand = {
     },
     HOTKEY: {
         keyRawName: 'Hotkey',
-        body: 'Hotkey, ${1:KeyName} , ${2:Label}, ${3:Options}',
+        body: 'Hotkey, ${1:KeyName} , ${2:Label_or_funcName}, ${3:Options}',
         doc: 'Creates, modifies, enables, or disables a hotkey while the script is running.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Hotkey.htm',
         exp: [
-            'Hotkey, KeyName [, Label, Options]',
+            'Hotkey, KeyName [, Label_or_funcName, Options]',
             'Hotkey, IfWinActive/Exist [ , WinTitle, WinText]',
             'Hotkey, If [, Expression]',
             'Hotkey, If, % FunctionObject',
@@ -2603,12 +2581,12 @@ export const LineCommand: TLineCommand = {
     },
     SETTIMER: {
         keyRawName: 'SetTimer',
-        body: 'SetTimer [, ${1:LabelOrFunc}, ${2|Period,On,Off|}]',
+        body: 'SetTimer [, ${1:Label_or_fnName}, ${2|Period,On,Off|}]',
         doc: 'Causes a subroutine to be launched automatically and repeatedly at a specified time interval.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/SetTimer.htm',
         exp: [
-            'SetTimer , Label, PeriodOnOffDelete, Priority',
+            'SetTimer , Label_or_fnName, PeriodOnOffDelete, Priority',
             '',
             ';exp1 of param is 0 functions',
             '~F10:: SetTimer, fn0, -250',

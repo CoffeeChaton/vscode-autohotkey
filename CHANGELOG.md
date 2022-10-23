@@ -5,7 +5,27 @@
 - add: Module Var `Semantic` `gotoDef` `list all ref`
 - add: global/local/normal/static of variables-property
 - add: config of `"AhkNekoHelp.Diag.useModuleValDiag"`
-- TODO: goto References `SetTimer, funcName`, filter ad funcName === labelName case
+- add: `func` goto def / find all ref of `SetTimer` and `hotkey`
+- add: semantic-highlight of `SetTimer` and `hotkey`
+
+```ahk
+SetTimer , Label_or_fnName
+;                  ^ function color/ ref
+hotkey, KeyName , Label_or_fnName, Options
+;                     ^ function color / ref
+
+; Intelligent Recognition, don't set color
+;Hotkey, IfWinActive/Exist , WinTitle, WinText
+;Hotkey, If , Expression
+;Hotkey, If, % FunctionObject
+```
+
+- add : `label` goto def / find all ref of `goto` `goSub` `Break` `Continue` `SetTimer` `hotkey`
+- add : doc of `clipboard` `clipboardall` `comspec` `errorlevel` `false` `programfiles` `true`
+- add : doc of Command `181/218 = 83%`
+- fix : Command of `} Command` of `{ Command`
+- FIXME: fix `var =` warn
+- TODO: add `this.fn()` goto def
 
 ## 0.0.11(2022-10-09)
 

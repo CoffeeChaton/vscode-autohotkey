@@ -34,7 +34,7 @@ type TBuiltInFuncElement = DeepReadonly<{
     link: `https://www.autohotkey.com/docs/${string}`;
     msg: string;
     insert: string;
-    exp: string[];
+    exp: readonly string[];
 }>;
 
 type TUPKey =
@@ -435,8 +435,10 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFuncbj> = {
         keyRawName: 'DllCall',
         link: 'https://www.autohotkey.com/docs/commands/DllCall.htm',
         msg: 'Calls a function inside a DLL, such as a standard Windows API function.',
-        insert: 'DllCall($0)',
+        insert: 'DllCall("${1:DllFile\\Function}", ${2:Type1}, ${3:Arg1}, ${4:Type2}, ${5:Arg2})',
         exp: [
+            'Result := DllCall("DllFile\\Function" , Type1, Arg1, Type2, Arg2, "Cdecl ReturnType")',
+            '',
             'SysColor := 15',
             'bc := DllCall("GetSysColor", "Int", SysColor, "UInt")',
         ],

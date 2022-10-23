@@ -9,6 +9,7 @@ import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
 import { getMultiline } from '../tools/str/getMultiline';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
 import { getLStr, isSetVarTradition } from '../tools/str/removeSpecialChar';
+import { getFistWordUpData } from './getFistWordUpData';
 
 /**
  * @param strArray keep this with readonly string[], don't use String, because of copy.
@@ -48,6 +49,7 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
         CommentBlock = inCommentBlock(textTrimStart, CommentBlock); // TODO {CommentBlock,resultLn} | null
         if (CommentBlock) {
             result.push({
+                fistWordUpCol: -1,
                 fistWordUp: '',
                 lStr: '',
                 deep,
@@ -75,6 +77,7 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
         });
         if (multiline !== EMultiline.none && multiline !== EMultiline.end) {
             result.push({
+                fistWordUpCol: -1,
                 fistWordUp: '',
                 lStr: '',
                 deep,
@@ -94,6 +97,7 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
 
         if (isSetVarTradition(textTrimStart)) {
             result.push({
+                fistWordUpCol: -1,
                 fistWordUp: '',
                 lStr: '',
                 deep,
@@ -125,6 +129,7 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
 
         if (lStrTrim === '') {
             result.push({
+                fistWordUpCol: -1,
                 fistWordUp: '',
                 lStr: '',
                 deep,
@@ -205,11 +210,10 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
 
         const cll: 0 | 1 = ContinueLongLine(lStrTrim); // ex: line start with ","
 
-        const fistWordUp: string = lStrTrim.match(/^(\w+)$/u)?.[1].toUpperCase()
-            ?? lStrTrim.match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1].toUpperCase()
-            ?? '';
+        const { fistWordUpCol, fistWordUp } = getFistWordUpData({ lStrTrim, lStr, cll });
 
         result.push({
+            fistWordUpCol,
             fistWordUp,
             lStr,
             deep,

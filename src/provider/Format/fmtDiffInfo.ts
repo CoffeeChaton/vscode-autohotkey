@@ -37,7 +37,6 @@ export function fmtDiffInfo(
     msg.push('-----------Format Diff End----------------------------------');
 
     OutputFormatChannel.appendLine(msg.join('\n'));
-    OutputFormatChannel.show();
     // do not callDiff(diffVar);
     // using setTimeout call.
 }

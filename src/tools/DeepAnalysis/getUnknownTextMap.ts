@@ -11,7 +11,8 @@ import type {
 } from '../../AhkSymbol/CAhkFunc';
 import type { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
-import { A_VariablesMDMap } from '../Built-in/A_Variables';
+import { hoverAVar } from '../Built-in/A_Variables';
+import { Bi_VarMDMap } from '../Built-in/BiVariables';
 import { CommandMDMap } from '../Built-in/Command_tools';
 import { StatementMDMap } from '../Built-in/statement_vsc';
 import { newC502 } from './FnVar/def/c502';
@@ -101,7 +102,8 @@ export function getUnknownTextMap(
 
             if (
                 !textMap.has(wordUp) && (
-                    CommandMDMap.has(wordUp) || A_VariablesMDMap.has(wordUp) || StatementMDMap.has(wordUp)
+                    CommandMDMap.has(wordUp) || (hoverAVar(wordUp) !== undefined) || StatementMDMap.has(wordUp)
+                    || Bi_VarMDMap.has(wordUp)
                     || (/^_+$/u).test(wordUp) // str
                     || (/^\d+$/u).test(wordUp) // just number
                     || (/^0X[\dA-F]+$/u).test(wordUp) // NumHexConst = 0 x [0-9a-fA-F]+

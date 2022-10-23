@@ -4,33 +4,16 @@
 
 import * as vscode from 'vscode';
 
-type TA_Element = {
-    body: string;
-    group: 'Date' | 'GUI' | 'Hotkeys' | 'Loop' | 'Misc.' | 'OS' | 'Script' | 'Setting' | 'Spec' | 'User Idle Time';
-    uri: `https://www.autohotkey.com/docs/${string}`;
-    // TODO add msg? https://www.autohotkey.com/docs/Variables.htm#BuiltIn
-};
-
-function A_Variables2Md(Element: TA_Element): vscode.MarkdownString {
-    const {
-        body,
-        uri,
-        group,
-    } = Element;
-    const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
-        .appendCodeblock(body, 'ahk')
-        .appendMarkdown(group)
-        .appendMarkdown('\n\n')
-        .appendMarkdown(`[Read Doc](${uri})`);
-    md.supportHtml = true;
-    return md;
-}
-
 type TA_MD_Map = ReadonlyMap<string, vscode.MarkdownString>;
 type TA_snippet_list = readonly vscode.CompletionItem[];
 
-export const [A_VariablesMDMap, snippetStartWihA] = ((): [TA_MD_Map, TA_snippet_list] => {
-    //
+const [A_VariablesMDMap, snippetStartWihA] = ((): [TA_MD_Map, TA_snippet_list] => {
+    type TA_Element = {
+        body: string;
+        group: 'Date' | 'GUI' | 'Hotkeys' | 'Loop' | 'Misc.' | 'OS' | 'Script' | 'Setting' | 'Spec' | 'User Idle Time';
+        uri: `https://www.autohotkey.com/docs/${string}`;
+        // TODO add exp / doc ? https://www.autohotkey.com/docs/Variables.htm#BuiltIn
+    };
 
     type TA_Variables = {
         [k in string]: TA_Element;
@@ -40,7 +23,7 @@ export const [A_VariablesMDMap, snippetStartWihA] = ((): [TA_MD_Map, TA_snippet_
         A_AhkPath: {
             body: 'A_AhkPath',
             group: 'Script',
-            uri: 'https://www.autohotkey.com/docs/Variables.htm#prop',
+            uri: 'https://www.autohotkey.com/docs/Variables.htm#AhkPath', // TODO let uri -> pos
         },
         A_AhkVersion: {
             body: 'A_AhkVersion',
@@ -798,6 +781,21 @@ export const [A_VariablesMDMap, snippetStartWihA] = ((): [TA_MD_Map, TA_snippet_
             uri: 'https://www.autohotkey.com/docs/Variables.htm#date',
         },
     };
+
+    function A_Variables2Md(Element: TA_Element): vscode.MarkdownString {
+        const {
+            body,
+            uri,
+            group,
+        } = Element;
+        const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
+            .appendCodeblock(body, 'ahk')
+            .appendMarkdown(group)
+            .appendMarkdown('\n\n')
+            .appendMarkdown(`[Read Doc](${uri})`);
+        md.supportHtml = true;
+        return md;
+    }
 
     const map1 = new Map<string, vscode.MarkdownString>();
     const List2: vscode.CompletionItem[] = [];

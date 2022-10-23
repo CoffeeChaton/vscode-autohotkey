@@ -56,12 +56,10 @@ const OutputVarCommandMap: ReadonlyMap<string, number> = new Map([
  * [Other Functions](https://www.autohotkey.com/docs/Functions.htm#Other_Functions)
  * [Polyethene's Command Functions](https://github.com/polyethene/AutoHotkey-Scripts/blob/master/Functions.ahk):
  * Provides a callable function for each AutoHotkey command that has an OutputVar.
- *
- * 24      48
  */
-export function OutputVarCommandBase(arg: TGetFnDefNeed, fistWordUp: string): null {
-    const quickMake: number | undefined = OutputVarCommandMap.get(fistWordUp);
-    if (quickMake === undefined) return null;
+export function OutputVarCommandBase(arg: TGetFnDefNeed, fistWordUp: string, fistWordUpCol: number): null {
+    const len: number | undefined = OutputVarCommandMap.get(fistWordUp);
+    if (len === undefined) return null;
     //
     const {
         lStr,
@@ -73,11 +71,10 @@ export function OutputVarCommandBase(arg: TGetFnDefNeed, fistWordUp: string): nu
         fnMode,
     } = arg;
 
-    const deep0 = lStr.search(/\S/u);
-    const ma: RegExpMatchArray | null = lStr.slice(deep0 + quickMake).match(/\b(\w+)\b/u);
+    const ma: RegExpMatchArray | null = lStr.slice(fistWordUpCol + len).match(/\b(\w+)\b/u);
     if (ma === null) return null;
 
-    const character: number = (ma.index ?? 0) + deep0 + quickMake;
+    const character: number = (ma.index ?? 0) + fistWordUpCol + len;
     const RawName: string = ma[1];
     const UpName: string = RawName.toUpperCase();
     if (paramMap.has(UpName) || GValMap.has(UpName)) return null;

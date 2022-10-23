@@ -1,6 +1,9 @@
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { pm } from '../../core/ProjectManager';
+import { getHotkeyData } from '../../tools/Command/HotkeyTools';
+import { getSetTimerData } from '../../tools/Command/SetTimerTools';
+import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
@@ -9,21 +12,28 @@ import { getDefWithLabel } from './getDefWithLabel';
 import { getValDefInFunc } from './getValDefInFunc';
 import { isPosAtMethodName } from './isPosAtMethodName';
 
-type TFnFindCol = (lineStr: string) => IterableIterator<RegExpMatchArray>;
+type TFnFindCol = (lnlStr: string, lnFistWordUp: string, lnFistWordUpCol: number) => number[];
 
 function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vscode.Location[] {
     const List: vscode.Location[] = [];
     for (const { DocStrMap, AST, uri } of pm.getDocMapValue()) {
         const filterLineList: number[] = getDAList(AST)
-            .filter((DA: CAhkFunc) => DA.kind === vscode.SymbolKind.Method)
-            .map((DA: CAhkFunc) => DA.nameRange.start.line);
+            .filter((DA: CAhkFunc): boolean => DA.kind === vscode.SymbolKind.Method)
+            .map((DA: CAhkFunc): number => DA.nameRange.start.line);
 
-        for (const { textRaw, line, lStr } of DocStrMap) {
-            if (lStr.trim().length === 0 || filterLineList.includes(line)) continue;
-            const text2: string = textRaw.slice(0, lStr.length);
-            for (const ma of refFn(text2)) {
-                const col: number | undefined = ma.index;
-                if (col === undefined) continue;
+        for (
+            const {
+                textRaw,
+                line,
+                lStr,
+                fistWordUp,
+                fistWordUpCol,
+            } of DocStrMap
+        ) {
+            if (/* lStr.trim().length === 0 || */ filterLineList.includes(line)) continue;
+
+            for (const col of refFn(textRaw.slice(0, lStr.length), fistWordUp, fistWordUpCol)) {
+                if (col === -1) continue;
 
                 const Location: vscode.Location = new vscode.Location(
                     uri,
@@ -40,6 +50,26 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
     return List;
 }
 
+function fnMake(regBase: RegExp, wordUp: string): TFnFindCol {
+    return (lnlStr: string, lnFistWordUp: string, lnFistWordUpCol: number): number[] => {
+        //  funcName( | "funcName"
+        const arr: number[] = [...lnlStr.matchAll(regBase)].map((ma: RegExpMatchArray): number => ma.index ?? -1);
+
+        if (lnFistWordUp === 'SETTIMER') {
+            const setTimerData: TScanData | null = getSetTimerData(lnlStr, lnFistWordUpCol);
+            if (setTimerData !== null && setTimerData.RawNameNew.toUpperCase() === wordUp) {
+                arr.push(setTimerData.lPos);
+            }
+        } else if (lnFistWordUp === 'HOTKEY') {
+            const HotkeyData: TScanData | null = getHotkeyData(lnlStr, lnFistWordUpCol);
+            if (HotkeyData !== null && HotkeyData.RawNameNew.toUpperCase() === wordUp) {
+                arr.push(HotkeyData.lPos);
+            }
+        }
+        return arr;
+    };
+}
+
 // TODO: spilt this func, just need input ahkFunc
 export function userDefFunc(
     document: vscode.TextDocument,
@@ -49,32 +79,43 @@ export function userDefFunc(
 ): vscode.Location[] | null {
     const timeStart: number = Date.now();
 
-    const { AST } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const { AST, DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
 
-    if (isPosAtMethodName(getDAWithPos(AST, position), position)) {
-        return null;
-    }
+    if (isPosAtMethodName(getDAWithPos(AST, position), position)) return null;
 
     const funcSymbol: CAhkFunc | null = getFuncWithName(wordUp);
     if (funcSymbol === null) return null;
 
-    const ahkFunc = {
-        // funcName( | "funcName" | SetTimer, funcName
-        // eslint-disable-next-line security/detect-non-literal-regexp
-        reg: new RegExp(
-            `(?:(?<![.\`%])\\b(${wordUp})\\b\\()|(?:(?<=")(${wordUp})")|(?:(?<=SetTimer[\\s,]+)\\b(${wordUp})\\b)`,
-            //                             funcName(              "funcName"                  SetTimer, funcName
-            'iug',
-        ),
-        refFn: (lineStr: string): IterableIterator<RegExpMatchArray> => lineStr.matchAll(ahkFunc.reg),
-        // FixME refactor this
-    } as const;
+    const { lStr, fistWordUp, fistWordUpCol } = DocStrMap[position.line];
 
-    if (document.getWordRangeAtPosition(position, ahkFunc.reg) === undefined) return null;
+    // funcName( | "funcName"
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    const regBase = new RegExp(
+        `(?:(?<![.\`%])\\b(${wordUp})\\b\\()|(?:(?<=")(${wordUp})")`,
+        //                          funcName(                  "funcName"
+        'iug',
+    );
+
+    const refFn: TFnFindCol = fnMake(regBase, wordUp);
+
+    if (document.getWordRangeAtPosition(position, regBase) === undefined) {
+        let atFuncName = 0;
+
+        if (fistWordUp === 'SETTIMER') {
+            const setTimerData: TScanData | null = getSetTimerData(lStr, fistWordUpCol);
+            if (setTimerData?.RawNameNew.toUpperCase() === wordUp) atFuncName = 1;
+        } else if (fistWordUp === 'HOTKEY') {
+            const HotkeyData: TScanData | null = getHotkeyData(lStr, fistWordUpCol);
+            if (HotkeyData?.RawNameNew.toUpperCase() === wordUp) atFuncName = 1;
+        }
+
+        if (atFuncName === 0) return null;
+    }
+
     // c := c();
     // No   Yes check pos at like func()
 
-    if (listAllUsing) return getReference(ahkFunc.refFn, timeStart, wordUp);
+    if (listAllUsing) return getReference(refFn, timeStart, wordUp);
 
     if (
         (funcSymbol.uri.fsPath === document.uri.fsPath

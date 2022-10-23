@@ -41,41 +41,54 @@ const OutputVarCommandMap: ReadonlyMap<string, number[]> = new Map([
  * - Run, Target , WorkingDir, Options, OutputVarPID
  * - RunWait, Target , WorkingDir, Options, OutputVarPID
  * - SplitPath, InputVar , OutFileName, OutDir, OutExtension, OutNameNoExt, OutDrive
- *
- * 5.04msms 14.11ms
  */
-export function OutputVarCommandPlus(arg: TGetFnDefNeed, fistWordUp: string): null {
+export function OutputVarCommandPlus(arg: TGetFnDefNeed, fistWordUp: string, fistWordUpCol: number): null {
     const needArr: number[] | undefined = OutputVarCommandMap.get(fistWordUp);
-    if (needArr !== undefined) {
-        const {
-            lStr,
-            line,
-            paramMap,
-            GValMap,
-            valMap,
-            lineComment,
-            fnMode,
-        } = arg;
+    if (needArr === undefined) return null;
 
-        for (const { RawNameNew, lPos } of pickCommand(needArr, spiltCommandAll(lStr))) {
-            const UpName: string = RawNameNew.toUpperCase();
-            if (paramMap.has(UpName) || GValMap.has(UpName)) continue;
+    const {
+        lStr,
+        line,
+        paramMap,
+        GValMap,
+        valMap,
+        lineComment,
+        fnMode,
+    } = arg;
 
-            valMap.set(
-                UpName,
-                getValMeta({
-                    line,
-                    character: lPos,
-                    RawName: RawNameNew,
-                    valMap,
-                    lineComment,
-                    fnMode,
-                }),
-            );
-        }
+    const strF: string = lStr
+        .slice(fistWordUpCol + fistWordUp.length)
+        .replace(/^\s*,?/u, `${fistWordUp},`)
+        .padStart(lStr.length, ' ');
+
+    for (const { RawNameNew, lPos } of pickCommand(needArr, spiltCommandAll(strF))) {
+        const UpName: string = RawNameNew.toUpperCase();
+        if (paramMap.has(UpName) || GValMap.has(UpName)) continue;
+
+        valMap.set(
+            UpName,
+            getValMeta({
+                line,
+                character: lPos,
+                RawName: RawNameNew,
+                valMap,
+                lineComment,
+                fnMode,
+            }),
+        );
     }
+
     return null;
 }
 
 // not plan to support
 // GuiControl ,, ControlID , value https://www.autohotkey.com/docs/commands/GuiControl.htm#Blank
+
+// OK
+// FileGetShortcut, LinkFile , OutTarget, OutDir, OutArgs, OutDescription, OutIcon, OutIconNum, OutRunState
+// ImageSearch, OutputVarX, OutputVarY
+// MouseGetPos , OutputVarX, OutputVarY, OutputVarWin, OutputVarControl
+// PixelSearch, OutputVarX, OutputVarY
+// Run, Target , WorkingDir, Options, OutputVarPID
+// RunWait, Target , WorkingDir, Options, OutputVarPID
+// SplitPath, InputVar , OutFileName, OutDir, OutExtension, OutNameNoExt, OutDrive

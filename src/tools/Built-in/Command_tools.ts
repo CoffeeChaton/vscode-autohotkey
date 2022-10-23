@@ -58,23 +58,6 @@ export const [snippetCommand, CommandMDMap, CommandErrMap] = ((): [TSnippetComma
     return [tempList, map1, tempSet];
 })();
 
-export function getHoverCommand(
-    fistWordUp: string,
-    position: vscode.Position,
-    lStr: string,
-): vscode.MarkdownString | undefined {
-    if (fistWordUp === '') return undefined;
-
-    const { character } = position;
-    const posS = lStr.length - lStr.trimStart().length;
-    if (character < posS) return undefined;
-
-    const posE = posS + fistWordUp.length;
-    if (character > posE) return undefined;
-
-    return CommandMDMap.get(fistWordUp);
-}
-
 export function getHoverCommand2(wordUp: string): vscode.MarkdownString | undefined {
     return CommandMDMap.get(wordUp);
 }

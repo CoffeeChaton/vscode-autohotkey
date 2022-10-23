@@ -55,7 +55,7 @@ type TElement = DeepReadonly<{
 
     recommended: boolean;
     link: `https://www.autohotkey.com/docs/${string}`;
-    exp: string[];
+    exp: readonly string[];
 }>;
 
 type TDirectivesObj = {

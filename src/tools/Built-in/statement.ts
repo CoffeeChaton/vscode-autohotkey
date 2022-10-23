@@ -4,17 +4,16 @@
 
 export type TStatementKeyList =
     | 'AND'
+    | 'BREAK'
     | 'CONTINUE'
     | 'ELSE'
-    | 'FALSE'
     | 'IF'
     | 'IN'
     | 'IS'
     | 'NEW'
     | 'NOT'
     | 'OR'
-    | 'THIS'
-    | 'TRUE';
+    | 'THIS';
 // Loop <file>
 
 export type TStatementElement<T extends TStatementKeyList> = {
@@ -24,7 +23,7 @@ export type TStatementElement<T extends TStatementKeyList> = {
 
     recommended: boolean;
     link: `https://www.autohotkey.com/docs/${string}`;
-    exp: string[];
+    exp: readonly string[];
 };
 
 export type TStatement = {
@@ -46,6 +45,27 @@ export const Statement: TStatement = {
             'if (Color = "Red" or Color = "Green" or Color = "Blue"        ; Comment.',
             '   or Color = "Black" or Color = "Gray" or Color = "White")   ; Comment.',
             '   and ProductIsAvailableInColor(Product, Color)              ; Comment.',
+        ],
+    },
+    BREAK: {
+        keyRawName: 'Break',
+        body: 'Break',
+        doc: 'Exits (terminates) any type of [loop statement](https://www.autohotkey.com/docs/Language.htm#loop-statement).',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Break.htm',
+        exp: [
+            'Break [, LoopLabel]',
+            '',
+            ';exp',
+            'Loop',
+            '{',
+            '    ; ...',
+            '    if (var > 25)',
+            '        break',
+            '    ; ...',
+            '    if (var <= 5)',
+            '        continue',
+            '}',
         ],
     },
     CONTINUE: {
@@ -72,9 +92,10 @@ export const Statement: TStatement = {
     ELSE: {
         keyRawName: 'Else',
         body: 'else',
+        link: 'https://www.autohotkey.com/docs/commands/Else.htm',
+
         doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if an [If statement](https://www.autohotkey.com/docs/Language.htm#if-statement) evaluates to false.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Else.htm',
         exp: [
             '; exp of "Else"',
             'if (x = 1) {',
@@ -84,17 +105,6 @@ export const Statement: TStatement = {
             '} else {',
             '    ; ...',
             '}',
-        ],
-    },
-    FALSE: {
-        keyRawName: 'False',
-        body: 'false',
-        doc: '`0` to represent `false`. They can be used to make a script more readable. For details, see [Boolean Values](https://www.autohotkey.com/docs/Concepts.htm#boolean).',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/Variables.htm#misc',
-        exp: [
-            'False',
-            'false',
         ],
     },
     IF: {
@@ -222,17 +232,6 @@ export const Statement: TStatement = {
             '        DllCall("GlobalFree", "Ptr", this.ptr)',
             '    }',
             '}',
-        ],
-    },
-    TRUE: {
-        keyRawName: 'True',
-        body: 'true',
-        doc: '`1` to represent `true`. They can be used to make a script more readable. For details, see [Boolean Values](https://www.autohotkey.com/docs/Concepts.htm#boolean).',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/Variables.htm#misc',
-        exp: [
-            'true',
-            'True',
         ],
     },
 };

@@ -5,15 +5,19 @@ export type TScanData = {
     lPos: number;
 };
 
-export function spiltCommandAll(lStr: string): TScanData[] {
-    const lStrLen: number = lStr.length;
+/**
+ * @param strF ahk is allow first arg don't need "," , so please fix lStr -> strF
+ */
+export function spiltCommandAll(strF: string): TScanData[] {
+    const lStrLen: number = strF.length;
 
     const AllCut: TScanData[] = [];
     let make = -1;
+
     do {
         const oldMake: number = make + 1;
-        make = FindExprDelim(lStr, ',', make + 1);
-        const partStr: string = lStr.slice(oldMake, make);
+        make = FindExprDelim(strF, ',', make + 1);
+        const partStr: string = strF.slice(oldMake, make);
         const RawNameNew: string = partStr.trim();
 
         AllCut.push({

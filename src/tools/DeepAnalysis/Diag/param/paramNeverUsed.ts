@@ -1,6 +1,7 @@
 import type { TParamMapOut, TValMapOut } from '../../../../AhkSymbol/CAhkFunc';
 import { C500Class } from '../../../../provider/Diagnostic/tools/CDiagFnLib/C500Class';
 import { C501Class } from '../../../../provider/Diagnostic/tools/CDiagFnLib/C501Class';
+import { Bi_VarMDMap } from '../../../Built-in/BiVariables';
 
 export function NeverUsedParam(
     paramMap: TParamMapOut,
@@ -30,9 +31,7 @@ export function NeverUsedVar(
         if (
             key.startsWith('A_')
             || key.startsWith('_')
-            || key === 'CLIPBOARD'
-            || key === 'CLIPBOARDALL'
-            || key === 'ERRORLEVEL'
+            || Bi_VarMDMap.has(key)
             || !displayErrList[v.defRangeList[0].start.line]
         ) {
             continue;

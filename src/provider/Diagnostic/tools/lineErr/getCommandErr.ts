@@ -4,8 +4,8 @@ import type { TAhkTokenLine } from '../../../../globalEnum';
 import { CommandErrMap } from '../../../../tools/Built-in/Command_tools';
 import { CDiagBase } from '../CDiagBase';
 
-function getLoopErr(lStr: string, line: number): CDiagBase | null {
-    const matchLoop: RegExpMatchArray | null = lStr.match(/^\s*Loop\b[\s,]+(\w+)/iu);
+function getLoopErr(lStr: string, line: number, fistWordUpCol: number): CDiagBase | null {
+    const matchLoop: RegExpMatchArray | null = lStr.match(/\bLoop\b\s*,?\s*(\w+)/iu);
     if (matchLoop === null) return null; // miss
 
     const SecondSection = matchLoop[1];
@@ -14,8 +14,7 @@ function getLoopErr(lStr: string, line: number): CDiagBase | null {
     }
 
     // eslint-disable-next-line no-magic-numbers
-    const position = lStr.search(/\bloop\b/iu) + 4;
-    const colL = lStr.indexOf(SecondSection, position);
+    const colL = lStr.indexOf(SecondSection, fistWordUpCol + 4);
     const colR = colL + SecondSection.length;
     if ((/^RootKey$/ui).test(SecondSection)) {
         // https://www.autohotkey.com/docs/commands/LoopReg.htm#old
@@ -50,17 +49,18 @@ export function getCommandErr(params: TAhkTokenLine): CDiagBase | null {
     const {
         lStr,
         fistWordUp,
+        fistWordUpCol,
         line,
     } = params;
 
     if (fistWordUp === '') return null; // miss
     if (fistWordUp === 'LOOP') {
-        return getLoopErr(lStr, line);
+        return getLoopErr(lStr, line, fistWordUpCol);
     }
 
     const diag: EDiagCode | undefined = CommandErrMap.get(fistWordUp);
     if (diag !== undefined) {
-        const colL: number = lStr.search(/\S/ui);
+        const colL: number = fistWordUpCol;
         return new CDiagBase({
             value: diag,
             range: new vscode.Range(line, colL, line, colL + fistWordUp.length),
@@ -70,7 +70,7 @@ export function getCommandErr(params: TAhkTokenLine): CDiagBase | null {
     }
     // if (StatementMDMap.has(fistWordUp)) return null;
     // if (!CommandMDMap.has(fistWordUp)) {
-    //     console.log('🚀 ~ Pretreatment ~ fistWordUp', fistWordUp);
+    //     console.log('🚀 ~ getCommandErr ~ fistWordUp', fistWordUp);
     // }
     return null;
 }

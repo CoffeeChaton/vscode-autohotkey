@@ -2,10 +2,9 @@
 /* eslint-disable max-lines-per-function */
 import type { TParamMapIn, TValMapIn, TValMetaIn } from '../../../AhkSymbol/CAhkFunc';
 import type { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
-import type { TVarData } from '../../../core/ParserTools/varMixedAnnouncement';
+import type { TBrackets, TVarData } from '../../../core/ParserTools/varMixedAnnouncement';
 import { varMixedAnnouncement } from '../../../core/ParserTools/varMixedAnnouncement';
 import type { TTokenStream } from '../../../globalEnum';
-import { replacerSpace } from '../../str/removeSpecialChar';
 import { forLoop } from './def/forLoop';
 import { getValMeta } from './def/getValMeta';
 import { OutputVarCommandBase } from './def/OutputVarCommandBase';
@@ -70,7 +69,7 @@ export function getFnVarDef(
 ): TFnVarDef {
     let fnMode: EFnMode = fnModeDefault;
     let fistWordVarMix: '' | 'GLOBAL' | 'LOCAL' | 'STATIC' = '';
-    let objDeepRaw = 0;
+    let BracketsRaw: TBrackets = [0, 0, 0];
 
     const valMap: TValMapIn = new Map<string, TValMetaIn>();
     for (
@@ -80,6 +79,7 @@ export function getFnVarDef(
             lineComment,
             fistWordUp,
             cll,
+            fistWordUpCol,
         } of DocStrMap
     ) {
         if (!allowList[line]) continue; // in arg Range
@@ -97,7 +97,7 @@ export function getFnVarDef(
             && (fistWordUp === 'STATIC' || fistWordUp === 'LOCAL' || fistWordUp === 'GLOBAL')
         ) {
             fistWordVarMix = fistWordUp;
-            objDeepRaw = 0;
+            BracketsRaw = [0, 0, 0];
         } else if (fistWordVarMix !== '' && cll === 1) {
             // nothing
             // fistWordVarMix = the last line fistWordUp
@@ -108,11 +108,12 @@ export function getFnVarDef(
         if (fistWordVarMix === 'GLOBAL') continue;
 
         if (fistWordVarMix === 'LOCAL' || fistWordVarMix === 'STATIC') {
-            const { varDataList, objDeep } = varMixedAnnouncement(
-                lStr.replace(/^\s*\b(?:static|local)\b[,\s]+/ui, replacerSpace),
-                objDeepRaw,
-            );
-            objDeepRaw = objDeep;
+            const strF: string = lStr
+                .replace(/^\s*\{?\s*\b(?:static|local)\b[,\s]+/ui, ',')
+                .padStart(lStr.length, ' ');
+
+            const { varDataList, Brackets } = varMixedAnnouncement(strF, BracketsRaw);
+            BracketsRaw = Brackets;
 
             setVarMix({
                 varDataList,
@@ -137,8 +138,8 @@ export function getFnVarDef(
         walrusOperator(need); // :=
         varSetCapacityFunc(need); // VarSetCapacity(varName) or NumGet(varName) or NumGet(&varName)
         forLoop(need); // for var1 , var2 in
-        OutputVarCommandBase(need, fistWordUp);
-        OutputVarCommandPlus(need, fistWordUp);
+        OutputVarCommandBase(need, fistWordUp, fistWordUpCol);
+        OutputVarCommandPlus(need, fistWordUp, fistWordUpCol);
 
         // not plan to support this case....
         // DllCall("DllFile\Function" , Type1, Arg1, Type2, Arg2, "Cdecl ReturnType")

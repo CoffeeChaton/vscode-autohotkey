@@ -3,6 +3,7 @@ import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { pm } from '../../core/ProjectManager';
 import { getSnippetStartWihA } from '../../tools/Built-in/A_Variables';
+import { snippetBiVar } from '../../tools/Built-in/BiVariables';
 import { Completion2Directives } from '../../tools/Built-in/Directives';
 import { BuiltInFunc2Completion } from '../../tools/Built-in/func_tools';
 import { getSnippetCommand } from '../../tools/Built-in/getSnippetCommand';
@@ -55,6 +56,7 @@ function CompletionItemCore(
             ...getSnippetStartWihA(PartStr),
             ...getSnippetStatement(PartStr),
             ...getSnippetWinMsg(PartStr),
+            ...snippetBiVar,
         );
     }
 

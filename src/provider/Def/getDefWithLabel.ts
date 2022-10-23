@@ -2,18 +2,58 @@ import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { CAhkLabel } from '../../AhkSymbol/CAhkLine';
 import { pm } from '../../core/ProjectManager';
+import { getHotkeyData } from '../../tools/Command/HotkeyTools';
+import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { findLabel } from '../../tools/labels';
 
+function LabelRefHotkey(
+    {
+        line,
+        wordUp,
+        lStr,
+        fistWordUpCol,
+    }: { line: number; wordUp: string; lStr: string; fistWordUpCol: number },
+): vscode.Range | null {
+    const HotkeyData: TScanData | null = getHotkeyData(lStr, fistWordUpCol);
+    if (HotkeyData === null) return null;
+
+    const { RawNameNew, lPos } = HotkeyData;
+    if (RawNameNew.toUpperCase() !== wordUp) return null;
+
+    return new vscode.Range(
+        new vscode.Position(line, lPos),
+        new vscode.Position(line, lPos + RawNameNew.length),
+    );
+}
+
 function getLabelRef(wordUp: string): vscode.Location[] {
     // eslint-disable-next-line security/detect-non-literal-regexp
-    const reg = new RegExp(`\\b((?:goto|goSub|Break|Continue|SetTimer)\\b[\\s,]+)\\b${wordUp}\\b`, 'iu');
-    const refFn = (lineStr: string): RegExpMatchArray | null => lineStr.match(reg);
+    const reg = new RegExp(`(\\b(?:goto|goSub|Break|Continue|SetTimer)\\b\\s*,?\\s*)\\b${wordUp}\\b`, 'iu');
 
     const List: vscode.Location[] = [];
     for (const { DocStrMap, uri } of pm.getDocMapValue()) {
-        for (const { line, lStr } of DocStrMap) {
-            const ma: RegExpMatchArray | null = refFn(lStr);
+        for (
+            const {
+                line,
+                lStr,
+                fistWordUp,
+                fistWordUpCol,
+            } of DocStrMap
+        ) {
+            if (fistWordUp === 'HOTKEY') {
+                const range: vscode.Range | null = LabelRefHotkey({
+                    line,
+                    wordUp,
+                    lStr,
+                    fistWordUpCol,
+                });
+                if (range !== null) List.push(new vscode.Location(uri, range));
+
+                continue;
+            }
+
+            const ma: RegExpMatchArray | null = lStr.match(reg);
             if (ma === null) continue;
             const { index } = ma;
             if (index === undefined) continue;
@@ -66,11 +106,6 @@ function getDefWithLabelCore(wordUpCase: string): vscode.Location[] | null {
  *                                          ^
  * ;            ... The label is jumped to as though a Gosub had been used.
  * ```
- *
- * ```ahk
- * Hotkey, KeyName , Label, Options
- *                    ^
- * ```
  */
 
 export function getDefWithLabel(
@@ -79,15 +114,21 @@ export function getDefWithLabel(
     wordUpCase: string,
 ): vscode.Location[] | null {
     const { DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
-    const { lStr } = DocStrMap[position.line];
+    const { lStr, fistWordUp, fistWordUpCol } = DocStrMap[position.line];
     const lStrFix: string = lStr.slice(0, Math.max(0, position.character));
 
     if ((/^\w+:$/u).test(lStr.trim())) {
         return [new vscode.Location(document.uri, position)]; // let auto call Ref
     }
 
-    if ((/\b(?:goto|goSub|Break|Continue)\b[\s,]+\w*$/ui).test(lStrFix)) {
+    if ((/\b(?:goto|goSub|Break|Continue|OnExit)\b[\s,]+\w*$/ui).test(lStrFix)) {
+        // OnExit , Label
         return getDefWithLabelCore(wordUpCase);
+    }
+
+    if (fistWordUp === 'HOTKEY') {
+        const HotkeyData: TScanData | null = getHotkeyData(lStr, fistWordUpCol);
+        if (HotkeyData?.RawNameNew.toUpperCase() === wordUpCase) return getDefWithLabelCore(wordUpCase);
     }
 
     const ma: RegExpMatchArray | null = lStrFix.match(/\b(SetTimer\b[\s,%]+)\w*$/ui);
@@ -129,3 +170,7 @@ export function getDefWithLabel(
 
     return null;
 }
+
+// unknown...
+// {_T("GroupAdd"), 1, 6, 6, NULL} // Group name, WinTitle, WinText, Label, exclude-title/text
+// {_T("Menu"), 2, 6, 6, NULL}  // tray, add, name, label, options, future use

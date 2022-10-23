@@ -4,6 +4,7 @@
 - [check #Include](https://www.autohotkey.com/docs/Functions.htm#lib)
 - [diag of `If Var op Value`](https://www.autohotkey.com/docs/Language.htm#if-statement)
 - [not use switch in js](https://github.com/microsoft/TypeScript/pull/50225)
+- `"name": "keyword.multiline.ahk"` with highlight `style1` `style2`
 - add diag auto check of `catch{} ;null catch`
 - add diag of [multi-line](https://www.autohotkey.com/docs/Scripts.htm#continuation)
 - add diag of `%\w%\w`
@@ -11,7 +12,63 @@
 - add hover of `;@ahk-neko-ignore`
 - add test jest of `package.json.config` <---> `configUI.ts`
 - change `configUI.ts` fmt option to `enum`
+- find All References `SetTimer, funcName`, filter ad funcName === labelName case
 - list all func add some Data at tail
 - Parser: -> AST
 - Scanner: -> Token
-- `"name": "keyword.multiline.ahk"` with highlight `style1` `style2`
+- test of <https://www.autohotkey.com/docs/scripts/index.htm>
+
+// Declare built-in var read function.
+// #define BIV_DECL_R(name) VarSizeType name(LPTSTR aBuf, LPTSTR aVarName)
+
+// TODO fn()
+// ComObjParameter
+// IsByRef()
+// ObjAddRef()
+// ObjBindMethod()
+// ObjClone()
+// ObjClone()
+// ObjCount()
+// ObjCount()
+// ObjDelete()
+// ObjGetAddress()
+// ObjGetBase()
+// ObjGetCapacity()
+// ObjHasKey()
+// ObjInsert()
+// ObjInsertAt()
+// ObjLength()
+// ObjMaxIndex()
+// ObjMinIndex()
+// ObjNewEnum()
+// ObjPop()
+// ObjPush()
+// ObjRawGet()
+// ObjRawSet()
+// ObjRelease()
+// ObjRemove()
+// ObjRemoveAt()
+// ObjSetCapacity()
+
+// -------
+// ObjClone()
+// ObjCount()
+// ObjDelete()
+// ObjGetAddress()
+// ObjGetCapacity()
+// ObjHasKey()
+// ObjInsert()
+// ObjInsertAt()
+// ObjLength()
+// ObjMaxIndex()
+// ObjMinIndex()
+// ObjNewEnum()
+// ObjPop()
+// ObjPush()
+// ObjRemove()
+// ObjRemoveAt()
+// ObjSetCapacity()
+// These functions are equivalent to built-in methods of the Object type. It is usually recommended to use the corresponding method instead.
+
+// ${3|Seconds,Minutes,Hours,Days|}
+// Var *Script::FindOrAddVar(LPTSTR aVarName, size_t aVarNameLength, int aScope)

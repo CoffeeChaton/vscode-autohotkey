@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import type {
     CAhkFunc,
     TParamMetaOut,
-    TTextMetaOut,
     TValMetaOut,
 } from '../../AhkSymbol/CAhkFunc';
 import { pm } from '../../core/ProjectManager';
@@ -37,23 +36,19 @@ function getModuleVarDef(
     listAllUsing: boolean,
     uri: vscode.Uri,
 ): vscode.Location[] | null {
-    const { ModuleValMap, ModuleTextMap } = ModuleVar;
-
-    const valMeta: TValMetaOut | undefined = ModuleValMap.get(wordUp);
+    const valMeta: TValMetaOut | undefined = ModuleVar.ModuleValMap.get(wordUp);
     if (valMeta !== undefined) {
         if (listAllUsing) {
             return searchAllVarRef(wordUp);
         }
+
         const { defRangeList } = valMeta;
         return defRangeList[0].contains(position)
             ? [new vscode.Location(uri, position)]
             : rangeList2LocList(defRangeList, uri);
     }
 
-    const textList: TTextMetaOut | undefined = ModuleTextMap.get(wordUp);
-    return textList !== undefined
-        ? rangeList2LocList(textList.refRangeList, uri)
-        : null;
+    return null;
 }
 
 export function getValDefInFunc(
@@ -67,13 +62,10 @@ export function getValDefInFunc(
 
     const DA: CAhkFunc | null = getDAWithPos(AST, position);
     if (DA === null) return getModuleVarDef(ModuleVar, position, wordUp, listAllUsing, uri);
+
     if (DA.nameRange.contains(position)) return null; // fnName === val
 
-    const {
-        paramMap,
-        valMap,
-        textMap,
-    } = DA;
+    const { paramMap, valMap } = DA;
     const argMeta: TParamMetaOut | undefined = paramMap.get(wordUp);
     if (argMeta !== undefined) {
         const { defRangeList, refRangeList } = argMeta;
@@ -86,11 +78,5 @@ export function getValDefInFunc(
         return metaRangeList(defRangeList, refRangeList, listAllUsing, position, uri);
     }
 
-    const ModuleVarDef: vscode.Location[] | null = getModuleVarDef(ModuleVar, position, wordUp, listAllUsing, uri);
-    if (ModuleVarDef !== null) return ModuleVarDef;
-
-    const textList: TTextMetaOut | undefined = textMap.get(wordUp);
-    return textList !== undefined
-        ? rangeList2LocList(textList.refRangeList, uri)
-        : null;
+    return getModuleVarDef(ModuleVar, position, wordUp, listAllUsing, uri);
 }

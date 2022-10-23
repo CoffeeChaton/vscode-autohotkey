@@ -16,12 +16,12 @@
 
 ### diag107
 
-    ```js
-    107: {
-        msg: 'assign warning',
-        path: 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
-    },
-    ```
+```js
+107: {
+    msg: 'assign warning',
+    path: 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
+},
+```
 
 ![diag107](./img/diag107.png)
 
@@ -31,12 +31,12 @@ try it [diag107](./ahk/diag107.ahk)
 
 ### diag121
 
-    ```js
-    121: {
-        msg: 'Multi-line:join > 15 characters',
-        path: 'https://www.autohotkey.com/docs/Scripts.htm#Join',
-    },
-    ```
+```js
+121: {
+    msg: 'Multi-line:join > 15 characters',
+    path: 'https://www.autohotkey.com/docs/Scripts.htm#Join',
+},
+```
 
 the word `Join` should be followed immediately by as many as `15` characters.
 
@@ -46,21 +46,21 @@ some idea [diag121](./ahk/diag121.ahk)
 
 ### diag302
 
-    ```js
-    302: {
-        msg: 'Function name too long, name len > (255 -2) characters.',
-        path: 'https://github.com/Lexikos/AutoHotkey_L/blob/master/source/script.cpp#L8744',
-    },
-    ```
+```js
+302: {
+    msg: 'Function name too long, name len > (255 -2) characters.',
+    path: 'https://github.com/Lexikos/AutoHotkey_L/blob/master/source/script.cpp#L8744',
+},
+```
 
 ### diag506
 
-    ```js
-    506: {
-        msg: 'not support of this number formats',
-        path: 'https://www.autohotkey.com/docs/Concepts.htm#numbers',
-    },
-    ```
+```js
+506: {
+    msg: 'not support of this number formats',
+    path: 'https://www.autohotkey.com/docs/Concepts.htm#numbers',
+},
+```
 
 Diag `c506` of not support number formats [number](https://www.autohotkey.com/docs/Concepts.htm#numbers)
 
@@ -88,13 +88,13 @@ i love `% "str"` style.
 - move to line `1` `12` try to `find all ref`.
 - if you need to use [IntelliSense](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp#4-completion-of-class) of `a2` now, you need to write `a2 := new XXX` at new line, variable tracking not supported `? :` now.
 
-  ```ahk
-  if (OutputVar > 0.5){
-    a2 := new C1
-  } else {
-    a2 := new C2
-  }
-  ```
+```ahk
+if (OutputVar > 0.5){
+  a2 := new C1
+} else {
+  a2 := new C2
+}
+```
 
 ## DEV note
 

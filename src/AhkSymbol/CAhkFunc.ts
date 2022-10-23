@@ -42,7 +42,10 @@ export type TValMetaOut = DeepReadonly<TValMetaIn>;
 
 export type TValMapIn = Map<TUpName, TValMetaIn>; // k = valNameUP
 
-export type TValMapOut = ReadonlyMap<TUpName, TValMetaOut>; // k = valNameUP
+/**
+ * k = valNameUP
+ */
+export type TValMapOut = ReadonlyMap<TUpName, TValMetaOut>;
 
 export type TTextMetaIn = {
     keyRawName: string;
