@@ -2,9 +2,10 @@
 /* eslint-disable max-lines-per-function */
 import type { TParamMapIn, TValMapIn, TValMetaIn } from '../../../AhkSymbol/CAhkFunc';
 import type { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';
-import type { TBrackets, TVarData } from '../../../core/ParserTools/varMixedAnnouncement';
+import type { TVarData } from '../../../core/ParserTools/varMixedAnnouncement';
 import { varMixedAnnouncement } from '../../../core/ParserTools/varMixedAnnouncement';
 import type { TTokenStream } from '../../../globalEnum';
+import type { TBrackets } from '../../Bracket';
 import { forLoop } from './def/forLoop';
 import { getValMeta } from './def/getValMeta';
 import { OutputVarCommandBase } from './def/OutputVarCommandBase';

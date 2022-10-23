@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import type { TTokenStream } from '../../globalEnum';
 import { EDetail } from '../../globalEnum';
-import type { TBrackets, TVarData } from './varMixedAnnouncement';
+import type { TBrackets } from '../../tools/Bracket';
+import type { TVarData } from './varMixedAnnouncement';
 import { varMixedAnnouncement } from './varMixedAnnouncement';
 
 type TGValData = {
