@@ -1,5 +1,4 @@
-import { EMultiline } from '../../globalEnum';
-import { isSetVarTradition } from '../../tools/str/removeSpecialChar';
+import { EDetail, EMultiline } from '../../globalEnum';
 
 function textReplace(textElement: string): string {
     return textElement.replaceAll(/ *, */gu, ', ')
@@ -76,12 +75,17 @@ function fnStrGroup(text: string): string {
     return head + newBody.trimStart();
 }
 
-export function lineReplace(text: string, textFix: string, CommentBlock: boolean, multiline: EMultiline): string {
-    return (CommentBlock
-            || textFix === ''
-            || multiline === EMultiline.start
-            || multiline === EMultiline.mid
-            || isSetVarTradition(textFix) || textFix.startsWith(':') || textFix.includes('::'))
+export function lineReplace({
+    text,
+    lStrTrim,
+    detail,
+    multiline,
+}: { text: string; lStrTrim: string; detail: readonly EDetail[]; multiline: EMultiline }): string {
+    return (lStrTrim === ''
+            || detail.includes(EDetail.inSkipSign2)
+            || detail.includes(EDetail.inComment)
+            || multiline !== EMultiline.none
+            || lStrTrim.startsWith(':') || lStrTrim.includes('::'))
         ? text
         : fnStrGroup(text);
 }
