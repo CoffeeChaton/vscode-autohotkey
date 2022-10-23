@@ -61,8 +61,11 @@ export const enum EDiagCode {
     code113 = 113,
     code114 = 114,
     // 120~130 is Multi-line-Diag
-    code120 = 120,
-    code121 = 121,
+    code120 = 120, // unknown
+    code121 = 121, // join > 15
+    code122 = 122, // %
+    code123 = 123, // ,
+
     code201 = 201, // 200~299 is not expression // need use %
     code301 = 301, // 300~399 is func err
     code302 = 302,
@@ -158,6 +161,14 @@ export const Diags: DeepReadonly<TDiags> = {
     121: {
         msg: 'Multi-line:join > 15 characters',
         path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag121',
+    },
+    122: {
+        msg: 'ahk-neko-help not supported "%" flag now.',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag122',
+    },
+    123: {
+        msg: 'ahk-neko-help not supported "," flag now.',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag123',
     },
     201: {
         msg: 'Count cannot be an expression, use %',

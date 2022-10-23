@@ -29,6 +29,7 @@
         "ifnotinstring",
         "Keybd",
         "LISTVARS",
+        "LPTSTR",
         "LTRB",
         "msgbox",
         "Mult",

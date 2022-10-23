@@ -53,3 +53,37 @@ export function getClassGetSet(FuncInput: TFuncInput): CAhkClassGetSet | null {
 //         }
 //     }
 // }
+
+// ResultType Script::DefineClassProperty(LPTSTR aBuf)
+// {
+//     LPTSTR name_end = find_identifier_end(aBuf);
+//     if (*name_end == '.')
+//         return ScriptError(ERR_INVALID_LINE_IN_CLASS_DEF, aBuf);
+
+//     LPTSTR param_start = omit_leading_whitespace(name_end);
+//     if (*param_start == '[')
+//     {
+//         LPTSTR param_end = aBuf + _tcslen(aBuf);
+//         if (param_end[-1] != ']')
+//             return ScriptError(ERR_MISSING_CLOSE_BRACKET, aBuf);
+//         *param_start = '(';
+//         param_end[-1] = ')';
+//     }
+//     else
+//         param_start = _T("()");
+
+//     // Save the property name and parameter list for later use with DefineFunc().
+//     mClassPropertyDef = tmalloc(_tcslen(aBuf) + 7); // +7 for ".Get()\0"
+//     if (!mClassPropertyDef)
+//         return ScriptError(ERR_OUTOFMEM);
+//     _stprintf(mClassPropertyDef, _T("%.*s.Get%s"), int(name_end - aBuf), aBuf, param_start);
+
+//     Object *class_object = mClassObject[mClassObjectCount - 1];
+//     *name_end = 0; // Terminate for aBuf use below.
+//     if (class_object->GetItem(ExprTokenType(), aBuf))
+//         return ScriptError(ERR_DUPLICATE_DECLARATION, aBuf);
+//     mClassProperty = new Property();
+//     if (!mClassProperty || !class_object->SetItem(aBuf, mClassProperty))
+//         return ScriptError(ERR_OUTOFMEM);
+//     return OK;
+// }

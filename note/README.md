@@ -6,6 +6,8 @@
   - [Diagnostic](#diagnostic)
     - [diag107](#diag107)
     - [diag121](#diag121)
+    - [diag122](#diag122)
+    - [diag123](#diag123)
     - [diag302](#diag302)
     - [diag506](#diag506)
   - [about str or %](#about-str-or-)
@@ -43,6 +45,28 @@ the word `Join` should be followed immediately by as many as `15` characters.
 ![diag121](./img/diag121.png)
 
 some idea [diag121](./ahk/diag121.ahk)
+
+### diag122
+
+```js
+122: {
+    msg: 'ahk-neko-help not supported "%" flag now.',
+    path: 'https://www.autohotkey.com/docs/Scripts.htm#continuation-section',
+},
+```
+
+please use tell me, how to use this flag? [report](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues)
+
+### diag123
+
+```js
+123: {
+    msg: 'ahk-neko-help not supported "," flag now.',
+    path: 'https://www.autohotkey.com/docs/Scripts.htm#continuation-section',
+},
+```
+
+please use tell me, how to use this flag? [report](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues)
 
 ### diag302
 

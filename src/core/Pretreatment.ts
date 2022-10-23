@@ -77,7 +77,7 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
             strArray,
             line,
         });
-        if (multiline !== EMultiline.none && multiline !== EMultiline.end) {
+        if (multiline === EMultiline.start || multiline === EMultiline.mid) {
             result.push({
                 fistWordUpCol: -1,
                 fistWordUp: '',

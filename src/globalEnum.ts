@@ -15,8 +15,10 @@ export const enum EDetail {
     hasDoubleSemicolon = 8,
 }
 
+/**
+ * https://www.autohotkey.com/docs/Scripts.htm#continuation-section
+ */
 export const enum EMultiline {
-    // https://www.autohotkey.com/docs/Scripts.htm#continuation-section
     none = 0,
     start = 1,
     mid = 2,
@@ -28,10 +30,13 @@ export type TPos = DeepReadonly<{
     len: number;
 }>;
 
+/**
+ * https://www.autohotkey.com/docs/Scripts.htm#continuation-section
+ */
 export type TMultilineFlag =
     | DeepReadonly<{
-        Join: TPos[];
-        LTrim: TPos[];
+        Join: TPos[]; // https://www.autohotkey.com/docs/Scripts.htm#Join
+        LTrim: TPos[]; // https://www.autohotkey.com/docs/Scripts.htm#LTrim
         RTrim0: TPos[];
         CommentFlag: TPos[]; // C
         Percent: TPos[]; // %
