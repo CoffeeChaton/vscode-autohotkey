@@ -46,7 +46,7 @@ export function FormatCore(
             textRaw,
         } of DocStrMap
     ) {
-        const textFix = lStr.trim();
+        const lStrTrim = lStr.trim();
 
         if (line >= fmtStart && line <= fmtEnd) {
             newTextList.push(fn_Warn_thisLineText_WARN({
@@ -60,21 +60,21 @@ export function FormatCore(
                 occ,
                 options,
                 switchRangeArray,
-                textFix,
+                lStrTrim,
                 textRaw,
             }));
         } else if (line > fmtEnd) {
             break;
         }
 
-        const switchRange: vscode.Range | null = getSwitchRange(document, DocStrMap, textFix, line);
+        const switchRange: vscode.Range | null = getSwitchRange(document, DocStrMap, lStrTrim, line);
         if (switchRange !== null) switchRangeArray.push(switchRange);
 
         deep = DocStrMap[line].deep;
 
-        occ = (textFix.endsWith('{') && !textFix.startsWith('{'))
+        occ = (lStrTrim.endsWith('{') && !lStrTrim.startsWith('{'))
             ? occ
-            : getDeepKeywords(textFix, occ); // TODO fmt_a1
+            : getDeepKeywords(lStrTrim, occ); // TODO fmt_a1
     }
 
     fmtDiffInfo({
