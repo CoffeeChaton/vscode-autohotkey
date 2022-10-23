@@ -8,7 +8,7 @@ function getFistWord(lStrTrim: string): string {
 
     if ((/^[{}]/u).test(lStrTrim)) {
         return lStrTrim
-            .replace(/^[{}]\s*/u, '')
+            .replace(/^[{} \t]*/u, '')
             .match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1]
             ?? '';
     }

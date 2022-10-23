@@ -15,8 +15,9 @@ export function getSnippetCommand(lStr: string, position: vscode.Position): TSni
     const isOK: boolean = (/^\w*$/u).test(subStr)
         || (/^case\s[^:]+:\s*\w*$/iu).test(subStr)
         || (/^default\s*:\s*\w*$/iu).test(subStr)
-        || (/::\s*\w*$/iu).test(subStr) // allow hotstring or hotkey
-        || (/^[{}]\s*\w*$/iu).test(subStr);
+        || (/::\s*\w*$/iu).test(subStr); // allow hotstring or hotkey
+
+    //  i don't want to use write this case...  || (/^[{}]\s*\w*$/iu).test(subStr);
 
     if (!isOK) return [];
 
