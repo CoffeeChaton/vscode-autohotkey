@@ -17,6 +17,7 @@ import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem'
 import { globalValCompletion } from './global/globalValCompletion';
 import { IncludeFsPath } from './Include_fsPath/Include_fsPath';
 import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
+import { ModuleVar2Completion } from './ModuleVar/ModuleVar2Completion';
 import { getStartWithStr } from './util';
 
 function getPartStr(lStr: string, position: vscode.Position): string | null {
@@ -33,7 +34,7 @@ function CompletionItemCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.CompletionItem[] {
-    const { AST, DocStrMap } = pm.updateDocDef(document);
+    const { AST, DocStrMap, ModuleVar } = pm.updateDocDef(document);
     const { lStr, textRaw } = DocStrMap[position.line];
 
     if ((/^\s*#Include(Again)?\s/ui).test(lStr)) return IncludeFsPath(document.uri.fsPath);
@@ -57,6 +58,7 @@ function CompletionItemCore(
             ...getSnippetStatement(PartStr),
             ...getSnippetWinMsg(PartStr),
             ...snippetBiVar,
+            ...ModuleVar2Completion(ModuleVar, DA, PartStr, document.uri.fsPath),
         );
     }
 
