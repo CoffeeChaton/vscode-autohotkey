@@ -82,9 +82,6 @@
             "patterns": [
                 {
                     "include": "#escaped-char"
-                },
-                {
-                    "include": "#percent-variable"
                 }
             ]
         },
@@ -176,38 +173,39 @@
             "include": "#numbers"
         },
         {
-            "match": "\\+|-|\\*|\\^|/|&|#|!|~|\\|",
-            "name": "keyword.operator.arithmetic.ahk"
+            "include": "#keyword"
         },
         {
-            "match": ":=|\\.=|::",
-            "name": "keyword.operator.assignment.ahk"
+            "include": "#keywordV2"
         },
         {
-            "match": "<=|>=|<>|==|>|<|!=",
-            "name": "keyword.operator.comparison.ahk"
+            "include": "#keywordV3"
         },
         {
-            "match": ":|\\?|`|,",
-            "name": "punctuation.ahk"
+            "include": "#punctuation1"
         },
         {
-            "match": "[\\[\\](){}]",
-            "name": "punctuation.bracket.ahk"
+            "include": "#punctuation2"
         },
         {
-            "match": "%",
-            "name": "punctuation.definition.variable.percent.ahk"
+            "include": "#punctuation3"
         },
         {
             "include": "#stringQuotedDouble"
         },
         {
-            "match": "\\w+(?=\\()",
-            "name": "entity.name.function.ahk"
+            "include": "#func"
         }
     ],
     "repository": {
+        "func": {
+            "patterns": [
+                {
+                    "match": "\\w+(?=\\()",
+                    "name": "entity.name.function.ahk"
+                }
+            ]
+        },
         "percent-variable": {
             "match": "(%\\w+%)",
             "captures": {
@@ -273,6 +271,54 @@
                     "match": "\\s\\.[0-9]+(?:([eE])[+-]?[0-9]+)?\\b(?!\\.)",
                     "name": "constant.numeric.decimal.ahk",
                     "captures": { "1": { "name": "keyword.other.unit.numeric.decimal.ahk" } }
+                }
+            ]
+        },
+        "keyword": {
+            "patterns": [
+                {
+                    "match": "\\+|-|\\*|\\^|/|&|#|!|~|\\|",
+                    "name": "keyword.operator.arithmetic.ahk"
+                }
+            ]
+        },
+        "keywordV2": {
+            "patterns": [
+                {
+                    "match": ":=|\\.=|::",
+                    "name": "keyword.operator.assignment.ahk"
+                }
+            ]
+        },
+        "keywordV3": {
+            "patterns": [
+                {
+                    "match": "<=|>=|<>|==|>|<|!=",
+                    "name": "keyword.operator.comparison.ahk"
+                }
+            ]
+        },
+        "punctuation1": {
+            "patterns": [
+                {
+                    "match": ":|\\?|`|,",
+                    "name": "punctuation.ahk"
+                }
+            ]
+        },
+        "punctuation2": {
+            "patterns": [
+                {
+                    "match": "[\\[\\](){}]",
+                    "name": "punctuation.bracket.ahk"
+                }
+            ]
+        },
+        "punctuation3": {
+            "patterns": [
+                {
+                    "match": "%",
+                    "name": "punctuation.definition.variable.percent.ahk"
                 }
             ]
         }
