@@ -2095,7 +2095,7 @@ export const LineCommand: TLineCommand = {
             'Displays the specified text in a small window containing one or more buttons (such as Yes and No).',
             '',
             '- **Text** : type is string',
-            '- **Options** : type is number',
+            '- **Options** : type is number, Indicates the type of message box and the possible button combinations. ',
             '- **Title** : type is string',
             '- **Timeout** : type is number of second, exp: `10` or `% mins*60`',
         ].join('\n'),
