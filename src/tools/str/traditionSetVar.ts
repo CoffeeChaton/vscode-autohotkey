@@ -100,7 +100,7 @@ export function SetVarTradition(textRaw: string): string {
                 const sNext: string | undefined = textRaw[i + 1] as string | undefined;
                 if (sNext !== undefined && (sNext === ' ' || sNext === '\t')) {
                     // TODO edge case, i think need diag ...
-                    lStr += ` ${sNext}${getLStr(textRaw.slice(i, len))}`;
+                    lStr += ` ${sNext}${getLStr(textRaw.slice(i + 2, len))}`;
                     return lStr; // <---------------------------------------------------------------------------------------
                 }
                 lStr += ' ';
