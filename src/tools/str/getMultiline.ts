@@ -1,15 +1,24 @@
-import type { DeepWriteable, TMultilineFlag, TPos } from '../../globalEnum';
-import { EMultiline } from '../../globalEnum';
+import type {
+    DeepWriteable,
+    TAhkTokenLine,
+    TMultilineFlag,
+    TPos,
+} from '../../globalEnum';
+import {
+    EDetail,
+    EMultiline,
+} from '../../globalEnum';
+
 import { replacerSpace } from './removeSpecialChar';
 
 type TGetMultilineFlag = {
     textRaw: string;
-    strArray: readonly string[];
+    result: readonly TAhkTokenLine[];
     line: number;
 };
 
-// eslint-disable-next-line max-lines-per-function
-function getMultilineFlag({ textRaw, strArray, line }: TGetMultilineFlag): TMultilineFlag {
+// eslint-disable-next-line max-lines-per-function, max-statements
+function getMultilineFlag({ textRaw, result, line }: TGetMultilineFlag): TMultilineFlag {
     const arr: readonly string[] = textRaw
         .replace(/^\s*\(\s*/ui, replacerSpace)
         .split(' ')
@@ -20,14 +29,12 @@ function getMultilineFlag({ textRaw, strArray, line }: TGetMultilineFlag): TMult
         LTrim: [],
         RTrim0: [],
         CommentFlag: [],
-        Percent: [],
-        comma: [],
-        accent: [],
-        unknown: [], // ... need for of
+        PercentFlag: [],
+        commaFlag: [],
+        accentFlag: [],
+        unknownFlag: [], // ... need for of
         L: textRaw.indexOf('('),
         R: textRaw.length,
-        blockLineStart: line,
-        blockLineEnd: line,
         isExpress: false,
     };
     let oldPos: number = textRaw.indexOf('(');
@@ -54,39 +61,48 @@ function getMultilineFlag({ textRaw, strArray, line }: TGetMultilineFlag): TMult
         } else {
             switch (str) {
                 case '%':
-                    flag.Percent.push(pos);
+                    flag.PercentFlag.push(pos);
                     break;
 
                 case ',':
-                    flag.comma.push(pos);
+                    flag.commaFlag.push(pos);
                     break;
 
                 case '`':
-                    flag.accent.push(pos);
+                    flag.accentFlag.push(pos);
                     break;
 
                 default:
-                    flag.unknown.push(pos);
+                    flag.unknownFlag.push(pos);
             }
         }
     }
 
-    for (const str of strArray.slice(line)) {
-        const textTrimStart: string = str.trimStart();
-        if (textTrimStart.startsWith(')')) {
-            flag.isExpress = textTrimStart.startsWith(')"');
-            break;
-        }
-
-        flag.blockLineEnd += 1;
+    const lineBeforeMsg = result[line - 1] as TAhkTokenLine | undefined;
+    if (lineBeforeMsg === undefined) return flag;
+    //
+    if (lineBeforeMsg.detail.includes(EDetail.inSkipSign2)) {
+        return flag; // not Express
     }
+    // FIXME: check lineBefore is cmd / style3
+    // if () {
+    //      return flag;
+    // }
 
-    // console.log('🚀 ~ getMultilineFlag ~ textTrimStart', {
-    //     A: flag.isExpress,
-    //     B: strArray[line + 1],
-    //     C: strArray[flag.blockLineEnd - 1],
-    // });
-
+    const textRawBefore: string = lineBeforeMsg.textRaw;
+    for (let i = lineBeforeMsg.lStr.length - 1; i > -1; i--) {
+        const s = textRawBefore[i];
+        if (s === ' ' || s === '\t') continue;
+        if (s === '"') {
+            flag.isExpress = true;
+            return flag;
+        }
+        if (s === ',') { // style3
+            return flag; // false
+        }
+        break;
+    }
+    flag.isExpress = true;
     return flag;
 }
 
@@ -95,7 +111,7 @@ type TGetMultiline = {
     multiline: EMultiline;
     multilineFlag: TMultilineFlag;
     textRaw: string;
-    strArray: readonly string[];
+    result: readonly TAhkTokenLine[];
     line: number;
 };
 
@@ -105,13 +121,13 @@ export function getMultiline(
         multiline,
         multilineFlag,
         textRaw,
-        strArray,
+        result,
         line,
     }: TGetMultiline,
 ): [EMultiline, TMultilineFlag] {
     if (multiline === EMultiline.none) {
         return textTrimStart.startsWith('(') && !textTrimStart.includes(')')
-            ? [EMultiline.start, getMultilineFlag({ textRaw, strArray, line })]
+            ? [EMultiline.start, getMultilineFlag({ textRaw, result, line })]
             : [EMultiline.none, null]; // 99%
     }
 
@@ -130,7 +146,7 @@ export function getMultiline(
     // END
     // if (LTrim === EMultiline.end)
     return textTrimStart.startsWith('(') && !textTrimStart.includes(')')
-        ? [EMultiline.start, getMultilineFlag({ textRaw, strArray, line })] // look 0.1% case...
+        ? [EMultiline.start, getMultilineFlag({ textRaw, result, line })] // look 0.1% case...
         : [EMultiline.none, null]; // 99%
 }
 

@@ -1,8 +1,15 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../diag';
-import type { TAhkTokenLine, TPos, TTokenStream } from '../../../globalEnum';
+import type {
+    NonNull,
+    TAhkTokenLine,
+    TMultilineFlag,
+    TPos,
+    TTokenStream,
+} from '../../../globalEnum';
 import { EMultiline } from '../../../globalEnum';
 import { CDiagBase } from './CDiagBase';
+import { diagEMultilineMidStyle1, diagEMultilineMidStyle2 } from './getMultilineDiagMid';
 
 type TDiagCodeAllow =
     | EDiagCode.code120
@@ -21,26 +28,18 @@ function fnMakeDiag(Pos: TPos, value: TDiagCodeAllow, line: number, severity: vs
     });
 }
 
-function getMultilineDiagOfLine(params: TAhkTokenLine): CDiagBase[] {
-    const {
-        multiline,
-        multilineFlag,
-        line,
-    } = params;
-
-    if (multiline !== EMultiline.start) return [];
-    if (multilineFlag === null) return [];
-
+function diagEMultilineStart(multilineFlag: NonNull<TMultilineFlag>, line: number): CDiagBase[] {
     const {
         Join,
-        unknown,
-        Percent, // Percent: TPos[]; // %
-        comma, // comma: TPos[]; // ,
+        unknownFlag,
+        PercentFlag, // Percent: TPos[]; // %
+        commaFlag, // comma: TPos[]; // ,
+        isExpress,
     } = multilineFlag;
 
     const diagList: CDiagBase[] = [
         // unknown
-        ...unknown
+        ...unknownFlag
             .map((Pos: TPos): CDiagBase => fnMakeDiag(Pos, EDiagCode.code120, line, vscode.DiagnosticSeverity.Warning)),
         //
         // Join is too long > 15 characters
@@ -50,14 +49,57 @@ function getMultilineDiagOfLine(params: TAhkTokenLine): CDiagBase[] {
             .map((Pos: TPos): CDiagBase => fnMakeDiag(Pos, EDiagCode.code121, line, vscode.DiagnosticSeverity.Warning)),
     ];
 
-    if (Percent.length > 0) {
-        diagList.push(fnMakeDiag(Percent[0], EDiagCode.code122, line, vscode.DiagnosticSeverity.Information));
+    if (PercentFlag.length > 0) {
+        diagList.push(fnMakeDiag(PercentFlag[0], EDiagCode.code122, line, vscode.DiagnosticSeverity.Information));
     }
-    if (comma.length > 0) {
-        diagList.push(fnMakeDiag(comma[0], EDiagCode.code123, line, vscode.DiagnosticSeverity.Information));
+    if (commaFlag.length > 0) {
+        diagList.push(fnMakeDiag(commaFlag[0], EDiagCode.code123, line, vscode.DiagnosticSeverity.Information));
+    }
+
+    if (isExpress) {
+        // FIXME: check this line is open by `"`.
     }
 
     return diagList;
+}
+
+function diagEMultilineEnd(params: TAhkTokenLine): [] | [CDiagBase] {
+    const { textRaw } = params;
+    if ((/^\s*\)\s*"/u).test(textRaw)) {
+        return [];
+    }
+
+    return [];
+    // const col = textRaw.indexOf(')');
+    // return [
+    //     new CDiagBase({
+    //         value, // FIXME: check this line is closed by `"`.
+    //         range: new vscode.Range(line, 0, line, col),
+    //         severity: vscode.DiagnosticSeverity.Error,
+    //         tags: [],
+    //     }),
+    // ];
+}
+function getMultilineDiagOfLine(params: TAhkTokenLine): CDiagBase[] {
+    const {
+        multiline,
+        multilineFlag,
+        line,
+        lStr,
+    } = params;
+
+    if (multilineFlag === null) return [];
+    if (multiline === EMultiline.start) return diagEMultilineStart(multilineFlag, line);
+    if (multiline === EMultiline.mid) {
+        return multilineFlag.isExpress
+            ? diagEMultilineMidStyle2(line, lStr)
+            : diagEMultilineMidStyle1(line, lStr);
+    }
+    if (multiline === EMultiline.end && multilineFlag.isExpress) {
+        return diagEMultilineEnd(params);
+    }
+    // if EMultiline.none
+    return [];
 }
 
 export function getMultilineDiag(DocStrMap: TTokenStream): CDiagBase[] {

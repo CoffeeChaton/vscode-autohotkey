@@ -26,7 +26,6 @@ export function baseDiagnostic(
         ...getFuncErr(DocStrMap, [...AST], getLintConfig().funcSize),
         ...getMultilineDiag(DocStrMap),
     ];
-    // 8k lines without gc -> 7ms
     wm.set(DocStrMap, diagList);
     return diagList;
 }

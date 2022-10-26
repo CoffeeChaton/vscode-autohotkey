@@ -30,7 +30,11 @@ hotkey, KeyName , Label_or_fnName, Options
 - add : doc of `clipboard` `clipboardall` `comspec` `errorlevel` `false` `programfiles` `true`
 - add : doc of Command `181/218 = 83%`
 - fix : Command of `} Command` of `{ Command`
-- fix : `var =` warn
+- fix : `var =` warn (code107)
+
+- add : semantic-highlight of var in [multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation)
+- style1 is OK, but has some highlight bug of style2.
+  ![multilineBug](image/CHANGELOG/v0-0-12-multilineBug.png)
 
 ## 0.0.11(2022-10-09)
 

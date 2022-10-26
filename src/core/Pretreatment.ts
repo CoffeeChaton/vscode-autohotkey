@@ -7,6 +7,7 @@ import { EDetail, EDiagDeep, EMultiline } from '../globalEnum';
 import { getIgnore } from '../provider/Diagnostic/getIgnore';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
 import { getMultiline } from '../tools/str/getMultiline';
+import { getMultilineLStr } from '../tools/str/getMultilineLStr';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
 import { getLStr } from '../tools/str/removeSpecialChar';
 import { isSetVarTradition, SetVarTradition } from '../tools/str/traditionSetVar';
@@ -74,14 +75,18 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
             multiline,
             multilineFlag,
             textRaw,
-            strArray,
+            result,
             line,
         });
         if (multiline === EMultiline.start || multiline === EMultiline.mid) {
+            // FIXME: diag -> something
+
             result.push({
                 fistWordUpCol: -1,
                 fistWordUp: '',
-                lStr: '',
+                lStr: multiline === EMultiline.mid
+                    ? getMultilineLStr({ multilineFlag, textRaw })
+                    : '',
                 deep,
                 textRaw,
                 detail: [],

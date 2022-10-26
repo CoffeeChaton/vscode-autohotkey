@@ -8,6 +8,9 @@
     - [diag121](#diag121)
     - [diag122](#diag122)
     - [diag123](#diag123)
+    - [diag124](#diag124)
+    - [diag125](#diag125)
+    - [diag126](#diag126)
     - [diag302](#diag302)
     - [diag506](#diag506)
   - [about str or %](#about-str-or-)
@@ -67,6 +70,45 @@ please use tell me, how to use this flag? [report](https://github.com/CoffeeChat
 ```
 
 please use tell me, how to use this flag? [report](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues)
+
+### diag124
+
+```js
+124: {
+    msg: '`"` is not closed',
+    path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag124',
+},
+```
+
+### diag125
+
+```js
+125: {
+    msg: '`%` miss to closed',
+    path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag125',
+},
+```
+
+![diag125-1](./img/diag125.png)
+
+> - [Multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) style1 / exp1 just support `%varName%` style.
+> - at this exp `% var%` `%` has a space, true error is at line `9`, but ahk-L report error position at line `5`.
+> - try it [diag125-1](./ahk/diag125.ahk)
+
+### diag126
+
+```js
+126: {
+    msg: '`%` variable name contains an illegal character',
+    path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag126',
+},
+```
+
+![diag126](./img/diag126.png)
+
+> - [Multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) style1 / exp1 just support `%varName%` style.
+> - try to write like line `11` `12` `13`, true error is at line `11`, but ahk-L report error position at line `6`.
+> - try it [diag126](./ahk/diag126.ahk)
 
 ### diag302
 

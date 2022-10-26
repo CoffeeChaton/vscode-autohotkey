@@ -7,6 +7,10 @@ export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
 
+// type NonNullable<T> = Exclude<T, null | undefined>; // Remove null and undefined from T
+
+export type NonNull<T> = Exclude<T, null>;
+
 export const enum EDetail {
     inComment = 3,
     inSkipSign2 = 4,
@@ -39,17 +43,14 @@ export type TMultilineFlag =
         LTrim: TPos[]; // https://www.autohotkey.com/docs/Scripts.htm#LTrim
         RTrim0: TPos[];
         CommentFlag: TPos[]; // C
-        Percent: TPos[]; // %
-        comma: TPos[]; // ,
-        accent: TPos[]; // `
+        PercentFlag: TPos[]; // %
+        commaFlag: TPos[]; // ,
+        accentFlag: TPos[]; // `
         // ---
-        unknown: TPos[];
+        unknownFlag: TPos[];
         L: number; // (
         R: number; // ;
 
-        //
-        blockLineStart: number;
-        blockLineEnd: number;
         /**
          * false : end with ')'
          * true : end with ')' and '#' expression syntax (recommended):

@@ -60,11 +60,15 @@ export const enum EDiagCode {
     code112 = 112,
     code113 = 113,
     code114 = 114,
-    // 120~130 is Multi-line-Diag
+    // 120~130 is Multiline-Diag
     code120 = 120, // unknown
     code121 = 121, // join > 15
     code122 = 122, // %
     code123 = 123, // ,
+    code124 = 124, // `"` is not closed
+    code125 = 125, // `%` miss to closed
+    code126 = 126, // `%` variable name contains an illegal character
+    code127 = 127, // 'Multiline just allow like `" VarName "` style, `"` need Need whitespace inside.',
 
     code201 = 201, // 200~299 is not expression // need use %
     code301 = 301, // 300~399 is func err
@@ -155,11 +159,11 @@ export const Diags: DeepReadonly<TDiags> = {
         path: 'https://www.autohotkey.com/docs/commands/Switch.htm',
     },
     120: {
-        msg: 'unknown options of Multi-line',
+        msg: 'unknown options of Multiline',
         path: 'https://www.autohotkey.com/docs/Scripts.htm#Join',
     },
     121: {
-        msg: 'Multi-line:join > 15 characters',
+        msg: 'Multiline:join > 15 characters',
         path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag121',
     },
     122: {
@@ -169,6 +173,22 @@ export const Diags: DeepReadonly<TDiags> = {
     123: {
         msg: 'ahk-neko-help not supported "," flag now.',
         path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag123',
+    },
+    124: {
+        msg: '`"` is not closed',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag124',
+    },
+    125: {
+        msg: '`%` is miss to closed',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag125',
+    },
+    126: {
+        msg: 'Multiline just allow like `%VarName%` of style1.',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag126',
+    },
+    127: {
+        msg: 'Multiline just allow like `" VarName "` of style2, `"` need to use whitespace pack varName.',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag127',
     },
     201: {
         msg: 'Count cannot be an expression, use %',

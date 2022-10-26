@@ -4,6 +4,7 @@ import { pm } from '../../core/ProjectManager';
 import { DAList2SemanticHighlight } from './DAList2SemanticHighlight';
 import { funcHighlight } from './funcHighlight';
 import { ModuleVarSemantic } from './ModuleVarSemantic';
+import { MultilineHighlight } from './MultilineHighlight';
 import { pushToken, TokenModifiers, TokenTypes } from './tools';
 // https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers
 
@@ -27,6 +28,7 @@ function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticToken
         ...DAList2SemanticHighlight(AST),
         ...ModuleVarSemantic(ModuleVar),
         ...funcHighlight(DocStrMap),
+        ...MultilineHighlight(DocStrMap),
     ], tokensBuilder);
 
     const result: vscode.SemanticTokens = tokensBuilder.build();
