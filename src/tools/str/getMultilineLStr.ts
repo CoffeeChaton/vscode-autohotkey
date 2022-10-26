@@ -13,13 +13,30 @@ function getMultilineLStrStyle1(
      */
     let satePercent = false;
 
+    /**
+     * flag of "`"
+     */
+    let sateEscape = false;
+
     let lStr = '';
 
     const len = textRaw.length;
     for (let i = 0; i < len; i++) {
         const s = textRaw[i];
 
+        if (sateEscape) {
+            // i need to check/diag  `[,%`;nrbtvaf] ?
+            lStr += '^';
+            sateEscape = false;
+            continue;
+        }
+
         switch (s) {
+            case '`':
+                lStr += '^';
+                sateEscape = true;
+                break;
+
             case ' ':
             case '\t':
                 lStr += s;
@@ -65,13 +82,30 @@ export function getMultilineLStrStyle2(
      */
     let sateStr = false;
 
+    /**
+     * flag of "`"
+     */
+    let sateEscape = false;
+
     let lStr = '';
 
     const len = textRaw.length;
     for (let i = 0; i < len; i++) {
         const s = textRaw[i];
 
+        if (sateEscape) {
+            // i need to check/diag  `[,%`;nrbtvaf] ?
+            lStr += '^';
+            sateEscape = false;
+            continue;
+        }
+
         switch (s) {
+            case '`':
+                lStr += '^';
+                sateEscape = true;
+                break;
+
             case ' ':
             case '\t':
                 lStr += s;

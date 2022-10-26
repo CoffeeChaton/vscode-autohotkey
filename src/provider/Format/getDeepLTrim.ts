@@ -3,7 +3,7 @@ import { EMultiline } from '../../globalEnum';
 import { enumLog } from '../../tools/enumErr';
 
 // return deep of LTrim
-export function getDeepLTrim(Multiline: EMultiline, multilineFlag: TMultilineFlag): 0 | 1 | 2 {
+export function getDeepLTrim(Multiline: EMultiline, multilineFlag: TMultilineFlag): 0 | 1 {
     switch (Multiline) {
         case EMultiline.none:
             return 0;
