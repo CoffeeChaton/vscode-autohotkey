@@ -27,9 +27,9 @@ export function onDidChangeTabs(tabChangeEvent: vscode.TabChangeEvent): void {
         const { uri } = tab.input;
         if (isAhkTab(uri)) {
             // clearNekoDA
-            const diagList = diagColl.get(uri);
+            const diagList: readonly vscode.Diagnostic[] | undefined = diagColl.get(uri);
             if (diagList !== undefined) {
-                diagColl.set(uri, diagList.filter((diag) => !(diag instanceof CDiagFn)));
+                diagColl.set(uri, diagList.filter((diag: vscode.Diagnostic): boolean => !(diag instanceof CDiagFn)));
             }
         }
     }

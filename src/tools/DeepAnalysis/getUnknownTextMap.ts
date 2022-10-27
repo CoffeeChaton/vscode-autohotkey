@@ -70,6 +70,18 @@ export function getUnknownTextMap(
                 continue;
             }
 
+            const oldVal: TValMetaIn | undefined = valMap.get(wordUp);
+            if (oldVal !== undefined) {
+                pushRef(oldVal, keyRawName, line, character);
+                continue;
+            }
+
+            const oldParam: TParamMetaIn | undefined = paramMap.get(wordUp);
+            if (oldParam !== undefined) {
+                pushRef(oldParam, keyRawName, line, character);
+                continue;
+            }
+
             const GValMapOldVal: TGlobalVal | undefined = GValMap.get(wordUp);
             if (GValMapOldVal !== undefined) {
                 const startPosOfGlobal: vscode.Position = new vscode.Position(line, character);
@@ -85,18 +97,6 @@ export function getUnknownTextMap(
                         ),
                     });
                 }
-                continue;
-            } // keep before valMap && paramMap
-
-            const oldVal: TValMetaIn | undefined = valMap.get(wordUp);
-            if (oldVal !== undefined) {
-                pushRef(oldVal, keyRawName, line, character);
-                continue;
-            }
-
-            const oldParam: TParamMetaIn | undefined = paramMap.get(wordUp);
-            if (oldParam !== undefined) {
-                pushRef(oldParam, keyRawName, line, character);
                 continue;
             }
 
