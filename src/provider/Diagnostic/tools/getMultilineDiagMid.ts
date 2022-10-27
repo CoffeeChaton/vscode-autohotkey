@@ -14,9 +14,6 @@ export function diagEMultilineMidStyle1(line: number, lStr: string): [] | [CDiag
 
     for (let i = 0; i < len; i++) {
         const s = lStr[i];
-        if (s === '^' || s === ' ' || s === '\t') {
-            continue;
-        }
 
         if (s === '%') {
             satePercent = !satePercent;
@@ -25,7 +22,7 @@ export function diagEMultilineMidStyle1(line: number, lStr: string): [] | [CDiag
 
         // %A_LineFile%
         //    ^ this  <---- true
-        if ((/^\W$/u).test(s)) {
+        if (satePercent && (/^\W$/u).test(s)) {
             const l1 = lStr.lastIndexOf('%', i);
             const l2 = l1 > -1
                 ? l1
