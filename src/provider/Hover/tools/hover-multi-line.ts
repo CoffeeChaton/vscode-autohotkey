@@ -8,7 +8,7 @@ const mdOfMultiLine116: vscode.MarkdownString = new vscode.MarkdownString('', tr
 
 mdOfMultiLine116.appendMarkdown(
     [
-        '[Read Doc](https://www.autohotkey.com/docs/Scripts.htm#continuation-section)\n\n',
+        '### Multi-line ([Read Doc](https://www.autohotkey.com/docs/Scripts.htm#continuation-section))\n\n',
         '**Method #2**: This method should be used to merge a large number of lines or when the lines are not suitable for Method #1.',
         'Although this method is especially useful for [auto-replace hotStrings](https://www.autohotkey.com/docs/Hotstrings.htm)',
         ', it can also be used with any command or [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions).\n\n',
