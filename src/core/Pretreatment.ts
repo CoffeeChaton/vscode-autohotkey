@@ -49,25 +49,27 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
         ignoreLineP = temp.ignoreLineP;
         const displayErr = line > ignoreLine;
         const displayFnErr = line > ignoreLineP;
-        CommentBlock = inCommentBlock(textTrimStart, CommentBlock); // TODO {CommentBlock,resultLn} | null
-        if (CommentBlock) {
-            result.push({
-                fistWordUpCol: -1,
-                fistWordUp: '',
-                lStr: '',
-                deep,
-                textRaw,
-                detail: [EDetail.inComment],
-                line,
-                cll: 0,
-                lineComment: '',
-                multiline,
-                multilineFlag: null,
-                diagDeep: 0,
-                displayErr,
-                displayFnErr,
-            });
-            continue;
+        if (multiline === EMultiline.none) {
+            CommentBlock = inCommentBlock(textTrimStart, CommentBlock); // TODO {CommentBlock,resultLn} | null
+            if (CommentBlock) {
+                result.push({
+                    fistWordUpCol: -1,
+                    fistWordUp: '',
+                    lStr: '',
+                    deep,
+                    textRaw,
+                    detail: [EDetail.inComment],
+                    line,
+                    cll: 0,
+                    lineComment: '',
+                    multiline,
+                    multilineFlag: null,
+                    diagDeep: 0,
+                    displayErr,
+                    displayFnErr,
+                });
+                continue;
+            }
         }
 
         [multiline, multilineFlag] = getMultiline({
