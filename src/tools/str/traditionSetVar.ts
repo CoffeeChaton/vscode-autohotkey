@@ -30,7 +30,7 @@ export function isSetVarTradition(textTrimStart: string): boolean {
     }
     const eqLeftStr: string = textTrimStart
         .slice(0, col0)
-        .replace(/^[{} \t]*/u, '')
+        // TODO .replace(/^[{} \t]*/u, '')
         .trim();
 
     /**
@@ -46,8 +46,6 @@ export function isSetVarTradition(textTrimStart: string): boolean {
     }
 
     return (/^[%\w.[\]]+$/u).test(eqLeftStr);
-
-    // return (/^\s*[\w%[][.\w%[\]]*\s*=[^=]/u).test(t);
 }
 
 // eslint-disable-next-line max-lines-per-function
