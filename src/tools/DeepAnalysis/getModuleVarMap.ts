@@ -32,21 +32,32 @@ function getModuleAllowList(DocStrMap: TTokenStream, AST: TAstRoot): readonly bo
         .map((TopSymbol: TTopSymbol): vscode.Range => TopSymbol.range);
 
     if (rangeList.length === 0) {
-        return DocStrMap.map(() => true);
+        return DocStrMap.map((): true => true);
     }
 
     let i = 0; // refer to rangeList i
-    const allowList: boolean[] = [];
+    const allowList: boolean[] = Array.from({ length: DocStrMap.length });
+
+    allowList.fill(true);
+
     for (const { line } of DocStrMap) {
         if (line < rangeList[i].start.line) {
-            allowList.push(true);
+            allowList[line] = true;
         } else if (line >= rangeList[i].start.line && line <= rangeList[i].end.line) {
-            allowList.push(false);
+            allowList[line] = false;
         } else if (line > rangeList[i].end.line) {
-            allowList.push(true);
             if ((i + 1) < rangeList.length) {
                 i++;
-            } // TODO ...clear this
+            } else {
+                break;
+            }
+
+            // fix this line is next func() start.line
+            if (line < rangeList[i].start.line) {
+                allowList[line] = true;
+            } else if (line >= rangeList[i].start.line && line <= rangeList[i].end.line) {
+                allowList[line] = false;
+            }
         }
     }
 
