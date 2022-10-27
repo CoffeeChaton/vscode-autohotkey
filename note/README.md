@@ -42,7 +42,7 @@ try it [diag107](./ahk/diag107.ahk)
 },
 ```
 
-the word `Join` should be followed immediately by as many as `15` characters.
+the word `Join` should be followed immediately by as many as `15` characters.[[Read Doc]](https://www.autohotkey.com/docs/Scripts.htm#Join)
 
 ![diag121](./img/diag121.png)
 
@@ -68,6 +68,10 @@ please use tell me, how to use this flag? [report](https://github.com/CoffeeChat
 },
 ```
 
+![diag124](./img/diag124.png)
+
+> try it [diag124](./ahk/diag124.ahk)
+
 ### diag125
 
 ```js
@@ -77,11 +81,11 @@ please use tell me, how to use this flag? [report](https://github.com/CoffeeChat
 },
 ```
 
-![diag125-1](./img/diag125.png)
+![diag125](./img/diag125.png)
 
 > - [Multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) style1 / exp1 just support `%varName%` style.
-> - at this exp `% var%` `%` has a space, true error is at line `9`, but ahk-L report error position at line `5`.
-> - try it [diag125-1](./ahk/diag125.ahk)
+> - at this exp `% var%` `%` has a space, this error is at line `9`, but ahk-L report this error at line `5`.
+> - try it [diag125](./ahk/diag125.ahk)
 
 ### diag126
 
@@ -95,8 +99,11 @@ please use tell me, how to use this flag? [report](https://github.com/CoffeeChat
 ![diag126](./img/diag126.png)
 
 > - [Multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) style1 / exp1 just support `%varName%` style.
-> - try to write like line `11` `12` `13`, true error is at line `11`, but ahk-L report error position at line `6`.
-> - try it [diag126](./ahk/diag126.ahk)
+> - try to write like line `11` `12` `13`, this error is at line `11`, but ahk-L report error at line `6`.
+
+if [Multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) is very big, this diagnostic can help you find errors faster
+
+> try it [diag126](./ahk/diag126.ahk)
 
 ### diag302
 
