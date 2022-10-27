@@ -63,8 +63,7 @@ export const enum EDiagCode {
     // 120~130 is Multiline-Diag
     code120 = 120, // unknown
     code121 = 121, // join > 15
-    code122 = 122, // %
-    code123 = 123, // ,
+    code122 = 122, // % , ` 3-flag is not support now
     code124 = 124, // `"` is not closed
     code125 = 125, // `%` miss to closed
     code126 = 126, // `%` variable name contains an illegal character
@@ -167,12 +166,8 @@ export const Diags: DeepReadonly<TDiags> = {
         path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag121',
     },
     122: {
-        msg: 'ahk-neko-help not supported "%" flag now.',
+        msg: 'ahk-neko-help not supported ( % , `) flag now.',
         path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag122',
-    },
-    123: {
-        msg: 'ahk-neko-help not supported "," flag now.',
-        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag123',
     },
     124: {
         msg: '`"` is not closed',

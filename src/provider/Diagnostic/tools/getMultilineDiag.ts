@@ -14,8 +14,7 @@ import { diagEMultilineMidStyle1, diagEMultilineMidStyle2 } from './getMultiline
 type TDiagCodeAllow =
     | EDiagCode.code120
     | EDiagCode.code121
-    | EDiagCode.code122
-    | EDiagCode.code123;
+    | EDiagCode.code122;
 
 function fnMakeDiag(Pos: TPos, value: TDiagCodeAllow, line: number, severity: vscode.DiagnosticSeverity): CDiagBase {
     //
@@ -32,9 +31,10 @@ function diagEMultilineStart(multilineFlag: NonNull<TMultilineFlag>, line: numbe
     const {
         Join,
         unknownFlag,
+        isExpress,
         PercentFlag, // Percent: TPos[]; // %
         commaFlag, // comma: TPos[]; // ,
-        isExpress,
+        accentFlag,
     } = multilineFlag;
 
     const diagList: CDiagBase[] = [
@@ -49,11 +49,8 @@ function diagEMultilineStart(multilineFlag: NonNull<TMultilineFlag>, line: numbe
             .map((Pos: TPos): CDiagBase => fnMakeDiag(Pos, EDiagCode.code121, line, vscode.DiagnosticSeverity.Warning)),
     ];
 
-    if (PercentFlag.length > 0) {
+    if (PercentFlag.length > 0 || commaFlag.length > 0 || accentFlag.length > 0) {
         diagList.push(fnMakeDiag(PercentFlag[0], EDiagCode.code122, line, vscode.DiagnosticSeverity.Information));
-    }
-    if (commaFlag.length > 0) {
-        diagList.push(fnMakeDiag(commaFlag[0], EDiagCode.code123, line, vscode.DiagnosticSeverity.Information));
     }
 
     if (isExpress) {
@@ -65,7 +62,7 @@ function diagEMultilineStart(multilineFlag: NonNull<TMultilineFlag>, line: numbe
 
 function diagEMultilineEnd(params: TAhkTokenLine): [] | [CDiagBase] {
     const { textRaw } = params;
-    if ((/^\s*\)\s*"/u).test(textRaw)) {
+    if ((/^[ \t]*\)[ \t]*"/u).test(textRaw)) {
         return [];
     }
 

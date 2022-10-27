@@ -7,7 +7,6 @@
     - [diag107](#diag107)
     - [diag121](#diag121)
     - [diag122](#diag122)
-    - [diag123](#diag123)
     - [diag124](#diag124)
     - [diag125](#diag125)
     - [diag126](#diag126)
@@ -53,18 +52,7 @@ some idea [diag121](./ahk/diag121.ahk)
 
 ```js
 122: {
-    msg: 'ahk-neko-help not supported "%" flag now.',
-    path: 'https://www.autohotkey.com/docs/Scripts.htm#continuation-section',
-},
-```
-
-please use tell me, how to use this flag? [report](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues)
-
-### diag123
-
-```js
-123: {
-    msg: 'ahk-neko-help not supported "," flag now.',
+    msg: 'ahk-neko-help not supported "%" "," "`" flag now.',
     path: 'https://www.autohotkey.com/docs/Scripts.htm#continuation-section',
 },
 ```
