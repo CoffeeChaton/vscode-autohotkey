@@ -44,7 +44,7 @@ export function getSetTimerWrap(AhkTokenLine: TAhkTokenLine): TScanData | null {
     if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT') {
         //
         const { lStr } = AhkTokenLine;
-        const col: number = lStr.search(/:\s*\bSetTimer\b/ui);
+        const col: number = lStr.search(/:\s*\bSetTimer\b[ \t,]/ui);
         if (col === -1) {
             wm.set(AhkTokenLine, null);
             return null;

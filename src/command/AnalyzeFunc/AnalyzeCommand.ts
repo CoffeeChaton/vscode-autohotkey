@@ -2,38 +2,36 @@ import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TTokenStream } from '../../globalEnum';
 import type { TFullFuncMap } from '../../tools/Func/getAllFunc';
 
-function getIgnoreList(): string[] {
-    return [
-        'IF',
-        'ELSE',
-        'RETURN',
+const ignoreList = [
+    'IF',
+    'ELSE',
+    'RETURN',
 
-        'STATIC',
-        'LOCAL',
-        'GLOBAL',
+    'STATIC',
+    'LOCAL',
+    'GLOBAL',
 
-        'SWITCH',
-        'CASE',
-        'DEFAULT',
+    'SWITCH',
+    'CASE',
+    'DEFAULT',
 
-        'TRUE',
-        'FALSE',
+    'TRUE',
+    'FALSE',
 
-        'FOR',
-        'LOOP',
-        'WHILE',
-        'BREAK',
-        'CONTINUE',
+    'FOR',
+    'LOOP',
+    'WHILE',
+    'BREAK',
+    'CONTINUE',
 
-        'AND',
-        'OR',
-        'IN',
-        'NOT',
+    'AND',
+    'OR',
+    'IN',
+    'NOT',
 
-        // 'CLASS',
-        'NEW',
-    ];
-}
+    // 'CLASS',
+    'NEW',
+] as const;
 
 type TMsg = {
     line: number;
@@ -54,7 +52,6 @@ function getCommandMap(AhkTokenList: TTokenStream): TCommandInfoMap {
         commandMap.set(fistWordUp, msg);
     }
 
-    const ignoreList: string[] = getIgnoreList();
     for (const key of ignoreList) {
         commandMap.delete(key);
     }
