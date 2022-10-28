@@ -1,3 +1,4 @@
+import type { TAhkTokenLine } from '../../globalEnum';
 import type { TScanData } from '../DeepAnalysis/FnVar/def/spiltCommandAll';
 import { spiltCommandAll } from '../DeepAnalysis/FnVar/def/spiltCommandAll';
 
@@ -9,10 +10,8 @@ export function getHotkeyData(lStr: string, fistWordUpCol: number): TScanData | 
     // NG Hotkey, If, % FunctionObject
     const strF: string = lStr
         .slice(fistWordUpCol)
-        .replace(/^\bHotkey\b\s*,?\s*/ui, 'Hotkey,')
+        .replace(/^\s*\bHotkey\b\s*,?\s*/ui, 'Hotkey,')
         .padStart(lStr.length, ' ');
-
-    // TODO of fistWordUp is case/default
 
     const arr: TScanData[] = spiltCommandAll(strF);
     // eslint-disable-next-line no-magic-numbers
@@ -29,4 +28,36 @@ export function getHotkeyData(lStr: string, fistWordUpCol: number): TScanData | 
         RawNameNew,
         lPos,
     };
+}
+
+const wm = new WeakMap<TAhkTokenLine, TScanData | null>();
+
+export function getHotkeyWrap(AhkTokenLine: TAhkTokenLine): TScanData | null {
+    const cache: TScanData | null | undefined = wm.get(AhkTokenLine);
+    if (cache === null) return null;
+
+    const { fistWordUp } = AhkTokenLine;
+    if (fistWordUp === 'HOTKEY') {
+        const { lStr, fistWordUpCol } = AhkTokenLine;
+        const ed: TScanData | null = getHotkeyData(lStr, fistWordUpCol);
+
+        wm.set(AhkTokenLine, ed);
+        return ed;
+    }
+
+    if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT') {
+        //
+        const { lStr } = AhkTokenLine;
+        const col: number = lStr.search(/:\s*\bHotkey\b/ui);
+        if (col === -1) {
+            wm.set(AhkTokenLine, null);
+            return null;
+        }
+        const ed: TScanData | null = getHotkeyData(lStr, col + 1); // of ":".length
+
+        wm.set(AhkTokenLine, ed);
+        return ed;
+    }
+
+    return null;
 }
