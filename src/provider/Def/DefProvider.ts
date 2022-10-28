@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { pm } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
-import { getHotkeyData, getHotkeyWrap } from '../../tools/Command/HotkeyTools';
-import { getSetTimerData, getSetTimerWrap } from '../../tools/Command/SetTimerTools';
+import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
+import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
@@ -100,7 +100,7 @@ export function userDefFunc(
     const funcSymbol: CAhkFunc | null = getFuncWithName(wordUp);
     if (funcSymbol === null) return null;
 
-    const { lStr, fistWordUp, fistWordUpCol } = DocStrMap[position.line];
+    const AhkTokenLine = DocStrMap[position.line];
 
     // funcName( | "funcName"
     // eslint-disable-next-line security/detect-non-literal-regexp
@@ -115,13 +115,11 @@ export function userDefFunc(
     if (document.getWordRangeAtPosition(position, regBase) === undefined) {
         let atFuncName = 0;
 
-        if (fistWordUp === 'SETTIMER') {
-            const setTimerData: TScanData | null = getSetTimerData(lStr, fistWordUpCol);
-            if (setTimerData?.RawNameNew.toUpperCase() === wordUp) atFuncName = 1;
-        } else if (fistWordUp === 'HOTKEY') {
-            const HotkeyData: TScanData | null = getHotkeyData(lStr, fistWordUpCol);
-            if (HotkeyData?.RawNameNew.toUpperCase() === wordUp) atFuncName = 1;
-        }
+        const setTimerFuncCol: number = searchSetTimerFuncRef(AhkTokenLine, wordUp);
+        if (setTimerFuncCol !== -1) atFuncName++;
+
+        const HotkeyFuncCol: number = searchHotkeyFuncRef(AhkTokenLine, wordUp);
+        if (HotkeyFuncCol !== -1) atFuncName++;
 
         if (atFuncName === 0) return null;
     }
