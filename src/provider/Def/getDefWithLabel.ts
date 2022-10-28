@@ -2,25 +2,20 @@ import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { CAhkLabel } from '../../AhkSymbol/CAhkLine';
 import { pm } from '../../core/ProjectManager';
-import { getHotkeyData } from '../../tools/Command/HotkeyTools';
+import type { TAhkTokenLine } from '../../globalEnum';
+import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { findLabel } from '../../tools/labels';
 
-function LabelRefHotkey(
-    {
-        line,
-        wordUp,
-        lStr,
-        fistWordUpCol,
-    }: { line: number; wordUp: string; lStr: string; fistWordUpCol: number },
-): vscode.Range | null {
-    const HotkeyData: TScanData | null = getHotkeyData(lStr, fistWordUpCol);
+function LabelRefHotkey(AhkTokenLine: TAhkTokenLine, wordUp: string): vscode.Range | null {
+    const HotkeyData: TScanData | null = getHotkeyWrap(AhkTokenLine);
     if (HotkeyData === null) return null;
 
     const { RawNameNew, lPos } = HotkeyData;
     if (RawNameNew.toUpperCase() !== wordUp) return null;
 
+    const { line } = AhkTokenLine;
     return new vscode.Range(
         new vscode.Position(line, lPos),
         new vscode.Position(line, lPos + RawNameNew.length),
@@ -33,25 +28,14 @@ function getLabelRef(wordUp: string): vscode.Location[] {
 
     const List: vscode.Location[] = [];
     for (const { DocStrMap, uri } of pm.getDocMapValue()) {
-        for (
-            const {
-                line,
-                lStr,
-                fistWordUp,
-                fistWordUpCol,
-            } of DocStrMap
-        ) {
-            if (fistWordUp === 'HOTKEY') {
-                const range: vscode.Range | null = LabelRefHotkey({
-                    line,
-                    wordUp,
-                    lStr,
-                    fistWordUpCol,
-                });
-                if (range !== null) List.push(new vscode.Location(uri, range));
-
+        for (const AhkTokenLine of DocStrMap) {
+            const range: vscode.Range | null = LabelRefHotkey(AhkTokenLine, wordUp);
+            if (range !== null) {
+                List.push(new vscode.Location(uri, range));
                 continue;
             }
+
+            const { line, lStr } = AhkTokenLine;
 
             const ma: RegExpMatchArray | null = lStr.match(reg);
             if (ma === null) continue;
@@ -114,7 +98,9 @@ export function getDefWithLabel(
     wordUpCase: string,
 ): vscode.Location[] | null {
     const { DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
-    const { lStr, fistWordUp, fistWordUpCol } = DocStrMap[position.line];
+
+    const AhkTokenLine = DocStrMap[position.line];
+    const { lStr } = AhkTokenLine;
     const lStrFix: string = lStr.slice(0, Math.max(0, position.character));
 
     if ((/^\w+:$/u).test(lStr.trim())) {
@@ -126,10 +112,8 @@ export function getDefWithLabel(
         return getDefWithLabelCore(wordUpCase);
     }
 
-    if (fistWordUp === 'HOTKEY') {
-        const HotkeyData: TScanData | null = getHotkeyData(lStr, fistWordUpCol);
-        if (HotkeyData?.RawNameNew.toUpperCase() === wordUpCase) return getDefWithLabelCore(wordUpCase);
-    }
+    const HotkeyData: TScanData | null = getHotkeyWrap(AhkTokenLine);
+    if (HotkeyData?.RawNameNew.toUpperCase() === wordUpCase) return getDefWithLabelCore(wordUpCase);
 
     const ma: RegExpMatchArray | null = lStrFix.match(/\b(SetTimer\b[\s,%]+)\w*$/ui);
     if (ma !== null) {

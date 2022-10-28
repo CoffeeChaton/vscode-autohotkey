@@ -2,7 +2,7 @@ import type { TAhkTokenLine } from '../../globalEnum';
 import type { TScanData } from '../DeepAnalysis/FnVar/def/spiltCommandAll';
 import { spiltCommandAll } from '../DeepAnalysis/FnVar/def/spiltCommandAll';
 
-export function getHotkeyData(lStr: string, fistWordUpCol: number): TScanData | null {
+function getHotkeyData(lStr: string, fistWordUpCol: number): TScanData | null {
     // OK Hotkey, KeyName , Label, Options
     //                        ^
     // NG Hotkey, IfWinActive/Exist , WinTitle, WinText
