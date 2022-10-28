@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { pm } from '../../core/ProjectManager';
-import { getHotkeyData } from '../../tools/Command/HotkeyTools';
-import { getSetTimerData } from '../../tools/Command/SetTimerTools';
+import type { TAhkTokenLine } from '../../globalEnum';
+import { getHotkeyData, getHotkeyWrap } from '../../tools/Command/HotkeyTools';
+import { getSetTimerData, getSetTimerWrap } from '../../tools/Command/SetTimerTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
@@ -12,7 +13,7 @@ import { getDefWithLabel } from './getDefWithLabel';
 import { getValDefInFunc } from './getValDefInFunc';
 import { isPosAtMethodName } from './isPosAtMethodName';
 
-type TFnFindCol = (lnlStr: string, lnFistWordUp: string, lnFistWordUpCol: number) => number[];
+type TFnFindCol = (AhkTokenLine: TAhkTokenLine, partTextRaw: string) => number[];
 
 function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vscode.Location[] {
     const List: vscode.Location[] = [];
@@ -21,18 +22,16 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
             .filter((DA: CAhkFunc): boolean => DA.kind === vscode.SymbolKind.Method)
             .map((DA: CAhkFunc): number => DA.nameRange.start.line);
 
-        for (
+        for (const AhkTokenLine of DocStrMap) {
             const {
                 textRaw,
                 line,
                 lStr,
-                fistWordUp,
-                fistWordUpCol,
-            } of DocStrMap
-        ) {
+            } = AhkTokenLine;
+
             if (/* lStr.trim().length === 0 || */ filterLineList.includes(line)) continue;
 
-            for (const col of refFn(textRaw.slice(0, lStr.length), fistWordUp, fistWordUpCol)) {
+            for (const col of refFn(AhkTokenLine, textRaw.slice(0, lStr.length))) {
                 if (col === -1) continue;
 
                 const Location: vscode.Location = new vscode.Location(
@@ -50,22 +49,37 @@ function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vsc
     return List;
 }
 
-function fnMake(regBase: RegExp, wordUp: string): TFnFindCol {
-    return (lnlStr: string, lnFistWordUp: string, lnFistWordUpCol: number): number[] => {
-        //  funcName( | "funcName"
-        const arr: number[] = [...lnlStr.matchAll(regBase)].map((ma: RegExpMatchArray): number => ma.index ?? -1);
+function searchHotkeyFuncRef(AhkTokenLine: TAhkTokenLine, wordUp: string): number {
+    const HotkeyData: TScanData | null = getHotkeyWrap(AhkTokenLine);
+    if (HotkeyData !== null && HotkeyData.RawNameNew.toUpperCase() === wordUp) {
+        return HotkeyData.lPos;
+    }
+    return -1;
+}
 
-        if (lnFistWordUp === 'SETTIMER') {
-            const setTimerData: TScanData | null = getSetTimerData(lnlStr, lnFistWordUpCol);
-            if (setTimerData !== null && setTimerData.RawNameNew.toUpperCase() === wordUp) {
-                arr.push(setTimerData.lPos);
-            }
-        } else if (lnFistWordUp === 'HOTKEY') {
-            const HotkeyData: TScanData | null = getHotkeyData(lnlStr, lnFistWordUpCol);
-            if (HotkeyData !== null && HotkeyData.RawNameNew.toUpperCase() === wordUp) {
-                arr.push(HotkeyData.lPos);
-            }
+function searchSetTimerFuncRef(AhkTokenLine: TAhkTokenLine, wordUp: string): number {
+    const setTimerData: TScanData | null = getSetTimerWrap(AhkTokenLine);
+    if (setTimerData !== null && setTimerData.RawNameNew.toUpperCase() === wordUp) {
+        return setTimerData.lPos;
+    }
+    return -1;
+}
+
+function fnMake(regBase: RegExp, wordUp: string): TFnFindCol {
+    return (AhkTokenLine: TAhkTokenLine, partTextRaw: string): number[] => {
+        //  funcName( | "funcName"
+        const arr: number[] = [...partTextRaw.matchAll(regBase)].map((ma: RegExpMatchArray): number => ma.index ?? -1);
+
+        const setTimerFuncCol: number = searchSetTimerFuncRef(AhkTokenLine, wordUp);
+        if (setTimerFuncCol !== -1) {
+            arr.push(setTimerFuncCol);
         }
+
+        const HotkeyFuncCol: number = searchHotkeyFuncRef(AhkTokenLine, wordUp);
+        if (HotkeyFuncCol !== -1) {
+            arr.push(HotkeyFuncCol);
+        }
+
         return arr;
     };
 }
