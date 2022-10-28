@@ -33,53 +33,16 @@ function _commandHeadStatistics(commandHead: string): void {
     }
 }
 
-// const e5 = [
-//     {
-//         k: 'SetTimer',
-//         v: 12,
-//     },
-//     {
-//         k: 'radius',
-//         v: 18,
-//     },
-//     {
-//         k: 'send',
-//         v: 20,
-//     },
-//     {
-//         k: 'SendInput',
-//         v: 22,
-//     },
-//     {
-//         k: 'MsgBox',
-//         v: 22,
-//     },
-//     {
-//         k: 'ToolTip',
-//         v: 24,
-//     },
-//     {
-//         k: 'static',
-//         v: 26,
-//     },
-//     {
-//         k: 'IniRead',
-//         v: 30,
-//     },
-//     {
-//         k: 'MouseClick',
-//         v: 32,
-//     },
-//     {
-//         k: 'IniWrite',
-//         v: 40,
-//     },
-//     {
-//         k: 'MouseMove',
-//         v: 46,
-//     },
-//     {
-//         k: 'Send',
-//         v: 72,
-//     },
-// ];
+// SWITCH: 37
+// DEFAULT: 37
+// SEND: 46
+// FOR: 58
+// LISTVARS: 59
+// GLOBAL: 93
+// LOCAL: 118
+// SLEEP: 132
+// CASE: 134
+// ELSE: 168
+// STATIC: 230
+// IF: 771
+// RETURN: 903
