@@ -70,15 +70,15 @@ export function getUnknownTextMap(
                 continue;
             }
 
-            const oldVal: TValMetaIn | undefined = valMap.get(wordUp);
-            if (oldVal !== undefined) {
-                pushRef(oldVal, keyRawName, line, character);
-                continue;
-            }
-
             const oldParam: TParamMetaIn | undefined = paramMap.get(wordUp);
             if (oldParam !== undefined) {
                 pushRef(oldParam, keyRawName, line, character);
+                continue;
+            }
+
+            const oldVal: TValMetaIn | undefined = valMap.get(wordUp);
+            if (oldVal !== undefined) {
+                pushRef(oldVal, keyRawName, line, character);
                 continue;
             }
 
