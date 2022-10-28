@@ -4,11 +4,14 @@ import { showTimeSpend, useSymbolProvider } from '../../configUI';
 import { pm } from '../../core/ProjectManager';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
+import { isAhkTab } from '../../tools/fsTools/isAhk';
 
 function SymbolProviderCore(document: vscode.TextDocument): vscode.DocumentSymbol[] {
     const { AST, DocStrMap, ModuleVar } = pm.updateDocDef(document);
 
-    digDAFile(getDAList(AST), ModuleVar, document.uri, DocStrMap);
+    if (isAhkTab(document.uri)) {
+        digDAFile(getDAList(AST), ModuleVar, document.uri, DocStrMap);
+    }
 
     showTimeSpend(path.basename(document.uri.fsPath));
 

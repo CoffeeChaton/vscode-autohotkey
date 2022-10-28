@@ -2,10 +2,8 @@ import * as vscode from 'vscode';
 import { diagColl, pm } from '../../core/ProjectManager';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAList } from '../../tools/DeepAnalysis/getDAList';
-import { isAhk } from '../../tools/fsTools/isAhk';
+import { isAhkTab } from '../../tools/fsTools/isAhk';
 import { CDiagFn } from '../Diagnostic/tools/CDiagFn';
-
-const isAhkTab = (uri: vscode.Uri): boolean => uri.scheme === 'file' && isAhk(uri.fsPath);
 
 export function onDidChangeActiveTab(e: vscode.TextEditor | undefined): undefined {
     if (e === undefined) return undefined;

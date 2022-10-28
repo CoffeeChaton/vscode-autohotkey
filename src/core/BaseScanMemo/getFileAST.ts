@@ -117,5 +117,20 @@ export function getFileAST(document: vscode.TextDocument): TMemo {
         ModuleVar: getModuleVarMap(DocStrMap, GValMap, AST, fsPath),
     };
     BaseScanMemo.setMemo(fsPath, AhkCache);
+
+    // console.log('🚀 ~ getFileAST', { ms: t2 - t1, fsPath });
+
+    // {
+    //     13k line
+    //     "ms": 594,
+    //     "fsPath": ... "AHK-Studio-master\\AHK-Studio.ahk"
+    // }
+
+    // {
+    //     8K line
+    //     "ms": 189,
+    //     "fsPath": ... "Lib\\Gdip_all_2020_08_24.ahk"
+    // }
+
     return AhkCache;
 }
