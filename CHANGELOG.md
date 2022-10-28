@@ -1,12 +1,12 @@
 # Changelog
 
-## NEXT 0.0.13()
+## NEXT 0.0.13(2022-11-15)
 
 - TODO: add `this.fn()` goto def
 - TODO: add `RegExMatch((Text := q.Read()), "OU)([^\x00-\x7F])", Found)` of `Found`...
 - TODO: add [ErrorLevel](https://www.autohotkey.com/docs/misc/ErrorLevel.htm)
 
-## NEXT 0.0.12(2022-10-31)
+## 0.0.12(2022-10-28)
 
 - add: Module Var `Semantic` `gotoDef` `list all ref` `Completion`
 - add: global/local/normal/static of variables-property
@@ -30,8 +30,9 @@ hotkey, KeyName , Label_or_fnName, Options
 - add : doc of `clipboard` `clipboardall` `comspec` `errorlevel` `false` `programfiles` `true`
 - add : doc of Command `181/218 = 83%`
 - fix : Command of `} Command` of `{ Command`
-- fix : `var =` warn (code107)
+- fix : `var =` warn (code107) && remove diag after next line is [multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation)
 
+- add : auto diag of multiline [diag121 ~ 126](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag126)
 - add : semantic-highlight of var in [multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation)
 - style1 is OK, but has some highlight bug of style2.
   ![multilineBug](image/CHANGELOG/v0-0-12-multilineBug.png)

@@ -61,7 +61,7 @@ export const enum EDiagCode {
     code113 = 113,
     code114 = 114,
     // 120~130 is Multiline-Diag
-    code120 = 120, // unknown
+    code120 = 120, // unknown-flag
     code121 = 121, // join > 15
     code122 = 122, // % , ` 3-flag is not support now
     code124 = 124, // `"` is not closed
