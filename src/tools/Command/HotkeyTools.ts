@@ -2,14 +2,14 @@ import type { TAhkTokenLine } from '../../globalEnum';
 import type { TScanData } from '../DeepAnalysis/FnVar/def/spiltCommandAll';
 import { spiltCommandAll } from '../DeepAnalysis/FnVar/def/spiltCommandAll';
 
-function getHotkeyData(lStr: string, fistWordUpCol: number): TScanData | null {
+function getHotkeyData(lStr: string, col: number): TScanData | null {
     // OK Hotkey, KeyName , Label, Options
     //                        ^
     // NG Hotkey, IfWinActive/Exist , WinTitle, WinText
     // NG Hotkey, If , Expression
     // NG Hotkey, If, % FunctionObject
     const strF: string = lStr
-        .slice(fistWordUpCol)
+        .slice(col)
         .replace(/^\s*\bHotkey\b\s*,?\s*/ui, 'Hotkey,')
         .padStart(lStr.length, ' ');
 
@@ -30,33 +30,18 @@ function getHotkeyData(lStr: string, fistWordUpCol: number): TScanData | null {
     };
 }
 
-const wm = new WeakMap<TAhkTokenLine, TScanData | null>();
-
 export function getHotkeyWrap(AhkTokenLine: TAhkTokenLine): TScanData | null {
-    const cache: TScanData | null | undefined = wm.get(AhkTokenLine);
-    if (cache === null) return null;
-
     const { fistWordUp } = AhkTokenLine;
     if (fistWordUp === 'HOTKEY') {
         const { lStr, fistWordUpCol } = AhkTokenLine;
-        const ed: TScanData | null = getHotkeyData(lStr, fistWordUpCol);
-
-        wm.set(AhkTokenLine, ed);
-        return ed;
+        return getHotkeyData(lStr, fistWordUpCol);
     }
 
     if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT') {
-        //
-        const { lStr } = AhkTokenLine;
-        const col: number = lStr.search(/:\s*\bHotkey\b[ \t,]/ui);
-        if (col === -1) {
-            wm.set(AhkTokenLine, null);
-            return null;
-        }
-        const ed: TScanData | null = getHotkeyData(lStr, col + 1); // of ":".length
-
-        wm.set(AhkTokenLine, ed);
-        return ed;
+        const { SecondWordUp, SecondWordUpCol, lStr } = AhkTokenLine;
+        return SecondWordUp === 'HOTKEY'
+            ? getHotkeyData(lStr, SecondWordUpCol)
+            : null;
     }
 
     return null;

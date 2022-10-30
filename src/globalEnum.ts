@@ -68,6 +68,8 @@ export const enum EDiagDeep {
 export type TAhkTokenLine = DeepReadonly<{
     fistWordUpCol: number;
     fistWordUp: string;
+    SecondWordUp: string;
+    SecondWordUpCol: number;
     lStr: string;
     textRaw: string;
     deep: number;

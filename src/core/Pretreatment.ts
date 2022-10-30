@@ -6,6 +6,7 @@ import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum'
 import { EDetail, EDiagDeep, EMultiline } from '../globalEnum';
 import { getIgnore } from '../provider/Diagnostic/getIgnore';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
+import { getSecondUp } from './getSecondUp';
 import { getMultiline } from '../tools/str/getMultiline';
 import { getMultilineLStr } from '../tools/str/getMultilineLStr';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
@@ -55,6 +56,8 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
                 result.push({
                     fistWordUpCol: -1,
                     fistWordUp: '',
+                    SecondWordUpCol: -1,
+                    SecondWordUp: '',
                     lStr: '',
                     deep,
                     textRaw,
@@ -86,6 +89,8 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
             result.push({
                 fistWordUpCol: -1,
                 fistWordUp: '',
+                SecondWordUpCol: -1,
+                SecondWordUp: '',
                 lStr: multiline === EMultiline.mid
                     ? getMultilineLStr({ multilineFlag, textRaw })
                     : '',
@@ -108,6 +113,8 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
             result.push({
                 fistWordUpCol: -1,
                 fistWordUp: '',
+                SecondWordUpCol: -1,
+                SecondWordUp: '',
                 lStr: SetVarTradition(textRaw),
                 deep,
                 textRaw,
@@ -140,6 +147,8 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
             result.push({
                 fistWordUpCol: -1,
                 fistWordUp: '',
+                SecondWordUpCol: -1,
+                SecondWordUp: '',
                 lStr: '',
                 deep,
                 textRaw,
@@ -212,10 +221,13 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
         const cll: 0 | 1 = ContinueLongLine(lStrTrim); // ex: line start with ","
 
         const { fistWordUpCol, fistWordUp } = getFistWordUpData({ lStrTrim, lStr, cll });
+        const { SecondWordUpCol, SecondWordUp } = getSecondUp(lStr, fistWordUp);
 
         result.push({
             fistWordUpCol,
             fistWordUp,
+            SecondWordUpCol,
+            SecondWordUp,
             lStr,
             deep,
             textRaw,

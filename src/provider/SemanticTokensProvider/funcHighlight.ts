@@ -5,11 +5,11 @@ import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import type { TSemanticTokensLeaf } from './tools';
 
-function SetTimerHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]): void {
+function SetTimerHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]): 0 | 1 {
     // SetTimer , Label_or_fnName, PeriodOnOffDelete, Priority
 
     const setTimerData: TScanData | null = getSetTimerWrap(AhkTokenLine);
-    if (setTimerData === null) return;
+    if (setTimerData === null) return 0;
 
     const { RawNameNew, lPos } = setTimerData;
 
@@ -22,12 +22,13 @@ function SetTimerHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensL
         tokenType: 'function',
         tokenModifiers: [],
     });
+    return 1;
 }
 
-function HotkeyHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]): void {
+function HotkeyHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]): 0 | 1 {
     // Hotkey, KeyName , Label, Options
     const HotkeyData: TScanData | null = getHotkeyWrap(AhkTokenLine);
-    if (HotkeyData === null) return;
+    if (HotkeyData === null) return 0;
 
     const { RawNameNew, lPos } = HotkeyData;
 
@@ -47,14 +48,15 @@ function HotkeyHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLea
         // AltTab (and others): These are special Alt-Tab hotkey actions that are described here.
         // WTF ... ahk is too many cases ...
     });
+    return 1;
 }
 
 export function funcHighlight(DocStrMap: TTokenStream): TSemanticTokensLeaf[] {
     const Tokens: TSemanticTokensLeaf[] = [];
 
     for (const AhkTokenLine of DocStrMap) {
-        HotkeyHighlight(AhkTokenLine, Tokens);
-        SetTimerHighlight(AhkTokenLine, Tokens);
+        const hint: 0 | 1 = SetTimerHighlight(AhkTokenLine, Tokens);
+        if (hint === 0) HotkeyHighlight(AhkTokenLine, Tokens);
     }
 
     return Tokens;

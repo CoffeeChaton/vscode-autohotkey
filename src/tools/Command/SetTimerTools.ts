@@ -2,12 +2,12 @@ import type { TAhkTokenLine } from '../../globalEnum';
 import type { TScanData } from '../DeepAnalysis/FnVar/def/spiltCommandAll';
 import { spiltCommandAll } from '../DeepAnalysis/FnVar/def/spiltCommandAll';
 
-function getSetTimerData(lStr: string, fistWordUpCol: number): TScanData | null {
+function getSetTimerData(lStr: string, col: number): TScanData | null {
     // SetTimer , Label_or_fnName, PeriodOnOffDelete, Priority
     // SetTimer , , PeriodOnOffDelete, Priority
 
     const strF: string = lStr
-        .slice(fistWordUpCol)
+        .slice(col)
         .replace(/^\s*\bSetTimer\b\s*,?\s*/ui, 'SetTimer,')
         .padStart(lStr.length, ' ');
 
@@ -26,33 +26,18 @@ function getSetTimerData(lStr: string, fistWordUpCol: number): TScanData | null 
     };
 }
 
-const wm = new WeakMap<TAhkTokenLine, TScanData | null>();
-
 export function getSetTimerWrap(AhkTokenLine: TAhkTokenLine): TScanData | null {
-    const cache: TScanData | null | undefined = wm.get(AhkTokenLine);
-    if (cache === null) return null;
-
     const { fistWordUp } = AhkTokenLine;
     if (fistWordUp === 'SETTIMER') {
         const { lStr, fistWordUpCol } = AhkTokenLine;
-        const ed: TScanData | null = getSetTimerData(lStr, fistWordUpCol);
-
-        wm.set(AhkTokenLine, ed);
-        return ed;
+        return getSetTimerData(lStr, fistWordUpCol);
     }
 
     if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT') {
-        //
-        const { lStr } = AhkTokenLine;
-        const col: number = lStr.search(/:\s*\bSetTimer\b[ \t,]/ui);
-        if (col === -1) {
-            wm.set(AhkTokenLine, null);
-            return null;
-        }
-        const ed: TScanData | null = getSetTimerData(lStr, col + 1); // of ":".length
-
-        wm.set(AhkTokenLine, ed);
-        return ed;
+        const { SecondWordUp, SecondWordUpCol, lStr } = AhkTokenLine;
+        return SecondWordUp === 'SETTIMER'
+            ? getSetTimerData(lStr, SecondWordUpCol)
+            : null;
     }
 
     return null;
