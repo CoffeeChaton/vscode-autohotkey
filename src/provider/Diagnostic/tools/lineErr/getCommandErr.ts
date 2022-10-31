@@ -45,32 +45,35 @@ function getLoopErr(lStr: string, line: number, fistWordUpCol: number): CDiagBas
     });
 }
 
-export function getCommandErr(params: TAhkTokenLine): CDiagBase | null {
-    const {
-        lStr,
-        fistWordUp,
-        fistWordUpCol,
-        line,
-    } = params;
+function getCommandErrCore(params: TAhkTokenLine, keyWordUp: string, col: number): CDiagBase | null {
+    const { lStr, line } = params;
 
-    if (fistWordUp === '') return null; // miss
-    if (fistWordUp === 'LOOP') {
-        return getLoopErr(lStr, line, fistWordUpCol);
+    if (keyWordUp === 'LOOP') {
+        return getLoopErr(lStr, line, col);
     }
 
-    const diag: EDiagCode | undefined = CommandErrMap.get(fistWordUp);
+    const diag: EDiagCode | undefined = CommandErrMap.get(keyWordUp);
     if (diag !== undefined) {
-        const colL: number = fistWordUpCol;
+        const colL: number = col;
         return new CDiagBase({
             value: diag,
-            range: new vscode.Range(line, colL, line, colL + fistWordUp.length),
+            range: new vscode.Range(line, colL, line, colL + keyWordUp.length),
             severity: vscode.DiagnosticSeverity.Warning,
             tags: [vscode.DiagnosticTag.Deprecated],
         });
     }
-    // if (StatementMDMap.has(fistWordUp)) return null;
-    // if (!CommandMDMap.has(fistWordUp)) {
-    //     console.log('🚀 ~ getCommandErr ~ fistWordUp', fistWordUp);
-    // }
     return null;
+}
+
+export function getCommandErr(params: TAhkTokenLine): CDiagBase | null {
+    const { fistWordUp } = params;
+
+    if (fistWordUp === '') return null; // miss
+
+    if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT') {
+        const { SecondWordUp, SecondWordUpCol } = params;
+        return getCommandErrCore(params, SecondWordUp, SecondWordUpCol);
+    }
+    const { fistWordUpCol } = params;
+    return getCommandErrCore(params, fistWordUp, fistWordUpCol);
 }
