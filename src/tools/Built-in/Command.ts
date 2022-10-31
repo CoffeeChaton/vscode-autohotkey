@@ -2981,7 +2981,7 @@ export const LineCommand: TLineCommand = {
     },
     THROW: {
         keyRawName: 'Throw',
-        body: 'Throw , $0',
+        body: 'Throw, Exception("${1:Message}" , ${2|"What",-1|}, "${3:Extra}")',
         doc: 'Signals the occurrence of an error. This signal can be caught by a [try](https://www.autohotkey.com/docs/commands/Try.htm)\\-[catch](https://www.autohotkey.com/docs/commands/Catch.htm) statement.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Throw.htm',
