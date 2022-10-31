@@ -73,16 +73,15 @@ export function getFnVarDef(
     let BracketsRaw: TBrackets = [0, 0, 0];
 
     const valMap: TValMapIn = new Map<string, TValMetaIn>();
-    for (
+    for (const AhkTokenLine of DocStrMap) {
         const {
             lStr,
             line,
             lineComment,
             fistWordUp,
             cll,
-            fistWordUpCol,
-        } of DocStrMap
-    ) {
+        } = AhkTokenLine;
+
         if (!allowList[line]) continue; // in arg Range
         if (line > allowList.length) break;
 
@@ -139,8 +138,17 @@ export function getFnVarDef(
         walrusOperator(need); // :=
         varSetCapacityFunc(need); // VarSetCapacity(varName) or NumGet(varName) or NumGet(&varName)
         forLoop(need); // for var1 , var2 in
-        OutputVarCommandBase(need, fistWordUp, fistWordUpCol);
-        OutputVarCommandPlus(need, fistWordUp, fistWordUpCol);
+
+        if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT') {
+            const { SecondWordUp, SecondWordUpCol } = AhkTokenLine;
+
+            OutputVarCommandBase(need, SecondWordUp, SecondWordUpCol);
+            OutputVarCommandPlus(need, SecondWordUp, SecondWordUpCol);
+        } else if (fistWordUp !== '') {
+            const { fistWordUpCol } = AhkTokenLine;
+            OutputVarCommandBase(need, fistWordUp, fistWordUpCol);
+            OutputVarCommandPlus(need, fistWordUp, fistWordUpCol);
+        }
 
         // not plan to support this case....
         // DllCall("DllFile\Function" , Type1, Arg1, Type2, Arg2, "Cdecl ReturnType")

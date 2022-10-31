@@ -42,8 +42,8 @@ const OutputVarCommandMap: ReadonlyMap<string, number[]> = new Map([
  * - RunWait, Target , WorkingDir, Options, OutputVarPID
  * - SplitPath, InputVar , OutFileName, OutDir, OutExtension, OutNameNoExt, OutDrive
  */
-export function OutputVarCommandPlus(arg: TGetFnDefNeed, fistWordUp: string, fistWordUpCol: number): null {
-    const needArr: number[] | undefined = OutputVarCommandMap.get(fistWordUp);
+export function OutputVarCommandPlus(need: TGetFnDefNeed, keyWord: string, col: number): null {
+    const needArr: number[] | undefined = OutputVarCommandMap.get(keyWord);
     if (needArr === undefined) return null;
 
     const {
@@ -54,11 +54,11 @@ export function OutputVarCommandPlus(arg: TGetFnDefNeed, fistWordUp: string, fis
         valMap,
         lineComment,
         fnMode,
-    } = arg;
+    } = need;
 
     const strF: string = lStr
-        .slice(fistWordUpCol + fistWordUp.length)
-        .replace(/^\s*,?/u, `${fistWordUp},`)
+        .slice(col + keyWord.length)
+        .replace(/^\s*,?/u, `${keyWord},`)
         .padStart(lStr.length, ' ');
 
     for (const { RawNameNew, lPos } of pickCommand(needArr, spiltCommandAll(strF))) {

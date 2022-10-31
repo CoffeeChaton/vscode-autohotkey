@@ -57,8 +57,8 @@ const OutputVarCommandMap: ReadonlyMap<string, number> = new Map([
  * [Polyethene's Command Functions](https://github.com/polyethene/AutoHotkey-Scripts/blob/master/Functions.ahk):
  * Provides a callable function for each AutoHotkey command that has an OutputVar.
  */
-export function OutputVarCommandBase(arg: TGetFnDefNeed, fistWordUp: string, fistWordUpCol: number): null {
-    const len: number | undefined = OutputVarCommandMap.get(fistWordUp);
+export function OutputVarCommandBase(need: TGetFnDefNeed, keyWord: string, col: number): null {
+    const len: number | undefined = OutputVarCommandMap.get(keyWord);
     if (len === undefined) return null;
     //
     const {
@@ -69,12 +69,12 @@ export function OutputVarCommandBase(arg: TGetFnDefNeed, fistWordUp: string, fis
         valMap,
         lineComment,
         fnMode,
-    } = arg;
+    } = need;
 
-    const ma: RegExpMatchArray | null = lStr.slice(fistWordUpCol + len).match(/\b(\w+)\b/u);
+    const ma: RegExpMatchArray | null = lStr.slice(col + len).match(/\b(\w+)\b/u);
     if (ma === null) return null;
 
-    const character: number = (ma.index ?? 0) + fistWordUpCol + len;
+    const character: number = (ma.index ?? 0) + col + len;
     const RawName: string = ma[1];
     const UpName: string = RawName.toUpperCase();
     if (paramMap.has(UpName) || GValMap.has(UpName)) return null;
