@@ -6,13 +6,13 @@ import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum'
 import { EDetail, EDiagDeep, EMultiline } from '../globalEnum';
 import { getIgnore } from '../provider/Diagnostic/getIgnore';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
-import { getSecondUp } from './getSecondUp';
 import { getMultiline } from '../tools/str/getMultiline';
 import { getMultilineLStr } from '../tools/str/getMultilineLStr';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
 import { getLStr } from '../tools/str/removeSpecialChar';
 import { isSetVarTradition, SetVarTradition } from '../tools/str/traditionSetVar';
 import { getFistWordUpData } from './getFistWordUpData';
+import { getSecondUp } from './getSecondUp';
 import { callDeep } from './ParserTools/calcDeep';
 
 /**

@@ -119,7 +119,7 @@ export function ParserLine(FuncInput: TFuncInput): CAhkComment | TLineClass | nu
     const strTrim: string = lStr.trim();
     if (strTrim === '') return getComment(FuncInput);
 
-    if (fistWordUp.length > 0) return null;
+    if (fistWordUp !== '') return null;
 
     for (const { test, getName, ClassName } of LineRuler) {
         if (!test(strTrim)) continue;

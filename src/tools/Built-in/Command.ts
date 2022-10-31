@@ -1885,7 +1885,7 @@ export const LineCommand: TLineCommand = {
     INPUTBOX: {
         keyRawName: 'InputBox',
         body:
-            'InputBox, ${1:OutputVar} [,% "${2:Title}", % "${3:Prompt}", ${4:HIDE}, ${5:Width}, ${6:Height}, ${7:X}, ${8:Y}, ${9:Font}, ${10:Timeout}, ${11:Default}]',
+            'InputBox, ${1:OutputVar} [,% "${2:Title}", % "${3:Prompt}", ${4:HIDE}, ${5:Width}, ${6:Height}, ${7:X}, ${8:Y}, ${9:Font}, ${10:Timeout}, % "${11:DefaultStr}"]',
         doc: 'Displays an input box to ask the user to enter a string.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/InputBox.htm',
