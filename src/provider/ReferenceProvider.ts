@@ -4,6 +4,7 @@ import { isPosAtStrNext } from '../tools/isPosAtStr';
 import { userDefFunc } from './Def/DefProvider';
 import { getClassDef } from './Def/getClassDef';
 import { posAtLabelDef } from './Def/getDefWithLabel';
+import { getRefSwitch } from './Def/getRefSwitch';
 import { getValDefInFunc } from './Def/getValDefInFunc';
 
 function ReferenceProviderCore(
@@ -20,6 +21,9 @@ function ReferenceProviderCore(
 
     const labelRef: vscode.Location[] | null = posAtLabelDef(document, position, wordUp);
     if (labelRef !== null) return labelRef;
+
+    const swLoc: vscode.Location[] | null = getRefSwitch(document, position, wordUp);
+    if (swLoc !== null) return swLoc;
 
     const listAllUsing = true;
     const userDefLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
