@@ -1,7 +1,8 @@
-import type * as vscode from 'vscode';
+import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { pm } from '../../core/ProjectManager';
+import type { TAhkTokenLine } from '../../globalEnum';
 import { getSnippetStartWihA } from '../../tools/Built-in/A_Variables';
 import { snippetBiVar } from '../../tools/Built-in/BiVariables';
 import { Completion2Directives } from '../../tools/Built-in/Directives';
@@ -11,14 +12,12 @@ import { ahkSend } from '../../tools/Built-in/Send_tools';
 import { getSnippetStatement } from '../../tools/Built-in/statement_vsc';
 import { getSnippetWinMsg } from '../../tools/Built-in/Windows_Messages_Tools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
-import { isPosAtStrNext } from '../../tools/isPosAtStr';
 import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
 import { globalValCompletion } from './global/globalValCompletion';
 import { IncludeFsPath } from './Include_fsPath/Include_fsPath';
 import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
 import { ModuleVar2Completion } from './ModuleVar/ModuleVar2Completion';
-import { getStartWithStr } from './util';
 
 function getPartStr(lStr: string, position: vscode.Position): string | null {
     const match: RegExpMatchArray | null = lStr
@@ -35,9 +34,15 @@ function CompletionItemCore(
     position: vscode.Position,
 ): vscode.CompletionItem[] {
     const { AST, DocStrMap, ModuleVar } = pm.updateDocDef(document);
-    const { lStr, textRaw } = DocStrMap[position.line];
+    const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
+    const { lStr, textRaw } = AhkTokenLine;
 
     if ((/^\s*#Include(Again)?\s/ui).test(lStr)) return IncludeFsPath(document.uri.fsPath);
+    if ((/\bnew[ \t]+\w*$/ui).test(lStr.slice(0, position.character))) {
+        // TODO new new Class
+        return listAllFuncClass()
+            .filter((v: vscode.CompletionItem): boolean => v.kind === vscode.CompletionItemKind.Class);
+    }
 
     const topSymbol: TTopSymbol | undefined = AST.find((top: TTopSymbol): boolean => top.range.contains(position));
 
@@ -59,18 +64,11 @@ function CompletionItemCore(
             ...getSnippetWinMsg(PartStr),
             ...snippetBiVar,
             ...ModuleVar2Completion(ModuleVar, DA, PartStr, document.uri.fsPath),
-        );
-    }
-
-    if (PartStr !== null && !isPosAtStrNext(textRaw, lStr, position)) {
-        const inputStr: string = getStartWithStr(document, position);
-        completions.push(
             ...listAllFuncClass(),
-            ...BuiltInFunc2Completion(inputStr),
-            // ...globalValCompletion(document, position, inputStr),
+            ...BuiltInFunc2Completion(PartStr),
         );
 
-        if (DA !== null) completions.push(...DeepAnalysisToCompletionItem(DA, inputStr));
+        if (DA !== null) completions.push(...DeepAnalysisToCompletionItem(DA, PartStr));
     }
 
     return completions;
