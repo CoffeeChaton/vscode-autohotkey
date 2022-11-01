@@ -40,9 +40,10 @@ function getModuleAllowList(DocStrMap: TTokenStream, AST: TAstRoot): readonly bo
 
     allowList.fill(true);
 
+    // wtf style..
     for (const { line } of DocStrMap) {
         if (line < rangeList[i].start.line) {
-            allowList[line] = true;
+            // none   allowList[line] = true;
         } else if (line >= rangeList[i].start.line && line <= rangeList[i].end.line) {
             allowList[line] = false;
         } else if (line > rangeList[i].end.line) {
@@ -54,7 +55,7 @@ function getModuleAllowList(DocStrMap: TTokenStream, AST: TAstRoot): readonly bo
 
             // fix this line is next func() start.line
             if (line < rangeList[i].start.line) {
-                allowList[line] = true;
+                // none  allowList[line] = true;
             } else if (line >= rangeList[i].start.line && line <= rangeList[i].end.line) {
                 allowList[line] = false;
             }

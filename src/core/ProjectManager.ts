@@ -27,6 +27,7 @@ export const pm = {
         // TODO check fs.existsSync(fsPath), but not this way.
         // Detecter.DocMap.delete(fsPath);
         // await openTextDocument(fsPath);
+        // https://devblogs.microsoft.com/typescript/announcing-typescript-4-9-beta/#file-watching-changes
         return need;
     },
 

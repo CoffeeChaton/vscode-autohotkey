@@ -4,7 +4,7 @@ import type { TAhkTokenLine } from '../../../../globalEnum';
 import { CommandErrMap } from '../../../../tools/Built-in/Command_tools';
 import { CDiagBase } from '../CDiagBase';
 
-function getLoopErr(lStr: string, line: number, fistWordUpCol: number): CDiagBase | null {
+function getLoopErr(lStr: string, line: number, col: number): CDiagBase | null {
     const matchLoop: RegExpMatchArray | null = lStr.match(/\bLoop\b\s*,?\s*(\w+)/iu);
     if (matchLoop === null) return null; // miss
 
@@ -14,7 +14,7 @@ function getLoopErr(lStr: string, line: number, fistWordUpCol: number): CDiagBas
     }
 
     // eslint-disable-next-line no-magic-numbers
-    const colL = lStr.indexOf(SecondSection, fistWordUpCol + 4);
+    const colL = lStr.indexOf(SecondSection, col + 4);
     const colR = colL + SecondSection.length;
     if ((/^RootKey$/ui).test(SecondSection)) {
         // https://www.autohotkey.com/docs/commands/LoopReg.htm#old

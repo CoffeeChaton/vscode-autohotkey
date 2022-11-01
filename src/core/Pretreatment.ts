@@ -51,7 +51,7 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
         const displayErr = line > ignoreLine;
         const displayFnErr = line > ignoreLineP;
         if (multiline === EMultiline.none) {
-            CommentBlock = inCommentBlock(textTrimStart, CommentBlock); // TODO {CommentBlock,resultLn} | null
+            CommentBlock = inCommentBlock(textTrimStart, CommentBlock);
             if (CommentBlock) {
                 result.push({
                     fistWordUpCol: -1,
@@ -84,8 +84,6 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
             line,
         });
         if (multiline === EMultiline.start || multiline === EMultiline.mid) {
-            // FIXME: diag -> something
-
             result.push({
                 fistWordUpCol: -1,
                 fistWordUp: '',

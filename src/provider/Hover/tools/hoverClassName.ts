@@ -13,7 +13,6 @@ function getClassWithPos(
     position: vscode.Position,
 ): CAhkClass | null {
     const TopSymbol: TTopSymbol | undefined = AstRoot.find((top: TTopSymbol): boolean => top.range.contains(position));
-    if (TopSymbol === undefined) return null;
     if (TopSymbol instanceof CAhkClass) return TopSymbol;
 
     return null;
