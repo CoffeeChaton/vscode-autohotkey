@@ -2,16 +2,14 @@ import { CAhkClass } from '../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TAhkSymbolList, TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
 
-function getDAList(AST: Readonly<TAhkSymbolList>): CAhkFunc[] {
-    const result: CAhkFunc[] = [];
+function getDAList(AST: Readonly<TAhkSymbolList>, result: CAhkFunc[]): void {
     for (const DA of AST) {
         if (DA instanceof CAhkFunc) {
             result.push(DA);
         } else if (DA instanceof CAhkClass) {
-            result.push(...getDAList(DA.children));
+            getDAList(DA.children, result);
         }
     }
-    return result;
 }
 
 const wm = new WeakMap<TAstRoot, CAhkFunc[]>();
@@ -25,7 +23,7 @@ export function getDAListTop(ASTRoot: TAstRoot): CAhkFunc[] {
         if (DA instanceof CAhkFunc) {
             result.push(DA);
         } else if (DA instanceof CAhkClass) {
-            result.push(...getDAList(DA.children));
+            getDAList(DA.children, result);
         }
     }
 
