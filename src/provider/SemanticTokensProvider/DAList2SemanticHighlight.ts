@@ -1,6 +1,6 @@
 import type { CAhkFunc as CAhkFunction } from '../../AhkSymbol/CAhkFunc';
 import type { TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
-import { getDAList } from '../../tools/DeepAnalysis/getDAList';
+import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import type { TSemanticTokensLeaf } from './tools';
 
 function DA2SemanticHighlight(fn: CAhkFunction): TSemanticTokensLeaf[] {
@@ -29,6 +29,6 @@ function DA2SemanticHighlight(fn: CAhkFunction): TSemanticTokensLeaf[] {
 }
 
 export function DAList2SemanticHighlight(AstRoot: TAstRoot): TSemanticTokensLeaf[] {
-    return getDAList(AstRoot)
+    return getDAListTop(AstRoot)
         .flatMap((fn: CAhkFunction): TSemanticTokensLeaf[] => DA2SemanticHighlight(fn));
 }

@@ -1,8 +1,8 @@
 import { CAhkClass } from '../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import type { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkSymbolList, TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
 
-export function getDAList(AST: Readonly<TAhkSymbolList>): CAhkFunc[] {
+function getDAList(AST: Readonly<TAhkSymbolList>): CAhkFunc[] {
     const result: CAhkFunc[] = [];
     for (const DA of AST) {
         if (DA instanceof CAhkFunc) {
@@ -11,5 +11,25 @@ export function getDAList(AST: Readonly<TAhkSymbolList>): CAhkFunc[] {
             result.push(...getDAList(DA.children));
         }
     }
+    return result;
+}
+
+const wm = new WeakMap<TAstRoot, CAhkFunc[]>();
+
+export function getDAListTop(ASTRoot: TAstRoot): CAhkFunc[] {
+    const cache: CAhkFunc[] | undefined = wm.get(ASTRoot);
+    if (cache !== undefined) return cache;
+
+    const result: CAhkFunc[] = [];
+    for (const DA of ASTRoot) {
+        if (DA instanceof CAhkFunc) {
+            result.push(DA);
+        } else if (DA instanceof CAhkClass) {
+            result.push(...getDAList(DA.children));
+        }
+    }
+
+    wm.set(ASTRoot, result);
+
     return result;
 }

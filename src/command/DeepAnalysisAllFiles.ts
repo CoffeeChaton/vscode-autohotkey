@@ -2,7 +2,7 @@ import type { CAhkFunc } from '../AhkSymbol/CAhkFunc';
 import { pm } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
-import { getDAList } from '../tools/DeepAnalysis/getDAList';
+import { getDAListTop } from '../tools/DeepAnalysis/getDAList';
 import type { TWordFrequencyStatistics } from './tools/WordFrequencyStatistics';
 import { WordFrequencyStatistics } from './tools/WordFrequencyStatistics';
 
@@ -38,7 +38,7 @@ export function DeepAnalysisAllFiles(): null {
             ModuleVar,
         } of pm.DocMap.values()
     ) { // keep output order is OK
-        const DAList: CAhkFunc[] = getDAList(AST);
+        const DAList: CAhkFunc[] = getDAListTop(AST);
         need.push(...DAList);
         digDAFile(DAList, ModuleVar, uri, DocStrMap);
     }

@@ -17,7 +17,7 @@ import { newC502 } from './FnVar/def/c502';
 import { wrapFnValDef } from './FnVar/def/wrapFnValDef';
 import { EFnMode } from './FnVar/EFnMode';
 import { getFnVarDef } from './FnVar/getFnVarDef';
-import { getDAList } from './getDAList';
+import { getDAListTop } from './getDAList';
 import { getUnknownTextMap } from './getUnknownTextMap';
 
 export type TModuleVar = {
@@ -90,7 +90,7 @@ function moveGValMap2ModuleMap(GValMap: TGValMap, ModuleValMap: TValMapIn): void
 }
 
 function moveTextMap2ModuleMap(AST: TAstRoot, valMap: TValMapIn): void {
-    const DAList: CAhkFunc[] = getDAList(AST);
+    const DAList: CAhkFunc[] = getDAListTop(AST);
     for (const vv of DAList) {
         const textMapRW: TTextMapIn = vv.textMap as TTextMapIn; // eval
         if (vv.fnMode === EFnMode.forceLocal) continue;

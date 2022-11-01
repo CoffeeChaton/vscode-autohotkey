@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { diagColl, pm } from '../../core/ProjectManager';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
-import { getDAList } from '../../tools/DeepAnalysis/getDAList';
+import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { isAhkTab } from '../../tools/fsTools/isAhk';
 import { CDiagFn } from '../Diagnostic/tools/CDiagFn';
 
@@ -12,7 +12,7 @@ export function onDidChangeActiveTab(e: vscode.TextEditor | undefined): undefine
     const { uri } = document;
     if (isAhkTab(uri)) {
         const { AST, DocStrMap, ModuleVar } = pm.getDocMap(uri.fsPath) ?? pm.updateDocDef(document);
-        digDAFile(getDAList(AST), ModuleVar, uri, DocStrMap);
+        digDAFile(getDAListTop(AST), ModuleVar, uri, DocStrMap);
     }
 
     return undefined;

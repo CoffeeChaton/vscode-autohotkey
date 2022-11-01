@@ -5,7 +5,7 @@ import { ECommand } from '../../command/ECommand';
 import { getCodeLenConfig } from '../../configUI';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
-import { getDAList } from '../../tools/DeepAnalysis/getDAList';
+import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import type { TShowUnknownAnalyze } from './showUnknownAnalyze';
 
 function CodeLensCore(fsPath: string): vscode.CodeLens[] {
@@ -15,7 +15,7 @@ function CodeLensCore(fsPath: string): vscode.CodeLens[] {
     const { AST, DocStrMap } = AhkFileData;
 
     const need: vscode.CodeLens[] = [];
-    const DAList: CAhkFunc[] = getDAList(AST);
+    const DAList: CAhkFunc[] = getDAListTop(AST);
     for (const DA of DAList) {
         const CommandAnalyze: vscode.Command = {
             title: 'Analyze',

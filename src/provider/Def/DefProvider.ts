@@ -5,7 +5,7 @@ import type { TAhkTokenLine } from '../../globalEnum';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
 import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
-import { getDAList } from '../../tools/DeepAnalysis/getDAList';
+import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { getClassDef } from './getClassDef';
@@ -18,7 +18,7 @@ type TFnFindCol = (AhkTokenLine: TAhkTokenLine, partTextRaw: string) => number[]
 function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vscode.Location[] {
     const List: vscode.Location[] = [];
     for (const { DocStrMap, AST, uri } of pm.getDocMapValue()) {
-        const filterLineList: number[] = getDAList(AST)
+        const filterLineList: number[] = getDAListTop(AST)
             .filter((DA: CAhkFunc): boolean => DA.kind === vscode.SymbolKind.Method)
             .map((DA: CAhkFunc): number => DA.nameRange.start.line);
 
