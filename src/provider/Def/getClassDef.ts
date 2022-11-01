@@ -1,16 +1,14 @@
 import * as vscode from 'vscode';
 import type { CAhkClass } from '../../AhkSymbol/CAhkClass';
-import type { TAllClassMap } from '../../tools/getAllClass';
-import { getAllClass } from '../../tools/getAllClass';
+import { searchClassNameBreak } from '../../tools/searchClassNameBreak';
 import { searchAllVarRef } from './searchAllVarRef';
 
 export function getClassDef(
     wordUp: string,
     listAllUsing: boolean,
 ): vscode.Location[] | null {
-    const classMap: TAllClassMap = getAllClass();
-    const classDef: CAhkClass | undefined = classMap.get(wordUp);
-    if (classDef === undefined) {
+    const classDef: CAhkClass | null = searchClassNameBreak(wordUp);
+    if (classDef === null) {
         return null;
     }
 

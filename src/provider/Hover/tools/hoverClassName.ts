@@ -4,8 +4,7 @@ import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import type { TAstRoot, TTopSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
 import { pm } from '../../../core/ProjectManager';
 import { getDAWithPos } from '../../../tools/DeepAnalysis/getDAWithPos';
-import type { TAllClassMap } from '../../../tools/getAllClass';
-import { getAllClass } from '../../../tools/getAllClass';
+import { searchClassNameBreak } from '../../../tools/searchClassNameBreak';
 import { isPosAtMethodName } from '../../Def/isPosAtMethodName';
 
 function getClassWithPos(
@@ -76,9 +75,8 @@ export function hoverClassName(
         // }
     }
 
-    const classMap: TAllClassMap = getAllClass();
-    const classDef: CAhkClass | undefined = classMap.get(wordUp);
-    if (classDef === undefined) {
+    const classDef: CAhkClass | null = searchClassNameBreak(wordUp);
+    if (classDef === null) {
         return null;
     }
 
