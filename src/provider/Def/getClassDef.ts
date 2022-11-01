@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
 import type { CAhkClass } from '../../AhkSymbol/CAhkClass';
-import { searchClassNameBreak } from '../../tools/searchClassNameBreak';
+import { getUserDefTopClassSymbol } from '../../tools/DeepAnalysis/getUserDefTopClassSymbol';
 import { searchAllVarRef } from './searchAllVarRef';
 
 export function getClassDef(
     wordUp: string,
     listAllUsing: boolean,
 ): vscode.Location[] | null {
-    const classDef: CAhkClass | null = searchClassNameBreak(wordUp);
+    const classDef: CAhkClass | null = getUserDefTopClassSymbol(wordUp);
     if (classDef === null) {
         return null;
     }

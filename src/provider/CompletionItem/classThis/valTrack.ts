@@ -4,8 +4,8 @@ import type { TTokenStream } from '../../../globalEnum';
 import { ahkBaseWrap } from '../../../tools/Built-in/ahkBase';
 import type { TAhkBaseObj } from '../../../tools/Built-in/ahkBase_tools';
 import { ahkBaseUp } from '../../../tools/Built-in/ahkBase_tools';
+import { getUserDefTopClassSymbol } from '../../../tools/DeepAnalysis/getUserDefTopClassSymbol';
 import { ahkValDefRegex } from '../../../tools/regexTools';
-import { getUserDefTopClassSymbol } from './getUserDefTopClassSymbol';
 import { getWmThis } from './getWmThis';
 import { parsingUserDefClassRecursive } from './parsingUserDefClassRecursive';
 

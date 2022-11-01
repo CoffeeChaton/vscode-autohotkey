@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import type { CAhkClass, TClassChildren } from '../../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
-import { getUserDefTopClassSymbol } from './getUserDefTopClassSymbol';
+import { getUserDefTopClassSymbol } from '../../../tools/DeepAnalysis/getUserDefTopClassSymbol';
 
 function getKindOfCh(kind: vscode.SymbolKind): vscode.CompletionItemKind {
     // dprint-ignore
