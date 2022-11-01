@@ -4,19 +4,21 @@ import { getRange } from '../range/getRange';
 import { getRangeOfLine } from '../range/getRangeOfLine';
 
 export function getClassGetSet(FuncInput: TFuncInput): CAhkClassGetSet | null {
-    const {
-        line,
-        lStr,
-        DocStrMap,
-        RangeEndLine,
-        document,
-        textRaw,
-    } = FuncInput;
+    const { lStr } = FuncInput.AhkTokenLine;
+
     const lStrTrim = lStr.trim();
     if (lStrTrim.includes('(') || lStrTrim.includes('=')) return null;
 
     const ma: RegExpMatchArray | null = lStrTrim.match(/^(\w+)(?:\[\])?\s*\{?$/u);
     if (ma === null) return null;
+
+    const {
+        AhkTokenLine,
+        document,
+        DocStrMap,
+        RangeEndLine,
+    } = FuncInput;
+    const { line, textRaw } = AhkTokenLine;
 
     return new CAhkClassGetSet({
         name: ma[1],

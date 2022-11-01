@@ -4,14 +4,8 @@ import { EDetail } from '../../globalEnum';
 import type { TFuncInput } from '../getChildren';
 
 export function getComment(FuncInput: TFuncInput): CAhkComment | null {
-    const {
-        line,
-        lStr,
-        DocStrMap,
-        document,
-    } = FuncInput;
+    const { detail, textRaw } = FuncInput.AhkTokenLine;
 
-    const { textRaw, detail, lineComment } = DocStrMap[line];
     if (!detail.includes(EDetail.hasDoubleSemicolon)) {
         return null;
     }
@@ -20,6 +14,9 @@ export function getComment(FuncInput: TFuncInput): CAhkComment | null {
     if (!(/^\s*;;/u).test(textRaw)) {
         return null;
     }
+
+    const { AhkTokenLine, document } = FuncInput;
+    const { line, lStr, lineComment } = AhkTokenLine;
 
     const doubleSemicolon: number = textRaw.indexOf(';;', lStr.length);
 

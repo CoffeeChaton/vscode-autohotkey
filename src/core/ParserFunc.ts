@@ -42,18 +42,19 @@ function getAllowsListOfFunc(DocStrMap: TTokenStream, startLine: number, endLine
 // TODO spilt this func
 // eslint-disable-next-line max-lines-per-function
 export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
+    const { line, lStr } = FuncInput.AhkTokenLine;
+
+    const col: number = lStr.indexOf('(');
+    if (lStr.length === 0 || col === -1 || lStr.includes('}')) return null;
+
     const {
         DocStrMap,
-        line,
         RangeEndLine,
         defStack,
-        lStr,
         document,
         GValMap,
     } = FuncInput;
 
-    const col: number = lStr.indexOf('(');
-    if (lStr.length === 0 || col === -1 || lStr.includes('}')) return null;
     const fnDefData: TFuncDefData | null = getFuncDef(DocStrMap, line);
     if (fnDefData === null) return null;
 

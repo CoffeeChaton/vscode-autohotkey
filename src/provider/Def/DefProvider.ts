@@ -9,6 +9,7 @@ import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { getClassDef } from './getClassDef';
+import { getDefSwitch } from './getDefSwitch';
 import { getDefWithLabel } from './getDefWithLabel';
 import { getValDefInFunc } from './getValDefInFunc';
 import { isPosAtMethodName } from './isPosAtMethodName';
@@ -154,6 +155,9 @@ function DefProviderCore(
     if ((/^0x[A-F\d]+$/ui).test(wordUp) || (/^\d+$/ui).test(wordUp)) return null;
 
     const listAllUsing = false;
+
+    const switchDef: vscode.Location[] | null = getDefSwitch(document, position, wordUp);
+    if (switchDef !== null) return switchDef;
 
     const LabelDef: vscode.Location[] | null = getDefWithLabel(document, position, wordUp);
     if (LabelDef !== null) return LabelDef;

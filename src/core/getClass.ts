@@ -29,10 +29,7 @@ function setClassBase(lStr: string, colFix: number, name: string): string {
 }
 
 export function getClass(FuncInput: TFuncInput): CAhkClass | null {
-    const {
-        fistWordUp,
-        lStr,
-    } = FuncInput;
+    const { lStr, fistWordUp, line } = FuncInput.AhkTokenLine;
 
     if (fistWordUp !== 'CLASS') return null;
     // class ClassName extends BaseClassName
@@ -41,7 +38,6 @@ export function getClass(FuncInput: TFuncInput): CAhkClass | null {
 
     const {
         DocStrMap,
-        line,
         RangeEndLine,
         document,
         GValMap,

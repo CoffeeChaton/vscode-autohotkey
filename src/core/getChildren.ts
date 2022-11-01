@@ -1,12 +1,10 @@
 import type * as vscode from 'vscode';
-import type { TTokenStream } from '../globalEnum';
+import type { TAhkTokenLine, TTokenStream } from '../globalEnum';
 import type { TGValMap } from './ParserTools/ahkGlobalDef';
 
 export type TFuncInput = Readonly<{
-    fistWordUp: string;
-    lStr: string;
-    textRaw: string;
-    line: number;
+    AhkTokenLine: TAhkTokenLine;
+    //
     RangeEndLine: number;
     defStack: string[];
     DocStrMap: TTokenStream;
@@ -42,18 +40,16 @@ export function getChildren<T extends vscode.DocumentSymbol>(
     let Resolved = RangeStartLine; // <--------------------------------
     for (let line = RangeStartLine; line < RangeEndLine; line++) {
         if (line < Resolved) continue; // <------------------------------------
-        const { lStr, fistWordUp, textRaw } = DocStrMap[line];
+        const AhkTokenLine: TAhkTokenLine = DocStrMap[line];
+
         for (const fn of fnList) {
             const DocumentSymbol: TChildrenType<T> | null = fn({
-                fistWordUp,
-                lStr,
+                AhkTokenLine,
                 DocStrMap,
-                line,
                 RangeEndLine,
                 defStack,
                 document,
                 GValMap,
-                textRaw,
             });
             if (DocumentSymbol !== null) {
                 result.push(DocumentSymbol);

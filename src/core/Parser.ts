@@ -1,7 +1,7 @@
+import * as vscode from 'vscode';
 import { CAhkCase, CAhkDefault, CAhkSwitch } from '../AhkSymbol/CAhkSwitch';
 import { getRange } from '../tools/range/getRange';
 import { getRangeCaseBlock } from '../tools/range/getRangeCaseBlock';
-import { getRangeOfLine } from '../tools/range/getRangeOfLine';
 import type { TFuncInput } from './getChildren';
 import { getChildren } from './getChildren';
 import { getCaseName, getSwitchName } from './ParserTools/getSwitchCaseName';
@@ -9,7 +9,7 @@ import { ParserLine } from './ParserTools/ParserLine';
 
 export const ParserBlock = {
     getCaseBlock(FuncInput: TFuncInput): CAhkCase | null {
-        const { lStr, fistWordUp } = FuncInput;
+        const { lStr, fistWordUp } = FuncInput.AhkTokenLine;
 
         if (fistWordUp !== 'CASE') return null;
         if (!lStr.includes(':')) return null;
@@ -17,12 +17,12 @@ export const ParserBlock = {
         const {
             RangeEndLine,
             defStack,
-            line,
+            AhkTokenLine,
             DocStrMap,
             document,
             GValMap,
-            textRaw,
         } = FuncInput;
+        const { line, fistWordUpCol } = AhkTokenLine;
 
         const name: string | null = getCaseName(DocStrMap[line].textRaw, lStr);
         if (name === null) return null;
@@ -40,17 +40,22 @@ export const ParserBlock = {
             },
         );
 
+        const selectionRange = new vscode.Range(
+            new vscode.Position(line, fistWordUpCol),
+            new vscode.Position(line, fistWordUpCol + fistWordUp.length),
+        );
+
         return new CAhkCase({
             name,
             range,
-            selectionRange: getRangeOfLine(line, lStr, textRaw.length),
+            selectionRange,
             uri: document.uri,
             ch,
         });
     },
 
     getDefaultBlock(FuncInput: TFuncInput): CAhkDefault | null {
-        const { lStr, fistWordUp } = FuncInput;
+        const { lStr, fistWordUp } = FuncInput.AhkTokenLine;
 
         if (fistWordUp !== 'DEFAULT') return null;
         if (!(/^default\b\s*:/iu).test(lStr.trim())) return null;
@@ -58,12 +63,12 @@ export const ParserBlock = {
         const {
             RangeEndLine,
             defStack,
-            line,
+            AhkTokenLine,
             DocStrMap,
             document,
             GValMap,
-            textRaw,
         } = FuncInput;
+        const { line, fistWordUpCol } = AhkTokenLine;
 
         const range = getRangeCaseBlock(DocStrMap, line, line, RangeEndLine, lStr);
         const ch = getChildren<CAhkDefault>(
@@ -78,27 +83,32 @@ export const ParserBlock = {
             },
         );
 
+        const selectionRange = new vscode.Range(
+            new vscode.Position(line, fistWordUpCol),
+            new vscode.Position(line, fistWordUpCol + fistWordUp.length),
+        );
+
         return new CAhkDefault({
             range,
-            selectionRange: getRangeOfLine(line, lStr, textRaw.length),
+            selectionRange,
             uri: document.uri,
             ch,
         });
     },
 
     getSwitchBlock(FuncInput: TFuncInput): CAhkSwitch | null {
-        if (FuncInput.fistWordUp !== 'SWITCH') return null;
+        const { fistWordUp } = FuncInput.AhkTokenLine;
+        if (fistWordUp !== 'SWITCH') return null;
 
         const {
-            DocStrMap,
-            line,
             RangeEndLine,
             defStack,
-            lStr,
+            AhkTokenLine,
+            DocStrMap,
             document,
             GValMap,
-            textRaw,
         } = FuncInput;
+        const { line, fistWordUpCol, lStr } = AhkTokenLine;
 
         const range = getRange(DocStrMap, line, line, RangeEndLine);
 
@@ -114,10 +124,15 @@ export const ParserBlock = {
             },
         );
 
+        const selectionRange = new vscode.Range(
+            new vscode.Position(line, fistWordUpCol),
+            new vscode.Position(line, fistWordUpCol + fistWordUp.length),
+        );
+
         return new CAhkSwitch({
             name: `Switch ${getSwitchName(lStr)}`,
             range,
-            selectionRange: getRangeOfLine(line, lStr, textRaw.length),
+            selectionRange,
             uri: document.uri,
             ch,
         });

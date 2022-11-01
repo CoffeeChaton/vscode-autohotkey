@@ -91,7 +91,6 @@ function getDefWithLabelCore(wordUpCase: string): vscode.Location[] | null {
  * ;            ... The label is jumped to as though a Gosub had been used.
  * ```
  */
-
 export function getDefWithLabel(
     document: vscode.TextDocument,
     position: vscode.Position,

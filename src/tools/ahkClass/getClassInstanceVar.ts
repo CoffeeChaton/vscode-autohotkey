@@ -3,15 +3,13 @@ import { CAhkClassInstanceVar } from '../../AhkSymbol/CAhkClass';
 import type { TFuncInput } from '../../core/getChildren';
 
 export function getClassInstanceVar(FuncInput: TFuncInput): CAhkClassInstanceVar | null {
-    const {
-        line,
-        lStr,
-        textRaw,
-        document,
-    } = FuncInput;
+    const { lStr } = FuncInput.AhkTokenLine;
 
     const index = lStr.indexOf(':=');
     if (index === -1) return null;
+
+    const { AhkTokenLine, document } = FuncInput;
+    const { line, textRaw } = AhkTokenLine;
 
     const isStatic = (/^static\s/ui).test(lStr.trimStart());
 
