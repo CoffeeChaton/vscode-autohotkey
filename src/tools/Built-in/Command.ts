@@ -1505,7 +1505,7 @@ export const LineCommand: TLineCommand = {
     GROUPACTIVATE: {
         keyRawName: 'GroupActivate',
         body: 'GroupActivate, ${1:GroupName} [, ${2:R} ]',
-        doc: 'Activates the next window in a window group that was defined with GroupAdd.',
+        doc: 'Activates the next window in a window group that was defined with [GroupAdd](https://www.autohotkey.com/docs/commands/GroupAdd.htm).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/GroupActivate.htm',
         exp: [

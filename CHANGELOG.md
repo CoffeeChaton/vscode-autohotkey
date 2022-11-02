@@ -6,14 +6,23 @@
 - TODO: add `RegExMatch((Text := q.Read()), "OU)([^\x00-\x7F])", Found)` of `Found`...
 - TODO: add [ErrorLevel](https://www.autohotkey.com/docs/misc/ErrorLevel.htm)
 
-## NEXT 0.0.13(2022-11-02)
+## 0.0.13(2022-11-02)
 
-> support <https://github.com/Lexikos/AutoHotkey_L/releases/tag/v1.1.35.00>
->
+### support <https://github.com/Lexikos/AutoHotkey_L/releases/tag/v1.1.35.00>
+
 > 1. support `!==` `>>>` `>>>=` syntax-highlight
 > 2. support `A_InitialWorkingDir` `A_Clipboard` `IsSet()` syntax-highlight && Completion && hover
 > 3. support `File.Handle` Completion
+> 4. Check and update doc of `GroupActivate` && `GroupClose`
 
+### Regular update
+
+1. add: `switch`/`case`/`default` gotoDef / findAllRef
+2. fix: support of Command after `case:` `default:`
+   - exp: `case: SetTimer , funcName`
+   - diag Command Err
+   - semantic-highlight of OutputVar Command exp: `WinGetTitle, OutputVar` or `SplitPath, InputVar , OutFileName, OutDir, OutExtension, OutNameNoExt, OutDrive` ...etc.
+   - semantic-highlight / gotoDef / findAllRef of funcName Command exp: `SetTimer , funcName` or `Hotkey, KeyName , funcName`
 
 ## 0.0.12(2022-10-28)
 
