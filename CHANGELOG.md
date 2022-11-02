@@ -2,7 +2,7 @@
 
 ## NEXT 0.0.14(2022-11-15)
 
-- TODO: cover <src/tools/Built-in/Command.ts> doc to 90%
+- TODO add : doc of Command `>90%`
 - TODO: add `this.fn()` goto def, just def,don't support of ref ...
 - fix: Multi-line isExpress
 - add: support Multi-line `%` flag
