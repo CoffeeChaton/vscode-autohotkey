@@ -4,7 +4,8 @@
 - [check #Include](https://www.autohotkey.com/docs/Functions.htm#lib)
 - [diag of `If Var op Value`](https://www.autohotkey.com/docs/Language.htm#if-statement)
 - [not use switch in js](https://github.com/microsoft/TypeScript/pull/50225)
-- `"name": "keyword.multiline.ahk"` with highlight `style1` `style2`
+- add [ErrorLevel](https://www.autohotkey.com/docs/misc/ErrorLevel.htm)
+- add `RegExMatch((Text := q.Read()), "OU)([^\x00-\x7F])", Found)` of `Found`...
 - add diag auto check of `catch{} ;null catch`
 - add diag of `%\w%\w`
 - add highlight of `"^\\s*#\\b(?i:include(?:Again)?)\\b\\s*(\\*i)?(.*)$"` lib mode,

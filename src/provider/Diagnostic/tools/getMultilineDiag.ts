@@ -49,7 +49,7 @@ function diagEMultilineStart(multilineFlag: NonNull<TMultilineFlag>, line: numbe
             .map((Pos: TPos): CDiagBase => fnMakeDiag(Pos, EDiagCode.code121, line, vscode.DiagnosticSeverity.Warning)),
     ];
 
-    if (PercentFlag.length > 0 || commaFlag.length > 0 || accentFlag.length > 0) {
+    if (commaFlag.length > 0 || accentFlag.length > 0) {
         diagList.push(fnMakeDiag(PercentFlag[0], EDiagCode.code122, line, vscode.DiagnosticSeverity.Information));
     }
 

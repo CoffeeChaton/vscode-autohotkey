@@ -4,9 +4,12 @@ import type { TMultilineFlag } from '../../globalEnum';
 
 /**
  * %
+ *
+ * if PercentFlag (%-flag) true
+ * -> look % like str...
  */
 function getMultilineLStrStyle1(
-    { textRaw, CFlag }: { textRaw: string; CFlag: boolean },
+    { textRaw, CFlag, PercentFlag }: { textRaw: string; CFlag: boolean; PercentFlag: boolean },
 ): string {
     /**
      * flag of '%'
@@ -53,8 +56,18 @@ function getMultilineLStrStyle1(
                 break;
 
             case '%':
-                lStr += '%';
+                /**
+                 * %
+                 *
+                 * if PercentFlag (%-flag) true
+                 * -> look % like str...
+                 */
+                if (PercentFlag) {
+                    lStr += '^';
+                    continue;
+                }
 
+                lStr += '%';
                 satePercent = !satePercent;
                 break;
 
@@ -159,8 +172,8 @@ export function getMultilineLStr(
     //     ?  '`': MultilineFlag.accent.length > 0,
     // } as const;
 
-    const CFlag = multilineFlag.CommentFlag.length > 0;
+    const CFlag: boolean = multilineFlag.CommentFlag.length > 0;
     return multilineFlag.isExpress
         ? getMultilineLStrStyle2({ textRaw, CFlag })
-        : getMultilineLStrStyle1({ textRaw, CFlag });
+        : getMultilineLStrStyle1({ textRaw, CFlag, PercentFlag: multilineFlag.PercentFlag.length > 0 });
 }

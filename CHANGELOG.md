@@ -2,9 +2,10 @@
 
 ## NEXT 0.0.14(2022-11-15)
 
-- TODO: add `this.fn()` goto def
-- TODO: add `RegExMatch((Text := q.Read()), "OU)([^\x00-\x7F])", Found)` of `Found`...
-- TODO: add [ErrorLevel](https://www.autohotkey.com/docs/misc/ErrorLevel.htm)
+- TODO: cover <src/tools/Built-in/Command.ts> doc to 90%
+- TODO: add `this.fn()` goto def, just def,don't support of ref ...
+- fix: Multi-line isExpress
+- add: support Multi-line `%` flag
 
 ## 0.0.13(2022-11-02)
 
@@ -153,6 +154,7 @@ because of vscode.settings options provided
 ## 0.0.6(2022-09-14)
 
 <details>
+ <summary><b>Result</b></summary>
 
 - add Diag `c302` of `Function name too long, name len > (255 -2) characters.`
 - add Diag `c505` of `param parsed Error -> unknown style`

@@ -52,7 +52,7 @@ some idea [diag121](./ahk/diag121.ahk)
 
 ```js
 122: {
-    msg: 'ahk-neko-help not supported "%" "," "`" flag now.',
+    msg: 'ahk-neko-help not supported "," "`" flag now.',
     path: 'https://www.autohotkey.com/docs/Scripts.htm#continuation-section',
 },
 ```

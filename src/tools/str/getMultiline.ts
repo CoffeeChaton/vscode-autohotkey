@@ -102,7 +102,7 @@ function getMultilineFlag({ textRaw, result, line }: TGetMultilineFlag): TMultil
         }
         break;
     }
-    flag.isExpress = true;
+    //  flag.isExpress = true;
     return flag;
 }
 
