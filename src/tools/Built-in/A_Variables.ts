@@ -65,6 +65,11 @@ const [A_VariablesMDMap, snippetStartWihA] = ((): [TA_MD_Map, TA_snippet_list] =
             group: 'Misc.',
             uri: 'https://www.autohotkey.com/docs/Variables.htm#misc',
         },
+        A_Clipboard: {
+            body: 'A_Clipboard',
+            group: 'Misc.',
+            uri: 'https://www.autohotkey.com/docs/misc/Clipboard.htm',
+        },
         A_ComSpec: {
             body: 'A_ComSpec',
             group: 'OS',
@@ -764,6 +769,11 @@ const [A_VariablesMDMap, snippetStartWihA] = ((): [TA_MD_Map, TA_snippet_list] =
             body: 'A_WorkingDir',
             group: 'Script',
             uri: 'https://www.autohotkey.com/docs/Variables.htm#prop',
+        },
+        A_InitialWorkingDir: {
+            body: 'A_InitialWorkingDir',
+            group: 'Script',
+            uri: 'https://www.autohotkey.com/docs/Variables.htm#InitialWorkingDir',
         },
         A_YDay: {
             body: 'A_YDay',

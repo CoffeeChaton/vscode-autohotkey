@@ -1,10 +1,19 @@
 # Changelog
 
-## NEXT 0.0.13(2022-11-15)
+## NEXT 0.0.14(2022-11-15)
 
 - TODO: add `this.fn()` goto def
 - TODO: add `RegExMatch((Text := q.Read()), "OU)([^\x00-\x7F])", Found)` of `Found`...
 - TODO: add [ErrorLevel](https://www.autohotkey.com/docs/misc/ErrorLevel.htm)
+
+## NEXT 0.0.13(2022-11-02)
+
+> support <https://github.com/Lexikos/AutoHotkey_L/releases/tag/v1.1.35.00>
+>
+> 1. support `!==` `>>>` `>>>=` syntax-highlight
+> 2. support `A_InitialWorkingDir` `A_Clipboard` `IsSet()` syntax-highlight && Completion && hover
+> 3. support `File.Handle` Completion
+
 
 ## 0.0.12(2022-10-28)
 

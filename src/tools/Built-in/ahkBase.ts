@@ -333,6 +333,15 @@ const ItemOfFileOpen: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => 
             ],
         },
         {
+            label: 'Handle ',
+            documentation: [
+                'Alias of [__Handle](https://www.autohotkey.com/docs/objects/File.htm#__Handle).',
+                '*Returns* a system file ```handle```, intended for use with ```DllCall()```. See [CreateFile](https://docs.microsoft.com/zh-tw/windows/win32/api/fileapi/nf-fileapi-createfilea?redirectedfrom=MSDN).',
+                '> File.__Handle',
+                'File objects internally buffer reads or writes. If data has been written into the object\'s internal buffer, it is committed to disk before the handle is returned. If the buffer contains data read from file, it is discarded and the actual file pointer is reset to the logical position indicated by ```File.Pos```.',
+            ],
+        },
+        {
             label: '__Handle ',
             documentation: [
                 '*Returns* a system file ```handle```, intended for use with ```DllCall()```. See [CreateFile](https://docs.microsoft.com/zh-tw/windows/win32/api/fileapi/nf-fileapi-createfilea?redirectedfrom=MSDN).',

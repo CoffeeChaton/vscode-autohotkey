@@ -83,6 +83,7 @@ type TUPKey =
     | 'ISFUNC'
     | 'ISLABEL'
     | 'ISOBJECT'
+    | 'ISSET'
     | 'LN'
     | 'LOADPICTURE'
     | 'LOG'
@@ -727,6 +728,23 @@ export const BuiltInFunctionObj: DeepReadonly<TBuiltInFuncbj> = {
             '    MsgBox % "This is an object."',
             'else',
             '    MsgBox % "This is not an object."',
+        ],
+    },
+    ISSET: {
+        group: 'Misc.',
+        keyRawName: 'IsSet',
+        link: 'https://www.autohotkey.com/docs/commands/IsSet.htm',
+        msg: 'Returns a non-zero number if the specified variable has been assigned a value.',
+        insert: 'IsSet(${1:Var})',
+        exp: [
+            'VarIsSet := IsSet(Var) ;;Return 0 or 1',
+            ';The return value is 1 (true) if Var has been assigned a value, otherwise 0 (false).',
+            '',
+            '; Shows different uses for IsSet.',
+            'Loop 2',
+            '    if !IsSet(MyVar)  ; Is this the first "use" of MyVar?',
+            '        MyVar := A_Index  ; Initialize on first "use".',
+            'MsgBox % "MyVar is " (IsSet(MyVar) ? "set and has value """ MyVar """" : "unset")',
         ],
     },
     LN: {
