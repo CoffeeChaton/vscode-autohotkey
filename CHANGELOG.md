@@ -2,9 +2,10 @@
 
 ## NEXT 0.0.14(2022-11-15)
 
+- add: list all func push Analyze, like : `file: 29 ,func: 665`
 - add: `function()` gotoDef/findAllRef use OutputChannel replace console.log
-- add: `this.Method()` goto def, just def, don't support of ref now...
-- add: cache to find all ref of function
+- add: `this.Method()` goto def, just def, but not support of ref now...
+- add: cache to find all ref of `function()`
 - add: doc of Command to 218 ruler
 - add: progress of dev tools
 - add: support [Multi-line](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) `%` flag

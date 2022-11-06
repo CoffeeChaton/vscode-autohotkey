@@ -8,6 +8,8 @@ function ListAllFunc(showLink: boolean): null {
     const t1: number = Date.now();
 
     const AllList: string[] = [];
+    let funcHint = 0;
+    let fileHint = 0;
     for (const { uri, AST } of pm.DocMap.values()) { // should keep output order
         AllList.push(uri.fsPath);
 
@@ -18,14 +20,19 @@ function ListAllFunc(showLink: boolean): null {
                     ? msgWithPos(text, uri.fsPath, DocumentSymbol.selectionRange.start)
                     : text;
                 AllList.push(textShow);
+                funcHint++;
             }
         }
         AllList.push('\n');
+        fileHint++;
     }
 
     OutputChannel.clear();
     OutputChannel.appendLine('[neko-help] List All Function()');
     OutputChannel.append(AllList.join('\n'));
+    OutputChannel.appendLine(`file: ${fileHint}`);
+    OutputChannel.appendLine(`func: ${funcHint}`);
+
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();
 
@@ -36,12 +43,16 @@ function ListAllFuncSort(reverse: boolean): null {
     const t1: number = Date.now();
 
     const AllList: string[] = [];
+    let funcHint = 0;
+    let fileHint = 0;
     for (const { uri, AST } of pm.DocMap.values()) { // should keep output order
         for (const DocumentSymbol of AST) {
             if (DocumentSymbol.kind === vscode.SymbolKind.Function) {
                 AllList.push(msgWithPos(`${DocumentSymbol.name}()`, uri.fsPath, DocumentSymbol.selectionRange.start));
+                funcHint++;
             }
         }
+        fileHint++;
     }
 
     // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
@@ -59,6 +70,8 @@ function ListAllFuncSort(reverse: boolean): null {
     OutputChannel.clear();
     OutputChannel.appendLine(`[neko-help] List All Function() ; Sort with ${re}`);
     OutputChannel.appendLine(appendText);
+    OutputChannel.appendLine(`\nfile: ${fileHint}`);
+    OutputChannel.appendLine(`func: ${funcHint}`);
     OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
     OutputChannel.show();
 
