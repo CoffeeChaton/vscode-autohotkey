@@ -14,6 +14,6 @@ export class CSnippetCommand extends vscode.CompletionItem {
         this.detail = 'Command of AHK (neko-help)';
         this.documentation = md;
         this.upName = k;
-        this.recommended = recommended ?? true; // TODO remove this undefined
+        this.recommended = recommended;
     }
 }
