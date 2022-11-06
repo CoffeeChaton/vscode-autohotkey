@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { CAhkLabel } from '../../AhkSymbol/CAhkLine';
+import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
@@ -92,18 +93,19 @@ function getDefWithLabelCore(wordUpCase: string): vscode.Location[] | null {
  * ```
  */
 export function getDefWithLabel(
-    document: vscode.TextDocument,
+    AhkFileData: TAhkFileData,
+    uri: vscode.Uri,
     position: vscode.Position,
     wordUpCase: string,
 ): vscode.Location[] | null {
-    const { DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const { DocStrMap } = AhkFileData;
 
-    const AhkTokenLine = DocStrMap[position.line];
+    const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
     const { lStr } = AhkTokenLine;
     const lStrFix: string = lStr.slice(0, Math.max(0, position.character));
 
     if ((/^\w+:$/u).test(lStr.trim())) {
-        return [new vscode.Location(document.uri, position)]; // let auto call Ref
+        return [new vscode.Location(uri, position)]; // let auto call Ref
     }
 
     if ((/\b(?:goto|goSub|Break|Continue|OnExit)\b[\s,]+\w*$/ui).test(lStrFix)) {

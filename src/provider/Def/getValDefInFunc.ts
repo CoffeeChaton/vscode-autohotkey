@@ -4,7 +4,7 @@ import type {
     TParamMetaOut,
     TValMetaOut,
 } from '../../AhkSymbol/CAhkFunc';
-import { pm } from '../../core/ProjectManager';
+import type { TAhkFileData } from '../../core/ProjectManager';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import type { TModuleVar } from '../../tools/DeepAnalysis/getModuleVarMap';
 import { searchAllVarRef } from './searchAllVarRef';
@@ -52,13 +52,13 @@ function getModuleVarDef(
 }
 
 export function getValDefInFunc(
-    document: vscode.TextDocument,
+    AhkFileData: TAhkFileData,
+    uri: vscode.Uri,
     position: vscode.Position,
     wordUp: string,
     listAllUsing: boolean,
 ): vscode.Location[] | null {
-    const { uri } = document;
-    const { AST, ModuleVar } = pm.getDocMap(uri.fsPath) ?? pm.updateDocDef(document);
+    const { AST, ModuleVar } = AhkFileData;
 
     const DA: CAhkFunc | null = getDAWithPos(AST, position);
     if (DA === null) return getModuleVarDef(ModuleVar, position, wordUp, listAllUsing, uri);

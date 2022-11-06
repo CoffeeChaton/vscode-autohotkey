@@ -1,14 +1,22 @@
 import type * as vscode from 'vscode';
+import type { TAhkFileData } from '../../core/ProjectManager';
+import { pm } from '../../core/ProjectManager';
 import { getClassDef } from './getClassDef';
 import { getDefSwitch } from './getDefSwitch';
 import { getDefWithLabel } from './getDefWithLabel';
 import { getFuncDef } from './getFuncDef';
+import { getThisMethod } from './getThisMethod';
 import { getValDefInFunc } from './getValDefInFunc';
 
 function DefProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Location[] | null {
+    const AhkFileData: TAhkFileData = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+
+    const methodDef: vscode.Location[] | null = getThisMethod(AhkFileData, position);
+    if (methodDef !== null) return methodDef;
+
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`#])\b\w+\b/u);
     if (range === undefined) return null;
     const wordUp: string = document.getText(range).toUpperCase();
@@ -17,10 +25,10 @@ function DefProviderCore(
 
     const listAllUsing = false;
 
-    const switchDef: vscode.Location[] | null = getDefSwitch(document, position, wordUp);
+    const switchDef: vscode.Location[] | null = getDefSwitch(AhkFileData, document.uri, position, wordUp);
     if (switchDef !== null) return switchDef;
 
-    const LabelDef: vscode.Location[] | null = getDefWithLabel(document, position, wordUp);
+    const LabelDef: vscode.Location[] | null = getDefWithLabel(AhkFileData, document.uri, position, wordUp);
     if (LabelDef !== null) return LabelDef;
 
     const userDefFuncLink: vscode.Location[] | null = getFuncDef(document, position, wordUp, listAllUsing);
@@ -29,7 +37,13 @@ function DefProviderCore(
     const classDef: vscode.Location[] | null = getClassDef(wordUp, listAllUsing);
     if (classDef !== null) return classDef; // class name is variable name, should before function.variable name
 
-    const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
+    const valInFunc: vscode.Location[] | null = getValDefInFunc(
+        AhkFileData,
+        document.uri,
+        position,
+        wordUp,
+        listAllUsing,
+    );
     if (valInFunc !== null) return valInFunc;
 
     return null;

@@ -2,7 +2,7 @@
 
 ## NEXT 0.0.14(2022-11-15)
 
-- TODO: add `this.fn()` goto def, just def,don't support of ref ...
+- add: `this.Method()` goto def, just def,don't support of ref ...
 - add: doc of Command to 218 ruler
 - add: progress of dev tools
 - add: support [Multi-line](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) `%` flag
