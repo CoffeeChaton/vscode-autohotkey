@@ -19,13 +19,11 @@ export function getSecondUp(lStr: string, fistWordUp: string): TSecondUpData {
         if (i === undefined) {
             return { SecondWordUpCol: -1, SecondWordUp: '' };
         }
-
-        const ed: TSecondUpData = {
+        // did i need to check `SecondWordUp := 0` ?
+        return {
             SecondWordUp: ma[1].toUpperCase(),
             SecondWordUpCol: i + ma[0].indexOf(ma[1]),
         };
-
-        return ed;
     }
 
     return { SecondWordUpCol: -1, SecondWordUp: '' };

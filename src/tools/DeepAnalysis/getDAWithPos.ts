@@ -8,12 +8,13 @@ function getMethodWithPos(
     classCh: TClassChildren[],
     position: vscode.Position,
 ): CAhkFunc | null {
-    for (const DA of classCh) {
-        if (!DA.range.contains(position)) continue;
+    const DA: TClassChildren | undefined = classCh
+        .find((ch: TClassChildren): boolean => ch.range.contains(position));
 
-        if (DA instanceof CAhkFunc) return DA;
-        if (DA instanceof CAhkClass) return getMethodWithPos(DA.children, position);
-    }
+    if (DA === undefined) return null;
+    if (DA instanceof CAhkFunc) return DA;
+    if (DA instanceof CAhkClass) return getMethodWithPos(DA.children, position);
+
     return null;
 }
 
