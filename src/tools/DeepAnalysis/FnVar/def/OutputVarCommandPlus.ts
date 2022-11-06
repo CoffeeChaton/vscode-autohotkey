@@ -11,7 +11,7 @@ function pickCommand(needArr: number[], AllCut: TScanData[]): TScanData[] {
     for (const make of needArr) {
         const ScanData: TScanData | undefined = AllCut[make] as TScanData | undefined; // some arg is optional
         if (ScanData === undefined) break;
-        if (!(/^\w+/u).test(ScanData.RawNameNew)) continue; // TODO diag This!! Output usually not need %
+        if (!(/^\w+$/u).test(ScanData.RawNameNew)) continue; // TODO diag This!! Output usually not need %
         needPartScan.push(ScanData);
     }
 

@@ -137,6 +137,7 @@ export function getFuncDef(
     const regBase = new RegExp(
         `(?:(?<![.\`%])\\b(${wordUp})\\b\\()|(?:(?<=")(${wordUp})")`,
         //                          funcName(                  "funcName"
+        // --------------------------------------------------- RegisterCallback("funcName") or Func("funcName")
         'iug',
     );
 

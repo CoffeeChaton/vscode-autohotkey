@@ -23,7 +23,7 @@ export function fmtDiffInfo(
 
     const msg = [
         '-----------Format Diff Start--------------------------------',
-        `${from} ${EVersion.formatRange} "${path.basename(fsPath)}", ${Date.now() - timeStart}ms`,
+        `${from} ${EVersion.formatRange} "${path.basename(fsPath)}", ${Date.now() - timeStart} ms`,
     ];
 
     for (const [line, [oldStr, newStr]] of DiffMap) {
