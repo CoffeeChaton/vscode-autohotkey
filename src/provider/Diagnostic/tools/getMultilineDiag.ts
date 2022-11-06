@@ -77,6 +77,7 @@ function diagEMultilineEnd(params: TAhkTokenLine): [] | [CDiagBase] {
     //     }),
     // ];
 }
+
 function getMultilineDiagOfLine(params: TAhkTokenLine): CDiagBase[] {
     const {
         multiline,

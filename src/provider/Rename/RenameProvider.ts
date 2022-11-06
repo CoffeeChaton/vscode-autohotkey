@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { pm } from '../../core/ProjectManager';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
-import { userDefFunc } from '../Def/DefProvider';
+import { getFuncDef } from '../Def/getFuncDef';
 
 function RenameProviderCore(
     document: vscode.TextDocument,
@@ -17,7 +17,7 @@ function RenameProviderCore(
         return null;
     }
 
-    const userDefLink: vscode.Location[] | null = userDefFunc(document, position, DA.upName, true);
+    const userDefLink: vscode.Location[] | null = getFuncDef(document, position, DA.upName, true);
     if (userDefLink === null) return null;
 
     const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();

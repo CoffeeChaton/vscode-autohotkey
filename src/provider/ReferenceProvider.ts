@@ -1,9 +1,9 @@
 import type * as vscode from 'vscode';
 import { pm } from '../core/ProjectManager';
 import { isPosAtStrNext } from '../tools/isPosAtStr';
-import { userDefFunc } from './Def/DefProvider';
 import { getClassDef } from './Def/getClassDef';
 import { posAtLabelDef } from './Def/getDefWithLabel';
+import { getFuncDef } from './Def/getFuncDef';
 import { getRefSwitch } from './Def/getRefSwitch';
 import { getValDefInFunc } from './Def/getValDefInFunc';
 
@@ -26,7 +26,7 @@ function ReferenceProviderCore(
     if (swLoc !== null) return swLoc;
 
     const listAllUsing = true;
-    const userDefLink: vscode.Location[] | null = userDefFunc(document, position, wordUp, listAllUsing);
+    const userDefLink: vscode.Location[] | null = getFuncDef(document, position, wordUp, listAllUsing);
     if (userDefLink !== null) return userDefLink;
 
     const classDef: vscode.Location[] | null = getClassDef(wordUp, listAllUsing);

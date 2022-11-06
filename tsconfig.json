@@ -2,6 +2,7 @@
     "compilerOptions": {
         "alwaysStrict": true,
         "esModuleInterop": true,
+        "exactOptionalPropertyTypes": true,
         "forceConsistentCasingInFileNames": true,
         "lib": ["ESNext"],
         "module": "CommonJS",
@@ -10,6 +11,8 @@
         "noFallthroughCasesInSwitch": true,
         "noImplicitOverride": true,
         "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noPropertyAccessFromIndexSignature": true,
         "noUnusedLocals": false,
         "resolveJsonModule": true,
         "rootDir": "src",
@@ -24,6 +27,6 @@
         "node_modules",
         ".vscode-test",
         "out",
-        "dict"
+        "dist"
     ]
 }

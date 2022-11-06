@@ -84,10 +84,6 @@ function getMultilineFlag({ textRaw, result, line }: TGetMultilineFlag): TMultil
     if (lineBeforeMsg.detail.includes(EDetail.inSkipSign2)) {
         return flag; // not Express
     }
-    // FIXME: check lineBefore is cmd / style3
-    // if () {
-    //      return flag;
-    // }
 
     const textRawBefore: string = lineBeforeMsg.textRaw;
     for (let i = lineBeforeMsg.lStr.length - 1; i > -1; i--) {
