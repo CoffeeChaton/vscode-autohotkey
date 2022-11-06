@@ -3,13 +3,12 @@
 ## NEXT 0.0.14(2022-11-15)
 
 - TODO add : doc of Command `>90%`
-- TODO: add : goto def of `Return` -> `label:` or `func()`
 - TODO: add `this.fn()` goto def, just def,don't support of ref ...
 - add: progress of dev tools
-- add: support Multi-line `%` flag
+- add: support [Multi-line](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) `%` flag
 - add: cache to find all ref of function
 - add: `function()` gotoDef/findAllRef use OutputChannel replace console.log
-- fix: Multi-line isExpress
+- fix: [Multi-line](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) isExpress
 
 ## 0.0.13(2022-11-02)
 

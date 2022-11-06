@@ -9,7 +9,7 @@ import { headIsThis } from './headIsThis';
 import { RefClassWithName } from './RefClassWithName';
 import { valTrack } from './valTrack';
 
-function getAhkTokenList(
+function setVarTrackRange(
     position: vscode.Position,
     DocStrMap: TTokenStream,
     DA: CAhkFunc | null,
@@ -42,7 +42,7 @@ function findClassDef(
 
     // a := new ClassName
     // a.  ;<---
-    const AhkTokenList: TTokenStream = getAhkTokenList(position, DocStrMap, DA);
+    const AhkTokenList: TTokenStream = setVarTrackRange(position, DocStrMap, DA);
     return valTrack(ChapterArr, AhkTokenList);
 }
 
