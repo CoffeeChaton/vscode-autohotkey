@@ -2,9 +2,7 @@ import * as vscode from 'vscode';
 import { getFormatConfig } from '../../configUI';
 import type {
     DeepReadonly,
-    EDetail,
-    EMultiline,
-    TMultilineFlag,
+    TAhkTokenLine,
 } from '../../globalEnum';
 
 import { ContinueLongLine } from './ContinueLongLine';
@@ -15,31 +13,25 @@ import type { TDiffMap } from './TFormat';
 
 type TWarnUse =
     & DeepReadonly<{
-        detail: readonly EDetail[];
-        lStrTrim: string;
-        line: number;
-        occ: number;
-        deep: number;
-        multiline: EMultiline;
-        multilineFlag: TMultilineFlag;
-        textRaw: string;
-        switchRangeArray: vscode.Range[];
         document: vscode.TextDocument;
+        lStrTrim: string;
+        occ: number;
+        oldDeep: number;
         options: vscode.FormattingOptions;
+        switchRangeArray: vscode.Range[];
     }>
     & {
         DiffMap: TDiffMap;
     };
 
-function wrap(args: TWarnUse, text: string): vscode.TextEdit {
+function wrap(args: TWarnUse, text: string, AhkTokenLine: TAhkTokenLine): vscode.TextEdit {
+    const { lStrTrim, DiffMap } = args;
     const {
         detail,
-        lStrTrim,
         line,
         multiline,
         textRaw,
-        DiffMap,
-    } = args;
+    } = AhkTokenLine;
 
     const newText: string = getFormatConfig() // WTF
         ? lineReplace({
@@ -60,27 +52,24 @@ function wrap(args: TWarnUse, text: string): vscode.TextEdit {
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
+export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkTokenLine): vscode.TextEdit {
     const {
-        lStrTrim,
-        line,
-        occ,
-        deep,
-        multiline,
-        multilineFlag,
-        switchRangeArray,
         document,
+        lStrTrim,
+        occ,
+        oldDeep,
         options, // by self
+        switchRangeArray,
     } = args;
-
+    const { line, multiline, multilineFlag } = AhkTokenLine;
     if (multilineFlag !== null && multilineFlag.LTrim.length === 0) {
-        return wrap(args, document.lineAt(line).text); // WTF**********
+        return wrap(args, document.lineAt(line).text, AhkTokenLine); // WTF**********
     }
 
     // const WarnLineBodyWarn: string = textRaw.replace(/\r$/u, '').trimStart();
     const WarnLineBodyWarn: string = document.lineAt(line).text.trimStart();
     if (WarnLineBodyWarn === '') {
-        return wrap(args, WarnLineBodyWarn);
+        return wrap(args, WarnLineBodyWarn, AhkTokenLine);
     }
 
     const switchDeep = inSwitchBlock(lStrTrim, line, switchRangeArray);
@@ -94,7 +83,7 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
 
     const deepFix = Math.max(
         0,
-        deep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(multiline, multilineFlag),
+        oldDeep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(multiline, multilineFlag),
     );
 
     const TabSpaces = options.insertSpaces
@@ -106,5 +95,5 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse): vscode.TextEdit {
         : 1;
 
     const DeepStr = TabSpaces.repeat(deepFix * TabSize);
-    return wrap(args, `${DeepStr}${WarnLineBodyWarn}`);
+    return wrap(args, `${DeepStr}${WarnLineBodyWarn}`, AhkTokenLine);
 }

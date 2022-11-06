@@ -22,9 +22,9 @@ export function getDeepKeywords(textFix: string, oneCommandCode: number): number
     const tf = commandRegexps.some((reg: Readonly<RegExp>) => reg.test(textFixTwo));
     if (tf) return occ + 1;
 
-    return (ContinueLongLine(textFixTwo) !== 0)
-        ? occ
-        : 0;
+    if (ContinueLongLine(textFixTwo) !== 0) return occ;
+
+    return 0;
 }
 
 // FIXME fmt

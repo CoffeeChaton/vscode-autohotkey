@@ -29,40 +29,27 @@ export function FormatCore(
     const timeStart: number = Date.now();
 
     const { DocStrMap } = pm.updateDocDef(document);
-    let deep = 0;
+    let oldDeep = 0;
     let occ = 0;
 
     const switchRangeArray: vscode.Range[] = [];
     const newTextList: vscode.TextEdit[] = [];
 
     const DiffMap: TDiffMap = new Map();
-    for (
-        const {
-            detail,
-            line,
-            lStr,
-            multiline,
-            multilineFlag,
-            textRaw,
-        } of DocStrMap
-    ) {
+    for (const AhkTokenLine of DocStrMap) {
+        const { line, lStr } = AhkTokenLine;
         const lStrTrim = lStr.trim();
 
         if (line >= fmtStart && line <= fmtEnd) {
             newTextList.push(fn_Warn_thisLineText_WARN({
-                deep,
-                detail,
                 DiffMap,
                 document,
-                line,
-                multiline,
-                multilineFlag,
+                lStrTrim,
                 occ,
+                oldDeep,
                 options,
                 switchRangeArray,
-                lStrTrim,
-                textRaw,
-            }));
+            }, AhkTokenLine));
         } else if (line > fmtEnd) {
             break;
         }
@@ -70,7 +57,7 @@ export function FormatCore(
         const switchRange: vscode.Range | null = getSwitchRange(document, DocStrMap, lStrTrim, line);
         if (switchRange !== null) switchRangeArray.push(switchRange);
 
-        deep = DocStrMap[line].deep;
+        oldDeep = DocStrMap[line].deep;
 
         occ = (lStrTrim.endsWith('{') && !lStrTrim.startsWith('{'))
             ? occ
