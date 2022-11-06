@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { CAhkSwitch } from '../../AhkSymbol/CAhkSwitch';
 import type { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
-import { pm } from '../../core/ProjectManager';
+import type { TAhkFileData } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
 
 function searchAST(AST: Readonly<TAhkSymbolList>, position: vscode.Position): CAhkSwitch[] {
@@ -20,11 +20,11 @@ function searchAST(AST: Readonly<TAhkSymbolList>, position: vscode.Position): CA
 }
 
 export function getRefSwitch(
-    document: vscode.TextDocument,
+    AhkFileData: TAhkFileData,
     position: vscode.Position,
     wordUp: string,
 ): vscode.Location[] | null {
-    const { DocStrMap, AST } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const { DocStrMap, AST } = AhkFileData;
 
     const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
     const { fistWordUp } = AhkTokenLine;

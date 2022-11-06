@@ -1,4 +1,5 @@
 import type * as vscode from 'vscode';
+import type { TAhkFileData } from '../core/ProjectManager';
 import { pm } from '../core/ProjectManager';
 import { isPosAtStrNext } from '../tools/isPosAtStr';
 import { getClassDef } from './Def/getClassDef';
@@ -11,18 +12,19 @@ function ReferenceProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Location[] | null {
-    const { DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
-    const { textRaw, lStr } = DocStrMap[position.line];
+    const AhkFileData: TAhkFileData = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+
+    const { textRaw, lStr } = AhkFileData.DocStrMap[position.line];
     if (isPosAtStrNext(textRaw, lStr, position)) return null;
 
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/ui);
     if (range === undefined) return null;
     const wordUp: string = document.getText(range).toUpperCase();
 
-    const labelRef: vscode.Location[] | null = posAtLabelDef(document, position, wordUp);
+    const labelRef: vscode.Location[] | null = posAtLabelDef(AhkFileData, position, wordUp);
     if (labelRef !== null) return labelRef;
 
-    const swLoc: vscode.Location[] | null = getRefSwitch(document, position, wordUp);
+    const swLoc: vscode.Location[] | null = getRefSwitch(AhkFileData, position, wordUp);
     if (swLoc !== null) return swLoc;
 
     const listAllUsing = true;
@@ -32,7 +34,13 @@ function ReferenceProviderCore(
     const classDef: vscode.Location[] | null = getClassDef(wordUp, listAllUsing);
     if (classDef !== null) return classDef; // class name is variable name, should before function.variable name
 
-    const valInFunc: vscode.Location[] | null = getValDefInFunc(document, position, wordUp, listAllUsing);
+    const valInFunc: vscode.Location[] | null = getValDefInFunc(
+        AhkFileData,
+        document.uri,
+        position,
+        wordUp,
+        listAllUsing,
+    );
     if (valInFunc !== null) return valInFunc;
     return null;
 }

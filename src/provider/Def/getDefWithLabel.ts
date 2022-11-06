@@ -60,12 +60,11 @@ function getLabelRef(wordUp: string): vscode.Location[] {
 }
 
 export function posAtLabelDef(
-    document: vscode.TextDocument,
+    AhkFileData: TAhkFileData,
     position: vscode.Position,
     wordUp: string,
 ): vscode.Location[] | null {
-    const { DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
-    const { lStr } = DocStrMap[position.line];
+    const { lStr } = AhkFileData.DocStrMap[position.line];
 
     if ((/^\w+:$/u).test(lStr.trim())) {
         return getLabelRef(wordUp);
