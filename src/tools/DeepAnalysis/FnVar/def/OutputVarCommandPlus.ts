@@ -29,6 +29,8 @@ const OutputVarCommandMap: ReadonlyMap<string, number[]> = new Map([
     ['RUN', [4]], // Run, Target , WorkingDir, Options, OutputVarPID
     ['RUNWAIT', [4]], // RunWait, Target , WorkingDir, Options, OutputVarPID
     ['SPLITPATH', [2, 3, 4, 5, 6]], // SplitPath, InputVar , OutFileName, OutDir, OutExtension, OutNameNoExt, OutDrive
+    ['WINGETACTIVESTATS', [1, 2, 3, 4, 5]], // WinGetActiveStats, OutTitle, OutWidth, OutHeight, OutX, OutY
+    ['WINGETPOS', [1, 2, 3, 4]], // WinGetPos , OutX, OutY, OutWidth, OutHeight
 ]);
 
 /**
@@ -41,6 +43,8 @@ const OutputVarCommandMap: ReadonlyMap<string, number[]> = new Map([
  * - Run, Target , WorkingDir, Options, OutputVarPID
  * - RunWait, Target , WorkingDir, Options, OutputVarPID
  * - SplitPath, InputVar , OutFileName, OutDir, OutExtension, OutNameNoExt, OutDrive
+ * - WinGetActiveStats, OutTitle, OutWidth, OutHeight, OutX, OutY
+ * - WinGetPos , OutX, OutY, OutWidth, OutHeight, WinTitle, WinText, ExcludeTitle, ExcludeText
  */
 export function OutputVarCommandPlus(need: TGetFnDefNeed, keyWord: string, col: number): null {
     const needArr: number[] | undefined = OutputVarCommandMap.get(keyWord);
