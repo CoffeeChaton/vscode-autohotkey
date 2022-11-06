@@ -8,7 +8,6 @@ describe('check LineCommand ruler', () => {
 
         let errState = 0;
         let a = 0;
-        let b = 0;
         for (const [k, v] of Object.entries(LineCommand)) {
             const {
                 keyRawName,
@@ -18,14 +17,11 @@ describe('check LineCommand ruler', () => {
                 recommended,
             } = v;
             a++;
-            if (exp !== undefined) {
-                b++;
-            }
             const v1 = k.toUpperCase() !== k;
             const v2 = keyRawName.toUpperCase() !== k;
             const v3 = !body.toUpperCase().includes(keyRawName.toUpperCase());
-            const v4 = (exp !== undefined) && !exp.join('\n').includes(keyRawName);
-            const v5 = diag !== undefined && recommended !== undefined && recommended;
+            const v4 = !exp.join('\n').includes(keyRawName);
+            const v5 = diag !== undefined && recommended;
             if (v1 || v2 || v3 || v4 || v5) {
                 errState++;
                 console.error(
@@ -43,7 +39,7 @@ describe('check LineCommand ruler', () => {
                 break;
             }
         }
-        console.log('🚀 ~ file: Command.test.ts ~ line 48 ~ it ~ errState', { b, a, '%': b / a });
+        console.log('🚀 ~ file: Command.test.ts ~ line 48 ~ it ~ errState', a);
 
         expect(errState === 0).toBeTruthy();
     });

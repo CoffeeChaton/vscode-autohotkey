@@ -231,10 +231,9 @@ export type TCommandElement = {
     keyRawName: string;
     body: string;
     doc: string;
-    // TODO : remove "?"
-    recommended?: boolean;
-    link?: `https://www.autohotkey.com/docs/${string}`;
-    exp?: readonly string[];
+    recommended: boolean;
+    link: `https://www.autohotkey.com/docs/${string}`;
+    exp: readonly string[];
     diag?: EDiagCode;
 };
 
@@ -3207,10 +3206,9 @@ export const LineCommand: TLineCommand = {
         ],
     },
     WINACTIVATE: {
-        // FIXME: add more doc
         keyRawName: 'WinActivate',
         body: 'WinActivate [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
-        doc: 'Activates the specified window.',
+        doc: 'Activates the specified window..',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/WinActivate.htm',
         exp: [
@@ -3219,131 +3217,329 @@ export const LineCommand: TLineCommand = {
     },
     WINACTIVATEBOTTOM: {
         keyRawName: 'WinActivateBottom',
-        body: 'WinActivateBottom, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
-        doc: 'Same as WinActivate except that it activates the bottommost matching window rather than the topmost.',
+        body: 'WinActivateBottom, [ ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText} ]',
+        doc: 'Same as [WinActivate](https://www.autohotkey.com/docs/commands/WinActivate.htm) except that it activates the bottommost matching window rather than the topmost.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinActivateBottom.htm',
+        exp: [
+            'WinActivateBottom [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINCLOSE: {
         keyRawName: 'WinClose',
-        body: 'WinClose, ${1:[ WinTitle}, ${2:WinText}, ${3:SecondsToWait}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        body: 'WinClose,[ ${1:WinTitle}, ${2:WinText}, ${3:SecondsToWait}, ${4:ExcludeTitle}, ${5:ExcludeText} ]',
         doc: 'Closes the specified window.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinClose.htm',
+        exp: [
+            'WinClose [, WinTitle, WinText, SecondsToWait, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINGET: {
         keyRawName: 'WinGet',
-        body: 'WinGet, ${1:OutputVar [}, ${2:Cmd}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
-        doc: 'Retrieves the specified window\'s unique ID, process ID, process name, or a list of its controls. It can also retrieve a list of all windows matching the specified criteria.',
+        body:
+            'WinGet, [ ${1:OutputVar}, ${2|ID,IDLast,PID,ProcessName,ProcessPath,Count,List,MinMax,ControlList,ControlListHwnd,Transparent,TransColor,Style,ExStyle|}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText} ]',
+        doc: [
+            'Retrieves the specified window\'s unique ID, process ID, process name, or a list of its controls. It can also retrieve a list of all windows matching the specified criteria.',
+            '- [ID](https://www.autohotkey.com/docs/commands/WinGet.htm#ID): Retrieves the unique ID number of a window.',
+            '- [IDLast](https://www.autohotkey.com/docs/commands/WinGet.htm#IDLast): Retrieves the unique ID number of the last/bottommost window if there is more than one match.',
+            '- [PID](https://www.autohotkey.com/docs/commands/WinGet.htm#PID): Retrieves the Process ID number of a window.',
+            '- [ProcessName](https://www.autohotkey.com/docs/commands/WinGet.htm#ProcessName): Retrieves the name of the process that owns a window.',
+            '- [ProcessPath](https://www.autohotkey.com/docs/commands/WinGet.htm#ProcessPath) [[v1.1.01+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.01.00 "Applies to AutoHotkey v1.1.01 and later"): Retrieves the full path and name of the process that owns a window.',
+            '- [Count](https://www.autohotkey.com/docs/commands/WinGet.htm#Count): Retrieves the number of existing windows that match the title/text parameters.',
+            '- [List](https://www.autohotkey.com/docs/commands/WinGet.htm#List): Retrieves the unique ID numbers of all existing windows that match the title/text parameters.',
+            '- [MinMax](https://www.autohotkey.com/docs/commands/WinGet.htm#MinMax): Retrieves the minimized/maximized state for a window.',
+            '- [ControlList](https://www.autohotkey.com/docs/commands/WinGet.htm#ControlList): Retrieves the control name for each control in a window.',
+            '- [ControlListHwnd](https://www.autohotkey.com/docs/commands/WinGet.htm#ControlListHwnd) [[v1.0.43.06+]](https://www.autohotkey.com/docs/ChangeLogHelp.htm#Older_Changes "Applies to AutoHotkey v1.0.43.06 and later"): Retrieves the unique ID number for each control in a window.',
+            '- [Transparent](https://www.autohotkey.com/docs/commands/WinGet.htm#Transparent): Retrieves the degree of transparency of a window.',
+            '- [TransColor](https://www.autohotkey.com/docs/commands/WinGet.htm#TransColor): Retrieves the color that is marked transparent in a window.',
+            '- [Style](https://www.autohotkey.com/docs/commands/WinGet.htm#Style): Retrieves an 8-digit hexadecimal number representing the style of a window.',
+            '- [ExStyle](https://www.autohotkey.com/docs/commands/WinGet.htm#ExStyle): Retrieves an 8-digit hexadecimal number representing the extended style of a window.',
+        ].join('\n'),
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinGet.htm',
+        exp: [
+            'WinGet, OutputVar , SubCommand, WinTitle, WinText, ExcludeTitle, ExcludeText',
+        ],
     },
     WINGETACTIVESTATS: {
         keyRawName: 'WinGetActiveStats',
-        body: 'WinGetActiveStats, ${1:Title}, ${2:Width}, ${3:Height}, ${4:X}, ${5:Y}',
-        doc: 'Combines the functions of WinGetActiveTitle and WinGetPos into one command.',
+        body: 'WinGetActiveStats, ${1:OutTitle}, ${2:OutWidth}, ${3:OutHeight}, ${4:OutX}, ${5:OutY}',
+        doc: 'Combines the functions of [WinGetActiveTitle](https://www.autohotkey.com/docs/commands/WinGetActiveTitle.htm) and [WinGetPos](https://www.autohotkey.com/docs/commands/WinGetPos.htm) into one command.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinGetActiveStats.htm',
+        exp: [
+            'WinGetActiveStats, OutTitle, OutWidth, OutHeight, OutX, OutY',
+            '',
+            ';exp',
+            'WinGetActiveStats, OutTitle, OutWidth, OutHeight, OutX, OutY',
+            'ListVars',
+            'MsgBox, ',
+            '    ( LTrim',
+            '        OutTitle is %OutTitle%',
+            '        OutWidth is %OutWidth%',
+            '        OutHeight is %OutHeight%',
+            '        OutX is %OutX%',
+            '        OutY is %OutY%',
+            '    )',
+        ],
     },
     WINGETACTIVETITLE: {
         keyRawName: 'WinGetActiveTitle',
         body: 'WinGetActiveTitle, ${1:OutputVar}',
         doc: 'Retrieves the title of the active window.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinGetActiveTitle.htm',
+        exp: [
+            'WinGetActiveTitle, Title',
+            'MsgBox, % "The active window is `n" Title',
+        ],
     },
     WINGETCLASS: {
         keyRawName: 'WinGetClass',
-        body: 'WinGetClass, ${1:OutputVar [}, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        body: 'WinGetClass, ${1:OutputVar} [, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Retrieves the specified window\'s class name.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinGetClass.htm',
+        exp: [
+            'WinGetClass, OutputVar [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINGETPOS: {
         keyRawName: 'WinGetPos',
         body:
-            'WinGetPos, ${1:[X}, ${2:Y}, ${3:Width}, ${4:Height}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText]}',
+            'WinGetPos, [ ${1:OutX}, ${2:OutY}, ${3:OutWidth}, ${4:OutHeight}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText} ]',
         doc: 'Retrieves the position and size of the specified window.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinGetPos.htm',
+        exp: [
+            'WinGetPos , X, Y, Width, Height, WinTitle, WinText, ExcludeTitle, ExcludeText',
+            'WinGetPos , OutX, OutY, OutWidth, OutHeight, WinTitle, WinText, ExcludeTitle, ExcludeText',
+        ],
     },
     WINGETTEXT: {
         keyRawName: 'WinGetText',
-        body: 'WinGetText, ${1:OutputVar [}, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        body: 'WinGetText, ${1:OutputVar} [, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Retrieves the text from the specified window.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinGetText.htm',
+        exp: [
+            'WinGetText , OutputVar [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINGETTITLE: {
         keyRawName: 'WinGetTitle',
-        body: 'WinGetTitle, ${1:OutputVar [}, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        body: 'WinGetTitle, ${1:OutputVar} [, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Retrieves the title of the specified window.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinGetTitle.htm',
+        exp: [
+            'WinGetTitle, OutputVar [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINHIDE: {
         keyRawName: 'WinHide',
-        body: 'WinHide,${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
+        body: 'WinHide, [${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Hides the specified window.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinHide.htm',
+        exp: [
+            'WinHide [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINKILL: {
         keyRawName: 'WinKill',
-        body: 'WinKill,${1:[ WinTitle}, ${2:WinText}, ${3:SecondsToWait}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        body: 'WinKill, [ ${1:WinTitle}, ${2:WinText}, ${3:SecondsToWait}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Forces the specified window to close.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinKill.htm',
+        exp: [
+            'WinKill [, WinTitle, WinText, SecondsToWait, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINMAXIMIZE: {
         keyRawName: 'WinMaximize',
         body: 'WinMaximize, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
         doc: 'Enlarges the specified window to its maximum size.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinMaximize.htm',
+        exp: [
+            'WinMaximize [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINMENUSELECTITEM: {
         keyRawName: 'WinMenuSelectItem',
         body:
-            'WinMenuSelectItem, ${1:WinTitle}, ${2:WinText}, ${3:Menu [}, ${4:SubMenu1}, ${5:SubMenu2}, ${6:SubMenu3}, ${7:SubMenu4}, ${8:SubMenu5}, ${9:SubMenu6}, ${10:ExcludeTitle}',
+            'WinMenuSelectItem, ${1:WinTitle}, ${2:WinText}, ${3:Menu} [, ${4:SubMenu1}, ${5:SubMenu2}, ${6:SubMenu3}, ${7:SubMenu4}, ${8:SubMenu5}, ${9:SubMenu6}, ${10:ExcludeTitle} ]',
         doc: 'Invokes a menu item from the menu bar of the specified window.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinMenuSelectItem.htm',
+        exp: [
+            'WinMenuSelectItem, WinTitle, WinText, Menu [, SubMenu1, SubMenu2, SubMenu3, SubMenu4, SubMenu5, SubMenu6, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINMINIMIZE: {
         keyRawName: 'WinMinimize',
-        body: 'WinMinimize, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
+        body: 'WinMinimize [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Collapses the specified window into a button on the task bar.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinMinimize.htm',
+        exp: [
+            'WinMinimize [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINMINIMIZEALL: {
         keyRawName: 'WinMinimizeAll',
         body: 'WinMinimizeAll',
         doc: 'Minimizes all windows.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinMinimizeAll.htm',
+        exp: [
+            'WinMinimizeAll',
+            'WinMinimizeAllUndo',
+            '',
+            ';Minimizes all windows for 1 second and unminimizes them.',
+            'WinMinimizeAll ; win + d',
+            'Sleep, 1000',
+            'WinMinimizeAllUndo ; re win + d',
+        ],
     },
     WINMINIMIZEALLUNDO: {
         keyRawName: 'WinMinimizeAllUndo',
         body: 'WinMinimizeAllUndo',
         doc: 'Unminimizes all windows.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinMinimizeAll.htm',
+        exp: [
+            'WinMinimizeAll',
+            'WinMinimizeAllUndo',
+            '',
+            ';Minimizes all windows for 1 second and unminimizes them.',
+            'WinMinimizeAll ; win + d',
+            'Sleep, 1000',
+            'WinMinimizeAllUndo ; re win + d',
+        ],
     },
     WINMOVE: {
         keyRawName: 'WinMove',
         body:
-            'WinMove, ${1:WinTitle}, ${2:WinText}, ${3:X}, ${4:Y}, ${5:[Width}, ${6:Height}, ${7:ExcludeTitle}, ${8:ExcludeText]}',
+            'WinMove, ${1:WinTitle}, ${2:WinText}, ${3:X}, ${4:Y}, [${5:Width}, ${6:Height}, ${7:ExcludeTitle}, ${8:ExcludeText}]',
         doc: 'Changes the position and/or size of the specified window.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinMove.htm',
+        exp: [
+            'WinMove, X, Y',
+            'WinMove, WinTitle, WinText, X, Y [, Width, Height, ExcludeTitle, ExcludeText]',
+            '',
+            ';Opens the calculator, waits until it exists and moves it to the upper-left corner of the screen.',
+            'Run, calc.exe',
+            'WinWait, Calculator',
+            'WinMove, 0, 0 ; Use the window found by WinWait.',
+        ],
     },
     WINRESTORE: {
         keyRawName: 'WinRestore',
-        body: 'WinRestore, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
+        body: 'WinRestore, [${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Unminimizes or unmaximizes the specified window if it is minimized or maximized.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinRestore.htm',
+        exp: [
+            'WinRestore [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+            '',
+            ';Unminimizes or unmaximizes Notepad if it is minimized or maximized.',
+            'WinRestore, Untitled - Notepad',
+        ],
     },
     WINSET: {
         keyRawName: 'WinSet',
         body:
-            'WinSet, ${1:AlwaysOnTop|Trans}, ${2:On|Off|Toggle|Value(0-255) [}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
-        doc: 'Makes a variety of changes to the specified window, such as "always on top" and transparency.',
+            'WinSet, ${1|AlwaysOnTop,Bottom,Top,Disable,Enable,Redraw,Style,ExStyle,Region,Transparent,TransColor|} [, ${2:Value}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
+        doc: [
+            'Makes a variety of changes to the specified window, such as "always on top" and transparency.',
+            '- [AlwaysOnTop](https://www.autohotkey.com/docs/commands/WinSet.htm#AlwaysOnTop): Makes a window stay on top of all other windows.',
+            '- [Bottom](https://www.autohotkey.com/docs/commands/WinSet.htm#Bottom): Sends a window to the bottom of stack; that is, beneath all other windows.',
+            '- [Top](https://www.autohotkey.com/docs/commands/WinSet.htm#Top): Brings a window to the top of the stack without explicitly activating it.',
+            '- [Disable](https://www.autohotkey.com/docs/commands/WinSet.htm#Disable): Disables a window.',
+            '- [Enable](https://www.autohotkey.com/docs/commands/WinSet.htm#Enable): Enables a window.',
+            '- [Redraw](https://www.autohotkey.com/docs/commands/WinSet.htm#Redraw): Redraws a window.',
+            '- [Style](https://www.autohotkey.com/docs/commands/WinSet.htm#Style): Changes the style of a window.',
+            '- [ExStyle](https://www.autohotkey.com/docs/commands/WinSet.htm#ExStyle): Changes the extended style of a window.',
+            '- [Region](https://www.autohotkey.com/docs/commands/WinSet.htm#Region): Changes the shape of a window to be the specified rectangle, ellipse, or polygon.',
+            '- [Transparent](https://www.autohotkey.com/docs/commands/WinSet.htm#Transparent): Makes a window semi-transparent.',
+            '- [TransColor](https://www.autohotkey.com/docs/commands/WinSet.htm#TransColor): Makes all pixels of the chosen color invisible inside the target window.',
+        ].join('\n'),
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinSet.htm',
+        exp: [
+            'WinSet, SubCommand, Value [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINSETTITLE: {
         keyRawName: 'WinSetTitle',
-        body: 'WinSetTitle, ${1:WinTitle}, ${2:WinText}, ${3:NewTitle [}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        body: 'WinSetTitle, ${1:WinTitle}, ${2:WinText}, ${3:NewTitle} [, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Changes the title of the specified window.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinSetTitle.htm',
+        exp: [
+            'WinSetTitle, NewTitle',
+            'WinSetTitle, WinTitle, WinText, NewTitle [, ExcludeTitle, ExcludeText]',
+            '',
+            ';',
+            'Run, notepad.exe',
+            'WinWaitActive, ahk_exe notepad.exe',
+            'WinSetTitle, % "This is a new title"',
+        ],
     },
     WINSHOW: {
         keyRawName: 'WinShow',
-        body: 'WinShow, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
+        body: 'WinShow [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Unhides the specified window.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinShow.htm',
+        exp: [
+            'WinShow [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINWAIT: {
         keyRawName: 'WinWait',
-        body: 'WinWait, ${1:WinTitle}, ${2:WinText}, ${3:Seconds [}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        body: 'WinWait [, ${1:WinTitle}, ${2:WinText}, ${3:Seconds}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Waits until the specified window exists.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinWait.htm',
+        exp: [
+            'WinWait [, WinTitle, WinText, Timeout, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINWAITACTIVE: {
         keyRawName: 'WinWaitActive',
-        body: 'WinWaitActive, ${1:[ WinTitle}, ${2:WinText}, ${3:Seconds}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        body: 'WinWaitActive [, ${1:WinTitle}, ${2:WinText}, ${3:Seconds}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Waits until the specified window is active.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinWaitActive.htm',
+        exp: [
+            'WinWaitActive [, WinTitle, WinText, Timeout, ExcludeTitle, ExcludeText]',
+            'WinWaitNotActive [, WinTitle, WinText, Timeout, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINWAITCLOSE: {
         keyRawName: 'WinWaitClose',
-        body: 'WinWaitClose, ${1:WinTitle}, ${2:WinText}, ${3:Seconds [}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        body: 'WinWaitClose [, ${1:WinTitle}, ${2:WinText}, ${3:Seconds}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Waits until the specified window does not exist.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinWaitClose.htm',
+        exp: [
+            'WinWaitClose [, WinTitle, WinText, Timeout, ExcludeTitle, ExcludeText]',
+        ],
     },
     WINWAITNOTACTIVE: {
         keyRawName: 'WinWaitNotActive',
-        body: 'WinWaitNotActive, ${1:[ WinTitle}, ${2:WinText}, ${3:Seconds}, ${4:ExcludeTitle}, ${5:ExcludeText]}',
+        body: 'WinWaitNotActive [, ${1:WinTitle}, ${2:WinText}, ${3:Seconds}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Waits until the specified window is not active.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/WinWaitActive.htm',
+        exp: [
+            'WinWaitActive [, WinTitle, WinText, Timeout, ExcludeTitle, ExcludeText]',
+            'WinWaitNotActive [, WinTitle, WinText, Timeout, ExcludeTitle, ExcludeText]',
+        ],
     },
 };
