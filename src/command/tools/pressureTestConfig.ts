@@ -2,22 +2,18 @@ import * as vscode from 'vscode';
 
 export type TPickReturn = {
     label: string;
-    delay: number;
-    maxTime: number;
+    cycles: number;
 };
 
 export function pressureTestConfig(): Thenable<TPickReturn | undefined> {
     const items: TPickReturn[] = [
         {
-            label: '8 sec (base + DA)',
-            delay: 400, // 173~250
-            maxTime: 20, // 8 * 1000 / 400
-            //              sec   ms    delay
+            label: '20 cycles',
+            cycles: 20,
         },
         {
-            label: '32 sec (base + DA)',
-            delay: 400,
-            maxTime: 80,
+            label: '80 cycles',
+            cycles: 80,
         },
     ];
 

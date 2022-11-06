@@ -13,7 +13,7 @@ function getReturnText(lStr: string, textRaw: string, col: number): string {
 
     if (name === '') return '';
 
-    const comment = textRaw.length > lStr.length
+    const comment: string = textRaw.length > lStr.length
         ? textRaw.slice(lStr.length)
         : '';
 
@@ -58,22 +58,27 @@ export function getFuncDocCore(
             lStr,
             fistWordUp,
             fistWordUpCol,
+            SecondWordUp,
+            SecondWordUpCol,
         } = AhkTokenLine;
+
         if (detail.includes(EDetail.inComment) || flag === EDocBlock.inDocCommentBlockEnd) {
             const textRawTrim: string = textRaw.trimStart(); // **** MD ****** sensitive of \s && \n
             flag = docCommentBlock(textRawTrim, flag);
-            if (flag === EDocBlock.inDocCommentBlockMid) {
-                if (textRawTrim.startsWith('*') || textRawTrim.startsWith(';')) {
-                    // allow '*' and ';'
-                    const lineDoc: string = textRawTrim.slice(1); // **** MD ****** sensitive of \s && \n
-                    fnDocList.push(lineDoc);
-                }
-                continue;
+            if (
+                flag === EDocBlock.inDocCommentBlockMid
+                && (textRawTrim.startsWith('*') || textRawTrim.startsWith(';'))
+            ) {
+                // allow '*' and ';'
+                fnDocList.push(textRawTrim.slice(1)); // **** MD ****** sensitive of \s && \n
             }
+            continue;
         }
 
         if (fistWordUp === 'RETURN') {
             returnList.push(getReturnText(lStr, textRaw, fistWordUpCol));
+        } else if (SecondWordUp === 'RETURN') {
+            returnList.push(getReturnText(lStr, textRaw, SecondWordUpCol));
             // eslint-disable-next-line no-magic-numbers
         } else if (lStr.length > 8) { // "Return A".len
             const col: number = lStr.search(/\bReturn\b/ui);

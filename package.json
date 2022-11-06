@@ -5,7 +5,7 @@
     "version": "0.0.14",
     "publisher": "cat1122",
     "engines": {
-        "vscode": "^1.72.0"
+        "vscode": "^1.73.0"
     },
     "repository": "https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp",
     "activationEvents": [
@@ -209,21 +209,20 @@
         "test": "jest",
         "pnpm clean cache": "pnpm store prune",
         "up": "dprint upgrade && dprint config update && pnpm up -L",
-        "package": "pnpm vsce package --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp --baseImagesUrl https://raw.githubusercontent.com/CoffeeChaton/vscode-autohotkey-NekoHelp/master/",
-        "package-pre": "pnpm vsce package --pre-release --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp --baseImagesUrl https://raw.githubusercontent.com/CoffeeChaton/vscode-autohotkey-NekoHelp/master/"
+        "package": "pnpm vsce package --no-dependencies --baseContentUrl https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp --baseImagesUrl https://raw.githubusercontent.com/CoffeeChaton/vscode-autohotkey-NekoHelp/master/"
     },
     "devDependencies": {
-        "@swc/core": "^1.3.11",
+        "@swc/core": "^1.3.14",
         "@swc/jest": "^0.2.23",
         "@types/assert": "^1.5.6",
-        "@types/jest": "^29.2.1",
+        "@types/jest": "^29.2.2",
         "@types/node": "^18.11.9",
-        "@types/vscode": "^1.72.0",
+        "@types/vscode": "^1.73.0",
         "@typescript-eslint/eslint-plugin": "^5.42.0",
         "@typescript-eslint/parser": "^5.42.0",
         "@vscode/test-electron": "^2.2.0",
         "dprint": "^0.32.2",
-        "esbuild": "^0.15.12",
+        "esbuild": "^0.15.13",
         "eslint": "^8.26.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-airbnb-typescript": "^17.0.0",
@@ -232,7 +231,7 @@
         "eslint-plugin-fp": "^2.3.0",
         "eslint-plugin-immutable": "^1.0.0",
         "eslint-plugin-import": "^2.26.0",
-        "eslint-plugin-jest": "^27.1.3",
+        "eslint-plugin-jest": "^27.1.4",
         "eslint-plugin-jest-formatting": "^3.1.0",
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-promise": "^6.1.1",

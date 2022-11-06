@@ -18,7 +18,7 @@ export function walrusOperator({
     if (lStrTrimLen < 4) return; // A:= ----> len 3
     if (!lStr.includes(':=')) return; // TODO did i need to support .= += -= /= ?
 
-    for (const v of lStr.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gu)) {
+    for (const v of lStr.matchAll(/(?<![.%])\b(\w+)\b\s*:=/gu)) {
         const character: number | undefined = v.index;
         if (character === undefined) continue;
 

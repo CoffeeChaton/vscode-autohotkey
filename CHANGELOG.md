@@ -3,9 +3,11 @@
 ## NEXT 0.0.14(2022-11-15)
 
 - TODO add : doc of Command `>90%`
+- TODO: add : goto def of `Return` -> `label:` or `func()`
 - TODO: add `this.fn()` goto def, just def,don't support of ref ...
-- fix: Multi-line isExpress
+- add: progress of dev tools
 - add: support Multi-line `%` flag
+- fix: Multi-line isExpress
 
 ## 0.0.13(2022-11-02)
 
