@@ -28,6 +28,8 @@ function devTestDA(cycles: number): void {
         })
         .catch((error: Error): void => {
             console.error('🚀 ~ devTestDA ~ error.message', error);
+            OutputChannel.appendLine(error.message);
+            OutputChannel.show();
         });
 }
 

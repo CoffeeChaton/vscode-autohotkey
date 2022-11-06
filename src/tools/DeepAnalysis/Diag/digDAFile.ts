@@ -70,7 +70,7 @@ function diagDAFileCore(
         c505ErrParamParsedError(paramMap, code505List);
         C506DiagNumberStyle(textMap, code506List);
         // if (paramMap.size > 12) {
-        //     console.log('🚀 ~ diagDAFileCore ~  DA.name', DA.selectionRangeText);
+        // TODO auto Diag ?
         // }
         // https://stackoverflow.com/questions/12684985/why-doesnt-autohotkey-support-default-parameters-in-the-middle-of-the-parameter
     }

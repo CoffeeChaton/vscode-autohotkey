@@ -5,50 +5,16 @@ import type { TAhkTokenLine } from '../../globalEnum';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
 import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
-import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
+import { OutputChannel } from '../vscWindows/OutputChannel';
 import { getClassDef } from './getClassDef';
 import { getDefSwitch } from './getDefSwitch';
 import { getDefWithLabel } from './getDefWithLabel';
+import type { TFnFindCol } from './getFuncReference';
+import { getFuncReference } from './getFuncReference';
 import { getValDefInFunc } from './getValDefInFunc';
 import { isPosAtMethodName } from './isPosAtMethodName';
-
-type TFnFindCol = (AhkTokenLine: TAhkTokenLine, partTextRaw: string) => number[];
-
-function getReference(refFn: TFnFindCol, timeStart: number, wordUp: string): vscode.Location[] {
-    const List: vscode.Location[] = [];
-    for (const { DocStrMap, AST, uri } of pm.getDocMapValue()) {
-        const filterLineList: number[] = getDAListTop(AST)
-            .filter((DA: CAhkFunc): boolean => DA.kind === vscode.SymbolKind.Method)
-            .map((DA: CAhkFunc): number => DA.nameRange.start.line);
-
-        for (const AhkTokenLine of DocStrMap) {
-            const {
-                textRaw,
-                line,
-                lStr,
-            } = AhkTokenLine;
-
-            if (/* lStr.trim().length === 0 || */ filterLineList.includes(line)) continue;
-
-            for (const col of refFn(AhkTokenLine, textRaw.slice(0, lStr.length))) {
-                if (col === -1) continue;
-
-                const Location: vscode.Location = new vscode.Location(
-                    uri,
-                    new vscode.Range(
-                        new vscode.Position(line, col),
-                        new vscode.Position(line, col + wordUp.length),
-                    ),
-                );
-                List.push(Location);
-            }
-        }
-    }
-    console.log(`🚀 list all using of "${wordUp}"`, Date.now() - timeStart, 'ms'); // ssd -> 9~11ms (if not gc)
-    return List;
-}
 
 function searchHotkeyFuncRef(AhkTokenLine: TAhkTokenLine, wordUp: string): number {
     const HotkeyData: TScanData | null = getHotkeyWrap(AhkTokenLine);
@@ -128,7 +94,7 @@ export function userDefFunc(
     // c := c();
     // No   Yes check pos at like func()
 
-    if (listAllUsing) return getReference(refFn, timeStart, wordUp);
+    if (listAllUsing) return getFuncReference(refFn, timeStart, funcSymbol.name);
 
     if (
         (funcSymbol.uri.fsPath === document.uri.fsPath
@@ -140,7 +106,7 @@ export function userDefFunc(
         return [new vscode.Location(document.uri, funcSymbol.nameRange)]; // let auto use getReference
     }
 
-    console.log(`🚀 goto def of "${wordUp}"`, Date.now() - timeStart, 'ms'); // ssd -> 0~1ms
+    OutputChannel.appendLine(`goto def of ${funcSymbol.name}() , use ${Date.now() - timeStart} ms`); // ssd -> 0~1ms
     return [new vscode.Location(funcSymbol.uri, funcSymbol.selectionRange)];
 }
 

@@ -7,6 +7,8 @@
 - TODO: add `this.fn()` goto def, just def,don't support of ref ...
 - add: progress of dev tools
 - add: support Multi-line `%` flag
+- add: cache to find all ref of function
+- add: `function()` gotoDef/findAllRef use OutputChannel replace console.log
 - fix: Multi-line isExpress
 
 ## 0.0.13(2022-11-02)

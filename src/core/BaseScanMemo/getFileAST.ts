@@ -85,6 +85,7 @@ export const BaseScanMemo = {
 } as const;
 
 export function getFileAST(document: vscode.TextDocument): TMemo {
+    // const t1 = Date.now();
     const fullText: string = document.getText();
     const fullTextList: string[] = fullText.split(/\r?\n/u);
     if (fullTextList.at(-1)?.trim() !== '') fullTextList.push('');
@@ -118,17 +119,20 @@ export function getFileAST(document: vscode.TextDocument): TMemo {
     };
     BaseScanMemo.setMemo(fsPath, AhkCache);
 
-    // console.log('🚀 ~ getFileAST', { ms: t2 - t1, fsPath });
+    // const ms = Date.now() - t1;
+    // if (ms > 30) {
+    //     console.log('🚀 ~ getFileAST', { ms, fsPath });
+    // }
 
     // {
-    //     13k line
-    //     "ms": 594,
+    //     13k line, 13921 line
+    //     "ms": 360 ~ 370, (20 cycles)
     //     "fsPath": ... "AHK-Studio-master\\AHK-Studio.ahk"
     // }
 
     // {
-    //     8K line
-    //     "ms": 189,
+    //     8K line ,8979 line
+    //     "ms": 46~48, (20 cycles)
     //     "fsPath": ... "Lib\\Gdip_all_2020_08_24.ahk"
     // }
 

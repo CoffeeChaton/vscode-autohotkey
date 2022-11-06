@@ -35,9 +35,6 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
         line++;
         const textTrimStart: string = textRaw.trimStart();
         if (deep < 0) {
-            // console.warn('Pretreatment -> line , deep < 0, fsPath', fileName);
-            // console.warn('Pretreatment -> line , deep < 0, line', line);
-            // console.warn('Pretreatment -> line , deep < 0, textTrimStart', textTrimStart);
             deep = 0;
         }
         const temp = getIgnore({
