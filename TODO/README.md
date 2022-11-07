@@ -17,9 +17,6 @@
 - Scanner: -> Token
 - test of <https://www.autohotkey.com/docs/scripts/index.htm>
 
-// Declare built-in var read function.
-// #define BIV_DECL_R(name) VarSizeType name(LPTSTR aBuf, LPTSTR aVarName)
-
 // TODO fn()
 // ComObjParameter
 // IsByRef()
@@ -69,5 +66,6 @@
 // ObjSetCapacity()
 // These functions are equivalent to built-in methods of the Object type. It is usually recommended to use the corresponding method instead.
 
-// ${3|Seconds,Minutes,Hours,Days|}
-// Var *Script::FindOrAddVar(LPTSTR aVarName, size_t aVarNameLength, int aScope)
+```js
+${3|Seconds,Minutes,Hours,Days|}
+```

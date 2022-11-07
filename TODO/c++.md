@@ -75,3 +75,12 @@ PreparseError(_T("Expected Case/Default"));
 
  case ACT_ASSIGNEXPR:
 ```
+
+```c++
+Var *Script::FindOrAddVar(LPTSTR aVarName, size_t aVarNameLength, int aScope)
+```
+
+```c++
+// Declare built-in var read function.
+ #define BIV_DECL_R(name) VarSizeType name(LPTSTR aBuf, LPTSTR aVarName)
+```

@@ -58,7 +58,7 @@ function getCommandErrCore(params: TAhkTokenLine, keyWordUp: string, col: number
         return new CDiagBase({
             value: diag,
             range: new vscode.Range(line, colL, line, colL + keyWordUp.length),
-            severity: vscode.DiagnosticSeverity.Warning,
+            severity: vscode.DiagnosticSeverity.Warning, // FIXME: if 700->
             tags: [vscode.DiagnosticTag.Deprecated],
         });
     }

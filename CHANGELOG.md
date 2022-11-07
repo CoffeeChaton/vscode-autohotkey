@@ -1,6 +1,20 @@
 # Changelog
 
-## NEXT 0.0.14(2022-11-15)
+## NEXT 0.0.15(2022-11-21)
+
+- TODO: auto-fix of
+
+```ahk
+a = %i%
+a = 0
+a =
+a = -5
+a = 0x25
+```
+
+- TODO: config of ...
+
+## 0.0.14(2022-11-7)
 
 - add: list all func push Analyze, like : `file: 29 ,func: 665`
 - add: `function()` gotoDef/findAllRef use OutputChannel replace console.log
