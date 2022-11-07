@@ -1,13 +1,12 @@
 import * as vscode from 'vscode';
-import type { EDiagCode } from '../../diag';
 import { Diags } from '../../diag';
-import type { TCommandElement } from './Command';
+import type { TAllowDiagCode, TCommandElement } from './Command';
 import { LineCommand } from './Command';
 import { CSnippetCommand } from './CSnippetCommand';
 
 type TCommandMDMap = ReadonlyMap<string, vscode.MarkdownString>;
 export type TSnippetCommand = readonly CSnippetCommand[];
-type TCommandErrMap = ReadonlyMap<string, EDiagCode>;
+type TCommandErrMap = ReadonlyMap<string, TAllowDiagCode>;
 
 export const [snippetCommand, CommandMDMap, CommandErrMap] = ((): [TSnippetCommand, TCommandMDMap, TCommandErrMap] => {
     const commandElement2Md = (Element: TCommandElement): vscode.MarkdownString => {
@@ -39,7 +38,7 @@ export const [snippetCommand, CommandMDMap, CommandErrMap] = ((): [TSnippetComma
 
     const map1 = new Map<string, vscode.MarkdownString>();
     const tempList: CSnippetCommand[] = [];
-    const tempSet = new Map<string, EDiagCode>();
+    const tempDiagMap = new Map<string, TAllowDiagCode>();
 
     for (const [k, v] of Object.entries(LineCommand)) {
         const md: vscode.MarkdownString = commandElement2Md(v);
@@ -48,10 +47,10 @@ export const [snippetCommand, CommandMDMap, CommandErrMap] = ((): [TSnippetComma
         tempList.push(new CSnippetCommand(k, v, md));
         const { diag } = v;
         if (diag !== undefined) {
-            tempSet.set(k, diag);
+            tempDiagMap.set(k, diag);
         }
     }
-    return [tempList, map1, tempSet];
+    return [tempList, map1, tempDiagMap];
 })();
 
 export function getHoverCommand2(wordUp: string): vscode.MarkdownString | undefined {

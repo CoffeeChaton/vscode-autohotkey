@@ -227,6 +227,18 @@ type TCommandKeyList =
     | 'WINWAITCLOSE'
     | 'WINWAITNOTACTIVE';
 
+export type TAllowDiagCode =
+    | EDiagCode.code700
+    | EDiagCode.code803
+    | EDiagCode.code804
+    | EDiagCode.code806
+    | EDiagCode.code812
+    | EDiagCode.code813
+    | EDiagCode.code814
+    | EDiagCode.code815
+    | EDiagCode.code816
+    | EDiagCode.code824;
+
 export type TCommandElement = {
     keyRawName: string;
     body: string;
@@ -234,7 +246,7 @@ export type TCommandElement = {
     recommended: boolean;
     link: `https://www.autohotkey.com/docs/${string}`;
     exp: readonly string[];
-    diag?: EDiagCode;
+    diag?: TAllowDiagCode;
 };
 
 type TLineCommand = {

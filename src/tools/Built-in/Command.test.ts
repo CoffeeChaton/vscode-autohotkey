@@ -39,7 +39,7 @@ describe('check LineCommand ruler', () => {
                 break;
             }
         }
-        console.log('🚀 ~ file: Command.test.ts ~ line 48 ~ it ~ errState', a);
+        console.log('🚀 ~ file: Command.test.ts ~ a', a);
 
         expect(errState === 0).toBeTruthy();
     });
