@@ -61,7 +61,7 @@ export type TStatementKeyList =
     | 'WHILE';
 // Loop <file>
 
-export type TStatementElement<T extends TStatementKeyList> = {
+export type TStatementElement = {
     keyRawName: string;
     body: string;
     doc: string;
@@ -73,7 +73,7 @@ export type TStatementElement<T extends TStatementKeyList> = {
 };
 
 export type TStatement = {
-    [k in TStatementKeyList]: TStatementElement<k>;
+    [k in TStatementKeyList]: TStatementElement;
 };
 
 /**

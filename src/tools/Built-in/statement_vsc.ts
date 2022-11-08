@@ -2,10 +2,10 @@
 /* eslint-disable max-lines */
 /* eslint-disable no-template-curly-in-string */
 import * as vscode from 'vscode';
-import type { TStatementElement, TStatementKeyList } from './statement';
+import type { TStatementElement } from './statement';
 import { Statement } from './statement';
 
-function Statement2Md(element: TStatementElement<TStatementKeyList>): vscode.MarkdownString {
+function Statement2Md(element: TStatementElement): vscode.MarkdownString {
     const {
         keyRawName,
         doc,

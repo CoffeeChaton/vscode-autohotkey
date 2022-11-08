@@ -1,5 +1,12 @@
 import { Statement } from './statement';
 
+/**
+ * Capitalize<Lowercase<str>>;
+ */
+function CapitalizeLowercase(str: string): string {
+    return str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 describe('check Statement ruler', () => {
     it('exp: and or break if return', () => {
         expect.hasAssertions();
@@ -12,7 +19,8 @@ describe('check Statement ruler', () => {
             const v2 = keyRawName.toUpperCase() !== k;
             const v3 = !body.toUpperCase().includes(keyRawName.toUpperCase());
             const v4 = !exp.join('\n').includes(keyRawName);
-            if (v1 || v2 || v3 || v4) {
+            const v5 = !k.startsWith('IF') && keyRawName !== CapitalizeLowercase(k);
+            if (v1 || v2 || v3 || v4 || v5) {
                 errState++;
                 console.error(
                     '--15--36--49--76--56',
