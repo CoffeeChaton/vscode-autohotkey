@@ -9,14 +9,9 @@ import { EDiagCode } from '../../diag';
 
 type TCommandKeyList =
     | 'AUTOTRIM'
-    | 'BETWEEN'
     | 'BLOCKINPUT'
-    | 'CASE'
-    | 'CATCH'
-    | 'CLASS'
     | 'CLICK'
     | 'CLIPWAIT'
-    | 'CONTINUE'
     | 'CONTROL'
     | 'CONTROLCLICK'
     | 'CONTROLFOCUS'
@@ -30,7 +25,6 @@ type TCommandKeyList =
     | 'CONTROLSETTEXT'
     | 'COORDMODE'
     | 'CRITICAL'
-    | 'DEFAULT'
     | 'DETECTHIDDENTEXT'
     | 'DETECTHIDDENWINDOWS'
     | 'DRIVE'
@@ -70,13 +64,8 @@ type TCommandKeyList =
     | 'FILESELECTFOLDER'
     | 'FILESETATTRIB'
     | 'FILESETTIME'
-    | 'FINALLY'
-    | 'FOR'
     | 'FORMATTIME'
     | 'GETKEYSTATE'
-    | 'GLOBAL'
-    | 'GOSUB'
-    | 'GOTO'
     | 'GROUPACTIVATE'
     | 'GROUPADD'
     | 'GROUPCLOSE'
@@ -85,21 +74,6 @@ type TCommandKeyList =
     | 'GUICONTROL'
     | 'GUICONTROLGET'
     | 'HOTKEY'
-    | 'IFEQUAL'
-    | 'IFEXIST'
-    | 'IFGREATER'
-    | 'IFGREATEROREQUAL'
-    | 'IFINSTRING'
-    | 'IFLESS'
-    | 'IFLESSOREQUAL'
-    | 'IFMSGBOX'
-    | 'IFNOTEQUAL'
-    | 'IFNOTEXIST'
-    | 'IFNOTINSTRING'
-    | 'IFWINACTIVE'
-    | 'IFWINEXIST'
-    | 'IFWINNOTACTIVE'
-    | 'IFWINNOTEXIST'
     | 'IMAGESEARCH'
     | 'INIDELETE'
     | 'INIREAD'
@@ -111,8 +85,6 @@ type TCommandKeyList =
     | 'LISTHOTKEYS'
     | 'LISTLINES'
     | 'LISTVARS'
-    | 'LOCAL'
-    | 'LOOP'
     | 'MENU'
     | 'MOUSECLICK'
     | 'MOUSECLICKDRAG'
@@ -132,7 +104,6 @@ type TCommandKeyList =
     | 'REGREAD'
     | 'REGWRITE'
     | 'RELOAD'
-    | 'RETURN'
     | 'RUN'
     | 'RUNAS'
     | 'RUNWAIT'
@@ -173,7 +144,6 @@ type TCommandKeyList =
     | 'SPLASHTEXTOFF'
     | 'SPLASHTEXTON'
     | 'SPLITPATH'
-    | 'STATIC'
     | 'STATUSBARGETTEXT'
     | 'STATUSBARWAIT'
     | 'STRINGCASESENSE'
@@ -189,17 +159,12 @@ type TCommandKeyList =
     | 'STRINGTRIMRIGHT'
     | 'STRINGUPPER'
     | 'SUSPEND'
-    | 'SWITCH'
     | 'SYSGET'
     | 'THREAD'
-    | 'THROW'
     | 'TOOLTIP'
     | 'TRANSFORM'
     | 'TRAYTIP'
-    | 'TRY'
-    | 'UNTIL'
     | 'URLDOWNLOADTOFILE'
-    | 'WHILE'
     | 'WINACTIVATE'
     | 'WINACTIVATEBOTTOM'
     | 'WINCLOSE'
@@ -267,21 +232,6 @@ export const LineCommand: TLineCommand = {
             ';           Off: Such tabs and spaces are not omitted.',
         ],
     },
-    BETWEEN: {
-        keyRawName: 'between',
-        body: 'between',
-        doc: 'Determines whether [traditional assignments](https://www.autohotkey.com/docs/commands/SetEnv.htm "Deprecated. New scripts should use Var := Value instead.") like `Var1 = %Var2%` omit spaces and tabs from the beginning and end of _Var2_.',
-        recommended: false,
-        link: 'https://www.autohotkey.com/docs/commands/AutoTrim.htm',
-        exp: [
-            'if Var between LowerBound and UpperBound',
-            'if Var not between LowerBound and UpperBound',
-            '; exp',
-            'var := 2',
-            'if var between 1 and 5',
-            '    MsgBox, % var "is in the range 1 to 5, inclusive."',
-        ],
-    },
     BLOCKINPUT: {
         keyRawName: 'BlockInput',
         body: 'BlockInput, ${1|On,Off,Send,Mouse,SendAndMouse,Default,MouseMove,MouseMoveOff|}',
@@ -302,76 +252,9 @@ export const LineCommand: TLineCommand = {
             ';  MouseMoveOff',
         ],
     },
-    CASE: {
-        keyRawName: 'Case',
-        body: 'Case $0:',
-        doc: 'Executes one case from a list of mutually exclusive candidates.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Switch.htm',
-        exp: [
-            'Switch UserInput {',
-            '    Case "btw":   MsgBox % "by the way"',
-            '    Case "otoh":  MsgBox % "on the other hand"',
-            '    Case "fl":    MsgBox % "Florida" Send, {backspace 3}Florida',
-            '    Case "ca":    MsgBox % "California"  Send, {backspace 3}California',
-            '    Case "ahk":   Run, % "https://www.autohotkey.com"',
-            '    Default :     MsgBox % "default"',
-            '}',
-        ],
-    },
-    CATCH: {
-        keyRawName: 'Catch',
-        body: 'Catch, $0',
-        doc: 'Specifies the code to execute if an exception is raised during execution of a [try](https://www.autohotkey.com/docs/commands/Try.htm) statement.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Catch.htm',
-        exp: [
-            'Try {',
-            '    ...',
-            '} Catch e {',
-            '    ...',
-            '} Finally {',
-            '    ...',
-            '}',
-        ],
-    },
-    CLASS: {
-        keyRawName: 'Class',
-        body: 'Class',
-        doc: 'At its root, a "class" is a set or category of things having some property or attribute in common. Since a [base](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects) or [prototype](https://www.autohotkey.com/docs/Objects.htm#Custom_Prototypes) object defines properties and behaviour for set of objects, it can also be called a _class_ object. For convenience, base objects can be defined using the "class" keyword as shown below:',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/Objects.htm#Custom_Classes',
-        exp: [
-            'class ClassName extends BaseClassName',
-            '{',
-            '    InstanceVar := Expression',
-            '    static ClassVar := Expression',
-            '',
-            '    class NestedClass',
-            '    {',
-            '        ...',
-            '    }',
-            '',
-            '    Method()',
-            '    {',
-            '        ...',
-            '    }',
-            '',
-            '    Property[]  ; Brackets are optional',
-            '    {',
-            '        get {',
-            '            return ...',
-            '        }',
-            '        set {',
-            '            return ... := value',
-            '        }',
-            '    }',
-            '}',
-        ],
-    },
     CLICK: {
         keyRawName: 'Click',
-        body: 'Click , Options',
+        body: 'Click [, ${1:Options}]',
         doc: 'Clicks a mouse button at the specified coordinates. It can also hold down a mouse button, turn the mouse wheel, or move the mouse.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Click.htm',
@@ -410,27 +293,10 @@ export const LineCommand: TLineCommand = {
             '',
         ],
     },
-    CONTINUE: {
-        keyRawName: 'Continue',
-        body: 'Continue',
-        doc: 'Skips the rest of a [loop statement](https://www.autohotkey.com/docs/Language.htm#loop-statement)\'s current iteration and begins a new one.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Continue.htm',
-        exp: [
-            'Continue , LoopLabel',
-            '',
-            'Loop, 10',
-            '{',
-            '    if (A_Index <= 5)',
-            '        continue',
-            '    MsgBox %A_Index%',
-            '}',
-        ],
-    },
     CONTROL: {
         keyRawName: 'Control',
         body:
-            'Control, ${1|Check,Uncheck,Enable,Disable,Show,Hide,Style,ExStyle,ShowDropDown,HideDropDown,TabLeft,TabRight,Add,Delete,Choose,ChooseString,EditPaste|}',
+            'Control, ${1|Check,Uncheck,Enable,Disable,Show,Hide,Style,ExStyle,ShowDropDown,HideDropDown,TabLeft,TabRight,Add,Delete,Choose,ChooseString,EditPaste|}, [${2:Value}, ${3:Control}, ${4:WinTitle}, ${5:WinText}, ${6:ExcludeTitle}, ${7:ExcludeText}]',
         doc: 'Makes a variety of changes to a control.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Control.htm',
@@ -644,23 +510,6 @@ export const LineCommand: TLineCommand = {
             ';          TargetType',
             ';                 -> On (defaults)',
             ';                 -> Off',
-        ],
-    },
-    DEFAULT: {
-        keyRawName: 'Default',
-        body: 'Default : $0',
-        doc: 'Executes one case from a list of mutually exclusive candidates.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Switch.htm',
-        exp: [
-            'Switch UserInput {',
-            '    Case "btw":   MsgBox % "by the way"',
-            '    Case "otoh":  MsgBox % "on the other hand"',
-            '    Case "fl":    MsgBox % "Florida" Send, {backspace 3}Florida',
-            '    Case "ca":    MsgBox % "California"  Send, {backspace 3}California',
-            '    Case "ahk":   Run, % "https://www.autohotkey.com"',
-            '    Default :     MsgBox % "default"',
-            '}',
         ],
     },
     DETECTHIDDENTEXT: {
@@ -1384,37 +1233,6 @@ export const LineCommand: TLineCommand = {
             'FileSetTime, setTime, % "D:\\test.txt"',
         ],
     },
-    FINALLY: {
-        keyRawName: 'Finally',
-        body: 'Finally',
-        doc: 'Ensures that one or more statements are always executed after a [Try](https://www.autohotkey.com/docs/commands/Try.htm) statement finishes.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Finally.htm',
-        exp: [
-            'Try {',
-            '    ...',
-            '} Catch e {',
-            '    ...',
-            '} Finally {',
-            '    ...',
-            '}',
-        ],
-    },
-    FOR: {
-        keyRawName: 'For',
-        body: 'For ${1:Key}, ${2:Value} in ${3:Expression} {\n}',
-        doc: 'Repeats a series of commands once for each key-value pair in an object.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/For.htm',
-        exp: [
-            'For Key [, Value] in Expression',
-            ';',
-            '; exp',
-            'For Key , Value in ["A", "B", "C"] {',
-            '    MsgBox % Key " & " Value',
-            '}',
-        ],
-    },
     FORMATTIME: {
         keyRawName: 'FormatTime',
         body: 'FormatTime, ${1:OutputVar} [, ${2:YYYYMMDDHH24MISS}, ${3:yyyy-MM-dd HH:mm:ss} ]',
@@ -1468,50 +1286,6 @@ export const LineCommand: TLineCommand = {
             'KeyIsDown := GetKeyState(KeyName , Mode)',
         ],
         diag: EDiagCode.code700,
-    },
-    GLOBAL: {
-        keyRawName: 'global',
-        body: 'global',
-        doc: 'To refer to an existing global variable inside a function (or create a new one), declare the variable as global prior to using it.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/Functions.htm#Global',
-        exp: [
-            'global LogFileName  ; This global variable was previously given a value somewhere outside this function.',
-        ],
-    },
-    GOSUB: {
-        keyRawName: 'Gosub',
-        body: 'Gosub, ${1:Label}',
-        doc: 'Jumps to the specified label and continues execution until [Return](https://www.autohotkey.com/docs/commands/Return.htm) is encountered.',
-        recommended: false,
-        link: 'https://www.autohotkey.com/docs/commands/Gosub.htm',
-        exp: [
-            'Gosub, Label1 ',
-            '    MsgBox, The Label1 subroutine has returned (it is finished).',
-            'return',
-            '',
-            'Label1:',
-            '    MsgBox, The Label1 subroutine is now running.',
-            'return',
-        ],
-    },
-    GOTO: {
-        keyRawName: 'Goto',
-        body: 'Goto, ${1:Label}',
-        doc: 'Jumps to the specified label and continues execution.',
-        recommended: false,
-        link: 'https://www.autohotkey.com/docs/commands/Goto.htm',
-        exp: [
-            'Goto, MyLabel',
-            '',
-            '; ...',
-            '',
-            'MyLabel:',
-            '',
-            'Sleep, 100',
-            '; ...',
-            '',
-        ],
     },
     GROUPACTIVATE: {
         keyRawName: 'GroupActivate',
@@ -1642,174 +1416,6 @@ export const LineCommand: TLineCommand = {
             'Hotkey, IfWinActive/Exist [ , WinTitle, WinText]',
             'Hotkey, If [, Expression]',
             'Hotkey, If, % FunctionObject',
-        ],
-    },
-    IFEQUAL: {
-        keyRawName: 'IfEqual',
-        body: 'IfEqual, ${1:Var} [, ${2:Value} ]',
-        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
-        recommended: false,
-        diag: EDiagCode.code806,
-        link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
-        exp: ['IfEqual, Var , Value ; if Var = Value'],
-    },
-    IFEXIST: {
-        keyRawName: 'IfExist',
-        body: 'IfExist, ${1:FilePattern}',
-        doc: 'Checks for the existence of a file or folder.',
-        recommended: false,
-        diag: EDiagCode.code700,
-        link: 'https://www.autohotkey.com/docs/commands/IfExist.htm',
-        exp: [
-            'IfExist, FilePattern',
-            'IfNotExist, FilePattern',
-            '',
-            ';exp',
-            'IfExist, D:\\Docs\\*.txt',
-            '    MsgBox, At least one .txt file exists.',
-        ],
-    },
-    IFGREATER: {
-        keyRawName: 'IfGreater',
-        body: 'IfGreater, ${1:Var} [, ${2:Value} ]',
-        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
-        recommended: false,
-        diag: EDiagCode.code806,
-        link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
-        exp: ['IfGreater, Var , Value ; if Var > Value'],
-    },
-    IFGREATEROREQUAL: {
-        keyRawName: 'IfGreaterOrEqual',
-        body: 'IfGreaterOrEqual, ${1:Var} [, ${2:Value} ]',
-        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
-        recommended: false,
-        diag: EDiagCode.code806,
-        link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
-        exp: ['IfGreaterOrEqual, Var , Value ; if Var >= Value'],
-    },
-    IFINSTRING: {
-        keyRawName: 'IfInString',
-        body: 'IfInString, ${1:Var}, ${2:SearchString}',
-        doc: 'Checks if a [variable](https://www.autohotkey.com/docs/Variables.htm) contains the specified string.',
-        recommended: false,
-        diag: EDiagCode.code700,
-        link: 'https://www.autohotkey.com/docs/commands/IfInString.htm',
-        exp: [
-            'IfInString, Var, SearchString',
-            'IfNotInString, Var, SearchString',
-        ],
-    },
-    IFLESS: {
-        keyRawName: 'IfLess',
-        body: 'IfLess, ${1:Var} [, ${2:Value} ]',
-        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
-        recommended: false,
-        diag: EDiagCode.code806,
-        link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
-        exp: ['IfLess, Var , Value ; if Var < Value'],
-    },
-    IFLESSOREQUAL: {
-        keyRawName: 'IfLessOrEqual',
-        body: 'IfLessOrEqual, ${1:Var} [, ${2:Value} ]',
-        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
-        recommended: false,
-        diag: EDiagCode.code806,
-        link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
-        exp: ['IfLessOrEqual, Var , Value ; if Var <= Value'],
-    },
-    IFMSGBOX: {
-        keyRawName: 'IfMsgBox',
-        body: 'IfMsgBox, ${1|Yes,No,OK,Cancel,Abort,Ignore,Retry,Continue,TryAgain,Timeout|}',
-        doc: 'Checks which button was pushed by the user during the most recent [MsgBox](https://www.autohotkey.com/docs/commands/MsgBox.htm) command.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/IfMsgBox.htm',
-        exp: [
-            'IfMsgBox, ButtonName',
-        ],
-    },
-    IFNOTEQUAL: {
-        keyRawName: 'IfNotEqual',
-        body: 'IfNotEqual, ${1:Var} [, ${2:Value} ]',
-        doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
-        recommended: false,
-        diag: EDiagCode.code806,
-        link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
-        exp: ['IfNotEqual, Var , Value ; if Var != Value'],
-    },
-    IFNOTEXIST: {
-        keyRawName: 'IfNotExist',
-        body: 'IfNotExist, ${1:FilePattern}',
-        doc: 'Checks for the existence of a file or folder.',
-        recommended: false,
-        diag: EDiagCode.code700,
-        link: 'https://www.autohotkey.com/docs/commands/IfExist.htm',
-        exp: [
-            'IfExist, FilePattern',
-            'IfNotExist, FilePattern',
-            '',
-            ';exp',
-            'IfExist, D:\\Docs\\*.txt',
-            '    MsgBox, At least one .txt file exists.',
-        ],
-    },
-    IFNOTINSTRING: {
-        keyRawName: 'IfNotInString',
-        body: 'IfNotInString, ${1:Var}, ${2:SearchString}',
-        doc: 'Checks if a [variable](https://www.autohotkey.com/docs/Variables.htm) contains the specified string.',
-        recommended: false,
-        diag: EDiagCode.code700,
-        link: 'https://www.autohotkey.com/docs/commands/IfInString.htm',
-        exp: [
-            'IfInString, Var, SearchString',
-            'IfNotInString, Var, SearchString',
-        ],
-    },
-    IFWINACTIVE: {
-        keyRawName: 'IfWinActive',
-        body: 'IfWinActive [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
-        doc: 'Checks if the specified window exists and is currently active (foremost).',
-        recommended: false,
-        diag: EDiagCode.code700,
-        link: 'https://www.autohotkey.com/docs/commands/IfWinActive.htm',
-        exp: [
-            'IfWinActive [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
-            'IfWinNotActive [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
-        ],
-    },
-    IFWINEXIST: {
-        keyRawName: 'IfWinExist',
-        body: 'IfWinExist [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
-        doc: 'Checks if the specified window exists.',
-        recommended: false,
-        diag: EDiagCode.code700,
-        link: 'https://www.autohotkey.com/docs/commands/IfWinExist.htm',
-        exp: [
-            'IfWinExist [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
-            'IfWinNotExist [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
-        ],
-    },
-    IFWINNOTACTIVE: {
-        keyRawName: 'IfWinNotActive',
-        body: 'IfWinNotActive [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
-        doc: 'Checks if the specified window exists and is currently active (foremost).',
-        recommended: false,
-        diag: EDiagCode.code700,
-        link: 'https://www.autohotkey.com/docs/commands/IfWinActive.htm',
-        exp: [
-            'IfWinActive [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
-            'IfWinNotActive [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
-        ],
-    },
-    IFWINNOTEXIST: {
-        keyRawName: 'IfWinNotExist',
-        body: 'IfWinNotExist  [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
-        doc: 'Checks if the specified window exists.',
-        recommended: false,
-        diag: EDiagCode.code700,
-        link: 'https://www.autohotkey.com/docs/commands/IfWinExist.htm',
-        exp: [
-            'IfWinExist [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
-            'IfWinNotExist [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
     },
     IMAGESEARCH: {
@@ -1958,43 +1564,6 @@ export const LineCommand: TLineCommand = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ListVars.htm',
         exp: ['ListVars'],
-    },
-    LOCAL: {
-        keyRawName: 'Local',
-        body: 'local, ${1:VariableName}',
-        doc: 'Local variables are specific to a single function and are visible only inside that function. Consequently, a local variable may have the same name as a global variable and both will have separate contents. Separate functions may also safely use the same variable names.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/Functions.htm#Local',
-        exp: [
-            'local a',
-            'Local b := 0',
-        ],
-    },
-    LOOP: {
-        keyRawName: 'Loop',
-        body: 'Loop, ${1:number}',
-        doc: 'Performs a series of commands repeatedly: either the specified number of times or until [break](https://www.autohotkey.com/docs/commands/Break.htm) is encountered.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Loop.htm',
-        exp: [
-            'Loop, 3 {',
-            '    MsgBox, % "Iteration number is " A_Index "!"  ; A_Index will be 1, 2, then 3',
-            '    Sleep, 100',
-            '}',
-            '; ---',
-            'iMax := 5',
-            'Loop, % iMax + 2 {',
-            '    MsgBox, % "Iteration number is " A_Index "!" ; 1 to 7',
-            '    Sleep, 100',
-            '}',
-            '',
-            ';--- loop 0',
-            'Loop, iMax { ; Count cannot be an expression, use %',
-            '    MsgBox, % "never loop "  A_Index ; loop 0',
-            '    Sleep, 100',
-            '}',
-            '',
-        ],
     },
     MENU: {
         keyRawName: 'Menu',
@@ -2285,22 +1854,6 @@ export const LineCommand: TLineCommand = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Reload.htm',
         exp: ['^!r::Reload  ; Ctrl+Alt+R'],
-    },
-    RETURN: {
-        keyRawName: 'Return',
-        body: 'Return',
-        doc: 'Returns from a subroutine to which execution had previously jumped via [function-call](https://www.autohotkey.com/docs/Functions.htm), [Gosub](https://www.autohotkey.com/docs/commands/Gosub.htm), [Hotkey](https://www.autohotkey.com/docs/Hotkeys.htm) activation, [GroupActivate](https://www.autohotkey.com/docs/commands/GroupActivate.htm), or other means.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Return.htm',
-        exp: [
-            '     Return 3',
-            '     Return "literal string"',
-            '     Return MyVar ',
-            '     Return i + 1',
-            '     Return true  ; Returns the number 1 to mean "true".',
-            '     Return ItemCount < MaxItems  ; Returns a true or false value.',
-            '     Return FindColor(TargetColor)',
-        ],
     },
     RUN: {
         keyRawName: 'Run',
@@ -2869,22 +2422,6 @@ export const LineCommand: TLineCommand = {
             '; drive = C:',
         ],
     },
-    STATIC: {
-        keyRawName: 'Static',
-        body: 'Static LoggedLines := 0',
-        doc: 'Static variables are always implicitly local, but differ from locals because their values are remembered between calls.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/Functions.htm#static',
-        exp: [
-            'LogToFile(TextToLog)',
-            '{',
-            '    Static LoggedLines := 0',
-            '    LoggedLines += 1  ; Maintain a tally locally (its value is remembered between calls).',
-            '    global LogFileName',
-            '    FileAppend, %LoggedLines%: %TextToLog%`n, %LogFileName%',
-            '}',
-        ],
-    },
     STATUSBARGETTEXT: {
         keyRawName: 'StatusBarGetText',
         body:
@@ -3046,32 +2583,6 @@ export const LineCommand: TLineCommand = {
             'Suspend, Permit',
         ],
     },
-    SWITCH: {
-        keyRawName: 'Switch',
-        body: [
-            'Switch ${1:key} {',
-            '    Case ${2:val1}:',
-            '        $0',
-            '    Case ${3:val2}, ${4:val3}:',
-            '        ',
-            '    Default :',
-            '        ',
-            '}',
-        ].join('\n'),
-        doc: 'Executes one case from a list of mutually exclusive candidates.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Switch.htm',
-        exp: [
-            'Switch UserInput {',
-            '    Case "btw":   MsgBox % "by the way"',
-            '    Case "otoh":  MsgBox % "on the other hand"',
-            '    Case "fl":    MsgBox % "Florida" Send, {backspace 3}Florida',
-            '    Case "ca":    MsgBox % "California"  Send, {backspace 3}California',
-            '    Case "ahk":   Run, % "https://www.autohotkey.com"',
-            '    Default :     MsgBox % "default"',
-            '}',
-        ],
-    },
     SYSGET: {
         keyRawName: 'SysGet',
         body:
@@ -3101,20 +2612,6 @@ export const LineCommand: TLineCommand = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Thread.htm',
         exp: ['Thread, SubCommand [, Value1, Value2]'],
-    },
-    THROW: {
-        keyRawName: 'Throw',
-        body: 'Throw, Exception("${1:Message}" , ${2|"What",-1|}, "${3:Extra}")',
-        doc: 'Signals the occurrence of an error. This signal can be caught by a [try](https://www.autohotkey.com/docs/commands/Try.htm)\\-[catch](https://www.autohotkey.com/docs/commands/Catch.htm) statement.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Throw.htm',
-        exp: [
-            'Throw 3',
-            'Throw "literal string"',
-            'Throw MyVar',
-            'Throw i + 1',
-            'Throw { what: "Custom error", file: A_LineFile, line: A_LineNumber } ; Throws an object',
-        ],
     },
     TOOLTIP: {
         keyRawName: 'ToolTip',
@@ -3152,34 +2649,6 @@ export const LineCommand: TLineCommand = {
             'TrayTip [, Title, Text, Seconds, Options]',
         ],
     },
-    TRY: {
-        keyRawName: 'Try',
-        body: 'Try',
-        doc: 'Guards one or more statements (commands or expressions) against runtime errors and exceptions thrown by the [throw](https://www.autohotkey.com/docs/commands/Throw.htm) command.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Try.htm',
-        exp: [
-            'Try {',
-            '    ...',
-            '} Catch e {',
-            '    ...',
-            '} Finally {',
-            '    ...',
-            '}',
-        ],
-    },
-    UNTIL: {
-        keyRawName: 'Until',
-        body: 'Until $0',
-        doc: 'Applies a condition to the continuation of a Loop or For-loop.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Until.htm',
-        exp: [
-            'Loop {',
-            '    ...',
-            '} Until Expression',
-        ],
-    },
     URLDOWNLOADTOFILE: {
         keyRawName: 'UrlDownloadToFile',
         body: 'UrlDownloadToFile, % "${1:URL_https}", % "${2:Filename}"',
@@ -3190,31 +2659,6 @@ export const LineCommand: TLineCommand = {
             'UrlDownloadToFile, URL, Filename',
             '',
             'UrlDownloadToFile, % "https://www.autohotkey.com/download/1.1/version.txt", % "D:\\AutoHotkey Latest Version.txt"',
-        ],
-    },
-    WHILE: {
-        keyRawName: 'While',
-        body: 'While ($0) {\n    \n}',
-        doc: 'Performs a series of commands repeatedly until the specified [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions) evaluates to false.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/While.htm',
-        exp: [
-            ';exp1 As the user drags the left mouse button, a tooltip displays the size of the region inside the drag-area.',
-            '',
-            'CoordMode, Mouse, Screen',
-            '',
-            '~LButton::fn_lb1()',
-            '',
-            'fn_lb1(){',
-            '    MouseGetPos, begin_x, begin_y',
-            '    While GetKeyState("LButton")',
-            '    {',
-            '        MouseGetPos, x, y',
-            '        ToolTip, % begin_x ", " begin_y "`n" Abs(begin_x-x) " x " Abs(begin_y-y)',
-            '        Sleep, 10',
-            '    }',
-            '    ToolTip',
-            '}',
         ],
     },
     WINACTIVATE: {
