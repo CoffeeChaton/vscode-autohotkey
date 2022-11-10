@@ -1,7 +1,6 @@
-/* eslint-disable no-magic-numbers */
-/* cSpell:disable */
 import type { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
+import { OutputCommandPlusMap } from './OutputPlusMap';
 import type { TScanData } from './spiltCommandAll';
 import { spiltCommandAll } from './spiltCommandAll';
 
@@ -18,24 +17,10 @@ function pickCommand(needArr: number[], AllCut: TScanData[]): TScanData[] {
     return needPartScan;
 }
 
-// {_T("FileGetShortcut"), 1, 8, 8 H, NULL} // Filespec, OutTarget, OutDir, OutArg, OutDescrip, OutIcon, OutIconIndex, OutShowState.
-
-const OutputVarCommandMap: ReadonlyMap<string, number[]> = new Map([
-    // FileGetShortcut, LinkFile , OutTarget, OutDir, OutArgs, OutDescription, OutIcon, OutIconNum, OutRunState
-    ['FILEGETSHORTCUT', [2, 3, 4, 5, 6, 7, 8]],
-    ['IMAGESEARCH', [1, 2]], // ImageSearch, OutputVarX, OutputVarY
-    ['MOUSEGETPOS', [1, 2, 3, 4]], // MouseGetPos , OutputVarX, OutputVarY, OutputVarWin, OutputVarControl
-    ['PIXELSEARCH', [1, 2]], // PixelSearch, OutputVarX, OutputVarY
-    ['RUN', [4]], // Run, Target , WorkingDir, Options, OutputVarPID
-    ['RUNWAIT', [4]], // RunWait, Target , WorkingDir, Options, OutputVarPID
-    ['SPLITPATH', [2, 3, 4, 5, 6]], // SplitPath, InputVar , OutFileName, OutDir, OutExtension, OutNameNoExt, OutDrive
-    ['WINGETACTIVESTATS', [1, 2, 3, 4, 5]], // WinGetActiveStats, OutTitle, OutWidth, OutHeight, OutX, OutY
-    ['WINGETPOS', [1, 2, 3, 4]], // WinGetPos , OutX, OutY, OutWidth, OutHeight
-]);
-
 /**
  * OutputVar
  *
+ * - ControlGetPos , OutX, OutY, OutWidth, OutHeight, Control, WinTitle, WinText, ExcludeTitle, ExcludeText
  * - FileGetShortcut, LinkFile , OutTarget, OutDir, OutArgs, OutDescription, OutIcon, OutIconNum, OutRunState
  * - ImageSearch, OutputVarX, OutputVarY
  * - MouseGetPos , OutputVarX, OutputVarY, OutputVarWin, OutputVarControl
@@ -47,7 +32,7 @@ const OutputVarCommandMap: ReadonlyMap<string, number[]> = new Map([
  * - WinGetPos , OutX, OutY, OutWidth, OutHeight, WinTitle, WinText, ExcludeTitle, ExcludeText
  */
 export function OutputVarCommandPlus(need: TGetFnDefNeed, keyWord: string, col: number): null {
-    const needArr: number[] | undefined = OutputVarCommandMap.get(keyWord);
+    const needArr: number[] | undefined = OutputCommandPlusMap.get(keyWord);
     if (needArr === undefined) return null;
 
     const {
