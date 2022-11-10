@@ -5,8 +5,6 @@
 
 import { EDiagCode } from '../../diag';
 
-// TODO: if g_act have ... rm statement
-
 type TCommandKeyList =
     | 'AUTOTRIM'
     | 'BLOCKINPUT'
@@ -192,6 +190,7 @@ type TCommandKeyList =
     | 'WINWAITCLOSE'
     | 'WINWAITNOTACTIVE';
 
+// FIXME: check this
 export type TAllowDiagCode =
     | EDiagCode.code700
     | EDiagCode.code803

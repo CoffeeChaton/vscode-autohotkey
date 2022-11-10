@@ -5,6 +5,7 @@
 
 import { EDiagCode } from '../../diag';
 
+// FIXME: check this
 type TAllowDiagCode =
     | EDiagCode.code700
     | EDiagCode.code803
