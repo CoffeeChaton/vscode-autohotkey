@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 /* eslint no-magic-numbers: "off" */
-/* cSpell:disable */
 
 // action_args = aLineText;
 

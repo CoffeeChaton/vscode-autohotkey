@@ -1,13 +1,16 @@
-/* cSpell:disable */
-/* eslint-disable max-len */
-/* eslint-disable max-lines */
 /* eslint-disable no-template-curly-in-string */
 
 const z9 = {
     CLASS: {
         keyRawName: 'Class',
         body: 'Class',
-        doc: 'At its root, a "class" is a set or category of things having some property or attribute in common. Since a [base](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects) or [prototype](https://www.autohotkey.com/docs/Objects.htm#Custom_Prototypes) object defines properties and behaviour for set of objects, it can also be called a _class_ object. For convenience, base objects can be defined using the "class" keyword as shown below:',
+        doc: [
+            'At its root, a "class" is a set or category of things having some property or attribute in common.',
+            'Since a [base](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects) or',
+            '[prototype](https://www.autohotkey.com/docs/Objects.htm#Custom_Prototypes) object defines properties and beHaviour for set of objects,',
+            'it can also be called a _class_ object.',
+            'For convenience, base objects can be defined using the "class" keyword as shown below:',
+        ].join('\n'),
         recommended: true,
         link: 'https://www.autohotkey.com/docs/Objects.htm#Custom_Classes',
         exp: [
@@ -67,7 +70,11 @@ const z9 = {
     LOCAL: {
         keyRawName: 'Local',
         body: 'local, ${1:VariableName}',
-        doc: 'Local variables are specific to a single function and are visible only inside that function. Consequently, a local variable may have the same name as a global variable and both will have separate contents. Separate functions may also safely use the same variable names.',
+        doc: [
+            'Local variables are specific to a single function and are visible only inside that function.',
+            'Consequently, a local variable may have the same name as a global variable and both will have separate contents.',
+            'Separate functions may also safely use the same variable names.',
+        ].join('\n'),
         recommended: true,
         link: 'https://www.autohotkey.com/docs/Functions.htm#Local',
         exp: [

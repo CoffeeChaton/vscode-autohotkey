@@ -1,6 +1,4 @@
 /* eslint-disable no-magic-numbers */
-/* cSpell:disable */
-// {_T("FileGetShortcut"), 1, 8, 8 H, NULL} // Filespec, OutTarget, OutDir, OutArg, OutDescrip, OutIcon, OutIconIndex, OutShowState.
 
 /**
  * @param cmd string -> upCaseString
@@ -21,7 +19,7 @@
  *
  * ref:
  * ```c++
- * {_T("FileGetShortcut"), 1, 8, 8 H, NULL} // Filespec, OutTarget, OutDir, OutArg, OutDescrip, OutIcon, OutIconIndex, OutShowState.
+ * {_T("FileGetShortcut"), 1, 8, 8 H, NULL} // Filespec, OutTarget, OutDir, OutArg, OutDescription, OutIcon, OutIconIndex, OutShowState.
  * ```
  */
 export const OutputCommandPlusMap: ReadonlyMap<string, number[]> = new Map([

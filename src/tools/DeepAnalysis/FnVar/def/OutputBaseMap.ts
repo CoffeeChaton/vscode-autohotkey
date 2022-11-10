@@ -1,5 +1,3 @@
-/* cSpell:disable */
-
 /**
  * @param cmd string -> upCaseString
  * @return number of cmd.len

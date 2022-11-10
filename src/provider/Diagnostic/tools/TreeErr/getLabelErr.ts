@@ -1,4 +1,3 @@
-/* cSpell:disable */
 import * as vscode from 'vscode';
 import { CAhkLabel } from '../../../../AhkSymbol/CAhkLine';
 import type { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';

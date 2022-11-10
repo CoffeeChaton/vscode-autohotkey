@@ -194,12 +194,11 @@ const def_command = {
     WinWaitNotActive: 'SSESS',
 };
 
-export const cmd2Map: ReadonlyMap<string, string[]> = ((): ReadonlyMap<string, string[]> => {
-    const map1 = new Map<string, string[]>();
+export const cmd2Map: ReadonlyMap<string, string> = ((): ReadonlyMap<string, string> => {
+    const map1 = new Map<string, string>();
 
     for (const [k, v] of Object.entries(def_command)) {
-        const arr: string[] = [...v];
-        map1.set(k.toUpperCase(), arr);
+        map1.set(k.toUpperCase(), v);
     }
 
     return map1;
