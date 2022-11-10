@@ -13,6 +13,9 @@ a = 0x25
 ```
 
 - TODO: config of ...
+- TODO: add cmd to find each file parsing time.
+- TODO: test: add more test
+- test: add vscode.test
 
 ## 0.0.14(2022-11-7)
 

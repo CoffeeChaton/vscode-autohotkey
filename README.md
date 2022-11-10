@@ -10,9 +10,12 @@ AutoHotKey language support for VS Code
   - [FunctionSymbol](#functionsymbol)
   - [CodeSymbol](#codesymbol)
   - [GotoDefinition](#gotodefinition)
+  - [Find All References support](#find-all-references-support)
+    - [Find Ref of Function](#find-ref-of-function)
+  - [Function rename](#function-rename)
   - [Hover](#hover)
-  - [CodeFormat](#codeformat)
   - [Diagnostic and lint](#diagnostic-and-lint)
+  - [CodeFormat](#codeformat)
   - [IntelliSense](#intellisense)
     - [1. Snippets of your function](#1-snippets-of-your-function)
     - [2. Completion of function variables](#2-completion-of-function-variables)
@@ -21,6 +24,7 @@ AutoHotKey language support for VS Code
   - [ListAllFunctions](#listallfunctions)
   - [Better highlight of Numbers](#better-highlight-of-numbers)
   - [Privacy Statement](#privacy-statement)
+  - [Performance](#performance)
   - [Credits](#credits)
   - [otherSuggest](#othersuggest)
 
@@ -54,12 +58,41 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 1. Go to Definition (via `F12` or `Ctrl+Click`)
 2. open the definition to the side with ( via `Ctrl+Alt+Click` )
 3. Peek Definition (via `Alt+F12`)
-4. Go to References (via `shift+F12`)
-5. Go to Symbol (via `ctrl+T`)
+4. Go to Symbol (via `Ctrl+T`)
+   ![GotoDef](image/GotoDef.gif)
+   > ↪ Go to Definition (via `F12` or `Ctrl+Click`)
+
+## Find All References support
+
+1. Go to References (via `Shift+F12`)
+2. Find All References (via `Shift+Alt+F12`)
 
    ![ListAllReferences](image/ListAllReferences.gif)
+   > 🔍 Find All References (via `Shift+F12`)
+   > // TODO: add great .gif
+
+### Find Ref of Function
+
+support to find like
+
+1. `functionName(` , call function.
+2. `"functionName"` , wrapped in text.
+   >
+   > - exp: [func()](https://www.autohotkey.com/docs/commands/Func.htm) or [RegisterCallback](https://www.autohotkey.com/docs/commands/RegisterCallback.htm)
+   > - `fnObject := func("functionName")`
+   > - `fnObject := RegisterCallback("functionName")`
+
+3. [SetTimer](https://www.autohotkey.com/docs/commands/SetTimer.htm), exp: `SetTimer , Label_or_functionName`
+4. [Hotkey](https://www.autohotkey.com/docs/commands/Hotkey.htm), exp: `Hotkey, KeyName , Label_or_functionName`
+
+## Function rename
+
+- auto rename with your can use [[🔍Find All References support]](#find-all-references-support) to find.
 
 ## Hover
+
+- Hover to view details on variables, function, command
+- Over 200 [Command and Function](https://www.autohotkey.com/docs/commands/) documenting built-in
 
 1. Hover function to show return value or comment
 
@@ -85,17 +118,9 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 
 ![hover3](image/hover3.png)
 
-## CodeFormat
-
-1. Right click then click format document.
-2. or `alt` + `shift` + `f`
-3. add switch case format
-
-- **beta test now.**
-
-![fmt](image/fmt.png)
-
 ## Diagnostic and lint
+
+⚠️ Diagnostics/Warnings over 40 ruler
 
 1. warning about use `=` not `:=` to assign.
 2. warning of Switch
@@ -110,6 +135,18 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 
 ![Diagnostic1](image/Diagnostic1.png)
 ![Diagnostic2](image/Diagnostic2.png)
+
+## CodeFormat
+
+1. Right click then click format document.
+2. or `alt` + `shift` + `f`
+3. add switch case format
+
+// TODO: write more doc
+
+- **beta test now.**
+
+![fmt](image/fmt.png)
 
 ## IntelliSense
 
@@ -182,8 +219,14 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
 
 - Do not upload any information.
 - without vscode, 0 dependencies, Safe and Privacy.
-- just scan workspaces or open file. not auto scan like [A_Desktop](https://www.autohotkey.com/docs/Variables.htm#Desktop) or [A_MyDocuments](https://www.autohotkey.com/docs/Variables.htm#MyDocuments) or any file without workspaces.
+- just scan workspaces or open file. not auto scan like [`A_Desktop`](https://www.autohotkey.com/docs/Variables.htm#Desktop) or [`A_MyDocuments`](https://www.autohotkey.com/docs/Variables.htm#MyDocuments) or any file without workspaces.
 - If you need to place .ahk in other folders, this Extensions support [Multi-root Workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces).
+
+## Performance
+
+- The best way to improve startup times is to exclude unnecessary files, via [settings.json](https://code.visualstudio.com/docs/getstarted/settings) `AhkNekoHelp.baseScan.IgnoredList`
+- When editing becomes slow, split the file, via [`#Include`](https://www.autohotkey.com/docs/commands/_Include.htm)
+- TODO use...try to find each file parsing time.
 
 ## Credits
 
