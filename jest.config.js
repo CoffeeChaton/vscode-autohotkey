@@ -8,7 +8,7 @@ module.exports = {
     coverageDirectory: 'coverage',
     // preset: 'ts-jest',
     testEnvironment: 'node',
-    testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.ts$',
+    testRegex: '\\.unit\\.test\\.ts$',
     transform: {
         '^.+\\.(t|j)sx?$': '@swc/jest',
     },

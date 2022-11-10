@@ -46,9 +46,9 @@ export function getUriList(): vscode.Uri[] | null {
 }
 
 // ---Min avg of 5 ---
-// subAvg is 177.4
-// subAvgArr len is [175, 179, 179, 176, 178]
+// subAvg is 78.6
+// subAvgArr len is [79, 78, 79, 79, 78]
 // ---Min std of 5 ---
-// subStd is 0.447213595499958
-// subStdArr len is [180, 179, 180, 180, 180]
+// subStd is 0
+// subStdArr len is [80, 80, 80, 80, 80]
 // ---------------------------------------------

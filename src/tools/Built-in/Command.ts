@@ -325,7 +325,8 @@ export const LineCommand: TLineCommand = {
     },
     CONTROLCLICK: {
         keyRawName: 'ControlClick',
-        body: 'ControlClick, ',
+        body:
+            'ControlClick , [Control-or-Pos, WinTitle, WinText, WhichButton, ClickCount, Options, ExcludeTitle, ExcludeText], ',
         doc: 'Sends a mouse button or mouse wheel event to a control.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ControlClick.htm',
