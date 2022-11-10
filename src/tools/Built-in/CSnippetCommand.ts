@@ -10,7 +10,7 @@ export class CSnippetCommand extends vscode.CompletionItem {
             label: keyRawName,
             description: 'Command',
         }, vscode.CompletionItemKind.Keyword); // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
-        this.insertText = new vscode.SnippetString(body.replaceAll('[', '').replaceAll(']', ''));
+        this.insertText = new vscode.SnippetString(body);
         this.detail = 'Command of AHK (neko-help)';
         this.documentation = md;
         this.upName = k;
