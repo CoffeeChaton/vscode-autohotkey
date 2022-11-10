@@ -326,7 +326,7 @@ export const LineCommand: TLineCommand = {
     CONTROLCLICK: {
         keyRawName: 'ControlClick',
         body:
-            'ControlClick , [Control-or-Pos, WinTitle, WinText, WhichButton, ClickCount, Options, ExcludeTitle, ExcludeText], ',
+            'ControlClick , [${1:Control_or_Pos}, ${2:WinTitle}, ${3:WinText}, ${4:WhichButton}, ${5:ClickCount}, ${6:Options}, ${7:ExcludeTitle}, ${8:ExcludeText}]',
         doc: 'Sends a mouse button or mouse wheel event to a control.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ControlClick.htm',
@@ -336,7 +336,7 @@ export const LineCommand: TLineCommand = {
     },
     CONTROLFOCUS: {
         keyRawName: 'ControlFocus',
-        body: 'ControlFocus, ',
+        body: 'ControlFocus , [${1:Control}, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Sets input focus to a given control on a window.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ControlFocus.htm',
@@ -373,7 +373,7 @@ export const LineCommand: TLineCommand = {
     },
     CONTROLGETFOCUS: {
         keyRawName: 'ControlGetFocus',
-        body: 'ControlGetFocus, ${1:OutputVar}',
+        body: 'ControlGetFocus, ${1:OutputVar}, [${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Retrieves which control of the target window has input focus, if any.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ControlGetFocus.htm',
@@ -390,12 +390,12 @@ export const LineCommand: TLineCommand = {
     CONTROLGETPOS: {
         keyRawName: 'ControlGetPos',
         body:
-            'ControlGetPos, [{1:X}, ${2:Y}, ${3:Width}, ${4:Height}, ${5:Control}, ${6:WinTitle}, ${7:WinText}, ${8:ExcludeTitle}]',
+            'ControlGetPos, [${1:OutX}, ${2:OutY}, ${3:OutWidth}, ${4:OutHeight}, ${5:Control}, ${6:WinTitle}, ${7:WinText}, ${8:ExcludeTitle}]',
         doc: 'Retrieves the position and size of a control.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ControlGetPos.htm',
         exp: [
-            'ControlGetPos , [X, Y, Width, Height, Control, WinTitle, WinText, ExcludeTitle, ExcludeText]',
+            'ControlGetPos , [OutX, OutY, OutWidth, OutHeight, Control, WinTitle, WinText, ExcludeTitle, ExcludeText]',
             '',
             ';exp: Continuously updates and displays the name and position of the control currently under the mouse cursor.',
             '',
