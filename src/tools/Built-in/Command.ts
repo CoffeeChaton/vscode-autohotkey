@@ -614,7 +614,7 @@ export const LineCommand: TLineCommand = {
     },
     ENVADD: {
         keyRawName: 'EnvAdd',
-        body: 'EnvAdd, ${1:Var}, ${2:Value} [, ${3:TimeUnits]}',
+        body: 'EnvAdd, ${1:OutVar}, ${2:Value} [, ${3:TimeUnits]}',
         doc: 'Sets a [variable](https://www.autohotkey.com/docs/Variables.htm) to the sum of itself plus the given value (can also add or subtract time from a [date-time](https://www.autohotkey.com/docs/commands/FileSetTime.htm#YYYYMMDD) value). Synonymous with: `Var += Value`.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/EnvAdd.htm',
@@ -631,7 +631,7 @@ export const LineCommand: TLineCommand = {
     },
     ENVDIV: {
         keyRawName: 'EnvDiv',
-        body: 'EnvDiv, ${1:Var}, ${2:Value}',
+        body: 'EnvDiv, ${1:OutVar}, ${2:Value}',
         doc: 'Sets a [variable](https://www.autohotkey.com/docs/Variables.htm) to itself divided by the given value. Synonymous with: `Var /= Value`.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/EnvDiv.htm',
@@ -663,7 +663,7 @@ export const LineCommand: TLineCommand = {
     },
     ENVMULT: {
         keyRawName: 'EnvMult',
-        body: 'EnvMult, ${1:Var}, ${2:Value}',
+        body: 'EnvMult, ${1:OutVar}, ${2:Value}',
         doc: 'Sets a [variable](https://www.autohotkey.com/docs/Variables.htm) to itself times the given value. Synonymous with: `Var *= Value`.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/EnvMult.htm',
@@ -693,7 +693,7 @@ export const LineCommand: TLineCommand = {
     },
     ENVSUB: {
         keyRawName: 'EnvSub',
-        body: 'EnvSub, ${1:Var}, ${2:Value}, ${3|Seconds,Minutes,Hours,Days|}',
+        body: 'EnvSub, ${1:OutVar}, ${2:Value}, ${3|Seconds,Minutes,Hours,Days|}',
         doc: [
             'Sets a [variable](https://www.autohotkey.com/docs/Variables.htm) to itself minus the given value (can also compare [date-time](https://www.autohotkey.com/docs/commands/FileSetTime.htm#YYYYMMDD) values). Synonymous with: `Var -= Value`.',
             '- Var : The name of the [variable](https://www.autohotkey.com/docs/Variables.htm) upon which to operate.',
