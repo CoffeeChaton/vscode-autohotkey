@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 
-const z9 = {
+const otherKeyWord = {
     CLASS: {
         keyRawName: 'Class',
         body: 'Class',
@@ -43,7 +43,7 @@ const z9 = {
     },
     STATIC: {
         keyRawName: 'Static',
-        body: 'Static LoggedLines := 0',
+        body: 'Static',
         doc: 'Static variables are always implicitly local, but differ from locals because their values are remembered between calls.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/Functions.htm#static',
@@ -69,7 +69,7 @@ const z9 = {
     },
     LOCAL: {
         keyRawName: 'Local',
-        body: 'local, ${1:VariableName}',
+        body: 'local',
         doc: [
             'Local variables are specific to a single function and are visible only inside that function.',
             'Consequently, a local variable may have the same name as a global variable and both will have separate contents.',

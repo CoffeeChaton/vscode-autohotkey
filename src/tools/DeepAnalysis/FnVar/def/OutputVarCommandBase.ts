@@ -1,7 +1,7 @@
 import type { TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
 import type { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
-import { OutputCommandBaseMap } from './OutputBaseMap';
+import { OutputCommandBaseMap } from './OutPut';
 
 /**
  * OutputVar
@@ -45,4 +45,4 @@ export function OutputVarCommandBase(need: TGetFnDefNeed, keyWord: string, col: 
 
 // FileGetTime, OutputVar
 // FileGetTime OutputVar
-//           ^ miss "," is OK ? Why? ...
+//           ^ miss "," is OK ... Why?

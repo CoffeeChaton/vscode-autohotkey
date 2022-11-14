@@ -195,11 +195,12 @@ export type TAllowDiagCode =
     | EDiagCode.code700
     | EDiagCode.code803
     | EDiagCode.code804
-    | EDiagCode.code806
     | EDiagCode.code812
+    | EDiagCode.code813
     | EDiagCode.code813
     | EDiagCode.code814
     | EDiagCode.code815
+    | EDiagCode.code816
     | EDiagCode.code816
     | EDiagCode.code824;
 
@@ -410,7 +411,7 @@ export const LineCommand: TLineCommand = {
     CONTROLGETTEXT: {
         keyRawName: 'ControlGetText',
         body:
-            'ControlGetText, ${1:OutputVar} [, ${2:Control}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
+            'ControlGetText, ${1:OutputVar} [, ${2:Control}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
         doc: 'Retrieves text from a control.\n\n* Note: To retrieve text from a ListView, ListBox, or ComboBox, use ControlGet List instead.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ControlGetText.htm',
@@ -432,7 +433,7 @@ export const LineCommand: TLineCommand = {
     CONTROLMOVE: {
         keyRawName: 'ControlMove',
         body:
-            'ControlMove, ${1:Control}, ${2:X}, ${3:Y}, ${4:Width}, ${5:Height} [, ${6:WinTitle}, ${7:WinText}, ${8:ExcludeTitle}]',
+            'ControlMove, ${1:Control}, ${2:X}, ${3:Y}, ${4:Width}, ${5:Height} [, ${6:WinTitle}, ${7:WinText}, ${8:ExcludeTitle}, ${9:ExcludeText}]',
         doc: 'Moves or resizes a control.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ControlMove.htm',
@@ -457,7 +458,7 @@ export const LineCommand: TLineCommand = {
     CONTROLSEND: {
         keyRawName: 'ControlSend',
         body:
-            'ControlSend, [${1:Control}, ${2:Keys}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
+            'ControlSend, [${1:Control}, ${2:Keys}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
         doc: 'Sends simulated keystrokes to a window or control.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ControlSend.htm',
@@ -468,7 +469,7 @@ export const LineCommand: TLineCommand = {
     CONTROLSENDRAW: {
         keyRawName: 'ControlSendRaw',
         body:
-            'ControlSendRaw, [${1:Control}, ${2:Keys}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText]}',
+            'ControlSendRaw, [${1:Control}, ${2:Keys}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
         doc: 'Sends simulated keystrokes to a window or control.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ControlSend.htm',
@@ -479,7 +480,7 @@ export const LineCommand: TLineCommand = {
     CONTROLSETTEXT: {
         keyRawName: 'ControlSetText',
         body:
-            'ControlSetText, [${1:Control}, ${2:NewText }, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
+            'ControlSetText, [${1:Control}, ${2:NewText}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
         doc: 'Changes the text of a control.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ControlSetText.htm',
@@ -489,8 +490,25 @@ export const LineCommand: TLineCommand = {
     },
     COORDMODE: {
         keyRawName: 'CoordMode',
-        body: 'CoordMode, ${1:ToolTip|Pixel|Mouse} [, ${2:Screen|Relative}]',
-        doc: 'Sets coordinate mode for various commands to be relative to either the active window or the screen.',
+        body: 'CoordMode, ${1|ToolTip,Pixel,Mouse,Caret,Menu|} [, ${2|Screen,Relative,Window,Client|}]',
+        doc: [
+            'Sets coordinate mode for various commands to be relative to either the active window or the screen.',
+            '',
+            '1. **TargetType**:',
+            '> The type of target to affect. Specify one of the following words:',
+            '- **ToolTip**: Affects [ToolTip](https://www.autohotkey.com/docs/commands/ToolTip.htm).',
+            '- **Pixel**: Affects [PixelGetColor](https://www.autohotkey.com/docs/commands/PixelGetColor.htm), [PixelSearch](https://www.autohotkey.com/docs/commands/PixelSearch.htm), and [ImageSearch](https://www.autohotkey.com/docs/commands/ImageSearch.htm).',
+            '- **Mouse**: Affects [MouseGetPos](https://www.autohotkey.com/docs/commands/MouseGetPos.htm), [Click](https://www.autohotkey.com/docs/commands/Click.htm), and [MouseMove](https://www.autohotkey.com/docs/commands/MouseMove.htm)/[Click](https://www.autohotkey.com/docs/commands/MouseClick.htm)/[Drag](https://www.autohotkey.com/docs/commands/MouseClickDrag.htm).',
+            '- **Caret**: Affects the built-in variables [A_CaretX](https://www.autohotkey.com/docs/Variables.htm#Caret) and [A_CaretY](https://www.autohotkey.com/docs/Variables.htm#Caret).',
+            '- **Menu**: Affects the [Menu Show](https://www.autohotkey.com/docs/commands/Menu.htm#Show) command when coordinates are specified for it.',
+            '',
+            '2. **RelativeTo**:',
+            '> The area to which TargetType is to be related. Specify one of the following words (if omitted, it defaults to Screen):',
+            '- **Screen**: Coordinates are relative to the desktop (entire screen).',
+            '- **Relative**: Coordinates are relative to the active window.',
+            '- **Window** [[v1.1.05+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.05.00 "Applies to AutoHotkey v1.1.05 and later"): Synonymous with _Relative_ and recommended for clarity.',
+            '- **Client** [[v1.1.05+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.05.00 "Applies to AutoHotkey v1.1.05 and later"): Coordinates are relative to the active window\'s client area, which excludes the window\'s title bar, menu (if it has a standard one) and borders. Client coordinates are less dependent on OS version and theme.',
+        ].join('\n'),
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/CoordMode.htm',
         exp: [
@@ -514,7 +532,7 @@ export const LineCommand: TLineCommand = {
     },
     DETECTHIDDENTEXT: {
         keyRawName: 'DetectHiddenText',
-        body: 'DetectHiddenText, ${1:On|Off}',
+        body: 'DetectHiddenText, ${1|On,Off|}',
         doc: 'Determines whether invisible text in a window is "seen" for the purpose of finding the window. This affects commands, built-in functions and control flow statements such as WinExist() and WinActivate.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/DetectHiddenText.htm',
@@ -526,7 +544,7 @@ export const LineCommand: TLineCommand = {
     },
     DETECTHIDDENWINDOWS: {
         keyRawName: 'DetectHiddenWindows',
-        body: 'DetectHiddenWindows, ${1:On|Off}',
+        body: 'DetectHiddenWindows, ${1|On,Off|}',
         doc: 'Determines whether invisible windows are "seen" by the script.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/DetectHiddenWindows.htm',
@@ -590,7 +608,7 @@ export const LineCommand: TLineCommand = {
     },
     DRIVESPACEFREE: {
         keyRawName: 'DriveSpaceFree',
-        body: 'DriveSpaceFree, ${1:OutputVar_MBSize}, ${2:C:\\}',
+        body: 'DriveSpaceFree, ${1:OutputVar_MBSize}, ${2:C:\\\\}',
         doc: 'Retrieves the free disk space of a drive, in Megabytes.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/DriveSpaceFree.htm',
@@ -614,7 +632,7 @@ export const LineCommand: TLineCommand = {
     },
     ENVADD: {
         keyRawName: 'EnvAdd',
-        body: 'EnvAdd, ${1:OutVar}, ${2:Value} [, ${3:TimeUnits]}',
+        body: 'EnvAdd, ${1:OutVar}, ${2:Value} [, ${3:TimeUnits}]',
         doc: 'Sets a [variable](https://www.autohotkey.com/docs/Variables.htm) to the sum of itself plus the given value (can also add or subtract time from a [date-time](https://www.autohotkey.com/docs/commands/FileSetTime.htm#YYYYMMDD) value). Synonymous with: `Var += Value`.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/EnvAdd.htm',
@@ -657,6 +675,7 @@ export const LineCommand: TLineCommand = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/EnvGet.htm',
         exp: [
+            'EnvGet, OutputVar, EnvVarName',
             'EnvGet, OutputVar, % A_Is64bitOS ? "ProgramW6432" : "ProgramFiles"',
             'MsgBox, % "Program files are in: " OutputVar',
         ],
@@ -668,7 +687,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/EnvMult.htm',
         exp: [
-            'EnvMult, Var, Value',
+            'EnvMult, OutVar, Value',
             'EnvMult, MyCount, 2',
             'MyCount *= 2',
         ],
@@ -703,6 +722,7 @@ export const LineCommand: TLineCommand = {
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/EnvSub.htm',
         exp: [
+            'EnvSub, OutVar, Value',
             'var1 := 20050126',
             'var2 := 20040126',
             'EnvSub, var1, %var2%, Days',
@@ -833,7 +853,7 @@ export const LineCommand: TLineCommand = {
     FILECREATESHORTCUT: {
         keyRawName: 'FileCreateShortcut',
         body:
-            'FileCreateShortcut, ${1:Target}, ${2:C:\\My Shortcut.lnk } [, ${3:WorkingDir}, ${4:Args}, ${5:Description}, ${6:IconFile}, ${7:ShortcutKey}, ${8:IconNumber}, ${9|1,3,7|}',
+            'FileCreateShortcut, ${1:Target}, ${2:C:\\My Shortcut.lnk} [, ${3:WorkingDir}, ${4:Args}, ${5:Description}, ${6:IconFile}, ${7:ShortcutKey}, ${8:IconNumber}, ${9|1,3,7|} ]',
         doc: 'Creates a shortcut (.lnk) file.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileCreateShortcut.htm',
@@ -852,7 +872,6 @@ export const LineCommand: TLineCommand = {
             '',
             '### FilePattern',
             '1. The name of a single file or a wildcard pattern such as `C:\\Temp\\*.tmp`. _FilePattern_ is assumed to be in [%A\\_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified.',
-            '',
             '2. To remove an entire folder, along with all its sub-folders and files, use [FileRemoveDir](https://www.autohotkey.com/docs/commands/FileRemoveDir.htm).',
         ].join('\n'),
         recommended: true,
@@ -952,7 +971,7 @@ export const LineCommand: TLineCommand = {
     },
     FILEGETSIZE: {
         keyRawName: 'FileGetSize',
-        body: 'FileGetSize, ${1:OutputVar} [, % "${2:Filename}", ${3|K,M}]',
+        body: 'FileGetSize, ${1:OutputVar} [, % "${2:Filename}", ${3|K,M|}]',
         doc: 'Retrieves the size of a file.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileGetSize.htm',
@@ -1075,6 +1094,8 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/FileRead.htm',
         exp: [
+            'FileRead, OutputVar, Filename',
+            '',
             'FileRead, OutputVar, % "C:\\My Documents\\My File.txt"',
         ],
         diag: EDiagCode.code700,
@@ -1311,7 +1332,7 @@ export const LineCommand: TLineCommand = {
     },
     GROUPCLOSE: {
         keyRawName: 'GroupClose',
-        body: 'GroupClose, ${1:GroupName} [, ${2:A|R}]',
+        body: 'GroupClose, ${1:GroupName} [, ${2|A,R|}]',
         doc: 'Closes the active window if it was just activated by [GroupActivate](https://www.autohotkey.com/docs/commands/GroupActivate.htm) or [GroupDeactivate](https://www.autohotkey.com/docs/commands/GroupDeactivate.htm). It then activates the next window in the series. It can also close all windows in a group.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/GroupClose.htm',
@@ -1328,7 +1349,7 @@ export const LineCommand: TLineCommand = {
     GUI: {
         keyRawName: 'Gui',
         body:
-            'Gui, ${1|New,Add,Show,Submit,Cancel,Destroy,Font,Color,Margin,Options,Menu,Minimize,Flash,Default|} [, ${2:Value1}, ${3:Value2}, ${4:Value3]}]',
+            'Gui, ${1|New,Add,Show,Submit,Cancel,Destroy,Font,Color,Margin,Options,Menu,Minimize,Flash,Default|} [, ${2:Value1}, ${3:Value2}, ${4:Value3}]',
         doc: [
             'Creates and manages windows and controls. Such windows can be used as data entry forms or custom user interfaces.',
             '1. `Sub-commands` -',
@@ -1451,7 +1472,7 @@ export const LineCommand: TLineCommand = {
     },
     INIREAD: {
         keyRawName: 'IniRead',
-        body: 'IniRead, ${4:OutputVar}, % "${1:Filename}", % "${2:Section}", % "${3:Key}" [,% "${5:Default}"]',
+        body: 'IniRead, ${1:OutputVar}, % "${2:Filename}", % "${3:Section}", % "${4:Key}" [,% "${5:Default}"]',
         doc: [
             'Reads a value, section or list of section names from a standard format .ini file.',
             '- A standard *ini* file looks like:',
@@ -1472,7 +1493,7 @@ export const LineCommand: TLineCommand = {
     },
     INIWRITE: {
         keyRawName: 'IniWrite',
-        body: 'IniWrite, % "${4:Value}", % "${1:Filename}", % "${2:Section}", % "${3:Key}"',
+        body: 'IniWrite, % "${1:Value}", % "${2:Filename}", % "${3:Section}", % "${4:Key}"',
         doc: [
             'Writes a value or section to a standard format .ini file.',
             '- A standard *ini* file looks like:',
@@ -1502,7 +1523,7 @@ export const LineCommand: TLineCommand = {
     INPUTBOX: {
         keyRawName: 'InputBox',
         body:
-            'InputBox, ${1:OutputVar} [,% "${2:Title}", % "${3:Prompt}", ${4:HIDE}, ${5:Width}, ${6:Height}, ${7:X}, ${8:Y}, ${9:Font}, ${10:Timeout}, % "${11:DefaultStr}"]',
+            'InputBox, ${1:OutputVar} [,% "${2:Title}", % "${3:Prompt}", ${4:HIDE}, ${5:Width}, ${6:Height}, ${7:X}, ${8:Y}, ${9:Locale}, ${10:Timeout}, % "${11:Default_Str}"]',
         doc: 'Displays an input box to ask the user to enter a string.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/InputBox.htm',
@@ -1761,7 +1782,7 @@ export const LineCommand: TLineCommand = {
     POSTMESSAGE: {
         keyRawName: 'PostMessage',
         body:
-            'PostMessage, ${1:Msg}, ${2:[wParam}, ${3:lParam}, ${4:Control}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText]}',
+            'PostMessage, ${1:Msg} [, ${2:wParam}, ${3:lParam}, ${4:Control}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText}]',
         doc: 'Sends a message to a window or control (SendMessage additionally waits for acknowledgement).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/PostMessage.htm',
@@ -1798,7 +1819,7 @@ export const LineCommand: TLineCommand = {
     },
     PROGRESS: {
         keyRawName: 'Progress',
-        body: 'Progress, Off',
+        body: 'Progress, ${1:ProgressParam1} [, ${2:SubText}, ${3:MainText}, ${4:WinTitle}, ${5:FontName}]',
         doc: 'Creates or updates a window containing a progress bar or an image.',
         recommended: false,
         diag: EDiagCode.code813,
@@ -1824,15 +1845,15 @@ export const LineCommand: TLineCommand = {
     },
     REGDELETE: {
         keyRawName: 'RegDelete',
-        body: 'RegDelete, % "${1:HKLM|HKU|HKCU|HKCR|HKCC}" [, % "${2:ValueName}]"',
-        doc: 'Deletes a subkey or value from the registry.',
+        body: 'RegDelete, % "${1|HKLM,HKU,HKCU,HKCR,HKCC|}\\" [, % "${2:ValueName}]"',
+        doc: 'Deletes a subkey or value from the registry.\n - **Warning**: Deleting from the registry is potentially dangerous - please exercise caution!',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/RegDelete.htm',
         exp: ['RegDelete, KeyName [, ValueName]'],
     },
     REGREAD: {
         keyRawName: 'RegRead',
-        body: 'RegRead, ${1:OutputVar}, % "${2:HKLM|HKU|HKCU|HKCR|HKCC}" [, % "${4:ValueName}" ]',
+        body: 'RegRead, ${1:OutputVar}, % "${2|HKLM,HKU,HKCU,HKCR,HKCC|}\\" [, % "${3:ValueName}" ]',
         doc: 'Reads a value from the registry.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/RegRead.htm',
@@ -1841,7 +1862,7 @@ export const LineCommand: TLineCommand = {
     REGWRITE: {
         keyRawName: 'RegWrite',
         body:
-            'RegWrite, ${1:REG_SZ|REG_EXPAND_SZ|REG_MULTI_SZ|REG_DWORD|REG_BINARY}, ${2:HKLM|HKU|HKCU|HKCR|HKCC} [, ${3:ValueName}, ${4:Value}]',
+            'RegWrite, ${1|REG_SZ,REG_EXPAND_SZ,REG_MULTI_SZ,REG_DWORD,REG_BINARY|}, % "${2|HKLM,HKU,HKCU,HKCR,HKCC|}\\" [, ${3:ValueName}, ${4:Value}]',
         doc: 'Writes a value to the registry.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/RegWrite.htm',
@@ -1963,7 +1984,7 @@ export const LineCommand: TLineCommand = {
     SENDMESSAGE: {
         keyRawName: 'SendMessage',
         body:
-            'SendMessage, ${1:Msg}, ${2:[wParam}, ${3:lParam}, ${4:Control}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText}, ${9:Timeout]}',
+            'SendMessage, ${1:Msg}, [ ${2:wParam}, ${3:lParam}, ${4:Control}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText}, ${9:Timeout}]',
         doc: 'Sends a message to a window or control (SendMessage additionally waits for acknowledgement).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/PostMessage.htm',
@@ -2009,7 +2030,7 @@ export const LineCommand: TLineCommand = {
     },
     SETBATCHLINES: {
         keyRawName: 'SetBatchLines',
-        body: 'SetBatchLines, ${1:-1 | 20ms | LineCount}',
+        body: 'SetBatchLines, ${1|-1,20ms,LineCount|}',
         doc: 'Determines how fast a script will run (affects CPU utilization).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/SetBatchLines.htm',
@@ -2054,7 +2075,7 @@ export const LineCommand: TLineCommand = {
     },
     SETENV: {
         keyRawName: 'SetEnv',
-        body: 'SetEnv, Var, Value',
+        body: 'SetEnv, ${1:OutVar}, ${2:Value}',
         doc: 'Assigns the specified value to a [variable](https://www.autohotkey.com/docs/Variables.htm).',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
@@ -2067,16 +2088,32 @@ export const LineCommand: TLineCommand = {
     },
     SETFORMAT: {
         keyRawName: 'SetFormat',
-        body: 'SetFormat, NumberType, Format',
+        body: 'SetFormat, ${1|IntegerFast,FloatFast,Integer,Float|}, ${2:Format}',
         doc: 'Sets the format of integers and floating point numbers generated by math operations.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/SetFormat.htm',
-        exp: ['SetFormat, NumberType, Format'],
+        exp: [
+            'SetFormat, NumberType, Format',
+            ';exp---',
+            'Var := 11.333333',
+            'SetFormat, float, 6.2',
+            'Var -= 1  ; Sets Var to be 10.33 with one leading space because the total width is 6.',
+            'SetFormat, float, 0.2',
+            'Var += 1  ; Sets Var to be 11.33 with no leading spaces.',
+            'SetFormat, float, 06.0',
+            'Var += 0  ; Sets Var to be 000011',
+            '',
+            '; Convert a decimal integer to hexadecimal:',
+            'SetFormat, IntegerFast, hex',
+            'Var += 0  ; Sets Var (which previously contained 11) to be 0xb.',
+            'Var .= ""  ; Necessary due to the "fast" mode.',
+            'SetFormat, IntegerFast, d',
+        ],
         diag: EDiagCode.code815,
     },
     SETKEYDELAY: {
         keyRawName: 'SetKeyDelay',
-        body: 'SetKeyDelay, ${1:[ Delay}, ${2:PressDuration]}',
+        body: 'SetKeyDelay [, ${1:Delay}, ${2:PressDuration}, ${3:Play}]',
         doc: 'Sets the delay that will occur after each keystroke sent by [Send](https://www.autohotkey.com/docs/commands/Send.htm) or [ControlSend](https://www.autohotkey.com/docs/commands/ControlSend.htm).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/SetKeyDelay.htm',
@@ -2133,7 +2170,7 @@ export const LineCommand: TLineCommand = {
     },
     SETSTORECAPSLOCKMODE: {
         keyRawName: 'SetStoreCapsLockMode',
-        body: 'SetStoreCapsLockMode, ${1:|On,Off|}',
+        body: 'SetStoreCapsLockMode, ${1|On,Off|}',
         doc: 'Whether to restore the state of CapsLock after a [Send](https://www.autohotkey.com/docs/commands/Send.htm).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/SetStoreCapslockMode.htm',
@@ -2145,7 +2182,7 @@ export const LineCommand: TLineCommand = {
     },
     SETTIMER: {
         keyRawName: 'SetTimer',
-        body: 'SetTimer [, ${1:Label_or_fnName}, ${2|Period,On,Off|}]',
+        body: 'SetTimer [, ${1:Label_or_fnName}, ${2|Period,On,Off|}, ${3:Priority_int}]',
         doc: 'Causes a subroutine to be launched automatically and repeatedly at a specified time interval.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/SetTimer.htm',
@@ -2173,7 +2210,7 @@ export const LineCommand: TLineCommand = {
     },
     SETTITLEMATCHMODE: {
         keyRawName: 'SetTitleMatchMode',
-        body: 'SetTitleMatchMode, ${1:Fast|Slow|RegEx|1|2|3}',
+        body: 'SetTitleMatchMode, ${1|Fast,Slow,RegEx,1,2,3|}',
         doc: 'Sets the matching behavior of the WinTitle parameter in commands such as [WinWait](https://www.autohotkey.com/docs/commands/WinWait.htm).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/SetTitleMatchMode.htm',
@@ -2249,12 +2286,12 @@ export const LineCommand: TLineCommand = {
     },
     SORT: {
         keyRawName: 'Sort',
-        body: 'Sort, ${1:VarName} [, ${2:Options}]',
+        body: 'Sort, ${1:InputVarName} [, ${2:Options}]',
         doc: 'Arranges a variable\'s contents in alphabetical, numerical, or random order (optionally removing duplicates).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Sort.htm',
         exp: [
-            'Sort, VarName [, Options]',
+            'Sort, InputVarName [, Options]',
             '',
             'MyVar := "5,3,7,9,1,13,999,-4"',
             'rawStr := MyVar',
@@ -2330,7 +2367,7 @@ export const LineCommand: TLineCommand = {
     },
     SOUNDSETWAVEVOLUME: {
         keyRawName: 'SoundSetWaveVolume',
-        body: 'SoundSetWaveVolume, ${1:Percent}',
+        body: 'SoundSetWaveVolume, ${1:Percent}, [ ${2:DeviceNumber}]',
         doc: [
             '',
             'Changes the wave output volume of a sound device.',
@@ -2355,7 +2392,8 @@ export const LineCommand: TLineCommand = {
     },
     SPLASHIMAGE: {
         keyRawName: 'SplashImage',
-        body: 'SplashImage, Off',
+        body:
+            'SplashImage, [, ${1:ImageFile}, ${2:Options}, ${3:SubText}, ${4:MainText}, ${5:WinTitle}, ${6:FontName}]',
         doc: 'Creates or updates a window containing a progress bar or an image.',
         recommended: false,
         diag: EDiagCode.code813,
@@ -2386,8 +2424,7 @@ export const LineCommand: TLineCommand = {
     SPLITPATH: {
         keyRawName: 'SplitPath',
         body:
-            'SplitPath, ${1:FullFileName} [, ${2:OutFileName}, ${3:OutDir}, ${4:OutExtension}, ${5:OutNameNoExt}, ${6:OutDrive}]',
-
+            'SplitPath, ${1:InputFullFileName} [, ${2:OutFileName}, ${3:OutDir}, ${4:OutExtension}, ${5:OutNameNoExt}, ${6:OutDrive}]',
         doc: [
             '',
             'Separates a file name or URL into its name, directory, extension, and drive.',
@@ -2441,7 +2478,7 @@ export const LineCommand: TLineCommand = {
     STATUSBARWAIT: {
         keyRawName: 'StatusBarWait',
         body:
-            'StatusBarWait, ${1:[BarText}, ${2:Timeout_sec}, ${3:Part#}, ${4:WinTitle}, ${5:WinText}, ${6:Interval}, ${7:ExcludeTitle}, ${8:ExcludeText]}',
+            'StatusBarWait, [${1:BarText}, ${2:Timeout_sec}, ${3:Part#}, ${4:WinTitle}, ${5:WinText}, ${6:Interval}, ${7:ExcludeTitle}, ${8:ExcludeText}]',
         doc: 'Waits until a window\'s status bar contains the specified string.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/StatusBarWait.htm',
@@ -2464,7 +2501,7 @@ export const LineCommand: TLineCommand = {
     },
     STRINGGETPOS: {
         keyRawName: 'StringGetPos',
-        body: 'StringGetPos, OutputVar, InputVar, SearchText , Occurrence, Offset',
+        body: 'StringGetPos, ${1:OutputVar}, ${2:InputVar}, ${3:SearchText} , ${4:Occurrence}, ${5:Offset}',
         doc: 'Retrieves the position of the specified substring within a string.\n\n**Deprecated:** This command is not recommended for use in new scripts. Use the [InStr](https://www.autohotkey.com/docs/commands/InStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringGetPos.htm',
@@ -2473,7 +2510,7 @@ export const LineCommand: TLineCommand = {
     },
     STRINGLEFT: {
         keyRawName: 'StringLeft',
-        body: 'StringLeft, OutputVar, InputVar, Count',
+        body: 'StringLeft, ${1:OutputVar}, ${2:InputVar}, ${3:Count}',
         doc: 'Retrieves a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
@@ -2482,7 +2519,7 @@ export const LineCommand: TLineCommand = {
     },
     STRINGLEN: {
         keyRawName: 'StringLen',
-        body: 'StringLen, OutputVar, InputVar',
+        body: 'StringLen, ${1:OutputVar}, ${2:InputVar}',
         doc: 'Retrieves the count of how many characters are in a string.\n\n**Deprecated:** This command is not recommended for use in new scripts. Use the [StrLen](https://www.autohotkey.com/docs/commands/StrLen.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLen.htm',
@@ -2491,7 +2528,7 @@ export const LineCommand: TLineCommand = {
     },
     STRINGLOWER: {
         keyRawName: 'StringLower',
-        body: 'StringLower, ${1:OutputVar}, ${2:InputVar} [, T]',
+        body: 'StringLower, ${1:OutputVar}, ${2:InputVar} [, ${3:T}]',
         doc: 'Converts a string to lowercase or uppercase.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLower.htm',
@@ -2500,7 +2537,7 @@ export const LineCommand: TLineCommand = {
     },
     STRINGMID: {
         keyRawName: 'StringMid',
-        body: 'StringMid, OutputVar, InputVar, StartChar [, Count, L]',
+        body: 'StringMid, ${1:OutputVar}, ${2:InputVar}, ${3:StartChar} [, ${4:Count}, ${5:L}]',
         doc: 'Retrieves one or more characters from the specified position in a string.\n\n**Deprecated:** This command is not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringMid.htm',
@@ -2509,7 +2546,7 @@ export const LineCommand: TLineCommand = {
     },
     STRINGREPLACE: {
         keyRawName: 'StringReplace',
-        body: 'StringReplace, OutputVar, InputVar, SearchText , ReplaceText, ReplaceAll',
+        body: 'StringReplace, ${1:OutputVar}, ${2:InputVar}, ${3:SearchText} , ${4:ReplaceText}, ${5:ReplaceAll}',
         doc: 'Replaces the specified substring with a new string.\n\n**Deprecated:** This command is not recommended for use in new scripts. Use the [StrReplace](https://www.autohotkey.com/docs/commands/StrReplace.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringReplace.htm',
@@ -2518,7 +2555,7 @@ export const LineCommand: TLineCommand = {
     },
     STRINGRIGHT: {
         keyRawName: 'StringRight',
-        body: 'StringRight, OutputVar, InputVar, Count',
+        body: 'StringRight, ${1:OutputVar}, ${2:InputVar}, ${3:Count}',
         doc: 'Retrieves a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
@@ -2536,7 +2573,7 @@ export const LineCommand: TLineCommand = {
     },
     STRINGTRIMLEFT: {
         keyRawName: 'StringTrimLeft',
-        body: 'StringTrimLeft, OutputVar, InputVar, Count',
+        body: 'StringTrimLeft, ${1:OutputVar}, ${2:InputVar}, ${3:Count}',
         doc: 'Removes a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringTrimLeft.htm',
@@ -2545,7 +2582,7 @@ export const LineCommand: TLineCommand = {
     },
     STRINGTRIMRIGHT: {
         keyRawName: 'StringTrimRight',
-        body: 'StringTrimRight, OutputVar, InputVar, Count',
+        body: 'StringTrimRight, ${1:OutputVar}, ${2:InputVar}, ${3:Count}',
         doc: 'Removes a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringTrimLeft.htm',
@@ -2554,7 +2591,7 @@ export const LineCommand: TLineCommand = {
     },
     STRINGUPPER: {
         keyRawName: 'StringUpper',
-        body: 'StringUpper, OutputVar, InputVar [, T]',
+        body: 'StringUpper, ${1:OutputVar}, ${2:InputVar} [, ${3:T}]',
         doc: 'Converts a string to lowercase or uppercase.\n\nCommand -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLower.htm',
@@ -2632,8 +2669,41 @@ export const LineCommand: TLineCommand = {
     },
     TRANSFORM: {
         keyRawName: 'Transform',
-        body: 'Transform, OutputVar, SubCommand, Value1 [, Value2]',
-        doc: 'Performs miscellaneous math functions, bitwise operations, and tasks such as ASCII/Unicode conversion.\n\n**Deprecated:** This command is not recommended for use in new scripts. For details on what you can use instead, see the sub-command sections below.',
+        body:
+            'Transform, ${1:OutputVar}, ${2|Unicode,Deref,HTML,Asc,Chr,Mod,Exp,Sqrt,Log,Ln,Round,Ceil,Floor,Abs,Sin,Cos,Tan,ASin,ACos,ATan,Pow,BitNot,BitAnd,BitOr,BitXOr,BitShiftLeft,BitShiftRight|}, ${3:Value1} [, ${4:Value2}]',
+        doc: [
+            'Performs miscellaneous math functions, bitwise operations, and tasks such as ASCII/Unicode conversion.',
+            '- **Deprecated:** This command is not recommended for use in new scripts. For details on what you can use instead, see the sub-command sections below.',
+            'For _SubCommand_, specify one of the following:',
+            '',
+            '- [Unicode](https://www.autohotkey.com/docs/commands/Transform.htm#Unicode) (for ANSI builds only): Retrieves or stores Unicode text on the clipboard.',
+            '- [Deref](https://www.autohotkey.com/docs/commands/Transform.htm#Deref): Expands variable references and escape sequences contained inside other variables.',
+            '- [HTML](https://www.autohotkey.com/docs/commands/Transform.htm#HTML): Converts the specified string into its HTML equivalent.',
+            '- [Asc](https://www.autohotkey.com/docs/commands/Transform.htm#Asc): Retrieves the character code for the first character in the specified string.',
+            '- [Chr](https://www.autohotkey.com/docs/commands/Transform.htm#Chr): Retrieves the single character corresponding to the character code.',
+            '- [Mod](https://www.autohotkey.com/docs/commands/Transform.htm#Mod): Retrieves the remainder of a division.',
+            '- [Exp](https://www.autohotkey.com/docs/commands/Transform.htm#Exp): Retrieves e raised to the _N_th power.',
+            '- [Sqrt](https://www.autohotkey.com/docs/commands/Transform.htm#Sqrt): Retrieves the square root of a number.',
+            '- [Log](https://www.autohotkey.com/docs/commands/Transform.htm#Log): Retrieves the logarithm (base 10) of a number.',
+            '- [Ln](https://www.autohotkey.com/docs/commands/Transform.htm#Ln): Retrieves the natural logarithm (base e) of a number.',
+            '- [Round](https://www.autohotkey.com/docs/commands/Transform.htm#Round): Retrieves a number rounded to _N_ decimal places.',
+            '- [Ceil](https://www.autohotkey.com/docs/commands/Transform.htm#Ceil): Retrieves a number rounded up to the nearest integer.',
+            '- [Floor](https://www.autohotkey.com/docs/commands/Transform.htm#Floor): Retrieves a number rounded down to the nearest integer.',
+            '- [Abs](https://www.autohotkey.com/docs/commands/Transform.htm#Abs): Retrieves the absolute value of a number.',
+            '- [Sin](https://www.autohotkey.com/docs/commands/Transform.htm#Sin): Retrieves the trigonometric sine of a number.',
+            '- [Cos](https://www.autohotkey.com/docs/commands/Transform.htm#Cos): Retrieves the trigonometric cosine of a number.',
+            '- [Tan](https://www.autohotkey.com/docs/commands/Transform.htm#Tan): Retrieves the trigonometric tangent of a number.',
+            '- [ASin](https://www.autohotkey.com/docs/commands/Transform.htm#ASin): Retrieves the arcsine in radians.',
+            '- [ACos](https://www.autohotkey.com/docs/commands/Transform.htm#ACos): Retrieves the arccosine in radians.',
+            '- [ATan](https://www.autohotkey.com/docs/commands/Transform.htm#ATan): Retrieves the arctangent in radians.',
+            '- [Pow](https://www.autohotkey.com/docs/commands/Transform.htm#Pow): Retrieves a base raised to the power of an exponent.',
+            '- [BitNot](https://www.autohotkey.com/docs/commands/Transform.htm#BitNot): Retrieves the bit-inverted version of a number.',
+            '- [BitAnd](https://www.autohotkey.com/docs/commands/Transform.htm#BitAnd): Retrieves the result of the bitwise-AND of the specified numbers.',
+            '- [BitOr](https://www.autohotkey.com/docs/commands/Transform.htm#BitOr): Retrieves the result of the bitwise-OR of the specified numbers.',
+            '- [BitXOr](https://www.autohotkey.com/docs/commands/Transform.htm#BitXOr): Retrieves the result of the bitwise-EXCLUSIVE-OR of the specified numbers.',
+            '- [BitShiftLeft](https://www.autohotkey.com/docs/commands/Transform.htm#BitShiftLeft): Retrieves the result of shifting a number to the left by _N_ bit positions.',
+            '- [BitShiftRight](https://www.autohotkey.com/docs/commands/Transform.htm#BitShiftRight): Retrieves the result of shifting a number to the right by _N_ bit positions.',
+        ].join('\n'),
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/Transform.htm',
         exp: ['Transform, OutputVar, SubCommand, Value1 [, Value2]'],
@@ -2815,7 +2885,7 @@ export const LineCommand: TLineCommand = {
     },
     WINMAXIMIZE: {
         keyRawName: 'WinMaximize',
-        body: 'WinMaximize, ${1:[ WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText]}',
+        body: 'WinMaximize [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Enlarges the specified window to its maximum size.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/WinMaximize.htm',
@@ -2826,7 +2896,7 @@ export const LineCommand: TLineCommand = {
     WINMENUSELECTITEM: {
         keyRawName: 'WinMenuSelectItem',
         body:
-            'WinMenuSelectItem, ${1:WinTitle}, ${2:WinText}, ${3:Menu} [, ${4:SubMenu1}, ${5:SubMenu2}, ${6:SubMenu3}, ${7:SubMenu4}, ${8:SubMenu5}, ${9:SubMenu6}, ${10:ExcludeTitle} ]',
+            'WinMenuSelectItem, ${1:WinTitle}, ${2:WinText}, ${3:Menu} [, ${4:SubMenu1}, ${5:SubMenu2}, ${6:SubMenu3}, ${7:SubMenu4}, ${8:SubMenu5}, ${9:SubMenu6}, ${10:ExcludeTitle}, ${11:ExcludeText} ]',
         doc: 'Invokes a menu item from the menu bar of the specified window.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/WinMenuSelectItem.htm',

@@ -29,7 +29,7 @@ export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: n
         }
     }
 
-    const errMsg = [
+    const errMsg: string = [
         `🚀 ~ startDeep${startDeep}`,
         '  DocStrMap[line].deep',
         'get Range ERROR Start --904--321--33 -------',
@@ -39,7 +39,7 @@ export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: n
         `  startDeep ${startDeep}`,
         `  RangeEnd ${RangeEnd}`,
         'get Range ERROR END --904--321--33 -------',
-    ];
-    console.error(errMsg.join('\n'));
+    ].join('\n');
+    console.error(errMsg);
     return new vscode.Range(defLine, 0, searchLine + 1, 0);
 }

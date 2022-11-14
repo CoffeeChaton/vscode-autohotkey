@@ -1,102 +1,111 @@
 /* cSpell:disable */
-import { OutputCommandBaseMap } from './OutputBaseMap';
-import { OutputCommandPlusMap } from './OutputPlusMap';
 
-/**
- * source of https://github.com/Lexikos/Scintillua-ahk/blob/master/ahk1.lua
- */
-const outBase = {
-    ControlGet: 'OSSSSSSS',
-    ControlGetFocus: 'OSSSS',
-    ControlGetText: 'OSSSSS',
-    DriveGet: 'OSS',
-    DriveSpaceFree: 'OS',
-    EnvAdd: 'OES',
-    EnvDiv: 'OE',
-    EnvGet: 'OS',
-    EnvMult: 'OE',
-    EnvSub: 'OES',
-    FileGetAttrib: 'OS',
-    FileGetSize: 'OSS',
-    FileGetTime: 'OSS',
-    FileGetVersion: 'OS',
-    FileRead: 'OS',
-    FileReadLine: 'OSE',
-    FileSelectFile: 'OSSSS',
-    FileSelectFolder: 'OSES',
-    FormatTime: 'OSS',
-    GetKeyState: 'OSS',
-    GuiControlGet: 'OSSS',
-    IniRead: 'OSSSS',
-    Input: 'OSSS',
-    InputBox: 'OSSSEEEESES',
-    PixelGetColor: 'OEES',
-    Random: 'OEE',
-    RegRead: 'OSSS',
-    SetEnv: 'OS',
-    SoundGet: 'OSSE',
-    SoundGetWaveVolume: 'OE',
-    StatusBarGetText: 'OESSSS',
-    StringGetPos: 'OISSE',
-    StringLeft: 'OIE',
-    StringLen: 'OI',
-    StringLower: 'OIS',
-    StringMid: 'OIEES',
-    StringReplace: 'OISSS',
-    StringRight: 'OIE',
-    StringTrimLeft: 'OIE',
-    StringTrimRight: 'OIE',
-    StringUpper: 'OIS',
-    SysGet: 'OSSS',
-    Transform: 'OSSS',
-    WinGet: 'OSSSSS',
-    WinGetActiveTitle: 'O',
-    WinGetClass: 'OSSSS',
-    WinGetText: 'OSSSS',
-    WinGetTitle: 'OSSSS',
-} as const;
+import { inPutVarMap, OutputCommandBaseMap, OutputCommandPlusMap } from './OutPut';
 
-/**
- * source of https://github.com/Lexikos/Scintillua-ahk/blob/master/ahk1.lua
- */
-const outPlus = {
-    ControlGetPos: 'OOOOSSSSS',
-    FileGetShortcut: 'SOOOOOOO',
-    ImageSearch: 'OOEEEES',
-    MouseGetPos: 'OOOOE',
-    PixelSearch: 'OOEEEEEES',
-    Run: 'SSSO',
-    RunWait: 'SSSO',
-    SplitPath: 'IOOOOO',
-    WinGetActiveStats: 'OOOOO',
-    WinGetPos: 'OOOOSSSS',
-} as const;
+const outBase = [
+    'ControlGet, OutputVar, SubCommand, Value, Control, WinTitle, WinText, ExcludeTitle, ExcludeText',
+    'ControlGetFocus, OutputVar, WinTitle, WinText, ExcludeTitle, ExcludeText',
+    'ControlGetText, OutputVar, Control, WinTitle, WinText, ExcludeTitle, ExcludeText',
+    'DriveGet, OutputVar, SubCommand, Value',
+    'DriveSpaceFree, OutputVar, Path',
+    'EnvAdd, OutVar, Value, TimeUnits',
+    'EnvDiv, OutVar, Value',
+    'EnvGet, OutputVar, EnvVarName',
+    'EnvMult, OutVar, Value',
+    'EnvSub, OutVar, Value',
+    'FileGetAttrib, OutputVar, Filename',
+    'FileGetSize, OutputVar, Filename, Units',
+    'FileGetTime, OutputVar, Filename, WhichTime',
+    'FileGetVersion, OutputVar, Filename',
+    'FileRead, OutputVar, Filename',
+    'FileReadLine, OutputVar, Filename, LineNum',
+    'FileSelectFile, OutputVar, Options, RootDir_or_Filename, Title, Filter',
+    'FileSelectFolder, OutputVar, StartingFolder, Options, Prompt',
+    'FormatTime, OutputVar, YYYYMMDDHH24MISS, Format',
+    'GetKeyState, OutputVar, KeyName, Mode',
+    'GuiControlGet, OutputVar, SubCommand, ControlID, Value',
+    'IniRead, OutputVar, Filename, Section, Key, Default',
+    'Input, OutputVar, Options, EndKeys, MatchList',
+    'InputBox, OutputVar, Title, Prompt, HIDE, Width, Height, X, Y, Locale, Timeout, Default',
+    'PixelGetColor, OutputVar, X, Y, Mode',
+    'Random, OutputVar, Min, Max',
+    'RegRead, OutputVar, KeyName, ValueName',
+    'SetEnv, OutVar, Value',
+    'SoundGet, OutputVar, ComponentType, ControlType, DeviceNumber',
+    'SoundGetWaveVolume, OutputVar, DeviceNumber',
+    'StatusBarGetText, OutputVar, Part#, WinTitle, WinText, ExcludeTitle, ExcludeText',
+    'StringGetPos, OutputVar, InputVar, SearchText, Occurrence, Offset',
+    'StringLeft, OutputVar, InputVar, Count',
+    'StringLen, OutputVar, InputVar',
+    'StringLower, OutputVar, InputVar, T',
+    'StringMid, OutputVar, InputVar, StartChar, Count, L',
+    'StringReplace, OutputVar, InputVar, SearchText, ReplaceText, ReplaceAll',
+    'StringRight, OutputVar, InputVar, Count',
+    'StringTrimLeft, OutputVar, InputVar, Count',
+    'StringTrimRight, OutputVar, InputVar, Count',
+    'StringUpper, OutputVar, InputVar, T',
+    'SysGet, OutputVar, SubCommand, Value',
+    'Transform, OutputVar, SubCommand, Value1, Value2',
+    'WinGet, OutputVar, SubCommand, WinTitle, WinText, ExcludeTitle, ExcludeText',
+    'WinGetActiveTitle, Title',
+    'WinGetClass, OutputVar, WinTitle, WinText, ExcludeTitle, ExcludeText',
+    'WinGetText, OutputVar, WinTitle, WinText, ExcludeTitle, ExcludeText',
+    'WinGetTitle, OutputVar, WinTitle, WinText, ExcludeTitle, ExcludeText',
+] as const;
 
-function O2Arr(defStr: string): number[] {
-    const arr: number[] = [];
+const outPlus = [
+    'ControlGetPos, OutX, OutY, OutWidth, OutHeight, Control, WinTitle, WinText, ExcludeTitle, ExcludeText',
+    'FileGetShortcut, LinkFile, OutTarget, OutDir, OutArgs, OutDescription, OutIcon, OutIconNum, OutRunState',
+    'ImageSearch, OutputVarX, OutputVarY',
+    'MouseGetPos, OutputVarX, OutputVarY, OutputVarWin, OutputVarControl',
+    'PixelSearch, OutputVarX, OutputVarY',
+    'Run, Target, WorkingDir, Options, OutputVarPID',
+    'RunWait, Target, WorkingDir, Options, OutputVarPID',
+    'SplitPath, InputVar, OutFileName, OutDir, OutExtension, OutNameNoExt, OutDrive',
+    'WinGetActiveStats, OutTitle, OutWidth, OutHeight, OutX, OutY',
+    'WinGetPos, OutX, OutY, OutWidth, OutHeight, WinTitle, WinText, ExcludeTitle, ExcludeText',
+] as const;
 
-    for (const [i, s] of [...defStr].entries()) {
-        if (s === 'O') {
-            arr.push(i + 1);
+const inputList = [
+    'Sort, InputVarName, Options',
+    'SplitPath, InputVar, OutFileName, OutDir, OutExtension, OutNameNoExt, OutDrive',
+    'StringGetPos, OutputVar, InputVar, SearchText, Occurrence, Offset',
+    'StringLeft, OutputVar, InputVar, Count',
+    'StringLen, OutputVar, InputVar',
+    'StringLower, OutputVar, InputVar, T',
+    'StringMid, OutputVar, InputVar, StartChar, Count, L',
+    'StringReplace, OutputVar, InputVar, SearchText, ReplaceText, ReplaceAll',
+    'StringRight, OutputVar, InputVar, Count',
+    'StringSplit, OutputArray, InputVar, Delimiters, OmitChars',
+    'StringTrimLeft, OutputVar, InputVar, Count',
+    'StringTrimRight, OutputVar, InputVar, Count',
+    'StringUpper, OutputVar, InputVar, T',
+] as const;
+
+function getCmdHead(lineStr: string): string {
+    return lineStr
+        .slice(0, lineStr.indexOf(','))
+        .trim()
+        .toUpperCase();
+}
+
+function DataCheck(testList: readonly string[], map: ReadonlyMap<string, unknown>): string[] {
+    expect(testList.length === map.size).toBeTruthy();
+
+    const errList: string[] = [];
+    for (const lineStr of testList) {
+        if (!map.has(getCmdHead(lineStr))) {
+            errList.push(lineStr);
         }
     }
-    return arr;
+    return errList;
 }
 
 describe('check outList Command cover', () => {
-    it('exp: OutPut Base', (): void => {
+    it('check: OutPut Base', (): void => {
         expect.hasAssertions();
 
-        const errList: [string, string][] = [];
-        for (const onigMsg of Object.entries(outBase)) {
-            const [key, _value] = onigMsg;
-            const defOffset: number | undefined = OutputCommandBaseMap.get(key.toUpperCase());
-            if (defOffset === undefined) {
-                errList.push(onigMsg);
-                continue;
-            }
-        }
-
+        const errList: string[] = DataCheck(outBase, OutputCommandBaseMap);
         if (errList.length > 0) {
             console.error('🚀 ~ OutPut Base ~ errList', errList);
         }
@@ -104,22 +113,21 @@ describe('check outList Command cover', () => {
         expect(errList.length === 0).toBeTruthy();
     });
 
-    it('exp: OutPut Plus', (): void => {
+    it('check: OutPut Plus', (): void => {
         expect.hasAssertions();
 
-        const errList: string[] = [];
-        for (const [key, defStr] of Object.entries(outPlus)) {
-            const defList: number[] | undefined = OutputCommandPlusMap.get(key.toUpperCase());
-            if (defList === undefined) {
-                errList.push(key);
-                continue;
-            }
-
-            const arr: number[] = O2Arr(defStr);
-
-            expect(arr).toStrictEqual(defList);
+        const errList: string[] = DataCheck(outPlus, OutputCommandPlusMap);
+        if (errList.length > 0) {
+            console.error('🚀 ~ OutPut Plus ~ errList', errList);
         }
 
+        expect(errList.length === 0).toBeTruthy();
+    });
+
+    it('check: InPut', (): void => {
+        expect.hasAssertions();
+
+        const errList: string[] = DataCheck(inputList, inPutVarMap);
         if (errList.length > 0) {
             console.error('🚀 ~ OutPut Plus ~ errList', errList);
         }

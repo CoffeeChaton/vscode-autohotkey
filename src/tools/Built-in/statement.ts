@@ -5,17 +5,9 @@
 import { EDiagCode } from '../../diag';
 
 // FIXME: check this
-type TAllowDiagCode =
+type TStatementDiag =
     | EDiagCode.code700
-    | EDiagCode.code803
-    | EDiagCode.code804
-    | EDiagCode.code806
-    | EDiagCode.code812
-    | EDiagCode.code813
-    | EDiagCode.code814
-    | EDiagCode.code815
-    | EDiagCode.code816
-    | EDiagCode.code824;
+    | EDiagCode.code806;
 
 export type TStatementKeyList =
     | 'AND'
@@ -69,7 +61,7 @@ export type TStatementElement = {
     recommended: boolean;
     link: `https://www.autohotkey.com/docs/${string}`;
     exp: readonly string[];
-    diag?: TAllowDiagCode;
+    diag?: TStatementDiag;
 };
 
 export type TStatement = {

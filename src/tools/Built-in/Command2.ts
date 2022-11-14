@@ -5,9 +5,10 @@
 export const cmd2Map: ReadonlyMap<string, string> = ((): ReadonlyMap<string, string> => {
     /**
      * source of https://github.com/Lexikos/Scintillua-ahk/blob/master/ahk1.lua
-     * S -> input or string?
+     * S -> string?
      * O -> output
      * E -> number
+     * I -> input varName ?
      */
     const defCommand = {
         AutoTrim: 'S',
@@ -82,7 +83,7 @@ export const cmd2Map: ReadonlyMap<string, string> = ((): ReadonlyMap<string, str
         IniWrite: 'SSSS',
         Input: 'OSSS',
         InputBox: 'OSSSEEEESES',
-        KeyHistory: 'SS',
+        KeyHistory: '',
         KeyWait: 'SS',
         ListHotkeys: '',
         ListLines: 'S',
@@ -94,18 +95,18 @@ export const cmd2Map: ReadonlyMap<string, string> = ((): ReadonlyMap<string, str
         MouseMove: 'EEES',
         // MsgBox: 'SSSS',
         MsgBox: 'S',
-        OnExit: 'SS',
+        OnExit: 'S',
         OutputDebug: 'S',
         Pause: 'SS',
         PixelGetColor: 'OEES',
         PixelSearch: 'OOEEEEEES',
         PostMessage: 'EEESSSSS',
         Process: 'SSS',
-        Progress: 'SSSSSS',
+        Progress: 'SSSSS',
         Random: 'OEE',
-        RegDelete: 'SSS',
-        RegRead: 'OSSS',
-        RegWrite: 'SSSSS',
+        RegDelete: 'SS',
+        RegRead: 'OSS',
+        RegWrite: 'SSSS',
         Reload: '',
         Run: 'SSSO',
         RunAs: 'SSS',
@@ -143,7 +144,7 @@ export const cmd2Map: ReadonlyMap<string, string> = ((): ReadonlyMap<string, str
         SoundPlay: 'SS',
         SoundSet: 'ESSE',
         SoundSetWaveVolume: 'EE',
-        SplashImage: 'SSSSSSS',
+        SplashImage: 'SSSSSS',
         SplashTextOff: '',
         SplashTextOn: 'EESS',
         SplitPath: 'IOOOOO',
@@ -157,12 +158,12 @@ export const cmd2Map: ReadonlyMap<string, string> = ((): ReadonlyMap<string, str
         StringMid: 'OIEES',
         StringReplace: 'OISSS',
         StringRight: 'OIE',
-        StringSplit: 'SISSS',
+        StringSplit: 'SISS',
         StringTrimLeft: 'OIE',
         StringTrimRight: 'OIE',
         StringUpper: 'OIS',
         Suspend: 'S',
-        SysGet: 'OSSS',
+        SysGet: 'OSS',
         Thread: 'SEE',
         ToolTip: 'SEEE',
         Transform: 'OSSS',
