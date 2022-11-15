@@ -73,10 +73,6 @@ export const enum EDiagCode {
     code301 = 301, // 300~399 is func err
     code302 = 302,
     // code600~699 warn user
-    /**
-     * `.base`  Prototype pollution!
-     */
-    code600 = 600,
 
     /**
      * label like `DEFAULT:`
@@ -196,10 +192,6 @@ export const Diags: DeepReadonly<TDiags> = {
     302: {
         msg: 'Function name too long, name len > (255 -2) characters.',
         path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag302',
-    },
-    600: {
-        msg: 'Alert Prototype Pollution!! Suggest to use class replace',
-        path: 'https://www.autohotkey.com/docs/Objects.htm#Custom_Classes',
     },
     601: {
         msg: 'did you mean switch case `default :` ? this way look like a `label:`.',
