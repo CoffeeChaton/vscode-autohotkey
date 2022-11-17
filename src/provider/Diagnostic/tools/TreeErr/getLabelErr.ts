@@ -15,10 +15,6 @@ const DiagLabelErrMap: ReadonlyMap<string, TDiagMsg> = new Map([
         code: EDiagCode.code811,
         tags: [vscode.DiagnosticTag.Deprecated],
     }],
-    ['DEFAULT:', {
-        code: EDiagCode.code601,
-        tags: [],
-    }],
     ['ON:', {
         code: EDiagCode.code602,
         tags: [],

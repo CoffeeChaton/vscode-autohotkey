@@ -73,11 +73,6 @@ export const enum EDiagCode {
     // code600~699 warn user
 
     /**
-     * label like `DEFAULT:`
-     */
-    code601 = 601, // DEFAULT:
-
-    /**
      * Label name of `On:` , `Off:`
      *
      * On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.
@@ -194,11 +189,6 @@ export const Diags: DeepReadonly<TDiags> = {
         msg: 'function or Method is so big',
         path: 'https://www.autohotkey.com/docs/Functions.htm',
         // is user setting.
-    },
-    601: {
-        msg: 'Refactoring error? if you mean this is switch case `default :`?',
-        path: 'https://www.autohotkey.com/docs/misc/Labels.htm#syntax-and-usage=',
-        notDoc: true,
     },
     602: {
         msg: 'recommended that the following names not be used: On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.',
