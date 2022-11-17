@@ -2217,6 +2217,14 @@ export const LineCommand: TLineCommand = {
         exp: [
             'SetTitleMatchMode, MatchMode',
             'SetTitleMatchMode, Speed',
+            '',
+            ';Waits for the status bar of the active window to change.',
+            'SetTitleMatchMode RegEx  ; Accept regular expressions for use below.',
+            'if WinExist("A")  ; Set the last-found window to be the active window (for use below).',
+            '{',
+            '    StatusBarGetText, OrigText',
+            '    StatusBarWait, ^(?!^\\Q%OrigText%\\E$)  ; This regular expression waits for any change to the text.',
+            '}',
         ],
     },
     SETWINDELAY: {
