@@ -18,17 +18,6 @@ function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol, maxFnSize: number
     return false;
 }
 
-function FunctionNameTooLong(func: TAhkSymbol): boolean {
-    //  if (aFuncNameLength > MAX_VAR_NAME_LENGTH)
-    // {
-    //  ScriptError(_T("Function name too long."), aFuncName);
-    //  return NULL;
-    // }
-
-    const MAX_VAR_NAME_LENGTH = 0xFF;
-    return func.name.length > (MAX_VAR_NAME_LENGTH - 2);
-}
-
 export function getFuncErr(
     DocStrMap: TTokenStream,
     funcCh: TAhkSymbolList,
@@ -39,26 +28,15 @@ export function getFuncErr(
         switch (func.kind) {
             case vscode.SymbolKind.Method:
             case vscode.SymbolKind.Function:
-                if (DocStrMap[func.range.start.line].displayErr) {
-                    if (fnErrCheck(DocStrMap, func, maxFnSize)) {
-                        digS.push(
-                            new CDiagBase({
-                                value: EDiagCode.code301,
-                                range: func.selectionRange,
-                                severity: vscode.DiagnosticSeverity.Warning,
-                                tags: [],
-                            }),
-                        );
-                    } else if (FunctionNameTooLong(func)) { // edge case...
-                        digS.push(
-                            new CDiagBase({
-                                value: EDiagCode.code302,
-                                range: func.selectionRange,
-                                severity: vscode.DiagnosticSeverity.Warning,
-                                tags: [],
-                            }),
-                        );
-                    }
+                if (DocStrMap[func.range.start.line].displayErr && fnErrCheck(DocStrMap, func, maxFnSize)) {
+                    digS.push(
+                        new CDiagBase({
+                            value: EDiagCode.code301,
+                            range: func.selectionRange,
+                            severity: vscode.DiagnosticSeverity.Warning,
+                            tags: [],
+                        }),
+                    );
                 }
                 break;
             case vscode.SymbolKind.Class:
