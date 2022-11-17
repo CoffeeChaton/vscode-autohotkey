@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { statusBarItem } from '../configUI';
 import type { TAhkFileData } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { statusBarItem } from '../provider/vscWindows/statusBarItem';
 import {
     arrSum,
     avgMin5,

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import type { DeepReadonly } from './globalEnum';
 import { OutputChannel } from './provider/vscWindows/OutputChannel';
+import { statusBarItem } from './provider/vscWindows/statusBarItem';
 
 export const enum ECommandOption {
     All = 0, // "Don't filter Command, Provides all entered commands.",
@@ -38,12 +39,6 @@ type TConfigs = DeepReadonly<TempConfigs>;
 /*
     ---set start---
 */
-export const statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(
-    'ahk-neko-help',
-    vscode.StatusBarAlignment.Right,
-);
-statusBarItem.tooltip = 'by CoffeeChaton/vscode-autohotkey-NekoHelp';
-statusBarItem.command = 'ahk.nekoHelp.bar';
 
 const Config = 'AhkNekoHelp';
 let Configs: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration(Config);

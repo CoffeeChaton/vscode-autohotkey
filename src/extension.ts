@@ -12,7 +12,7 @@ import { ListAllFuncMain } from './command/ListAllFunc';
 import { ListAllInclude } from './command/ListAllInclude';
 import { ListIncludeTree } from './command/ListIncludeTree';
 import { UpdateCacheAsync, UpdateCacheUi } from './command/UpdateCache';
-import { configChangEvent, statusBarItem } from './configUI';
+import { configChangEvent } from './configUI';
 import { diagColl, pm } from './core/ProjectManager';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CodeLensProvider } from './provider/CodeLens/CodeLensProvider';
@@ -28,7 +28,8 @@ import { ReferenceProvider } from './provider/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
 import { AhkFullSemanticHighlight, legend } from './provider/SemanticTokensProvider/SemanticTokensProvider';
 import { SymbolProvider } from './provider/SymbolProvider/SymbolProvider';
-import { OutputChannel } from './provider/vscWindows/OutputChannel';
+import { OutputChannel, OutputFormatChannel } from './provider/vscWindows/OutputChannel';
+import { statusBarItem } from './provider/vscWindows/statusBarItem';
 import { WorkspaceSymbolProvider } from './provider/WorkspaceSymbolProvider/WorkspaceSymbolProvider';
 
 // main
@@ -73,6 +74,7 @@ export function activate(context: ExtensionContext): void {
         commands.registerCommand(ECommand.showUnknownAnalyze, showUnknownAnalyze),
         // root dispose
         OutputChannel,
+        OutputFormatChannel,
         statusBarItem,
         diagColl,
     );
