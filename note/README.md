@@ -10,7 +10,7 @@
     - [diag124](#diag124)
     - [diag125](#diag125)
     - [diag126](#diag126)
-    - [diag302](#diag302)
+    - [diag201](#diag201)
     - [diag506](#diag506)
   - [about str or %](#about-str-or-)
   - [about ahk class](#about-ahk-class)
@@ -19,6 +19,10 @@
 ## Diagnostic
 
 ### diag107
+
+[SetEnv (Var = Value)](https://www.autohotkey.com/docs/commands/SetEnv.htm)
+
+> **Deprecated:** This command or a legacy assignment is not recommended for use in new scripts. Use [expression assignments](https://www.autohotkey.com/docs/commands/SetExpression.htm) like `Var := Value` instead.
 
 ```js
 107: {
@@ -29,7 +33,7 @@
 
 ![diag107](./img/diag107.png)
 
-> Can you guess the correct result? Without auto diag.
+> Can you find the right option quickly?
 
 try it [diag107](./ahk/diag107.ahk)
 
@@ -52,7 +56,7 @@ some idea [diag121](./ahk/diag121.ahk)
 
 ```js
 122: {
-    msg: 'ahk-neko-help not supported "," "`" flag now.',
+    msg: 'ahk-neko-help not supported "," or "`" flag now.',
     path: 'https://www.autohotkey.com/docs/Scripts.htm#continuation-section',
 },
 ```
@@ -100,32 +104,58 @@ please use tell me, how to use this flag? [report](https://github.com/CoffeeChat
 
 > - [Multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) style1 / exp1 just support `%varName%` style.
 > - try to write like line `11` `12` `13`, this error is at line `11`, but ahk-L report error at line `6`.
+> - I know there has some highlight bug at line 12 of `.a` and line 13 of `[" b"]`. [v0.0.12(2022-10-28)](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/CHANGELOG.md#00122022-10-28)
 
-if [Multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) is very big, this diagnostic can help you find errors faster
+if [Multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) is very big, this diagnostic can help you to find the problem more quickly.
 
 > try it [diag126](./ahk/diag126.ahk)
 
-### diag302
+### diag201
+
+[Loop , Count](https://www.autohotkey.com/docs/commands/Loop.htm#Parameters)
 
 ```js
-302: {
-    msg: 'Function name too long, name len > (255 -2) characters.',
-    path: 'https://github.com/Lexikos/AutoHotkey_L/blob/master/source/script.cpp#L8744',
+201: {
+    msg: 'If Count is a variable reference such as `%varName%` or `% expression`',
+    path: 'https://www.autohotkey.com/docs/commands/Loop.htm#Parameters'
 },
 ```
+
+```ahk
+caseA := 5
+Loop, caseA { ; will jump this..., so I provided diagnosis.
+    MsgBox, % "caseA loop: " A_Index
+}
+;
+
+caseB := 3
+Loop, %caseB% { ; loop 3
+    MsgBox, % "caseB loop: " A_Index
+}
+
+
+caseC := 1
+Loop, % caseC + 1 { ; loop 2
+    MsgBox, % "caseC loop: " A_Index
+}
+```
+
+> try it [diag201](./ahk/diag201.ahk)
+
+When I switch back to ahk from other languages, I often make mistakes on this example
 
 ### diag506
 
 ```js
 506: {
-    msg: 'not support of this number formats',
+    msg: 'ahk v1 not support of this number formats',
     path: 'https://www.autohotkey.com/docs/Concepts.htm#numbers',
 },
 ```
 
-Diag `c506` of not support number formats [number](https://www.autohotkey.com/docs/Concepts.htm#numbers)
+`c506` is diagnosis of ahk v1 not support number formats [number](https://www.autohotkey.com/docs/Concepts.htm#numbers)
 
-> base10 `99` === base2 `0o1100011` === base8 `0b143` , but ahk v1 just support base10 base16
+> base10 `99` === base2 `0o1100011` === base8 `0b143` === base16 `0x63`, but ahk v1 just support base10 base16
 >
 > AutoHotkey supports these number formats:
 >
@@ -148,6 +178,7 @@ i love `% "str"` style.
 - move to line `26` `30` `35` `44` try to `go to def`.
 - move to line `1` `12` try to `find all ref`.
 - if you need to use [IntelliSense](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp#4-completion-of-class) of `a2` now, you need to write `a2 := new XXX` at new line, variable tracking not supported `? :` now.
+- Because the other way, for me to achieve too complicated
 
 ```ahk
 if (OutputVar > 0.5){

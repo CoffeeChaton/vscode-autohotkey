@@ -15,7 +15,7 @@ function setErrDefault(sw: CAhkSwitch): CDiagBase | null {
 
     return iDefault === 0
         ? new CDiagBase({ // not find
-            value: EDiagCode.code110,
+            value: EDiagCode.code111,
             range,
             severity: vscode.DiagnosticSeverity.Warning,
             tags: [],
