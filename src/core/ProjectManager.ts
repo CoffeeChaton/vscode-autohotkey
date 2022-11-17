@@ -2,14 +2,14 @@
 import * as vscode from 'vscode';
 import { ECommand } from '../command/ECommand';
 import type { TFsPath } from '../globalEnum';
+import { setBaseDiag } from '../provider/Diagnostic/setBaseDiag';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { isAhk } from '../tools/fsTools/isAhk';
-import type { TMemo } from './BaseScanMemo/getFileAST';
-import { BaseScanMemo, getFileAST } from './BaseScanMemo/getFileAST';
+import { rmFileDiag } from './diagColl';
+import type { TMemo } from './ParserTools/getFileAST';
+import { BaseScanMemo, getFileAST } from './ParserTools/getFileAST';
 
 export type TAhkFileData = TMemo;
-
-export const diagColl: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('ahk-neko-help');
 
 /**
  * ProjectManager
@@ -38,6 +38,7 @@ export const pm = {
     delMap(e: vscode.FileDeleteEvent): void {
         for (const uri of e.files) {
             delOldCache(uri);
+            rmFileDiag(uri);
         }
     },
 
@@ -86,7 +87,8 @@ export const pm = {
             && isAhk(fsPath)
         ) {
             pm.DocMap.set(fsPath, UpDateDocDefReturn);
-            diagColl.set(uri, [...UpDateDocDefReturn.baseDiag]);
+            const { AST, DocStrMap } = UpDateDocDefReturn;
+            setBaseDiag(uri, DocStrMap, AST);
         }
 
         return UpDateDocDefReturn;
@@ -97,7 +99,7 @@ export function delOldCache(uri: vscode.Uri): void {
     const { fsPath } = uri;
     pm.DocMap.delete(fsPath);
     BaseScanMemo.memo.delete(fsPath);
-    diagColl.delete(uri);
+    rmFileDiag(uri);
 }
 
 function renameFileNameBefore(e: vscode.FileRenameEvent): Thenable<vscode.TextDocument>[] {

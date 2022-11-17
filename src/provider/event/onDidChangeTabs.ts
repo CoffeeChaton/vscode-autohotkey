@@ -1,8 +1,11 @@
+import * as fs from 'node:fs';
 import * as vscode from 'vscode';
-import { diagColl, pm } from '../../core/ProjectManager';
+import { diagColl } from '../../core/diagColl';
+import { delOldCache, pm } from '../../core/ProjectManager';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { isAhkTab } from '../../tools/fsTools/isAhk';
+import { setBaseDiag } from '../Diagnostic/setBaseDiag';
 import { CDiagFn } from '../Diagnostic/tools/CDiagFn';
 
 export function onDidChangeActiveTab(e: vscode.TextEditor | undefined): undefined {
@@ -12,6 +15,7 @@ export function onDidChangeActiveTab(e: vscode.TextEditor | undefined): undefine
     const { uri } = document;
     if (isAhkTab(uri)) {
         const { AST, DocStrMap, ModuleVar } = pm.getDocMap(uri.fsPath) ?? pm.updateDocDef(document);
+        setBaseDiag(uri, DocStrMap, AST);
         digDAFile(getDAListTop(AST), ModuleVar, uri, DocStrMap);
     }
 
@@ -25,9 +29,14 @@ export function onDidChangeTabs(tabChangeEvent: vscode.TabChangeEvent): void {
         const { uri } = tab.input;
         if (isAhkTab(uri)) {
             // clearNekoDA
-            const diagList: readonly vscode.Diagnostic[] | undefined = diagColl.get(uri);
-            if (diagList !== undefined) {
-                diagColl.set(uri, diagList.filter((diag: vscode.Diagnostic): boolean => !(diag instanceof CDiagFn)));
+            diagColl.set(
+                uri,
+                (diagColl.get(uri) ?? []).filter((diag: vscode.Diagnostic): boolean => !(diag instanceof CDiagFn)),
+            );
+
+            // eslint-disable-next-line security/detect-non-literal-fs-filename
+            if (!fs.existsSync(uri.fsPath)) {
+                delOldCache(uri);
             }
         }
     }

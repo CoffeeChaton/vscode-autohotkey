@@ -13,7 +13,8 @@ import { ListAllInclude } from './command/ListAllInclude';
 import { ListIncludeTree } from './command/ListIncludeTree';
 import { UpdateCacheAsync, UpdateCacheUi } from './command/UpdateCache';
 import { configChangEvent } from './configUI';
-import { diagColl, pm } from './core/ProjectManager';
+import { diagColl, rmAllDiag } from './core/diagColl';
+import { pm } from './core/ProjectManager';
 import { CodeActionProvider } from './provider/CodeActionProvider/CodeActionProvider';
 import { CodeLensProvider } from './provider/CodeLens/CodeLensProvider';
 import { showUnknownAnalyze } from './provider/CodeLens/showUnknownAnalyze';
@@ -85,7 +86,7 @@ export function activate(context: ExtensionContext): void {
 
 // this method is called when your extension is deactivated
 export function deactive(): void {
-    // none
+    rmAllDiag();
 }
 
 // TODO i18n of diag

@@ -1,11 +1,13 @@
 import * as vscode from 'vscode';
-import { BaseScanMemo } from '../core/BaseScanMemo/getFileAST';
+import { rmAllDiag } from '../core/diagColl';
+import { BaseScanMemo } from '../core/ParserTools/getFileAST';
 import type { TAhkFileData } from '../core/ProjectManager';
 import { pm } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { getUriList } from '../tools/fsTools/getUriList';
 
 export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileData[] | null> {
+    rmAllDiag();
     pm.DocMap.clear();
     if (clearCache) {
         BaseScanMemo.memo.clear();

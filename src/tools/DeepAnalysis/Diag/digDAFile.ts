@@ -2,7 +2,7 @@
 import type * as vscode from 'vscode';
 import type { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { getDiagConfig } from '../../../configUI';
-import { diagColl } from '../../../core/ProjectManager';
+import { diagColl } from '../../../core/diagColl';
 import type { TAhkTokenLine, TTokenStream } from '../../../globalEnum';
 import { CDiagFn } from '../../../provider/Diagnostic/tools/CDiagFn';
 import type { C500Class } from '../../../provider/Diagnostic/tools/CDiagFnLib/C500Class';
@@ -102,14 +102,11 @@ function diagDAFileCore(
 }
 
 export function digDAFile(DAList: CAhkFunc[], ModuleVar: TModuleVar, uri: vscode.Uri, DocStrMap: TTokenStream): void {
-    const baseDiag: vscode.Diagnostic[] = (diagColl.get(uri) ?? [])
-        .filter((diag: vscode.Diagnostic): boolean => !(diag instanceof CDiagFn));
-
     const displayFnErrList: readonly boolean[] = DocStrMap
         .map(({ displayFnErr }: TAhkTokenLine): boolean => displayFnErr);
 
     diagColl.set(uri, [
-        ...baseDiag,
+        ...(diagColl.get(uri) ?? []).filter((diag: vscode.Diagnostic): boolean => !(diag instanceof CDiagFn)),
         ...diagDAFileCore(DAList, ModuleVar, displayFnErrList),
     ]);
 }

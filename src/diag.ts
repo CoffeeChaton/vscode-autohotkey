@@ -125,6 +125,9 @@ export type TDiags = {
         path: TLink;
         Deprecated?: true; // FIXME: add config option to pack.json
         notDoc?: true; // FIXME: add config option to pack.json
+        // FIXME let  pack.json set diag value as
+        // 0 1 2
+        // none info warning
     };
 };
 

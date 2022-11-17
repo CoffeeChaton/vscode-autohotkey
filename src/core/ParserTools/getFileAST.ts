@@ -2,8 +2,6 @@
 import * as vscode from 'vscode';
 import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TFsPath, TTokenStream } from '../../globalEnum';
-import { baseDiagnostic } from '../../provider/Diagnostic/Diagnostic';
-import type { CDiagBase } from '../../provider/Diagnostic/tools/CDiagBase';
 import type { TModuleVar } from '../../tools/DeepAnalysis/getModuleVarMap';
 import { getModuleVarMap } from '../../tools/DeepAnalysis/getModuleVarMap';
 import { isAhk } from '../../tools/fsTools/isAhk';
@@ -11,10 +9,10 @@ import { getChildren } from '../getChildren';
 import { getClass } from '../getClass';
 import { ParserBlock } from '../Parser';
 import { getFunc } from '../ParserFunc';
-import type { TGValMap } from '../ParserTools/ahkGlobalDef';
-import { ahkGlobalMain } from '../ParserTools/ahkGlobalDef';
-import { ParserLine } from '../ParserTools/ParserLine';
 import { Pretreatment } from '../Pretreatment';
+import type { TGValMap } from './ahkGlobalDef';
+import { ahkGlobalMain } from './ahkGlobalDef';
+import { ParserLine } from './ParserLine';
 
 /**
  * Never user this, just for Memo...
@@ -27,7 +25,6 @@ export type TMemo = Readonly<{
     readonly AST: TAstRoot;
     readonly DocStrMap: TTokenStream;
     readonly DocFullSize: number;
-    readonly baseDiag: readonly CDiagBase[];
     readonly uri: vscode.Uri;
     readonly ModuleVar: TModuleVar;
 }>;
@@ -112,7 +109,6 @@ export function getFileAST(document: vscode.TextDocument): TMemo {
     const AhkCache: TMemo = {
         DocStrMap,
         AST,
-        baseDiag: baseDiagnostic(DocStrMap, AST),
         DocFullSize,
         uri: document.uri,
         ModuleVar: getModuleVarMap(DocStrMap, GValMap, AST, fsPath),
