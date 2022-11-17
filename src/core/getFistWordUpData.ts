@@ -1,3 +1,11 @@
+function getFistWordCore(lStrTrimFix: string): string {
+    const ma1: string | undefined = lStrTrimFix.match(/^\b(default)\s*:/ui)?.[1];
+    if (ma1 !== undefined) return ma1;
+
+    return lStrTrimFix.match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1]
+        ?? '';
+}
+
 function getFistWord(lStrTrim: string): string {
     // TODO get FistWordUp
     // OK    const isOK: boolean = (/^\w*$/u).test(subStr)
@@ -7,24 +15,21 @@ function getFistWord(lStrTrim: string): string {
     // OK        || (/^[{}]\s*/iu).test(subStr);
 
     if ((/^[{}]/u).test(lStrTrim)) {
-        return lStrTrim
-            .replace(/^[{} \t]*/u, '')
-            .match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1]
-            ?? '';
+        const lStrTrimFix: string = lStrTrim.replace(/^[{} \t]*/u, '');
+        return getFistWordCore(lStrTrimFix);
     }
 
     if (lStrTrim.includes('::')) {
         // CAhkHotString -> :*:btw::
         // CAhkHotKeys   -> ^a::
-        return lStrTrim
+        const lStrTrimFix: string = lStrTrim
             .replace(/^:[^:]*?:[^:]+::\s*/u, '')
-            .replace(/^[^:]+::\s*/u, '')
-            .match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1]
-            ?? '';
+            .replace(/^[^:]+::\s*/u, '');
+        return getFistWordCore(lStrTrimFix);
     }
 
-    return lStrTrim.match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1]
-        ?? '';
+    // not need to fix
+    return getFistWordCore(lStrTrim);
 }
 
 type TFistWordUpData = {
