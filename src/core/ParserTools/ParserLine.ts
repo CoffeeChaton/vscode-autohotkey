@@ -1,3 +1,4 @@
+import type * as vscode from 'vscode';
 import { CAhkInclude } from '../../AhkSymbol/CAhkInclude';
 import type { CAhkComment, TLineClass } from '../../AhkSymbol/CAhkLine';
 import {
@@ -116,17 +117,18 @@ export function ParserLine(FuncInput: TFuncInput): CAhkComment | TLineClass | nu
     if (fistWordUp !== '') return null;
 
     const { AhkTokenLine, document } = FuncInput;
-    const { line, textRaw } = AhkTokenLine;
+    const { line } = AhkTokenLine;
 
     for (const { test, getName, ClassName } of LineRuler) {
         if (!test(strTrim)) continue;
         const name: string | null = getName(strTrim);
         if (name === null) continue;
 
+        const rangeOfLine: vscode.Range = getRangeOfLine(line, lStr, lStr.length);
         return new ClassName({
             name,
-            range: getRangeOfLine(line, lStr, textRaw.length),
-            selectionRange: getRangeOfLine(line, lStr, lStr.length),
+            range: rangeOfLine,
+            selectionRange: rangeOfLine,
             uri: document.uri,
         });
     }
