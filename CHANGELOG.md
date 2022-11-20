@@ -1,8 +1,8 @@
 # Changelog
 
-## NEXT 0.0.15(2022-11-21)
+## NEXT 0.0.16(2022-12-04)
 
-- TODO: auto-fix of
+- TODO: auto-fix of code107
 
 ```ahk
 a = %i%
@@ -12,17 +12,52 @@ a = -5
 a = 0x25
 ```
 
-- TODO: config of ...
-- TODO: add cmd to find each file parsing time.
-- TODO: test: add more test
 - TODO: test: add vscode.test
+- TODO: remove `ahk.snippets.json` to ts
+- TODO: fix : limit Statement completion range.
+
+```typescript
+type TStatementKeyList =
+    | 'IFEQUAL'
+    | 'IFEXIST'
+    | 'IFGREATER'
+    | 'IFGREATEROREQUAL'
+    | 'IFINSTRING'
+    | 'IFLESS'
+    | 'IFLESSOREQUAL'
+    | 'IFMSGBOX'
+    | 'IFNOTEQUAL'
+    | 'IFNOTEXIST'
+    | 'IFNOTINSTRING'
+    | 'IFWINACTIVE'
+    | 'IFWINEXIST'
+    | 'IFWINNOTACTIVE'
+    | 'IFWINNOTEXIST';
+```
+
+## NEXT 0.0.15(2022-11-21)
+
 - add: Diagnostic Master Switch config
-- fix: config err of code700 (`FileAppend` `FileGetAttrib` `FileRead` `StringLower` `StringUpper`)
+- add: mare config of Diagnostic
+
+```jsonc
+// settings.json // https://stackoverflow.com/questions/65908987/how-can-i-open-visual-studio-codes-settings-json-file
+{
+    "AhkNekoHelp.Diag.AMasterSwitch": "auto",
+    "AhkNekoHelp.Diag.code107LegacyAssignment": true,
+    "AhkNekoHelp.Diag.code300FuncSize": 100,
+    "AhkNekoHelp.Diag.code800Deprecated": true
+}
+```
+
+- doc: add test to check all OutPutParam
+- perf: add cache of `instanceOf`
+- fix: remove config err (`FileAppend` `FileGetAttrib` `FileRead` `StringLower` `StringUpper`)
 - fix: highlight & ref of param/val like `keyword`
 
 ```ahk
 Search(node, find, return="") {
-                    ^-----------------------------------------------------> param WTF...
+                    ^-----------------------------------------------------> param def
     found := this.xml.SelectNodes(....) ;...
     ;....
         if (ff.text=find) {

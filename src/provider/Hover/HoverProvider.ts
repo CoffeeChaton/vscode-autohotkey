@@ -6,6 +6,7 @@ import { hoverAVar } from '../../tools/Built-in/A_Variables';
 import { hoverBiVar } from '../../tools/Built-in/BiVariables';
 import { getHoverCommand2 } from '../../tools/Built-in/Command_tools';
 import { BuiltInFuncMDMap } from '../../tools/Built-in/func_tools';
+import { getHoverOtherKeyWord } from '../../tools/Built-in/otherKeyWord';
 import { getHoverStatement } from '../../tools/Built-in/statement_vsc';
 import { hover2winMsgMd } from '../../tools/Built-in/Windows_Messages_Tools';
 import { numberFindWinMsg } from '../../tools/Built-in/Windows_MessagesRe_Tools';
@@ -80,6 +81,7 @@ function HoverProviderCore(
     type TFn = (wordUp: string) => vscode.MarkdownString | null | undefined;
     const fnList: TFn[] = [
         getHoverCommand2,
+        getHoverOtherKeyWord,
         getHoverStatement,
         hoverAVar,
         hoverBiVar,

@@ -16,7 +16,7 @@ function setErrDefault(sw: CAhkSwitch): CDiagBase | null {
 
     return new CDiagBase({ // too Much
         value: EDiagCode.code111,
-        range: DefaultList[iDefault - 1].range,
+        range: DefaultList[0].range,
         severity: vscode.DiagnosticSeverity.Warning,
         tags: [],
     });

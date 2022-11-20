@@ -8,6 +8,7 @@ import { snippetBiVar } from '../../tools/Built-in/BiVariables';
 import { Completion2Directives } from '../../tools/Built-in/Directives';
 import { BuiltInFunc2Completion } from '../../tools/Built-in/func_tools';
 import { getSnippetCommand } from '../../tools/Built-in/getSnippetCommand';
+import { getSnippetOtherKeyWord } from '../../tools/Built-in/otherKeyWord';
 import { ahkSend } from '../../tools/Built-in/Send_tools';
 import { getSnippetStatement } from '../../tools/Built-in/statement_vsc';
 import { getSnippetWinMsg } from '../../tools/Built-in/Windows_Messages_Tools';
@@ -53,6 +54,7 @@ function CompletionItemCore(
         ...wrapClass(position, textRaw, lStr, topSymbol, DocStrMap, DA), // '.'
         ...ahkSend(document, position), // '{'
         ...Completion2Directives(lStr, position),
+        ...getSnippetOtherKeyWord(lStr, position),
         ...getSnippetCommand(lStr, position),
         ...globalValCompletion(DocStrMap, position),
     ];
