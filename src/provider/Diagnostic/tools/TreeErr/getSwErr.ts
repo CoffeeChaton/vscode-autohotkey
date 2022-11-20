@@ -6,26 +6,20 @@ import { EDiagCode } from '../../../../diag';
 import { CDiagBase } from '../CDiagBase';
 
 function setErrDefault(sw: CAhkSwitch): CDiagBase | null {
-    const { children, range } = sw;
-    const iDefault: number = children
-        .filter((e: CAhkCase | CAhkDefault): boolean => e instanceof CAhkDefault)
-        .length;
+    const { children } = sw;
+    const DefaultList: CAhkDefault[] = children
+        .filter((e: CAhkCase | CAhkDefault): e is CAhkDefault => e instanceof CAhkDefault);
 
-    if (iDefault === 1) return null; // OK
+    const iDefault: number = DefaultList.length;
 
-    return iDefault === 0
-        ? new CDiagBase({ // not find
-            value: EDiagCode.code111,
-            range,
-            severity: vscode.DiagnosticSeverity.Warning,
-            tags: [],
-        })
-        : new CDiagBase({ // too Much
-            value: EDiagCode.code111,
-            range,
-            severity: vscode.DiagnosticSeverity.Warning,
-            tags: [],
-        });
+    if (iDefault === 1 || iDefault === 0) return null; // OK
+
+    return new CDiagBase({ // too Much
+        value: EDiagCode.code111,
+        range: DefaultList[iDefault - 1].range,
+        severity: vscode.DiagnosticSeverity.Warning,
+        tags: [],
+    });
 }
 
 function setErrCase(sw: CAhkSwitch): CDiagBase | null {
@@ -33,16 +27,6 @@ function setErrCase(sw: CAhkSwitch): CDiagBase | null {
     const iCase: number = children
         .filter((e: CAhkCase | CAhkDefault): boolean => e instanceof CAhkCase)
         .length;
-
-    // too Much
-    if (iCase > 20) {
-        return new CDiagBase({
-            value: EDiagCode.code112,
-            range,
-            severity: vscode.DiagnosticSeverity.Warning,
-            tags: [],
-        });
-    }
 
     return iCase === 0 // not find
         ? new CDiagBase({
@@ -54,24 +38,11 @@ function setErrCase(sw: CAhkSwitch): CDiagBase | null {
         : null; // at 1~19
 }
 
-function setErrSwNameNotFind(sw: CAhkSwitch): CDiagBase | null {
-    const { name, range } = sw;
-    // i know ahk allow switch name is not found, but I don't think it is a good idea.
-    return name === ''
-        ? new CDiagBase({
-            value: EDiagCode.code114,
-            range,
-            severity: vscode.DiagnosticSeverity.Information,
-            tags: [],
-        })
-        : null;
-}
-
 export function getSwErr(sw: TAhkSymbol): CDiagBase[] {
     if (!(sw instanceof CAhkSwitch)) return [];
 
     type TFnLint = (sw: CAhkSwitch) => CDiagBase | null;
-    const fnList: TFnLint[] = [setErrDefault, setErrCase, setErrSwNameNotFind];
+    const fnList: TFnLint[] = [setErrDefault, setErrCase];
 
     const digS: CDiagBase[] = [];
     for (const fn of fnList) {

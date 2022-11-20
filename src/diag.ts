@@ -54,22 +54,24 @@ export const DiagsDA: DeepReadonly<TDiagsDA> = {
 };
 
 export const enum EDiagCode {
-    code107 = 107,
+    code107 = 107, // :=
     code111 = 111, // 111~114 is switch err
-    code112 = 112,
     code113 = 113,
-    code114 = 114,
+
     // 120~130 is Multiline-Diag
     code120 = 120, // unknown-flag
     code121 = 121, // join > 15
-    code122 = 122, // 'ahk-neko-help not supported "," "`" flag now.',
+    code122 = 122, // 'ahk-neko-help is not work of "," "`" flag now.',
+    // code123 ?
     code124 = 124, // `"` is not closed
     code125 = 125, // `%` miss to closed
     code126 = 126, // `%` variable name contains an illegal character
     code127 = 127, // 'Multiline just allow like `" VarName "` style, `"` need Need whitespace inside.',
 
     code201 = 201, // 200~299 is not expression // need use %
-    code301 = 301, // 300~399 is func err
+    // 300~399 is func err
+    code301 = 301, // user-config function size
+
     // code600~699 warn user
 
     /**
@@ -131,23 +133,15 @@ export type TDiags = {
 
 export const Diags: DeepReadonly<TDiags> = {
     107: {
-        msg: 'assign warning',
+        msg: '(legacy assignment), try to use `:=` replace',
         path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag107',
     },
     111: {
-        msg: 'Default : not find ',
-        path: 'https://www.autohotkey.com/docs/commands/Switch.htm',
-    },
-    112: {
-        msg: 'Case : > 20',
+        msg: '`Default:` Too much ',
         path: 'https://www.autohotkey.com/docs/commands/Switch.htm',
     },
     113: {
-        msg: 'Case : not find ',
-        path: 'https://www.autohotkey.com/docs/commands/Switch.htm',
-    },
-    114: {
-        msg: 'Switch name not find',
+        msg: '`Case :` not find ',
         path: 'https://www.autohotkey.com/docs/commands/Switch.htm',
     },
     120: {
@@ -159,7 +153,7 @@ export const Diags: DeepReadonly<TDiags> = {
         path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag121',
     },
     122: {
-        msg: 'ahk-neko-help not supported (, `) flag now.',
+        msg: 'ahk-neko-help is not work of (, `) flag now.',
         path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag122',
     },
     124: {
@@ -258,7 +252,7 @@ export const Diags: DeepReadonly<TDiags> = {
         path: 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm',
     },
     902: {
-        msg: 'ahk-doc not recommended and`ahk-neko-help is not work of this Directives.',
+        msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',
         path: 'https://www.autohotkey.com/docs/commands/_CommentFlag.htm',
     },
     903: {
