@@ -24,7 +24,7 @@ type TLineRuler = Readonly<{
     test: (strTrim: string) => boolean;
 }>;
 
-const LineRuler: readonly TLineRuler[] = [
+const LineRuler = [
     {
         ClassName: CAhkInclude,
 
@@ -106,7 +106,7 @@ const LineRuler: readonly TLineRuler[] = [
             return (/^#\w+(?:[\s,$])/u).test(strTrim);
         },
     },
-];
+] as const satisfies readonly TLineRuler[];
 
 export function ParserLine(FuncInput: TFuncInput): CAhkComment | TLineClass | null {
     const { lStr, fistWordUp } = FuncInput.AhkTokenLine;
@@ -114,7 +114,7 @@ export function ParserLine(FuncInput: TFuncInput): CAhkComment | TLineClass | nu
     const strTrim: string = lStr.trim();
     if (strTrim === '') return getComment(FuncInput);
 
-    if (fistWordUp !== '') return null;
+    if (fistWordUp !== '' && fistWordUp !== 'DEFAULT') return null;
 
     const { AhkTokenLine, document } = FuncInput;
     const { line } = AhkTokenLine;
