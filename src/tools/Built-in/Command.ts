@@ -783,7 +783,7 @@ export const LineCommand: TLineCommand = {
         keyRawName: 'FileAppend',
         body: 'FileAppend [, ${1:Text}, ${2:Filename}, ${3:Encoding}]',
         doc: 'Writes text to the end of a file (first creating the file, if necessary).',
-        recommended: false,
+        recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileAppend.htm',
         exp: [
             'FileAppend , Text, Filename, Encoding',
@@ -797,7 +797,6 @@ export const LineCommand: TLineCommand = {
             'Variable references such as %Var% are expanded by default.',
             '), D:\\My File.txt',
         ],
-        diag: EDiagCode.code700,
     },
     FILECOPY: {
         keyRawName: 'FileCopy',
@@ -921,7 +920,7 @@ export const LineCommand: TLineCommand = {
             '- C = COMPRESSED',
             '- T = TEMPORARY',
         ].join('\n'),
-        recommended: false,
+        recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileGetAttrib.htm',
         exp: [
             'FileGetAttrib, OutputVar , Filename',
@@ -933,7 +932,6 @@ export const LineCommand: TLineCommand = {
             'if InStr(Attributes, "H")',
             '    MsgBox The file is hidden.',
         ],
-        diag: EDiagCode.code700,
     },
     FILEGETSHORTCUT: {
         keyRawName: 'FileGetShortcut',
@@ -1091,14 +1089,13 @@ export const LineCommand: TLineCommand = {
         keyRawName: 'FileRead',
         body: 'FileRead, ${1:OutputVar}, % "${2:Filename}"',
         doc: 'Reads a file\'s contents into a [variable](https://www.autohotkey.com/docs/Variables.htm).\n > try to use [function](https://www.autohotkey.com/docs/Language.htm#commands-vs-functions) replace [FileOpen](https://www.autohotkey.com/docs/commands/FileOpen.htm) and [File.Read](https://www.autohotkey.com/docs/objects/File.htm#Read)',
-        recommended: false,
+        recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileRead.htm',
         exp: [
             'FileRead, OutputVar, Filename',
             '',
             'FileRead, OutputVar, % "C:\\My Documents\\My File.txt"',
         ],
-        diag: EDiagCode.code700,
     },
     FILEREADLINE: {
         keyRawName: 'FileReadLine',
@@ -2538,10 +2535,9 @@ export const LineCommand: TLineCommand = {
         keyRawName: 'StringLower',
         body: 'StringLower, ${1:OutputVar}, ${2:InputVar} [, ${3:T}]',
         doc: 'Converts a string to lowercase or uppercase.',
-        recommended: false,
+        recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/StringLower.htm',
         exp: ['StringLower, OutputVar, InputVar , T'],
-        diag: EDiagCode.code700,
     },
     STRINGMID: {
         keyRawName: 'StringMid',
@@ -2601,10 +2597,9 @@ export const LineCommand: TLineCommand = {
         keyRawName: 'StringUpper',
         body: 'StringUpper, ${1:OutputVar}, ${2:InputVar} [, ${3:T}]',
         doc: 'Converts a string to lowercase or uppercase.\n\nCommand -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
-        recommended: false,
+        recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/StringLower.htm',
         exp: ['StringUpper, OutputVar, InputVar , T'],
-        diag: EDiagCode.code700,
     },
     SUSPEND: {
         keyRawName: 'Suspend',

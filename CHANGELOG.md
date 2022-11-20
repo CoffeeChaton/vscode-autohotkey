@@ -15,7 +15,9 @@ a = 0x25
 - TODO: config of ...
 - TODO: add cmd to find each file parsing time.
 - TODO: test: add more test
-- test: add vscode.test
+- TODO: test: add vscode.test
+- add: Diagnostic Master Switch config
+- fix: config err of code700 (`FileAppend` `FileGetAttrib` `FileRead` `StringLower` `StringUpper`)
 - fix: highlight & ref of param/val like `keyword`
 
 ```ahk

@@ -41,29 +41,6 @@ describe('check LineCommand ruler', () => {
         expect(errState === 0).toBeTruthy();
     });
 
-    it('check EDiagCode.code700', (): void => {
-        expect.hasAssertions();
-
-        let errState = 0;
-        for (const [fistWord, v] of Object.entries(LineCommand)) {
-            const { diag } = v;
-            const nameCheck: boolean =
-                (/^(?:File(Append|GetAttrib|Read)|GetKeyState|If(?:Not)?(?:Exist|InString)|IfWin(?:Not)?(?:Active|Exist))$/ui)
-                    .test(fistWord)
-                || (/^String(?:GetPos|Len|Replace|Split|Lower|Upper|Left|Mid|Right|TrimLeft|TrimRight)$/ui).test(
-                    fistWord,
-                );
-
-            if (nameCheck && (diag === undefined || diag !== EDiagCode.code700)) {
-                errState++;
-                console.error('--86--32--4', { k: fistWord, v });
-                break;
-            }
-        }
-
-        expect(errState === 0).toBeTruthy();
-    });
-
     it('check EDiagCode.OtherCommandErr', (): void => {
         expect.hasAssertions();
 
