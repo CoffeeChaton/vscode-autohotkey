@@ -20,7 +20,7 @@ function assignErr({
     const col: number = lStr.indexOf('=');
     return new CDiagBase({
         value: EDiagCode.code107,
-        range: new vscode.Range(line, col - 1, line, col),
+        range: new vscode.Range(line, col, line, col + 1),
         severity: vscode.DiagnosticSeverity.Warning,
         tags: [],
     });
