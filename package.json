@@ -219,7 +219,7 @@
         "@vscode/test-electron": "^2.2.0",
         "dprint": "^0.32.2",
         "esbuild": "^0.15.14",
-        "eslint": "^8.27.0",
+        "eslint": "^8.28.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-airbnb-typescript": "^17.0.0",
         "eslint-config-sukka": "^1.6.16",

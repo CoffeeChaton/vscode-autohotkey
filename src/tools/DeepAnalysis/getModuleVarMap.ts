@@ -1,7 +1,8 @@
 import * as path from 'node:path';
 import type * as vscode from 'vscode';
-import { CAhkClass } from '../../AhkSymbol/CAhkClass';
+import type { CAhkClass } from '../../AhkSymbol/CAhkClass';
 import type {
+    CAhkFunc,
     TParamMapIn,
     TTextMapIn,
     TTextMapOut,
@@ -9,10 +10,12 @@ import type {
     TValMapOut,
     TValMetaIn,
 } from '../../AhkSymbol/CAhkFunc';
-import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+
+import type { TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
+import { getFileAllClass } from '../visitor/getFileAllClassList';
+import { getFileAllFunc } from '../visitor/getFileAllFuncList';
 import { newC502 } from './FnVar/def/c502';
 import { wrapFnValDef } from './FnVar/def/wrapFnValDef';
 import { EFnMode } from './FnVar/EFnMode';
@@ -26,10 +29,12 @@ export type TModuleVar = {
     readonly allowList: readonly boolean[];
 };
 
-function getModuleAllowList(DocStrMap: TTokenStream, AST: TAstRoot): readonly boolean[] {
-    const rangeList: readonly vscode.Range[] = AST
-        .filter((TopSymbol: TTopSymbol): boolean => TopSymbol instanceof CAhkFunc || TopSymbol instanceof CAhkClass)
-        .map((TopSymbol: TTopSymbol): vscode.Range => TopSymbol.range);
+function getModuleAllowList(DocStrMap: TTokenStream, Ast: TAstRoot): readonly boolean[] {
+    const rangeList: readonly vscode.Range[] = [
+        ...getFileAllClass(Ast),
+        ...getFileAllFunc(Ast),
+    ]
+        .map((TopSymbol: CAhkClass | CAhkFunc): vscode.Range => TopSymbol.range);
 
     if (rangeList.length === 0) {
         return DocStrMap.map((): true => true);
@@ -90,8 +95,7 @@ function moveGValMap2ModuleMap(GValMap: TGValMap, ModuleValMap: TValMapIn): void
 }
 
 function moveTextMap2ModuleMap(AST: TAstRoot, valMap: TValMapIn): void {
-    const DAList: CAhkFunc[] = getDAListTop(AST);
-    for (const vv of DAList) {
+    for (const vv of getDAListTop(AST)) {
         const textMapRW: TTextMapIn = vv.textMap as TTextMapIn; // eval
         if (vv.fnMode === EFnMode.forceLocal) continue;
         for (const [k, v] of textMapRW) {

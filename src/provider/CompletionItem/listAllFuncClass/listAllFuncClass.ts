@@ -1,11 +1,13 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
-import { CAhkClass } from '../../../AhkSymbol/CAhkClass';
-import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
+import type { CAhkClass } from '../../../AhkSymbol/CAhkClass';
+import type { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import type { TAstRoot } from '../../../AhkSymbol/TAhkSymbolIn';
 import { getSnippetBlockFilesList } from '../../../configUI';
 import { pm } from '../../../core/ProjectManager';
 import { fsPathIsAllow } from '../../../tools/fsTools/getUriList';
+import { getFileAllClass } from '../../../tools/visitor/getFileAllClassList';
+import { getFileAllFunc } from '../../../tools/visitor/getFileAllFuncList';
 
 function setClassSnip(
     fileName: string,
@@ -53,16 +55,12 @@ function partSnip(AstRoot: TAstRoot, fileName: string): readonly vscode.Completi
         return cache;
     }
 
-    const item: vscode.CompletionItem[] = [];
-    for (const AH of AstRoot) {
-        if (AH instanceof CAhkClass) {
-            // is Class
-            item.push(setClassSnip(fileName, AH));
-        } else if (AH instanceof CAhkFunc) {
-            // is Func
-            item.push(setFuncSnip(fileName, AH));
-        }
-    }
+    const item: readonly vscode.CompletionItem[] = [
+        ...getFileAllFunc(AstRoot)
+            .map((ahkFunc: CAhkFunc): vscode.CompletionItem => setFuncSnip(fileName, ahkFunc)),
+        ...getFileAllClass(AstRoot)
+            .map((ahkClass: CAhkClass): vscode.CompletionItem => setClassSnip(fileName, ahkClass)),
+    ];
 
     wm.set(AstRoot, item);
     return item;

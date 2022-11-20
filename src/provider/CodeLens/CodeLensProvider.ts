@@ -15,7 +15,7 @@ function CodeLensCore(fsPath: string): vscode.CodeLens[] {
     const { AST, DocStrMap } = AhkFileData;
 
     const need: vscode.CodeLens[] = [];
-    const DAList: CAhkFunc[] = getDAListTop(AST);
+    const DAList: readonly CAhkFunc[] = getDAListTop(AST);
     for (const DA of DAList) {
         const CommandAnalyze: vscode.Command = {
             title: 'Analyze',

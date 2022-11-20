@@ -27,10 +27,10 @@ type TDaDiagCache = {
     useModuleValDiag: boolean;
 };
 
-const wm = new WeakMap<CAhkFunc[], TDaDiagCache>();
+const wm = new WeakMap<readonly CAhkFunc[], TDaDiagCache>();
 
 function diagDAFileCore(
-    DAList: CAhkFunc[],
+    DAList: readonly CAhkFunc[],
     ModuleVar: TModuleVar,
     displayErrList: readonly boolean[],
 ): readonly CDiagFn[] {
@@ -101,7 +101,12 @@ function diagDAFileCore(
     return DADiagList;
 }
 
-export function digDAFile(DAList: CAhkFunc[], ModuleVar: TModuleVar, uri: vscode.Uri, DocStrMap: TTokenStream): void {
+export function digDAFile(
+    DAList: readonly CAhkFunc[],
+    ModuleVar: TModuleVar,
+    uri: vscode.Uri,
+    DocStrMap: TTokenStream,
+): void {
     const displayFnErrList: readonly boolean[] = DocStrMap
         .map(({ displayFnErr }: TAhkTokenLine): boolean => displayFnErr);
 

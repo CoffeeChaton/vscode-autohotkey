@@ -38,7 +38,7 @@ export function DeepAnalysisAllFiles(): null {
             ModuleVar,
         } of pm.DocMap.values()
     ) { // keep output order is OK
-        const DAList: CAhkFunc[] = getDAListTop(AST);
+        const DAList: readonly CAhkFunc[] = getDAListTop(AST);
         need.push(...DAList);
         digDAFile(DAList, ModuleVar, uri, DocStrMap);
     }

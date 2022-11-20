@@ -1,12 +1,12 @@
-import { CAhkClass } from '../../AhkSymbol/CAhkClass';
+import type { CAhkClass } from '../../AhkSymbol/CAhkClass';
 import { pm } from '../../core/ProjectManager';
+import { getFileAllClassMap } from '../visitor/getFileAllClassMap';
 
-export function getUserDefTopClassSymbol(keyUpName: string): CAhkClass | null {
+export function getUserDefTopClassSymbol(wordUP: string): CAhkClass | null {
     for (const { AST } of pm.getDocMapValue()) {
-        for (const AhkSymbol of AST) {
-            if (AhkSymbol instanceof CAhkClass && keyUpName === AhkSymbol.upName) {
-                return AhkSymbol;
-            }
+        const ahkClass: CAhkClass | undefined = getFileAllClassMap(AST).get(wordUP);
+        if (ahkClass !== undefined) {
+            return ahkClass;
         }
     }
     return null;
