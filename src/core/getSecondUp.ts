@@ -1,3 +1,5 @@
+import { getFistWordCore } from './getFistWordUpData';
+
 type TSecondUpData = {
     SecondWordUp: string;
     SecondWordUpCol: number;
@@ -10,19 +12,25 @@ type TSecondUpData = {
  */
 export function getSecondUp(lStr: string, fistWordUp: string): TSecondUpData {
     if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT') {
-        const ma: RegExpMatchArray | null = lStr.match(/:\s*\b(\w+)\b[ \t,$]/ui);
-        if (ma === null) {
+        const lStrFix: string = lStr.slice(lStr.indexOf(':') + 1).trim();
+        if (lStrFix === '') {
             return { SecondWordUpCol: -1, SecondWordUp: '' };
         }
 
-        const i: number | undefined = ma.index;
-        if (i === undefined) {
+        const SecondWord: string = lStrFix.match(/^(\w+)$/u)?.[1] ?? getFistWordCore(lStrFix);
+        if (SecondWord === '') {
             return { SecondWordUpCol: -1, SecondWordUp: '' };
         }
-        // did i need to check `SecondWordUp := 0` ?
+
+        const col: number = lStrFix.padStart(lStr.length, ' ').indexOf(SecondWord);
+        if (col === -1) {
+            console.warn('🚀', col);
+            return { SecondWordUpCol: -1, SecondWordUp: '' };
+        }
+
         return {
-            SecondWordUp: ma[1].toUpperCase(),
-            SecondWordUpCol: i + ma[0].indexOf(ma[1]),
+            SecondWordUp: SecondWord.toUpperCase(),
+            SecondWordUpCol: col,
         };
     }
 

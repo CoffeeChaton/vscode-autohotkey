@@ -1,4 +1,4 @@
-function getFistWordCore(lStrTrimFix: string): string {
+export function getFistWordCore(lStrTrimFix: string): string {
     const ma1: string | undefined = lStrTrimFix.match(/^\b(default)\s*:/ui)?.[1];
     if (ma1 !== undefined) return ma1;
 

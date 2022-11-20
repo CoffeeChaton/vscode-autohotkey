@@ -63,7 +63,7 @@ type TFnVarDef = {
 
 export function getFnVarDef(
     allowList: readonly boolean[],
-    DocStrMap: TTokenStream,
+    AhkTokenList: TTokenStream,
     paramMap: TParamMapIn,
     GValMap: TGValMap,
     fnModeDefault: EFnMode,
@@ -73,7 +73,7 @@ export function getFnVarDef(
     let BracketsRaw: TBrackets = [0, 0, 0];
 
     const valMap: TValMapIn = new Map<string, TValMetaIn>();
-    for (const AhkTokenLine of DocStrMap) {
+    for (const AhkTokenLine of AhkTokenList) {
         const {
             lStr,
             line,

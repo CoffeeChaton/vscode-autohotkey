@@ -40,14 +40,21 @@ function pushRef(
 // eslint-disable-next-line max-params
 export function getUnknownTextMap(
     allowList: readonly boolean[],
-    DocStrMap: TTokenStream,
+    AhkTokenList: TTokenStream,
     paramMap: TParamMapIn,
     valMap: TValMapIn,
     GValMap: TGValMap,
     name: string,
 ): TTextMapIn {
     const textMap: TTextMapIn = new Map<string, TTextMetaIn>();
-    for (const { lStr, line } of DocStrMap) {
+    for (const AhkTokenLine of AhkTokenList) {
+        const {
+            lStr,
+            line,
+            fistWordUpCol,
+            SecondWordUpCol,
+        } = AhkTokenLine;
+
         if (!allowList[line]) continue; // in arg Range
         if (line > allowList.length) break;
 
@@ -60,6 +67,24 @@ export function getUnknownTextMap(
 
             if (character === undefined || input === undefined) {
                 void vscode.window.showErrorMessage(`getUnknown Error at line ${line} of ${name}()`);
+                continue;
+            }
+            if (character === fistWordUpCol || character === SecondWordUpCol) {
+                // ; Search(node, find, return="") {
+                // ;                     ^-----------------------------------------------------> param WTF...
+                // ;     found := this.xml.SelectNodes(....) ;...
+                // ;     ;....
+                // ;         if (ff.text=find) {
+                // ;             if return
+                // ;                  ^--------------------------------------------------------> param
+                // ;                 return ff.SelectSingleNode("../" return)
+                // ;                   ^-------------------------------------------------------> keyword
+                // ;                                                     ^---------------------> param
+                // ;             return ff.SelectSingleNode("..")
+                // ;               ^-----------------------------------------------------------> keyword
+                // ;         }
+                // ;     ;...
+                // ; }
                 continue;
             }
 
