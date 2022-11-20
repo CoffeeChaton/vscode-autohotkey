@@ -120,18 +120,16 @@ support to find like
 
 ## Diagnostic and lint
 
-⚠️ Diagnostics/Warnings over 40 ruler
+⚠️ Diagnostics/Warnings over 30 ruler
 
 1. warning about use `=` not `:=` to assign.
 2. warning of Switch
    \
-   `default : not find`\
    `default : too much`\
-   `Case : > 20`\
    `Case : not find`
 3. use `;@ahk-neko-ignore [number] line.` to ignore,
    \
-   exp: `;@ahk-neko-ignore 3 line.`
+   exp: `;@ahk-neko-ignore 999 line.`
 
 ![Diagnostic1](image/Diagnostic1.png)
 ![Diagnostic2](image/Diagnostic2.png)

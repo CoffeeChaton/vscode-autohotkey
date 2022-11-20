@@ -20,9 +20,6 @@ export const enum EDiagMasterSwitch {
 type TempConfigs = {
     statusBarDisplayColor: string;
     formatTextReplace: boolean;
-    lint: {
-        funcSize: number;
-    };
     baseScan: {
         IgnoredList: readonly string[];
     };
@@ -32,6 +29,8 @@ type TempConfigs = {
     };
     Diag: {
         AMasterSwitch: EDiagMasterSwitch;
+        code107LegacyAssignment: boolean;
+        code300FuncSize: number;
         code500Max: number; // NeverUsedVar
         code502Max: number; // of var
         code503Max: number; // of param
@@ -61,9 +60,6 @@ function getConfig(): TConfigs {
     const ed: TConfigs = {
         statusBarDisplayColor: getConfigs<string>('statusBar.displayColor'),
         formatTextReplace: getConfigs<boolean>('format.textReplace'),
-        lint: {
-            funcSize: getConfigs<number>('lint.funcSize'),
-        },
         baseScan: {
             IgnoredList: getConfigs<readonly string[]>('baseScan.IgnoredList'),
         },
@@ -73,10 +69,12 @@ function getConfig(): TConfigs {
         },
         Diag: {
             AMasterSwitch: getConfigs<EDiagMasterSwitch>('Diag.AMasterSwitch'),
+            code107LegacyAssignment: getConfigs<boolean>('Diag.code107LegacyAssignment'), // of param
+            code300FuncSize: getConfigs<number>('Diag.code300FuncSize'),
             code500Max: getConfigs<number>('Diag.code500'), // NeverUsedVar
             code502Max: getConfigs<number>('Diag.code502'), // of var
             code503Max: getConfigs<number>('Diag.code503'), // of param
-            code800Deprecated: getConfigs<boolean>('Diag.code800Deprecated'), // of param
+            code800Deprecated: getConfigs<boolean>('Diag.code800Deprecated'),
             useModuleValDiag: getConfigs<boolean>('Diag.useModuleValDiag'),
         },
         useCodeLens: getConfigs<boolean>('useCodeLens'),
@@ -100,10 +98,6 @@ export function configChangEvent(): void {
 export function showTimeSpend(showText: string): void {
     statusBarItem.text = `$(heart) ${showText}`;
     statusBarItem.show();
-}
-
-export function getLintConfig(): { funcSize: number } {
-    return config.lint;
 }
 
 export function getCodeLenConfig(): boolean {

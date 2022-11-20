@@ -85,6 +85,18 @@
                     "default": false,
                     "markdownDescription": "beta test: try to Diag [5xx](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/src/diag.ts#L29) at all file"
                 },
+                "AhkNekoHelp.Diag.code107LegacyAssignment": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "(code107) Diagnostic [`var = value`(legacy assignment)](https://www.autohotkey.com/docs/commands/SetEnv.htm) and suggest \"try to use `:=` replace `=`\""
+                },
+                "AhkNekoHelp.Diag.code300FuncSize": {
+                    "type": "number",
+                    "default": 100,
+                    "minimum": 3,
+                    "maximum": 100000,
+                    "markdownDescription": "(code300) lint of function/Method size (just calc non-blank lines)"
+                },
                 "AhkNekoHelp.Diag.code500": {
                     "type": "number",
                     "default": 20,
@@ -109,7 +121,7 @@
                 "AhkNekoHelp.Diag.code800Deprecated": {
                     "type": "boolean",
                     "default": true,
-                    "markdownDescription": "Diagnostic Deprecated commands, false to hide all diag code [8xx](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/src/diag.ts#L206)"
+                    "markdownDescription": "(code8xx) Diagnostic Deprecated commands, false to hide diag code like [8xx](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/src/diag.ts#L206)"
                 },
                 "AhkNekoHelp.baseScan.IgnoredList": {
                     "type": "array",
@@ -130,14 +142,7 @@
                 "AhkNekoHelp.format.textReplace": {
                     "type": "boolean",
                     "default": false,
-                    "markdownDescription": "test options: textReplace"
-                },
-                "AhkNekoHelp.lint.funcSize": {
-                    "type": "number",
-                    "default": 100,
-                    "minimum": 3,
-                    "maximum": 100000,
-                    "markdownDescription": "lint of function/Method size (line)"
+                    "markdownDescription": "`Alpha test options`, It is **not recommended** to turn on except for advanced users."
                 },
                 "AhkNekoHelp.snippets.CommandOption": {
                     "type": "number",
