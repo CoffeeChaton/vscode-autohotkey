@@ -65,6 +65,21 @@
             "type": "object",
             "title": "AhkNekoHelp",
             "properties": {
+                "AhkNekoHelp.Diag.0masterSwitch": {
+                    "type": "string",
+                    "default": "auto",
+                    "enum": [
+                        "never",
+                        "auto",
+                        "alway"
+                    ],
+                    "markdownEnumDescriptions": [
+                        "don't diagnose at any time.",
+                        "(default) if open [workspace](https://code.visualstudio.com/docs/editor/workspaces) then diagnose, else not.",
+                        "alway diagnose"
+                    ]
+                },
+
                 "AhkNekoHelp.Diag.useModuleValDiag": {
                     "type": "boolean",
                     "default": false,
@@ -105,7 +120,7 @@
                     "items": {
                         "type": "string"
                     },
-                    "markdownDescription": "Disable AhkNekoHelp when the file path contains a match of any of the provided **Array of [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/RegExp)**. \n\nNote: pathname separator use ```\"/\"``` **not windows-style** ```\"\\\"```"
+                    "markdownDescription": "[workspace](https://code.visualstudio.com/docs/editor/workspaces) scan blockList, Disable AhkNekoHelp when the file path contains a match of any of the provided **Array of [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/RegExp)**. \n\nNote: pathname separator use ```\"/\"``` **not windows-style** ```\"\\\"```"
                 },
                 "AhkNekoHelp.format.textReplace": {
                     "type": "boolean",
