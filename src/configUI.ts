@@ -11,6 +11,12 @@ export const enum ECommandOption {
     notProvided = 3, // "not provided any Command."
 }
 
+export const enum EDiagMasterSwitch {
+    never = 'never',
+    auto = 'auto',
+    alway = 'alway',
+}
+
 type TempConfigs = {
     statusBarDisplayColor: string;
     formatTextReplace: boolean;
@@ -25,6 +31,7 @@ type TempConfigs = {
         CommandOption: ECommandOption;
     };
     Diag: {
+        AMasterSwitch: EDiagMasterSwitch;
         useModuleValDiag: boolean;
         code500Max: number; // NeverUsedVar
         code502Max: number; // of var
@@ -64,6 +71,7 @@ function getConfig(): TConfigs {
             CommandOption: getConfigs<ECommandOption>('snippets.CommandOption'),
         },
         Diag: {
+            AMasterSwitch: getConfigs<EDiagMasterSwitch>('Diag.AMasterSwitch'),
             useModuleValDiag: getConfigs<boolean>('Diag.useModuleValDiag'),
             code500Max: getConfigs<number>('Diag.code500'), // NeverUsedVar
             code502Max: getConfigs<number>('Diag.code502'), // of var
@@ -164,6 +172,16 @@ export function getDiagConfig(): TConfigs['Diag'] {
     return config.Diag;
 }
 
+export function needDiag(): boolean {
+    const { AMasterSwitch } = config.Diag;
+    if (
+        AMasterSwitch === EDiagMasterSwitch.never
+        || (AMasterSwitch === EDiagMasterSwitch.auto && vscode.workspace.workspaceFolders === undefined)
+    ) {
+        return false;
+    }
+    return true;
+}
 // vscode.window.setStatusBarMessage(timeSpend);
 // vscode.window.showErrorMessage()
 // vscode.window.showInformationMessage()

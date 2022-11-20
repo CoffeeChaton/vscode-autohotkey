@@ -65,7 +65,7 @@
             "type": "object",
             "title": "AhkNekoHelp",
             "properties": {
-                "AhkNekoHelp.Diag.0masterSwitch": {
+                "AhkNekoHelp.Diag.AMasterSwitch": {
                     "type": "string",
                     "default": "auto",
                     "enum": [
@@ -77,9 +77,9 @@
                         "don't diagnose at any time.",
                         "(default) if open [workspace](https://code.visualstudio.com/docs/editor/workspaces) then diagnose, else not.",
                         "alway diagnose"
-                    ]
+                    ],
+                    "markdownDescription": "[Diagnostic](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/src/diag.ts) Master Switch"
                 },
-
                 "AhkNekoHelp.Diag.useModuleValDiag": {
                     "type": "boolean",
                     "default": false,

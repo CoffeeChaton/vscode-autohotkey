@@ -1,15 +1,21 @@
 import * as path from 'node:path';
 import type * as vscode from 'vscode';
-import { showTimeSpend, useSymbolProvider } from '../../configUI';
+import {
+    needDiag,
+    showTimeSpend,
+    useSymbolProvider,
+} from '../../configUI';
 import { pm } from '../../core/ProjectManager';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { isAhkTab } from '../../tools/fsTools/isAhk';
+import { setBaseDiag } from '../Diagnostic/setBaseDiag';
 
 function SymbolProviderCore(document: vscode.TextDocument): vscode.DocumentSymbol[] {
     const { AST, DocStrMap, ModuleVar } = pm.updateDocDef(document);
 
-    if (isAhkTab(document.uri)) {
+    if (isAhkTab(document.uri) && needDiag()) {
+        setBaseDiag(document.uri, DocStrMap, AST);
         digDAFile(getDAListTop(AST), ModuleVar, document.uri, DocStrMap);
     }
 

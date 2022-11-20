@@ -1,6 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 import { ECommand } from '../command/ECommand';
+import { needDiag } from '../configUI';
 import type { TFsPath } from '../globalEnum';
 import { setBaseDiag } from '../provider/Diagnostic/setBaseDiag';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
@@ -89,8 +90,10 @@ export const pm = {
             && isAhk(fsPath)
         ) {
             pm.DocMap.set(fsPath, UpDateDocDefReturn);
-            const { AST, DocStrMap } = UpDateDocDefReturn;
-            setBaseDiag(uri, DocStrMap, AST);
+            if (needDiag()) {
+                const { AST, DocStrMap } = UpDateDocDefReturn;
+                setBaseDiag(uri, DocStrMap, AST);
+            }
         }
 
         return UpDateDocDefReturn;

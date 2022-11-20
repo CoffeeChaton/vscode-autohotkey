@@ -1,5 +1,6 @@
 import * as fs from 'node:fs';
 import * as vscode from 'vscode';
+import { needDiag } from '../../configUI';
 import { rmFileDiag } from '../../core/diagColl';
 import { delOldCache, pm } from '../../core/ProjectManager';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
@@ -7,18 +8,16 @@ import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { isAhkTab } from '../../tools/fsTools/isAhk';
 import { setBaseDiag } from '../Diagnostic/setBaseDiag';
 
-export function onDidChangeActiveTab(e: vscode.TextEditor | undefined): undefined {
-    if (e === undefined) return undefined;
+export function onDidChangeActiveTab(e: vscode.TextEditor | undefined): void {
+    if (e === undefined) return;
 
     const { document } = e;
     const { uri } = document;
-    if (isAhkTab(uri)) {
+    if (isAhkTab(uri) && needDiag()) {
         const { AST, DocStrMap, ModuleVar } = pm.getDocMap(uri.fsPath) ?? pm.updateDocDef(document);
         setBaseDiag(uri, DocStrMap, AST);
         digDAFile(getDAListTop(AST), ModuleVar, uri, DocStrMap);
     }
-
-    return undefined;
 }
 
 function checkPmFileExist(): void {

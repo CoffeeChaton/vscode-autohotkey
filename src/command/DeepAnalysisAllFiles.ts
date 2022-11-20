@@ -1,5 +1,6 @@
 import type { CAhkFunc } from '../AhkSymbol/CAhkFunc';
 import { pm } from '../core/ProjectManager';
+import { setBaseDiag } from '../provider/Diagnostic/setBaseDiag';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAListTop } from '../tools/DeepAnalysis/getDAList';
@@ -40,6 +41,7 @@ export function DeepAnalysisAllFiles(): null {
     ) { // keep output order is OK
         const DAList: readonly CAhkFunc[] = getDAListTop(AST);
         need.push(...DAList);
+        setBaseDiag(uri, DocStrMap, AST);
         digDAFile(DAList, ModuleVar, uri, DocStrMap);
     }
 
