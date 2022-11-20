@@ -18,16 +18,18 @@ export const pm = {
     // key : vscode.Uri.fsPath,
     DocMap: new Map<TFsPath, TAhkFileData>(),
 
+    /**
+     * ```js
+     * 1/3 -> .reverse()
+     * ```
+     * @exp, funcName double def at 2 files
+     */
     getDocMapValue(): TAhkFileData[] {
         const need: TAhkFileData[] = [...pm.DocMap.values()];
         // eslint-disable-next-line no-magic-numbers
-        if (Math.random() > 0.3) { // 1/3 -> .reverse() exp, funcName double def at 2 files
+        if (Math.random() > 0.3) {
             need.reverse();
         }
-        // TODO check fs.existsSync(fsPath), but not this way.
-        // Detecter.DocMap.delete(fsPath);
-        // await openTextDocument(fsPath);
-        // https://devblogs.microsoft.com/typescript/announcing-typescript-4-9-beta/#file-watching-changes
         return need;
     },
 
