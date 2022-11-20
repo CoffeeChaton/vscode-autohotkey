@@ -5,7 +5,6 @@ import { diagColl, getWithOutNekoDiag } from '../../core/diagColl';
 import type { TAhkTokenLine, TTokenStream } from '../../globalEnum';
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import type { CDiagBase } from './tools/CDiagBase';
-import { getDeepErr } from './tools/getDeepErr';
 import { getFuncSizeErr } from './tools/getFuncErr';
 import { getLineErr } from './tools/getLineErr';
 import { getMultilineDiag } from './tools/getMultilineDiag';
@@ -20,7 +19,6 @@ function baseDiagnostic(DocStrMap: TTokenStream, AST: TAstRoot): readonly CDiagB
     const displayErrList: readonly boolean[] = DocStrMap.map(({ displayErr }: TAhkTokenLine): boolean => displayErr);
 
     const diagList: readonly CDiagBase[] = [
-        ...getDeepErr(DocStrMap),
         ...getLineErr(DocStrMap),
         ...getTreeErr(AST, displayErrList),
         ...getMultilineDiag(DocStrMap),
