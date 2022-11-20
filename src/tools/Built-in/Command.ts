@@ -192,7 +192,6 @@ type TCommandKeyList =
 
 // FIXME: check this
 export type TAllowDiagCode =
-    | EDiagCode.code700
     | EDiagCode.code803
     | EDiagCode.code804
     | EDiagCode.code812
@@ -202,7 +201,8 @@ export type TAllowDiagCode =
     | EDiagCode.code815
     | EDiagCode.code816
     | EDiagCode.code816
-    | EDiagCode.code824;
+    | EDiagCode.code824
+    | EDiagCode.code899;
 
 export type TCommandElement = {
     keyRawName: string;
@@ -1303,7 +1303,7 @@ export const LineCommand: TLineCommand = {
             ' ',
             'KeyIsDown := GetKeyState(KeyName , Mode)',
         ],
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
     },
     GROUPACTIVATE: {
         keyRawName: 'GroupActivate',
@@ -2511,7 +2511,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringGetPos.htm',
         exp: ['StringGetPos, OutputVar, InputVar, SearchText [, Occurrence, Offset]'],
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
     },
     STRINGLEFT: {
         keyRawName: 'StringLeft',
@@ -2520,7 +2520,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
         exp: ['StringLeft, OutputVar, InputVar, Count'],
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
     },
     STRINGLEN: {
         keyRawName: 'StringLen',
@@ -2529,7 +2529,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLen.htm',
         exp: ['StringLen, OutputVar, InputVar'],
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
     },
     STRINGLOWER: {
         keyRawName: 'StringLower',
@@ -2546,7 +2546,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringMid.htm',
         exp: ['StringMid, OutputVar, InputVar, StartChar , Count, L'],
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
     },
     STRINGREPLACE: {
         keyRawName: 'StringReplace',
@@ -2555,7 +2555,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringReplace.htm',
         exp: ['StringReplace, OutputVar, InputVar, SearchText , ReplaceText, ReplaceAll'],
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
     },
     STRINGRIGHT: {
         keyRawName: 'StringRight',
@@ -2564,7 +2564,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
         exp: ['StringRight, OutputVar, InputVar, Count'],
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
     },
     STRINGSPLIT: {
         keyRawName: 'StringSplit',
@@ -2573,7 +2573,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
         exp: ['StringSplit, OutputArray, InputVar [, Delimiters, OmitChars]'],
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
     },
     STRINGTRIMLEFT: {
         keyRawName: 'StringTrimLeft',
@@ -2582,7 +2582,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringTrimLeft.htm',
         exp: ['StringTrimLeft, OutputVar, InputVar, Count'],
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
     },
     STRINGTRIMRIGHT: {
         keyRawName: 'StringTrimRight',
@@ -2591,7 +2591,7 @@ export const LineCommand: TLineCommand = {
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringTrimLeft.htm',
         exp: ['StringTrimRight, OutputVar, InputVar, Count'],
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
     },
     STRINGUPPER: {
         keyRawName: 'StringUpper',

@@ -1,6 +1,7 @@
+/* eslint-disable no-magic-numbers */
 import type * as vscode from 'vscode';
 import type { TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
-import { getLintConfig } from '../../configUI';
+import { getDiagConfig, getLintConfig } from '../../configUI';
 import { diagColl, getWithOutNekoDiag } from '../../core/diagColl';
 import type { TAhkTokenLine, TTokenStream } from '../../globalEnum';
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
@@ -28,12 +29,23 @@ function baseDiagnostic(DocStrMap: TTokenStream, AST: TAstRoot): readonly CDiagB
 }
 
 export function setBaseDiag(uri: vscode.Uri, DocStrMap: TTokenStream, AST: TAstRoot): void {
-    const baseDiag: readonly CDiagBase[] = baseDiagnostic(DocStrMap, AST);
+    const baseDiagSet = new Set<CDiagBase>(baseDiagnostic(DocStrMap, AST));
 
+    const DiagShow: CDiagBase[] = [];
+    const { code800Deprecated } = getDiagConfig();
+
+    for (const diag of baseDiagSet) {
+        const { value } = diag.code;
+        if ((value > 800 && value < 900) && !code800Deprecated) {
+            continue;
+        }
+
+        DiagShow.push(diag);
+    }
     // TODO: read config and filter baseDiag
     diagColl.set(uri, [
         ...getWithOutNekoDiag(diagColl.get(uri) ?? []),
-        ...baseDiag,
+        ...DiagShow,
         ...getFuncSizeErr(getDAListTop(AST), DocStrMap, getLintConfig().funcSize),
     ]);
 }

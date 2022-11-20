@@ -6,8 +6,8 @@ import { EDiagCode } from '../../diag';
 
 // FIXME: check this
 type TStatementDiag =
-    | EDiagCode.code700
-    | EDiagCode.code806;
+    | EDiagCode.code806
+    | EDiagCode.code899;
 
 export type TStatementKeyList =
     | 'AND'
@@ -306,7 +306,7 @@ export const Statement: TStatement = {
         body: 'IfExist, ${1:FilePattern}',
         doc: 'Checks for the existence of a file or folder.',
         recommended: false,
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
         link: 'https://www.autohotkey.com/docs/commands/IfExist.htm',
         exp: [
             'IfExist, FilePattern',
@@ -340,7 +340,7 @@ export const Statement: TStatement = {
         body: 'IfInString, ${1:Var}, ${2:SearchString}',
         doc: 'Checks if a [variable](https://www.autohotkey.com/docs/Variables.htm) contains the specified string.',
         recommended: false,
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
         link: 'https://www.autohotkey.com/docs/commands/IfInString.htm',
         exp: [
             'IfInString, Var, SearchString',
@@ -389,7 +389,7 @@ export const Statement: TStatement = {
         body: 'IfNotExist, ${1:FilePattern}',
         doc: 'Checks for the existence of a file or folder.',
         recommended: false,
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
         link: 'https://www.autohotkey.com/docs/commands/IfExist.htm',
         exp: [
             'IfExist, FilePattern',
@@ -405,7 +405,7 @@ export const Statement: TStatement = {
         body: 'IfNotInString, ${1:Var}, ${2:SearchString}',
         doc: 'Checks if a [variable](https://www.autohotkey.com/docs/Variables.htm) contains the specified string.',
         recommended: false,
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
         link: 'https://www.autohotkey.com/docs/commands/IfInString.htm',
         exp: [
             'IfInString, Var, SearchString',
@@ -417,7 +417,7 @@ export const Statement: TStatement = {
         body: 'IfWinActive [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Checks if the specified window exists and is currently active (foremost).',
         recommended: false,
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
         link: 'https://www.autohotkey.com/docs/commands/IfWinActive.htm',
         exp: [
             'IfWinActive [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
@@ -429,7 +429,7 @@ export const Statement: TStatement = {
         body: 'IfWinExist [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Checks if the specified window exists.',
         recommended: false,
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
         link: 'https://www.autohotkey.com/docs/commands/IfWinExist.htm',
         exp: [
             'IfWinExist [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
@@ -441,7 +441,7 @@ export const Statement: TStatement = {
         body: 'IfWinNotActive [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Checks if the specified window exists and is currently active (foremost).',
         recommended: false,
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
         link: 'https://www.autohotkey.com/docs/commands/IfWinActive.htm',
         exp: [
             'IfWinActive [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
@@ -453,7 +453,7 @@ export const Statement: TStatement = {
         body: 'IfWinNotExist  [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Checks if the specified window exists.',
         recommended: false,
-        diag: EDiagCode.code700,
+        diag: EDiagCode.code899,
         link: 'https://www.autohotkey.com/docs/commands/IfWinExist.htm',
         exp: [
             'IfWinExist [, WinTitle, WinText, ExcludeTitle, ExcludeText]',

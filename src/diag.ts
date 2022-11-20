@@ -84,7 +84,6 @@ export const enum EDiagCode {
      */
     code603 = 603,
 
-    code700 = 700, // 700 is Command -> func
     // code701 = 701, // 701~799 is Command error
     // 800~899 is Deprecated / Old Syntax
     code801 = 801,
@@ -100,6 +99,13 @@ export const enum EDiagCode {
     code816 = 816,
     code824 = 824,
     code825 = 825,
+    /**
+     * - TODO: move 899 -> 8xx
+     * - 899 is Command -> func
+     * - https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
+     */
+    code899 = 899, // 899 is Command -> func
+
     // 901~999 is not recommended
     code901 = 901,
     code902 = 902,
@@ -189,53 +195,48 @@ export const Diags: DeepReadonly<TDiags> = {
         msg: 'Unknown #Directives',
         path: 'https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm',
     },
-    700: {
-        msg: 'try to use function replace Command(obsolete code)',
-        path: 'https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
-        // TODO -> move more 700 -> 8xx code
-    },
     801: {
-        msg: 'Use `Loop, Reg, KeyName` instead.',
+        msg: 'Deprecated: Use `Loop, Reg, KeyName` instead.',
         path: 'https://www.autohotkey.com/docs/commands/LoopReg.htm#old',
     },
     802: {
-        msg: 'Use `Loop, Files, FilePattern` instead.',
+        msg: 'Deprecated: Use `Loop, Files, FilePattern` instead.',
         path: 'https://www.autohotkey.com/docs/commands/LoopFile.htm#old',
     },
     803: {
-        msg: 'Use `Var := Var / Value` or `Var /= Value` instead.',
+        msg: 'Deprecated: Use `Var := Var / Value` or `Var /= Value` instead.',
         path: 'https://www.autohotkey.com/docs/commands/EnvDiv.htm',
     },
     804: {
-        msg: 'Use `Var := Var * Value` or `Var *= Value` instead.',
+        msg: 'Deprecated: Use `Var := Var * Value` or `Var *= Value` instead.',
         path: 'https://www.autohotkey.com/docs/commands/EnvMult.htm',
     },
     806: {
-        msg: 'Use `If (expression)` instead.',
+        msg: 'Deprecated: Use `If (expression)` instead.',
         path: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
     },
     811: {
-        msg: 'Use the `OnClipboardChange()` function instead.',
+        msg: 'Deprecated: Use the `OnClipboardChange()` function instead.',
         path: 'https://www.autohotkey.com/docs/commands/OnClipboardChange.htm#label',
     },
     812: {
-        msg: 'Use the `OnExit()` function instead.',
+        msg: 'Deprecated: Use the `OnExit()` function instead.',
         path: 'https://www.autohotkey.com/docs/commands/OnExit.htm#command',
     },
     813: {
-        msg: 'Use the `Gui,` command instead.',
+        msg: 'Deprecated: Use the `Gui,` command instead.',
         path: 'https://www.autohotkey.com/docs/commands/Progress.htm',
     },
     814: {
-        msg: 'Use expression assignments like `Var := Value` instead.',
+        msg: 'Deprecated: Use expression assignments like `Var := Value` instead.',
         path: 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
     },
     815: {
-        msg: 'Use the `Format()` function instead.',
+        msg: 'Deprecated: Use the `Format()` function instead.',
         path: 'https://www.autohotkey.com/docs/commands/SetFormat.htm',
     },
     816: {
-        msg: 'Use the `Gui` command instead.',
+        msg: 'Deprecated: Use the `Gui` command instead.',
         path: 'https://www.autohotkey.com/docs/commands/SplashTextOn.htm',
     },
     824: {
@@ -246,6 +247,11 @@ export const Diags: DeepReadonly<TDiags> = {
     825: {
         msg: 'Deprecated: #AllowSameLineComments was removed.',
         path: 'https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm',
+    },
+    899: {
+        msg: 'Deprecated: try to use function replace Command(obsolete code)',
+        path: 'https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
+        // TODO -> move more 899 -> 8xx code
     },
     901: {
         msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',

@@ -32,10 +32,11 @@ type TempConfigs = {
     };
     Diag: {
         AMasterSwitch: EDiagMasterSwitch;
-        useModuleValDiag: boolean;
         code500Max: number; // NeverUsedVar
         code502Max: number; // of var
         code503Max: number; // of param
+        code800Deprecated: boolean;
+        useModuleValDiag: boolean;
     };
     useCodeLens: boolean;
     useSymbolProvider: boolean;
@@ -72,10 +73,11 @@ function getConfig(): TConfigs {
         },
         Diag: {
             AMasterSwitch: getConfigs<EDiagMasterSwitch>('Diag.AMasterSwitch'),
-            useModuleValDiag: getConfigs<boolean>('Diag.useModuleValDiag'),
             code500Max: getConfigs<number>('Diag.code500'), // NeverUsedVar
             code502Max: getConfigs<number>('Diag.code502'), // of var
             code503Max: getConfigs<number>('Diag.code503'), // of param
+            code800Deprecated: getConfigs<boolean>('Diag.code800Deprecated'), // of param
+            useModuleValDiag: getConfigs<boolean>('Diag.useModuleValDiag'),
         },
         useCodeLens: getConfigs<boolean>('useCodeLens'),
         useSymbolProvider: getConfigs<boolean>('useSymbolProvider'),
