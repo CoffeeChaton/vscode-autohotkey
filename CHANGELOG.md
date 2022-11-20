@@ -35,7 +35,7 @@ type TStatementKeyList =
     | 'IFWINNOTEXIST';
 ```
 
-## NEXT 0.0.15(2022-11-21)
+## 0.0.15(2022-11-20)
 
 - add: Diagnostic Master Switch config
 - add: mare config of Diagnostic

@@ -43,11 +43,3 @@ export function getUriList(): vscode.Uri[] | null {
 
     return [...Collector].map((path0: string): vscode.Uri => vscode.Uri.file(path0));
 }
-
-// ---Min avg of 5 ---
-// subAvg is 78.6
-// subAvgArr len is [79, 78, 79, 79, 78]
-// ---Min std of 5 ---
-// subStd is 0
-// subStdArr len is [80, 80, 80, 80, 80]
-// ---------------------------------------------

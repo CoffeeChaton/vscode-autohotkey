@@ -58,7 +58,7 @@ Deep Analysis All Files
 Deep Analysis : 744 Symbol
 paramMapSize is 1922
 valMapSize is 2030
-textMapSize is 441
-All Size is 4393
-Done in 5 ms
+textMapSize is 440
+All Size is 4392
+Done in 4 ms
 */
