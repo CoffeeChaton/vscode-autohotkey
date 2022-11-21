@@ -112,7 +112,6 @@ export const enum EDiagCode {
     code901 = 901,
     code902 = 902,
     code903 = 903,
-    code904 = 904,
     // // of EDiagDeep
     // code908 = 908, // {{{ of one Line
     // code909 = 909, // }}} of one Line
@@ -259,22 +258,4 @@ export const Diags: DeepReadonly<TDiags> = {
         msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',
         path: 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related',
     },
-    904: {
-        msg: 'ahk-neko-help is not work of `#Hotstring EndChars`',
-        path: 'https://www.autohotkey.com/docs/commands/_Hotstring.htm',
-        // un support of EndChars
-        // Hotstring("EndChars", "-()[]{}:;")
-        // #Hotstring EndChars
-    },
-    // of EDiagDeep
-    // 908: { // {{{ of one Line
-    //     msg: 'Indentation suggestions : split to new line',
-    //     path: 'https://www.autohotkey.com/docs/Tutorial.htm#s84',
-    //     notDoc: true,
-    // },
-    // 909: { // }}} of one Line
-    //     msg: 'Indentation suggestions : split to new line',
-    //     path: 'https://www.autohotkey.com/docs/Tutorial.htm#s84',
-    //     notDoc: true,
-    // },
 };

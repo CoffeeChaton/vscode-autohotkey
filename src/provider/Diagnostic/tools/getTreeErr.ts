@@ -1,5 +1,4 @@
 import type { TAhkSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
-import type { TTokenStream } from '../../../globalEnum';
 import type { CDiagBase } from './CDiagBase';
 import { getDirectivesErr } from './TreeErr/getDirectivesErr';
 import { getLabelErr } from './TreeErr/getLabelErr';
@@ -8,7 +7,6 @@ import { getSwErr } from './TreeErr/getSwErr';
 export function getTreeErr(
     children: readonly TAhkSymbol[],
     displayErr: readonly boolean[],
-    DocStrMap: TTokenStream,
 ): CDiagBase[] {
     const digS: CDiagBase[] = [];
     for (const ch of children) {
@@ -16,11 +14,11 @@ export function getTreeErr(
             digS.push(
                 ...getSwErr(ch),
                 ...getLabelErr(ch),
-                ...getDirectivesErr(ch, DocStrMap),
+                ...getDirectivesErr(ch),
             );
         }
         digS.push(
-            ...getTreeErr(ch.children, displayErr, DocStrMap),
+            ...getTreeErr(ch.children, displayErr),
         );
     }
     return digS;

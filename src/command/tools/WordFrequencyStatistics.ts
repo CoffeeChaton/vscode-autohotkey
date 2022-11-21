@@ -51,10 +51,6 @@ export function WordFrequencyStatistics(need: CAhkFunc[]): TWordFrequencyStatist
     };
 }
 
-// V: 86
-// -> Functions.ahk
-// -> ex: "ControlGet, v, %Cmd%, %Value%, %Control%, %WinTitle%, %WinText%, %ExcludeTitle%, %ExcludeText%"
-
 // PointsF: 35
 // -> Gdip_all_2020_08_24
 // -> ByRef

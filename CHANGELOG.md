@@ -35,6 +35,8 @@ type TStatementKeyList =
     | 'IFWINNOTEXIST';
 ```
 
+- fix: code107 diag range
+
 ## 0.0.15(2022-11-20)
 
 - add: Diagnostic Master Switch config

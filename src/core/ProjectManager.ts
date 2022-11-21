@@ -1,9 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 import { ECommand } from '../command/ECommand';
-import { needDiag } from '../configUI';
 import type { TFsPath } from '../globalEnum';
-import { setBaseDiag } from '../provider/Diagnostic/setBaseDiag';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { isAhk } from '../tools/fsTools/isAhk';
 import { rmFileDiag } from './diagColl';
@@ -80,23 +78,20 @@ export const pm = {
     },
 
     updateDocDef(document: vscode.TextDocument): TAhkFileData {
-        const UpDateDocDefReturn: TAhkFileData = getFileAST(document);
+        const result: TAhkFileData = getFileAST(document);
 
-        const { uri } = document;
+        const { uri, languageId } = document;
         const { fsPath, scheme } = uri;
         if (
             scheme === 'file'
+            && languageId === 'ahk'
             && !fsPath.startsWith('\\')
             && isAhk(fsPath)
         ) {
-            pm.DocMap.set(fsPath, UpDateDocDefReturn);
-            if (needDiag()) {
-                const { AST, DocStrMap } = UpDateDocDefReturn;
-                setBaseDiag(uri, DocStrMap, AST);
-            }
+            pm.DocMap.set(fsPath, result);
         }
 
-        return UpDateDocDefReturn;
+        return result;
     },
 };
 
