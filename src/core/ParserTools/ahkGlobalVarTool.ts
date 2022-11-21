@@ -14,9 +14,9 @@ export function getGlobalUpNameMap(): TGlobalVarUpNameMap {
     for (const { ModuleVar, uri } of pm.getDocMapValue()) {
         for (const [k, { keyRawName }] of ModuleVar.ModuleValMap) {
             const oldData: TData | undefined = map.get(k);
-            const fsPathList: string[] = oldData !== undefined
-                ? [...oldData.fsPathList, uri.toString()]
-                : [uri.toString()];
+            const fsPathList: string[] = oldData === undefined
+                ? [uri.toString()]
+                : [...oldData.fsPathList, uri.toString()];
 
             map.set(k, {
                 fsPathList,

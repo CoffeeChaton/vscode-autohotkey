@@ -41,9 +41,9 @@ function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): string {
     }
 
     const keyRawName: string | undefined = BuiltInFuncMDMap.get(keyUp)?.keyRawName;
-    return keyRawName !== undefined
-        ? `${keyRawName}(...) ; "Built-in Functions"`
-        : `${keyUp}(...) ; >>>>>>>>>>>>>> unknown function <<<<<<<<<<<<<<<<<<<`;
+    return keyRawName === undefined
+        ? `${keyUp}(...) ; >>>>>>>>>>>>>> unknown function <<<<<<<<<<<<<<<<<<<`
+        : `${keyRawName}(...) ; "Built-in Functions"`;
 }
 
 export function AnalyzeRefFunc(AhkTokenList: TTokenStream, fullFuncMap: TFullFuncMap): string[] {

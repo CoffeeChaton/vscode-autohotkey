@@ -73,9 +73,9 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
     }
 
     const switchDeep = inSwitchBlock(lStrTrim, line, switchRangeArray);
-    const LineDeep: 0 | 1 = (occ !== 0)
-        ? 0
-        : ContinueLongLine(lStrTrim);
+    const LineDeep: 0 | 1 = (occ === 0)
+        ? ContinueLongLine(lStrTrim)
+        : 0;
 
     const curlyBracketsChange: -1 | 0 = lStrTrim.startsWith('}') || (occ > 0 && lStrTrim.startsWith('{'))
         ? -1

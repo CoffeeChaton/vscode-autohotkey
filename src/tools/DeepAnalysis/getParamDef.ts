@@ -37,9 +37,9 @@ function getParamDefNeed(
         new vscode.Position(line, ch + keyRawName.length),
     );
 
-    const parsedErrRange: vscode.Range | null = !(/^\w+$/u).test(keyRawName)
-        ? range
-        : null;
+    const parsedErrRange: vscode.Range | null = (/^\w+$/u).test(keyRawName)
+        ? null
+        : range;
 
     return {
         keyRawName,

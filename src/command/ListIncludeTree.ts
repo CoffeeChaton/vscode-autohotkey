@@ -78,7 +78,15 @@ function IncludeTree(docPath: string, searchStack: string[], IncludeMap: TInclud
         const startPos = `${docPath}:${range.start.line + 1}:${range.start.character + 1}`;
         const hasFile: boolean = pm.DocMap.has(searchPath);
 
-        if (!hasFile) {
+        if (hasFile) {
+            result.push({
+                deep,
+                name,
+                hasFile,
+                searchPath,
+                startPos,
+            }, ...IncludeTree(searchPath, [...searchStack, searchPath], IncludeMap));
+        } else {
             const { warnMsg } = rawData;
             const showMsg = warnMsg === ''
                 ? 'can not resolve path'
@@ -91,14 +99,6 @@ function IncludeTree(docPath: string, searchStack: string[], IncludeMap: TInclud
                 searchPath: showMsg,
                 startPos,
             });
-        } else {
-            result.push({
-                deep,
-                name,
-                hasFile,
-                searchPath,
-                startPos,
-            }, ...IncludeTree(searchPath, [...searchStack, searchPath], IncludeMap));
         }
     }
 

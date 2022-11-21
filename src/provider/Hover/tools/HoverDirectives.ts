@@ -24,7 +24,7 @@ export function HoverDirectives(
 ): vscode.MarkdownString | undefined {
     const ah: CAhkDirectives | CAhkInclude | undefined = findDirectivesWithPos(AstRoot, position);
 
-    return ah !== undefined
-        ? DirectivesMDMap.get(ah.hashtag)
-        : undefined;
+    return ah === undefined
+        ? undefined
+        : DirectivesMDMap.get(ah.hashtag);
 }

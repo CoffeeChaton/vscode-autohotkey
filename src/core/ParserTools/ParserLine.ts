@@ -57,9 +57,9 @@ const LineRuler = [
 
         getName(strTrim: string): string | null {
             const e: RegExpMatchArray | null = strTrim.match(/^(:[^:]*?:[^:]+::)/u);
-            return (e !== null)
-                ? e[1]
-                : null;
+            return (e === null)
+                ? null
+                : e[1];
         },
 
         test(strTrim: string): boolean {
@@ -76,9 +76,9 @@ const LineRuler = [
         getName(strTrim: string): string | null {
             // ex ~F10::
             const m: RegExpMatchArray | null = strTrim.match(/^([^:]+::)/u);
-            return (m !== null)
-                ? m[1]
-                : null;
+            return (m === null)
+                ? null
+                : m[1];
         },
 
         test(strTrim: string): boolean {
@@ -94,9 +94,9 @@ const LineRuler = [
         getName(strTrim: string): string | null {
             // ex #NoEnv
             const m: RegExpMatchArray | null = strTrim.match(/^(#\w+)(?:[\s,$])/u);
-            return (m !== null)
-                ? m[1]
-                : null;
+            return (m === null)
+                ? null
+                : m[1];
         },
 
         test(strTrim: string): boolean {

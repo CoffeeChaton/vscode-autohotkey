@@ -311,9 +311,12 @@ function ParseActionType(aBufTarget: string, aBufSource: readonly string[], aDis
 
     const end_marker: string | null = StrChrAny(aBufSource, end_flags);
 
-    if (end_marker !== null) { // Found a delimiter.
-    } else { // No delimiter found, so set end_marker to the location of the last char in string.
+    if (end_marker === null) {
+        // No delimiter found, so set end_marker to the location of the last char in string.
+    } else {
+        // Found a delimiter.
     }
+
     return '';
 }
 

@@ -63,9 +63,9 @@ function ListAllFuncSort(reverse: boolean): null {
             .join('\n')
         : AllList.join('\n');
 
-    const re = !reverse
-        ? 'a -> z'
-        : 'z -> a';
+    const re = reverse
+        ? 'z -> a'
+        : 'a -> z';
 
     OutputChannel.clear();
     OutputChannel.appendLine(`[neko-help] List All Function() ; Sort with ${re}`);

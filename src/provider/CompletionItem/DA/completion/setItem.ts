@@ -35,9 +35,9 @@ export function setItemCore(
         : 'this Method';
     const label: vscode.CompletionItemLabel = {
         label: keyRawName,
-        description: recStr !== undefined
-            ? `✿ ${kindStr}` // "⌬ ";
-            : kindStr,
+        description: recStr === undefined
+            ? kindStr // "⌬ ";
+            : `✿ ${kindStr}`,
     };
 
     const item: vscode.CompletionItem = new vscode.CompletionItem(label);

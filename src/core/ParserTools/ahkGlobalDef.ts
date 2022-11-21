@@ -34,13 +34,13 @@ function setGlobalVar(
             ),
         };
 
-        if (oldVal !== undefined) {
-            oldVal.defRangeList.push(element);
-        } else {
+        if (oldVal === undefined) {
             GValMap.set(ValUpName, {
                 defRangeList: [element],
                 refRangeList: [],
             });
+        } else {
+            oldVal.defRangeList.push(element);
         }
     }
 }

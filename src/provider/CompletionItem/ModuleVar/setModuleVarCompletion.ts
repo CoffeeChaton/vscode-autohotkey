@@ -33,12 +33,13 @@ export function setModuleVarCompletion(
         const recStr: ESnippetRecBecause | undefined = recMap.get(keyRawName);
 
         const label: vscode.CompletionItemLabel = {
-            label: DA !== null
-                ? `global ${keyRawName}`
-                : keyRawName,
-            description: recStr !== undefined
-                ? `✿ ${fileName}` // "⌬ ";
-                : fileName,
+            label: DA === null
+                ? keyRawName
+                : `global ${keyRawName}`,
+
+            description: recStr === undefined
+                ? fileName // "⌬ ";
+                : `✿ ${fileName}`,
         };
 
         const item: vscode.CompletionItem = new vscode.CompletionItem(label);

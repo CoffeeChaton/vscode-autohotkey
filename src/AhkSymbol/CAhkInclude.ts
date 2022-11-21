@@ -52,9 +52,9 @@ const list = [
 function setWarnMsg(path1: string): string {
     const pathLow: string = path1.toLowerCase();
     const find: string | undefined = list.find((v: string): boolean => pathLow.includes(v.toLowerCase()));
-    return find !== undefined
-        ? `not yet support of "${find}"`
-        : '';
+    return find === undefined
+        ? ''
+        : `not yet support of "${find}"`;
 }
 
 function getRawData(path1: string, fsPath: string): TRawData {
