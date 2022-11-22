@@ -3,6 +3,7 @@
 /* eslint-disable max-statements */
 import * as path from 'node:path';
 import * as vscode from 'vscode';
+import { isAutoSwitchAhk2 } from '../configUI';
 import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum';
 import { EDetail, EDiagDeep, EMultiline } from '../globalEnum';
 import { getIgnore } from '../provider/Diagnostic/getIgnore';
@@ -25,17 +26,20 @@ function switchAhk2(document: vscode.TextDocument): 'isAhk2' {
     const { fsPath } = document.uri;
 
     void vscode.languages.getLanguages().then(async (langs: string[]): Promise<0> => {
-        try {
-            await vscode.languages.setTextDocumentLanguage(document, 'ahk2');
-        } catch {
-            // not need any thing
+        if (isAutoSwitchAhk2()) {
+            try {
+                await vscode.languages.setTextDocumentLanguage(document, 'ahk2');
+            } catch {
+                // not need any thing
+            }
         }
 
         if (!langs.includes('ahk2') && HintInfoChangeToAhk === 0) {
             const fileName: string = path.basename(fsPath);
             const suggest = 'https://marketplace.visualstudio.com/items?itemName=thqby.vscode-autohotkey2-lsp';
             void vscode.window.showInformationMessage(
-                `some file like "${fileName}" is need ahk v2,\n suggest to use [AutoHotkey v2 Language Support](${suggest})`,
+                // eslint-disable-next-line max-len
+                `some file like "${fileName}" is "#Requires AutoHotkey v2",\n NekoHelp is not support ahk2,\n suggest to use [AutoHotkey v2 Language Support](${suggest})`,
             );
             HintInfoChangeToAhk = 1;
         }

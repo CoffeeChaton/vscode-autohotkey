@@ -184,6 +184,11 @@
                     "type": "boolean",
                     "default": true,
                     "markdownDescription": "use [outline](https://code.visualstudio.com/docs/getstarted/userinterface#_outline-view) and [breadcrumbs](https://code.visualstudio.com/docs/getstarted/userinterface#_breadcrumbs), if you like other plugins SymBolProvider, can close this."
+                },
+                "AhkNekoHelp.autoSwitchAhk2": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "true -> auto switch file to ahk2, false -> nothing."
                 }
             }
         },

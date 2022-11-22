@@ -36,6 +36,7 @@ type TStatementKeyList =
 ```
 
 - fix: code107 diag range
+- add: `auto switch ahk2`
 
 ## 0.0.15(2022-11-20)
 
