@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
 import { getSnippetStartWihA } from '../../tools/Built-in/A_Variables';
@@ -34,7 +35,10 @@ function CompletionItemCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.CompletionItem[] {
-    const { AST, DocStrMap, ModuleVar } = pm.updateDocDef(document);
+    const AhkFileData: TAhkFileData | null = pm.updateDocDef(document);
+    if (AhkFileData === null) return [];
+    const { AST, DocStrMap, ModuleVar } = AhkFileData;
+
     const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
     const { lStr, textRaw } = AhkTokenLine;
 

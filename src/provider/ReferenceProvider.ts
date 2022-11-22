@@ -12,7 +12,8 @@ function ReferenceProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Location[] | null {
-    const AhkFileData: TAhkFileData = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    if (AhkFileData === null) return null;
 
     const { textRaw, lStr } = AhkFileData.DocStrMap[position.line];
     if (isPosAtStrNext(textRaw, lStr, position)) return null;

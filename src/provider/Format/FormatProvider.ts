@@ -1,5 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import type * as vscode from 'vscode';
+import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { EFormatChannel } from '../../globalEnum';
 import { fmtDiffInfo } from './fmtDiffInfo';
@@ -28,7 +29,10 @@ export function FormatCore(
 ): vscode.TextEdit[] {
     const timeStart: number = Date.now();
 
-    const { DocStrMap } = pm.updateDocDef(document);
+    const AhkFileData: TAhkFileData | null = pm.updateDocDef(document);
+    if (AhkFileData === null) return [];
+    const { DocStrMap } = AhkFileData;
+
     let oldDeep = 0;
     let occ = 0;
 

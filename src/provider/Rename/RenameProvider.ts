@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncDef } from '../Def/getFuncDef';
@@ -9,7 +10,10 @@ function RenameProviderCore(
     position: vscode.Position,
     newName: string,
 ): vscode.WorkspaceEdit | null {
-    const { AST } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const AhkFileData: TAhkFileData | null = pm.updateDocDef(document);
+    if (AhkFileData === null) return null;
+
+    const { AST } = AhkFileData;
 
     const DA: CAhkFunc | null = getDAWithPos(AST, position);
     if (DA === null || !DA.nameRange.contains(position) || DA.kind === vscode.SymbolKind.Method) {

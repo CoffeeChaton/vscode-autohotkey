@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
+import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { getFileAllFunc } from '../../tools/visitor/getFileAllFuncList';
 
@@ -12,7 +13,9 @@ export function DependencyAnalysis(
     if (!(selection instanceof vscode.Selection)) return [];
     const { active } = selection;
 
-    const { AST, DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    if (AhkFileData === null) return [];
+    const { AST, DocStrMap } = AhkFileData;
 
     const ahkFn: CAhkFunc | undefined = getFileAllFunc(AST)
         .find((ahkFunc: CAhkFunc): boolean => ahkFunc.nameRange.contains(active));

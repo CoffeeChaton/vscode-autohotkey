@@ -123,7 +123,9 @@ export function getFuncDef(
 ): vscode.Location[] | null {
     const timeStart: number = Date.now();
 
-    const { AST, DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    if (AhkFileData === null) return null;
+    const { AST, DocStrMap } = AhkFileData;
 
     if (isPosAtMethodName(getDAWithPos(AST, position), position)) return null;
 

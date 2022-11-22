@@ -1,7 +1,8 @@
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-statements */
-
+import * as path from 'node:path';
+import * as vscode from 'vscode';
 import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum';
 import { EDetail, EDiagDeep, EMultiline } from '../globalEnum';
 import { getIgnore } from '../provider/Diagnostic/getIgnore';
@@ -16,12 +17,46 @@ import { getSecondUp } from './getSecondUp';
 import { callDeep } from './ParserTools/calcDeep';
 
 /**
+ * Avoid too many messages
+ */
+let HintInfoChangeToAhk = 0;
+
+function switchAhk2(document: vscode.TextDocument): 'isAhk2' {
+    const { fsPath } = document.uri;
+
+    void vscode.languages.getLanguages().then(async (langs: string[]): Promise<0> => {
+        try {
+            await vscode.languages.setTextDocumentLanguage(document, 'ahk2');
+        } catch {
+            // not need any thing
+        }
+
+        if (!langs.includes('ahk2') && HintInfoChangeToAhk === 0) {
+            const fileName: string = path.basename(fsPath);
+            const suggest = 'https://marketplace.visualstudio.com/items?itemName=thqby.vscode-autohotkey2-lsp';
+            void vscode.window.showInformationMessage(
+                `some file like "${fileName}" is need ahk v2,\n suggest to use [AutoHotkey v2 Language Support](${suggest})`,
+            );
+            HintInfoChangeToAhk = 1;
+        }
+
+        return 0;
+    });
+
+    // throw new Error(`ahk2 -> ${textTrim} -> ${fsPath}`);
+    return 'isAhk2';
+}
+
+/**
  * @param strArray keep this with readonly string[], don't use String, because of copy.
  *  and without str.spilt(\r?\n), I hate \r
- * @param _fileName just debug of deep < 0
  * @returns FFullDocTokenDocStream
  */
-export function Pretreatment(strArray: readonly string[], _fileName: string): TTokenStream {
+export function Pretreatment(
+    strArray: readonly string[],
+    document: vscode.TextDocument,
+): TTokenStream | 'isAhk2' {
+    let needCheckThisAhk2 = true;
     const result: TAhkTokenLine[] = [];
     let CommentBlock = false;
     let multiline: EMultiline = EMultiline.none;
@@ -124,6 +159,16 @@ export function Pretreatment(strArray: readonly string[], _fileName: string): TT
                 displayFnErr,
             });
             continue;
+        }
+
+        if (needCheckThisAhk2) {
+            // #Requires AutoHotkey v1.1.33+
+            const ahkV: RegExpMatchArray | null = textTrimStart
+                .match(/^#Requires[ \t]+AutoHotkey[ \t]+v(\d)\b/iu);
+            if (ahkV !== null) {
+                if (ahkV[1] === '1') needCheckThisAhk2 = false;
+                if (ahkV[1] === '2') return switchAhk2(document);
+            }
         }
 
         // ---------

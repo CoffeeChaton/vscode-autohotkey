@@ -1,8 +1,10 @@
 /* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 import { ECommand } from '../command/ECommand';
+import { getIgnoredList } from '../configUI';
 import type { TFsPath } from '../globalEnum';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { fsPathIsAllow } from '../tools/fsTools/getUriList';
 import { isAhk } from '../tools/fsTools/isAhk';
 import { rmFileDiag } from './diagColl';
 import type { TMemo } from './ParserTools/getFileAST';
@@ -48,7 +50,7 @@ export const pm = {
             if (isAhk(uri.fsPath)) {
                 void vscode.workspace
                     .openTextDocument(uri)
-                    .then((doc: vscode.TextDocument): TAhkFileData => pm.updateDocDef(doc));
+                    .then((doc: vscode.TextDocument): TAhkFileData | null => pm.updateDocDef(doc));
             }
         }
     },
@@ -77,8 +79,9 @@ export const pm = {
         OutputChannel.show();
     },
 
-    updateDocDef(document: vscode.TextDocument): TAhkFileData {
-        const result: TAhkFileData = getFileAST(document);
+    updateDocDef(document: vscode.TextDocument): TAhkFileData | null {
+        const result: TAhkFileData | null = getFileAST(document);
+        if (result === null) return null;
 
         const { uri, languageId } = document;
         const { fsPath, scheme } = uri;
@@ -87,13 +90,14 @@ export const pm = {
             && languageId === 'ahk'
             && !fsPath.startsWith('\\')
             && isAhk(fsPath)
+            && fsPathIsAllow(fsPath, getIgnoredList())
         ) {
             pm.DocMap.set(fsPath, result);
         }
 
         return result;
     },
-};
+} as const;
 
 export function delOldCache(uri: vscode.Uri): void {
     const { fsPath } = uri;

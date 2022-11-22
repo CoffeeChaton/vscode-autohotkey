@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { isPosAtStrNext } from '../isPosAtStr';
 import { A_Send } from './Send';
@@ -33,7 +34,10 @@ const sendBigBlock: readonly vscode.CompletionItem[] = ((): readonly vscode.Comp
 })();
 
 export function ahkSend(document: vscode.TextDocument, position: vscode.Position): readonly vscode.CompletionItem[] {
-    const { DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const re: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    if (re === null) return [];
+
+    const { DocStrMap } = re;
     const { textRaw, lStr } = DocStrMap[position.line];
     if (
         (/\b(?:Control)?Send(?:Input|Play|Event)?\b/ui).test(lStr)

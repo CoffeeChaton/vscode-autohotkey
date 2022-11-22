@@ -18,13 +18,14 @@ export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileDat
 
     const FileListData: TAhkFileData[] = [];
     for (const uri of uriList) {
-        FileListData.push(
-            // In the same PC, IO is relatively fast, but this decision is made for the workload of GC each time
-            // and await in loop can run faster
-            // eslint-disable-next-line no-await-in-loop
-            await vscode.workspace.openTextDocument(uri)
-                .then((doc: vscode.TextDocument): TAhkFileData => pm.updateDocDef(doc)),
-        );
+        // In the same PC, IO is relatively fast, but this decision is made for the workload of GC each time
+        // and await in loop can run faster
+        // eslint-disable-next-line no-await-in-loop
+        const doc: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
+        const AhkFileData: TAhkFileData | null = pm.updateDocDef(doc);
+        if (AhkFileData !== null) {
+            FileListData.push(AhkFileData);
+        }
     }
 
     return FileListData;

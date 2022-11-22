@@ -1,6 +1,7 @@
 /* eslint-disable max-statements */
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { hoverAVar } from '../../tools/Built-in/A_Variables';
 import { hoverBiVar } from '../../tools/Built-in/BiVariables';
@@ -40,7 +41,9 @@ function HoverProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Hover | null {
-    const { AST, DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    if (AhkFileData === null) return null;
+    const { AST, DocStrMap } = AhkFileData;
 
     // ^\s*\( Trim
     const mdOfMultiLine: vscode.MarkdownString | null = hoverMultiLine(DocStrMap, position);

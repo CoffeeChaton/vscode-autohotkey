@@ -5,6 +5,7 @@ import {
     showTimeSpend,
     useSymbolProvider,
 } from '../../configUI';
+import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
@@ -12,8 +13,10 @@ import { isAhkTab } from '../../tools/fsTools/isAhk';
 import { setBaseDiag } from '../Diagnostic/setBaseDiag';
 
 function SymbolProviderCore(document: vscode.TextDocument): vscode.DocumentSymbol[] {
-    const { AST, DocStrMap, ModuleVar } = pm.updateDocDef(document);
+    const result: TAhkFileData | null = pm.updateDocDef(document);
+    if (result === null) return [];
 
+    const { DocStrMap, AST, ModuleVar } = result;
     if (isAhkTab(document.uri) && needDiag()) {
         setBaseDiag(document.uri, DocStrMap, AST);
         digDAFile(getDAListTop(AST), ModuleVar, document.uri, DocStrMap);

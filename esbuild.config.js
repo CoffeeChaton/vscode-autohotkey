@@ -18,7 +18,7 @@ esbuild
         external: ['vscode', '@vscode/test-electron'], // not bundle 'vscode' && https://github.com/modfy/nominal
         format: 'cjs',
         logLevel: 'info',
-        minify: !isDev, //
+        minify: false, // 130KB -> 150KB, but a picture usually has 10~20 kb
         outdir: 'dist',
         platform: 'node',
         sourcemap: isDev,

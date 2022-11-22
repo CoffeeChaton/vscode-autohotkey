@@ -81,7 +81,7 @@ export const BaseScanMemo = {
     },
 } as const;
 
-export function getFileAST(document: vscode.TextDocument): TMemo {
+export function getFileAST(document: vscode.TextDocument): TMemo | null {
     // const t1 = Date.now();
     const fullText: string = document.getText();
     const fullTextList: string[] = fullText.split(/\r?\n/u);
@@ -92,7 +92,9 @@ export function getFileAST(document: vscode.TextDocument): TMemo {
     const oldCache: TMemo | undefined = BaseScanMemo.getMemo(fsPath, fullTextList, DocFullSize);
     if (oldCache !== undefined) return oldCache;
 
-    const DocStrMap: TTokenStream = Pretreatment(fullTextList, document.fileName);
+    const DocStrMap: TTokenStream | 'isAhk2' = Pretreatment(fullTextList, document);
+    if (DocStrMap === 'isAhk2') return null;
+
     const GValMap: TGValMap = ahkGlobalMain(DocStrMap);
     const AST: TAstRoot = getChildren<CTopClass>(
         [getClass, getFunc, ParserBlock.getSwitchBlock, ParserLine],

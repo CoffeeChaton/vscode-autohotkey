@@ -15,8 +15,10 @@ export const legend: vscode.SemanticTokensLegend = new vscode.SemanticTokensLege
 
 const wm = new WeakMap<TAhkFileData, vscode.SemanticTokens>();
 
-function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticTokens {
-    const AhkFileData: TAhkFileData = pm.updateDocDef(document);
+function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticTokens | null {
+    const AhkFileData: TAhkFileData | null = pm.updateDocDef(document);
+    if (AhkFileData === null) return null;
+
     const cache: vscode.SemanticTokens | undefined = wm.get(AhkFileData);
     if (cache !== undefined) return cache;
 
@@ -31,10 +33,10 @@ function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticToken
         ...MultilineHighlight(DocStrMap),
     ], tokensBuilder);
 
-    const result: vscode.SemanticTokens = tokensBuilder.build();
-    wm.set(AhkFileData, result);
+    const SemanticTokens: vscode.SemanticTokens = tokensBuilder.build();
+    wm.set(AhkFileData, SemanticTokens);
 
-    return result;
+    return SemanticTokens;
 }
 
 // semantic token type

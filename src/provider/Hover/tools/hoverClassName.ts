@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { CAhkClass, CAhkClassGetSet, CAhkClassInstanceVar } from '../../../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import type { TAstRoot, TTopSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkFileData } from '../../../core/ProjectManager';
 import { pm } from '../../../core/ProjectManager';
 import { getDAWithPos } from '../../../tools/DeepAnalysis/getDAWithPos';
 import { getUserDefTopClassSymbol } from '../../../tools/DeepAnalysis/getUserDefTopClassSymbol';
@@ -51,7 +52,9 @@ export function hoverClassName(
     position: vscode.Position,
     wordUp: string,
 ): vscode.MarkdownString | null {
-    const { AST, DocStrMap } = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    if (AhkFileData === null) return null;
+    const { AST, DocStrMap } = AhkFileData;
 
     if (isPosAtMethodName(getDAWithPos(AST, position), position)) {
         return null;
