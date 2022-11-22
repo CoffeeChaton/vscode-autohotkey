@@ -8,6 +8,7 @@ import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum'
 import { EDetail, EDiagDeep, EMultiline } from '../globalEnum';
 import { getIgnore } from '../provider/Diagnostic/getIgnore';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
+import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { getMultiline } from '../tools/str/getMultiline';
 import { getMultilineLStr } from '../tools/str/getMultilineLStr';
 import { inCommentBlock } from '../tools/str/inCommentBlock';
@@ -29,8 +30,18 @@ function switchAhk2(document: vscode.TextDocument): 'isAhk2' {
         if (isAutoSwitchAhk2()) {
             try {
                 await vscode.languages.setTextDocumentLanguage(document, 'ahk2');
-            } catch {
-                // not need any thing
+            } catch (error: unknown) {
+                let message = 'Unknown Error';
+                if (error instanceof Error) {
+                    message = error.message;
+                }
+                if (message !== 'Unknown language id: ahk2') {
+                    console.error(error);
+                    OutputChannel.appendLine(';AhkNekoHelp.switchAhk2 Error Start------------');
+                    OutputChannel.appendLine(message);
+                    OutputChannel.appendLine(';AhkNekoHelp.switchAhk2 Error End--------------');
+                    OutputChannel.show();
+                }
             }
         }
 

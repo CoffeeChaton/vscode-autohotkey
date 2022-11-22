@@ -130,9 +130,11 @@
                         "/node_modules$",
                         "/node_modules/",
                         "/neko_Exp_GDIP\\.ahk$",
-                        "/build$",
-                        "/dist$",
-                        "/temp$"
+                        "/build(/|$)",
+                        "/dist(/|$)",
+                        "/temp(/|$)",
+                        "/ahk2(/|$)",
+                        "ahk2\\.ahk"
                     ],
                     "items": {
                         "type": "string"
