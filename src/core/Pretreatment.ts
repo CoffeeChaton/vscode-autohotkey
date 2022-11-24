@@ -3,7 +3,6 @@
 /* eslint-disable max-statements */
 import * as path from 'node:path';
 import * as vscode from 'vscode';
-import { isAutoSwitchAhk2 } from '../configUI';
 import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum';
 import { EDetail, EDiagDeep, EMultiline } from '../globalEnum';
 import { getIgnore } from '../provider/Diagnostic/getIgnore';
@@ -23,39 +22,24 @@ import { callDeep } from './ParserTools/calcDeep';
  */
 let HintInfoChangeToAhk = 0;
 
-function switchAhk2(document: vscode.TextDocument): 'isAhk2' {
+function infoAddAhk2(document: vscode.TextDocument, ahkV0: string): 'isAhk2' {
     const { fsPath } = document.uri;
 
-    void vscode.languages.getLanguages().then(async (langs: string[]): Promise<0> => {
-        if (isAutoSwitchAhk2()) {
-            try {
-                await vscode.languages.setTextDocumentLanguage(document, 'ahk2');
-            } catch (error: unknown) {
-                let message = 'Unknown Error';
-                if (error instanceof Error) {
-                    message = error.message;
-                }
-                if (message !== 'Unknown language id: ahk2') {
-                    console.error(error);
-                    OutputChannel.appendLine(';AhkNekoHelp.switchAhk2 Error Start------------');
-                    OutputChannel.appendLine(message);
-                    OutputChannel.appendLine(';AhkNekoHelp.switchAhk2 Error End--------------');
-                    OutputChannel.show();
-                }
-            }
-        }
+    void vscode.languages.getLanguages().then((langs: string[]): null => {
+        if (HintInfoChangeToAhk > 0) return null;
+        if (langs.includes('ahk2')) return null;
 
-        if (!langs.includes('ahk2') && HintInfoChangeToAhk === 0) {
-            const fileName: string = path.basename(fsPath);
-            const suggest = 'https://marketplace.visualstudio.com/items?itemName=thqby.vscode-autohotkey2-lsp';
-            void vscode.window.showInformationMessage(
-                // eslint-disable-next-line max-len
-                `some file like "${fileName}" is "#Requires AutoHotkey v2",\n NekoHelp is not support ahk2,\n suggest to use [AutoHotkey v2 Language Support](${suggest})`,
-            );
-            HintInfoChangeToAhk = 1;
-        }
+        const fileName: string = path.basename(fsPath);
+        const link =
+            'https://marketplace.visualstudio.com/search?term=tag%3Aahk2&target=VSCode&category=All+categories&sortBy=Relevance';
 
-        return 0;
+        OutputChannel.appendLine(`[${Date.now()}] some file like "${fileName}" is "${ahkV0.trim()}"`);
+        OutputChannel.appendLine(`;NekoHelp not support ahk2, suggest to use other Extensions ${link}`);
+        // OutputChannel.show();
+
+        HintInfoChangeToAhk = 1;
+
+        return null;
     });
 
     // throw new Error(`ahk2 -> ${textTrim} -> ${fsPath}`);
@@ -182,7 +166,7 @@ export function Pretreatment(
                 .match(/^#Requires[ \t]+AutoHotkey[ \t]+v(\d)\b/iu);
             if (ahkV !== null) {
                 if (ahkV[1] === '1') needCheckThisAhk2 = false;
-                if (ahkV[1] === '2') return switchAhk2(document);
+                if (ahkV[1] === '2') return infoAddAhk2(document, ahkV[0]);
             }
         }
 

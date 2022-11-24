@@ -530,16 +530,18 @@ export const [SnippetDirectives, DirectivesMDMap] = ((): [TSnippetDirectivee, TD
         },
         REQUIRES: {
             keyRawName: '#Requires',
-            insert: '#Requires ${1:Version}',
+            insert: '#Requires #Requires AutoHotkey ${1:v1.1.33+}',
             doc: 'Displays an error and quits if a version requirement is not met.',
             recommended: true,
             link: 'https://www.autohotkey.com/docs/commands/_Requires.htm',
             exp: [
-                '#Requires v1.1.33+',
+                '#Requires Requirement',
                 '',
                 '; exp: Causes the script to run only on v1.1.33.00 and later v1.1.* releases.',
                 '#Requires AutoHotkey v1.1.33+',
                 'MsgBox This script will run only on v1.1.33.00 and later v1.1.* releases.',
+                '',
+                '#Requires AutoHotkey v2.0-a',
             ],
         },
         SINGLEINSTANCE: {

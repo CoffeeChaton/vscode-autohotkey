@@ -507,7 +507,7 @@ packages:
       '@types/node': 18.11.9
       ansi-escapes: 4.3.2
       chalk: 4.1.2
-      ci-info: 3.6.1
+      ci-info: 3.6.2
       exit: 0.1.2
       graceful-fs: 4.2.10
       jest-changed-files: 29.2.0
@@ -705,7 +705,7 @@ packages:
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
       '@types/node': 18.11.9
-      '@types/yargs': 17.0.13
+      '@types/yargs': 17.0.14
       chalk: 4.1.2
     dev: true
 
@@ -1024,8 +1024,8 @@ packages:
       '@types/yargs-parser': 21.0.0
     dev: true
 
-  /@types/yargs/17.0.13:
-    resolution: {integrity: sha512-9sWaruZk2JGxIQU+IhI1fhPYRcQ0UuTNuKuCW9bR5fp7qi2Llf7WDzNa17Cy7TKnh3cdxDOiyTu6gaLS0eDatg==}
+  /@types/yargs/17.0.14:
+    resolution: {integrity: sha512-9Pj7abXoW1RSTcZaL2Hk6G2XyLMlp5ECdVC/Zf2p/KBjC3srijLGgRAXOBjtFrJoIrvxdTKyKDA14bEcbxBaWw==}
     dependencies:
       '@types/yargs-parser': 21.0.0
     dev: true
@@ -1543,8 +1543,8 @@ packages:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
     dev: true
 
-  /ci-info/3.6.1:
-    resolution: {integrity: sha512-up5ggbaDqOqJ4UqLKZ2naVkyqSJQgJi5lwD6b6mM748ysrghDBX0bx/qJTUHzw7zu6Mq4gycviSF5hJnwceD8w==}
+  /ci-info/3.6.2:
+    resolution: {integrity: sha512-lVZdhvbEudris15CLytp2u6Y0p5EKfztae9Fqa189MfNmln9F33XuH69v5fvNfiRN5/0eAUz2yJL3mo+nhaRKg==}
     engines: {node: '>=8'}
     dev: true
 
@@ -1832,8 +1832,8 @@ packages:
       once: 1.4.0
     dev: true
 
-  /enhanced-resolve/5.10.0:
-    resolution: {integrity: sha512-T0yTFjdpldGY8PmuXXR0PyQ1ufZpEGiHVrp7zHKB7jdR4qlmZHhONVM5AQOAWXuF/w3dnHbEQVrNptJgt7F+cQ==}
+  /enhanced-resolve/5.12.0:
+    resolution: {integrity: sha512-QHTXI/sZQmko1cbDoNAa3mJ5qhWUUNAq3vR0/YiD379fWQrcfuoX1+HW2S0MTt7XmoPLapdaDKUtelUSPic7hQ==}
     engines: {node: '>=10.13.0'}
     dependencies:
       graceful-fs: 4.2.10
@@ -2190,7 +2190,7 @@ packages:
       eslint-plugin-import: '*'
     dependencies:
       debug: 4.3.4
-      enhanced-resolve: 5.10.0
+      enhanced-resolve: 5.12.0
       eslint: 8.28.0
       eslint-plugin-import: 2.26.0_vc54pluhgv7booofyyjouvuf74
       get-tsconfig: 4.2.0
@@ -2359,7 +2359,7 @@ packages:
       eslint: '>=8.28.0'
     dependencies:
       '@babel/helper-validator-identifier': 7.19.1
-      ci-info: 3.6.1
+      ci-info: 3.6.2
       clean-regexp: 1.0.0
       eslint: 8.28.0
       eslint-utils: 3.0.0_eslint@8.28.0
@@ -3236,7 +3236,7 @@ packages:
       '@types/node': 18.11.9
       babel-jest: 29.3.1_@babel+core@7.20.2
       chalk: 4.1.2
-      ci-info: 3.6.1
+      ci-info: 3.6.2
       deepmerge: 4.2.2
       glob: 7.2.3
       graceful-fs: 4.2.10
@@ -3503,7 +3503,7 @@ packages:
       '@jest/types': 29.3.1
       '@types/node': 18.11.9
       chalk: 4.1.2
-      ci-info: 3.6.1
+      ci-info: 3.6.2
       graceful-fs: 4.2.10
       picomatch: 2.3.1
     dev: true

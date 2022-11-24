@@ -35,8 +35,8 @@ type TStatementKeyList =
     | 'IFWINNOTEXIST';
 ```
 
+- add: info add ahk2 Extensions in OutputChannel
 - fix: code107 diag range
-- add: `auto switch ahk2`
 
 ## 0.0.15(2022-11-20)
 

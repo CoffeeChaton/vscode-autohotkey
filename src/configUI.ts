@@ -18,7 +18,6 @@ export const enum EDiagMasterSwitch {
 }
 
 type TempConfigs = {
-    autoSwitchAhk2: boolean;
     statusBarDisplayColor: string;
     formatTextReplace: boolean;
     baseScan: {
@@ -59,7 +58,6 @@ function getConfigs<T>(section: string): T {
 
 function getConfig(): TConfigs {
     const ed: TConfigs = {
-        autoSwitchAhk2: getConfigs<boolean>('autoSwitchAhk2'),
         statusBarDisplayColor: getConfigs<string>('statusBar.displayColor'),
         formatTextReplace: getConfigs<boolean>('format.textReplace'),
         baseScan: {
@@ -181,9 +179,6 @@ export function needDiag(): boolean {
     return true;
 }
 
-export function isAutoSwitchAhk2(): boolean {
-    return config.autoSwitchAhk2;
-}
 // vscode.window.setStatusBarMessage(timeSpend);
 // vscode.window.showErrorMessage()
 // vscode.window.showInformationMessage()
