@@ -14,13 +14,6 @@ type TA_Send = {
 };
 
 export const A_Send: TA_Send = {
-    F12: {
-        label: '{F1-F12}',
-        icon: '{F1-F12}',
-        doc: ['Function keys. For example: {F12} is **F12** on keypad'],
-        body: 'F12',
-        link: 'https://www.autohotkey.com/docs/commands/Send.htm#keynames',
-    },
     Text: {
         label: '{Text}',
         icon: 'Text mode',
