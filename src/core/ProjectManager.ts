@@ -80,8 +80,8 @@ export const pm = {
     },
 
     updateDocDef(document: vscode.TextDocument): TAhkFileData | null {
-        const result: TAhkFileData | null = getFileAST(document);
-        if (result === null) return null;
+        const result: TAhkFileData | 'isAhk2' = getFileAST(document);
+        if (result === 'isAhk2') return null;
 
         const { uri, languageId } = document;
         const { fsPath, scheme } = uri;

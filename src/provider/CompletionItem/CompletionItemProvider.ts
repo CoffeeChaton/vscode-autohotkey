@@ -50,7 +50,6 @@ function CompletionItemCore(
 
     if ((/^\s*#Include(Again)?\s/ui).test(lStr)) return IncludeFsPath(document.uri.fsPath);
     if ((/\bnew[ \t]+\w*$/ui).test(lStr.slice(0, position.character))) {
-        // TODO new new Class
         return listAllFuncClass()
             .filter((v: vscode.CompletionItem): boolean => v.kind === vscode.CompletionItemKind.Class);
     }
@@ -62,7 +61,7 @@ function CompletionItemCore(
 
     const completions: vscode.CompletionItem[] = [
         ...wrapClass(position, textRaw, lStr, topSymbol, DocStrMap, DA), // '.'
-        ...ahkSend(document, position), // '{'
+        ...ahkSend(AhkFileData, position), // '{'
         ...Completion2Directives(lStr, position),
         ...getSnippetOtherKeyWord(lStr, position),
         ...getSnippetCommand(lStr, position),

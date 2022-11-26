@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 
 // dprint-ignore
 export const justSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => [
-
+//
     'Pixel',
     'Mouse',
     'Screen',
@@ -109,7 +109,7 @@ export const justSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.C
     'MonthCal',
     'Slider',
     'StatusBar',
-
+    //
     'Tab2',
     'TreeView',
     'UpDown',
@@ -238,7 +238,6 @@ export const justSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.C
     'DPIScale',
     'Hwnd',
     'Parent',
-
 ].map((key: string) => {
     const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
         .appendCodeblock(key, 'ahk');

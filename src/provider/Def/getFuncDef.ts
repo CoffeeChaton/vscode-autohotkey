@@ -116,7 +116,7 @@ export function getFuncReference(refFn: TFnFindCol, timeStart: number, funcSymbo
 
 // TODO: spilt this func, just need input ahkFunc
 export function getFuncDef(
-    document: vscode.TextDocument,
+    document: vscode.TextDocument, // TODO: remove this
     position: vscode.Position,
     wordUp: string,
     listAllUsing: boolean,

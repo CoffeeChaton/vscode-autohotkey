@@ -41,8 +41,9 @@ function HoverProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Hover | null {
-    const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
-    if (AhkFileData === null) return null;
+    const AhkFileData: TAhkFileData | undefined = pm.getDocMap(document.uri.fsPath);
+    if (AhkFileData === undefined) return null;
+
     const { AST, DocStrMap } = AhkFileData;
 
     // ^\s*\( Trim
@@ -73,7 +74,7 @@ function HoverProviderCore(
 
     const wordUp: string = document.getText(range).toUpperCase();
 
-    const ahkClassMd: vscode.MarkdownString | null = hoverClassName(document, position, wordUp);
+    const ahkClassMd: vscode.MarkdownString | null = hoverClassName(AhkFileData, position, wordUp);
     if (ahkClassMd !== null) return new vscode.Hover(ahkClassMd);
 
     if (AhkFunc !== null) {

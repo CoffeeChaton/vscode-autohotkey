@@ -12,8 +12,8 @@ function DefProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Location[] | null {
-    const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
-    if (AhkFileData === null) return null;
+    const AhkFileData: TAhkFileData | undefined = pm.getDocMap(document.uri.fsPath);
+    if (AhkFileData === undefined) return null;
 
     const methodDef: vscode.Location[] | null = getThisMethod(AhkFileData, position);
     if (methodDef !== null) return methodDef;

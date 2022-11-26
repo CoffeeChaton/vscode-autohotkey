@@ -16,11 +16,11 @@ function setClassSnip(
     const { name, insertText } = AC;
 
     const item: vscode.CompletionItem = new vscode.CompletionItem({
-        label: `new ${name}`,
+        label: name,
         description: fileName,
     });
 
-    item.insertText = `new ${insertText}`;
+    item.insertText = insertText;
     item.detail = 'neko help';
 
     item.kind = vscode.CompletionItemKind.Class;

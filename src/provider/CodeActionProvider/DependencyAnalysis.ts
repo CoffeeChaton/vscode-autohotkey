@@ -11,18 +11,15 @@ export function DependencyAnalysis(
     selection: vscode.Range | vscode.Selection,
 ): vscode.Command[] {
     if (!(selection instanceof vscode.Selection)) return [];
-    const { active } = selection;
-
-    const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
-    if (AhkFileData === null) return [];
+    const AhkFileData: TAhkFileData | undefined = pm.getDocMap(document.uri.fsPath);
+    if (AhkFileData === undefined) return [];
     const { AST, DocStrMap } = AhkFileData;
 
+    const { active } = selection;
     const ahkFn: CAhkFunc | undefined = getFileAllFunc(AST)
         .find((ahkFunc: CAhkFunc): boolean => ahkFunc.nameRange.contains(active));
 
-    if (ahkFn === undefined) {
-        return [];
-    }
+    if (ahkFn === undefined) return [];
 
     const CommandAnalyze: vscode.Command = {
         title: 'Analyze this Function',
