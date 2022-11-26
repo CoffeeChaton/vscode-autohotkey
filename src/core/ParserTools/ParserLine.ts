@@ -116,7 +116,7 @@ export function ParserLine(FuncInput: TFuncInput): CAhkComment | TLineClass | nu
 
     if (fistWordUp !== '' && fistWordUp !== 'DEFAULT') return null;
 
-    const { AhkTokenLine, document } = FuncInput;
+    const { AhkTokenLine, uri } = FuncInput;
     const { line } = AhkTokenLine;
 
     for (const { test, getName, ClassName } of LineRuler) {
@@ -129,7 +129,7 @@ export function ParserLine(FuncInput: TFuncInput): CAhkComment | TLineClass | nu
             name,
             range: rangeOfLine,
             selectionRange: rangeOfLine,
-            uri: document.uri,
+            uri,
         });
     }
     return null;

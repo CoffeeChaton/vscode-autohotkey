@@ -15,7 +15,7 @@ export function getComment(FuncInput: TFuncInput): CAhkComment | null {
         return null;
     }
 
-    const { AhkTokenLine, document } = FuncInput;
+    const { AhkTokenLine, uri } = FuncInput;
     const { line, lStr, lineComment } = AhkTokenLine;
 
     const doubleSemicolon: number = textRaw.indexOf(';;', lStr.length);
@@ -29,6 +29,6 @@ export function getComment(FuncInput: TFuncInput): CAhkComment | null {
         name,
         range,
         selectionRange: range,
-        uri: document.uri,
+        uri,
     });
 }

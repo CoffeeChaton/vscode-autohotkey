@@ -5,20 +5,20 @@ import type { TGValMap } from './ParserTools/ahkGlobalDef';
 export type TFuncInput = Readonly<{
     AhkTokenLine: TAhkTokenLine;
     //
-    RangeEndLine: number;
     defStack: string[];
     DocStrMap: TTokenStream;
-    document: vscode.TextDocument;
     GValMap: TGValMap;
+    RangeEndLine: number;
+    uri: vscode.Uri;
 }>;
 
 type ChildType = Readonly<{
     defStack: string[];
-    RangeStartLine: number;
-    RangeEndLine: number;
     DocStrMap: TTokenStream;
-    document: vscode.TextDocument;
     GValMap: TGValMap;
+    RangeEndLine: number;
+    RangeStartLine: number;
+    uri: vscode.Uri;
 }>;
 
 type TChildrenType<T extends vscode.DocumentSymbol> = T['children'][number];
@@ -32,8 +32,8 @@ export function getChildren<T extends vscode.DocumentSymbol>(
         RangeStartLine,
         RangeEndLine,
         defStack,
-        document,
         GValMap,
+        uri,
     } = child;
 
     const result: TChildrenType<T>[] = [];
@@ -48,8 +48,8 @@ export function getChildren<T extends vscode.DocumentSymbol>(
                 DocStrMap,
                 RangeEndLine,
                 defStack,
-                document,
                 GValMap,
+                uri,
             });
             if (DocumentSymbol !== null) {
                 result.push(DocumentSymbol);

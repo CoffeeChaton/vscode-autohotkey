@@ -14,7 +14,7 @@ export function getClassGetSet(FuncInput: TFuncInput): CAhkClassGetSet | null {
 
     const {
         AhkTokenLine,
-        document,
+        uri,
         DocStrMap,
         RangeEndLine,
     } = FuncInput;
@@ -24,7 +24,7 @@ export function getClassGetSet(FuncInput: TFuncInput): CAhkClassGetSet | null {
         name: ma[1],
         range: getRange(DocStrMap, line, line, RangeEndLine),
         selectionRange: getRangeOfLine(line, lStr, textRaw.length),
-        uri: document.uri,
+        uri,
     });
 }
 

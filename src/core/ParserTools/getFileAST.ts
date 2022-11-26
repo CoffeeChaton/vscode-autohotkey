@@ -88,7 +88,8 @@ export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
     if (fullTextList.at(-1)?.trim() !== '') fullTextList.push('');
 
     const DocFullSize: number = fullText.length;
-    const { fsPath } = document.uri;
+    const { uri } = document;
+    const { fsPath } = uri;
     const oldCache: TMemo | undefined = BaseScanMemo.getMemo(fsPath, fullTextList, DocFullSize);
     if (oldCache !== undefined) return oldCache;
 
@@ -103,7 +104,7 @@ export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
             RangeStartLine: 0,
             RangeEndLine: DocStrMap.length,
             defStack: [],
-            document,
+            uri,
             GValMap,
         },
     );
@@ -112,7 +113,7 @@ export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
         DocStrMap,
         AST,
         DocFullSize,
-        uri: document.uri,
+        uri,
         ModuleVar: getModuleVarMap(DocStrMap, GValMap, AST, fsPath),
     };
     BaseScanMemo.setMemo(fsPath, AhkCache);

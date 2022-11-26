@@ -30,8 +30,9 @@ function infoAddAhk2(document: vscode.TextDocument, ahkV0: string): 'isAhk2' {
         if (langs.includes('ahk2')) return null;
 
         const fileName: string = path.basename(fsPath);
-        const link =
-            'https://marketplace.visualstudio.com/search?term=tag%3Aahk2&target=VSCode&category=All+categories&sortBy=Relevance';
+
+        // dprint-ignore
+        const link = 'https://marketplace.visualstudio.com/search?term=tag%3Aahk2&target=VSCode&category=All+categories&sortBy=Relevance';
 
         OutputChannel.appendLine(`[${Date.now()}] some file like "${fileName}" is "${ahkV0.trim()}"`);
         OutputChannel.appendLine(`;NekoHelp not support ahk2, suggest to use other Extensions ${link}`);

@@ -8,7 +8,7 @@ export function getClassInstanceVar(FuncInput: TFuncInput): CAhkClassInstanceVar
     const index = lStr.indexOf(':=');
     if (index === -1) return null;
 
-    const { AhkTokenLine, document } = FuncInput;
+    const { AhkTokenLine, uri } = FuncInput;
     const { line, textRaw } = AhkTokenLine;
 
     const isStatic = (/^static\s/ui).test(lStr.trimStart());
@@ -30,7 +30,7 @@ export function getClassInstanceVar(FuncInput: TFuncInput): CAhkClassInstanceVar
             new vscode.Position(line, col),
             new vscode.Position(line, col + name.length),
         ),
-        uri: document.uri,
+        uri,
         detail: isStatic
             ? 'static ClassVar'
             : 'Instance Var',

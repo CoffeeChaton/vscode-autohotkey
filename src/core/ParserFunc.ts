@@ -10,6 +10,7 @@ import { getUnknownTextMap } from '../tools/DeepAnalysis/getUnknownTextMap';
 import type { TFuncDefData } from '../tools/Func/getFuncDef';
 import { getFuncDef } from '../tools/Func/getFuncDef';
 import { getDocStrMapMask } from '../tools/getDocStrMapMask';
+import { getTextInRange } from '../tools/getTextInRange';
 import { getFuncDocCore } from '../tools/MD/getFuncDocMD';
 import { getRange } from '../tools/range/getRange';
 import type { TFuncInput } from './getChildren';
@@ -51,7 +52,7 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
         DocStrMap,
         RangeEndLine,
         defStack,
-        document,
+        uri,
         GValMap,
     } = FuncInput;
 
@@ -68,7 +69,7 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
             defStack,
-            document,
+            uri,
             GValMap,
         },
     );
@@ -87,8 +88,8 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
     const { valMap, fnMode } = getFnVarDef(allowList, AhkTokenList, paramMap, GValMap, EFnMode.normal);
     const textMap: TTextMapIn = getUnknownTextMap(allowList, AhkTokenList, paramMap, valMap, GValMap, name); // eval!!
 
-    const selectionRangeText: string = document.getText(selectionRange);
-    const fileName: string = path.basename(document.uri.fsPath);
+    const selectionRangeText: string = getTextInRange(selectionRange, DocStrMap);
+    const fileName: string = path.basename(uri.fsPath);
 
     return new CAhkFunc({
         name,
@@ -97,7 +98,7 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
         selectionRange,
         selectionRangeText,
         md: getFuncDocCore(fileName, AhkTokenList, selectionRangeText, defStack),
-        uri: document.uri,
+        uri,
         defStack,
         paramMap,
         valMap,

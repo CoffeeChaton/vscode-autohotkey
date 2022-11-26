@@ -42,6 +42,7 @@
         "DEREFCHAR",
         "DETECTHIDDENTEXT",
         "DETECTHIDDENWINDOWS",
+        "dprint",
         "DRIVE",
         "DRIVEGET",
         "DRIVESPACEFREE",

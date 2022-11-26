@@ -13,7 +13,6 @@ a = 0x25
 ```
 
 - TODO: test: add vscode.test
-- TODO: remove `ahk.snippets.json` to ts
 - TODO: fix : limit Statement completion range.
 
 ```typescript
@@ -37,6 +36,7 @@ type TStatementKeyList =
 
 - add: info add ahk2 Extensions in OutputChannel
 - fix: code107 diag range
+- feat: move `ahk.snippets.json` to ts
 
 ## 0.0.15(2022-11-20)
 

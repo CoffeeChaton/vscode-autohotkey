@@ -39,7 +39,7 @@ export function getClass(FuncInput: TFuncInput): CAhkClass | null {
     const {
         DocStrMap,
         RangeEndLine,
-        document,
+        uri,
         GValMap,
         defStack,
     } = FuncInput;
@@ -54,7 +54,7 @@ export function getClass(FuncInput: TFuncInput): CAhkClass | null {
             RangeStartLine: range.start.line + 1,
             RangeEndLine: range.end.line,
             defStack: [...defStack, name],
-            document,
+            uri,
             GValMap,
         },
     );
@@ -67,7 +67,7 @@ export function getClass(FuncInput: TFuncInput): CAhkClass | null {
         range,
         selectionRange: new vscode.Range(line, col, line, col + name.length),
         insertText: `${name}${setClassInsertText(ch)}`,
-        uri: document.uri,
+        uri,
         ch,
     });
 }

@@ -19,7 +19,7 @@ export const ParserBlock = {
             defStack,
             AhkTokenLine,
             DocStrMap,
-            document,
+            uri,
             GValMap,
         } = FuncInput;
         const { line, fistWordUpCol } = AhkTokenLine;
@@ -35,7 +35,7 @@ export const ParserBlock = {
                 RangeStartLine: range.start.line + 1,
                 RangeEndLine: range.end.line,
                 defStack,
-                document,
+                uri,
                 GValMap,
             },
         );
@@ -49,7 +49,7 @@ export const ParserBlock = {
             name,
             range,
             selectionRange,
-            uri: document.uri,
+            uri,
             ch,
         });
     },
@@ -65,7 +65,7 @@ export const ParserBlock = {
             defStack,
             AhkTokenLine,
             DocStrMap,
-            document,
+            uri,
             GValMap,
         } = FuncInput;
         const { line, fistWordUpCol } = AhkTokenLine;
@@ -78,7 +78,7 @@ export const ParserBlock = {
                 RangeStartLine: range.start.line + 1,
                 RangeEndLine: range.end.line,
                 defStack,
-                document,
+                uri,
                 GValMap,
             },
         );
@@ -91,7 +91,7 @@ export const ParserBlock = {
         return new CAhkDefault({
             range,
             selectionRange,
-            uri: document.uri,
+            uri,
             ch,
         });
     },
@@ -105,7 +105,7 @@ export const ParserBlock = {
             defStack,
             AhkTokenLine,
             DocStrMap,
-            document,
+            uri,
             GValMap,
         } = FuncInput;
         const { line, fistWordUpCol, lStr } = AhkTokenLine;
@@ -119,7 +119,7 @@ export const ParserBlock = {
                 RangeStartLine: range.start.line + 1,
                 RangeEndLine: range.end.line,
                 defStack,
-                document,
+                uri,
                 GValMap,
             },
         );
@@ -133,7 +133,7 @@ export const ParserBlock = {
             name: `Switch ${getSwitchName(lStr)}`,
             range,
             selectionRange,
-            uri: document.uri,
+            uri,
             ch,
         });
     },

@@ -134,7 +134,7 @@
                         "/dist(/|$)",
                         "/temp(/|$)",
                         "/ahk2(/|$)",
-                        "ahk2\\.ahk"
+                        "\\.2\\.ahk$"
                     ],
                     "items": {
                         "type": "string"
