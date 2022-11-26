@@ -9,6 +9,17 @@ type TStatementDiag =
     | EDiagCode.code806
     | EDiagCode.code899;
 
+type TOther =
+    | 'AND'
+    | 'BETWEEN'
+    | 'DEFAULT'
+    | 'IN'
+    | 'IS'
+    | 'NEW'
+    | 'NOT'
+    | 'OR'
+    | 'THIS';
+
 export type TStatementKeyList =
     | 'AND'
     | 'BETWEEN'
@@ -93,7 +104,7 @@ export const Statement: TStatement = {
         keyRawName: 'Between',
         body: 'between',
         doc: 'Determines whether [traditional assignments](https://www.autohotkey.com/docs/commands/SetEnv.htm "Deprecated. New scripts should use Var := Value instead.") like `Var1 = %Var2%` omit spaces and tabs from the beginning and end of _Var2_.',
-        recommended: false,
+        recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/AutoTrim.htm',
         exp: [
             'if Var Between LowerBound and UpperBound',
@@ -245,7 +256,7 @@ export const Statement: TStatement = {
         keyRawName: 'Gosub',
         body: 'Gosub, ${1:Label}',
         doc: 'Jumps to the specified label and continues execution until [Return](https://www.autohotkey.com/docs/commands/Return.htm) is encountered.',
-        recommended: false,
+        recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Gosub.htm',
         exp: [
             'Gosub, Label1 ',
@@ -261,7 +272,7 @@ export const Statement: TStatement = {
         keyRawName: 'Goto',
         body: 'Goto, ${1:Label}',
         doc: 'Jumps to the specified label and continues execution.',
-        recommended: false,
+        recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Goto.htm',
         exp: [
             'Goto, MyLabel',

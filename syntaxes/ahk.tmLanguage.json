@@ -23,6 +23,9 @@
             "name": "comment.line.semicolon.ahk"
         },
         {
+            "include": "#ahk2exe"
+        },
+        {
             "captures": {
                 "1": {
                     "name": "punctuation.definition.comment.ahk"
@@ -63,7 +66,15 @@
             ]
         },
         {
-            "begin": "^\\s*/\\*",
+            "begin": "^\\s*/\\*(?i:(@Ahk2Exe-(Keep)\\b))",
+            "beginCaptures": {
+                "1": {
+                    "name": "comment.block.ahk2exe.keep.ahk"
+                },
+                "2": {
+                    "name": "keyword.comment.ahk2exe.keep.ahk"
+                }
+            },
             "end": "^\\s*\\*/",
             "name": "comment.block.ahk"
         },
@@ -342,6 +353,15 @@
                     "name": "punctuation.definition.variable.percent.ahk"
                 }
             ]
+        },
+        "ahk2exe": {
+            "captures": {
+                "1": {
+                    "name": "keyword.comment.ahk2exe.ahk"
+                }
+            },
+            "match": "^\\s*;(?i:@Ahk2Exe-(AddResource|Base|Bin|ConsoleApp|Cont|Debug|ExeName|IgnoreBegin|IgnoreEnd|Keep|Let|Nop|Obey|PostExec|ResourceID|Set(?:MainIcon|Prop|CompanyName|Copyright|Description|FileVersion|InternalName|Language|LegalTrademarks|Name|OrigFilename|ProductName|ProductVersion|Version)?|UpdateManifest|UseResourceLang)\\b).*",
+            "name": "comment.line.ahk2exe.ahk"
         }
     },
     "scopeName": "source.ahk"

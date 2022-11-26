@@ -2,17 +2,6 @@
 
 ## NEXT 0.0.16(2022-12-04)
 
-- TODO: auto-fix of code107
-
-```ahk
-a = %i%
-a = 0
-a =
-a = -5
-a = 0x25
-```
-
-- TODO: test: add vscode.test
 - TODO: fix : limit Statement completion range.
 
 ```typescript
@@ -34,6 +23,7 @@ type TStatementKeyList =
     | 'IFWINNOTEXIST';
 ```
 
+- add: syntax-highlight of `;@Ahk2Exe-`
 - add: info add ahk2 Extensions in OutputChannel
 - fix: code107 diag range
 - feat: move `ahk.snippets.json` to ts

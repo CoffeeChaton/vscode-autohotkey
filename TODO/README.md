@@ -1,10 +1,8 @@
 # TODO TODO list
 
 - [add test of tmLanguage.json](https://github.com/Microsoft/TypeScript-TmLanguage)
-- [check #Include](https://www.autohotkey.com/docs/Functions.htm#lib)
 - [diag of `If Var op Value`](https://www.autohotkey.com/docs/Language.htm#if-statement)
 - [not use switch in js](https://github.com/microsoft/TypeScript/pull/50225)
-- add [ErrorLevel](https://www.autohotkey.com/docs/misc/ErrorLevel.htm)
 - add `RegExMatch((Text := q.Read()), "OU)([^\x00-\x7F])", Found)` of `Found`...
 - add diag auto check of `catch{} ;null catch`
 - add diag of `%\w%\w`
@@ -16,6 +14,16 @@
 - Parser: -> AST
 - Scanner: -> Token
 - test of <https://www.autohotkey.com/docs/scripts/index.htm>
+- TODO: test: add vscode.test
+- TODO: auto-fix of code107
+
+```ahk
+a = %i%
+a = 0
+a =
+a = -5
+a = 0x25
+```
 
 // TODO fn()
 // ComObjParameter

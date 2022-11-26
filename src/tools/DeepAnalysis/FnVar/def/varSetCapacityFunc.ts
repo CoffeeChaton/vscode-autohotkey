@@ -2,8 +2,8 @@ import type { TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
 import type { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
 
-// NumGet(VarOrAddress [, Offset := 0, Type := "UPtr"])
-// VarSetCapacity(varName)
+// NumGet(OutputVar [, Offset := 0, Type := "UPtr"])
+// VarSetCapacity(OutputVar)
 // TV_GetText(OutputVar, ItemID)
 // LV_GetText(OutputVar, RowNumber [, ColumnNumber])
 

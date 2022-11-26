@@ -3,8 +3,6 @@
 /* eslint-disable max-lines */
 /* eslint-disable no-template-curly-in-string */
 
-import type { DeepReadonly } from '../../globalEnum';
-
 // https://www.autohotkey.com/docs/Functions.htm#BuiltIn
 
 type TElementGroup =
@@ -28,7 +26,7 @@ type TElementGroup =
     | 'TreeView'
     | 'Window'; // OBJ_XX
 
-type TBuiltInFuncElement = DeepReadonly<{
+type TBuiltInFuncElement = Readonly<{
     keyRawName: string;
     group: TElementGroup;
     link: `https://www.autohotkey.com/docs/${string}`;
@@ -156,7 +154,7 @@ type TBuiltInFuncbj = {
     [k in TUPKey]: TBuiltInFuncElement;
 };
 
-export const BuiltInFunctionObj: DeepReadonly<TBuiltInFuncbj> = {
+export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
     ABS: {
         group: 'Math',
         keyRawName: 'Abs',

@@ -3,8 +3,6 @@
         "browser": false,
         "es6": true,
         "node": true
-        // "jest": true,
-        // "jest/globals": true,
     },
     "extends": [
         "airbnb-base",
@@ -15,7 +13,6 @@
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:import/errors",
         "plugin:import/recommended",
-        "plugin:import/typescript",
         "plugin:import/typescript",
         "plugin:import/warnings",
         "plugin:promise/recommended",
@@ -46,7 +43,7 @@
             "parserOptions": {
                 "project": [
                     "./tsconfig.json"
-                ] // Specify it only for TypeScript files
+                ]
             },
             "rules": {
                 "jest-formatting/padding-around-describe-blocks": "error",
@@ -62,32 +59,25 @@
         },
         "ecmaVersion": 2021,
         "project": "tsconfig.json",
-        "projectFolderIgnoreList": [
-            "**/__test__/**"
-        ],
         "sourceType": "module"
     },
     "plugins": [
         "@typescript-eslint",
         "@typescript-eslint/eslint-plugin",
         "fp",
-        "immutable",
         "import",
         "promise",
         "security",
         "unicorn"
-        // "jest",
-        // "jest-formatting"
+        // "immutable",
     ],
     "root": true,
     "rules": {
-        "unicorn/switch-case-braces": ["error", "avoid"],
-        "comma-dangle": "off",
-        "@typescript-eslint/comma-dangle": "off",
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/ban-types": "warn",
+        "@typescript-eslint/comma-dangle": "off",
         "@typescript-eslint/consistent-type-assertions": "warn",
         "@typescript-eslint/consistent-type-definitions": [
             "error",
@@ -175,6 +165,7 @@
         "brace-style": "warn",
         "capitalized-comments": "warn",
         "class-methods-use-this": "warn",
+        "comma-dangle": "off",
         "comma-spacing": "warn",
         "complexity": [
             "error",
@@ -195,9 +186,6 @@
         "func-names": "warn",
         "func-style": "off",
         "id-length": "off",
-        "immutable/no-let": "off",
-        "immutable/no-mutation": "off",
-        "immutable/no-this": "off",
         "implicit-arrow-linebreak": "error",
         "import/default": "error",
         "import/export": "error",
@@ -293,9 +281,11 @@
                     0,
                     1,
                     2
-                ]
+                ],
+                "detectObjects": false
             }
         ],
+        "no-constant-binary-expression": "error",
         "no-mixed-operators": "warn",
         "no-multi-assign": "warn",
         "no-nested-ternary": "error",
@@ -379,6 +369,10 @@
         ],
         "unicorn/prefer-set-has": "off",
         "unicorn/prevent-abbreviations": "off",
+        "unicorn/switch-case-braces": [
+            "error",
+            "avoid"
+        ],
         "use-isnan": "error",
         "wrap-regex": "error"
     },
