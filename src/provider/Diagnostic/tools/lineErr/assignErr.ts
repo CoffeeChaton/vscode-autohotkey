@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import type { TAhkTokenLine, TTokenStream } from '../../../../globalEnum';
 import { EDetail, EMultiline } from '../../../../globalEnum';
+import { CMemo } from '../../../../tools/CMemo';
 import { CDiagBase } from '../CDiagBase';
 
 function assignErr({
@@ -26,12 +27,7 @@ function assignErr({
     });
 }
 
-const wm = new WeakMap<TTokenStream, readonly CDiagBase[]>();
-
-export function getAssignErr(DocStrMap: TTokenStream): readonly CDiagBase[] {
-    const cache: readonly CDiagBase[] | undefined = wm.get(DocStrMap);
-    if (cache !== undefined) return cache;
-
+const AssignErr = new CMemo<TTokenStream, readonly CDiagBase[]>((DocStrMap: TTokenStream) => {
     const diagList: CDiagBase[] = [];
 
     for (const token of DocStrMap) {
@@ -40,7 +36,9 @@ export function getAssignErr(DocStrMap: TTokenStream): readonly CDiagBase[] {
         const ed1: CDiagBase | null = assignErr(token, DocStrMap);
         if (ed1 !== null) diagList.push(ed1);
     }
-
-    wm.set(DocStrMap, diagList);
     return diagList;
+});
+
+export function getAssignErr(DocStrMap: TTokenStream): readonly CDiagBase[] {
+    return AssignErr.up(DocStrMap);
 }

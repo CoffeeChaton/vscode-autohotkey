@@ -3,9 +3,10 @@ import type { CAhkClass } from '../../../AhkSymbol/CAhkClass';
 import type { TAhkFileData } from '../../../core/ProjectManager';
 import { pm } from '../../../core/ProjectManager';
 import type { TTokenStream } from '../../../globalEnum';
+import { CMemo } from '../../../tools/CMemo';
 import { getDocStrMapMask } from '../../../tools/getDocStrMapMask';
 
-function getWmThisCore(AhkClassSymbol: CAhkClass): vscode.CompletionItem[] {
+const WmThis = new CMemo<CAhkClass, vscode.CompletionItem[]>((AhkClassSymbol: CAhkClass): vscode.CompletionItem[] => {
     const { fsPath } = AhkClassSymbol.uri;
     const AhkFileData: TAhkFileData | undefined = pm.getDocMap(fsPath);
     if (AhkFileData === undefined) return [];
@@ -33,15 +34,8 @@ function getWmThisCore(AhkClassSymbol: CAhkClass): vscode.CompletionItem[] {
         itemS.push(item);
     }
     return itemS;
-}
-
-const wm = new WeakMap<CAhkClass, vscode.CompletionItem[]>();
+});
 
 export function getWmThis(AhkClassSymbol: CAhkClass): vscode.CompletionItem[] {
-    const cache: vscode.CompletionItem[] | undefined = wm.get(AhkClassSymbol);
-    if (cache !== undefined) return cache;
-
-    const v: vscode.CompletionItem[] = getWmThisCore(AhkClassSymbol);
-    wm.set(AhkClassSymbol, v);
-    return v;
+    return WmThis.up(AhkClassSymbol);
 }

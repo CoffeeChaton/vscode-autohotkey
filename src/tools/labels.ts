@@ -1,6 +1,7 @@
 import { CAhkLabel } from '../AhkSymbol/CAhkLine';
 import type { TAhkSymbol, TAstRoot } from '../AhkSymbol/TAhkSymbolIn';
 import { pm } from '../core/ProjectManager';
+import { CMemo } from './CMemo';
 
 type TLabelMapRW = Map<string, CAhkLabel>;
 
@@ -14,22 +15,15 @@ function findAllLabelMapCore(ch: readonly TAhkSymbol[], map: TLabelMapRW): void 
     }
 }
 
-const wm = new WeakMap<TAstRoot, TLabelMapRW>();
-
-function findAllLabelMap(AST: TAstRoot): TLabelMapRW {
-    const cache: TLabelMapRW | undefined = wm.get(AST);
-    if (cache !== undefined) return cache;
-
+const findAllLabelMap = new CMemo<TAstRoot, TLabelMapRW>((AST: TAstRoot) => {
     const LabelMap: TLabelMapRW = new Map();
     findAllLabelMapCore(AST, LabelMap);
-
-    wm.set(AST, LabelMap);
     return LabelMap;
-}
+});
 
 export function findLabel(wordUpCase: string): CAhkLabel | null {
     for (const { AST } of pm.getDocMapValue()) {
-        const label: CAhkLabel | undefined = findAllLabelMap(AST).get(wordUpCase);
+        const label: CAhkLabel | undefined = findAllLabelMap.up(AST).get(wordUpCase);
         if (label !== undefined) return label;
     }
     return null;

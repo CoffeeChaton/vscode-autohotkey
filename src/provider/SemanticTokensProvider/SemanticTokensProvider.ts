@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
+import { CMemo } from '../../tools/CMemo';
 import { DAList2SemanticHighlight } from './DAList2SemanticHighlight';
 import { funcHighlight } from './funcHighlight';
 import { ModuleVarSemantic } from './ModuleVarSemantic';
@@ -13,15 +14,7 @@ export const legend: vscode.SemanticTokensLegend = new vscode.SemanticTokensLege
     [...TokenModifiers],
 );
 
-const wm = new WeakMap<TAhkFileData, vscode.SemanticTokens>();
-
-function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticTokens | null {
-    const AhkFileData: TAhkFileData | null = pm.updateDocDef(document);
-    if (AhkFileData === null) return null;
-
-    const cache: vscode.SemanticTokens | undefined = wm.get(AhkFileData);
-    if (cache !== undefined) return cache;
-
+const Semantic = new CMemo<TAhkFileData, vscode.SemanticTokens>((AhkFileData: TAhkFileData): vscode.SemanticTokens => {
     const { AST, ModuleVar, DocStrMap } = AhkFileData;
 
     const tokensBuilder: vscode.SemanticTokensBuilder = new vscode.SemanticTokensBuilder(legend);
@@ -34,10 +27,8 @@ function SemanticTokensCore(document: vscode.TextDocument): vscode.SemanticToken
     ], tokensBuilder);
 
     const SemanticTokens: vscode.SemanticTokens = tokensBuilder.build();
-    wm.set(AhkFileData, SemanticTokens);
-
     return SemanticTokens;
-}
+});
 
 // semantic token type
 export const AhkFullSemanticHighlight: vscode.DocumentSemanticTokensProvider = {
@@ -46,6 +37,9 @@ export const AhkFullSemanticHighlight: vscode.DocumentSemanticTokensProvider = {
         document: vscode.TextDocument,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.SemanticTokens> {
-        return SemanticTokensCore(document);
+        const AhkFileData: TAhkFileData | null = pm.updateDocDef(document);
+        if (AhkFileData === null) return null;
+
+        return Semantic.up(AhkFileData);
     },
 };

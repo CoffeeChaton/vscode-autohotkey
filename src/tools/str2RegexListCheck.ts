@@ -1,13 +1,7 @@
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { CMemo } from './CMemo';
 
-export const wm = new WeakMap<readonly string[], readonly RegExp[]>();
-
-export function str2RegexListCheck(strList: readonly string[]): readonly RegExp[] {
-    const cache: readonly RegExp[] | undefined = wm.get(strList);
-    if (cache !== undefined) {
-        return cache;
-    }
-
+const RegexMemo = new CMemo<readonly string[], readonly RegExp[]>((strList: readonly string[]): readonly RegExp[] => {
     // "/\\.",
     // "/node_modules$",
     // "/ahk_lib$",
@@ -43,7 +37,9 @@ export function str2RegexListCheck(strList: readonly string[]): readonly RegExp[
         OutputChannel.appendLine(';AhkNekoHelp.baseScan.IgnoredList Error End--------------');
         OutputChannel.show();
     }
-
-    wm.set(strList, regexList);
     return regexList;
+});
+
+export function str2RegexListCheck(strList: readonly string[]): readonly RegExp[] {
+    return RegexMemo.up(strList);
 }
