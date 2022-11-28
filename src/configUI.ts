@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import type { DeepReadonly } from './globalEnum';
-import { OutputChannel } from './provider/vscWindows/OutputChannel';
 import { statusBarItem } from './provider/vscWindows/statusBarItem';
+import { str2RegexListCheck } from './tools/str2RegexListCheck';
 
 export const enum ECommandOption {
     All = 0, // "Don't filter Command, Provides all entered commands.",
@@ -82,6 +82,8 @@ function getConfig(): TConfigs {
     } as const;
 
     statusBarItem.color = ed.statusBarDisplayColor;
+    void str2RegexListCheck(ed.baseScan.IgnoredList);
+    void str2RegexListCheck(ed.snippets.blockFilesList);
     return ed;
 }
 
@@ -112,52 +114,12 @@ export function useSymbolProvider(): boolean {
     return config.useSymbolProvider;
 }
 
-const wm = new WeakMap<readonly string[], readonly RegExp[]>();
-
-function str2RegexList(strList: readonly string[]): readonly RegExp[] {
-    const cache: readonly RegExp[] | undefined = wm.get(strList);
-    if (cache !== undefined) return cache;
-
-    // "/\\.",
-    // "/node_modules$",
-    // "/ahk_lib$",
-    // "/ahk_log$",
-    // "/ahk_music$",
-    // "/IMG$"
-    // "/Gdip_.*\\.ahk$",
-
-    let errRuler = '';
-    const regexList: RegExp[] = [];
-    try {
-        for (const str of strList) {
-            errRuler = str;
-            // eslint-disable-next-line security/detect-non-literal-regexp
-            const re = new RegExp(str, 'u');
-            regexList.push(re);
-        }
-    } catch (error: unknown) {
-        let message = 'Unknown Error';
-        if (error instanceof Error) {
-            message = error.message;
-        }
-        console.error(error);
-        OutputChannel.appendLine(';AhkNekoHelp.baseScan.IgnoredList Error Start------------');
-        OutputChannel.appendLine(`has error of this ruler: "${errRuler}"`);
-        OutputChannel.appendLine(message);
-        OutputChannel.appendLine(';AhkNekoHelp.baseScan.IgnoredList Error End--------------');
-        OutputChannel.show();
-    }
-
-    wm.set(strList, regexList);
-    return regexList;
-}
-
 export function getIgnoredList(): readonly RegExp[] {
-    return str2RegexList(config.baseScan.IgnoredList);
+    return str2RegexListCheck(config.baseScan.IgnoredList);
 }
 
 export function getSnippetBlockFilesList(): readonly RegExp[] {
-    return str2RegexList(config.snippets.blockFilesList);
+    return str2RegexListCheck(config.snippets.blockFilesList);
 }
 
 export function getCommandOptions(): ECommandOption {

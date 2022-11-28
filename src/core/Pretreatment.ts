@@ -20,28 +20,46 @@ import { callDeep } from './ParserTools/calcDeep';
 /**
  * Avoid too many messages
  */
-let HintInfoChangeToAhk = 0;
+let HintInfoChangeToAhk: 0 | 1 = 0;
 
 function infoAddAhk2(document: vscode.TextDocument, ahkV0: string): 'isAhk2' {
     const { fsPath } = document.uri;
 
-    void vscode.languages.getLanguages().then((langs: string[]): null => {
-        if (HintInfoChangeToAhk > 0) return null;
-        if (langs.includes('ahk2')) return null;
+    if (HintInfoChangeToAhk === 0) {
+        void vscode.languages.getLanguages().then((langs: string[]): null => {
+            if (langs.includes('ahk2')) return null;
 
-        const fileName: string = path.basename(fsPath);
+            // try {
+            //     if (langs.includes('ahk2')) {
+            //         await vscode.languages.setTextDocumentLanguage(document, 'ahk2');
+            //         return null;
+            //     }
+            //     await vscode.languages.setTextDocumentLanguage(document, 'plaintext');
+            // } catch (error: unknown) {
+            //     let message = 'Unknown Error';
+            //     if (error instanceof Error) {
+            //         message = error.message;
+            //     }
+            //     if (message !== 'Unknown language id: ahk2') {
+            //         console.error(error);
+            //         OutputChannel.appendLine(';AhkNekoHelp.switchAhk2 Error Start------------');
+            //         OutputChannel.appendLine(message);
+            //         OutputChannel.appendLine(';AhkNekoHelp.switchAhk2 Error End--------------');
+            //         OutputChannel.show();
+            //     }
+            // }
 
-        // dprint-ignore
-        const link = 'https://marketplace.visualstudio.com/search?term=tag%3Aahk2&target=VSCode&category=All+categories&sortBy=Relevance';
+            const fileName: string = path.basename(fsPath);
+            const t1: string = (new Date()).toLocaleString();
+            OutputChannel.appendLine(
+                `[${t1}] some file like "${fileName}" is "${ahkV0.trim()}" ;NekoHelp not support ahk2, suggest to use other Extensions`,
+            );
 
-        OutputChannel.appendLine(`[${Date.now()}] some file like "${fileName}" is "${ahkV0.trim()}"`);
-        OutputChannel.appendLine(`;NekoHelp not support ahk2, suggest to use other Extensions ${link}`);
-        // OutputChannel.show();
+            HintInfoChangeToAhk = 1;
 
-        HintInfoChangeToAhk = 1;
-
-        return null;
-    });
+            return null;
+        });
+    }
 
     // throw new Error(`ahk2 -> ${textTrim} -> ${fsPath}`);
     return 'isAhk2';
@@ -50,7 +68,6 @@ function infoAddAhk2(document: vscode.TextDocument, ahkV0: string): 'isAhk2' {
 /**
  * @param strArray keep this with readonly string[], don't use String, because of copy.
  *  and without str.spilt(\r?\n), I hate \r
- * @returns FFullDocTokenDocStream
  */
 export function Pretreatment(
     strArray: readonly string[],
@@ -285,9 +302,5 @@ export function Pretreatment(
 
     return result;
 }
-
-// let lastFsPath = ''; // vscode.Uri.fsPath
-// type THash = number;
-// const cacheMap = new Map<THash, TLineErr | 0>();
 
 // LexicalAnalysisSimple
