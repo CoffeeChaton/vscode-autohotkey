@@ -5,14 +5,14 @@ import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
 import { getSnippetStartWihA } from '../../tools/Built-in/A_Variables';
-import { snippetBiVar } from '../../tools/Built-in/BiVariables';
+import { getSnipBiVar } from '../../tools/Built-in/BiVariables';
 import { Completion2Directives } from '../../tools/Built-in/Directives';
 import { BuiltInFunc2Completion } from '../../tools/Built-in/func_tools';
 import { getSnippetCommand } from '../../tools/Built-in/getSnippetCommand';
-import { justSnip } from '../../tools/Built-in/Keys and other/ahk.snippets';
+import { getSnipJustSnip } from '../../tools/Built-in/Keys and other/ahk.snippets';
 import { getSnipStartJoy } from '../../tools/Built-in/Keys and other/Joystick';
 import { getSnipStartF } from '../../tools/Built-in/Keys and other/keyF12';
-import { MouseKeyboardSnip } from '../../tools/Built-in/Keys and other/MouseKeyboard';
+import { getSnipMouseKeyboard } from '../../tools/Built-in/Keys and other/MouseKeyboard';
 import { getSnipStartNum } from '../../tools/Built-in/Keys and other/NumpadSnippets';
 import { getSnippetOtherKeyWord } from '../../tools/Built-in/otherKeyWord';
 import { ahkSend } from '../../tools/Built-in/Send_tools';
@@ -58,17 +58,18 @@ function CompletionItemCore(
 
     const DA: CAhkFunc | null = getDAWithPos(AST, position);
     const PartStr: string | null = getPartStr(lStr, position);
+    const subStr = lStr.slice(0, position.character).trim();
 
     const completions: vscode.CompletionItem[] = [
         ...wrapClass(position, textRaw, lStr, topSymbol, DocStrMap, DA), // '.'
         ...ahkSend(AhkFileData, position), // '{'
-        ...Completion2Directives(lStr, position),
-        ...getSnippetOtherKeyWord(lStr, position),
-        ...getSnippetCommand(lStr, position),
+        ...Completion2Directives(subStr),
+        ...getSnippetOtherKeyWord(subStr),
+        ...getSnippetCommand(subStr),
         ...globalValCompletion(DocStrMap, position),
-        ...getSnipStatement2(lStr, position),
-        ...justSnip,
-        ...MouseKeyboardSnip, // TODO: use fn limit it
+        ...getSnipStatement2(subStr),
+        ...getSnipJustSnip(subStr),
+        ...getSnipMouseKeyboard(subStr), // TODO: use fn limit it
     ];
 
     if (PartStr !== null) {
@@ -76,7 +77,7 @@ function CompletionItemCore(
             ...getSnippetStartWihA(PartStr),
             ...getSnippetStatement(PartStr),
             ...getSnippetWinMsg(PartStr),
-            ...snippetBiVar,
+            ...getSnipBiVar(PartStr),
             ...ModuleVar2Completion(ModuleVar, DA, PartStr, document.uri.fsPath),
             ...listAllFuncClass(),
             ...BuiltInFunc2Completion(PartStr),

@@ -641,12 +641,7 @@ export const [SnippetDirectives, DirectivesMDMap] = ((): [TSnippetDirectivee, TD
     return [List1, map2]; // [Array(29),Map(35)]
 })();
 
-export function Completion2Directives(
-    lStr: string,
-    position: vscode.Position,
-): readonly vscode.CompletionItem[] {
-    const subStr = lStr.slice(0, position.character).trim();
-
+export function Completion2Directives(subStr: string): readonly vscode.CompletionItem[] {
     return (/^#\w*$/ui).test(subStr)
         ? SnippetDirectives
         : [];

@@ -223,7 +223,7 @@ export const LineCommand: TLineCommand = {
         keyRawName: 'AutoTrim',
         body: 'AutoTrim, ${1|On,Off|}',
         doc: 'Determines whether [traditional assignments](https://www.autohotkey.com/docs/commands/SetEnv.htm "Deprecated. New scripts should use Var := Value instead.") like `Var1 = %Var2%` omit spaces and tabs from the beginning and end of _Var2_.',
-        recommended: false,
+        recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/AutoTrim.htm',
         exp: [
             'AutoTrim, OnOff',

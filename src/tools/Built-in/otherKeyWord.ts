@@ -137,12 +137,7 @@ export function getHoverOtherKeyWord(wordUp: string): vscode.MarkdownString | un
     return OtherKeyWordMDMap.get(wordUp);
 }
 
-export function getSnippetOtherKeyWord(
-    lStr: string,
-    position: vscode.Position,
-): readonly CSnippetCommand[] {
-    const subStr = lStr.slice(0, position.character).trim();
-
+export function getSnippetOtherKeyWord(subStr: string): readonly CSnippetCommand[] {
     return (/^\s*\w*$/ui).test(subStr)
         ? snippetOtherKeyWord
         : [];

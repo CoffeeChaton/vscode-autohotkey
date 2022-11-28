@@ -1,4 +1,3 @@
-import type * as vscode from 'vscode';
 import { ECommandOption, getCommandOptions } from '../../configUI';
 import { enumLog } from '../enumErr';
 import { getAllFunc } from '../Func/getAllFunc';
@@ -8,26 +7,22 @@ import type { CSnippetCommand } from './CSnippetCommand';
 
 const snippetCommandFilter: readonly CSnippetCommand[] = snippetCommand.filter((v) => v.recommended);
 
-export function getSnippetCommand(lStr: string, position: vscode.Position): TSnippetCommand {
-    const subStr: string = lStr.slice(0, position.character).trim();
-
+export function getSnippetCommand(subStr: string): TSnippetCommand {
     // ^ ~~ $  need close
     const isOK: boolean = (/^\w*$/u).test(subStr)
         || (/^case\s[^:]+:\s*\w*$/iu).test(subStr)
         || (/^default\s*:\s*\w*$/iu).test(subStr)
         || (/::\s*\w*$/iu).test(subStr); // allow hotstring or hotkey
 
-    //  i don't want to use write this case...  || (/^[{}]\s*\w*$/iu).test(subStr);
+    // || (/^[{}]\s*\w*$/iu).test(subStr);
+    // { MsgBox hi!
+    // ^---- "{" and cmd
+    // i know this is OK, but i don't want to Completion the case...
 
     if (!isOK) return [];
 
     //
     const opt: ECommandOption = getCommandOptions();
-
-    if (opt === ECommandOption.noSameFunc) {
-        const fnMap = getAllFunc();
-        return snippetCommandFilter.filter((v) => !fnMap.has(v.upName));
-    }
 
     switch (opt) {
         case ECommandOption.All:
@@ -35,6 +30,11 @@ export function getSnippetCommand(lStr: string, position: vscode.Position): TSni
 
         case ECommandOption.Recommended:
             return snippetCommandFilter;
+
+        case ECommandOption.noSameFunc: {
+            const fnMap = getAllFunc();
+            return snippetCommandFilter.filter((v) => !fnMap.has(v.upName));
+        }
 
         case ECommandOption.notProvided:
             return [];

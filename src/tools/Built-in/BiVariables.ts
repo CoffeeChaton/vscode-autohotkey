@@ -187,3 +187,9 @@ export const [Bi_VarMDMap, snippetBiVar] = ((): [TBi_VarMDMap, TBi_snippet_list]
 export function hoverBiVar(wordUp: string): vscode.MarkdownString | undefined {
     return Bi_VarMDMap.get(wordUp);
 }
+
+export function getSnipBiVar(PartStr: string): readonly vscode.CompletionItem[] {
+    return PartStr.startsWith('A_')
+        ? []
+        : snippetBiVar;
+}

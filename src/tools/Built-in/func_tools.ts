@@ -86,8 +86,8 @@ export const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TBiFuncMap] => {
     return [Obj1, map2];
 })();
 
-export function BuiltInFunc2Completion(inputStr: string): readonly vscode.CompletionItem[] {
-    if (inputStr.length < 3) {
+export function BuiltInFunc2Completion(PartStr: string): readonly vscode.CompletionItem[] {
+    if (PartStr.length < 3) {
         const result: vscode.CompletionItem[] = [];
         for (const v of Object.values(SnippetObj)) {
             result.push(...v);
@@ -96,7 +96,7 @@ export function BuiltInFunc2Completion(inputStr: string): readonly vscode.Comple
     }
 
     // head.len is 3 !== '_'
-    const head: string = inputStr.slice(0, 3).toUpperCase();
+    const head: string = PartStr.slice(0, 3).toUpperCase();
     const index: TrGroup = baseGroup.find((v: TrGroup) => v === head) ?? '_';
 
     return SnippetObj[index]; // some case

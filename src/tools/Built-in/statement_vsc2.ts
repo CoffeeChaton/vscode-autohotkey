@@ -118,12 +118,7 @@ const Statement2: readonly vscode.CompletionItem[] = ((): readonly vscode.Comple
     return List2;
 })();
 
-export function getSnipStatement2(
-    lStr: string,
-    position: vscode.Position,
-): readonly vscode.CompletionItem[] {
-    const subStr = lStr.slice(0, position.character).trim();
-
+export function getSnipStatement2(subStr: string): readonly vscode.CompletionItem[] {
     return (/^\s*\w*$/ui).test(subStr)
         ? Statement2
         : [];

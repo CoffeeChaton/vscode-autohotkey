@@ -3,8 +3,8 @@
 import * as vscode from 'vscode';
 
 // dprint-ignore
-export const justSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => [
-//
+const justSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => [
+    //
     'Pixel',
     'Mouse',
     'Screen',
@@ -254,3 +254,9 @@ export const justSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.C
 
     return item;
 }))();
+
+export function getSnipJustSnip(subStr: string): readonly vscode.CompletionItem[] {
+    return (/(?<![.`#])\b(\w+)$/ui).test(subStr)
+        ? justSnip
+        : [];
+}

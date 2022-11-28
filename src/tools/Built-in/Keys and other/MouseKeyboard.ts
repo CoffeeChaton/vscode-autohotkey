@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 
-export const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => {
+const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => {
     type TListKeys = {
         group: string;
         uri: `https://www.autohotkey.com/docs/KeyList.htm#${string}`;
@@ -148,3 +148,9 @@ export const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly
 
     return [...makeSnip(Mouse), ...makeSnip(keyboard), ...makeSnip(MultimediaKeys), ...makeSnip(OtherKeys)];
 })();
+
+export function getSnipMouseKeyboard(subStr: string): readonly vscode.CompletionItem[] {
+    return (/(?<![.`#])\b(\w+)$/ui).test(subStr)
+        ? MouseKeyboardSnip
+        : [];
+}
