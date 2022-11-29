@@ -55,20 +55,20 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 
 ## GotoDefinition
 
-1. Go to Definition (via `F12` or `Ctrl+Click`)
-2. open the definition to the side with ( via `Ctrl+Alt+Click` )
-3. Peek Definition (via `Alt+F12`)
-4. Go to Symbol (via `Ctrl+T`)
+1. Go to Definition (default via `F12` or `Ctrl+Click`)
+2. open the definition to the side with (default via `Ctrl+Alt+Click` )
+3. Peek Definition (default via `Alt+F12`)
+4. Go to Symbol (default via `Ctrl+T`)
    ![GotoDef](image/GotoDef.gif)
-   > ↪ Go to Definition (via `F12` or `Ctrl+Click`)
+   > ↪ Go to Definition (default via `F12` or `Ctrl+Click`)
 
 ## Find All References support
 
-1. Go to References (via `Shift+F12`)
-2. Find All References (via `Shift+Alt+F12`)
+1. Go to References (default via `Shift+F12`)
+2. Find All References (default via `Shift+Alt+F12`)
 
    ![ListAllReferences](image/ListAllReferences.gif)
-   > 🔍 Find All References (via `Shift+F12`)
+   > 🔍 Find All References (default via `Shift+F12`)
    > // TODO: add great .gif
 
 ### Find Ref of Function

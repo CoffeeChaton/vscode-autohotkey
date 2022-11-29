@@ -25,7 +25,7 @@ import { FormatProvider } from './provider/Format/FormatProvider';
 import { RangeFormatProvider } from './provider/FormatRange/RangeFormatProvider';
 import { OnTypeFormattingEditProvider } from './provider/FormattingEditOnType/OnTypeFormattingEditProvider';
 import { HoverProvider } from './provider/Hover/HoverProvider';
-import { ReferenceProvider } from './provider/ReferenceProvider';
+import { ReferenceProvider } from './provider/Ref/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
 import { AhkFullSemanticHighlight, legend } from './provider/SemanticTokensProvider/SemanticTokensProvider';
 import { SymbolProvider } from './provider/SymbolProvider/SymbolProvider';

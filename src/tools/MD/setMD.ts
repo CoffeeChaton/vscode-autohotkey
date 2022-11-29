@@ -44,10 +44,10 @@ export function setMD(
         .appendCodeblock(`${prefix} of ${funcName}()`)
         .appendMarkdown(recStr)
         .appendMarkdown(commentListStr)
-        .appendMarkdown('use`f12` goto def    \n')
+        .appendMarkdown('- def    \n')
         .appendMarkdown(RangeList2Str(defRangeList))
         .appendMarkdown('   \n')
-        .appendMarkdown('use`shift f12` goto ref    \n')
+        .appendMarkdown('- ref    \n')
         .appendMarkdown(RangeList2Str(refRangeList));
 }
 

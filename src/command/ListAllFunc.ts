@@ -91,3 +91,7 @@ export function ListAllFuncMain(): void {
     void vscode.window.showQuickPick<TCommand>(items)
         .then((pick: TPick<void> | undefined): undefined => void pick?.fn());
 }
+
+// file: 29
+// func: 665
+// Done in 0 ms

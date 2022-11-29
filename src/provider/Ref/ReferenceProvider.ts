@@ -1,12 +1,12 @@
 import type * as vscode from 'vscode';
-import type { TAhkFileData } from '../core/ProjectManager';
-import { pm } from '../core/ProjectManager';
-import { isPosAtStrNext } from '../tools/isPosAtStr';
-import { getClassDef } from './Def/getClassDef';
-import { posAtLabelDef } from './Def/getDefWithLabel';
-import { getFuncDef } from './Def/getFuncDef';
-import { getRefSwitch } from './Def/getRefSwitch';
-import { getValDefInFunc } from './Def/getValDefInFunc';
+import type { TAhkFileData } from '../../core/ProjectManager';
+import { pm } from '../../core/ProjectManager';
+import { isPosAtStrNext } from '../../tools/isPosAtStr';
+import { getClassDef } from '../Def/getClassDef';
+import { posAtLabelDef } from '../Def/getDefWithLabel';
+import { getFuncDef } from '../Def/getFuncDef';
+import { getRefSwitch } from '../Def/getRefSwitch';
+import { getValDefInFunc } from '../Def/getValDefInFunc';
 
 function ReferenceProviderCore(
     document: vscode.TextDocument,
@@ -46,6 +46,21 @@ function ReferenceProviderCore(
     return null;
 }
 
+function just2Ref(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+): vscode.Location[] | null {
+    const loc: vscode.Location[] | null = ReferenceProviderCore(document, position);
+    if (loc === null || loc.length !== 2) return loc;
+
+    const loc0 = loc[0];
+    if (loc0.uri.fsPath === document.uri.fsPath && loc0.range.contains(position)) {
+        return [loc[1]];
+    }
+
+    return [loc0];
+}
+
 //  Go to References search (via Shift+F12),
 export const ReferenceProvider: vscode.ReferenceProvider = {
     provideReferences(
@@ -54,6 +69,6 @@ export const ReferenceProvider: vscode.ReferenceProvider = {
         _context: vscode.ReferenceContext,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.Location[]> {
-        return ReferenceProviderCore(document, position);
+        return just2Ref(document, position);
     },
 };
