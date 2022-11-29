@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { CommandMDMap } from './Command_tools';
 import { Statement } from './statement';
 
 type TStatementMDMap = ReadonlyMap<string, vscode.MarkdownString>;
@@ -44,7 +45,11 @@ export const [StatementMDMap, snippetStatement] = ((): [TStatementMDMap, TSnippe
     return [map1, List2]; // [Map(19), Array(19)]
 })();
 
-export function getSnippetStatement(PartStr: string): readonly vscode.CompletionItem[] {
+export function getSnippetStatement(PartStr: string, fistWordUp: string): readonly vscode.CompletionItem[] {
+    if (CommandMDMap.has(fistWordUp)) {
+        return [];
+    }
+
     return PartStr.startsWith('A_')
         ? []
         : snippetStatement;

@@ -46,7 +46,7 @@ function CompletionItemCore(
     const { AST, DocStrMap, ModuleVar } = AhkFileData;
 
     const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
-    const { lStr, textRaw } = AhkTokenLine;
+    const { lStr, textRaw, fistWordUp } = AhkTokenLine;
 
     if ((/^\s*#Include(Again)?\s/ui).test(lStr)) return IncludeFsPath(document.uri.fsPath);
     if ((/\bnew[ \t]+\w*$/ui).test(lStr.slice(0, position.character))) {
@@ -75,7 +75,7 @@ function CompletionItemCore(
     if (PartStr !== null) {
         completions.push(
             ...getSnippetStartWihA(PartStr),
-            ...getSnippetStatement(PartStr),
+            ...getSnippetStatement(PartStr, fistWordUp),
             ...getSnippetWinMsg(PartStr),
             ...getSnipBiVar(PartStr),
             ...ModuleVar2Completion(ModuleVar, DA, PartStr, document.uri.fsPath),

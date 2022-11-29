@@ -2,31 +2,11 @@
 
 ## NEXT 0.0.16(2022-12-04)
 
-- TODO: fix : limit Statement completion range.
-
-```typescript
-type TStatementKeyList =
-    | 'IFEQUAL'
-    | 'IFEXIST'
-    | 'IFGREATER'
-    | 'IFGREATEROREQUAL'
-    | 'IFINSTRING'
-    | 'IFLESS'
-    | 'IFLESSOREQUAL'
-    | 'IFMSGBOX'
-    | 'IFNOTEQUAL'
-    | 'IFNOTEXIST'
-    | 'IFNOTINSTRING'
-    | 'IFWINACTIVE'
-    | 'IFWINEXIST'
-    | 'IFWINNOTACTIVE'
-    | 'IFWINNOTEXIST';
-```
-
-- add: syntax-highlight of `;@Ahk2Exe-`
 - add: info add ahk2 Extensions in OutputChannel
-- fix: code107 diag range
+- add: syntax-highlight of `;@Ahk2Exe-`
 - feat: move `ahk.snippets.json` to ts
+- fix: limit Statement completion range
+- fix: code107 diag range
 
 ## 0.0.15(2022-11-20)
 
