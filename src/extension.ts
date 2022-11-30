@@ -29,13 +29,13 @@ import { ReferenceProvider } from './provider/Ref/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
 import { AhkFullSemanticHighlight, legend } from './provider/SemanticTokensProvider/SemanticTokensProvider';
 import { SymbolProvider } from './provider/SymbolProvider/SymbolProvider';
-import { OutputChannel, OutputFormatChannel } from './provider/vscWindows/OutputChannel';
+import { OutputChannel } from './provider/vscWindows/OutputChannel';
 import { statusBarItem } from './provider/vscWindows/statusBarItem';
 import { WorkspaceSymbolProvider } from './provider/WorkspaceSymbolProvider/WorkspaceSymbolProvider';
 
 // main
 export function activate(context: ExtensionContext): void {
-    const selector: DocumentSelector = { language: 'ahk' };
+    const selector: DocumentSelector = { language: 'ahk' }; // scheme: 'file'
     context.subscriptions.push(
         // languages-------------------
         languages.registerCodeActionsProvider(selector, CodeActionProvider),
@@ -75,7 +75,6 @@ export function activate(context: ExtensionContext): void {
         commands.registerCommand(ECommand.showUnknownAnalyze, showUnknownAnalyze),
         // root dispose
         OutputChannel,
-        OutputFormatChannel,
         statusBarItem,
         diagColl,
     );

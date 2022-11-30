@@ -2,7 +2,7 @@
 
 ## NEXT 0.0.16(2022-12-04)
 
-- add: info add ahk2 Extensions in OutputChannel
+- add: ignore ahk2 file if use `#Requires AutoHotkey v2`
 - add: syntax-highlight of `;@Ahk2Exe-`
 - feat: move `ahk.snippets.json` to ts
 - fix: limit Statement completion range
