@@ -47,7 +47,7 @@ const outBase = [
     'SysGet, OutputVar, SubCommand, Value',
     'Transform, OutputVar, SubCommand, Value1, Value2',
     'WinGet, OutputVar, SubCommand, WinTitle, WinText, ExcludeTitle, ExcludeText',
-    'WinGetActiveTitle, Title',
+    'WinGetActiveTitle, OutputVar',
     'WinGetClass, OutputVar, WinTitle, WinText, ExcludeTitle, ExcludeText',
     'WinGetText, OutputVar, WinTitle, WinText, ExcludeTitle, ExcludeText',
     'WinGetTitle, OutputVar, WinTitle, WinText, ExcludeTitle, ExcludeText',
@@ -67,7 +67,7 @@ const outPlus = [
 ] as const;
 
 const inputList = [
-    'Sort, InputVarName, Options',
+    'Sort, InputVar, Options',
     'SplitPath, InputVar, OutFileName, OutDir, OutExtension, OutNameNoExt, OutDrive',
     'StringGetPos, OutputVar, InputVar, SearchText, Occurrence, Offset',
     'StringLeft, OutputVar, InputVar, Count',
@@ -102,36 +102,19 @@ function DataCheck(testList: readonly string[], map: ReadonlyMap<string, unknown
 }
 
 describe('check outList Command cover', () => {
-    it('check: OutPut Base', (): void => {
+    it('check: OutPutB OutPutP InPut', (): void => {
         expect.hasAssertions();
 
-        const errList: string[] = DataCheck(outBase, OutputCommandBaseMap);
-        if (errList.length > 0) {
-            console.error('🚀 ~ OutPut Base ~ errList', errList);
-        }
+        const errList0: string[] = DataCheck(outBase, OutputCommandBaseMap);
+        const errList1: string[] = DataCheck(outPlus, OutputCommandPlusMap);
+        const errList2: string[] = DataCheck(inputList, inPutVarMap);
 
-        expect(errList.length === 0).toBeTruthy();
-    });
+        if (errList0.length > 0) console.error('🚀 ~ OutPut Base', errList0);
+        if (errList1.length > 0) console.error('🚀 ~ OutPut Plus', errList1);
+        if (errList2.length > 0) console.error('🚀 ~ InPut', errList2);
 
-    it('check: OutPut Plus', (): void => {
-        expect.hasAssertions();
-
-        const errList: string[] = DataCheck(outPlus, OutputCommandPlusMap);
-        if (errList.length > 0) {
-            console.error('🚀 ~ OutPut Plus ~ errList', errList);
-        }
-
-        expect(errList.length === 0).toBeTruthy();
-    });
-
-    it('check: InPut', (): void => {
-        expect.hasAssertions();
-
-        const errList: string[] = DataCheck(inputList, inPutVarMap);
-        if (errList.length > 0) {
-            console.error('🚀 ~ OutPut Plus ~ errList', errList);
-        }
-
-        expect(errList.length === 0).toBeTruthy();
+        expect(errList0.length === 0).toBeTruthy();
+        expect(errList1.length === 0).toBeTruthy();
+        expect(errList2.length === 0).toBeTruthy();
     });
 });
