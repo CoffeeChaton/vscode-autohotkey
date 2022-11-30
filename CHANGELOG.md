@@ -1,6 +1,11 @@
 # Changelog
 
-## NEXT 0.0.16(2022-12-04)
+## Next 0.0.17(2022-12-15)
+
+- TODO: add: doc of `A_var`
+- TODO: add:snip of `;@Ahk2Exe-`
+
+## 0.0.16(2022-11-30)
 
 - add: ignore ahk2 file if use `#Requires AutoHotkey v2`
 - add: syntax-highlight of `;@Ahk2Exe-`
