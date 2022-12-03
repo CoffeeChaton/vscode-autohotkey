@@ -5,8 +5,9 @@
 - TODO: add: doc of `A_var`
 - TODO: add:snip of `;@Ahk2Exe-`
 
-## Next 0.0.17(2022-12-3)
+## 0.0.17(2022-12-3)
 
+- add: syntax-highlight of `;@Ahk2Exe-%U_V%`
 - fix: support `DefProvider` `HoverProvider` `ReferenceProvider` with temp-file.
 - fix: syntax-highlight of `/*`
 - feat: support [AutoHotkey_L v1.1.36.00](https://github.com/Lexikos/AutoHotkey_L/releases/tag/v1.1.36.00)
