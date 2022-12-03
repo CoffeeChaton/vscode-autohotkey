@@ -41,8 +41,8 @@ function HoverProviderCore(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.Hover | null {
-    const AhkFileData: TAhkFileData | undefined = pm.getDocMap(document.uri.fsPath);
-    if (AhkFileData === undefined) return null;
+    const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+    if (AhkFileData === null) return null;
 
     const { AST, DocStrMap } = AhkFileData;
 
