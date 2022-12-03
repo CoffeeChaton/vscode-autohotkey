@@ -2,8 +2,6 @@
     "version": "0.2",
     "ignorePaths": [
         ".eslintrc.json",
-        "ahk.snippets.json",
-        "output.tmLanguage.json",
         "pnpm-lock.yaml"
     ],
     "dictionaryDefinitions": [],
