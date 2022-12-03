@@ -194,6 +194,11 @@
                 "language": "ahk",
                 "scopeName": "source.ahk",
                 "path": "./syntaxes/ahk.tmLanguage.json"
+            },
+            {
+                "language": "log",
+                "scopeName": "source.log",
+                "path": "./syntaxes/output.tmLanguage.json"
             }
         ],
         "languages": [
@@ -227,15 +232,14 @@
         "@swc/jest": "^0.2.23",
         "@types/assert": "^1.5.6",
         "@types/jest": "^29.2.3",
-        "@types/node": "^18.11.10",
+        "@types/node": "^18.11.9",
         "@types/vscode": "^1.73.1",
         "@typescript-eslint/eslint-plugin": "^5.45.0",
         "@typescript-eslint/parser": "^5.45.0",
         "@vscode/test-electron": "^2.2.0",
-        "@vscode/vsce": "^2.15.0",
         "dprint": "^0.33.0",
         "esbuild": "^0.15.16",
-        "eslint": "^8.29.0",
+        "eslint": "^8.28.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-airbnb-typescript": "^17.0.0",
         "eslint-config-sukka": "^1.6.16",
@@ -252,7 +256,8 @@
         "fs": "0.0.1-security",
         "jest": "^29.3.1",
         "sort-package-json": "^2.1.0",
-        "typescript": "^4.9.3"
+        "typescript": "^4.9.3",
+        "vsce": "2.14.0"
     },
     "engines": {
         "vscode": "^1.73.0"
