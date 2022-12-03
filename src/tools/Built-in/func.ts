@@ -147,6 +147,7 @@ type TUPKey =
     | 'TV_MODIFY'
     | 'TV_SETIMAGELIST'
     | 'VARSETCAPACITY'
+    | 'VERCOMPARE'
     | 'WINACTIVE'
     | 'WINEXIST';
 
@@ -1474,6 +1475,17 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
         insert: 'VarSetCapacity(${1:TargetVar})',
         exp: [
             'VarSetCapacity(MyVar, 10240000)  ; ~10 MB',
+        ],
+    },
+    VERCOMPARE: {
+        group: 'Str',
+        keyRawName: 'VerCompare',
+        link: 'https://www.autohotkey.com/docs/commands/VerCompare.htm',
+        msg: 'Compares two version strings.',
+        insert: 'VerCompare(${1:VersionA},${2:VersionB})',
+        exp: [
+            ';Demonstrates a range check.',
+            'MsgBox % VerCompare("2.0.1", ">=2.0") && VerCompare("2.0.1", "<2.1")  ; Returns 1',
         ],
     },
     WINACTIVE: {

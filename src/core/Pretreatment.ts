@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-statements */
+
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum';
@@ -63,6 +64,25 @@ function infoAddAhk2(document: vscode.TextDocument, ahkV0: string): 'isAhk2' {
 
     // throw new Error(`ahk2 -> ${textTrim} -> ${fsPath}`);
     return 'isAhk2';
+}
+
+function getRequiresVersion(textTrimStart: string): 0 | 1 | 2 {
+    // #Requires AutoHotkey v2.0-a
+    // #Requires AutoHotkey >=2.0- <2.1
+    // #Requires AutoHotkey >2.0- <=2.1
+    // #Requires AutoHotkey v2.0-rc.2 64-bit
+    const Requires: RegExpMatchArray | null = textTrimStart
+        .match(/^#Requires[ \t]+AutoHotkey(?:\w*)[ \t]+(.*)/iu);
+
+    if (Requires !== null) {
+        const ahkV: RegExpMatchArray | null = (Requires[1]).match(/[v>=][ \t]*(\d)\b/ui);
+        if (ahkV !== null) {
+            if (ahkV[1] === '1') return 1;
+            if (ahkV[1] === '2') return 2;
+        }
+    }
+
+    return 0; // as 'unknown';
 }
 
 /**
@@ -179,13 +199,10 @@ export function Pretreatment(
         }
 
         if (needCheckThisAhk2) {
-            // #Requires AutoHotkey v1.1.33+
-            const ahkV: RegExpMatchArray | null = textTrimStart
-                .match(/^#Requires[ \t]+AutoHotkey[ \t]+v(\d)\b/iu);
-            if (ahkV !== null) {
-                if (ahkV[1] === '1') needCheckThisAhk2 = false;
-                if (ahkV[1] === '2') return infoAddAhk2(document, ahkV[0]);
-            }
+            const version: 0 | 1 | 2 = getRequiresVersion(textTrimStart);
+
+            if (version === 2) return infoAddAhk2(document, textTrimStart);
+            if (version === 1) needCheckThisAhk2 = false;
         }
 
         // ---------

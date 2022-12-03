@@ -137,7 +137,7 @@ export function getFuncDef(
     // funcName( | "funcName"
     // eslint-disable-next-line security/detect-non-literal-regexp
     const regBase = new RegExp(
-        `(?:(?<![.\`%])\\b(${wordUp})\\b\\()|(?:(?<=")(${wordUp})")`,
+        `(?:(?<![.\`%#])\\b(${wordUp})\\b\\()|(?:(?<=")(${wordUp})")`,
         //                          funcName(                  "funcName"
         // --------------------------------------------------- RegisterCallback("funcName") or Func("funcName")
         'iug',
