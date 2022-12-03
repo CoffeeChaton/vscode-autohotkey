@@ -33,7 +33,7 @@ function CodeLensCore(fsPath: string): vscode.CodeLens[] {
                 title: 'unknownText',
                 command: ECommand.showUnknownAnalyze,
                 tooltip: 'by neko-help dev tools',
-                arguments: [DA.textMap, fsPath] as TShowUnknownAnalyze,
+                arguments: [DA] as TShowUnknownAnalyze,
             };
             need.push(new vscode.CodeLens(DA.range, unknownTextCommand));
         }

@@ -40,7 +40,7 @@ export function DependencyAnalysis(
             title: 'unknownText',
             command: ECommand.showUnknownAnalyze,
             tooltip: 'by neko-help dev tools',
-            arguments: [ahkFn.textMap, ahkFn.uri.fsPath] as TShowUnknownAnalyze,
+            arguments: [ahkFn] as TShowUnknownAnalyze,
         };
         need.push(unknownTextCommand);
     }

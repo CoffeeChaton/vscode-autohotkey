@@ -40,8 +40,6 @@ async function fmtAnalyze(document: vscode.TextDocument): Promise<void> {
     await vscode.workspace.applyEdit(edit);
 }
 
-export type TShowAnalyze = [CAhkFunc, TTokenStream];
-
 export async function AnalyzeFuncMain(DA: CAhkFunc, AhkTokenList: TTokenStream): Promise<void> {
     const fullFuncMap: TFullFuncMap = getAllFunc();
 
@@ -77,3 +75,5 @@ export async function AnalyzeFuncMain(DA: CAhkFunc, AhkTokenList: TTokenStream):
 
     await vscode.window.showTextDocument(document);
 }
+
+export type TShowAnalyze = Parameters<typeof AnalyzeFuncMain>;
