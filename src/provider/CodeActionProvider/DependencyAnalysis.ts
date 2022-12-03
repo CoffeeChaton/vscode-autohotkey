@@ -5,6 +5,7 @@ import { ECommand } from '../../command/ECommand';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { getFileAllFunc } from '../../tools/visitor/getFileAllFuncList';
+import type { TShowUnknownAnalyze } from '../CodeLens/showUnknownAnalyze';
 
 export function DependencyAnalysis(
     document: vscode.TextDocument,
@@ -21,6 +22,8 @@ export function DependencyAnalysis(
 
     if (ahkFn === undefined) return [];
 
+    const need: vscode.Command[] = [];
+
     const CommandAnalyze: vscode.Command = {
         title: 'Analyze this Function',
         command: ECommand.showFuncAnalyze,
@@ -30,6 +33,17 @@ export function DependencyAnalysis(
             DocStrMap.slice(ahkFn.selectionRange.start.line + 1, ahkFn.range.end.line + 1),
         ] as TShowAnalyze,
     };
+    need.push(CommandAnalyze);
 
-    return [CommandAnalyze];
+    if (ahkFn.textMap.size > 0) {
+        const unknownTextCommand: vscode.Command = {
+            title: 'unknownText',
+            command: ECommand.showUnknownAnalyze,
+            tooltip: 'by neko-help dev tools',
+            arguments: [ahkFn.textMap, ahkFn.uri.fsPath] as TShowUnknownAnalyze,
+        };
+        need.push(unknownTextCommand);
+    }
+
+    return need;
 }

@@ -1,9 +1,26 @@
 # Changelog
 
-## Next 0.0.17(2022-12-15)
+## NextNext 0.0.18(2022-12-15)
 
 - TODO: add: doc of `A_var`
 - TODO: add:snip of `;@Ahk2Exe-`
+
+## Next 0.0.17(2022-12-3)
+
+- fix: support `DefProvider` `HoverProvider` `ReferenceProvider` with temp-file.
+- fix: remove `log` `output.tmLanguage.json`
+- fix: syntax-highlight of `/*`
+- feat: support [AutoHotkey_L v1.1.36.00](https://github.com/Lexikos/AutoHotkey_L/releases/tag/v1.1.36.00)
+
+1. support `VerCompare()` syntax-highlight && Completion && hover
+2. support ignore ahk2 file if use
+
+```ahk
+#Requires AutoHotkey v2.0-a
+#Requires AutoHotkey >=2.0- <2.1
+#Requires AutoHotkey >2.0- <=2.1
+#Requires AutoHotkey v2.0-rc.2 64-bit
+```
 
 ## 0.0.16(2022-11-30)
 

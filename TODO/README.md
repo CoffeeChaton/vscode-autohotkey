@@ -14,8 +14,10 @@
 - Parser: -> AST
 - Scanner: -> Token
 - test of <https://www.autohotkey.com/docs/scripts/index.htm>
-- TODO: test: add vscode.test
-- TODO: auto-fix of code107
+- move some `.ts` -> `ahk-doc.json`
+- add: support of `user-def-.h.ahk`
+- test: add vscode.test
+- auto-fix of code107
 
 ```ahk
 a = %i%

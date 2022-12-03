@@ -29,7 +29,7 @@ export const enum EMultiline {
     end = 3,
 }
 
-export type TPos = DeepReadonly<{
+export type TPos = Readonly<{
     col: number;
     len: number;
 }>;
