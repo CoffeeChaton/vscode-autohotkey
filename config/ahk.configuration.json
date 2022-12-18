@@ -18,8 +18,8 @@
         ["[", "]"],
         ["(", ")"],
         ["\"", "\""],
-        ["%", "%"]
-        // { "open": "/*", "close": "\n*/", "notIn": ["string"] },
+        ["%", "%"],
+        { "open": "/*", "close": "\n*/", "notIn": ["string"] }
         // { "open": "/**", "close": "\n*/", "notIn": ["string"] }
     ],
     // symbols that that can be used to surround a selection
@@ -32,8 +32,8 @@
     ],
     "folding": {
         "markers": {
-            "start": "^\\s*\\/\\*", // /*
-            "end": "^\\s*\\*\\/" // */
+            "start": "^[ \\t]*\\/\\*", // /*
+            "end": "^[ \\t]*\\*\\/" // */
         }
     }
 }

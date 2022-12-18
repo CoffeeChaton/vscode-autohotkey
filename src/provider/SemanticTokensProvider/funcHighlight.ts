@@ -54,9 +54,14 @@ function HotkeyHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLea
 export function funcHighlight(DocStrMap: TTokenStream): TSemanticTokensLeaf[] {
     const Tokens: TSemanticTokensLeaf[] = [];
 
+    type TFn = (AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]) => 0 | 1;
+    const fnList: TFn[] = [SetTimerHighlight, HotkeyHighlight];
+
     for (const AhkTokenLine of DocStrMap) {
-        const hint: 0 | 1 = SetTimerHighlight(AhkTokenLine, Tokens);
-        if (hint === 0) HotkeyHighlight(AhkTokenLine, Tokens);
+        for (const fn of fnList) {
+            const result: 0 | 1 = fn(AhkTokenLine, Tokens);
+            if (result === 1) break;
+        }
     }
 
     return Tokens;

@@ -5,221 +5,55 @@
 
 import { EDiagCode } from '../../diag';
 
-type TCommandKeyList =
-    | 'AUTOTRIM'
-    | 'BLOCKINPUT'
-    | 'CLICK'
-    | 'CLIPWAIT'
-    | 'CONTROL'
-    | 'CONTROLCLICK'
-    | 'CONTROLFOCUS'
-    | 'CONTROLGET'
-    | 'CONTROLGETFOCUS'
-    | 'CONTROLGETPOS'
-    | 'CONTROLGETTEXT'
-    | 'CONTROLMOVE'
-    | 'CONTROLSEND'
-    | 'CONTROLSENDRAW'
-    | 'CONTROLSETTEXT'
-    | 'COORDMODE'
-    | 'CRITICAL'
-    | 'DETECTHIDDENTEXT'
-    | 'DETECTHIDDENWINDOWS'
-    | 'DRIVE'
-    | 'DRIVEGET'
-    | 'DRIVESPACEFREE'
-    | 'EDIT'
-    | 'ENVADD'
-    | 'ENVDIV'
-    | 'ENVGET'
-    | 'ENVMULT'
-    | 'ENVSET'
-    | 'ENVSUB'
-    | 'ENVUPDATE'
-    | 'EXIT'
-    | 'EXITAPP'
-    | 'FILEAPPEND'
-    | 'FILECOPY'
-    | 'FILECOPYDIR'
-    | 'FILECREATEDIR'
-    | 'FILECREATESHORTCUT'
-    | 'FILEDELETE'
-    | 'FILEENCODING'
-    | 'FILEGETATTRIB'
-    | 'FILEGETSHORTCUT'
-    | 'FILEGETSIZE'
-    | 'FILEGETTIME'
-    | 'FILEGETVERSION'
-    | 'FILEINSTALL'
-    | 'FILEMOVE'
-    | 'FILEMOVEDIR'
-    | 'FILEREAD'
-    | 'FILEREADLINE'
-    | 'FILERECYCLE'
-    | 'FILERECYCLEEMPTY'
-    | 'FILEREMOVEDIR'
-    | 'FILESELECTFILE'
-    | 'FILESELECTFOLDER'
-    | 'FILESETATTRIB'
-    | 'FILESETTIME'
-    | 'FORMATTIME'
-    | 'GETKEYSTATE'
-    | 'GROUPACTIVATE'
-    | 'GROUPADD'
-    | 'GROUPCLOSE'
-    | 'GROUPDEACTIVATE'
-    | 'GUI'
-    | 'GUICONTROL'
-    | 'GUICONTROLGET'
-    | 'HOTKEY'
-    | 'IMAGESEARCH'
-    | 'INIDELETE'
-    | 'INIREAD'
-    | 'INIWRITE'
-    | 'INPUT'
-    | 'INPUTBOX'
-    | 'KEYHISTORY'
-    | 'KEYWAIT'
-    | 'LISTHOTKEYS'
-    | 'LISTLINES'
-    | 'LISTVARS'
-    | 'MENU'
-    | 'MOUSECLICK'
-    | 'MOUSECLICKDRAG'
-    | 'MOUSEGETPOS'
-    | 'MOUSEMOVE'
-    | 'MSGBOX'
-    | 'ONEXIT'
-    | 'OUTPUTDEBUG'
-    | 'PAUSE'
-    | 'PIXELGETCOLOR'
-    | 'PIXELSEARCH'
-    | 'POSTMESSAGE'
-    | 'PROCESS'
-    | 'PROGRESS'
-    | 'RANDOM'
-    | 'REGDELETE'
-    | 'REGREAD'
-    | 'REGWRITE'
-    | 'RELOAD'
-    | 'RUN'
-    | 'RUNAS'
-    | 'RUNWAIT'
-    | 'SEND'
-    | 'SENDEVENT'
-    | 'SENDINPUT'
-    | 'SENDLEVEL'
-    | 'SENDMESSAGE'
-    | 'SENDMODE'
-    | 'SENDPLAY'
-    | 'SENDRAW'
-    | 'SETBATCHLINES'
-    | 'SETCAPSLOCKSTATE'
-    | 'SETCONTROLDELAY'
-    | 'SETDEFAULTMOUSESPEED'
-    | 'SETENV'
-    | 'SETFORMAT'
-    | 'SETKEYDELAY'
-    | 'SETMOUSEDELAY'
-    | 'SETNUMLOCKSTATE'
-    | 'SETREGVIEW'
-    | 'SETSCROLLLOCKSTATE'
-    | 'SETSTORECAPSLOCKMODE'
-    | 'SETTIMER'
-    | 'SETTITLEMATCHMODE'
-    | 'SETWINDELAY'
-    | 'SETWORKINGDIR'
-    | 'SHUTDOWN'
-    | 'SLEEP'
-    | 'SORT'
-    | 'SOUNDBEEP'
-    | 'SOUNDGET'
-    | 'SOUNDGETWAVEVOLUME'
-    | 'SOUNDPLAY'
-    | 'SOUNDSET'
-    | 'SOUNDSETWAVEVOLUME'
-    | 'SPLASHIMAGE'
-    | 'SPLASHTEXTOFF'
-    | 'SPLASHTEXTON'
-    | 'SPLITPATH'
-    | 'STATUSBARGETTEXT'
-    | 'STATUSBARWAIT'
-    | 'STRINGCASESENSE'
-    | 'STRINGGETPOS'
-    | 'STRINGLEFT'
-    | 'STRINGLEN'
-    | 'STRINGLOWER'
-    | 'STRINGMID'
-    | 'STRINGREPLACE'
-    | 'STRINGRIGHT'
-    | 'STRINGSPLIT'
-    | 'STRINGTRIMLEFT'
-    | 'STRINGTRIMRIGHT'
-    | 'STRINGUPPER'
-    | 'SUSPEND'
-    | 'SYSGET'
-    | 'THREAD'
-    | 'TOOLTIP'
-    | 'TRANSFORM'
-    | 'TRAYTIP'
-    | 'URLDOWNLOADTOFILE'
-    | 'WINACTIVATE'
-    | 'WINACTIVATEBOTTOM'
-    | 'WINCLOSE'
-    | 'WINGET'
-    | 'WINGETACTIVESTATS'
-    | 'WINGETACTIVETITLE'
-    | 'WINGETCLASS'
-    | 'WINGETPOS'
-    | 'WINGETTEXT'
-    | 'WINGETTITLE'
-    | 'WINHIDE'
-    | 'WINKILL'
-    | 'WINMAXIMIZE'
-    | 'WINMENUSELECTITEM'
-    | 'WINMINIMIZE'
-    | 'WINMINIMIZEALL'
-    | 'WINMINIMIZEALLUNDO'
-    | 'WINMOVE'
-    | 'WINRESTORE'
-    | 'WINSET'
-    | 'WINSETTITLE'
-    | 'WINSHOW'
-    | 'WINWAIT'
-    | 'WINWAITACTIVE'
-    | 'WINWAITCLOSE'
-    | 'WINWAITNOTACTIVE';
-
-// FIXME: check this
 export type TAllowDiagCode =
     | EDiagCode.code803
     | EDiagCode.code804
     | EDiagCode.code812
     | EDiagCode.code813
-    | EDiagCode.code813
     | EDiagCode.code814
     | EDiagCode.code815
-    | EDiagCode.code816
     | EDiagCode.code816
     | EDiagCode.code824
     | EDiagCode.code899;
 
-export type TCommandElement = {
+type TCommandParams = {
+    sign: string;
+    name: string;
+    isOpt: boolean;
+    defVal: string;
+};
+
+export type TCommandElement = Readonly<{
+    upName: string;
     keyRawName: string;
     body: string;
     doc: string;
     recommended: boolean;
     link: `https://www.autohotkey.com/docs/${string}`;
     exp: readonly string[];
+    //
     diag?: TAllowDiagCode;
-};
+    _DevNote?: readonly string[];
+    _params?: TCommandParams[];
 
-type TLineCommand = {
-    [k in TCommandKeyList]: Readonly<TCommandElement>;
-};
+    /**
+     * S -> string?
+     * O -> output
+     * E -> number?
+     * I -> input varName
+     * F -> functionName
+     * L -> label
+     * FO -> funcObject
+     */
+    _paramType: string[];
+}>;
 
-export const LineCommand: TLineCommand = {
-    AUTOTRIM: {
+/**
+ * after initialization clear
+ */
+export const LineCommand: TCommandElement[] = [
+    {
+        upName: 'AUTOTRIM',
         keyRawName: 'AutoTrim',
         body: 'AutoTrim, ${1|On,Off|}',
         doc: 'Determines whether [traditional assignments](https://www.autohotkey.com/docs/commands/SetEnv.htm "Deprecated. New scripts should use Var := Value instead.") like `Var1 = %Var2%` omit spaces and tabs from the beginning and end of _Var2_.',
@@ -231,8 +65,12 @@ export const LineCommand: TLineCommand = {
             ';               Var1 = %Var2%',
             ';           Off: Such tabs and spaces are not omitted.',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    BLOCKINPUT: {
+    {
+        upName: 'BLOCKINPUT',
         keyRawName: 'BlockInput',
         body: 'BlockInput, ${1|On,Off,Send,Mouse,SendAndMouse,Default,MouseMove,MouseMoveOff|}',
         doc: 'Disables or enables the user\'s ability to interact with the computer via keyboard and mouse.',
@@ -251,8 +89,12 @@ export const LineCommand: TLineCommand = {
             ';  MouseMove',
             ';  MouseMoveOff',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    CLICK: {
+    {
+        upName: 'CLICK',
         keyRawName: 'Click',
         body: 'Click [, ${1:Options}]',
         doc: 'Clicks a mouse button at the specified coordinates. It can also hold down a mouse button, turn the mouse wheel, or move the mouse.',
@@ -278,8 +120,12 @@ export const LineCommand: TLineCommand = {
             'Click, Up Right',
             '',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    CLIPWAIT: {
+    {
+        upName: 'CLIPWAIT',
         keyRawName: 'ClipWait',
         body: 'ClipWait, ${1:Timeout}, ${2|False,True|}',
         doc: 'Waits until the [clipboard](https://www.autohotkey.com/docs/misc/Clipboard.htm) contains data.',
@@ -292,8 +138,13 @@ export const LineCommand: TLineCommand = {
             ';  WaitForAnyData : ',
             '',
         ],
+        _paramType: [
+            'E',
+            'E',
+        ],
     },
-    CONTROL: {
+    {
+        upName: 'CONTROL',
         keyRawName: 'Control',
         body:
             'Control, ${1|Check,Uncheck,Enable,Disable,Show,Hide,Style,ExStyle,ShowDropDown,HideDropDown,TabLeft,TabRight,Add,Delete,Choose,ChooseString,EditPaste|}, [${2:Value}, ${3:Control}, ${4:WinTitle}, ${5:WinText}, ${6:ExcludeTitle}, ${7:ExcludeText}]',
@@ -322,8 +173,18 @@ export const LineCommand: TLineCommand = {
             ';        EditPaste: Pastes the specified string at the caret in an Edit control.',
             ';        ',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    CONTROLCLICK: {
+    {
+        upName: 'CONTROLCLICK',
         keyRawName: 'ControlClick',
         body:
             'ControlClick , [${1:Control_or_Pos}, ${2:WinTitle}, ${3:WinText}, ${4:WhichButton}, ${5:ClickCount}, ${6:Options}, ${7:ExcludeTitle}, ${8:ExcludeText}]',
@@ -333,8 +194,19 @@ export const LineCommand: TLineCommand = {
         exp: [
             'ControlClick , [Control-or-Pos, WinTitle, WinText, WhichButton, ClickCount, Options, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'E',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    CONTROLFOCUS: {
+    {
+        upName: 'CONTROLFOCUS',
         keyRawName: 'ControlFocus',
         body: 'ControlFocus , [${1:Control}, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Sets input focus to a given control on a window.',
@@ -343,8 +215,16 @@ export const LineCommand: TLineCommand = {
         exp: [
             'ControlFocus , [Control, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    CONTROLGET: {
+    {
+        upName: 'CONTROLGET',
         keyRawName: 'ControlGet',
         body:
             'ControlGet, ${1:OutputVar}, ${2|List,Checked,Enabled,Visible,Tab,FindString,Choice,LineCount,CurrentLine,CurrentCol,Line,Selected,Style,ExStyle,Hwnd|}, [${3:Value}, ${4:Control}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText}]',
@@ -370,8 +250,19 @@ export const LineCommand: TLineCommand = {
             ';    ExStyle: Retrieves an 8-digit hexadecimal number representing the extended style of the control.',
             ';    Hwnd [v1.1.04+]: Retrieves the window handle (HWND) of the control.',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    CONTROLGETFOCUS: {
+    {
+        upName: 'CONTROLGETFOCUS',
         keyRawName: 'ControlGetFocus',
         body: 'ControlGetFocus, ${1:OutputVar}, [${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Retrieves which control of the target window has input focus, if any.',
@@ -386,8 +277,16 @@ export const LineCommand: TLineCommand = {
             'else',
             '    MsgBox, % "Control with focus = " OutputVar',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    CONTROLGETPOS: {
+    {
+        upName: 'CONTROLGETPOS',
         keyRawName: 'ControlGetPos',
         body:
             'ControlGetPos, [${1:OutX}, ${2:OutY}, ${3:OutWidth}, ${4:OutHeight}, ${5:Control}, ${6:WinTitle}, ${7:WinText}, ${8:ExcludeTitle}]',
@@ -407,8 +306,19 @@ export const LineCommand: TLineCommand = {
             '    ToolTip, % WhichControl "`nX: " X "`tY: " Y "`nW: " W "`tH:" H',
             '}',
         ],
+        _paramType: [
+            'O',
+            'O',
+            'O',
+            'O',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    CONTROLGETTEXT: {
+    {
+        upName: 'CONTROLGETTEXT',
         keyRawName: 'ControlGetText',
         body:
             'ControlGetText, ${1:OutputVar} [, ${2:Control}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
@@ -429,8 +339,17 @@ export const LineCommand: TLineCommand = {
             '    MsgBox % OutputVar',
             '}',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    CONTROLMOVE: {
+    {
+        upName: 'CONTROLMOVE',
         keyRawName: 'ControlMove',
         body:
             'ControlMove, ${1:Control}, ${2:X}, ${3:Y}, ${4:Width}, ${5:Height} [, ${6:WinTitle}, ${7:WinText}, ${8:ExcludeTitle}, ${9:ExcludeText}]',
@@ -454,8 +373,20 @@ export const LineCommand: TLineCommand = {
             '}',
             '',
         ],
+        _paramType: [
+            'S',
+            'E',
+            'E',
+            'E',
+            'E',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    CONTROLSEND: {
+    {
+        upName: 'CONTROLSEND',
         keyRawName: 'ControlSend',
         body:
             'ControlSend, [${1:Control}, ${2:Keys}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
@@ -465,8 +396,17 @@ export const LineCommand: TLineCommand = {
         exp: [
             'ControlSend [, Control, Keys, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    CONTROLSENDRAW: {
+    {
+        upName: 'CONTROLSENDRAW',
         keyRawName: 'ControlSendRaw',
         body:
             'ControlSendRaw, [${1:Control}, ${2:Keys}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
@@ -476,8 +416,17 @@ export const LineCommand: TLineCommand = {
         exp: [
             'ControlSendRaw [, Control, Keys, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    CONTROLSETTEXT: {
+    {
+        upName: 'CONTROLSETTEXT',
         keyRawName: 'ControlSetText',
         body:
             'ControlSetText, [${1:Control}, ${2:NewText}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
@@ -487,28 +436,20 @@ export const LineCommand: TLineCommand = {
         exp: [
             'ControlSetText [, Control, NewText, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    COORDMODE: {
+    {
+        upName: 'COORDMODE',
         keyRawName: 'CoordMode',
         body: 'CoordMode, ${1|ToolTip,Pixel,Mouse,Caret,Menu|} [, ${2|Screen,Relative,Window,Client|}]',
-        doc: [
-            'Sets coordinate mode for various commands to be relative to either the active window or the screen.',
-            '',
-            '1. **TargetType**:',
-            '> The type of target to affect. Specify one of the following words:',
-            '- **ToolTip**: Affects [ToolTip](https://www.autohotkey.com/docs/commands/ToolTip.htm).',
-            '- **Pixel**: Affects [PixelGetColor](https://www.autohotkey.com/docs/commands/PixelGetColor.htm), [PixelSearch](https://www.autohotkey.com/docs/commands/PixelSearch.htm), and [ImageSearch](https://www.autohotkey.com/docs/commands/ImageSearch.htm).',
-            '- **Mouse**: Affects [MouseGetPos](https://www.autohotkey.com/docs/commands/MouseGetPos.htm), [Click](https://www.autohotkey.com/docs/commands/Click.htm), and [MouseMove](https://www.autohotkey.com/docs/commands/MouseMove.htm)/[Click](https://www.autohotkey.com/docs/commands/MouseClick.htm)/[Drag](https://www.autohotkey.com/docs/commands/MouseClickDrag.htm).',
-            '- **Caret**: Affects the built-in variables [A_CaretX](https://www.autohotkey.com/docs/Variables.htm#Caret) and [A_CaretY](https://www.autohotkey.com/docs/Variables.htm#Caret).',
-            '- **Menu**: Affects the [Menu Show](https://www.autohotkey.com/docs/commands/Menu.htm#Show) command when coordinates are specified for it.',
-            '',
-            '2. **RelativeTo**:',
-            '> The area to which TargetType is to be related. Specify one of the following words (if omitted, it defaults to Screen):',
-            '- **Screen**: Coordinates are relative to the desktop (entire screen).',
-            '- **Relative**: Coordinates are relative to the active window.',
-            '- **Window** [[v1.1.05+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.05.00 "Applies to AutoHotkey v1.1.05 and later"): Synonymous with _Relative_ and recommended for clarity.',
-            '- **Client** [[v1.1.05+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.05.00 "Applies to AutoHotkey v1.1.05 and later"): Coordinates are relative to the active window\'s client area, which excludes the window\'s title bar, menu (if it has a standard one) and borders. Client coordinates are less dependent on OS version and theme.',
-        ].join('\n'),
+        doc: 'Sets coordinate mode for various commands to be relative to either the active window or the screen.\n\n1. **TargetType**:\n> The type of target to affect. Specify one of the following words:\n- **ToolTip**: Affects [ToolTip](https://www.autohotkey.com/docs/commands/ToolTip.htm).\n- **Pixel**: Affects [PixelGetColor](https://www.autohotkey.com/docs/commands/PixelGetColor.htm), [PixelSearch](https://www.autohotkey.com/docs/commands/PixelSearch.htm), and [ImageSearch](https://www.autohotkey.com/docs/commands/ImageSearch.htm).\n- **Mouse**: Affects [MouseGetPos](https://www.autohotkey.com/docs/commands/MouseGetPos.htm), [Click](https://www.autohotkey.com/docs/commands/Click.htm), and [MouseMove](https://www.autohotkey.com/docs/commands/MouseMove.htm)/[Click](https://www.autohotkey.com/docs/commands/MouseClick.htm)/[Drag](https://www.autohotkey.com/docs/commands/MouseClickDrag.htm).\n- **Caret**: Affects the built-in variables [A_CaretX](https://www.autohotkey.com/docs/Variables.htm#Caret) and [A_CaretY](https://www.autohotkey.com/docs/Variables.htm#Caret).\n- **Menu**: Affects the [Menu Show](https://www.autohotkey.com/docs/commands/Menu.htm#Show) command when coordinates are specified for it.\n\n2. **RelativeTo**:\n> The area to which TargetType is to be related. Specify one of the following words (if omitted, it defaults to Screen):\n- **Screen**: Coordinates are relative to the desktop (entire screen).\n- **Relative**: Coordinates are relative to the active window.\n- **Window** [[v1.1.05+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.05.00 "Applies to AutoHotkey v1.1.05 and later"): Synonymous with _Relative_ and recommended for clarity.\n- **Client** [[v1.1.05+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.05.00 "Applies to AutoHotkey v1.1.05 and later"): Coordinates are relative to the active window\'s client area, which excludes the window\'s title bar, menu (if it has a standard one) and borders. Client coordinates are less dependent on OS version and theme.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/CoordMode.htm',
         exp: [
@@ -516,21 +457,13 @@ export const LineCommand: TLineCommand = {
             'CoordMode, ToolTip, Screen',
             'CoordMode, ToolTip',
         ],
-    },
-    CRITICAL: {
-        keyRawName: 'Critical',
-        body: 'Critical, ${1|Off,On|}',
-        doc: 'Prevents the current thread from being interrupted by other threads, or enables it to be interrupted.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/CoordMode.htm',
-        exp: [
-            'Critical [, OnOffNumeric]',
-            ';          TargetType',
-            ';                 -> On (defaults)',
-            ';                 -> Off',
+        _paramType: [
+            'S',
+            'S',
         ],
     },
-    DETECTHIDDENTEXT: {
+    {
+        upName: 'DETECTHIDDENTEXT',
         keyRawName: 'DetectHiddenText',
         body: 'DetectHiddenText, ${1|On,Off|}',
         doc: 'Determines whether invisible text in a window is "seen" for the purpose of finding the window. This affects commands, built-in functions and control flow statements such as WinExist() and WinActivate.',
@@ -541,8 +474,12 @@ export const LineCommand: TLineCommand = {
             ';                -> On (defaults), Hidden text will be detected.',
             ';                -> Off, Hidden text is not detected.',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    DETECTHIDDENWINDOWS: {
+    {
+        upName: 'DETECTHIDDENWINDOWS',
         keyRawName: 'DetectHiddenWindows',
         body: 'DetectHiddenWindows, ${1|On,Off|}',
         doc: 'Determines whether invisible windows are "seen" by the script.',
@@ -553,8 +490,12 @@ export const LineCommand: TLineCommand = {
             ';                     On: Hidden windows are detected.',
             ';          (default) Off: Hidden windows are not detected, except by the WinShow command.',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    DRIVE: {
+    {
+        upName: 'DRIVE',
         keyRawName: 'Drive',
         body: 'Drive, ${1|Label,Lock,Unlock,Eject|} [, ${2:Drive}, ${3:Value}]',
         doc: 'Ejects/retracts the tray in a CD or DVD drive, or sets a drive\'s volume label.',
@@ -568,23 +509,18 @@ export const LineCommand: TLineCommand = {
             ';          Unlock: Restores a drive\'s eject feature.',
             ';          Eject: Ejects or retracts the tray of a CD or DVD drive.',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+        ],
     },
-    DRIVEGET: {
+    {
+        upName: 'DRIVEGET',
         keyRawName: 'DriveGet',
         body:
             'DriveGet, ${1:OutputVar}, ${2|List,Capacity,FileSystem,Label,Serial,Type,Status,StatusCD|} [, ${3:Value}]',
-        doc: [
-            'Retrieves various types of information about the computer\'s drive(s).',
-            '*SubCommand*',
-            '* List:        Retrieves a string of letters, one character for each drive letter in the system.',
-            '* Capacity:    Retrieves the total capacity of the specified path in megabytes.',
-            '* FileSystem:  Retrieves the type of the specified drive\'s file system.',
-            '* Label:       Retrieves the volume label of the specified drive.',
-            '* Serial:      Retrieves the volume serial number of the specified drive.',
-            '* Type:        Retrieves the drive type of the specified path.',
-            '* Status:      Retrieves the status of the specified path.',
-            '* StatusCD:    Retrieves the media status of a CD or DVD drive.',
-        ].join('\n'),
+        doc: 'Retrieves various types of information about the computer\'s drive(s).\n*SubCommand*\n* List:        Retrieves a string of letters, one character for each drive letter in the system.\n* Capacity:    Retrieves the total capacity of the specified path in megabytes.\n* FileSystem:  Retrieves the type of the specified drive\'s file system.\n* Label:       Retrieves the volume label of the specified drive.\n* Serial:      Retrieves the volume serial number of the specified drive.\n* Type:        Retrieves the drive type of the specified path.\n* Status:      Retrieves the status of the specified path.\n* StatusCD:    Retrieves the media status of a CD or DVD drive.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/DriveGet.htm',
         exp: [
@@ -605,8 +541,14 @@ export const LineCommand: TLineCommand = {
             'DriveGet, status, Status, %folder%',
             'MsgBox All Drives: %list%`nSelected Drive: %folder%`nDrive Type: %type%`nStatus: %status%`nCapacity: %cap% M`nFree Space: %free% M`nFilesystem: %fs%`nVolume Label: %label%`nSerial Number: %serial%',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+        ],
     },
-    DRIVESPACEFREE: {
+    {
+        upName: 'DRIVESPACEFREE',
         keyRawName: 'DriveSpaceFree',
         body: 'DriveSpaceFree, ${1:OutputVar_MBSize}, ${2:C:\\\\}',
         doc: 'Retrieves the free disk space of a drive, in Megabytes.',
@@ -619,8 +561,13 @@ export const LineCommand: TLineCommand = {
             'DriveSpaceFree, FreeSpace, C:\\',
             'MsgBox % FreeSpace//1024 ; MB -> GB',
         ],
+        _paramType: [
+            'O',
+            'S',
+        ],
     },
-    EDIT: {
+    {
+        upName: 'EDIT',
         keyRawName: 'Edit',
         body: 'Edit',
         doc: 'Opens the current script for editing in the associated editor.',
@@ -629,8 +576,10 @@ export const LineCommand: TLineCommand = {
         exp: [
             'Edit',
         ],
+        _paramType: [],
     },
-    ENVADD: {
+    {
+        upName: 'ENVADD',
         keyRawName: 'EnvAdd',
         body: 'EnvAdd, ${1:OutVar}, ${2:Value} [, ${3:TimeUnits}]',
         doc: 'Sets a [variable](https://www.autohotkey.com/docs/Variables.htm) to the sum of itself plus the given value (can also add or subtract time from a [date-time](https://www.autohotkey.com/docs/commands/FileSetTime.htm#YYYYMMDD) value). Synonymous with: `Var += Value`.',
@@ -646,8 +595,14 @@ export const LineCommand: TLineCommand = {
             'var1 += 31, days',
             'MsgBox, % var1  ; The answer will be the date 31 days from now.',
         ],
+        _paramType: [
+            'O',
+            'E',
+            'S',
+        ],
     },
-    ENVDIV: {
+    {
+        upName: 'ENVDIV',
         keyRawName: 'EnvDiv',
         body: 'EnvDiv, ${1:OutVar}, ${2:Value}',
         doc: 'Sets a [variable](https://www.autohotkey.com/docs/Variables.htm) to itself divided by the given value. Synonymous with: `Var /= Value`.',
@@ -659,19 +614,16 @@ export const LineCommand: TLineCommand = {
             'MyCount /= 2',
         ],
         diag: EDiagCode.code803,
+        _paramType: [
+            'O',
+            'E',
+        ],
     },
-    ENVGET: {
+    {
+        upName: 'ENVGET',
         keyRawName: 'EnvGet',
         body: 'EnvGet, ${1:OutputVar}, ${2:EnvVarName}',
-        doc: [
-            'Retrieves an environment variable.',
-            '# [Parameters](https://www.autohotkey.com/docs/commands/EnvGet.htm#Parameters)',
-            '* OutputVar : ',
-            '  The name of the variable in which to store the string.',
-            '* EnvVarName :',
-            '  The name of the [environment variable](https://www.autohotkey.com/docs/Concepts.htm#environment-variables) to retrieve.',
-            '  Exp : `Path` or `TEMP`or `TMP`',
-        ].join('\n'),
+        doc: 'Retrieves an environment variable.\n# [Parameters](https://www.autohotkey.com/docs/commands/EnvGet.htm#Parameters)\n* OutputVar : \n  The name of the variable in which to store the string.\n* EnvVarName :\n  The name of the [environment variable](https://www.autohotkey.com/docs/Concepts.htm#environment-variables) to retrieve.\n  Exp : `Path` or `TEMP`or `TMP`',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/EnvGet.htm',
         exp: [
@@ -679,8 +631,13 @@ export const LineCommand: TLineCommand = {
             'EnvGet, OutputVar, % A_Is64bitOS ? "ProgramW6432" : "ProgramFiles"',
             'MsgBox, % "Program files are in: " OutputVar',
         ],
+        _paramType: [
+            'O',
+            'S',
+        ],
     },
-    ENVMULT: {
+    {
+        upName: 'ENVMULT',
         keyRawName: 'EnvMult',
         body: 'EnvMult, ${1:OutVar}, ${2:Value}',
         doc: 'Sets a [variable](https://www.autohotkey.com/docs/Variables.htm) to itself times the given value. Synonymous with: `Var *= Value`.',
@@ -692,33 +649,31 @@ export const LineCommand: TLineCommand = {
             'MyCount *= 2',
         ],
         diag: EDiagCode.code804,
+        _paramType: [
+            'O',
+            'E',
+        ],
     },
-    ENVSET: {
+    {
+        upName: 'ENVSET',
         keyRawName: 'EnvSet',
         body: 'EnvSet, ${1:EnvVar}, ${2:Value}',
-        doc: [
-            'Writes a value to a [variable](https://www.autohotkey.com/docs/Variables.htm) contained in the environment.',
-            '## Parameters',
-            '* EnvVar : ',
-            '  Name of the [environment variable](https://www.autohotkey.com/docs/Concepts.htm#environment-variables) to use, e.g. "COMSPEC" or "PATH".',
-            '* Value :',
-            '  Value to set the [environment variable](https://www.autohotkey.com/docs/Concepts.htm#environment-variables) to.',
-        ].join('\n'),
+        doc: 'Writes a value to a [variable](https://www.autohotkey.com/docs/Variables.htm) contained in the environment.\n## Parameters\n* EnvVar : \n  Name of the [environment variable](https://www.autohotkey.com/docs/Concepts.htm#environment-variables) to use, e.g. "COMSPEC" or "PATH".\n* Value :\n  Value to set the [environment variable](https://www.autohotkey.com/docs/Concepts.htm#environment-variables) to.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/EnvSet.htm',
         exp: [
             'EnvSet, AutGUI, Some text to put in the variable.',
         ],
+        _paramType: [
+            'S',
+            'S',
+        ],
     },
-    ENVSUB: {
+    {
+        upName: 'ENVSUB',
         keyRawName: 'EnvSub',
         body: 'EnvSub, ${1:OutVar}, ${2:Value}, ${3|Seconds,Minutes,Hours,Days|}',
-        doc: [
-            'Sets a [variable](https://www.autohotkey.com/docs/Variables.htm) to itself minus the given value (can also compare [date-time](https://www.autohotkey.com/docs/commands/FileSetTime.htm#YYYYMMDD) values). Synonymous with: `Var -= Value`.',
-            '- Var : The name of the [variable](https://www.autohotkey.com/docs/Variables.htm) upon which to operate.',
-            '- Value : Any integer, floating point number, or [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions).',
-            '- TimeUnits : `Seconds`, `Minutes`, `Hours`, `Days`',
-        ].join('\n'),
+        doc: 'Sets a [variable](https://www.autohotkey.com/docs/Variables.htm) to itself minus the given value (can also compare [date-time](https://www.autohotkey.com/docs/commands/FileSetTime.htm#YYYYMMDD) values). Synonymous with: `Var -= Value`.\n- Var : The name of the [variable](https://www.autohotkey.com/docs/Variables.htm) upon which to operate.\n- Value : Any integer, floating point number, or [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions).\n- TimeUnits : `Seconds`, `Minutes`, `Hours`, `Days`',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/EnvSub.htm',
         exp: [
@@ -728,8 +683,14 @@ export const LineCommand: TLineCommand = {
             'EnvSub, var1, %var2%, Days',
             'MsgBox, %var1%  ; The answer will be 366 since 2004 is a leap year.',
         ],
+        _paramType: [
+            'O',
+            'E',
+            'S',
+        ],
     },
-    ENVUPDATE: {
+    {
+        upName: 'ENVUPDATE',
         keyRawName: 'EnvUpdate',
         body: 'EnvUpdate',
         doc: 'Notifies the OS and all running applications that [environment variable(s)](https://www.autohotkey.com/docs/Concepts.htm#environment-variables) have changed.',
@@ -738,48 +699,10 @@ export const LineCommand: TLineCommand = {
         exp: [
             'EnvUpdate',
         ],
+        _paramType: [],
     },
-    EXIT: {
-        keyRawName: 'Exit',
-        body: 'Exit [, ${1:ExitCode}]',
-        doc: [
-            'Exits the [current thread](https://www.autohotkey.com/docs/misc/Threads.htm) or (if the script is not [persistent](https://www.autohotkey.com/docs/commands/_Persistent.htm)) the entire script.',
-            '* ExitCode',
-            '',
-            '> An integer between -2147483648 and 2147483647 (can be an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions)) that is returned to its caller when the script exits. This code is accessible to any program that spawned the script, such as another script (via RunWait) or a batch (.bat) file. If omitted, _ExitCode_ defaults to zero. Zero is traditionally used to indicate success.',
-        ].join('\n'),
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/Exit.htm',
-        exp: [
-            '#z::',
-            '    Gosub, Sub2',
-            '    MsgBox, % "This MsgBox will never happen because of the EXIT."',
-            'Return',
-            '',
-            'Sub2:',
-            'Exit  ; Terminate this subroutine as well as the calling subroutine.',
-        ],
-    },
-    EXITAPP: {
-        keyRawName: 'ExitApp',
-        body: 'ExitApp [, ${1:ExitCode}]',
-        doc: [
-            'Terminates the script.',
-            '* ExitCode',
-            '1. An integer between -2147483648 and 2147483647',
-            '2. If omitted, _ExitCode_ defaults to zero.',
-            '3. Zero is traditionally used to indicate success.',
-        ].join('\n'),
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/ExitApp.htm',
-        exp: [
-            'ExitApp [, ExitCode]',
-            '',
-            ';exp Press a hotkey to terminate the script.',
-            '#x::ExitApp  ; Win+X',
-        ],
-    },
-    FILEAPPEND: {
+    {
+        upName: 'FILEAPPEND',
         keyRawName: 'FileAppend',
         body: 'FileAppend [, ${1:Text}, ${2:Filename}, ${3:Encoding}]',
         doc: 'Writes text to the end of a file (first creating the file, if necessary).',
@@ -797,16 +720,17 @@ export const LineCommand: TLineCommand = {
             'Variable references such as %Var% are expanded by default.',
             '), D:\\My File.txt',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+        ],
     },
-    FILECOPY: {
+    {
+        upName: 'FILECOPY',
         keyRawName: 'FileCopy',
         body: 'FileCopy, ${1:Source}, ${2:Dest} [, ${3|0,1|}]',
-        doc: [
-            'Copies one or more files.',
-            '* Overwrite',
-            '* If omitted or 0 (false), the command does not overwrite existing files.',
-            '* If this parameter is 1 (true), the command overwrites existing files.',
-        ].join('\n'),
+        doc: 'Copies one or more files.\n* Overwrite\n* If omitted or 0 (false), the command does not overwrite existing files.\n* If this parameter is 1 (true), the command overwrites existing files.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileCopy.htm',
         exp: [
@@ -815,18 +739,17 @@ export const LineCommand: TLineCommand = {
             ';exp1 Makes a copy but keep the original file name.',
             'FileCopy, C:\\My Documents\\List1.txt, D:\\Main Backup\\',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+        ],
     },
-    FILECOPYDIR: {
+    {
+        upName: 'FILECOPYDIR',
         keyRawName: 'FileCopyDir',
         body: 'FileCopyDir, ${1:Source}, ${2:Dest} [, ${3|0,1|}]',
-        doc: [
-            'Copies a folder along with all its sub-folders and files (similar to xcopy).',
-            '* **Overwrite**',
-            '* This parameter determines whether to overwrite files if they already exist. If omitted, it defaults to 0 (false). Specify one of the following values:',
-            '* 0 (false): Do not overwrite existing files. The operation will fail and have no effect if _Dest_ already exists as a file or directory.',
-            '* 1 (true): Overwrite existing files. However, any files or subfolders inside _Dest_ that do not have a counterpart in _Source_ will not be deleted.',
-            '* This parameter can be an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions), even one that evalutes to true or false (since true and false are stored internally as 1 and 0).',
-        ].join('\n'),
+        doc: 'Copies a folder along with all its sub-folders and files (similar to xcopy).\n* **Overwrite**\n* This parameter determines whether to overwrite files if they already exist. If omitted, it defaults to 0 (false). Specify one of the following values:\n* 0 (false): Do not overwrite existing files. The operation will fail and have no effect if _Dest_ already exists as a file or directory.\n* 1 (true): Overwrite existing files. However, any files or subfolders inside _Dest_ that do not have a counterpart in _Source_ will not be deleted.\n* This parameter can be an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions), even one that evalutes to true or false (since true and false are stored internally as 1 and 0).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileCopyDir.htm',
         exp: [
@@ -835,8 +758,14 @@ export const LineCommand: TLineCommand = {
             ';exp1 Copies a directory to a new location.',
             'FileCopyDir, % "C:\\My Folder", % "C:\\Copy of My Folder"',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+        ],
     },
-    FILECREATEDIR: {
+    {
+        upName: 'FILECREATEDIR',
         keyRawName: 'FileCreateDir',
         body: 'FileCreateDir, ${1:Path}',
         doc: 'Creates a folder.',
@@ -848,8 +777,12 @@ export const LineCommand: TLineCommand = {
             ';exp1 Creates a new directory, including its parent directories if necessary.',
             'FileCreateDir, % "C:\\Test1\\My Images\\Folder2"',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    FILECREATESHORTCUT: {
+    {
+        upName: 'FILECREATESHORTCUT',
         keyRawName: 'FileCreateShortcut',
         body:
             'FileCreateShortcut, ${1:Target}, ${2:C:\\My Shortcut.lnk} [, ${3:WorkingDir}, ${4:Args}, ${5:Description}, ${6:IconFile}, ${7:ShortcutKey}, ${8:IconNumber}, ${9|1,3,7|} ]',
@@ -862,17 +795,23 @@ export const LineCommand: TLineCommand = {
             ';exp1 The letter "i" in the last parameter makes the shortcut key be Ctrl+Alt+I.',
             'FileCreateShortcut, Notepad.exe, %A_Desktop%\\My Shortcut.lnk, C:\\, "%A_ScriptFullPath%", My Description, C:\\My Icon.ico, i',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'E',
+            'E',
+        ],
     },
-    FILEDELETE: {
+    {
+        upName: 'FILEDELETE',
         keyRawName: 'FileDelete',
         body: 'FileDelete, ${1:FilePattern}',
-        doc: [
-            'Deletes one or more files.',
-            '',
-            '### FilePattern',
-            '1. The name of a single file or a wildcard pattern such as `C:\\Temp\\*.tmp`. _FilePattern_ is assumed to be in [%A\\_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified.',
-            '2. To remove an entire folder, along with all its sub-folders and files, use [FileRemoveDir](https://www.autohotkey.com/docs/commands/FileRemoveDir.htm).',
-        ].join('\n'),
+        doc: 'Deletes one or more files.\n\n### FilePattern\n1. The name of a single file or a wildcard pattern such as `C:\\Temp\\*.tmp`. _FilePattern_ is assumed to be in [%A\\_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified.\n2. To remove an entire folder, along with all its sub-folders and files, use [FileRemoveDir](https://www.autohotkey.com/docs/commands/FileRemoveDir.htm).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileDelete.htm',
         exp: [
@@ -881,45 +820,30 @@ export const LineCommand: TLineCommand = {
             ';exp1 Deletes all .tmp files in a directory.',
             'FileDelete, C:\\temp files\\*.tmp',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    FILEENCODING: {
+    {
+        upName: 'FILEENCODING',
         keyRawName: 'FileEncoding',
         body: 'FileEncoding, [${1|ANSI,UTF-8,UTF-8-RAW,UTF-16,UTF-16-RAW,CPnnn|}]',
-        doc: [
-            'Sets the default encoding for [FileRead](https://www.autohotkey.com/docs/commands/FileRead.htm), [FileReadLine](https://www.autohotkey.com/docs/commands/FileReadLine.htm), [Loop Read](https://www.autohotkey.com/docs/commands/LoopReadFile.htm), [FileAppend](https://www.autohotkey.com/docs/commands/FileAppend.htm), and [FileOpen()](https://www.autohotkey.com/docs/commands/FileOpen.htm).',
-            '',
-            '### Encoding',
-            'One of the following values : (if omitted, it defaults to the system default ANSI code page, which is also the default setting)',
-            '- UTF-8: Unicode UTF-8, equivalent to CP65001.',
-            '- UTF-8-RAW: As above, but no byte order mark is written when a new file is created.',
-            '- UTF-16: Unicode UTF-16 with little endian byte order, equivalent to CP1200.',
-            '- UTF-16-RAW: As above, but no byte order mark is written when a new file is created.',
-            '- CP_nnn_: A code page with numeric identifier _nnn_. See [Code Page Identifiers](https://msdn.microsoft.com/en-us/library/dd317756.aspx).',
-        ].join('\n'),
+        doc: 'Sets the default encoding for [FileRead](https://www.autohotkey.com/docs/commands/FileRead.htm), [FileReadLine](https://www.autohotkey.com/docs/commands/FileReadLine.htm), [Loop Read](https://www.autohotkey.com/docs/commands/LoopReadFile.htm), [FileAppend](https://www.autohotkey.com/docs/commands/FileAppend.htm), and [FileOpen()](https://www.autohotkey.com/docs/commands/FileOpen.htm).\n\n### Encoding\nOne of the following values : (if omitted, it defaults to the system default ANSI code page, which is also the default setting)\n- UTF-8: Unicode UTF-8, equivalent to CP65001.\n- UTF-8-RAW: As above, but no byte order mark is written when a new file is created.\n- UTF-16: Unicode UTF-16 with little endian byte order, equivalent to CP1200.\n- UTF-16-RAW: As above, but no byte order mark is written when a new file is created.\n- CP_nnn_: A code page with numeric identifier _nnn_. See [Code Page Identifiers](https://msdn.microsoft.com/en-us/library/dd317756.aspx).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileEncoding.htm',
         exp: [
             'FileEncoding [, Encoding]',
             '',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    FILEGETATTRIB: {
+    {
+        upName: 'FILEGETATTRIB',
         keyRawName: 'FileGetAttrib',
         body: 'FileGetAttrib, ${1:OutputVar} , [${2:Filename}]',
-        doc: [
-            'Reports whether a file or folder is read-only, hidden, etc.',
-            '1. `Remarks` - The string returned will contain a subset of the letters in the string "RASHNDOCT":',
-            '',
-            '- R = READONLY',
-            '- A = ARCHIVE',
-            '- S = SYSTEM',
-            '- H = HIDDEN',
-            '- N = NORMAL',
-            '- D = DIRECTORY',
-            '- O = OFFLINE',
-            '- C = COMPRESSED',
-            '- T = TEMPORARY',
-        ].join('\n'),
+        doc: 'Reports whether a file or folder is read-only, hidden, etc.\n1. `Remarks` - The string returned will contain a subset of the letters in the string "RASHNDOCT":\n\n- R = READONLY\n- A = ARCHIVE\n- S = SYSTEM\n- H = HIDDEN\n- N = NORMAL\n- D = DIRECTORY\n- O = OFFLINE\n- C = COMPRESSED\n- T = TEMPORARY',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileGetAttrib.htm',
         exp: [
@@ -932,42 +856,35 @@ export const LineCommand: TLineCommand = {
             'if InStr(Attributes, "H")',
             '    MsgBox The file is hidden.',
         ],
+        _paramType: [
+            'O',
+            'S',
+        ],
     },
-    FILEGETSHORTCUT: {
+    {
+        upName: 'FILEGETSHORTCUT',
         keyRawName: 'FileGetShortcut',
         body:
             'FileGetShortcut, ${1:LinkFile} [, ${2:OutTarget}, ${3:OutDir}, ${4:OutArgs}, ${5:Outdoc}, ${6:OutIcon}, ${7:OutIconNum}, ${8:OutRunState}]',
-        doc: [
-            'Retrieves information about a shortcut (.lnk) file, such as its target file.',
-            '### [Parameters](https://www.autohotkey.com/docs/commands/FileGetShortcut.htm#Parameters)',
-            '',
-            '- LinkFile',
-            '> Name of the shortcut file to be analyzed, which is assumed to be in [%A\\_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified. Be sure to include the **.lnk** extension.',
-            '- OutTarget',
-            '> Name of the variable in which to store the shortcut\'s target (not including any arguments it might have). For example: C:\\WINDOWS\\system32\\notepad.exe',
-            '- OutDir',
-            '> Name of the variable in which to store the shortcut\'s working directory. For example: C:\\My Documents. If environment variables such as %WinDir% are present in the string, one way to resolve them is via [StrReplace()](https://www.autohotkey.com/docs/commands/StrReplace.htm) or [StringReplace](https://www.autohotkey.com/docs/commands/StringReplace.htm "Deprecated. New scripts should use StrReplace() instead."). For example: [StringReplace](https://www.autohotkey.com/docs/commands/StringReplace.htm), OutDir, OutDir, %WinDir%, %[A_WinDir](https://www.autohotkey.com/docs/Variables.htm#WinDir)%.',
-            '- OutArgs',
-            '> Name of the variable in which to store the shortcut\'s parameters (blank if none).',
-            '- OutDescription',
-            '> Name of the variable in which to store the shortcut\'s comments (blank if none).',
-            '- OutIcon',
-            '> Name of the variable in which to store the filename of the shortcut\'s icon (blank if none).',
-            '- OutIconNum',
-            '> Name of the variable in which to store the shortcut\'s icon number within the icon file (blank if none). This value is most often 1, which means the first icon.',
-            '- OutRunState',
-            '> Name of the variable in which to store the shortcut\'s initial launch state, which is one of the following digits:',
-            '> - 1 = Normal',
-            '> - 3 = Maximized',
-            '> - 7 = Minimized',
-        ].join('\n'),
+        doc: 'Retrieves information about a shortcut (.lnk) file, such as its target file.\n### [Parameters](https://www.autohotkey.com/docs/commands/FileGetShortcut.htm#Parameters)\n\n- LinkFile\n> Name of the shortcut file to be analyzed, which is assumed to be in [%A\\_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified. Be sure to include the **.lnk** extension.\n- OutTarget\n> Name of the variable in which to store the shortcut\'s target (not including any arguments it might have). For example: C:\\WINDOWS\\system32\\notepad.exe\n- OutDir\n> Name of the variable in which to store the shortcut\'s working directory. For example: C:\\My Documents. If environment variables such as %WinDir% are present in the string, one way to resolve them is via [StrReplace()](https://www.autohotkey.com/docs/commands/StrReplace.htm) or [StringReplace](https://www.autohotkey.com/docs/commands/StringReplace.htm "Deprecated. New scripts should use StrReplace() instead."). For example: [StringReplace](https://www.autohotkey.com/docs/commands/StringReplace.htm), OutDir, OutDir, %WinDir%, %[A_WinDir](https://www.autohotkey.com/docs/Variables.htm#WinDir)%.\n- OutArgs\n> Name of the variable in which to store the shortcut\'s parameters (blank if none).\n- OutDescription\n> Name of the variable in which to store the shortcut\'s comments (blank if none).\n- OutIcon\n> Name of the variable in which to store the filename of the shortcut\'s icon (blank if none).\n- OutIconNum\n> Name of the variable in which to store the shortcut\'s icon number within the icon file (blank if none). This value is most often 1, which means the first icon.\n- OutRunState\n> Name of the variable in which to store the shortcut\'s initial launch state, which is one of the following digits:\n> - 1 = Normal\n> - 3 = Maximized\n> - 7 = Minimized',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileGetShortcut.htm',
         exp: [
             'FileGetShortcut, LinkFile [, OutTarget, OutDir, OutArgs, OutDescription, OutIcon, OutIconNum, OutRunState]',
         ],
+        _paramType: [
+            'S',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+        ],
     },
-    FILEGETSIZE: {
+    {
+        upName: 'FILEGETSIZE',
         keyRawName: 'FileGetSize',
         body: 'FileGetSize, ${1:OutputVar} [, % "${2:Filename}", ${3|K,M|}]',
         doc: 'Retrieves the size of a file.',
@@ -979,19 +896,17 @@ export const LineCommand: TLineCommand = {
             ';exp',
             'FileGetSize, OutputVar, % "D:\\test.doc"',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+        ],
     },
-    FILEGETTIME: {
+    {
+        upName: 'FILEGETTIME',
         keyRawName: 'FileGetTime',
         body: 'FileGetTime, ${1:OutputVar} [, % "${2:Filename}", ${3|M,C,A|} ]',
-        doc: [
-            'Retrieves the datetime stamp of a file or folder.',
-            '1. `OutputVar` : YYYYMMDDHH24MISS. The time is your own local time, not UTC/GMT.',
-            '2. `Filename` : The name of the target file or folder, which is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified. If omitted, the current file of the innermost enclosing [File-Loop](https://www.autohotkey.com/docs/commands/LoopFile.htm) will be used instead.',
-            '3. `WhichTime`: ',
-            '- `M` = Modification time(defaults)',
-            '- `C` = Creation time',
-            '- `A` = Last access time',
-        ].join('\n'),
+        doc: 'Retrieves the datetime stamp of a file or folder.\n1. `OutputVar` : YYYYMMDDHH24MISS. The time is your own local time, not UTC/GMT.\n2. `Filename` : The name of the target file or folder, which is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified. If omitted, the current file of the innermost enclosing [File-Loop](https://www.autohotkey.com/docs/commands/LoopFile.htm) will be used instead.\n3. `WhichTime`: \n- `M` = Modification time(defaults)\n- `C` = Creation time\n- `A` = Last access time',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileGetTime.htm',
         exp: [
@@ -1004,15 +919,17 @@ export const LineCommand: TLineCommand = {
             'FormatTime, fmtTime, % fileTime, yyyy-MM-dd HH:mm:ss',
             'MsgBox, % fmtTime',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+        ],
     },
-    FILEGETVERSION: {
+    {
+        upName: 'FILEGETVERSION',
         keyRawName: 'FileGetVersion',
         body: 'FileGetVersion, ${1:OutputVar} [, % "${2:Filename}"]',
-        doc: [
-            'Retrieves the version of a file.',
-            '1. `OutputVar` - The name of the variable in which to store the version number/string.',
-            '2. `Filename` - The name of the target file. If a full path is not specified, this function uses the search sequence specified by the system [LoadLibrary](https://msdn.microsoft.com/en-us/library/windows/desktop/ms684175) function. If omitted, the current file of the innermost enclosing [File-Loop](https://www.autohotkey.com/docs/commands/LoopFile.htm) will be used instead.',
-        ].join('\n'),
+        doc: 'Retrieves the version of a file.\n1. `OutputVar` - The name of the variable in which to store the version number/string.\n2. `Filename` - The name of the target file. If a full path is not specified, this function uses the search sequence specified by the system [LoadLibrary](https://msdn.microsoft.com/en-us/library/windows/desktop/ms684175) function. If omitted, the current file of the innermost enclosing [File-Loop](https://www.autohotkey.com/docs/commands/LoopFile.htm) will be used instead.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileGetVersion.htm',
         exp: [
@@ -1022,37 +939,32 @@ export const LineCommand: TLineCommand = {
             'FileGetVersion, Version, % A_ProgramFiles "\\AutoHotkey\\AutoHotkey.exe"',
             'MsgBox, % Version',
         ],
+        _paramType: [
+            'O',
+            'S',
+        ],
     },
-    FILEINSTALL: {
+    {
+        upName: 'FILEINSTALL',
         keyRawName: 'FileInstall',
         body: 'FileInstall, ${1:Source}, % "${2:Dest}" [, ${3|true,false|}]',
-        doc: [
-            'Includes the specified file inside the [compiled version](https://www.autohotkey.com/docs/Scripts.htm#ahk2exe) of the script.',
-            '1. `Source` - ',
-            '> - The name of the file to be added to the compiled EXE. The file is assumed to be in (or relative to) the script\'s own directory if an absolute path isn\'t specified.',
-            '> - The file name **must not** contain double quotes, variable references (e.g. %A_ProgramFiles%), or wildcards. In addition, any special characters such as literal percent signs and commas must be [escaped](https://www.autohotkey.com/docs/misc/EscapeChar.htm) (just like in the parameters of all other commands). Finally, this parameter must be listed to the right of the FileInstall command (that is, not on a [continuation line](https://www.autohotkey.com/docs/Scripts.htm#continuation) beneath it).',
-            '2. `Dest` - When _Source_ is extracted from the EXE, this is the name of the file to be created. It is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified. The destination directory must already exist. Unlike _Source_, variable references may be used.',
-            '3. `Overwrite` - This parameter determines whether to overwrite files if they already exist.',
-        ].join('\n'),
+        doc: 'Includes the specified file inside the [compiled version](https://www.autohotkey.com/docs/Scripts.htm#ahk2exe) of the script.\n1. `Source` - \n> - The name of the file to be added to the compiled EXE. The file is assumed to be in (or relative to) the script\'s own directory if an absolute path isn\'t specified.\n> - The file name **must not** contain double quotes, variable references (e.g. %A_ProgramFiles%), or wildcards. In addition, any special characters such as literal percent signs and commas must be [escaped](https://www.autohotkey.com/docs/misc/EscapeChar.htm) (just like in the parameters of all other commands). Finally, this parameter must be listed to the right of the FileInstall command (that is, not on a [continuation line](https://www.autohotkey.com/docs/Scripts.htm#continuation) beneath it).\n2. `Dest` - When _Source_ is extracted from the EXE, this is the name of the file to be created. It is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified. The destination directory must already exist. Unlike _Source_, variable references may be used.\n3. `Overwrite` - This parameter determines whether to overwrite files if they already exist.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileInstall.htm',
-        exp: ['FileInstall, Source, Dest [, Overwrite]'],
+        exp: [
+            'FileInstall, Source, Dest [, Overwrite]',
+        ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+        ],
     },
-    FILEMOVE: {
+    {
+        upName: 'FILEMOVE',
         keyRawName: 'FileMove',
         body: 'FileMove, % "${1:SourcePattern}", % "${2:DestPattern}" [, ${3|true,false|} ]',
-        doc: [
-            'Moves or renames one or more files.',
-            '1. `SourcePattern` - The name of a single file or a wildcard pattern such as C:\\Temp\\*.tmp. _SourcePattern_ is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified.',
-            '2. `DestPattern` - ',
-            '> - The name or pattern of the destination, which is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified.',
-            '> - If present, the first asterisk (`*`) in the filename is replaced with the source filename excluding its extension, while the first asterisk after the last full stop (`.`) is replaced with the source file\'s extension. If an asterisk is present but the extension is omitted, the source file\'s extension is used.',
-            '> - To perform a simple move -- retaining the existing file name(s) -- specify only the folder name as shown in these mostly equivalent examples:',
-            '> - ```FileMove, C:\\*.txt, C:\\My Folder```',
-            '> - ```FileMove, C:\\*.txt, C:\\My Folder\\*.*```',
-            '> - The destination directory must already exist. If _My Folder_ does not exist, the first example above will use "My Folder" as the target filename, while the second example will move no files.',
-            '3. `Overwrite` - This parameter determines whether to overwrite files if they already exist.',
-        ].join('\n'),
+        doc: 'Moves or renames one or more files.\n1. `SourcePattern` - The name of a single file or a wildcard pattern such as C:\\Temp\\*.tmp. _SourcePattern_ is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified.\n2. `DestPattern` - \n> - The name or pattern of the destination, which is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified.\n> - If present, the first asterisk (`*`) in the filename is replaced with the source filename excluding its extension, while the first asterisk after the last full stop (`.`) is replaced with the source file\'s extension. If an asterisk is present but the extension is omitted, the source file\'s extension is used.\n> - To perform a simple move -- retaining the existing file name(s) -- specify only the folder name as shown in these mostly equivalent examples:\n> - ```FileMove, C:\\*.txt, C:\\My Folder```\n> - ```FileMove, C:\\*.txt, C:\\My Folder\\*.*```\n> - The destination directory must already exist. If _My Folder_ does not exist, the first example above will use "My Folder" as the target filename, while the second example will move no files.\n3. `Overwrite` - This parameter determines whether to overwrite files if they already exist.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileMove.htm',
         exp: [
@@ -1061,21 +973,17 @@ export const LineCommand: TLineCommand = {
             '; Renames a single file.',
             'FileMove, % "D:\\File Before.txt", % "D:\\File After.txt"',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+        ],
     },
-    FILEMOVEDIR: {
+    {
+        upName: 'FILEMOVEDIR',
         keyRawName: 'FileMoveDir',
         body: 'FileMoveDir, % "${1:Source}", % "${2:Dest}" [, ${3|0,1,2,R|}]',
-        doc: [
-            'Moves a folder along with all its sub-folders and files. It can also rename a folder.',
-            '1. `Source` - Name of the source directory (with no trailing backslash), which is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified. For example: C:\\My Folder',
-            '2. `Dest` - The new path and name of the directory (with no trailing baskslash), which is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified. For example: D:\\My Folder.',
-            '> **Note**: _Dest_ is the actual path and name that the directory will have after it is moved; it is _not_ the directory into which _Source_ is moved (except for the known limitation mentioned below).',
-            '3. `Flag` - ',
-            '> - **0** (default): Do not overwrite existing files. The operation will fail if _Dest_ already exists as a file or directory.',
-            '> - **1**: Overwrite existing files. However, any files or subfolders inside _Dest_ that do not have a counterpart in _Source_ will not be deleted. **Known limitation:** If _Dest_ already exists as a folder and it is on the same volume as _Source_, _Source_ will be moved into it rather than overwriting it. To avoid this, see the next option.',
-            '> - **2**: The same as mode 1 above except that the limitation is absent.',
-            '> - **R**: Rename the directory rather than moving it. Although renaming normally has the same effect as moving, it is helpful in cases where you want "all or none" behavior; that is, when you don\'t want the operation to be only partially successful when _Source_ or one of its files is locked (in use). Although this method cannot move _Source_ onto a different volume, it can move it to any other directory on its own volume. The operation will fail if _Dest_ already exists as a file or directory.',
-        ].join('\n'),
+        doc: 'Moves a folder along with all its sub-folders and files. It can also rename a folder.\n1. `Source` - Name of the source directory (with no trailing backslash), which is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified. For example: C:\\My Folder\n2. `Dest` - The new path and name of the directory (with no trailing baskslash), which is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified. For example: D:\\My Folder.\n> **Note**: _Dest_ is the actual path and name that the directory will have after it is moved; it is _not_ the directory into which _Source_ is moved (except for the known limitation mentioned below).\n3. `Flag` - \n> - **0** (default): Do not overwrite existing files. The operation will fail if _Dest_ already exists as a file or directory.\n> - **1**: Overwrite existing files. However, any files or subfolders inside _Dest_ that do not have a counterpart in _Source_ will not be deleted. **Known limitation:** If _Dest_ already exists as a folder and it is on the same volume as _Source_, _Source_ will be moved into it rather than overwriting it. To avoid this, see the next option.\n> - **2**: The same as mode 1 above except that the limitation is absent.\n> - **R**: Rename the directory rather than moving it. Although renaming normally has the same effect as moving, it is helpful in cases where you want "all or none" behavior; that is, when you don\'t want the operation to be only partially successful when _Source_ or one of its files is locked (in use). Although this method cannot move _Source_ onto a different volume, it can move it to any other directory on its own volume. The operation will fail if _Dest_ already exists as a file or directory.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileMoveDir.htm',
         exp: [
@@ -1084,8 +992,14 @@ export const LineCommand: TLineCommand = {
             '; Moves a directory to a new drive.',
             'FileMoveDir, % "D:\\My Folder", % "E:\\My Folder"',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+        ],
     },
-    FILEREAD: {
+    {
+        upName: 'FILEREAD',
         keyRawName: 'FileRead',
         body: 'FileRead, ${1:OutputVar}, % "${2:Filename}"',
         doc: 'Reads a file\'s contents into a [variable](https://www.autohotkey.com/docs/Variables.htm).\n > try to use [function](https://www.autohotkey.com/docs/Language.htm#commands-vs-functions) replace [FileOpen](https://www.autohotkey.com/docs/commands/FileOpen.htm) and [File.Read](https://www.autohotkey.com/docs/objects/File.htm#Read)',
@@ -1096,8 +1010,13 @@ export const LineCommand: TLineCommand = {
             '',
             'FileRead, OutputVar, % "C:\\My Documents\\My File.txt"',
         ],
+        _paramType: [
+            'O',
+            'S',
+        ],
     },
-    FILEREADLINE: {
+    {
+        upName: 'FILEREADLINE',
         keyRawName: 'FileReadLine',
         body: 'FileReadLine, ${1:OutputVar}, % "${2:Filename}", ${3:LineNum}',
         doc: 'Reads the specified line from a file and stores the text in a [variable](https://www.autohotkey.com/docs/Variables.htm).\n > `Remarks` - It is strongly recommended to use this command only for small files, or in cases where only a single line of text is needed. To scan and process a large number of lines (one by one), use a [file-reading loop](https://www.autohotkey.com/docs/commands/LoopReadFile.htm) for best performance.',
@@ -1109,8 +1028,14 @@ export const LineCommand: TLineCommand = {
             'FileReadLine, lineText, % "D:\\test.txt", 5',
             'MsgBox % "lineText is " lineText',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'E',
+        ],
     },
-    FILERECYCLE: {
+    {
+        upName: 'FILERECYCLE',
         keyRawName: 'FileRecycle',
         body: 'FileRecycle, % "${1:FilePattern}"',
         doc: 'Sends a file or directory to the recycle bin if possible, *or permanently deletes it.*',
@@ -1121,8 +1046,12 @@ export const LineCommand: TLineCommand = {
             '',
             'FileRecycle, % "D:\\test.txt"',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    FILERECYCLEEMPTY: {
+    {
+        upName: 'FILERECYCLEEMPTY',
         keyRawName: 'FileRecycleEmpty',
         body: 'FileRecycleEmpty [, % "${1:DriveLetter}"]',
         doc: 'Empties the recycle bin.',
@@ -1133,8 +1062,12 @@ export const LineCommand: TLineCommand = {
             '',
             'FileRecycleEmpty, % "D:\\"',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    FILEREMOVEDIR: {
+    {
+        upName: 'FILEREMOVEDIR',
         keyRawName: 'FileRemoveDir',
         body: 'FileRemoveDir, % "${1:Path}", ${2|true,false|}',
         doc: 'Deletes a folder.\n - `DirName`: Name of the directory to delete, which is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified.',
@@ -1145,8 +1078,13 @@ export const LineCommand: TLineCommand = {
             '',
             'FileRemoveDir, % "D:\\Download Temp"',
         ],
+        _paramType: [
+            'S',
+            'E',
+        ],
     },
-    FILESELECTFILE: {
+    {
+        upName: 'FILESELECTFILE',
         keyRawName: 'FileSelectFile',
         body: 'FileSelectFile, ${1:OutputVar} [, ${2:Options}, ${3:RootDir_or_Filename}, ${4:Title}, ${5:Filter}]',
         doc: 'Displays a standard dialog that allows the user to open or save file(s).',
@@ -1161,19 +1099,19 @@ export const LineCommand: TLineCommand = {
             'else',
             '    MsgBox, % "The user selected the following:`n" SelectedFile',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    FILESELECTFOLDER: {
+    {
+        upName: 'FILESELECTFOLDER',
         keyRawName: 'FileSelectFolder',
         body: 'FileSelectFolder, ${1:OutputVar} [, ${2:StartingFolder}, ${3:Options}, ${4:Prompt}]',
-        doc: [
-            'Displays a standard dialog that allows the user to select a folder.',
-            '',
-            '`Options`:',
-            '- **0**: The options below are all disabled (except on Windows 2000, where the "make new folder" button might appear anyway).',
-            '- **1** (default): A button is provided that allows the user to create new folders.',
-            '- **Add 2** to the above number to provide an edit field that allows the user to type the name of a folder. For example, a value of 3 for this parameter provides both an edit field and a "make new folder" button.',
-            '- **Add 4** to the above number to omit the BIF_NEWDIALOGSTYLE property. Adding 4 ensures that FileSelectFolder will work properly even in a Preinstallation Environment like WinPE or BartPE. However, this prevents the appearance of a "make new folder" button, at least on Windows XP. ["4" requires v1.0.48+]',
-        ].join('\n'),
+        doc: 'Displays a standard dialog that allows the user to select a folder.\n\n`Options`:\n- **0**: The options below are all disabled (except on Windows 2000, where the "make new folder" button might appear anyway).\n- **1** (default): A button is provided that allows the user to create new folders.\n- **Add 2** to the above number to provide an edit field that allows the user to type the name of a folder. For example, a value of 3 for this parameter provides both an edit field and a "make new folder" button.\n- **Add 4** to the above number to omit the BIF_NEWDIALOGSTYLE property. Adding 4 ensures that FileSelectFolder will work properly even in a Preinstallation Environment like WinPE or BartPE. However, this prevents the appearance of a "make new folder" button, at least on Windows XP. ["4" requires v1.0.48+]',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileSelectFolder.htm',
         exp: [
@@ -1185,33 +1123,18 @@ export const LineCommand: TLineCommand = {
             'else',
             '    MsgBox, % "You selected folder`n" OutputVar',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'E',
+            'S',
+        ],
     },
-    FILESETATTRIB: {
+    {
+        upName: 'FILESETATTRIB',
         keyRawName: 'FileSetAttrib',
         body: 'FileSetAttrib, ${1:Attributes} [, % "${2:D:\\test.txt}", ${3|0,1,2|}, ${4|0,1|}]',
-        doc: [
-            'Changes the attributes of one or more files or folders. Wildcards are supported.',
-            '1. `Attributes` -',
-            '> - The attributes to change. For example, `+HA-R`.',
-            '> - To easily turn on, turn off or toggle attributes, prefix one or more of the following attribute letters with a plus sign (+), minus sign (-) or caret (^), respectively:',
-            '> 1. `R` = READONLY',
-            '> 2. `A` = ARCHIVE',
-            '> 3. `S` = SYSTEM',
-            '> 4. `H` = HIDDEN',
-            '> 5. `N` = NORMAL (this is valid only when used without any other attributes)',
-            '> 6. `O` = OFFLINE',
-            '> 7. `T` = TEMPORARY',
-            '2. `FilePattern` -',
-            '> - The name of a single file or folder, or a wildcard pattern such as `C:\\Temp\\*.tmp`. _FilePattern_ is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified.',
-            '> - If omitted, the current file of the innermost enclosing File-Loop will be used instead.',
-            '3. `OperateOnFolders` -',
-            '> - `0` (default) = Folders are not operated upon (only files).',
-            '> - `1` = All files and folders that match the wildcard pattern are operated upon.',
-            '> - `2` = Only folders are operated upon (no files).',
-            '4. `Recurse` -',
-            '> - `0` (default) = Subfolders are not recursed into.',
-            '> - `1` = Subfolders are recursed into so that files and folders contained therein are operated upon if they match FilePattern. All subfolders will be recursed into, not just those whose names match FilePattern. However, files and folders with a complete path name longer than 259 characters are skipped over as though they do not exist. Such files are rare because normally, the operating system does not allow their creation.',
-        ].join('\n'),
+        doc: 'Changes the attributes of one or more files or folders. Wildcards are supported.\n1. `Attributes` -\n> - The attributes to change. For example, `+HA-R`.\n> - To easily turn on, turn off or toggle attributes, prefix one or more of the following attribute letters with a plus sign (+), minus sign (-) or caret (^), respectively:\n> 1. `R` = READONLY\n> 2. `A` = ARCHIVE\n> 3. `S` = SYSTEM\n> 4. `H` = HIDDEN\n> 5. `N` = NORMAL (this is valid only when used without any other attributes)\n> 6. `O` = OFFLINE\n> 7. `T` = TEMPORARY\n2. `FilePattern` -\n> - The name of a single file or folder, or a wildcard pattern such as `C:\\Temp\\*.tmp`. _FilePattern_ is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified.\n> - If omitted, the current file of the innermost enclosing File-Loop will be used instead.\n3. `OperateOnFolders` -\n> - `0` (default) = Folders are not operated upon (only files).\n> - `1` = All files and folders that match the wildcard pattern are operated upon.\n> - `2` = Only folders are operated upon (no files).\n4. `Recurse` -\n> - `0` (default) = Subfolders are not recursed into.\n> - `1` = Subfolders are recursed into so that files and folders contained therein are operated upon if they match FilePattern. All subfolders will be recursed into, not just those whose names match FilePattern. However, files and folders with a complete path name longer than 259 characters are skipped over as though they do not exist. Such files are rare because normally, the operating system does not allow their creation.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileSetAttrib.htm',
         exp: [
@@ -1220,26 +1143,18 @@ export const LineCommand: TLineCommand = {
             ';Turns on the "read-only" and "hidden" attributes of all files and directories (subdirectories are not recursed into).',
             'FileSetAttrib, % "+RH", % "D:\\MyFiles\\*.*", 1  ; +RH is identical to +R+H (readonly && hidden)',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+            'E',
+        ],
     },
-    FILESETTIME: {
+    {
+        upName: 'FILESETTIME',
         keyRawName: 'FileSetTime',
         body: 'FileSetTime [, ${1:YYYYMMDDHH24MISS}, % "${2:D:\\test.txt}", ${3|M,C,A|}, ${4|0,1,2|}, ${5|0,1|}]',
-        doc: [
-            'Changes the datetime stamp of one or more files or folders. Wildcards are supported.',
-            '1. `YYYYMMDDHH24MISS` - This parameter is an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions).',
-            '2. `FilePattern` - The name of a single file or folder, or a wildcard pattern such as C:\\Temp\\*.tmp. _FilePattern_ is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir).\n if an absolute path isn\'t specified.If omitted, the current file of the innermost enclosing [File-Loop](https://www.autohotkey.com/docs/commands/LoopFile.htm) will be used instead.',
-            '3. `WhichTime` -',
-            '> - `M` = Modification time (default)',
-            '> - `C` = Creation time',
-            '> - `A` = Last access time',
-            '4. `OperateOnFolders` -',
-            '> - `0` = Folders are not operated upon (only files).  (default)',
-            '> - `1` = All files and folders that match the wildcard pattern are operated upon.',
-            '> - `2` = Only folders are operated upon (no files).',
-            '5. `OperateOnFolders` -',
-            '> - `0` = Subfolders are not recursed into. (default)',
-            '> - `1` = Subfolders are recursed into so that files and folders contained therein are operated upon if they match FilePattern. All subfolders will be recursed into, not just those whose names match FilePattern. However, files and folders with a complete path name longer than 259 characters are skipped over as though they do not exist. Such files are rare because normally, the operating system does not allow their creation.',
-        ].join('\n'),
+        doc: 'Changes the datetime stamp of one or more files or folders. Wildcards are supported.\n1. `YYYYMMDDHH24MISS` - This parameter is an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions).\n2. `FilePattern` - The name of a single file or folder, or a wildcard pattern such as C:\\Temp\\*.tmp. _FilePattern_ is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir).\n if an absolute path isn\'t specified.If omitted, the current file of the innermost enclosing [File-Loop](https://www.autohotkey.com/docs/commands/LoopFile.htm) will be used instead.\n3. `WhichTime` -\n> - `M` = Modification time (default)\n> - `C` = Creation time\n> - `A` = Last access time\n4. `OperateOnFolders` -\n> - `0` = Folders are not operated upon (only files).  (default)\n> - `1` = All files and folders that match the wildcard pattern are operated upon.\n> - `2` = Only folders are operated upon (no files).\n5. `OperateOnFolders` -\n> - `0` = Subfolders are not recursed into. (default)\n> - `1` = Subfolders are recursed into so that files and folders contained therein are operated upon if they match FilePattern. All subfolders will be recursed into, not just those whose names match FilePattern. However, files and folders with a complete path name longer than 259 characters are skipped over as though they do not exist. Such files are rare because normally, the operating system does not allow their creation.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/FileSetTime.htm',
         exp: [
@@ -1250,8 +1165,16 @@ export const LineCommand: TLineCommand = {
             'setTime := yyyy . Month . Day . Hour . Minute . Second',
             'FileSetTime, setTime, % "D:\\test.txt"',
         ],
+        _paramType: [
+            'E',
+            'S',
+            'S',
+            'E',
+            'E',
+        ],
     },
-    FORMATTIME: {
+    {
+        upName: 'FORMATTIME',
         keyRawName: 'FormatTime',
         body: 'FormatTime, ${1:OutputVar} [, ${2:YYYYMMDDHH24MISS}, ${3:yyyy-MM-dd HH:mm:ss} ]',
         doc: 'Transforms a [YYYYMMDDHH24MISS](https://www.autohotkey.com/docs/commands/FileSetTime.htm#YYYYMMDD) timestamp into the specified date/time format.',
@@ -1291,8 +1214,14 @@ export const LineCommand: TLineCommand = {
             'FormatTime, YearWeek, 20050101, YWeek',
             'MsgBox % "January 1st of 2005 is in the following ISO year and week number: " YearWeek',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+        ],
     },
-    GETKEYSTATE: {
+    {
+        upName: 'GETKEYSTATE',
         keyRawName: 'GetKeyState',
         body: 'GetKeyState, ${1:OutputVar}, ${2:KeyName} [,${3:Mode}]',
         doc: '**Deprecated:** This command is not recommended for use in new scripts. Use the [GetKeyState](https://www.autohotkey.com/docs/commands/GetKeyState.htm#function) function instead.',
@@ -1304,8 +1233,14 @@ export const LineCommand: TLineCommand = {
             'KeyIsDown := GetKeyState(KeyName , Mode)',
         ],
         diag: EDiagCode.code899,
+        _paramType: [
+            'O',
+            'S',
+            'S',
+        ],
     },
-    GROUPACTIVATE: {
+    {
+        upName: 'GROUPACTIVATE',
         keyRawName: 'GroupActivate',
         body: 'GroupActivate, ${1:GroupName} [, ${2:R} ]',
         doc: 'Activates the next window in a window group that was defined with [GroupAdd](https://www.autohotkey.com/docs/commands/GroupAdd.htm).',
@@ -1317,113 +1252,124 @@ export const LineCommand: TLineCommand = {
             '; Activates the newest window (the one most recently active) in a window group.',
             'GroupActivate, MyGroup, R',
         ],
+        _paramType: [
+            'S',
+            'S',
+        ],
     },
-    GROUPADD: {
+    {
+        upName: 'GROUPADD',
         keyRawName: 'GroupAdd',
         body:
             'GroupAdd, ${1:GroupName} [, ${2:WinTitle}, ${3:WinText}, ${4:Label}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
         doc: 'Adds a window specification to a window group, creating the group if necessary.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/GroupAdd.htm',
-        exp: ['GroupAdd, GroupName [, WinTitle, WinText, Label, ExcludeTitle, ExcludeText]'],
+        exp: [
+            'GroupAdd, GroupName [, WinTitle, WinText, Label, ExcludeTitle, ExcludeText]',
+        ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    GROUPCLOSE: {
+    {
+        upName: 'GROUPCLOSE',
         keyRawName: 'GroupClose',
         body: 'GroupClose, ${1:GroupName} [, ${2|A,R|}]',
         doc: 'Closes the active window if it was just activated by [GroupActivate](https://www.autohotkey.com/docs/commands/GroupActivate.htm) or [GroupDeactivate](https://www.autohotkey.com/docs/commands/GroupDeactivate.htm). It then activates the next window in the series. It can also close all windows in a group.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/GroupClose.htm',
-        exp: ['GroupClose, GroupName [, Mode]'],
+        exp: [
+            'GroupClose, GroupName [, Mode]',
+        ],
+        _paramType: [
+            'S',
+            'S',
+        ],
     },
-    GROUPDEACTIVATE: {
+    {
+        upName: 'GROUPDEACTIVATE',
         keyRawName: 'GroupDeactivate',
         body: 'GroupDeactivate, ${1:GroupName} [, ${2:R}]',
         doc: 'Similar to [GroupActivate](https://www.autohotkey.com/docs/commands/GroupActivate.htm) except activates the next window **not** in the group.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/GroupDeactivate.htm',
-        exp: ['GroupDeactivate, GroupName [, Mode]'],
+        exp: [
+            'GroupDeactivate, GroupName [, Mode]',
+        ],
+        _paramType: [
+            'S',
+            'S',
+        ],
     },
-    GUI: {
+    {
+        upName: 'GUI',
         keyRawName: 'Gui',
         body:
-            'Gui, ${1|New,Add,Show,Submit,Cancel,Destroy,Font,Color,Margin,Options,Menu,Minimize,Flash,Default|} [, ${2:Value1}, ${3:Value2}, ${4:Value3}]',
-        doc: [
-            'Creates and manages windows and controls. Such windows can be used as data entry forms or custom user interfaces.',
-            '1. `Sub-commands` -',
-            '',
-            '- [New](https://www.autohotkey.com/docs/commands/Gui.htm#New) [[v1.1.04+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.04.00 "Applies to AutoHotkey v1.1.04 and later"): Creates a new window.',
-            '- [Add](https://www.autohotkey.com/docs/commands/Gui.htm#Add): Creates a control such as text, button, or checkbox.',
-            '- [Show](https://www.autohotkey.com/docs/commands/Gui.htm#Show): Displays the window. It can also minimize, maximize, or move the window.',
-            '- [Submit](https://www.autohotkey.com/docs/commands/Gui.htm#Submit): Saves the user\'s input and optionally hides the window.',
-            '- [Cancel](https://www.autohotkey.com/docs/commands/Gui.htm#Cancel) / [Hide](https://www.autohotkey.com/docs/commands/Gui.htm#Hide): Hides the window.',
-            '- [Destroy](https://www.autohotkey.com/docs/commands/Gui.htm#Destroy): Deletes the window.',
-            '- [Font](https://www.autohotkey.com/docs/commands/Gui.htm#Font): Sets the typeface, size, style, and text color for subsequently created controls.',
-            '- [Color](https://www.autohotkey.com/docs/commands/Gui.htm#Color): Sets the background color for the window and/or its controls.',
-            '- [Margin](https://www.autohotkey.com/docs/commands/Gui.htm#Margin): Sets the margin/spacing used whenever no explicit position has been specified for a control.',
-            '- [Options and styles for a window](https://www.autohotkey.com/docs/commands/Gui.htm#Options): Sets various options for the appearance and behavior of the window.',
-            '- [Menu](https://www.autohotkey.com/docs/commands/Gui.htm#Menu): Adds or removes a menu bar.',
-            '- [Minimize](https://www.autohotkey.com/docs/commands/Gui.htm#Minimize) / [Maximize](https://www.autohotkey.com/docs/commands/Gui.htm#Maximize) / [Restore](https://www.autohotkey.com/docs/commands/Gui.htm#Restore): Performs the indicated operation on the window.',
-            '- [Flash](https://www.autohotkey.com/docs/commands/Gui.htm#Flash): Blinks the window and its taskbar button.',
-            '- [Default](https://www.autohotkey.com/docs/commands/Gui.htm#Default): Changes the current thread\'s default GUI window name.',
-        ].join('\n'),
+            'Gui, ${1:GuiName}:${2|New,Add,Show,Submit,Cancel,Destroy,Font,Color,Margin,Options,Menu,Minimize,Flash,Default|} [, ${3:Value1}, ${4:Value2}, ${5:Value3}]',
+        doc: 'Creates and manages windows and controls. Such windows can be used as data entry forms or custom user interfaces.\n1. `Sub-commands` -\n\n- [New](https://www.autohotkey.com/docs/commands/Gui.htm#New) [[v1.1.04+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.04.00 "Applies to AutoHotkey v1.1.04 and later"): Creates a new window.\n- [Add](https://www.autohotkey.com/docs/commands/Gui.htm#Add): Creates a control such as text, button, or checkbox.\n- [Show](https://www.autohotkey.com/docs/commands/Gui.htm#Show): Displays the window. It can also minimize, maximize, or move the window.\n- [Submit](https://www.autohotkey.com/docs/commands/Gui.htm#Submit): Saves the user\'s input and optionally hides the window.\n- [Cancel](https://www.autohotkey.com/docs/commands/Gui.htm#Cancel) / [Hide](https://www.autohotkey.com/docs/commands/Gui.htm#Hide): Hides the window.\n- [Destroy](https://www.autohotkey.com/docs/commands/Gui.htm#Destroy): Deletes the window.\n- [Font](https://www.autohotkey.com/docs/commands/Gui.htm#Font): Sets the typeface, size, style, and text color for subsequently created controls.\n- [Color](https://www.autohotkey.com/docs/commands/Gui.htm#Color): Sets the background color for the window and/or its controls.\n- [Margin](https://www.autohotkey.com/docs/commands/Gui.htm#Margin): Sets the margin/spacing used whenever no explicit position has been specified for a control.\n- [Options and styles for a window](https://www.autohotkey.com/docs/commands/Gui.htm#Options): Sets various options for the appearance and behavior of the window.\n- [Menu](https://www.autohotkey.com/docs/commands/Gui.htm#Menu): Adds or removes a menu bar.\n- [Minimize](https://www.autohotkey.com/docs/commands/Gui.htm#Minimize) / [Maximize](https://www.autohotkey.com/docs/commands/Gui.htm#Maximize) / [Restore](https://www.autohotkey.com/docs/commands/Gui.htm#Restore): Performs the indicated operation on the window.\n- [Flash](https://www.autohotkey.com/docs/commands/Gui.htm#Flash): Blinks the window and its taskbar button.\n- [Default](https://www.autohotkey.com/docs/commands/Gui.htm#Default): Changes the current thread\'s default GUI window name.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Gui.htm',
         exp: [
-            'Gui, SubCommand [, Value1, Value2, Value3]',
+            'Gui, GuiName:SubCommand [, Value1, Value2, Value3]',
+        ],
+        _DevNote: [
+            'https://www.autohotkey.com/boards/viewtopic.php?f=6&t=77668',
+            'Gui NoBuffer:Color, 0x00FF00',
+            'Gui GuiName:SubCommand, Value1',
+            '_____^GuiName',
+            '_____________^SubCommand',
+        ],
+        _paramType: [
+            'G',
+            'S',
+            'S',
+            'S',
+            'S',
         ],
     },
-    GUICONTROL: {
+    {
+        upName: 'GUICONTROL',
         keyRawName: 'GuiControl',
         body:
             'GuiControl, ${1|(Blank),Text,Move,MoveDraw,Focus,Disable,Enable,Hide,Show,Delete,Choose,ChooseString,Font,Options|}, ${2:ControlID} [, ${3:Value}]',
-        doc: [
-            'Makes a variety of changes to a control in a GUI window.',
-            '1. `SubCommand` -',
-            '',
-            '- [(Blank)](https://www.autohotkey.com/docs/commands/GuiControl.htm#Blank): Puts new contents into the control.',
-            '- [Text](https://www.autohotkey.com/docs/commands/GuiControl.htm#Text): Changes the text/caption of the control.',
-            '- [Move](https://www.autohotkey.com/docs/commands/GuiControl.htm#Move): Moves and/or resizes the control.',
-            '- [MoveDraw](https://www.autohotkey.com/docs/commands/GuiControl.htm#MoveDraw): Moves and/or resizes the control and repaints the region occupied by it.',
-            '- [Focus](https://www.autohotkey.com/docs/commands/GuiControl.htm#Focus): Sets keyboard focus to the control.',
-            '- [Disable](https://www.autohotkey.com/docs/commands/GuiControl.htm#Disable): Disables (grays out) the control.',
-            '- [Enable](https://www.autohotkey.com/docs/commands/GuiControl.htm#Enable): Enables the control.',
-            '- [Hide](https://www.autohotkey.com/docs/commands/GuiControl.htm#Hide): Hides the control.',
-            '- [Show](https://www.autohotkey.com/docs/commands/GuiControl.htm#Show): Shows the control.',
-            '- [Delete](https://www.autohotkey.com/docs/commands/GuiControl.htm#Delete): Not yet implemented.',
-            '- [Choose](https://www.autohotkey.com/docs/commands/GuiControl.htm#Choose): Selects the specified item number in a multi-item control.',
-            '- [ChooseString](https://www.autohotkey.com/docs/commands/GuiControl.htm#ChooseString): Selects a item in a multi-item control whose leading part matches a string.',
-            '- [Font](https://www.autohotkey.com/docs/commands/GuiControl.htm#Font): Changes the control\'s font typeface, size, color, and style.',
-            '- [Options](https://www.autohotkey.com/docs/commands/GuiControl.htm#options): Add or remove various control-specific or general options and styles.',
-        ].join('\n'),
+        doc: 'Makes a variety of changes to a control in a GUI window.\n1. `SubCommand` -\n\n- [(Blank)](https://www.autohotkey.com/docs/commands/GuiControl.htm#Blank): Puts new contents into the control.\n- [Text](https://www.autohotkey.com/docs/commands/GuiControl.htm#Text): Changes the text/caption of the control.\n- [Move](https://www.autohotkey.com/docs/commands/GuiControl.htm#Move): Moves and/or resizes the control.\n- [MoveDraw](https://www.autohotkey.com/docs/commands/GuiControl.htm#MoveDraw): Moves and/or resizes the control and repaints the region occupied by it.\n- [Focus](https://www.autohotkey.com/docs/commands/GuiControl.htm#Focus): Sets keyboard focus to the control.\n- [Disable](https://www.autohotkey.com/docs/commands/GuiControl.htm#Disable): Disables (grays out) the control.\n- [Enable](https://www.autohotkey.com/docs/commands/GuiControl.htm#Enable): Enables the control.\n- [Hide](https://www.autohotkey.com/docs/commands/GuiControl.htm#Hide): Hides the control.\n- [Show](https://www.autohotkey.com/docs/commands/GuiControl.htm#Show): Shows the control.\n- [Delete](https://www.autohotkey.com/docs/commands/GuiControl.htm#Delete): Not yet implemented.\n- [Choose](https://www.autohotkey.com/docs/commands/GuiControl.htm#Choose): Selects the specified item number in a multi-item control.\n- [ChooseString](https://www.autohotkey.com/docs/commands/GuiControl.htm#ChooseString): Selects a item in a multi-item control whose leading part matches a string.\n- [Font](https://www.autohotkey.com/docs/commands/GuiControl.htm#Font): Changes the control\'s font typeface, size, color, and style.\n- [Options](https://www.autohotkey.com/docs/commands/GuiControl.htm#options): Add or remove various control-specific or general options and styles.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/GuiControl.htm',
         exp: [
             'GuiControl, SubCommand, ControlID [, Value]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+        ],
     },
-    GUICONTROLGET: {
+    {
+        upName: 'GUICONTROLGET',
         keyRawName: 'GuiControlGet',
         body:
             'GuiControlGet, ${1:OutputVar} [, ${2|(Blank),Pos,Focus,FocusV,Enabled,Visible,Hwnd,Name|}, ${3:ControlID}, ${4:Value}]',
-        doc: [
-            'Retrieves various types of information about a control in a GUI window.',
-            '1. `SubCommand` -',
-            '- [(Blank)](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Blank): Retrieves the contents of the control.',
-            '- [Pos](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Pos): Retrieves the position and size of the control.',
-            '- [Focus](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Focus): Retrieves the control identifier (ClassNN) for the control that currently has keyboard focus.',
-            '- [FocusV](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#FocusV) [[v1.0.43.06+]](https://www.autohotkey.com/docs/ChangeLogHelp.htm#Older_Changes "Applies to AutoHotkey v1.0.43.06 and later"): Retrieves the name of the focused control\'s associated variable.',
-            '- [Enabled](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Enabled): Retrieves 1 if the control is enabled or 0 if it is disabled.',
-            '- [Visible](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Visible): Retrieves 1 if the control is visible or 0 if it is hidden.',
-            '- [Hwnd](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Hwnd) [[v1.0.46.16+]](https://www.autohotkey.com/docs/ChangeLogHelp.htm#v1.0.46.16 "Applies to AutoHotkey v1.0.46.16 and later"): Retrieves the window handle (HWND) of the control.',
-            '- [Name](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Name) [[v1.1.03+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.03.00 "Applies to AutoHotkey v1.1.03 and later"): Retrieves the name of the control\'s associated variable.',
-        ].join('\n'),
+        doc: 'Retrieves various types of information about a control in a GUI window.\n1. `SubCommand` -\n- [(Blank)](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Blank): Retrieves the contents of the control.\n- [Pos](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Pos): Retrieves the position and size of the control.\n- [Focus](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Focus): Retrieves the control identifier (ClassNN) for the control that currently has keyboard focus.\n- [FocusV](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#FocusV) [[v1.0.43.06+]](https://www.autohotkey.com/docs/ChangeLogHelp.htm#Older_Changes "Applies to AutoHotkey v1.0.43.06 and later"): Retrieves the name of the focused control\'s associated variable.\n- [Enabled](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Enabled): Retrieves 1 if the control is enabled or 0 if it is disabled.\n- [Visible](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Visible): Retrieves 1 if the control is visible or 0 if it is hidden.\n- [Hwnd](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Hwnd) [[v1.0.46.16+]](https://www.autohotkey.com/docs/ChangeLogHelp.htm#v1.0.46.16 "Applies to AutoHotkey v1.0.46.16 and later"): Retrieves the window handle (HWND) of the control.\n- [Name](https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Name) [[v1.1.03+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.03.00 "Applies to AutoHotkey v1.1.03 and later"): Retrieves the name of the control\'s associated variable.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/GuiControlGet.htm',
         exp: [
             'GuiControlGet, OutputVar [, SubCommand, ControlID, Value]',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    HOTKEY: {
+    {
+        upName: 'HOTKEY',
         keyRawName: 'Hotkey',
         body: 'Hotkey, ${1:KeyName} , ${2:Label_or_funcName}, ${3:Options}',
         doc: 'Creates, modifies, enables, or disables a hotkey while the script is running.',
@@ -1435,8 +1381,14 @@ export const LineCommand: TLineCommand = {
             'Hotkey, If [, Expression]',
             'Hotkey, If, % FunctionObject',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+        ],
     },
-    IMAGESEARCH: {
+    {
+        upName: 'IMAGESEARCH',
         keyRawName: 'ImageSearch',
         body: 'ImageSearch, ${1:OutputVarX}, ${2:OutputVarY}, ${3:X1}, ${4:Y1}, ${5:X2}, ${6:Y2}, ${7:ImageFile}',
         doc: 'Searches a region of the screen for an image.',
@@ -1448,36 +1400,38 @@ export const LineCommand: TLineCommand = {
             'ImageSearch, FoundX, FoundY, 40, 40, 300, 300, % "C:\\My Images\\test.bmp"',
             'MsgBox % "FoundX : " FoundX " ,FoundY : " FoundY',
         ],
+        _paramType: [
+            'O',
+            'O',
+            'E',
+            'E',
+            'E',
+            'E',
+            'S',
+        ],
     },
-    INIDELETE: {
+    {
+        upName: 'INIDELETE',
         keyRawName: 'IniDelete',
         body: 'IniDelete, % "${1:Filename}", % "${2:Section}" [, % "${3:Key}"]',
-        doc: [
-            'Deletes a value from a standard format .ini file.',
-            '- A standard *ini* file looks like:',
-            '```ini',
-            '[Section]',
-            'Key=Value',
-            '```',
-        ].join('\n'),
+        doc: 'Deletes a value from a standard format .ini file.\n- A standard *ini* file looks like:\n```ini\n[Section]\nKey=Value\n```',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/IniDelete.htm',
         exp: [
             'IniDelete, Filename, Section [, Key]',
             '',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+        ],
     },
-    INIREAD: {
+    {
+        upName: 'INIREAD',
         keyRawName: 'IniRead',
         body: 'IniRead, ${1:OutputVar}, % "${2:Filename}", % "${3:Section}", % "${4:Key}" [,% "${5:Default}"]',
-        doc: [
-            'Reads a value, section or list of section names from a standard format .ini file.',
-            '- A standard *ini* file looks like:',
-            '```ini',
-            '[Section]',
-            'Key=Value',
-            '```',
-        ].join('\n'),
+        doc: 'Reads a value, section or list of section names from a standard format .ini file.\n- A standard *ini* file looks like:\n```ini\n[Section]\nKey=Value\n```',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/IniRead.htm',
         exp: [
@@ -1487,18 +1441,19 @@ export const LineCommand: TLineCommand = {
             '',
             'IniRead, OutputVar, % "Filename", % "Section", % "Key"',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    INIWRITE: {
+    {
+        upName: 'INIWRITE',
         keyRawName: 'IniWrite',
         body: 'IniWrite, % "${1:Value}", % "${2:Filename}", % "${3:Section}", % "${4:Key}"',
-        doc: [
-            'Writes a value or section to a standard format .ini file.',
-            '- A standard *ini* file looks like:',
-            '```ini',
-            '[Section]',
-            'Key=Value',
-            '```',
-        ].join('\n'),
+        doc: 'Writes a value or section to a standard format .ini file.\n- A standard *ini* file looks like:\n```ini\n[Section]\nKey=Value\n```',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/IniWrite.htm',
         exp: [
@@ -1508,16 +1463,32 @@ export const LineCommand: TLineCommand = {
             'IniRead, OutputVar, % "Filename", % "Section", % "Key"',
             'IniWrite, % "Value", % "Filename", % "Section", % "Key"',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    INPUT: {
+    {
+        upName: 'INPUT',
         keyRawName: 'Input',
         body: 'Input [, ${1:OutputVar}, ${2:Options}, ${3:EndKeys}, ${4:MatchList}]',
         doc: 'Waits for the user to type a string.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Input.htm',
-        exp: ['Input [, OutputVar, Options, EndKeys, MatchList]'],
+        exp: [
+            'Input [, OutputVar, Options, EndKeys, MatchList]',
+        ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    INPUTBOX: {
+    {
+        upName: 'INPUTBOX',
         keyRawName: 'InputBox',
         body:
             'InputBox, ${1:OutputVar} [,% "${2:Title}", % "${3:Prompt}", ${4:HIDE}, ${5:Width}, ${6:Height}, ${7:X}, ${8:Y}, ${9:Locale}, ${10:Timeout}, % "${11:Default_Str}"]',
@@ -1537,8 +1508,22 @@ export const LineCommand: TLineCommand = {
             'else',
             '    MsgBox, % "You entered" UserInput',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+            'E',
+            'E',
+            'E',
+            'E',
+            'S',
+            'E',
+            'S',
+        ],
     },
-    KEYHISTORY: {
+    {
+        upName: 'KEYHISTORY',
         keyRawName: 'KeyHistory',
         body: 'KeyHistory',
         doc: 'Displays script info and a history of the most recent keystrokes and mouse clicks.',
@@ -1550,111 +1535,129 @@ export const LineCommand: TLineCommand = {
             ';exp1',
             '~F10:: KeyHistory',
         ],
+        _paramType: [],
     },
-    KEYWAIT: {
+    {
+        upName: 'KEYWAIT',
         keyRawName: 'KeyWait',
         body: 'KeyWait, ${1:KeyName} [, ${2:Options}]',
         doc: 'Waits for a key or mouse/joystick button to be released or pressed down.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/KeyWait.htm',
-        exp: ['KeyWait, KeyName [, Options]'],
+        exp: [
+            'KeyWait, KeyName [, Options]',
+        ],
+        _paramType: [
+            'S',
+            'S',
+        ],
     },
-    LISTHOTKEYS: {
+    {
+        upName: 'LISTHOTKEYS',
         keyRawName: 'ListHotkeys',
         body: 'ListHotkeys',
         doc: 'Displays the hotkeys in use by the current script, whether their subroutines are currently running, and whether or not they use the [keyboard](https://www.autohotkey.com/docs/commands/_InstallKeybdHook.htm) or [mouse](https://www.autohotkey.com/docs/commands/_InstallMouseHook.htm) hook.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ListHotkeys.htm',
-        exp: ['ListHotkeys'],
+        exp: [
+            'ListHotkeys',
+        ],
+        _paramType: [],
     },
-    LISTLINES: {
+    {
+        upName: 'LISTLINES',
         keyRawName: 'ListLines',
         body: 'ListLines [, ${1|On,Off|}]',
         doc: 'Displays the script lines most recently executed.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ListLines.htm',
-        exp: ['ListLines'],
+        exp: [
+            'ListLines',
+        ],
+        _paramType: [
+            'S',
+        ],
     },
-    LISTVARS: {
+    {
+        upName: 'LISTVARS',
         keyRawName: 'ListVars',
         body: 'ListVars',
         doc: 'Displays the script\'s [variables](https://www.autohotkey.com/docs/Variables.htm): their names and current contents.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/ListVars.htm',
-        exp: ['ListVars'],
+        exp: [
+            'ListVars',
+        ],
+        _paramType: [],
     },
-    MENU: {
+    {
+        upName: 'MENU',
         keyRawName: 'Menu',
         body:
             'Menu, ${1:MenuName}, ${2|Add,Insert,Delete,DeleteAll,Rename,Check,Uncheck,ToggleCheck,Enable,Disable,ToggleEnable,Default,NoDefault,Standard,NoStandard,Icon,NoIcon,Tip,Show,Color,Click,MainWindow,NoMainWindow,UseErrorLevel|} [, ${3:Value1}, ${4:Value2}, ${5:Value3}, ${6:Value4}]',
-        doc: [
-            'Creates, deletes, modifies and displays menus and menu items. Changes the tray icon and its tooltip. Controls whether the main window of a [compiled script](https://www.autohotkey.com/docs/Scripts.htm#ahk2exe) can be opened.',
-            '1. `SubCommand` -',
-            '- [Add](https://www.autohotkey.com/docs/commands/Menu.htm#Add): Adds a menu item, updates one with a new submenu or label, or converts one from a normal item into a submenu (or vice versa).',
-            '- [Insert](https://www.autohotkey.com/docs/commands/Menu.htm#Insert) [[v1.1.23+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.23.00 "Applies to AutoHotkey v1.1.23 and later"): Inserts a new item before the specified menu item.',
-            '- [Delete](https://www.autohotkey.com/docs/commands/Menu.htm#Delete): Deletes the specified menu item from the menu.',
-            '- [DeleteAll](https://www.autohotkey.com/docs/commands/Menu.htm#DeleteAll): Deletes all custom menu items from the menu.',
-            '- [Rename](https://www.autohotkey.com/docs/commands/Menu.htm#Rename): Renames the specified menu item.',
-            '- [Check](https://www.autohotkey.com/docs/commands/Menu.htm#Check): Adds a visible checkmark in the menu next to the specified menu item.',
-            '- [Uncheck](https://www.autohotkey.com/docs/commands/Menu.htm#Uncheck): Removes the checkmark from the specified menu item.',
-            '- [ToggleCheck](https://www.autohotkey.com/docs/commands/Menu.htm#ToggleCheck): Adds a checkmark to the specified menu item; otherwise, removes it.',
-            '- [Enable](https://www.autohotkey.com/docs/commands/Menu.htm#Enable): Enables the specified menu item if was previously disabled.',
-            '- [Disable](https://www.autohotkey.com/docs/commands/Menu.htm#Disable): Disables the specified menu item.',
-            '- [ToggleEnable](https://www.autohotkey.com/docs/commands/Menu.htm#ToggleEnable): Disables the specified menu item; otherwise, enables it.',
-            '- [Default](https://www.autohotkey.com/docs/commands/Menu.htm#Default): Changes the menu\'s default item to be the specified menu item and makes its font bold.',
-            '- [NoDefault](https://www.autohotkey.com/docs/commands/Menu.htm#NoDefault): Reverses setting a user-defined default menu item.',
-            '- [Standard](https://www.autohotkey.com/docs/commands/Menu.htm#Standard): Inserts the standard menu items at the bottom of the menu.',
-            '- [NoStandard](https://www.autohotkey.com/docs/commands/Menu.htm#NoStandard): Removes all standard menu items from the menu.',
-            '- [Icon](https://www.autohotkey.com/docs/commands/Menu.htm#Icon): Changes the script\'s tray icon or [[in v1.0.90+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#L17 "Applies to:AutoHotkey_L Revision 17 and later AutoHotkey v1.0.90.00 and later") sets a icon for the specified menu item.',
-            '- [NoIcon](https://www.autohotkey.com/docs/commands/Menu.htm#NoIcon): Removes the tray icon or [[in v1.0.90+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#L17 "Applies to:AutoHotkey_L Revision 17 and later AutoHotkey v1.0.90.00 and later") removes the icon from the specified menu item.',
-            '- [Tip](https://www.autohotkey.com/docs/commands/Menu.htm#Tip): Changes the tray icon\'s tooltip.',
-            '- [Show](https://www.autohotkey.com/docs/commands/Menu.htm#Show): Displays the specified menu.',
-            '- [Color](https://www.autohotkey.com/docs/commands/Menu.htm#Color): Changes the background color of the menu.',
-            '- [Click](https://www.autohotkey.com/docs/commands/Menu.htm#Click): Sets the number of clicks to activate the tray menu\'s default menu item.',
-            '- [MainWindow](https://www.autohotkey.com/docs/commands/Menu.htm#MainWindow): Allows the main window of a script to be opened via the tray icon.',
-            '- [NoMainWindow](https://www.autohotkey.com/docs/commands/Menu.htm#NoMainWindow): Prevents the main window from being opened via the tray icon.',
-            '- [UseErrorLevel](https://www.autohotkey.com/docs/commands/Menu.htm#UseErrorLevel): Skips any warning dialogs and thread terminations whenever the Menu command generates an error.',
-        ].join('\n'),
+        doc: 'Creates, deletes, modifies and displays menus and menu items. Changes the tray icon and its tooltip. Controls whether the main window of a [compiled script](https://www.autohotkey.com/docs/Scripts.htm#ahk2exe) can be opened.\n1. `SubCommand` -\n- [Add](https://www.autohotkey.com/docs/commands/Menu.htm#Add): Adds a menu item, updates one with a new submenu or label, or converts one from a normal item into a submenu (or vice versa).\n- [Insert](https://www.autohotkey.com/docs/commands/Menu.htm#Insert) [[v1.1.23+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.23.00 "Applies to AutoHotkey v1.1.23 and later"): Inserts a new item before the specified menu item.\n- [Delete](https://www.autohotkey.com/docs/commands/Menu.htm#Delete): Deletes the specified menu item from the menu.\n- [DeleteAll](https://www.autohotkey.com/docs/commands/Menu.htm#DeleteAll): Deletes all custom menu items from the menu.\n- [Rename](https://www.autohotkey.com/docs/commands/Menu.htm#Rename): Renames the specified menu item.\n- [Check](https://www.autohotkey.com/docs/commands/Menu.htm#Check): Adds a visible checkmark in the menu next to the specified menu item.\n- [Uncheck](https://www.autohotkey.com/docs/commands/Menu.htm#Uncheck): Removes the checkmark from the specified menu item.\n- [ToggleCheck](https://www.autohotkey.com/docs/commands/Menu.htm#ToggleCheck): Adds a checkmark to the specified menu item; otherwise, removes it.\n- [Enable](https://www.autohotkey.com/docs/commands/Menu.htm#Enable): Enables the specified menu item if was previously disabled.\n- [Disable](https://www.autohotkey.com/docs/commands/Menu.htm#Disable): Disables the specified menu item.\n- [ToggleEnable](https://www.autohotkey.com/docs/commands/Menu.htm#ToggleEnable): Disables the specified menu item; otherwise, enables it.\n- [Default](https://www.autohotkey.com/docs/commands/Menu.htm#Default): Changes the menu\'s default item to be the specified menu item and makes its font bold.\n- [NoDefault](https://www.autohotkey.com/docs/commands/Menu.htm#NoDefault): Reverses setting a user-defined default menu item.\n- [Standard](https://www.autohotkey.com/docs/commands/Menu.htm#Standard): Inserts the standard menu items at the bottom of the menu.\n- [NoStandard](https://www.autohotkey.com/docs/commands/Menu.htm#NoStandard): Removes all standard menu items from the menu.\n- [Icon](https://www.autohotkey.com/docs/commands/Menu.htm#Icon): Changes the script\'s tray icon or [[in v1.0.90+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#L17 "Applies to:AutoHotkey_L Revision 17 and later AutoHotkey v1.0.90.00 and later") sets a icon for the specified menu item.\n- [NoIcon](https://www.autohotkey.com/docs/commands/Menu.htm#NoIcon): Removes the tray icon or [[in v1.0.90+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#L17 "Applies to:AutoHotkey_L Revision 17 and later AutoHotkey v1.0.90.00 and later") removes the icon from the specified menu item.\n- [Tip](https://www.autohotkey.com/docs/commands/Menu.htm#Tip): Changes the tray icon\'s tooltip.\n- [Show](https://www.autohotkey.com/docs/commands/Menu.htm#Show): Displays the specified menu.\n- [Color](https://www.autohotkey.com/docs/commands/Menu.htm#Color): Changes the background color of the menu.\n- [Click](https://www.autohotkey.com/docs/commands/Menu.htm#Click): Sets the number of clicks to activate the tray menu\'s default menu item.\n- [MainWindow](https://www.autohotkey.com/docs/commands/Menu.htm#MainWindow): Allows the main window of a script to be opened via the tray icon.\n- [NoMainWindow](https://www.autohotkey.com/docs/commands/Menu.htm#NoMainWindow): Prevents the main window from being opened via the tray icon.\n- [UseErrorLevel](https://www.autohotkey.com/docs/commands/Menu.htm#UseErrorLevel): Skips any warning dialogs and thread terminations whenever the Menu command generates an error.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Menu.htm',
-        exp: ['Menu, MenuName, SubCommand [, Value1, Value2, Value3, Value4]'],
+        exp: [
+            'Menu, MenuName, SubCommand [, Value1, Value2, Value3, Value4]',
+        ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    MOUSECLICK: {
+    {
+        upName: 'MOUSECLICK',
         keyRawName: 'MouseClick',
         body:
             'MouseClick [, ${1|Left,Right,Middle,WheelUp,WheelDown,WheelLeft,WheelRight|} , ${2:X}, ${3:Y}, ${4:ClickCount}, ${5:0-100}, ${6|D,U|}, ${7:R}]',
         doc: 'Clicks or holds down a mouse button, or turns the mouse wheel. NOTE: The [Click command](https://www.autohotkey.com/docs/commands/Click.htm) is generally more flexible and easier to use.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/MouseClick.htm',
-        exp: ['MouseClick [, WhichButton , X, Y, ClickCount, Speed, DownOrUp, Relative]'],
+        exp: [
+            'MouseClick [, WhichButton , X, Y, ClickCount, Speed, DownOrUp, Relative]',
+        ],
+        _paramType: [
+            'S',
+            'E',
+            'E',
+            'E',
+            'E',
+            'S',
+            'S',
+        ],
     },
-    MOUSECLICKDRAG: {
+    {
+        upName: 'MOUSECLICKDRAG',
         keyRawName: 'MouseClickDrag',
         body:
             'MouseClickDrag, ${1|Left,Right,Middle,WheelUp,WheelDown|}, ${2:X1}, ${3:Y1}, ${4:X2}, ${5:Y2} [, ${6:0-100}, ${7:R}]',
         doc: 'Clicks and holds the specified mouse button, moves the mouse to the destination coordinates, then releases the button.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/MouseClickDrag.htm',
-        exp: ['MouseClickDrag, WhichButton, X1, Y1, X2, Y2 [, Speed, Relative]'],
+        exp: [
+            'MouseClickDrag, WhichButton, X1, Y1, X2, Y2 [, Speed, Relative]',
+        ],
+        _paramType: [
+            'S',
+            'E',
+            'E',
+            'E',
+            'E',
+            'E',
+            'S',
+        ],
     },
-    MOUSEGETPOS: {
+    {
+        upName: 'MOUSEGETPOS',
         keyRawName: 'MouseGetPos',
         body:
             'MouseGetPos [, ${1:OutputVarX}, ${2:OutputVarY}, ${3:OutputVarWin}, ${4:OutputVarControl}, ${5|0,1,2,3|}]',
-        doc: [
-            'Retrieves the current position of the mouse cursor, and optionally which window and control it is hovering over.',
-            '1. `OutputVarX`, `OutputVarY` - The names of the variables in which to store the X and Y coordinates. The retrieved coordinates are relative to the active window unless [CoordMode](https://www.autohotkey.com/docs/commands/CoordMode.htm) was used to change to screen coordinates.',
-            '2. `OutputVarWin` -',
-            '> - This optional parameter is the name of the variable in which to store the [unique ID number](https://www.autohotkey.com/docs/commands/WinGet.htm) of the window under the mouse cursor. If the window cannot be determined, this variable will be made blank.',
-            '> - The window does not have to be active to be detected. Hidden windows cannot be detected.',
-            '3. `OutputVarControl` -',
-            '> - This optional parameter is the name of the variable in which to store the name (ClassNN) of the control under the mouse cursor. If the control cannot be determined, this variable will be made blank.',
-            '> - The names of controls should always match those shown by the version of Window Spy distributed with [[v1.0.14+]](https://www.autohotkey.com/docs/ChangeLogHelp.htm#Older_Changes "Applies to AutoHotkey v1.0.14 and later") (but not necessarily older versions of Window Spy). The window under the mouse cursor does not have to be active for a control to be detected.',
-            '4. `Flag` - If omitted or 0, the command uses the default method to determine _OutputVarControl_ and stores the control\'s ClassNN. To change this behavior, add up one or both of the following digits:',
-            '> - **1**: Uses a simpler method to determine _OutputVarControl_. This method correctly retrieves the active/topmost child window of an Multiple Document Interface (MDI) application such as SysEdit or TextPad. However, it is less accurate for other purposes such as detecting controls inside a GroupBox control.',
-            '> - **2** [[v1.0.43.06+]:](https://www.autohotkey.com/docs/ChangeLogHelp.htm#Older_Changes "Applies to AutoHotkey v1.0.43.06 and later") Stores the [control\'s HWND](https://www.autohotkey.com/docs/commands/ControlGet.htm#Hwnd) in _OutputVarControl_ rather than the control\'s ClassNN.',
-            '> - For example, to put both options into effect, the _Flag_ parameter must be set to 3.',
-        ].join('\n'),
+        doc: 'Retrieves the current position of the mouse cursor, and optionally which window and control it is hovering over.\n1. `OutputVarX`, `OutputVarY` - The names of the variables in which to store the X and Y coordinates. The retrieved coordinates are relative to the active window unless [CoordMode](https://www.autohotkey.com/docs/commands/CoordMode.htm) was used to change to screen coordinates.\n2. `OutputVarWin` -\n> - This optional parameter is the name of the variable in which to store the [unique ID number](https://www.autohotkey.com/docs/commands/WinGet.htm) of the window under the mouse cursor. If the window cannot be determined, this variable will be made blank.\n> - The window does not have to be active to be detected. Hidden windows cannot be detected.\n3. `OutputVarControl` -\n> - This optional parameter is the name of the variable in which to store the name (ClassNN) of the control under the mouse cursor. If the control cannot be determined, this variable will be made blank.\n> - The names of controls should always match those shown by the version of Window Spy distributed with [[v1.0.14+]](https://www.autohotkey.com/docs/ChangeLogHelp.htm#Older_Changes "Applies to AutoHotkey v1.0.14 and later") (but not necessarily older versions of Window Spy). The window under the mouse cursor does not have to be active for a control to be detected.\n4. `Flag` - If omitted or 0, the command uses the default method to determine _OutputVarControl_ and stores the control\'s ClassNN. To change this behavior, add up one or both of the following digits:\n> - **1**: Uses a simpler method to determine _OutputVarControl_. This method correctly retrieves the active/topmost child window of an Multiple Document Interface (MDI) application such as SysEdit or TextPad. However, it is less accurate for other purposes such as detecting controls inside a GroupBox control.\n> - **2** [[v1.0.43.06+]:](https://www.autohotkey.com/docs/ChangeLogHelp.htm#Older_Changes "Applies to AutoHotkey v1.0.43.06 and later") Stores the [control\'s HWND](https://www.autohotkey.com/docs/commands/ControlGet.htm#Hwnd) in _OutputVarControl_ rather than the control\'s ClassNN.\n> - For example, to put both options into effect, the _Flag_ parameter must be set to 3.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/MouseGetPos.htm',
         exp: [
@@ -1673,8 +1676,16 @@ export const LineCommand: TLineCommand = {
             '    ToolTip, % "ahk_id " id "`nahk_class " class "`n" title "`nControl: " control',
             '}',
         ],
+        _paramType: [
+            'O',
+            'O',
+            'O',
+            'O',
+            'E',
+        ],
     },
-    MOUSEMOVE: {
+    {
+        upName: 'MOUSEMOVE',
         keyRawName: 'MouseMove',
         body: 'MouseMove, ${1:X}, ${2:Y} [, ${3:0-100}, ${4:R}]',
         doc: 'Moves the mouse cursor.',
@@ -1685,18 +1696,18 @@ export const LineCommand: TLineCommand = {
             '',
             'MouseMove, 20 , 30, 50 , R',
         ],
+        _paramType: [
+            'E',
+            'E',
+            'E',
+            'S',
+        ],
     },
-    MSGBOX: {
+    {
+        upName: 'MSGBOX',
         keyRawName: 'MsgBox',
         body: 'MsgBox, % "${1:text}"',
-        doc: [
-            'Displays the specified text in a small window containing one or more buttons (such as Yes and No).',
-            '',
-            '- **Text** : type is string',
-            '- **Options** : type is number, Indicates the type of message box and the possible button combinations. ',
-            '- **Title** : type is string',
-            '- **Timeout** : type is number of second, exp: `10` or `% mins*60`',
-        ].join('\n'),
+        doc: 'Displays the specified text in a small window containing one or more buttons (such as Yes and No).\n\n- **Text** : type is string\n- **Options** : type is number, Indicates the type of message box and the possible button combinations. \n- **Title** : type is string\n- **Timeout** : type is number of second, exp: `10` or `% mins*60`',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/MsgBox.htm',
         exp: [
@@ -1711,8 +1722,12 @@ export const LineCommand: TLineCommand = {
             ';      and `Icon` -> `Icon Question` of 0x20',
             'MsgBox, % 0x1 + 0x20 ,% "exp2" ,% "Do you need help?"',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    ONEXIT: {
+    {
+        upName: 'ONEXIT',
         keyRawName: 'OnExit',
         body: 'OnExit [, ${1:Label}]',
         doc: 'Specifies a [callback function](https://www.autohotkey.com/docs/Functions.htm) or [subroutine](https://www.autohotkey.com/docs/commands/Gosub.htm) to run automatically when the script exits.',
@@ -1725,8 +1740,12 @@ export const LineCommand: TLineCommand = {
             'OnExit(Func , AddRemove)',
         ],
         diag: EDiagCode.code812,
+        _paramType: [
+            'S',
+        ],
     },
-    OUTPUTDEBUG: {
+    {
+        upName: 'OUTPUTDEBUG',
         keyRawName: 'OutputDebug',
         body: 'OutputDebug, % "${1:Text}',
         doc: 'Sends a string to the debugger (if any) for display.',
@@ -1737,8 +1756,12 @@ export const LineCommand: TLineCommand = {
             '',
             'OutputDebug, % "[" A_Now "] Because the window [" TargetWindowTitle "] did not exist, the process was aborted."',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    PAUSE: {
+    {
+        upName: 'PAUSE',
         keyRawName: 'Pause',
         body: 'Pause, [ ${1|On,Off,Toggle|}, ${2|0,1|} ]',
         doc: 'Pauses the script\'s [current thread](https://www.autohotkey.com/docs/misc/Threads.htm).',
@@ -1750,8 +1773,13 @@ export const LineCommand: TLineCommand = {
             'Pause::Pause  ; The Pause/Break key.',
             '#p::Pause  ; Win+P',
         ],
+        _paramType: [
+            'S',
+            'S',
+        ],
     },
-    PIXELGETCOLOR: {
+    {
+        upName: 'PIXELGETCOLOR',
         keyRawName: 'PixelGetColor',
         body: 'PixelGetColor, ${1:OutputVar}, ${2:X}, ${3:Y} [, ${4|Alt,Slow,RGB|}]',
         doc: 'Retrieves the color of the pixel at the specified x,y coordinates.',
@@ -1766,17 +1794,38 @@ export const LineCommand: TLineCommand = {
             'MsgBox % "The color at the current cursor position is " color',
             'return',
         ],
+        _paramType: [
+            'O',
+            'E',
+            'E',
+            'S',
+        ],
     },
-    PIXELSEARCH: {
+    {
+        upName: 'PIXELSEARCH',
         keyRawName: 'PixelSearch',
         body:
             'PixelSearch, ${1:OutputVarX}, ${2:OutputVarY}, ${3:X1}, ${4:Y1}, ${5:X2}, ${6:Y2}, ${7:0x16_BGR_ColorID} [, ${8:0-255}, ${9:Fast RGB}]',
         doc: 'Searches a region of the screen for a pixel of the specified color.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/PixelSearch.htm',
-        exp: ['PixelSearch, OutputVarX, OutputVarY, X1, Y1, X2, Y2, ColorID [, Variation, Mode]'],
+        exp: [
+            'PixelSearch, OutputVarX, OutputVarY, X1, Y1, X2, Y2, ColorID [, Variation, Mode]',
+        ],
+        _paramType: [
+            'O',
+            'O',
+            'E',
+            'E',
+            'E',
+            'E',
+            'E',
+            'E',
+            'S',
+        ],
     },
-    POSTMESSAGE: {
+    {
+        upName: 'POSTMESSAGE',
         keyRawName: 'PostMessage',
         body:
             'PostMessage, ${1:Msg} [, ${2:wParam}, ${3:lParam}, ${4:Control}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText}]',
@@ -1789,20 +1838,22 @@ export const LineCommand: TLineCommand = {
             ';Switches the active window\'s keyboard layout/language to English',
             'PostMessage, 0x0050, 0, 0x4090409,, A  ; 0x0050 is WM_INPUTLANGCHANGEREQUEST.',
         ],
+        _paramType: [
+            'E',
+            'E',
+            'E',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    PROCESS: {
+    {
+        upName: 'PROCESS',
         keyRawName: 'Process',
         body: 'Process, ${1|Exist,Close,List,Priority,Wait,WaitClose|} [, % ${2:PID_Or_Name} , % "${3:Value}" ]',
-        doc: [
-            'Performs one of the following operations on a process: checks if it exists; changes its priority; closes it; waits for it to close.',
-            '1. SubCommand',
-            '- [Exist](https://www.autohotkey.com/docs/commands/Process.htm#Exist): Checks whether the specified process is present.',
-            '- [Close](https://www.autohotkey.com/docs/commands/Process.htm#Close): Forces the first matching process to close.',
-            '- [List](https://www.autohotkey.com/docs/commands/Process.htm#List): Not yet implemented.',
-            '- [Priority](https://www.autohotkey.com/docs/commands/Process.htm#Priority): Changes the priority level of the first matching process.',
-            '- [Wait](https://www.autohotkey.com/docs/commands/Process.htm#Wait): Waits for the specified process to exist.',
-            '- [WaitClose](https://www.autohotkey.com/docs/commands/Process.htm#WaitClose): Waits for all matching processes to close.',
-        ].join('\n'),
+        doc: 'Performs one of the following operations on a process: checks if it exists; changes its priority; closes it; waits for it to close.\n1. SubCommand\n- [Exist](https://www.autohotkey.com/docs/commands/Process.htm#Exist): Checks whether the specified process is present.\n- [Close](https://www.autohotkey.com/docs/commands/Process.htm#Close): Forces the first matching process to close.\n- [List](https://www.autohotkey.com/docs/commands/Process.htm#List): Not yet implemented.\n- [Priority](https://www.autohotkey.com/docs/commands/Process.htm#Priority): Changes the priority level of the first matching process.\n- [Wait](https://www.autohotkey.com/docs/commands/Process.htm#Wait): Waits for the specified process to exist.\n- [WaitClose](https://www.autohotkey.com/docs/commands/Process.htm#WaitClose): Waits for all matching processes to close.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Process.htm',
         exp: [
@@ -1813,8 +1864,14 @@ export const LineCommand: TLineCommand = {
             'Process, Priority, % NewPID, % "High"',
             'MsgBox % "The newly launched Notepad\'s PID is" NewPID',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+        ],
     },
-    PROGRESS: {
+    {
+        upName: 'PROGRESS',
         keyRawName: 'Progress',
         body: 'Progress, ${1:ProgressParam1} [, ${2:SubText}, ${3:MainText}, ${4:WinTitle}, ${5:FontName}]',
         doc: 'Creates or updates a window containing a progress bar or an image.',
@@ -1825,8 +1882,16 @@ export const LineCommand: TLineCommand = {
             'Progress, Off',
             'Progress, ProgressParam1 [, SubText, MainText, WinTitle, FontName]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    RANDOM: {
+    {
+        upName: 'RANDOM',
         keyRawName: 'Random',
         body: 'Random, ${1:OutputVar}, ${2:Min}, ${3:Max}',
         doc: 'Generates a pseudo-random number.',
@@ -1839,41 +1904,75 @@ export const LineCommand: TLineCommand = {
             'Random, rand, 1, 10',
             'MsgBox % rand',
         ],
+        _paramType: [
+            'O',
+            'E',
+            'E',
+        ],
     },
-    REGDELETE: {
+    {
+        upName: 'REGDELETE',
         keyRawName: 'RegDelete',
         body: 'RegDelete, % "${1|HKLM,HKU,HKCU,HKCR,HKCC|}\\" [, % "${2:ValueName}]"',
         doc: 'Deletes a subkey or value from the registry.\n - **Warning**: Deleting from the registry is potentially dangerous - please exercise caution!',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/RegDelete.htm',
-        exp: ['RegDelete, KeyName [, ValueName]'],
+        exp: [
+            'RegDelete, KeyName [, ValueName]',
+        ],
+        _paramType: [
+            'S',
+            'S',
+        ],
     },
-    REGREAD: {
+    {
+        upName: 'REGREAD',
         keyRawName: 'RegRead',
         body: 'RegRead, ${1:OutputVar}, % "${2|HKLM,HKU,HKCU,HKCR,HKCC|}\\" [, % "${3:ValueName}" ]',
         doc: 'Reads a value from the registry.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/RegRead.htm',
-        exp: ['RegRead, OutputVar, KeyName [, ValueName]'],
+        exp: [
+            'RegRead, OutputVar, KeyName [, ValueName]',
+        ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+        ],
     },
-    REGWRITE: {
+    {
+        upName: 'REGWRITE',
         keyRawName: 'RegWrite',
         body:
             'RegWrite, ${1|REG_SZ,REG_EXPAND_SZ,REG_MULTI_SZ,REG_DWORD,REG_BINARY|}, % "${2|HKLM,HKU,HKCU,HKCR,HKCC|}\\" [, ${3:ValueName}, ${4:Value}]',
         doc: 'Writes a value to the registry.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/RegWrite.htm',
-        exp: ['RegWrite, ValueType, KeyName [, ValueName, Value]'],
+        exp: [
+            'RegWrite, ValueType, KeyName [, ValueName, Value]',
+        ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    RELOAD: {
+    {
+        upName: 'RELOAD',
         keyRawName: 'Reload',
         body: 'Reload',
         doc: 'Replaces the currently running instance of the script with a new one.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Reload.htm',
-        exp: ['^!r::Reload  ; Ctrl+Alt+R'],
+        exp: [
+            '^!r::Reload  ; Ctrl+Alt+R',
+        ],
+        _paramType: [],
     },
-    RUN: {
+    {
+        upName: 'RUN',
         keyRawName: 'Run',
         body:
             'Run, % "${1:ReadMe.docx}" [, % "${2:D:\\document}", % "${3:Max Min Hide UseErrorLevel}", ${4:OutputVarPID}]',
@@ -1890,8 +1989,15 @@ export const LineCommand: TLineCommand = {
             '    MsgBox, % "PID is " PID',
             '}',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'O',
+        ],
     },
-    RUNAS: {
+    {
+        upName: 'RUNAS',
         keyRawName: 'RunAs',
         body: 'RunAs, [${1:User}, ${2:Password}, ${3:Domain}]',
         doc: 'Specifies a set of user credentials to use for all subsequent uses of Run and RunWait.',
@@ -1907,8 +2013,14 @@ export const LineCommand: TLineCommand = {
             'Run, RegEdit.exe',
             'RunAs ; Reset to normal behavior.',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+        ],
     },
-    RUNWAIT: {
+    {
+        upName: 'RUNWAIT',
         keyRawName: 'RunWait',
         body:
             'RunWait, % "${1:ReadMe.docx}" [, % "${2:D:\\document}", % "${3:Max Min Hide UseErrorLevel}", ${4:OutputVarPID}]',
@@ -1925,8 +2037,15 @@ export const LineCommand: TLineCommand = {
             '    MsgBox, % "PID is " PID',
             '}',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'O',
+        ],
     },
-    SEND: {
+    {
+        upName: 'SEND',
         keyRawName: 'Send',
         body: 'Send, ${1:Keys}',
         doc: 'Sends simulated keystrokes and mouse clicks to the active window.',
@@ -1939,8 +2058,12 @@ export const LineCommand: TLineCommand = {
             'SendPlay Keys',
             'SendEvent Keys',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SENDEVENT: {
+    {
+        upName: 'SENDEVENT',
         keyRawName: 'SendEvent',
         body: 'SendEvent, ${1:Keys}',
         doc: 'SendEvent sends keystrokes using the same method as the pre-1.0.43 Send command. The rate at which keystrokes are sent is determined by SetKeyDelay.',
@@ -1953,8 +2076,12 @@ export const LineCommand: TLineCommand = {
             'SendPlay Keys',
             'SendEvent Keys',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SENDINPUT: {
+    {
+        upName: 'SENDINPUT',
         keyRawName: 'SendInput',
         body: 'SendInput, ${1:Keys}',
         doc: 'SendInput and SendPlay use the same syntax as Send but are generally faster and more reliable. In addition, they buffer any physical keyboard or mouse activity during the send, which prevents the user\'s keystrokes from being interspersed with those being sent.',
@@ -1967,8 +2094,12 @@ export const LineCommand: TLineCommand = {
             'SendPlay Keys',
             'SendEvent Keys',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SENDLEVEL: {
+    {
+        upName: 'SENDLEVEL',
         keyRawName: 'SendLevel',
         body: 'SendLevel, ${1:0-100}',
         doc: 'Controls which artificial keyboard and mouse events are ignored by hotkeys and hotstrings.',
@@ -1977,8 +2108,12 @@ export const LineCommand: TLineCommand = {
         exp: [
             'SendLevel, Level',
         ],
+        _paramType: [
+            'E',
+        ],
     },
-    SENDMESSAGE: {
+    {
+        upName: 'SENDMESSAGE',
         keyRawName: 'SendMessage',
         body:
             'SendMessage, ${1:Msg}, [ ${2:wParam}, ${3:lParam}, ${4:Control}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText}, ${9:Timeout}]',
@@ -1988,16 +2123,34 @@ export const LineCommand: TLineCommand = {
         exp: [
             'SendMessage, Msg [, wParam, lParam, Control, WinTitle, WinText, ExcludeTitle, ExcludeText, Timeout]',
         ],
+        _paramType: [
+            'E',
+            'E',
+            'E',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'E',
+        ],
     },
-    SENDMODE: {
+    {
+        upName: 'SENDMODE',
         keyRawName: 'SendMode',
         body: 'SendMode, ${1|Event,Play,Input,InputThenPlay|}',
         doc: 'Makes Send synonymous with SendInput or SendPlay rather than the default (SendEvent). Also makes Click and MouseMove/Click/Drag use the specified method.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/SendMode.htm',
-        exp: ['SendMode Mode'],
+        exp: [
+            'SendMode Mode',
+        ],
+        _paramType: [
+            'S',
+        ],
     },
-    SENDPLAY: {
+    {
+        upName: 'SENDPLAY',
         keyRawName: 'SendPlay',
         body: 'SendPlay, ${1:Keys}',
         doc: 'SendInput and SendPlay use the same syntax as Send but are generally faster and more reliable. In addition, they buffer any physical keyboard or mouse activity during the send, which prevents the user\'s keystrokes from being interspersed with those being sent.',
@@ -2010,8 +2163,12 @@ export const LineCommand: TLineCommand = {
             'SendPlay Keys',
             'SendEvent Keys',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SENDRAW: {
+    {
+        upName: 'SENDRAW',
         keyRawName: 'SendRaw',
         body: 'SendRaw, ${1:Keys}',
         doc: 'Similar to Send, except that all characters in Keys are interpreted and sent literally. See Raw mode for details.',
@@ -2024,8 +2181,12 @@ export const LineCommand: TLineCommand = {
             'SendPlay Keys',
             'SendEvent Keys',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SETBATCHLINES: {
+    {
+        upName: 'SETBATCHLINES',
         keyRawName: 'SetBatchLines',
         body: 'SetBatchLines, ${1|-1,20ms,LineCount|}',
         doc: 'Determines how fast a script will run (affects CPU utilization).',
@@ -2036,8 +2197,12 @@ export const LineCommand: TLineCommand = {
             'SetBatchLines -1;never sleep (i.e. have the script run at maximum speed).',
             'SetBatchLines, 1000 ;Causes the script to sleep every 1000 lines.',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SETCAPSLOCKSTATE: {
+    {
+        upName: 'SETCAPSLOCKSTATE',
         keyRawName: 'SetCapsLockState',
         body: 'SetCapsLockState, ${1|On,Off,AlwaysOn,AlwaysOff|}',
         doc: 'Sets the state of **CapsLock** / **NumLock** / **ScrollLock**. Can also force the key to stay on or off.',
@@ -2048,8 +2213,12 @@ export const LineCommand: TLineCommand = {
             'SetNumLockState [, State]',
             'SetScrollLockState [, State]',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SETCONTROLDELAY: {
+    {
+        upName: 'SETCONTROLDELAY',
         keyRawName: 'SetControlDelay',
         body: 'SetControlDelay, ${1:Delay}',
         doc: 'Sets the delay that will occur after each control-modifying command.',
@@ -2061,16 +2230,26 @@ export const LineCommand: TLineCommand = {
             'SetControlDelay, 0 ; 0 for the smallest possible delay.',
             'SetControlDelay, 20 ; If unset, the default delay is 20.',
         ],
+        _paramType: [
+            'E',
+        ],
     },
-    SETDEFAULTMOUSESPEED: {
+    {
+        upName: 'SETDEFAULTMOUSESPEED',
         keyRawName: 'SetDefaultMouseSpeed',
         body: 'SetDefaultMouseSpeed, ${1:0-100}',
         doc: 'Sets the mouse speed that will be used if unspecified in [Click](https://www.autohotkey.com/docs/commands/Click.htm) and [MouseMove](https://www.autohotkey.com/docs/commands/MouseMove.htm)/[Click](https://www.autohotkey.com/docs/commands/MouseClick.htm)/[Drag](https://www.autohotkey.com/docs/commands/MouseClickDrag.htm).',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/SetDefaultMouseSpeed.htm',
-        exp: ['SetDefaultMouseSpeed, Speed'],
+        exp: [
+            'SetDefaultMouseSpeed, Speed',
+        ],
+        _paramType: [
+            'E',
+        ],
     },
-    SETENV: {
+    {
+        upName: 'SETENV',
         keyRawName: 'SetEnv',
         body: 'SetEnv, ${1:OutVar}, ${2:Value}',
         doc: 'Assigns the specified value to a [variable](https://www.autohotkey.com/docs/Variables.htm).',
@@ -2082,8 +2261,13 @@ export const LineCommand: TLineCommand = {
             'Var := "Value"',
         ],
         diag: EDiagCode.code814,
+        _paramType: [
+            'O',
+            'S',
+        ],
     },
-    SETFORMAT: {
+    {
+        upName: 'SETFORMAT',
         keyRawName: 'SetFormat',
         body: 'SetFormat, ${1|IntegerFast,FloatFast,Integer,Float|}, ${2:Format}',
         doc: 'Sets the format of integers and floating point numbers generated by math operations.',
@@ -2107,8 +2291,13 @@ export const LineCommand: TLineCommand = {
             'SetFormat, IntegerFast, d',
         ],
         diag: EDiagCode.code815,
+        _paramType: [
+            'S',
+            'S',
+        ],
     },
-    SETKEYDELAY: {
+    {
+        upName: 'SETKEYDELAY',
         keyRawName: 'SetKeyDelay',
         body: 'SetKeyDelay [, ${1:Delay}, ${2:PressDuration}, ${3:Play}]',
         doc: 'Sets the delay that will occur after each keystroke sent by [Send](https://www.autohotkey.com/docs/commands/Send.htm) or [ControlSend](https://www.autohotkey.com/docs/commands/ControlSend.htm).',
@@ -2117,8 +2306,14 @@ export const LineCommand: TLineCommand = {
         exp: [
             'SetKeyDelay , Delay, PressDuration, Play',
         ],
+        _paramType: [
+            'E',
+            'E',
+            'S',
+        ],
     },
-    SETMOUSEDELAY: {
+    {
+        upName: 'SETMOUSEDELAY',
         keyRawName: 'SetMouseDelay',
         body: 'SetMouseDelay, ${1:Delay_ms}, [ ${2:Play}]',
         doc: 'Sets the delay that will occur after each mouse movement or click.',
@@ -2127,8 +2322,13 @@ export const LineCommand: TLineCommand = {
         exp: [
             'SetMouseDelay, Delay [, Play]',
         ],
+        _paramType: [
+            'E',
+            'S',
+        ],
     },
-    SETNUMLOCKSTATE: {
+    {
+        upName: 'SETNUMLOCKSTATE',
         keyRawName: 'SetNumLockState',
         body: 'SetNumLockState, ${1|On,Off,AlwaysOn,AlwaysOff|}',
         doc: 'Sets the state of **CapsLock** / **NumLock** / **ScrollLock**. Can also force the key to stay on or off.',
@@ -2139,8 +2339,12 @@ export const LineCommand: TLineCommand = {
             'SetNumLockState [, State]',
             'SetScrollLockState [, State]',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SETREGVIEW: {
+    {
+        upName: 'SETREGVIEW',
         keyRawName: 'SetRegView',
         body: 'SetRegView, ${1|32,64,Default|}',
         doc: 'Sets the registry view used by [RegRead](https://www.autohotkey.com/docs/commands/RegRead.htm), [RegWrite](https://www.autohotkey.com/docs/commands/RegWrite.htm), [RegDelete](https://www.autohotkey.com/docs/commands/RegDelete.htm) and [registry loops](https://www.autohotkey.com/docs/commands/LoopReg.htm), allowing them in a 32-bit script to access the 64-bit registry view and vice versa.',
@@ -2152,8 +2356,12 @@ export const LineCommand: TLineCommand = {
             'SetRegView 64',
             'SetRegView Default',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SETSCROLLLOCKSTATE: {
+    {
+        upName: 'SETSCROLLLOCKSTATE',
         keyRawName: 'SetScrollLockState',
         body: 'SetScrollLockState, ${1|On,Off,AlwaysOn,AlwaysOff|}',
         doc: 'Sets the state of **CapsLock** / **NumLock** / **ScrollLock**. Can also force the key to stay on or off.',
@@ -2164,8 +2372,12 @@ export const LineCommand: TLineCommand = {
             'SetNumLockState [, State]',
             'SetScrollLockState [, State]',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SETSTORECAPSLOCKMODE: {
+    {
+        upName: 'SETSTORECAPSLOCKMODE',
         keyRawName: 'SetStoreCapsLockMode',
         body: 'SetStoreCapsLockMode, ${1|On,Off|}',
         doc: 'Whether to restore the state of CapsLock after a [Send](https://www.autohotkey.com/docs/commands/Send.htm).',
@@ -2176,8 +2388,12 @@ export const LineCommand: TLineCommand = {
             'SetStoreCapsLockMode, Off',
             'SetStoreCapsLockMode, On',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SETTIMER: {
+    {
+        upName: 'SETTIMER',
         keyRawName: 'SetTimer',
         body: 'SetTimer [, ${1:Label_or_fnName}, ${2|Period,On,Off|}, ${3:Priority_int}]',
         doc: 'Causes a subroutine to be launched automatically and repeatedly at a specified time interval.',
@@ -2204,8 +2420,14 @@ export const LineCommand: TLineCommand = {
             '    MsgBox % A_ThisFunc " : " (param1 + param2)',
             '}',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+        ],
     },
-    SETTITLEMATCHMODE: {
+    {
+        upName: 'SETTITLEMATCHMODE',
         keyRawName: 'SetTitleMatchMode',
         body: 'SetTitleMatchMode, ${1|Fast,Slow,RegEx,1,2,3|}',
         doc: 'Sets the matching behavior of the WinTitle parameter in commands such as [WinWait](https://www.autohotkey.com/docs/commands/WinWait.htm).',
@@ -2223,8 +2445,12 @@ export const LineCommand: TLineCommand = {
             '    StatusBarWait, ^(?!^\\Q%OrigText%\\E$)  ; This regular expression waits for any change to the text.',
             '}',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SETWINDELAY: {
+    {
+        upName: 'SETWINDELAY',
         keyRawName: 'SetWinDelay',
         body: 'SetWinDelay, ${1:Delay_ms}',
         doc: 'Sets the delay that will occur after each windowing command, such as [WinActivate](https://www.autohotkey.com/docs/commands/WinActivate.htm).',
@@ -2234,8 +2460,12 @@ export const LineCommand: TLineCommand = {
             'SetWinDelay, Delay',
             '; Use -1 for no delay at all and 0 for the smallest possible delay. If unset, the default delay is 100.',
         ],
+        _paramType: [
+            'E',
+        ],
     },
-    SETWORKINGDIR: {
+    {
+        upName: 'SETWORKINGDIR',
         keyRawName: 'SetWorkingDir',
         body: 'SetWorkingDir, % "${1:DirName}"',
         doc: 'Changes the script\'s current working directory.\n - `DirName` - The name of the new working directory, which is assumed to be a subfolder of the current [%A_WorkingDir%](https://www.autohotkey.com/docs/Variables.htm#WorkingDir) if an absolute path isn\'t specified.',
@@ -2246,26 +2476,15 @@ export const LineCommand: TLineCommand = {
             '',
             'SetWorkingDir, % "D:\\My Folder\\Temp"',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SHUTDOWN: {
+    {
+        upName: 'SHUTDOWN',
         keyRawName: 'Shutdown',
         body: 'Shutdown, ${1:Flag}',
-        doc: [
-            'Shuts down, restarts, or logs off the system.',
-            '1. `Flag` - A combination (sum) of the following numbers:',
-            '',
-            '- 0 = Logoff',
-            '- 1 = Shutdown',
-            '- 2 = Reboot',
-            '- 4 = Force',
-            '- 8 = Power down',
-            '',
-            'Add the required values together. For example, to shutdown and power down the flag would be 9 (shutdown + power down = 1 + 8 = 9). Alternatively, an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions) such as 1+8 can be specified.',
-            '',
-            'The "Force" value (4) forces all open applications to close. It should only be used in an emergency because it may cause any open applications to lose data.',
-            '',
-            'The "Power down" value (8) shuts down the system and turns off the power.',
-        ].join('\n'),
+        doc: 'Shuts down, restarts, or logs off the system.\n1. `Flag` - A combination (sum) of the following numbers:\n\n- 0 = Logoff\n- 1 = Shutdown\n- 2 = Reboot\n- 4 = Force\n- 8 = Power down\n\nAdd the required values together. For example, to shutdown and power down the flag would be 9 (shutdown + power down = 1 + 8 = 9). Alternatively, an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions) such as 1+8 can be specified.\n\nThe "Force" value (4) forces all open applications to close. It should only be used in an emergency because it may cause any open applications to lose data.\n\nThe "Power down" value (8) shuts down the system and turns off the power.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Shutdown.htm',
         exp: [
@@ -2273,8 +2492,12 @@ export const LineCommand: TLineCommand = {
             '',
             'Shutdown, 1 ; Shutdown',
         ],
+        _paramType: [
+            'E',
+        ],
     },
-    SLEEP: {
+    {
+        upName: 'SLEEP',
         keyRawName: 'Sleep',
         body: 'Sleep, ${1:Delay_ms}',
         doc: 'Waits the specified amount of time before continuing.\n `Delay` - The amount of time to pause (in milliseconds) between 0 and 2147483647 (24 days), which can be an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions).',
@@ -2288,8 +2511,12 @@ export const LineCommand: TLineCommand = {
             ';Waits 30 minutes before continuing execution.',
             'Sleep 30 * 60 * 1000 ; Sleep for 30 minutes.',
         ],
+        _paramType: [
+            'E',
+        ],
     },
-    SORT: {
+    {
+        upName: 'SORT',
         keyRawName: 'Sort',
         body: 'Sort, ${1:InputVarName} [, ${2:Options}]',
         doc: 'Arranges a variable\'s contents in alphabetical, numerical, or random order (optionally removing duplicates).',
@@ -2304,8 +2531,13 @@ export const LineCommand: TLineCommand = {
             'MsgBox % rawStr ;              5,3,7,9,1,13,999,-4',
             'MsgBox % MyVar ; The result is -4,1,3,5,7,9,13,999',
         ],
+        _paramType: [
+            'I',
+            'S',
+        ],
     },
-    SOUNDBEEP: {
+    {
+        upName: 'SOUNDBEEP',
         keyRawName: 'SoundBeep',
         body: 'SoundBeep [, ${1:Frequency_37_to_32767}, ${2:Duration_ms}]',
         doc: 'Emits a tone from the PC speaker.',
@@ -2317,8 +2549,13 @@ export const LineCommand: TLineCommand = {
             'SoundBeep ; Plays the default pitch and duration.',
             'SoundBeep, 750, 500 ;Plays a higher pitch for half a second.',
         ],
+        _paramType: [
+            'E',
+            'E',
+        ],
     },
-    SOUNDGET: {
+    {
+        upName: 'SOUNDGET',
         keyRawName: 'SoundGet',
         body:
             'SoundGet, ${1:OutputVar} [, ${2|MASTER,SPEAKERS,DIGITAL,LINE,MICROPHONE,SYNTH,CD,TELEPHONE,PCSPEAKER,WAVE,AUX,ANALOG,HEADPHONES,N/A|}, ${3:ControlType}, ${4:DeviceNumber}]',
@@ -2331,8 +2568,15 @@ export const LineCommand: TLineCommand = {
             'SoundGet, master_volume',
             'MsgBox, % "Master volume is " master_volume " percent."',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'E',
+        ],
     },
-    SOUNDGETWAVEVOLUME: {
+    {
+        upName: 'SOUNDGETWAVEVOLUME',
         keyRawName: 'SoundGetWaveVolume',
         body: 'SoundGetWaveVolume, ${1:OutputVar} [, ${2:DeviceNumber}]',
         doc: 'Retrieves the wave output volume for a sound device.',
@@ -2344,8 +2588,13 @@ export const LineCommand: TLineCommand = {
             'SoundGetWaveVolume, OutputVar',
             'MsgBox, % "The current wave output volume level is " OutputVar',
         ],
+        _paramType: [
+            'O',
+            'E',
+        ],
     },
-    SOUNDPLAY: {
+    {
+        upName: 'SOUNDPLAY',
         keyRawName: 'SoundPlay',
         body: 'SoundPlay, ${1:Filename} [, ${2:wait}]',
         doc: 'Plays a sound, video, or other supported file type.',
@@ -2354,8 +2603,13 @@ export const LineCommand: TLineCommand = {
         exp: [
             'SoundPlay, Filename [, Wait]',
         ],
+        _paramType: [
+            'S',
+            'S',
+        ],
     },
-    SOUNDSET: {
+    {
+        upName: 'SOUNDSET',
         keyRawName: 'SoundSet',
         body: 'SoundSet, ${1:NewSetting} [, ${2:ComponentType}, ${3:ControlType}, ${4:DeviceNumber}]',
         doc: 'Changes various settings of a sound device (master mute, master volume, etc.)',
@@ -2369,22 +2623,18 @@ export const LineCommand: TLineCommand = {
             'SoundSet, +10 ;Increases the master volume by 10%.',
             'SoundSet -10;Decreases the master volume by 10%.',
         ],
+        _paramType: [
+            'E',
+            'S',
+            'S',
+            'E',
+        ],
     },
-    SOUNDSETWAVEVOLUME: {
+    {
+        upName: 'SOUNDSETWAVEVOLUME',
         keyRawName: 'SoundSetWaveVolume',
         body: 'SoundSetWaveVolume, ${1:Percent}, [ ${2:DeviceNumber}]',
-        doc: [
-            '',
-            'Changes the wave output volume of a sound device.',
-            '',
-            '1. Percent',
-            '- Percentage number between -100 and 100 inclusive (it can be a floating point number or an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions)).',
-            '- If the number begins with a plus or minus sign, the **current volume level** will be adjusted up or down by the indicated amount.',
-            '- Otherwise, the volume will be set explicitly to the level indicated by _Percent_.',
-            '',
-            '2. DeviceNumber',
-            '- If this parameter is omitted, it defaults to 1 (the first sound device), which is usually the system\'s default device for recording and playback. Specify a number higher than 1 to operate upon a different sound device.',
-        ].join('\n'),
+        doc: '\nChanges the wave output volume of a sound device.\n\n1. Percent\n- Percentage number between -100 and 100 inclusive (it can be a floating point number or an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions)).\n- If the number begins with a plus or minus sign, the **current volume level** will be adjusted up or down by the indicated amount.\n- Otherwise, the volume will be set explicitly to the level indicated by _Percent_.\n\n2. DeviceNumber\n- If this parameter is omitted, it defaults to 1 (the first sound device), which is usually the system\'s default device for recording and playback. Specify a number higher than 1 to operate upon a different sound device.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/SoundSetWaveVolume.htm',
         exp: [
@@ -2394,8 +2644,13 @@ export const LineCommand: TLineCommand = {
             'SoundSetWaveVolume, -10 ; -10%, exp: 50% -> 40%',
             'SoundSetWaveVolume, +20 ; +20%, exp: 50% -> 70%',
         ],
+        _paramType: [
+            'E',
+            'E',
+        ],
     },
-    SPLASHIMAGE: {
+    {
+        upName: 'SPLASHIMAGE',
         keyRawName: 'SplashImage',
         body:
             'SplashImage, [, ${1:ImageFile}, ${2:Options}, ${3:SubText}, ${4:MainText}, ${5:WinTitle}, ${6:FontName}]',
@@ -2407,37 +2662,52 @@ export const LineCommand: TLineCommand = {
             'SplashImage, Off',
             'SplashImage [, ImageFile, Options, SubText, MainText, WinTitle, FontName]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    SPLASHTEXTOFF: {
+    {
+        upName: 'SPLASHTEXTOFF',
         keyRawName: 'SplashTextOff',
         body: 'SplashTextOff',
         doc: 'Creates or removes a customizable text popup window.',
         recommended: false,
         diag: EDiagCode.code816,
         link: 'https://www.autohotkey.com/docs/commands/SplashTextOn.htm',
-        exp: ['SplashTextOff'],
+        exp: [
+            'SplashTextOff',
+        ],
+        _paramType: [],
     },
-    SPLASHTEXTON: {
+    {
+        upName: 'SPLASHTEXTON',
         keyRawName: 'SplashTextOn',
         body: 'SplashTextOn [, ${1:Width}, ${2:Height}, ${3:Title}, ${4:Text}]',
         doc: 'Creates or removes a customizable text popup window.',
         recommended: false,
         diag: EDiagCode.code816,
         link: 'https://www.autohotkey.com/docs/commands/SplashTextOn.htm',
-        exp: ['SplashTextOn , Width, Height, Title, Text'],
+        exp: [
+            'SplashTextOn , Width, Height, Title, Text',
+        ],
+        _paramType: [
+            'E',
+            'E',
+            'S',
+            'S',
+        ],
     },
-    SPLITPATH: {
+    {
+        upName: 'SPLITPATH',
         keyRawName: 'SplitPath',
         body:
             'SplitPath, ${1:InputFullFileName} [, ${2:OutFileName}, ${3:OutDir}, ${4:OutExtension}, ${5:OutNameNoExt}, ${6:OutDrive}]',
-        doc: [
-            '',
-            'Separates a file name or URL into its name, directory, extension, and drive.',
-            '',
-            '1. InputVar',
-            '- Name of the variable containing the file name or URL to be analyzed.',
-            '- Note that this command expects filename paths to contain backslashes (\\\\) only and URLs to contain forward slashes (/) only.',
-        ].join('\n'),
+        doc: '\nSeparates a file name or URL into its name, directory, extension, and drive.\n\n1. InputVar\n- Name of the variable containing the file name or URL to be analyzed.\n- Note that this command expects filename paths to contain backslashes (\\\\) only and URLs to contain forward slashes (/) only.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/SplitPath.htm',
         exp: [
@@ -2463,8 +2733,17 @@ export const LineCommand: TLineCommand = {
             '; name_no_ext = Address List',
             '; drive = C:',
         ],
+        _paramType: [
+            'I',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+        ],
     },
-    STATUSBARGETTEXT: {
+    {
+        upName: 'STATUSBARGETTEXT',
         keyRawName: 'StatusBarGetText',
         body:
             'StatusBarGetText, ${1:OutputVar} [, ${2:Part#}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
@@ -2479,8 +2758,17 @@ export const LineCommand: TLineCommand = {
             'if InStr(RetrievedText, "found")',
             '    MsgBox, % "Search results have been found." ',
         ],
+        _paramType: [
+            'O',
+            'E',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    STATUSBARWAIT: {
+    {
+        upName: 'STATUSBARWAIT',
         keyRawName: 'StatusBarWait',
         body:
             'StatusBarWait, [${1:BarText}, ${2:Timeout_sec}, ${3:Part#}, ${4:WinTitle}, ${5:WinText}, ${6:Interval}, ${7:ExcludeTitle}, ${8:ExcludeText}]',
@@ -2491,8 +2779,19 @@ export const LineCommand: TLineCommand = {
             'StatusBarWait [, BarText, Timeout, Part#, WinTitle, WinText, Interval, ExcludeTitle, ExcludeText]',
             '',
         ],
+        _paramType: [
+            'S',
+            'E',
+            'E',
+            'S',
+            'S',
+            'E',
+            'S',
+            'S',
+        ],
     },
-    STRINGCASESENSE: {
+    {
+        upName: 'STRINGCASESENSE',
         keyRawName: 'StringCaseSense',
         body: 'StringCaseSense, ${1|On,Off,Locale|}',
         doc: 'Determines whether string comparisons are case sensitive (default is "not case sensitive").',
@@ -2503,115 +2802,206 @@ export const LineCommand: TLineCommand = {
             'StringCaseSense, Off',
             'StringCaseSense, Locale',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    STRINGGETPOS: {
+    {
+        upName: 'STRINGGETPOS',
         keyRawName: 'StringGetPos',
         body: 'StringGetPos, ${1:OutputVar}, ${2:InputVar}, ${3:SearchText} , ${4:Occurrence}, ${5:Offset}',
         doc: 'Retrieves the position of the specified substring within a string.\n\n**Deprecated:** This command is not recommended for use in new scripts. Use the [InStr](https://www.autohotkey.com/docs/commands/InStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringGetPos.htm',
-        exp: ['StringGetPos, OutputVar, InputVar, SearchText [, Occurrence, Offset]'],
+        exp: [
+            'StringGetPos, OutputVar, InputVar, SearchText [, Occurrence, Offset]',
+        ],
         diag: EDiagCode.code899,
+        _paramType: [
+            'O',
+            'I',
+            'S',
+            'S',
+            'E',
+        ],
     },
-    STRINGLEFT: {
+    {
+        upName: 'STRINGLEFT',
         keyRawName: 'StringLeft',
         body: 'StringLeft, ${1:OutputVar}, ${2:InputVar}, ${3:Count}',
         doc: 'Retrieves a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
-        exp: ['StringLeft, OutputVar, InputVar, Count'],
+        exp: [
+            'StringLeft, OutputVar, InputVar, Count',
+        ],
         diag: EDiagCode.code899,
+        _paramType: [
+            'O',
+            'I',
+            'E',
+        ],
     },
-    STRINGLEN: {
+    {
+        upName: 'STRINGLEN',
         keyRawName: 'StringLen',
         body: 'StringLen, ${1:OutputVar}, ${2:InputVar}',
         doc: 'Retrieves the count of how many characters are in a string.\n\n**Deprecated:** This command is not recommended for use in new scripts. Use the [StrLen](https://www.autohotkey.com/docs/commands/StrLen.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLen.htm',
-        exp: ['StringLen, OutputVar, InputVar'],
+        exp: [
+            'StringLen, OutputVar, InputVar',
+        ],
         diag: EDiagCode.code899,
+        _paramType: [
+            'O',
+            'I',
+        ],
     },
-    STRINGLOWER: {
+    {
+        upName: 'STRINGLOWER',
         keyRawName: 'StringLower',
         body: 'StringLower, ${1:OutputVar}, ${2:InputVar} [, ${3:T}]',
         doc: 'Converts a string to lowercase or uppercase.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/StringLower.htm',
-        exp: ['StringLower, OutputVar, InputVar , T'],
+        exp: [
+            'StringLower, OutputVar, InputVar , T',
+        ],
+        _paramType: [
+            'O',
+            'I',
+            'S',
+        ],
     },
-    STRINGMID: {
+    {
+        upName: 'STRINGMID',
         keyRawName: 'StringMid',
         body: 'StringMid, ${1:OutputVar}, ${2:InputVar}, ${3:StartChar} [, ${4:Count}, ${5:L}]',
         doc: 'Retrieves one or more characters from the specified position in a string.\n\n**Deprecated:** This command is not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringMid.htm',
-        exp: ['StringMid, OutputVar, InputVar, StartChar , Count, L'],
+        exp: [
+            'StringMid, OutputVar, InputVar, StartChar , Count, L',
+        ],
         diag: EDiagCode.code899,
+        _paramType: [
+            'O',
+            'I',
+            'E',
+            'E',
+            'S',
+        ],
     },
-    STRINGREPLACE: {
+    {
+        upName: 'STRINGREPLACE',
         keyRawName: 'StringReplace',
         body: 'StringReplace, ${1:OutputVar}, ${2:InputVar}, ${3:SearchText} , ${4:ReplaceText}, ${5:ReplaceAll}',
         doc: 'Replaces the specified substring with a new string.\n\n**Deprecated:** This command is not recommended for use in new scripts. Use the [StrReplace](https://www.autohotkey.com/docs/commands/StrReplace.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringReplace.htm',
-        exp: ['StringReplace, OutputVar, InputVar, SearchText , ReplaceText, ReplaceAll'],
+        exp: [
+            'StringReplace, OutputVar, InputVar, SearchText , ReplaceText, ReplaceAll',
+        ],
         diag: EDiagCode.code899,
+        _paramType: [
+            'O',
+            'I',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    STRINGRIGHT: {
+    {
+        upName: 'STRINGRIGHT',
         keyRawName: 'StringRight',
         body: 'StringRight, ${1:OutputVar}, ${2:InputVar}, ${3:Count}',
         doc: 'Retrieves a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
-        exp: ['StringRight, OutputVar, InputVar, Count'],
+        exp: [
+            'StringRight, OutputVar, InputVar, Count',
+        ],
         diag: EDiagCode.code899,
+        _paramType: [
+            'O',
+            'I',
+            'E',
+        ],
     },
-    STRINGSPLIT: {
+    {
+        upName: 'STRINGSPLIT',
         keyRawName: 'StringSplit',
         body: 'StringSplit, ${1:OutputArray}, ${2:InputVar} [, ${3:Delimiters}, ${4:OmitChars}]',
         doc: 'Retrieves a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringLeft.htm',
-        exp: ['StringSplit, OutputArray, InputVar [, Delimiters, OmitChars]'],
+        exp: [
+            'StringSplit, OutputArray, InputVar [, Delimiters, OmitChars]',
+        ],
         diag: EDiagCode.code899,
+        _paramType: [
+            'S',
+            'I',
+            'S',
+            'S',
+        ],
     },
-    STRINGTRIMLEFT: {
+    {
+        upName: 'STRINGTRIMLEFT',
         keyRawName: 'StringTrimLeft',
         body: 'StringTrimLeft, ${1:OutputVar}, ${2:InputVar}, ${3:Count}',
         doc: 'Removes a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringTrimLeft.htm',
-        exp: ['StringTrimLeft, OutputVar, InputVar, Count'],
+        exp: [
+            'StringTrimLeft, OutputVar, InputVar, Count',
+        ],
         diag: EDiagCode.code899,
+        _paramType: [
+            'O',
+            'I',
+            'E',
+        ],
     },
-    STRINGTRIMRIGHT: {
+    {
+        upName: 'STRINGTRIMRIGHT',
         keyRawName: 'StringTrimRight',
         body: 'StringTrimRight, ${1:OutputVar}, ${2:InputVar}, ${3:Count}',
         doc: 'Removes a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/commands/SubStr.htm) function instead.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/StringTrimLeft.htm',
-        exp: ['StringTrimRight, OutputVar, InputVar, Count'],
+        exp: [
+            'StringTrimRight, OutputVar, InputVar, Count',
+        ],
         diag: EDiagCode.code899,
+        _paramType: [
+            'O',
+            'I',
+            'E',
+        ],
     },
-    STRINGUPPER: {
+    {
+        upName: 'STRINGUPPER',
         keyRawName: 'StringUpper',
         body: 'StringUpper, ${1:OutputVar}, ${2:InputVar} [, ${3:T}]',
         doc: 'Converts a string to lowercase or uppercase.\n\nCommand -> func https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/StringLower.htm',
-        exp: ['StringUpper, OutputVar, InputVar , T'],
+        exp: [
+            'StringUpper, OutputVar, InputVar , T',
+        ],
+        _paramType: [
+            'O',
+            'I',
+            'S',
+        ],
     },
-    SUSPEND: {
+    {
+        upName: 'SUSPEND',
         keyRawName: 'Suspend',
         body: 'Suspend [, ${1|On,Off,Toggle,Permit|}]',
-        doc: [
-            'Disables or enables all or selected [hotkeys](https://www.autohotkey.com/docs/Hotkeys.htm) and [hotstrings](https://www.autohotkey.com/docs/Hotstrings.htm).',
-            '',
-            '- **On**: Suspends all [hotkeys](https://www.autohotkey.com/docs/Hotkeys.htm) and [hotstrings](https://www.autohotkey.com/docs/Hotstrings.htm) except those explained the Remarks section.',
-            '- **Off**: Re-enables the hotkeys and hotstrings that were disable above.',
-            '- **Toggle** (default): Changes to the opposite of its previous state (On or Off).',
-            '- **Permit**: Does nothing except mark the current subroutine as being exempt from suspension.',
-        ].join('\n'),
+        doc: 'Disables or enables all or selected [hotkeys](https://www.autohotkey.com/docs/Hotkeys.htm) and [hotstrings](https://www.autohotkey.com/docs/Hotstrings.htm).\n\n- **On**: Suspends all [hotkeys](https://www.autohotkey.com/docs/Hotkeys.htm) and [hotstrings](https://www.autohotkey.com/docs/Hotstrings.htm) except those explained the Remarks section.\n- **Off**: Re-enables the hotkeys and hotstrings that were disable above.\n- **Toggle** (default): Changes to the opposite of its previous state (On or Off).\n- **Permit**: Does nothing except mark the current subroutine as being exempt from suspension.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Suspend.htm',
         exp: [
@@ -2622,38 +3012,45 @@ export const LineCommand: TLineCommand = {
             'Suspend, Toggle ;<-- default',
             'Suspend, Permit',
         ],
+        _paramType: [
+            'S',
+        ],
     },
-    SYSGET: {
+    {
+        upName: 'SYSGET',
         keyRawName: 'SysGet',
         body:
             'SysGet, ${1:OutputVar}, ${2|MonitorCount,MonitorPrimary,Monitor,MonitorWorkArea,MonitorName,(Numeric)|} [, ${3:Value}]',
-        doc: [
-            'Retrieves screen resolution, multi-monitor info, dimensions of system objects, and other system properties.',
-            '- [MonitorCount](https://www.autohotkey.com/docs/commands/SysGet.htm#MonitorCount): Retrieves the total number of monitors.',
-            '- [MonitorPrimary](https://www.autohotkey.com/docs/commands/SysGet.htm#MonitorPrimary): Retrieves the number of the primary monitor.',
-            '- [Monitor](https://www.autohotkey.com/docs/commands/SysGet.htm#Monitor): Retrieves the bounding coordinates of the specified monitor.',
-            '- [MonitorWorkArea](https://www.autohotkey.com/docs/commands/SysGet.htm#MonitorWorkArea): Retrieves the working area\'s bounding coordinates of the specified monitor.',
-            '- [MonitorName](https://www.autohotkey.com/docs/commands/SysGet.htm#MonitorName): Retrieves the name of the specified monitor.',
-            '- [(Numeric)](https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric): Retrieve the corresponding value from the tables below.',
-        ].join('\n'),
+        doc: 'Retrieves screen resolution, multi-monitor info, dimensions of system objects, and other system properties.\n- [MonitorCount](https://www.autohotkey.com/docs/commands/SysGet.htm#MonitorCount): Retrieves the total number of monitors.\n- [MonitorPrimary](https://www.autohotkey.com/docs/commands/SysGet.htm#MonitorPrimary): Retrieves the number of the primary monitor.\n- [Monitor](https://www.autohotkey.com/docs/commands/SysGet.htm#Monitor): Retrieves the bounding coordinates of the specified monitor.\n- [MonitorWorkArea](https://www.autohotkey.com/docs/commands/SysGet.htm#MonitorWorkArea): Retrieves the working area\'s bounding coordinates of the specified monitor.\n- [MonitorName](https://www.autohotkey.com/docs/commands/SysGet.htm#MonitorName): Retrieves the name of the specified monitor.\n- [(Numeric)](https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric): Retrieve the corresponding value from the tables below.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/SysGet.htm',
-        exp: ['SysGet, OutputVar, SubCommand [, Value]'],
+        exp: [
+            'SysGet, OutputVar, SubCommand [, Value]',
+        ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+        ],
     },
-    THREAD: {
+    {
+        upName: 'THREAD',
         keyRawName: 'Thread',
         body: 'Thread, ${1|NoTimers,Priority,Interrupt|}, ${2:Value1}, ${3:Value2}',
-        doc: [
-            'Sets the priority or interruptibility of [threads](https://www.autohotkey.com/docs/misc/Threads.htm). It can also temporarily disable all [timers](https://www.autohotkey.com/docs/commands/SetTimer.htm).',
-            '- [NoTimers](https://www.autohotkey.com/docs/commands/Thread.htm#NoTimers): Prevents interruptions from any timers.',
-            '- [Priority](https://www.autohotkey.com/docs/commands/Thread.htm#Priority): Changes the priority level of the current thread.',
-            '- [Interrupt](https://www.autohotkey.com/docs/commands/Thread.htm#Interrupt): Changes the duration of interruptibility for newly launched threads.',
-        ].join('\n'),
+        doc: 'Sets the priority or interruptibility of [threads](https://www.autohotkey.com/docs/misc/Threads.htm). It can also temporarily disable all [timers](https://www.autohotkey.com/docs/commands/SetTimer.htm).\n- [NoTimers](https://www.autohotkey.com/docs/commands/Thread.htm#NoTimers): Prevents interruptions from any timers.\n- [Priority](https://www.autohotkey.com/docs/commands/Thread.htm#Priority): Changes the priority level of the current thread.\n- [Interrupt](https://www.autohotkey.com/docs/commands/Thread.htm#Interrupt): Changes the duration of interruptibility for newly launched threads.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Thread.htm',
-        exp: ['Thread, SubCommand [, Value1, Value2]'],
+        exp: [
+            'Thread, SubCommand [, Value1, Value2]',
+        ],
+        _paramType: [
+            'S',
+            'E',
+            'E',
+        ],
     },
-    TOOLTIP: {
+    {
+        upName: 'TOOLTIP',
         keyRawName: 'ToolTip',
         body: 'ToolTip [, % "${1:Text}", ${2:X}, ${3:Y}, ${4:1_to_20}]',
         doc: 'Creates an always-on-top window anywhere on the screen.',
@@ -2669,50 +3066,34 @@ export const LineCommand: TLineCommand = {
             '    ToolTip, % "rand is " rand',
             '}',
         ],
+        _paramType: [
+            'S',
+            'E',
+            'E',
+            'E',
+        ],
     },
-    TRANSFORM: {
+    {
+        upName: 'TRANSFORM',
         keyRawName: 'Transform',
         body:
             'Transform, ${1:OutputVar}, ${2|Unicode,Deref,HTML,Asc,Chr,Mod,Exp,Sqrt,Log,Ln,Round,Ceil,Floor,Abs,Sin,Cos,Tan,ASin,ACos,ATan,Pow,BitNot,BitAnd,BitOr,BitXOr,BitShiftLeft,BitShiftRight|}, ${3:Value1} [, ${4:Value2}]',
-        doc: [
-            'Performs miscellaneous math functions, bitwise operations, and tasks such as ASCII/Unicode conversion.',
-            '- **Deprecated:** This command is not recommended for use in new scripts. For details on what you can use instead, see the sub-command sections below.',
-            'For _SubCommand_, specify one of the following:',
-            '',
-            '- [Unicode](https://www.autohotkey.com/docs/commands/Transform.htm#Unicode) (for ANSI builds only): Retrieves or stores Unicode text on the clipboard.',
-            '- [Deref](https://www.autohotkey.com/docs/commands/Transform.htm#Deref): Expands variable references and escape sequences contained inside other variables.',
-            '- [HTML](https://www.autohotkey.com/docs/commands/Transform.htm#HTML): Converts the specified string into its HTML equivalent.',
-            '- [Asc](https://www.autohotkey.com/docs/commands/Transform.htm#Asc): Retrieves the character code for the first character in the specified string.',
-            '- [Chr](https://www.autohotkey.com/docs/commands/Transform.htm#Chr): Retrieves the single character corresponding to the character code.',
-            '- [Mod](https://www.autohotkey.com/docs/commands/Transform.htm#Mod): Retrieves the remainder of a division.',
-            '- [Exp](https://www.autohotkey.com/docs/commands/Transform.htm#Exp): Retrieves e raised to the _N_th power.',
-            '- [Sqrt](https://www.autohotkey.com/docs/commands/Transform.htm#Sqrt): Retrieves the square root of a number.',
-            '- [Log](https://www.autohotkey.com/docs/commands/Transform.htm#Log): Retrieves the logarithm (base 10) of a number.',
-            '- [Ln](https://www.autohotkey.com/docs/commands/Transform.htm#Ln): Retrieves the natural logarithm (base e) of a number.',
-            '- [Round](https://www.autohotkey.com/docs/commands/Transform.htm#Round): Retrieves a number rounded to _N_ decimal places.',
-            '- [Ceil](https://www.autohotkey.com/docs/commands/Transform.htm#Ceil): Retrieves a number rounded up to the nearest integer.',
-            '- [Floor](https://www.autohotkey.com/docs/commands/Transform.htm#Floor): Retrieves a number rounded down to the nearest integer.',
-            '- [Abs](https://www.autohotkey.com/docs/commands/Transform.htm#Abs): Retrieves the absolute value of a number.',
-            '- [Sin](https://www.autohotkey.com/docs/commands/Transform.htm#Sin): Retrieves the trigonometric sine of a number.',
-            '- [Cos](https://www.autohotkey.com/docs/commands/Transform.htm#Cos): Retrieves the trigonometric cosine of a number.',
-            '- [Tan](https://www.autohotkey.com/docs/commands/Transform.htm#Tan): Retrieves the trigonometric tangent of a number.',
-            '- [ASin](https://www.autohotkey.com/docs/commands/Transform.htm#ASin): Retrieves the arcsine in radians.',
-            '- [ACos](https://www.autohotkey.com/docs/commands/Transform.htm#ACos): Retrieves the arccosine in radians.',
-            '- [ATan](https://www.autohotkey.com/docs/commands/Transform.htm#ATan): Retrieves the arctangent in radians.',
-            '- [Pow](https://www.autohotkey.com/docs/commands/Transform.htm#Pow): Retrieves a base raised to the power of an exponent.',
-            '- [BitNot](https://www.autohotkey.com/docs/commands/Transform.htm#BitNot): Retrieves the bit-inverted version of a number.',
-            '- [BitAnd](https://www.autohotkey.com/docs/commands/Transform.htm#BitAnd): Retrieves the result of the bitwise-AND of the specified numbers.',
-            '- [BitOr](https://www.autohotkey.com/docs/commands/Transform.htm#BitOr): Retrieves the result of the bitwise-OR of the specified numbers.',
-            '- [BitXOr](https://www.autohotkey.com/docs/commands/Transform.htm#BitXOr): Retrieves the result of the bitwise-EXCLUSIVE-OR of the specified numbers.',
-            '- [BitShiftLeft](https://www.autohotkey.com/docs/commands/Transform.htm#BitShiftLeft): Retrieves the result of shifting a number to the left by _N_ bit positions.',
-            '- [BitShiftRight](https://www.autohotkey.com/docs/commands/Transform.htm#BitShiftRight): Retrieves the result of shifting a number to the right by _N_ bit positions.',
-        ].join('\n'),
+        doc: 'Performs miscellaneous math functions, bitwise operations, and tasks such as ASCII/Unicode conversion.\n- **Deprecated:** This command is not recommended for use in new scripts. For details on what you can use instead, see the sub-command sections below.\nFor _SubCommand_, specify one of the following:\n\n- [Unicode](https://www.autohotkey.com/docs/commands/Transform.htm#Unicode) (for ANSI builds only): Retrieves or stores Unicode text on the clipboard.\n- [Deref](https://www.autohotkey.com/docs/commands/Transform.htm#Deref): Expands variable references and escape sequences contained inside other variables.\n- [HTML](https://www.autohotkey.com/docs/commands/Transform.htm#HTML): Converts the specified string into its HTML equivalent.\n- [Asc](https://www.autohotkey.com/docs/commands/Transform.htm#Asc): Retrieves the character code for the first character in the specified string.\n- [Chr](https://www.autohotkey.com/docs/commands/Transform.htm#Chr): Retrieves the single character corresponding to the character code.\n- [Mod](https://www.autohotkey.com/docs/commands/Transform.htm#Mod): Retrieves the remainder of a division.\n- [Exp](https://www.autohotkey.com/docs/commands/Transform.htm#Exp): Retrieves e raised to the _N_th power.\n- [Sqrt](https://www.autohotkey.com/docs/commands/Transform.htm#Sqrt): Retrieves the square root of a number.\n- [Log](https://www.autohotkey.com/docs/commands/Transform.htm#Log): Retrieves the logarithm (base 10) of a number.\n- [Ln](https://www.autohotkey.com/docs/commands/Transform.htm#Ln): Retrieves the natural logarithm (base e) of a number.\n- [Round](https://www.autohotkey.com/docs/commands/Transform.htm#Round): Retrieves a number rounded to _N_ decimal places.\n- [Ceil](https://www.autohotkey.com/docs/commands/Transform.htm#Ceil): Retrieves a number rounded up to the nearest integer.\n- [Floor](https://www.autohotkey.com/docs/commands/Transform.htm#Floor): Retrieves a number rounded down to the nearest integer.\n- [Abs](https://www.autohotkey.com/docs/commands/Transform.htm#Abs): Retrieves the absolute value of a number.\n- [Sin](https://www.autohotkey.com/docs/commands/Transform.htm#Sin): Retrieves the trigonometric sine of a number.\n- [Cos](https://www.autohotkey.com/docs/commands/Transform.htm#Cos): Retrieves the trigonometric cosine of a number.\n- [Tan](https://www.autohotkey.com/docs/commands/Transform.htm#Tan): Retrieves the trigonometric tangent of a number.\n- [ASin](https://www.autohotkey.com/docs/commands/Transform.htm#ASin): Retrieves the arcsine in radians.\n- [ACos](https://www.autohotkey.com/docs/commands/Transform.htm#ACos): Retrieves the arccosine in radians.\n- [ATan](https://www.autohotkey.com/docs/commands/Transform.htm#ATan): Retrieves the arctangent in radians.\n- [Pow](https://www.autohotkey.com/docs/commands/Transform.htm#Pow): Retrieves a base raised to the power of an exponent.\n- [BitNot](https://www.autohotkey.com/docs/commands/Transform.htm#BitNot): Retrieves the bit-inverted version of a number.\n- [BitAnd](https://www.autohotkey.com/docs/commands/Transform.htm#BitAnd): Retrieves the result of the bitwise-AND of the specified numbers.\n- [BitOr](https://www.autohotkey.com/docs/commands/Transform.htm#BitOr): Retrieves the result of the bitwise-OR of the specified numbers.\n- [BitXOr](https://www.autohotkey.com/docs/commands/Transform.htm#BitXOr): Retrieves the result of the bitwise-EXCLUSIVE-OR of the specified numbers.\n- [BitShiftLeft](https://www.autohotkey.com/docs/commands/Transform.htm#BitShiftLeft): Retrieves the result of shifting a number to the left by _N_ bit positions.\n- [BitShiftRight](https://www.autohotkey.com/docs/commands/Transform.htm#BitShiftRight): Retrieves the result of shifting a number to the right by _N_ bit positions.',
         recommended: false,
         link: 'https://www.autohotkey.com/docs/commands/Transform.htm',
-        exp: ['Transform, OutputVar, SubCommand, Value1 [, Value2]'],
+        exp: [
+            'Transform, OutputVar, SubCommand, Value1 [, Value2]',
+        ],
         diag: EDiagCode.code824,
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    TRAYTIP: {
+    {
+        upName: 'TRAYTIP',
         keyRawName: 'TrayTip',
         body: 'TrayTip [, ${1:Title}, ${2:Text}, ${3:Seconds}, ${4:Options}]',
         doc: 'Creates a balloon message window near the tray icon. On Windows 10, a toast notification may be shown instead.',
@@ -2721,8 +3102,15 @@ export const LineCommand: TLineCommand = {
         exp: [
             'TrayTip [, Title, Text, Seconds, Options]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+            'E',
+        ],
     },
-    URLDOWNLOADTOFILE: {
+    {
+        upName: 'URLDOWNLOADTOFILE',
         keyRawName: 'UrlDownloadToFile',
         body: 'UrlDownloadToFile, % "${1:URL_https}", % "${2:Filename}"',
         doc: 'Downloads a file from the Internet.',
@@ -2733,8 +3121,13 @@ export const LineCommand: TLineCommand = {
             '',
             'UrlDownloadToFile, % "https://www.autohotkey.com/download/1.1/version.txt", % "D:\\AutoHotkey Latest Version.txt"',
         ],
+        _paramType: [
+            'S',
+            'S',
+        ],
     },
-    WINACTIVATE: {
+    {
+        upName: 'WINACTIVATE',
         keyRawName: 'WinActivate',
         body: 'WinActivate [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Activates the specified window..',
@@ -2743,8 +3136,15 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinActivate [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINACTIVATEBOTTOM: {
+    {
+        upName: 'WINACTIVATEBOTTOM',
         keyRawName: 'WinActivateBottom',
         body: 'WinActivateBottom, [ ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText} ]',
         doc: 'Same as [WinActivate](https://www.autohotkey.com/docs/commands/WinActivate.htm) except that it activates the bottommost matching window rather than the topmost.',
@@ -2753,8 +3153,15 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinActivateBottom [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINCLOSE: {
+    {
+        upName: 'WINCLOSE',
         keyRawName: 'WinClose',
         body: 'WinClose,[ ${1:WinTitle}, ${2:WinText}, ${3:SecondsToWait}, ${4:ExcludeTitle}, ${5:ExcludeText} ]',
         doc: 'Closes the specified window.',
@@ -2763,35 +3170,36 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinClose [, WinTitle, WinText, SecondsToWait, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+            'S',
+            'S',
+        ],
     },
-    WINGET: {
+    {
+        upName: 'WINGET',
         keyRawName: 'WinGet',
         body:
             'WinGet, [ ${1:OutputVar}, ${2|ID,IDLast,PID,ProcessName,ProcessPath,Count,List,MinMax,ControlList,ControlListHwnd,Transparent,TransColor,Style,ExStyle|}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText} ]',
-        doc: [
-            'Retrieves the specified window\'s unique ID, process ID, process name, or a list of its controls. It can also retrieve a list of all windows matching the specified criteria.',
-            '- [ID](https://www.autohotkey.com/docs/commands/WinGet.htm#ID): Retrieves the unique ID number of a window.',
-            '- [IDLast](https://www.autohotkey.com/docs/commands/WinGet.htm#IDLast): Retrieves the unique ID number of the last/bottommost window if there is more than one match.',
-            '- [PID](https://www.autohotkey.com/docs/commands/WinGet.htm#PID): Retrieves the Process ID number of a window.',
-            '- [ProcessName](https://www.autohotkey.com/docs/commands/WinGet.htm#ProcessName): Retrieves the name of the process that owns a window.',
-            '- [ProcessPath](https://www.autohotkey.com/docs/commands/WinGet.htm#ProcessPath) [[v1.1.01+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.01.00 "Applies to AutoHotkey v1.1.01 and later"): Retrieves the full path and name of the process that owns a window.',
-            '- [Count](https://www.autohotkey.com/docs/commands/WinGet.htm#Count): Retrieves the number of existing windows that match the title/text parameters.',
-            '- [List](https://www.autohotkey.com/docs/commands/WinGet.htm#List): Retrieves the unique ID numbers of all existing windows that match the title/text parameters.',
-            '- [MinMax](https://www.autohotkey.com/docs/commands/WinGet.htm#MinMax): Retrieves the minimized/maximized state for a window.',
-            '- [ControlList](https://www.autohotkey.com/docs/commands/WinGet.htm#ControlList): Retrieves the control name for each control in a window.',
-            '- [ControlListHwnd](https://www.autohotkey.com/docs/commands/WinGet.htm#ControlListHwnd) [[v1.0.43.06+]](https://www.autohotkey.com/docs/ChangeLogHelp.htm#Older_Changes "Applies to AutoHotkey v1.0.43.06 and later"): Retrieves the unique ID number for each control in a window.',
-            '- [Transparent](https://www.autohotkey.com/docs/commands/WinGet.htm#Transparent): Retrieves the degree of transparency of a window.',
-            '- [TransColor](https://www.autohotkey.com/docs/commands/WinGet.htm#TransColor): Retrieves the color that is marked transparent in a window.',
-            '- [Style](https://www.autohotkey.com/docs/commands/WinGet.htm#Style): Retrieves an 8-digit hexadecimal number representing the style of a window.',
-            '- [ExStyle](https://www.autohotkey.com/docs/commands/WinGet.htm#ExStyle): Retrieves an 8-digit hexadecimal number representing the extended style of a window.',
-        ].join('\n'),
+        doc: 'Retrieves the specified window\'s unique ID, process ID, process name, or a list of its controls. It can also retrieve a list of all windows matching the specified criteria.\n- [ID](https://www.autohotkey.com/docs/commands/WinGet.htm#ID): Retrieves the unique ID number of a window.\n- [IDLast](https://www.autohotkey.com/docs/commands/WinGet.htm#IDLast): Retrieves the unique ID number of the last/bottommost window if there is more than one match.\n- [PID](https://www.autohotkey.com/docs/commands/WinGet.htm#PID): Retrieves the Process ID number of a window.\n- [ProcessName](https://www.autohotkey.com/docs/commands/WinGet.htm#ProcessName): Retrieves the name of the process that owns a window.\n- [ProcessPath](https://www.autohotkey.com/docs/commands/WinGet.htm#ProcessPath) [[v1.1.01+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.01.00 "Applies to AutoHotkey v1.1.01 and later"): Retrieves the full path and name of the process that owns a window.\n- [Count](https://www.autohotkey.com/docs/commands/WinGet.htm#Count): Retrieves the number of existing windows that match the title/text parameters.\n- [List](https://www.autohotkey.com/docs/commands/WinGet.htm#List): Retrieves the unique ID numbers of all existing windows that match the title/text parameters.\n- [MinMax](https://www.autohotkey.com/docs/commands/WinGet.htm#MinMax): Retrieves the minimized/maximized state for a window.\n- [ControlList](https://www.autohotkey.com/docs/commands/WinGet.htm#ControlList): Retrieves the control name for each control in a window.\n- [ControlListHwnd](https://www.autohotkey.com/docs/commands/WinGet.htm#ControlListHwnd) [[v1.0.43.06+]](https://www.autohotkey.com/docs/ChangeLogHelp.htm#Older_Changes "Applies to AutoHotkey v1.0.43.06 and later"): Retrieves the unique ID number for each control in a window.\n- [Transparent](https://www.autohotkey.com/docs/commands/WinGet.htm#Transparent): Retrieves the degree of transparency of a window.\n- [TransColor](https://www.autohotkey.com/docs/commands/WinGet.htm#TransColor): Retrieves the color that is marked transparent in a window.\n- [Style](https://www.autohotkey.com/docs/commands/WinGet.htm#Style): Retrieves an 8-digit hexadecimal number representing the style of a window.\n- [ExStyle](https://www.autohotkey.com/docs/commands/WinGet.htm#ExStyle): Retrieves an 8-digit hexadecimal number representing the extended style of a window.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/WinGet.htm',
         exp: [
             'WinGet, OutputVar , SubCommand, WinTitle, WinText, ExcludeTitle, ExcludeText',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINGETACTIVESTATS: {
+    {
+        upName: 'WINGETACTIVESTATS',
         keyRawName: 'WinGetActiveStats',
         body: 'WinGetActiveStats, ${1:OutTitle}, ${2:OutWidth}, ${3:OutHeight}, ${4:OutX}, ${5:OutY}',
         doc: 'Combines the functions of [WinGetActiveTitle](https://www.autohotkey.com/docs/commands/WinGetActiveTitle.htm) and [WinGetPos](https://www.autohotkey.com/docs/commands/WinGetPos.htm) into one command.',
@@ -2812,8 +3220,16 @@ export const LineCommand: TLineCommand = {
             '        OutY is %OutY%',
             '    )',
         ],
+        _paramType: [
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+        ],
     },
-    WINGETACTIVETITLE: {
+    {
+        upName: 'WINGETACTIVETITLE',
         keyRawName: 'WinGetActiveTitle',
         body: 'WinGetActiveTitle, ${1:OutputVar}',
         doc: 'Retrieves the title of the active window.',
@@ -2823,8 +3239,12 @@ export const LineCommand: TLineCommand = {
             'WinGetActiveTitle, Title',
             'MsgBox, % "The active window is `n" Title',
         ],
+        _paramType: [
+            'O',
+        ],
     },
-    WINGETCLASS: {
+    {
+        upName: 'WINGETCLASS',
         keyRawName: 'WinGetClass',
         body: 'WinGetClass, ${1:OutputVar} [, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Retrieves the specified window\'s class name.',
@@ -2833,8 +3253,16 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinGetClass, OutputVar [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINGETPOS: {
+    {
+        upName: 'WINGETPOS',
         keyRawName: 'WinGetPos',
         body:
             'WinGetPos, [ ${1:OutX}, ${2:OutY}, ${3:OutWidth}, ${4:OutHeight}, ${5:WinTitle}, ${6:WinText}, ${7:ExcludeTitle}, ${8:ExcludeText} ]',
@@ -2845,8 +3273,19 @@ export const LineCommand: TLineCommand = {
             'WinGetPos , X, Y, Width, Height, WinTitle, WinText, ExcludeTitle, ExcludeText',
             'WinGetPos , OutX, OutY, OutWidth, OutHeight, WinTitle, WinText, ExcludeTitle, ExcludeText',
         ],
+        _paramType: [
+            'O',
+            'O',
+            'O',
+            'O',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINGETTEXT: {
+    {
+        upName: 'WINGETTEXT',
         keyRawName: 'WinGetText',
         body: 'WinGetText, ${1:OutputVar} [, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Retrieves the text from the specified window.',
@@ -2855,8 +3294,16 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinGetText , OutputVar [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINGETTITLE: {
+    {
+        upName: 'WINGETTITLE',
         keyRawName: 'WinGetTitle',
         body: 'WinGetTitle, ${1:OutputVar} [, ${2:WinTitle}, ${3:WinText}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Retrieves the title of the specified window.',
@@ -2865,8 +3312,16 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinGetTitle, OutputVar [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'O',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINHIDE: {
+    {
+        upName: 'WINHIDE',
         keyRawName: 'WinHide',
         body: 'WinHide, [${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Hides the specified window.',
@@ -2875,8 +3330,15 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinHide [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINKILL: {
+    {
+        upName: 'WINKILL',
         keyRawName: 'WinKill',
         body: 'WinKill, [ ${1:WinTitle}, ${2:WinText}, ${3:SecondsToWait}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Forces the specified window to close.',
@@ -2885,8 +3347,16 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinKill [, WinTitle, WinText, SecondsToWait, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+            'S',
+            'S',
+        ],
     },
-    WINMAXIMIZE: {
+    {
+        upName: 'WINMAXIMIZE',
         keyRawName: 'WinMaximize',
         body: 'WinMaximize [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Enlarges the specified window to its maximum size.',
@@ -2895,8 +3365,15 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinMaximize [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINMENUSELECTITEM: {
+    {
+        upName: 'WINMENUSELECTITEM',
         keyRawName: 'WinMenuSelectItem',
         body:
             'WinMenuSelectItem, ${1:WinTitle}, ${2:WinText}, ${3:Menu} [, ${4:SubMenu1}, ${5:SubMenu2}, ${6:SubMenu3}, ${7:SubMenu4}, ${8:SubMenu5}, ${9:SubMenu6}, ${10:ExcludeTitle}, ${11:ExcludeText} ]',
@@ -2906,8 +3383,22 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinMenuSelectItem, WinTitle, WinText, Menu [, SubMenu1, SubMenu2, SubMenu3, SubMenu4, SubMenu5, SubMenu6, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINMINIMIZE: {
+    {
+        upName: 'WINMINIMIZE',
         keyRawName: 'WinMinimize',
         body: 'WinMinimize [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Collapses the specified window into a button on the task bar.',
@@ -2916,8 +3407,15 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinMinimize [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINMINIMIZEALL: {
+    {
+        upName: 'WINMINIMIZEALL',
         keyRawName: 'WinMinimizeAll',
         body: 'WinMinimizeAll',
         doc: 'Minimizes all windows.',
@@ -2932,8 +3430,10 @@ export const LineCommand: TLineCommand = {
             'Sleep, 1000',
             'WinMinimizeAllUndo ; re win + d',
         ],
+        _paramType: [],
     },
-    WINMINIMIZEALLUNDO: {
+    {
+        upName: 'WINMINIMIZEALLUNDO',
         keyRawName: 'WinMinimizeAllUndo',
         body: 'WinMinimizeAllUndo',
         doc: 'Unminimizes all windows.',
@@ -2948,8 +3448,10 @@ export const LineCommand: TLineCommand = {
             'Sleep, 1000',
             'WinMinimizeAllUndo ; re win + d',
         ],
+        _paramType: [],
     },
-    WINMOVE: {
+    {
+        upName: 'WINMOVE',
         keyRawName: 'WinMove',
         body:
             'WinMove, ${1:WinTitle}, ${2:WinText}, ${3:X}, ${4:Y}, [${5:Width}, ${6:Height}, ${7:ExcludeTitle}, ${8:ExcludeText}]',
@@ -2965,8 +3467,19 @@ export const LineCommand: TLineCommand = {
             'WinWait, Calculator',
             'WinMove, 0, 0 ; Use the window found by WinWait.',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+            'E',
+            'E',
+            'E',
+            'S',
+            'S',
+        ],
     },
-    WINRESTORE: {
+    {
+        upName: 'WINRESTORE',
         keyRawName: 'WinRestore',
         body: 'WinRestore, [${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Unminimizes or unmaximizes the specified window if it is minimized or maximized.',
@@ -2978,32 +3491,35 @@ export const LineCommand: TLineCommand = {
             ';Unminimizes or unmaximizes Notepad if it is minimized or maximized.',
             'WinRestore, Untitled - Notepad',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINSET: {
+    {
+        upName: 'WINSET',
         keyRawName: 'WinSet',
         body:
             'WinSet, ${1|AlwaysOnTop,Bottom,Top,Disable,Enable,Redraw,Style,ExStyle,Region,Transparent,TransColor|} [, ${2:Value}, ${3:WinTitle}, ${4:WinText}, ${5:ExcludeTitle}, ${6:ExcludeText}]',
-        doc: [
-            'Makes a variety of changes to the specified window, such as "always on top" and transparency.',
-            '- [AlwaysOnTop](https://www.autohotkey.com/docs/commands/WinSet.htm#AlwaysOnTop): Makes a window stay on top of all other windows.',
-            '- [Bottom](https://www.autohotkey.com/docs/commands/WinSet.htm#Bottom): Sends a window to the bottom of stack; that is, beneath all other windows.',
-            '- [Top](https://www.autohotkey.com/docs/commands/WinSet.htm#Top): Brings a window to the top of the stack without explicitly activating it.',
-            '- [Disable](https://www.autohotkey.com/docs/commands/WinSet.htm#Disable): Disables a window.',
-            '- [Enable](https://www.autohotkey.com/docs/commands/WinSet.htm#Enable): Enables a window.',
-            '- [Redraw](https://www.autohotkey.com/docs/commands/WinSet.htm#Redraw): Redraws a window.',
-            '- [Style](https://www.autohotkey.com/docs/commands/WinSet.htm#Style): Changes the style of a window.',
-            '- [ExStyle](https://www.autohotkey.com/docs/commands/WinSet.htm#ExStyle): Changes the extended style of a window.',
-            '- [Region](https://www.autohotkey.com/docs/commands/WinSet.htm#Region): Changes the shape of a window to be the specified rectangle, ellipse, or polygon.',
-            '- [Transparent](https://www.autohotkey.com/docs/commands/WinSet.htm#Transparent): Makes a window semi-transparent.',
-            '- [TransColor](https://www.autohotkey.com/docs/commands/WinSet.htm#TransColor): Makes all pixels of the chosen color invisible inside the target window.',
-        ].join('\n'),
+        doc: 'Makes a variety of changes to the specified window, such as "always on top" and transparency.\n- [AlwaysOnTop](https://www.autohotkey.com/docs/commands/WinSet.htm#AlwaysOnTop): Makes a window stay on top of all other windows.\n- [Bottom](https://www.autohotkey.com/docs/commands/WinSet.htm#Bottom): Sends a window to the bottom of stack; that is, beneath all other windows.\n- [Top](https://www.autohotkey.com/docs/commands/WinSet.htm#Top): Brings a window to the top of the stack without explicitly activating it.\n- [Disable](https://www.autohotkey.com/docs/commands/WinSet.htm#Disable): Disables a window.\n- [Enable](https://www.autohotkey.com/docs/commands/WinSet.htm#Enable): Enables a window.\n- [Redraw](https://www.autohotkey.com/docs/commands/WinSet.htm#Redraw): Redraws a window.\n- [Style](https://www.autohotkey.com/docs/commands/WinSet.htm#Style): Changes the style of a window.\n- [ExStyle](https://www.autohotkey.com/docs/commands/WinSet.htm#ExStyle): Changes the extended style of a window.\n- [Region](https://www.autohotkey.com/docs/commands/WinSet.htm#Region): Changes the shape of a window to be the specified rectangle, ellipse, or polygon.\n- [Transparent](https://www.autohotkey.com/docs/commands/WinSet.htm#Transparent): Makes a window semi-transparent.\n- [TransColor](https://www.autohotkey.com/docs/commands/WinSet.htm#TransColor): Makes all pixels of the chosen color invisible inside the target window.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/WinSet.htm',
         exp: [
             'WinSet, SubCommand, Value [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINSETTITLE: {
+    {
+        upName: 'WINSETTITLE',
         keyRawName: 'WinSetTitle',
         body: 'WinSetTitle, ${1:WinTitle}, ${2:WinText}, ${3:NewTitle} [, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Changes the title of the specified window.',
@@ -3018,8 +3534,16 @@ export const LineCommand: TLineCommand = {
             'WinWaitActive, ahk_exe notepad.exe',
             'WinSetTitle, % "This is a new title"',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINSHOW: {
+    {
+        upName: 'WINSHOW',
         keyRawName: 'WinShow',
         body: 'WinShow [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Unhides the specified window.',
@@ -3028,8 +3552,15 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinShow [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'S',
+            'S',
+        ],
     },
-    WINWAIT: {
+    {
+        upName: 'WINWAIT',
         keyRawName: 'WinWait',
         body: 'WinWait [, ${1:WinTitle}, ${2:WinText}, ${3:Seconds}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Waits until the specified window exists.',
@@ -3038,8 +3569,16 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinWait [, WinTitle, WinText, Timeout, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+            'S',
+            'S',
+        ],
     },
-    WINWAITACTIVE: {
+    {
+        upName: 'WINWAITACTIVE',
         keyRawName: 'WinWaitActive',
         body: 'WinWaitActive [, ${1:WinTitle}, ${2:WinText}, ${3:Seconds}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Waits until the specified window is active.',
@@ -3049,8 +3588,16 @@ export const LineCommand: TLineCommand = {
             'WinWaitActive [, WinTitle, WinText, Timeout, ExcludeTitle, ExcludeText]',
             'WinWaitNotActive [, WinTitle, WinText, Timeout, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+            'S',
+            'S',
+        ],
     },
-    WINWAITCLOSE: {
+    {
+        upName: 'WINWAITCLOSE',
         keyRawName: 'WinWaitClose',
         body: 'WinWaitClose [, ${1:WinTitle}, ${2:WinText}, ${3:Seconds}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Waits until the specified window does not exist.',
@@ -3059,8 +3606,16 @@ export const LineCommand: TLineCommand = {
         exp: [
             'WinWaitClose [, WinTitle, WinText, Timeout, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+            'S',
+            'S',
+        ],
     },
-    WINWAITNOTACTIVE: {
+    {
+        upName: 'WINWAITNOTACTIVE',
         keyRawName: 'WinWaitNotActive',
         body: 'WinWaitNotActive [, ${1:WinTitle}, ${2:WinText}, ${3:Seconds}, ${4:ExcludeTitle}, ${5:ExcludeText}]',
         doc: 'Waits until the specified window is not active.',
@@ -3070,5 +3625,12 @@ export const LineCommand: TLineCommand = {
             'WinWaitActive [, WinTitle, WinText, Timeout, ExcludeTitle, ExcludeText]',
             'WinWaitNotActive [, WinTitle, WinText, Timeout, ExcludeTitle, ExcludeText]',
         ],
+        _paramType: [
+            'S',
+            'S',
+            'E',
+            'S',
+            'S',
+        ],
     },
-};
+];

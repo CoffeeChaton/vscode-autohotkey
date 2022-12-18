@@ -24,6 +24,7 @@ function LabelRefHotkey(AhkTokenLine: TAhkTokenLine, wordUp: string): vscode.Ran
 }
 
 function getLabelRef(wordUp: string): vscode.Location[] {
+    // TODO for performance use keyword match replace regex!
     // eslint-disable-next-line security/detect-non-literal-regexp
     const reg = new RegExp(`(\\b(?:goto|goSub|Break|Continue|SetTimer)\\b\\s*,?\\s*)\\b${wordUp}\\b`, 'iu');
 

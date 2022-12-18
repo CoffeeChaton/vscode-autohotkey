@@ -75,7 +75,7 @@ export function SetVarTradition(textRaw: string): string {
                 if (sBefore === ' ' || sBefore === '\t') {
                     return lStr;
                 }
-                lStr += s; // TODO edge case, i think need diag
+                lStr += s;
                 break;
             }
 

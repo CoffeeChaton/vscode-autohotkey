@@ -59,12 +59,6 @@ export type TMultilineFlag =
     }>
     | null;
 
-export const enum EDiagDeep {
-    none = 0,
-    multL = 1, // multiple opening braces "{"
-    multR = 2, // multiple closing braces "}"
-}
-
 export type TAhkTokenLine = DeepReadonly<{
     fistWordUpCol: number;
     fistWordUp: string;
@@ -79,9 +73,9 @@ export type TAhkTokenLine = DeepReadonly<{
     multilineFlag: TMultilineFlag;
     cll: 0 | 1;
     lineComment: string;
-    diagDeep: EDiagDeep;
     displayErr: boolean;
     displayFnErr: boolean;
+    ahkDoc: string;
     // I know this is not Complete and correct Token.
 }>;
 

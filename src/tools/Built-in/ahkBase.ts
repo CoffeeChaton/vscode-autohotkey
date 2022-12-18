@@ -10,7 +10,7 @@ type TDescription = Readonly<{
     documentation: string[];
 }>;
 
-const ItemOfAhkObj: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
+const ItemOfAhkObj: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     // Obj := Object(...
     // Obj := {}
     // Methods:
@@ -187,7 +187,7 @@ const ItemOfAhkObj: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     return itemS;
 })();
 
-const ItemOfFileOpen: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
+const ItemOfFileOpen: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     // File := FileOpen()
     const itemS: vscode.CompletionItem[] = [];
     const ahkFileOpenMethod: readonly TDescription[] = [
@@ -411,7 +411,7 @@ const ItemOfFileOpen: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => 
     return itemS;
 })();
 
-const ItemOfFunc: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
+const ItemOfFunc: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     const itemS: vscode.CompletionItem[] = [];
     for (
         const v of [
@@ -443,6 +443,69 @@ const ItemOfFunc: vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
         itemS.push(item);
     }
 
+    // FIXME add doc of https://www.autohotkey.com/docs/lib/FuncObj.htm
+    return itemS;
+})();
+
+const ItemOfAhkCatch: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
+    // IObject *Line::CreateRuntimeException(LPCTSTR aErrorText, LPCTSTR aWhat, LPCTSTR aExtraInfo)
+    // ResultType Line::ThrowRuntimeException(LPCTSTR aErrorText, LPCTSTR aWhat, LPCTSTR aExtraInfo)
+
+    const ahkCatchProperties: readonly TDescription[] = [
+        {
+            label: 'Message',
+            documentation: [
+                'An error message or [ErrorLevel](https://www.autohotkey.com/docs/misc/ErrorLevel.htm) value.',
+            ],
+        },
+        {
+            label: 'What',
+            documentation: [
+                'The name of the command, function or label which was executing or about to execute when the error occurred.',
+            ],
+        },
+        {
+            label: 'Extra',
+            documentation: [
+                'Additional information about the error, if available.',
+            ],
+        },
+        {
+            label: 'File',
+            documentation: [
+                'Set automatically to the full path of the script file which contains the line at which the error occurred.',
+            ],
+        },
+        {
+            label: 'Line',
+            documentation: [
+                'Set automatically to the line number at which the error occurred.',
+            ],
+        },
+    ];
+
+    const itemS: vscode.CompletionItem[] = [];
+    for (const { label, documentation } of ahkCatchProperties) {
+        const md = new vscode.MarkdownString(documentation.join('\n\n'), true)
+            .appendMarkdown('\n[(read doc)](https://www.autohotkey.com/docs/lib/Throw.htm#Exception)')
+            .appendCodeblock([
+                'Key1 := "F11"',
+                'Try, Hotkey, %Key1%, label1',
+                '',
+                'Catch err {',
+                '    MsgBox, % "Extra : " err.Extra ;Extra : label1',
+                '    MsgBox, % "File : " err.File ; C:\\XXXX\\exp.ahk',
+                '    MsgBox, % "Line : " err.Line ; 10',
+                '    MsgBox, % "Message : " err.Message ;Target label does not exist.',
+                '    MsgBox, % "What : " err.What ;Hotkey',
+                '}',
+            ].join('\n'));
+        const item: vscode.CompletionItem = new vscode.CompletionItem(label, vscode.CompletionItemKind.Property);
+        item.detail = 'neko help: error -> Exception()';
+        item.documentation = md;
+        itemS.push(item);
+    }
+
     return itemS;
 })();
 
@@ -452,5 +515,6 @@ export function ahkBaseWrap(Obj: TAhkBaseObj): vscode.CompletionItem[] {
     if (Obj.ahkFileOpen) itemS.push(...ItemOfFileOpen);
     if (Obj.ahkFuncObject) itemS.push(...ItemOfFunc);
     if (Obj.ahkBase) itemS.push(...ItemOfAhkObj);
+    if (Obj.ahkCatch) itemS.push(...ItemOfAhkCatch);
     return itemS;
 }

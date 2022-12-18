@@ -1,7 +1,7 @@
 import * as path from 'node:path';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TTokenStream } from '../../globalEnum';
-import { BuiltInFuncMDMap } from '../../tools/Built-in/func_tools';
+import { getBuiltInFuncMD } from '../../tools/Built-in/func.tools';
 import type { TFullFuncMap } from '../../tools/Func/getAllFunc';
 
 type TMsg = {
@@ -40,7 +40,7 @@ function splitLine(keyUp: string, fullFuncMap: TFullFuncMap): string {
         return `${DA.name}(...) ; ${fileName}`;
     }
 
-    const keyRawName: string | undefined = BuiltInFuncMDMap.get(keyUp)?.keyRawName;
+    const keyRawName: string | undefined = getBuiltInFuncMD(keyUp)?.keyRawName;
     return keyRawName === undefined
         ? `${keyUp}(...) ; >>>>>>>>>>>>>> unknown function <<<<<<<<<<<<<<<<<<<`
         : `${keyRawName}(...) ; "Built-in Functions"`;

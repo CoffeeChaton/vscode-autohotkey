@@ -1,7 +1,7 @@
 import type { TParamMapOut, TValMapOut } from '../../../../AhkSymbol/CAhkFunc';
 import { C500Class } from '../../../../provider/Diagnostic/tools/CDiagFnLib/C500Class';
 import { C501Class } from '../../../../provider/Diagnostic/tools/CDiagFnLib/C501Class';
-import { Bi_VarMDMap } from '../../../Built-in/BiVariables';
+import { Bi_VarMDMap } from '../../../Built-in/BiVariables.tools';
 
 export function NeverUsedParam(
     paramMap: TParamMapOut,

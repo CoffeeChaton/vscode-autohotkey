@@ -50,19 +50,23 @@ const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly vscode
             'Down',
             'Left',
             'Right',
+            //
             'LWin',
             'RWin',
+            //
             'Control',
             'LControl',
             'RControl',
             'Ctrl',
             'LCtrl',
             'RCtrl',
+            //
             'Alt',
             'LAlt',
             'RAlt',
             'AltDown',
             'AltUp',
+            //
             'Shift',
             'LShift',
             'RShift',

@@ -4,20 +4,22 @@ import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
-import { getSnippetStartWihA } from '../../tools/Built-in/A_Variables';
-import { getSnipBiVar } from '../../tools/Built-in/BiVariables';
-import { Completion2Directives } from '../../tools/Built-in/Directives';
-import { BuiltInFunc2Completion } from '../../tools/Built-in/func_tools';
-import { getSnippetCommand } from '../../tools/Built-in/getSnippetCommand';
+import { getSnippetStartWihA } from '../../tools/Built-in/A_Variables.tools';
+import { getSnipAhk2exe } from '../../tools/Built-in/Ahk2exe.tools';
+import { getSnipBiVar } from '../../tools/Built-in/BiVariables.tools';
+import { getSnippetCommand } from '../../tools/Built-in/Command.tools.completion';
+import { snipDirectives } from '../../tools/Built-in/Directives.tool';
+import { BuiltInFunc2Completion } from '../../tools/Built-in/func.tools';
 import { getSnipJustSnip } from '../../tools/Built-in/Keys and other/ahk.snippets';
 import { getSnipStartJoy } from '../../tools/Built-in/Keys and other/Joystick';
 import { getSnipStartF } from '../../tools/Built-in/Keys and other/keyF12';
 import { getSnipMouseKeyboard } from '../../tools/Built-in/Keys and other/MouseKeyboard';
 import { getSnipStartNum } from '../../tools/Built-in/Keys and other/NumpadSnippets';
-import { getSnippetOtherKeyWord } from '../../tools/Built-in/otherKeyWord';
+import { getSnippetOtherKeyWord1 } from '../../tools/Built-in/otherKeyword1.tools';
+import { getSnippetOtherKeyWord2 } from '../../tools/Built-in/otherKeyword2.tools';
 import { ahkSend } from '../../tools/Built-in/Send_tools';
-import { getSnippetStatement } from '../../tools/Built-in/statement_vsc';
-import { getSnipStatement2 } from '../../tools/Built-in/statement_vsc2';
+import { getSnippetStatement } from '../../tools/Built-in/statement.tools';
+import { getSnipStatement2 } from '../../tools/Built-in/statement2.tools';
 import { getSnippetWinMsg } from '../../tools/Built-in/Windows_Messages_Tools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { wrapClass } from './classThis/wrapClass';
@@ -63,13 +65,13 @@ function CompletionItemCore(
     const completions: vscode.CompletionItem[] = [
         ...wrapClass(position, textRaw, lStr, topSymbol, DocStrMap, DA), // '.'
         ...ahkSend(AhkFileData, position), // '{'
-        ...Completion2Directives(subStr),
-        ...getSnippetOtherKeyWord(subStr),
+        ...snipDirectives(subStr),
+        ...getSnippetOtherKeyWord1(lStr),
         ...getSnippetCommand(subStr),
         ...globalValCompletion(DocStrMap, position),
         ...getSnipStatement2(subStr),
         ...getSnipJustSnip(subStr),
-        ...getSnipMouseKeyboard(subStr), // TODO: use fn limit it
+        ...getSnipMouseKeyboard(subStr),
     ];
 
     if (PartStr !== null) {
@@ -84,6 +86,7 @@ function CompletionItemCore(
             ...getSnipStartJoy(PartStr),
             ...getSnipStartNum(PartStr),
             ...getSnipStartF(PartStr),
+            ...getSnippetOtherKeyWord2(PartStr),
         );
 
         if (DA !== null) completions.push(...DeepAnalysisToCompletionItem(DA, PartStr));
@@ -98,8 +101,12 @@ export const CompletionItemProvider: vscode.CompletionItemProvider = {
         document: vscode.TextDocument,
         position: vscode.Position,
         _token: vscode.CancellationToken,
-        _context: vscode.CompletionContext,
+        context: vscode.CompletionContext,
     ): vscode.ProviderResult<vscode.CompletionItem[]> {
+        if (context.triggerCharacter === '@') {
+            const ahk2exe: vscode.CompletionItem[] | null = getSnipAhk2exe(document, position);
+            if (ahk2exe !== null) return ahk2exe;
+        }
         return CompletionItemCore(document, position);
     },
 };

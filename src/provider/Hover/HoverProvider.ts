@@ -3,22 +3,25 @@ import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
-import { hoverAVar } from '../../tools/Built-in/A_Variables';
-import { hoverBiVar } from '../../tools/Built-in/BiVariables';
-import { getHoverCommand2 } from '../../tools/Built-in/Command_tools';
-import { BuiltInFuncMDMap } from '../../tools/Built-in/func_tools';
-import { getHoverOtherKeyWord } from '../../tools/Built-in/otherKeyWord';
-import { getHoverStatement } from '../../tools/Built-in/statement_vsc';
+import type { TAhkTokenLine } from '../../globalEnum';
+import { hoverAVar } from '../../tools/Built-in/A_Variables.tools';
+import { hoverBiVar } from '../../tools/Built-in/BiVariables.tools';
+import { getHoverCommand2 } from '../../tools/Built-in/Command.tools';
+import { getBuiltInFuncMD } from '../../tools/Built-in/func.tools';
+import { getHoverOtherKeyWord1 } from '../../tools/Built-in/otherKeyword1.tools';
+import { getHoverOtherKeyWord2 } from '../../tools/Built-in/otherKeyword2.tools';
+import { getHoverStatement } from '../../tools/Built-in/statement.tools';
 import { hover2winMsgMd } from '../../tools/Built-in/Windows_Messages_Tools';
 import { numberFindWinMsg } from '../../tools/Built-in/Windows_MessagesRe_Tools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStrNext } from '../../tools/isPosAtStr';
 import { DeepAnalysisHover } from './tools/DeepAnalysisHover';
-import { hoverMultiLine } from './tools/hover-multi-line';
+import { hoverAhk2exe } from './tools/hoverAhk2exe';
 import { hoverClassName } from './tools/hoverClassName';
-import { HoverDirectives } from './tools/HoverDirectives';
+import { hoverDirectives } from './tools/hoverDirectives';
 import { hoverGlobalVar } from './tools/hoverGlobalVar';
+import { hoverMultiLine } from './tools/hoverMultiLine';
 
 function HoverOfFunc(
     document: vscode.TextDocument,
@@ -31,7 +34,7 @@ function HoverOfFunc(
     const DA: CAhkFunc | null = getFuncWithName(wordUp);
     if (DA !== null) return DA.md;
 
-    const BuiltInFuncMD: vscode.MarkdownString | undefined = BuiltInFuncMDMap.get(wordUp)?.md;
+    const BuiltInFuncMD: vscode.MarkdownString | undefined = getBuiltInFuncMD(wordUp)?.md;
     if (BuiltInFuncMD !== undefined) return BuiltInFuncMD;
 
     return null; // not userDefFunc of BiFunc
@@ -51,11 +54,12 @@ function HoverProviderCore(
     if (mdOfMultiLine !== null) return new vscode.Hover(mdOfMultiLine);
 
     // pos at Comment range...
-    const { lStr, textRaw } = DocStrMap[position.line];
-    if (position.character > lStr.length) return null;
+    const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
+    const { lStr, textRaw } = AhkTokenLine;
+    if (position.character > lStr.length) return hoverAhk2exe(AhkTokenLine, position);
 
     // ex: #Warn
-    const DirectivesMd: vscode.MarkdownString | undefined = HoverDirectives(position, AST);
+    const DirectivesMd: vscode.MarkdownString | undefined = hoverDirectives(position, AST);
     if (DirectivesMd !== undefined) return new vscode.Hover(DirectivesMd);
 
     const AhkFunc: CAhkFunc | null = getDAWithPos(AST, position);
@@ -85,7 +89,8 @@ function HoverProviderCore(
     type TFn = (wordUp: string) => vscode.MarkdownString | null | undefined;
     const fnList: TFn[] = [
         getHoverCommand2,
-        getHoverOtherKeyWord,
+        getHoverOtherKeyWord1,
+        getHoverOtherKeyWord2,
         getHoverStatement,
         hoverAVar,
         hoverBiVar,

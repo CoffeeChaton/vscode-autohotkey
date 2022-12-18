@@ -27,148 +27,34 @@ type TElementGroup =
     | 'Window'; // OBJ_XX
 
 type TBuiltInFuncElement = Readonly<{
+    upName: string;
     keyRawName: string;
     group: TElementGroup;
     link: `https://www.autohotkey.com/docs/${string}`;
-    msg: string;
+    msg: readonly string[];
     insert: string;
     exp: readonly string[];
 }>;
 
-type TUPKey =
-    | 'ABS'
-    | 'ACOS'
-    | 'ARRAY'
-    | 'ASC'
-    | 'ASIN'
-    | 'ATAN'
-    | 'CEIL'
-    | 'CHR'
-    | 'COMOBJACTIVE'
-    | 'COMOBJARRAY'
-    | 'COMOBJCONNECT'
-    | 'COMOBJCREATE'
-    | 'COMOBJECT'
-    | 'COMOBJENWRAP'
-    | 'COMOBJERROR'
-    | 'COMOBJFLAGS'
-    | 'COMOBJGET'
-    | 'COMOBJMISSING'
-    | 'COMOBJQUERY'
-    | 'COMOBJTYPE'
-    | 'COMOBJUNWRAP'
-    | 'COMOBJVALUE'
-    | 'COS'
-    | 'DLLCALL'
-    | 'EXCEPTION'
-    | 'EXP'
-    | 'FILEEXIST'
-    | 'FILEOPEN'
-    | 'FLOOR'
-    | 'FORMAT'
-    | 'FUNC'
-    | 'GETKEYNAME'
-    | 'GETKEYSC'
-    | 'GETKEYSTATE'
-    | 'GETKEYVK'
-    | 'HOTSTRING'
-    | 'IL_ADD'
-    | 'IL_CREATE'
-    | 'IL_DESTROY'
-    | 'INPUTHOOK'
-    | 'INSTR'
-    | 'ISBYREF'
-    | 'ISFUNC'
-    | 'ISLABEL'
-    | 'ISOBJECT'
-    | 'ISSET'
-    | 'LN'
-    | 'LOADPICTURE'
-    | 'LOG'
-    | 'LTRIM'
-    | 'LV_ADD'
-    | 'LV_DELETE'
-    | 'LV_DELETECOL'
-    | 'LV_GETCOUNT'
-    | 'LV_GETNEXT'
-    | 'LV_GETTEXT'
-    | 'LV_INSERT'
-    | 'LV_INSERTCOL'
-    | 'LV_MODIFY'
-    | 'LV_MODIFYCOL'
-    | 'LV_SETIMAGELIST'
-    | 'MAX'
-    | 'MENUGETHANDLE'
-    | 'MENUGETNAME'
-    | 'MIN'
-    | 'MOD'
-    | 'NUMGET'
-    | 'NUMPUT'
-    | 'OBJADDREF'
-    | 'OBJBINDMETHOD'
-    | 'OBJGETBASE'
-    | 'OBJRAWGET'
-    | 'OBJRAWSET'
-    | 'OBJRELEASE'
-    | 'OBJSETBASE'
-    | 'ONCLIPBOARDCHANGE'
-    | 'ONERROR'
-    | 'ONEXIT'
-    | 'ONMESSAGE'
-    | 'ORD'
-    | 'REGEXMATCH'
-    | 'REGEXREPLACE'
-    | 'REGISTERCALLBACK'
-    | 'ROUND'
-    | 'RTRIM'
-    | 'SB_SETICON'
-    | 'SB_SETPARTS'
-    | 'SB_SETTEXT'
-    | 'SIN'
-    | 'SQRT'
-    | 'STRGET'
-    | 'STRLEN'
-    | 'STRPUT'
-    | 'STRREPLACE'
-    | 'STRSPLIT'
-    | 'SUBSTR'
-    | 'TAN'
-    | 'TRIM'
-    | 'TV_ADD'
-    | 'TV_DELETE'
-    | 'TV_GET'
-    | 'TV_GETCHILD'
-    | 'TV_GETCOUNT'
-    | 'TV_GETNEXT'
-    | 'TV_GETPARENT'
-    | 'TV_GETPREV'
-    | 'TV_GETSELECTION'
-    | 'TV_GETTEXT'
-    | 'TV_MODIFY'
-    | 'TV_SETIMAGELIST'
-    | 'VARSETCAPACITY'
-    | 'VERCOMPARE'
-    | 'WINACTIVE'
-    | 'WINEXIST';
-
-type TBuiltInFuncbj = {
-    [k in TUPKey]: TBuiltInFuncElement;
-};
-
-export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
-    ABS: {
+/**
+ * after initialization clear
+ */
+export const BuiltInFunctionObj: TBuiltInFuncElement[] = [
+    {
+        upName: 'ABS',
         group: 'Math',
         keyRawName: 'Abs',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Abs',
-        msg: ' Returns the absolute value of _Number_.',
+        msg: [' Returns the absolute value of _Number_.'],
         insert: 'Abs($1)',
         exp: ['MsgBox, % Abs(-1.2) ; Returns 1.2'],
     },
-    ACOS: {
+    {
+        upName: 'ACOS',
         group: '△Math',
         keyRawName: 'ACos',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#ACos',
-        msg: ' Returns the arcsine/arccosine/arctangent in radians.',
+        msg: [' Returns the arcsine/arccosine/arctangent in radians.'],
         insert: 'ACos(${1:Number})',
         exp: [
             'number := -1.1',
@@ -186,22 +72,27 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'OutputDebug % ACos(pi / 6)  ; 1.019727',
         ],
     },
-    ARRAY: {
+    {
+        upName: 'ARRAY',
         group: 'Misc.',
         keyRawName: 'Array',
         link: 'https://www.autohotkey.com/docs/Objects.htm#Usage_Simple_Arrays',
-        msg: ' Create an array',
+        msg: [' Create an array'],
         insert: 'Array($0)', // (!_tcsicmp(suffix, _T("Array")))
         exp: [
             'Array1 := [Item1, Item2, ..., ItemN]',
             'Array2 := Array(Item1, Item2, ..., ItemN)',
         ],
     },
-    ASC: {
+    {
+        upName: 'ASC',
         group: 'Str',
         keyRawName: 'Asc',
         link: 'https://www.autohotkey.com/docs/commands/Asc.htm',
-        msg: 'Returns the numeric value of the first byte or UTF-16 code unit in the specified string.\n\n This function returns a numeric value in the range 0 to 255 (for ANSI) or 0 to 0xFFFF (for Unicode). See [Unicode vs ANSI](https://www.autohotkey.com/docs/Compat.htm#Format) for details. If _String_ is empty, it returns 0.',
+        msg: [
+            'Returns the numeric value of the first byte or UTF-16 code unit in the specified string.',
+            'This function returns a numeric value in the range 0 to 255 (for ANSI) or 0 to 0xFFFF (for Unicode). See [Unicode vs ANSI](https://www.autohotkey.com/docs/Compat.htm#Format) for details. If _String_ is empty, it returns 0.',
+        ],
         insert: 'Asc(${1:String})',
         exp: [
             'Number := Asc(String)',
@@ -210,11 +101,15 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'MsgBox, % Asc("test")',
         ],
     },
-    ASIN: {
+    {
+        upName: 'ASIN',
         group: '△Math',
         keyRawName: 'ASin',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#ASin',
-        msg: ' Returns the arcsine/arccosine/arctangent in radians.\nIf Number is less than -1 or greater than 1, the function yields a blank result (empty string).',
+        msg: [
+            ' Returns the arcsine/arccosine/arctangent in radians.',
+            'If Number is less than -1 or greater than 1, the function yields a blank result (empty string).',
+        ],
         insert: 'ASin(${1:Number})',
         exp: [
             'number := -1.1',
@@ -232,52 +127,59 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'OutputDebug % ASin(pi / 6)  ; 0.551070',
         ],
     },
-    ATAN: {
+    {
+        upName: 'ATAN',
         group: '△Math',
         keyRawName: 'ATan',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#ATan',
-        msg: ' Returns the arcsine/arccosine/arctangent in radians.',
+        msg: [' Returns the arcsine/arccosine/arctangent in radians.'],
         insert: 'ATan(${1:Number})',
         exp: [
             'pi := 4 * ATan(1)',
             'OutputDebug % pi ; 3.141593',
         ],
     },
-    CEIL: {
+    {
+        upName: 'CEIL',
         group: 'Math',
         keyRawName: 'Ceil',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Ceil',
-        msg: ' Returns _Number_ rounded up to the nearest integer (without any .00 suffix).',
+        msg: [' Returns _Number_ rounded up to the nearest integer (without any .00 suffix).'],
         insert: 'Ceil($1)',
         exp: [
             'MsgBox, % Ceil(1.2)  ; Returns 2',
             'MsgBox, % Ceil(-1.2) ; Returns -1',
         ],
     },
-    CHR: {
+    {
+        upName: 'CHR',
         group: 'Str',
         keyRawName: 'Chr',
         link: 'https://www.autohotkey.com/docs/commands/Chr.htm',
-        msg: 'Returns the string (usually a single character) corresponding to the character code indicated by the specified number.',
+        msg: [
+            'Returns the string (usually a single character) corresponding to the character code indicated by the specified number.',
+        ],
         insert: 'Chr(${1:Number})',
         exp: [
             'String := Chr(Number)',
             'MsgBox % Chr(116) ; Reports "t".',
         ],
     },
-    COMOBJACTIVE: {
+    {
+        upName: 'COMOBJACTIVE',
         group: 'COM',
         keyRawName: 'ComObjActive',
         link: 'https://www.autohotkey.com/docs/commands/ComObjActive.htm',
-        msg: 'Retrieves a running object that has been registered with OLE.',
+        msg: ['Retrieves a running object that has been registered with OLE.'],
         insert: 'ComObjActive(${1:CLSID})',
         exp: ['ComObject := ComObjActive(CLSID)'],
     },
-    COMOBJARRAY: {
+    {
+        upName: 'COMOBJARRAY',
         group: 'COM',
         keyRawName: 'ComObjArray',
         link: 'https://www.autohotkey.com/docs/commands/ComObjArray.htm',
-        msg: ' Creates a SAFEARRAY for use with COM.',
+        msg: [' Creates a SAFEARRAY for use with COM.'],
         insert: 'ComObjArray(${1:VarType}, ${2:Count1})',
         exp: [
             'arr := ComObjArray(VT_VARIANT:=12, 3)',
@@ -290,11 +192,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'MsgBox % t',
         ],
     },
-    COMOBJCONNECT: {
+    {
+        upName: 'COMOBJCONNECT',
         group: 'COM',
         keyRawName: 'ComObjConnect',
         link: 'https://www.autohotkey.com/docs/commands/ComObjConnect.htm',
-        msg: ' Connects a COM object\'s event sources to functions with a given prefix.',
+        msg: [' Connects a COM object\'s event sources to functions with a given prefix.'],
         insert: 'ComObjConnect(${1:ComObject})',
         exp: [
             'ie := ComObjCreate("InternetExplorer.Application")',
@@ -302,11 +205,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'ComObjConnect(ie, "IE_")',
         ],
     },
-    COMOBJCREATE: {
+    {
+        upName: 'COMOBJCREATE',
         group: 'COM',
         keyRawName: 'ComObjCreate',
         link: 'https://www.autohotkey.com/docs/commands/ComObjCreate.htm',
-        msg: ' Creates a COM object.',
+        msg: [' Creates a COM object.'],
         insert: 'ComObjCreate(${1:CLSID})',
         exp: [
             'ie := ComObjCreate("InternetExplorer.Application")',
@@ -314,48 +218,41 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'ie.Navigate("https://www.autohotkey.com/")',
         ],
     },
-    COMOBJECT: {
+    {
+        upName: 'COMOBJECT',
         group: 'COM',
         keyRawName: 'ComObject',
         link: 'https://www.autohotkey.com/docs/commands/ComObjActive.htm',
-        msg: ' Creates an object representing a typed value to be passed as a parameter or return value.',
+        msg: [' Creates an object representing a typed value to be passed as a parameter or return value.'],
         insert: 'ComObject(${1:VarType}, ${2:Value})',
         exp: [
             'ParamObj := ComObject(VarType, Value , Flags)',
         ],
     },
-    COMOBJENWRAP: {
-        group: 'COM',
-        keyRawName: 'ComObjEnwrap',
-        link: 'https://www.autohotkey.com/docs/commands/ComObjActive.htm',
-        msg: ' Wraps/unwraps a COM object.',
-        insert: 'ComObjEnwrap(${1:DispPtr})',
-        exp: [
-            ';is Deprecated',
-            'ComObject := ComObjEnwrap(DispPtr)',
-        ],
-    },
-    COMOBJERROR: {
+    {
+        upName: 'COMOBJERROR',
         group: 'COM',
         keyRawName: 'ComObjError',
         link: 'https://www.autohotkey.com/docs/commands/ComObjError.htm',
-        msg: ' Enables or disables notification of COM errors.',
+        msg: [' Enables or disables notification of COM errors.'],
         insert: 'ComObjError($1)',
         exp: ['Enabled := ComObjError(true)'],
     },
-    COMOBJFLAGS: {
+    {
+        upName: 'COMOBJFLAGS',
         group: 'COM',
         keyRawName: 'ComObjFlags',
         link: 'https://www.autohotkey.com/docs/commands/ComObjFlags.htm',
-        msg: 'Retrieves or changes flags which control a COM wrapper object\'s behaviour.',
+        msg: ['Retrieves or changes flags which control a COM wrapper object\'s behaviour.'],
         insert: 'ComObjFlags(${1:ComObject})',
         exp: ['Flags := ComObjFlags(ComObject , NewFlags, Mask)'],
     },
-    COMOBJGET: {
+    {
+        upName: 'COMOBJGET',
         group: 'COM',
         keyRawName: 'ComObjGet',
         link: 'https://www.autohotkey.com/docs/commands/ComObjGet.htm',
-        msg: ' Returns a reference to an object provided by a COM component.',
+        msg: [' Returns a reference to an object provided by a COM component.'],
         insert: 'ComObjGet(${1:Name})',
         exp: [
             'WinGet pid, PID, A',
@@ -363,30 +260,21 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'wmi := ComObjGet("winmgmts:")',
         ],
     },
-    COMOBJMISSING: {
-        group: 'COM',
-        keyRawName: 'ComObjMissing',
-        link: 'https://www.autohotkey.com/docs/commands/ComObjActive.htm',
-        msg: ' Creates a "missing parameter" object to pass to a COM method.',
-        insert: 'ComObjMissing($0)',
-        exp: [
-            '; is Deprecated',
-            'ParamObj := ComObjMissing()',
-        ],
-    },
-    COMOBJQUERY: {
+    {
+        upName: 'COMOBJQUERY',
         group: 'COM',
         keyRawName: 'ComObjQuery',
         link: 'https://www.autohotkey.com/docs/commands/ComObjQuery.htm',
-        msg: ' Queries a COM object for an interface or service.',
+        msg: [' Queries a COM object for an interface or service.'],
         insert: 'ComObjQuery(${1:ComObject})',
         exp: ['InterfacePointer := ComObjQuery(ComObject, SID, IID)'],
     },
-    COMOBJTYPE: {
+    {
+        upName: 'COMOBJTYPE',
         group: 'COM',
         keyRawName: 'ComObjType',
         link: 'https://www.autohotkey.com/docs/commands/ComObjType.htm',
-        msg: 'Retrieves type information from a COM object.',
+        msg: ['Retrieves type information from a COM object.'],
         insert: 'ComObjType(${2:ComObject}, "${1|Name,IID,Class,CLSID|}")',
         exp: [
             'd := ComObjCreate("Scripting.Dictionary")',
@@ -396,31 +284,23 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'CName   := ComObjType(d, "Class")',
             'CLSID   := ComObjType(d, "CLSID")',
         ],
+        // https://www.autohotkey.com/docs/commands/ComObjType.htm#vt
     },
-    COMOBJUNWRAP: {
-        group: 'COM',
-        keyRawName: 'ComObjUnwrap',
-        link: 'https://www.autohotkey.com/docs/commands/ComObjActive.htm',
-        msg: ' Wraps/unwraps a COM object.',
-        insert: 'ComObjUnwrap(${1:ComObject})',
-        exp: [
-            ';is Deprecated',
-            'DispPtr := ComObjUnwrap(ComObject)',
-        ],
-    },
-    COMOBJVALUE: {
+    {
+        upName: 'COMOBJVALUE',
         group: 'COM',
         keyRawName: 'ComObjValue',
         link: 'https://www.autohotkey.com/docs/commands/ComObjValue.htm',
-        msg: 'Retrieves the value or pointer stored in a COM wrapper object.',
+        msg: ['Retrieves the value or pointer stored in a COM wrapper object.'],
         insert: 'ComObjValue(${1:ComObject})',
         exp: ['Value := ComObjValue(ComObject)'],
     },
-    COS: {
+    {
+        upName: 'COS',
         group: '△Math',
         keyRawName: 'Cos',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Cos',
-        msg: ' Returns the trigonometric sine/cosine/tangent of _Number_.',
+        msg: [' Returns the trigonometric sine/cosine/tangent of _Number_.'],
         insert: 'Cos(${1:Number})',
         exp: [
             'Value := Cos(Number)',
@@ -430,11 +310,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'MsgBox, % Cos(90*pi) ; Returns 1',
         ],
     },
-    DLLCALL: {
+    {
+        upName: 'DLLCALL',
         group: 'Lib',
         keyRawName: 'DllCall',
         link: 'https://www.autohotkey.com/docs/commands/DllCall.htm',
-        msg: 'Calls a function inside a DLL, such as a standard Windows API function.',
+        msg: ['Calls a function inside a DLL, such as a standard Windows API function.'],
         insert: 'DllCall("${1:DllFile\\Function}", ${2:Type1}, ${3:Arg1}, ${4:Type2}, ${5:Arg2})',
         exp: [
             'Result := DllCall("DllFile\\Function" , Type1, Arg1, Type2, Arg2, "Cdecl ReturnType")',
@@ -443,7 +324,8 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'bc := DllCall("GetSysColor", "Int", SysColor, "UInt")',
         ],
     },
-    EXCEPTION: {
+    {
+        upName: 'EXCEPTION',
         group: 'Error',
         keyRawName: 'Exception',
         link: 'https://www.autohotkey.com/docs/commands/Throw.htm#Exception',
@@ -454,7 +336,7 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '- **Extra:** Additional information about the error, if available.',
             '- **File:** Set automatically to the full path of the script file which contains the line at which the error occurred.',
             '- **Line:** Set automatically to the line number at which the error occurred.',
-        ].join('\n'),
+        ],
         insert: 'Exception("${1:Message}" , ${2|"What",-1|}, "${3:Extra}")',
         exp: [
             'Exception(Message , What, Extra)',
@@ -462,51 +344,56 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '  throw Exception("Fail", -1)',
         ],
     },
-    EXP: {
+    {
+        upName: 'EXP',
         group: 'Math',
         keyRawName: 'Exp',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Exp',
-        msg: ' Returns _e_ (which is approximately 2.71828182845905) raised to the _N_th power.',
+        msg: [' Returns _e_ (which is approximately 2.71828182845905) raised to the _N_th power.'],
         insert: 'Exp($1)',
         exp: ['MsgBox, % Exp(1.2) ; Returns 3.320117'],
     },
-    FILEEXIST: {
+    {
+        upName: 'FILEEXIST',
         group: 'File',
         keyRawName: 'FileExist',
         link: 'https://www.autohotkey.com/docs/commands/FileExist.htm',
-        msg: 'Checks for the existence of a file or folder and returns its attributes.',
+        msg: ['Checks for the existence of a file or folder and returns its attributes.'],
         insert: 'FileExist("${1:C:\\My_File.txt}")',
         exp: [
             'if FileExist("D:\\")',
             '    MsgBox, % "The drive exists."',
         ],
     },
-    FILEOPEN: {
+    {
+        upName: 'FILEOPEN',
         group: 'File',
         keyRawName: 'FileOpen',
         link: 'https://www.autohotkey.com/docs/commands/FileOpen.htm',
-        msg: 'Opens a file to read specific content from it and/or to write new content into it.',
+        msg: ['Opens a file to read specific content from it and/or to write new content into it.'],
         insert: 'FileOpen($1:{Filename}, Flags , Encoding)',
         exp: [
             'file := FileOpen(FileName, "r")',
         ],
     },
-    FLOOR: {
+    {
+        upName: 'FLOOR',
         group: 'Math',
         keyRawName: 'Floor',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Floor',
-        msg: ' Returns _Number_ rounded down to the nearest integer (without any .00 suffix).',
+        msg: [' Returns _Number_ rounded down to the nearest integer (without any .00 suffix).'],
         insert: 'Floor($1)',
         exp: [
             'MsgBox, % Floor(1.2)  ; Returns 1',
             'MsgBox, % Floor(-1.2) ; Returns -2',
         ],
     },
-    FORMAT: {
+    {
+        upName: 'FORMAT',
         group: 'Str',
         keyRawName: 'Format',
         link: 'https://www.autohotkey.com/docs/commands/Format.htm',
-        msg: 'Formats a variable number of input values according to a format string.',
+        msg: ['Formats a variable number of input values according to a format string.'],
         insert: 'Format(${1:FormatStr })',
         exp: [
             'String := Format(FormatStr , Values...)',
@@ -515,11 +402,15 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'MsgBox % Format("{2:x}{1:02x}", arr*)',
         ],
     },
-    FUNC: {
+    {
+        upName: 'FUNC',
         group: 'Misc.',
         keyRawName: 'Func',
         link: 'https://www.autohotkey.com/docs/commands/Func.htm',
-        msg: 'Retrieves a reference to the specified function.\n\n[Func Object](https://www.autohotkey.com/docs/objects/Func.htm)',
+        msg: [
+            'Retrieves a reference to the specified function.',
+            '[Func Object](https://www.autohotkey.com/docs/objects/Func.htm)',
+        ],
         insert: 'Func(${1:FunctionName})',
         exp: [
             '~F11:: fn_exp()',
@@ -534,11 +425,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '}',
         ],
     },
-    GETKEYNAME: {
+    {
+        upName: 'GETKEYNAME',
         group: 'Keyboard',
         keyRawName: 'GetKeyName',
         link: 'https://www.autohotkey.com/docs/commands/GetKey.htm',
-        msg: 'Retrieves the name/text, virtual key code or scan code of a key.',
+        msg: ['Retrieves the name/text, virtual key code or scan code of a key.'],
         insert: 'GetKeyName(${1:Key})',
         exp: [
             'key  := "LWin" ; Any key can be used here.',
@@ -550,11 +442,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'OutputDebug % sc ; 347',
         ],
     },
-    GETKEYSC: {
+    {
+        upName: 'GETKEYSC',
         group: 'Keyboard',
         keyRawName: 'GetKeySC',
         link: 'https://www.autohotkey.com/docs/commands/GetKey.htm',
-        msg: 'Retrieves the name/text, virtual key code or scan code of a key.',
+        msg: ['Retrieves the name/text, virtual key code or scan code of a key.'],
         insert: 'GetKeySC(${1:Key})',
         exp: [
             'key  := "LWin" ; Any key can be used here.',
@@ -566,22 +459,24 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'OutputDebug % sc ; 347',
         ],
     },
-    GETKEYSTATE: {
+    {
+        upName: 'GETKEYSTATE',
         group: 'Keyboard',
         keyRawName: 'GetKeyState',
         link: 'https://www.autohotkey.com/docs/commands/GetKeyState.htm#function',
-        msg: 'Returns true , link: "1", if the specified key is down and false , link: "0", if it is up.',
+        msg: ['Returns true , link: "1", if the specified key is down and false , link: "0", if it is up.'],
         insert: 'GetKeyState(${1:KeyName})',
         exp: [
             'KeyIsDown := GetKeyState(KeyName , Mode)',
             'state := GetKeyState("RButton")  ; Right mouse button.',
         ],
     },
-    GETKEYVK: {
+    {
+        upName: 'GETKEYVK',
         group: 'Keyboard',
         keyRawName: 'GetKeyVK',
         link: 'https://www.autohotkey.com/docs/commands/GetKey.htm',
-        msg: 'Retrieves the name/text, virtual key code or scan code of a key.',
+        msg: ['Retrieves the name/text, virtual key code or scan code of a key.'],
         insert: 'GetKeyVK(${1:Key})',
         exp: [
             'key  := "LWin" ; Any key can be used here.',
@@ -593,11 +488,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'OutputDebug % sc ; 347',
         ],
     },
-    HOTSTRING: {
+    {
+        upName: 'HOTSTRING',
         group: 'Keyboard',
         keyRawName: 'Hotstring',
         link: 'https://www.autohotkey.com/docs/commands/Hotstring.htm',
-        msg: 'Creates, modifies, enables, or disables a hotstring while the script is running.',
+        msg: ['Creates, modifies, enables, or disables a hotstring while the script is running.'],
         insert: 'Hotstring(${1:String})',
         exp: [
             'try',
@@ -606,54 +502,64 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '    MsgBox % "The hotstring does not exist or it has no variant for the current IfWin criteria."',
         ],
     },
-    IL_ADD: {
+    {
+        upName: 'IL_ADD',
         group: 'ImageLists',
         keyRawName: 'IL_Add',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#IL_Add',
-        msg: 'Adds an icon or picture to the specified _ImageListID_ and returns the new icon\'s index (1 is the first icon, 2 is the second, and so on).',
+        msg: [
+            'Adds an icon or picture to the specified _ImageListID_',
+            'and returns the new icon\'s index (1 is the first icon, 2 is the second, and so on).',
+        ],
         insert: 'IL_Add(${1:ImageListID}, ${2:Filename})',
         exp: [
             '; https://www.autohotkey.com/docs/commands/ListView.htm#BuiltIn',
             'IL_Add(ImageListID, Filename , IconNumber, ResizeNonIcon)',
         ],
     },
-    IL_CREATE: {
+    {
+        upName: 'IL_CREATE',
         group: 'ImageLists',
         keyRawName: 'IL_Create',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#IL_Create',
-        msg: 'Creates a new ImageList, initially empty, and returns the unique ID of the ImageList (or 0 upon failure).',
+        msg: [
+            'Creates a new ImageList, initially empty, and returns the unique ID of the ImageList (or 0 upon failure).',
+        ],
         insert: 'IL_Create($1)',
         exp: [
             '; https://www.autohotkey.com/docs/commands/ListView.htm#BuiltIn',
             'IL_Create(InitialCount, GrowCount, LargeIcons)',
         ],
     },
-    IL_DESTROY: {
+    {
+        upName: 'IL_DESTROY',
         group: 'ImageLists',
         keyRawName: 'IL_Destroy',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#IL_Destroy',
-        msg: 'Deletes the specified ImageList and returns 1 upon success and 0 upon failure.',
+        msg: ['Deletes the specified ImageList and returns 1 upon success and 0 upon failure.'],
         insert: 'IL_Destroy(${1:ImageListID})',
         exp: [
             '; https://www.autohotkey.com/docs/commands/ListView.htm#BuiltIn',
             'IL_Destroy(ImageListID)',
         ],
     },
-    INPUTHOOK: {
+    {
+        upName: 'INPUTHOOK',
         group: 'Keyboard',
         keyRawName: 'InputHook',
         link: 'https://www.autohotkey.com/docs/commands/InputHook.htm',
-        msg: 'Creates an object which can be used to collect or intercept keyboard input.',
+        msg: ['Creates an object which can be used to collect or intercept keyboard input.'],
         insert: 'InputHook($1)',
         exp: [
             'InputHook := InputHook(Options, EndKeys, MatchList)',
         ],
     },
-    INSTR: {
+    {
+        upName: 'INSTR',
         group: 'Str',
         keyRawName: 'InStr',
         link: 'https://www.autohotkey.com/docs/commands/InStr.htm',
-        msg: 'Searches for a given occurrence of a string, from the left or the right.',
+        msg: ['Searches for a given occurrence of a string, from the left or the right.'],
         insert: 'InStr(${1:Haystack}, ${2:Needle})',
         exp: [
             'FoundPos := InStr(Haystack, Needle , CaseSensitive := false, StartingPos := 1, Occurrence := 1)',
@@ -661,11 +567,14 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'MsgBox % InStr("123abc789", "abc") ; Returns 4',
         ],
     },
-    ISBYREF: {
+    {
+        upName: 'ISBYREF',
         group: 'Func',
         keyRawName: 'IsByRef',
         link: 'https://www.autohotkey.com/docs/commands/IsByRef.htm',
-        msg: 'Returns a non-zero number if the specified [ByRef parameter](https://www.autohotkey.com/docs/Functions.htm#ByRef) was supplied with a variable.',
+        msg: [
+            'Returns a non-zero number if the specified [ByRef parameter](https://www.autohotkey.com/docs/Functions.htm#ByRef) was supplied with a variable.',
+        ],
         insert: 'IsByRef(${1:ParameterVar})',
         exp: [
             '~F10:: fn_f10()',
@@ -682,11 +591,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '',
         ],
     },
-    ISFUNC: {
+    {
+        upName: 'ISFUNC',
         group: 'Func',
         keyRawName: 'IsFunc',
         link: 'https://www.autohotkey.com/docs/commands/IsFunc.htm',
-        msg: 'Returns a non-zero number if the specified function exists in the script.',
+        msg: ['Returns a non-zero number if the specified function exists in the script.'],
         insert: 'IsFunc("${1:FunctionName}")',
         exp: [
             'count := IsFunc("RegExReplace") ; Any function name can be used here.',
@@ -696,11 +606,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '    MsgBox, % "This function does not exist."',
         ],
     },
-    ISLABEL: {
+    {
+        upName: 'ISLABEL',
         group: 'Misc.',
         keyRawName: 'IsLabel',
         link: 'https://www.autohotkey.com/docs/commands/IsLabel.htm',
-        msg: 'Returns a non-zero number if the specified label exists in the script.',
+        msg: ['Returns a non-zero number if the specified label exists in the script.'],
         insert: 'IsLabel("${1:LabelName}")',
         exp: [
             'TrueOrFalse := IsLabel(LabelName)',
@@ -713,11 +624,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'return',
         ],
     },
-    ISOBJECT: {
+    {
+        upName: 'ISOBJECT',
         group: 'Misc.',
         keyRawName: 'IsObject',
         link: 'https://www.autohotkey.com/docs/commands/IsObject.htm',
-        msg: 'Returns a non-zero number if the specified value is an object.',
+        msg: ['Returns a non-zero number if the specified value is an object.'],
         insert: 'IsObject("${1:ObjectValue}")',
         exp: [
             'TrueOrFalse := IsObject(ObjectValue)',
@@ -729,11 +641,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '    MsgBox % "This is not an object."',
         ],
     },
-    ISSET: {
+    {
+        upName: 'ISSET',
         group: 'Misc.',
         keyRawName: 'IsSet',
         link: 'https://www.autohotkey.com/docs/commands/IsSet.htm',
-        msg: 'Returns a non-zero number if the specified variable has been assigned a value.',
+        msg: ['Returns a non-zero number if the specified variable has been assigned a value.'],
         insert: 'IsSet(${1:Var})',
         exp: [
             'VarIsSet := IsSet(Var) ;;Return 0 or 1',
@@ -746,37 +659,41 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'MsgBox % "MyVar is " (IsSet(MyVar) ? "set and has value """ MyVar """" : "unset")',
         ],
     },
-    LN: {
+    {
+        upName: 'LN',
         group: 'Math',
         keyRawName: 'Ln',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Ln',
-        msg: ' Returns the natural logarithm (base e) of _Number_.',
+        msg: [' Returns the natural logarithm (base e) of _Number_.'],
         insert: 'Ln($1)',
         exp: ['MsgBox, % Ln(1.2) ; Returns 0.182322'],
     },
-    LOADPICTURE: {
+    {
+        upName: 'LOADPICTURE',
         group: 'GUI',
         keyRawName: 'LoadPicture',
         link: 'https://www.autohotkey.com/docs/commands/LoadPicture.htm',
-        msg: 'Loads a picture from file and returns a bitmap or icon handle.',
+        msg: ['Loads a picture from file and returns a bitmap or icon handle.'],
         insert: 'LoadPicture(${1:Filename})',
         exp: [
             'Handle := LoadPicture(Filename , Options, ByRef ImageType)',
         ],
     },
-    LOG: {
+    {
+        upName: 'LOG',
         group: 'Math',
         keyRawName: 'Log',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Log',
-        msg: ' Returns the logarithm (base 10) of _Number_.',
+        msg: [' Returns the logarithm (base 10) of _Number_.'],
         insert: 'Log($1)',
         exp: ['MsgBox, % Log(1.2) ; Returns 0.079181'],
     },
-    LTRIM: {
+    {
+        upName: 'LTRIM',
         group: 'Str',
         keyRawName: 'LTrim',
         link: 'https://www.autohotkey.com/docs/commands/Trim.htm',
-        msg: 'Trims characters from the beginning and/or end of a string.',
+        msg: ['Trims characters from the beginning and/or end of a string.'],
         insert: 'LTrim(${1:String})',
         exp: [
             'Result :=  Trim(String, OmitChars := " `t")',
@@ -784,41 +701,45 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'Result := RTrim(String, OmitChars := " `t")',
         ],
     },
-    LV_ADD: {
+    {
+        upName: 'LV_ADD',
         group: 'ListView',
         keyRawName: 'LV_Add',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#LV_Add',
-        msg: 'Adds a new row to the bottom of the list.',
+        msg: ['Adds a new row to the bottom of the list.'],
         insert: 'LV_Add($1)',
         exp: [
             'LV_Add(Options, Field1, Field2, ...)',
         ],
     },
-    LV_DELETE: {
+    {
+        upName: 'LV_DELETE',
         group: 'ListView',
         keyRawName: 'LV_Delete',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#LV_Delete',
-        msg: 'Deletes the specified row or all rows.',
+        msg: ['Deletes the specified row or all rows.'],
         insert: 'LV_Delete($1)',
         exp: [
             'LV_Delete(RowNumber)',
         ],
     },
-    LV_DELETECOL: {
+    {
+        upName: 'LV_DELETECOL',
         group: 'ListView',
         keyRawName: 'LV_DeleteCol',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#LV_DeleteCol',
-        msg: 'Deletes the specified column and all of the contents beneath it.',
+        msg: ['Deletes the specified column and all of the contents beneath it.'],
         insert: 'LV_DeleteCol(${1:ColumnNumber})',
         exp: [
             'LV_DeleteCol(ColumnNumber)',
         ],
     },
-    LV_GETCOUNT: {
+    {
+        upName: 'LV_GETCOUNT',
         group: 'ListView',
         keyRawName: 'LV_GetCount',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#LV_GetCount',
-        msg: 'Returns the total number of rows or columns, or the number of selected rows only.',
+        msg: ['Returns the total number of rows or columns, or the number of selected rows only.'],
         insert: 'LV_GetCount($1)',
         exp: [
             'LV_GetCount(Mode)',
@@ -828,81 +749,91 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '}',
         ],
     },
-    LV_GETNEXT: {
+    {
+        upName: 'LV_GETNEXT',
         group: 'ListView',
         keyRawName: 'LV_GetNext',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#LV_GetNext',
-        msg: 'Returns the row number of the next selected, checked, or focused row.',
+        msg: ['Returns the row number of the next selected, checked, or focused row.'],
         insert: 'LV_GetNext($1)',
         exp: [
             'LV_GetNext(StartingRowNumber, RowType)',
         ],
     },
-    LV_GETTEXT: {
+    {
+        upName: 'LV_GETTEXT',
         group: 'ListView',
         keyRawName: 'LV_GetText',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#LV_GetText',
-        msg: 'Retrieves the text at the specified _RowNumber_ and _ColumnNumber_ and stores it in _OutputVar_.',
+        msg: ['Retrieves the text at the specified _RowNumber_ and _ColumnNumber_ and stores it in _OutputVar_.'],
         insert: 'LV_GetText(${1:OutputVar}, ${2:RowNumber})',
         exp: [
             'LV_GetText(OutputVar, RowNumber , ColumnNumber)',
         ],
     },
-    LV_INSERT: {
+    {
+        upName: 'LV_INSERT',
         group: 'ListView',
         keyRawName: 'LV_Insert',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#LV_Insert',
-        msg: 'Inserts a new row at the specified row number.',
+        msg: ['Inserts a new row at the specified row number.'],
         insert: 'LV_Insert(${1:RowNumber})',
         exp: [
             'LV_Insert(RowNumber , Options, Col1, Col2, ...)',
         ],
     },
-    LV_INSERTCOL: {
+    {
+        upName: 'LV_INSERTCOL',
         group: 'ListView',
         keyRawName: 'LV_InsertCol',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#LV_InsertCol',
-        msg: 'Inserts a new column at the specified column number.',
+        msg: ['Inserts a new column at the specified column number.'],
         insert: 'LV_InsertCol(${1:ColumnNumber})',
         exp: [
             'LV_InsertCol(ColumnNumber , Options, ColumnTitle)',
         ],
     },
-    LV_MODIFY: {
+    {
+        upName: 'LV_MODIFY',
         group: 'ListView',
         keyRawName: 'LV_Modify',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#LV_Modify',
-        msg: 'Modifies the attributes and/or text of a row.',
+        msg: ['Modifies the attributes and/or text of a row.'],
         insert: 'LV_Modify(${1:RowNumber})',
         exp: [
             'LV_Modify(RowNumber , Options, NewCol1, NewCol2, ...)',
         ],
     },
-    LV_MODIFYCOL: {
+    {
+        upName: 'LV_MODIFYCOL',
         group: 'ListView',
         keyRawName: 'LV_ModifyCol',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#LV_ModifyCol',
-        msg: 'Modifies the attributes and/or text of the specified column and its header.',
+        msg: ['Modifies the attributes and/or text of the specified column and its header.'],
         insert: 'LV_ModifyCol($1)',
         exp: [
             'LV_ModifyCol(ColumnNumber, Options, ColumnTitle)',
         ],
     },
-    LV_SETIMAGELIST: {
+    {
+        upName: 'LV_SETIMAGELIST',
         group: 'ListView',
         keyRawName: 'LV_SetImageList',
         link: 'https://www.autohotkey.com/docs/commands/ListView.htm#LV_SetImageList',
-        msg: 'Sets or replaces an [ImageList](https://www.autohotkey.com/docs/commands/ListView.htm#IL) for displaying icons.',
+        msg: [
+            'Sets or replaces an [ImageList](https://www.autohotkey.com/docs/commands/ListView.htm#IL) for displaying icons.',
+        ],
         insert: 'LV_SetImageList(${1:ImageListID})',
         exp: [
             'LV_SetImageList(ImageListID , IconType)',
         ],
     },
-    MAX: {
+    {
+        upName: 'MAX',
         group: 'Math',
         keyRawName: 'Max',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Max',
-        msg: ' Returns the highest/lowest value of one or more numbers.',
+        msg: [' Returns the highest/lowest value of one or more numbers.'],
         insert: 'Max($1)',
         exp: [
             'Value := Max(Number1 , Number2, ...)',
@@ -911,27 +842,34 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'MsgBox, % Max(array*) ; Returns 4',
         ],
     },
-    MENUGETHANDLE: {
+    {
+        upName: 'MENUGETHANDLE',
         group: 'GUI',
         keyRawName: 'MenuGetHandle',
         link: 'https://www.autohotkey.com/docs/commands/MenuGetHandle.htm',
-        msg: 'Retrieves the [Win32 menu](https://www.autohotkey.com/docs/commands/Menu.htm#Win32_Menus) handle of a menu.',
+        msg: [
+            'Retrieves the [Win32 menu](https://www.autohotkey.com/docs/commands/Menu.htm#Win32_Menus) handle of a menu.',
+        ],
         insert: 'MenuGetHandle(${1:MenuName})',
         exp: ['Handle := MenuGetHandle(MenuName)'],
     },
-    MENUGETNAME: {
+    {
+        upName: 'MENUGETNAME',
         group: 'GUI',
         keyRawName: 'MenuGetName',
         link: 'https://www.autohotkey.com/docs/commands/MenuGetName.htm',
-        msg: 'Retrieves the name of a menu given a handle to its underlying [Win32 menu](https://www.autohotkey.com/docs/commands/Menu.htm#Win32_Menus).',
+        msg: [
+            'Retrieves the name of a menu given a handle to its underlying [Win32 menu](https://www.autohotkey.com/docs/commands/Menu.htm#Win32_Menus).',
+        ],
         insert: 'MenuGetName(${1:Handle})',
         exp: ['MenuName := MenuGetName(Handle)'],
     },
-    MIN: {
+    {
+        upName: 'MIN',
         group: 'Math',
         keyRawName: 'Min',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Min',
-        msg: ' Returns the highest/lowest value of one or more numbers.',
+        msg: [' Returns the highest/lowest value of one or more numbers.'],
         insert: 'Min($1)',
         exp: [
             'Value := Min(Number1 , Number2, ...)',
@@ -940,101 +878,124 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'MsgBox, % Max(array*) ; Returns 1',
         ],
     },
-    MOD: {
+    {
+        upName: 'MOD',
         group: 'Math',
         keyRawName: 'Mod',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Mod',
-        msg: ' Returns the remainder when _Dividend_ is divided by _Divisor_.',
+        msg: [' Returns the remainder when _Dividend_ is divided by _Divisor_.'],
         insert: 'Mod(${1:Dividend}, ${2:Divisor})',
         exp: [
             'Value := Mod(Dividend, Divisor)',
             'MsgBox, % Mod(7.5, 2) ; Returns 1.5 (2 x 3 + 1.5)',
         ],
     },
-    NUMGET: {
+    {
+        upName: 'NUMGET',
         group: 'Lib',
         keyRawName: 'NumGet',
         link: 'https://www.autohotkey.com/docs/commands/NumGet.htm',
-        msg: 'Returns the binary number stored at the specified address+offset.',
+        msg: ['Returns the binary number stored at the specified address+offset.'],
         insert: 'NumGet(${1:VarOrAddress})',
         exp: [
             'Width := NumGet(rc, 8, "int")',
         ],
     },
-    NUMPUT: {
+    {
+        upName: 'NUMPUT',
         group: 'Lib',
         keyRawName: 'NumPut',
         link: 'https://www.autohotkey.com/docs/commands/NumPut.htm',
-        msg: 'Stores a number in binary format at the specified address+offset.',
+        msg: ['Stores a number in binary format at the specified address+offset.'],
         insert: 'NumPut(${1:Number}, ${2:VarOrAddress})',
         exp: [
             'NumPut(x, RectF, 0, "float"), NumPut(y, RectF, 4, "float")',
         ],
     },
-    OBJADDREF: {
+    {
+        upName: 'OBJADDREF',
         group: 'Object',
         keyRawName: 'ObjAddRef',
         link: 'https://www.autohotkey.com/docs/commands/ObjAddRef.htm',
-        msg: 'Increments or decrements an object\'s [reference count](https://www.autohotkey.com/docs/Objects.htm#Reference_Counting).',
+        msg: [
+            'Increments or decrements an object\'s [reference count](https://www.autohotkey.com/docs/Objects.htm#Reference_Counting).',
+        ],
         insert: 'ObjAddRef(${1:Ptr})',
         exp: ['ObjAddRef(Ptr)'],
     },
-    OBJBINDMETHOD: {
+    {
+        upName: 'OBJBINDMETHOD',
         group: 'Object',
         keyRawName: 'ObjBindMethod',
         link: 'https://www.autohotkey.com/docs/commands/ObjBindMethod.htm',
-        msg: 'Creates a [BoundFunc object](https://www.autohotkey.com/docs/objects/Functor.htm#BoundFunc) which calls a method of a given object.',
+        msg: [
+            'Creates a [BoundFunc object](https://www.autohotkey.com/docs/objects/Functor.htm#BoundFunc) which calls a method of a given object.',
+        ],
         insert: 'ObjBindMethod(${1:Obj}, ${2:Method})',
         exp: ['BoundFunc := ObjBindMethod(Obj, Method, Params)'],
     },
-    OBJGETBASE: {
+    {
+        upName: 'OBJGETBASE',
         group: 'Object',
         keyRawName: 'ObjGetBase',
         link: 'https://www.autohotkey.com/docs/objects/Object.htm#GetBase',
-        msg: 'Retrieves an object\'s [base object](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects).',
+        msg: ['Retrieves an object\'s [base object](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects).'],
         insert: 'ObjGetBase(${1:Obj})',
         exp: ['BaseObject := ObjGetBase(Object)'],
     },
-    OBJRAWGET: {
+    {
+        upName: 'OBJRAWGET',
         group: 'Object',
         keyRawName: 'ObjRawGet',
         link: 'https://www.autohotkey.com/docs/objects/Object.htm#RawGet',
-        msg: 'Retrieves a key-value pair from an object, bypassing the object\'s [meta-functions](https://www.autohotkey.com/docs/Objects.htm#Meta_Functions).',
+        msg: [
+            'Retrieves a key-value pair from an object, bypassing the object\'s [meta-functions](https://www.autohotkey.com/docs/Objects.htm#Meta_Functions).',
+        ],
         insert: 'ObjRawGet(${1:Obj})',
         exp: ['Value := ObjRawGet(Object, Key)'],
     },
-    OBJRAWSET: {
+    {
+        upName: 'OBJRAWSET',
         group: 'Object',
         keyRawName: 'ObjRawSet',
         link: 'https://www.autohotkey.com/docs/objects/Object.htm#RawSet',
-        msg: 'Stores or overwrites a key-value pair in an object, bypassing the object\'s [meta-functions](https://www.autohotkey.com/docs/Objects.htm#Meta_Functions).',
+        msg: [
+            'Stores or overwrites a key-value pair in an object, bypassing the object\'s [meta-functions](https://www.autohotkey.com/docs/Objects.htm#Meta_Functions).',
+        ],
         insert: 'ObjRawSet(${1:Obj}, ${2:key}, ${3:value})',
         exp: [
             'ObjRawSet(Object, Key, Value) ; -> without __Set',
             'Object[Key] := Value ; -> use __Set',
         ],
     },
-    OBJRELEASE: {
+    {
+        upName: 'OBJRELEASE',
         group: 'Object',
         keyRawName: 'ObjRelease',
         link: 'https://www.autohotkey.com/docs/commands/ObjAddRef.htm',
-        msg: 'Increments or decrements an object\'s [reference count](https://www.autohotkey.com/docs/Objects.htm#Reference_Counting).',
+        msg: [
+            'Increments or decrements an object\'s [reference count](https://www.autohotkey.com/docs/Objects.htm#Reference_Counting).',
+        ],
         insert: 'ObjRelease(${1:Ptr})',
         exp: ['ObjRelease(Ptr)'],
     },
-    OBJSETBASE: {
+    {
+        upName: 'OBJSETBASE',
         group: 'Object',
         keyRawName: 'ObjSetBase',
         link: 'https://www.autohotkey.com/docs/objects/Object.htm#SetBase',
-        msg: 'Sets an object\'s [base object](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects).',
+        msg: ['Sets an object\'s [base object](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects).'],
         insert: 'ObjSetBase(${1:Object}, ${2:BaseObject})',
         exp: ['ObjSetBase(Object, BaseObject)'],
     },
-    ONCLIPBOARDCHANGE: {
+    {
+        upName: 'ONCLIPBOARDCHANGE',
         group: 'Env',
         keyRawName: 'OnClipboardChange',
         link: 'https://www.autohotkey.com/docs/commands/OnClipboardChange.htm#function',
-        msg: 'Registers a [function](https://www.autohotkey.com/docs/Functions.htm) or [function object](https://www.autohotkey.com/docs/objects/Functor.htm) to run whenever the clipboard\'s content changes.',
+        msg: [
+            'Registers a [function](https://www.autohotkey.com/docs/Functions.htm) or [function object](https://www.autohotkey.com/docs/objects/Functor.htm) to run whenever the clipboard\'s content changes.',
+        ],
         insert: 'OnClipboardChange(${1:element})',
         exp: [
             '#Persistent',
@@ -1048,11 +1009,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '}',
         ], // <-------
     },
-    ONERROR: {
+    {
+        upName: 'ONERROR',
         group: 'Control',
         keyRawName: 'OnError',
         link: 'https://www.autohotkey.com/docs/commands/OnError.htm',
-        msg: 'Specifies a function to run automatically when an unhandled error occurs.',
+        msg: ['Specifies a function to run automatically when an unhandled error occurs.'],
         insert: 'OnError(${1:Func})',
         exp: [
             'OnError(Func , AddRemove)',
@@ -1065,11 +1027,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '}',
         ],
     },
-    ONEXIT: {
+    {
+        upName: 'ONEXIT',
         group: 'Control',
         keyRawName: 'OnExit',
         link: 'https://www.autohotkey.com/docs/commands/OnExit.htm#function',
-        msg: 'Specifies a function to run automatically when the script exits.',
+        msg: ['Specifies a function to run automatically when the script exits.'],
         insert: 'OnExit(${1:Func})',
         exp: [
             'OnExit(Func , AddRemove)',
@@ -1089,11 +1052,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '}',
         ],
     },
-    ONMESSAGE: {
+    {
+        upName: 'ONMESSAGE',
         group: 'GUI',
         keyRawName: 'OnMessage',
         link: 'https://www.autohotkey.com/docs/commands/OnMessage.htm',
-        msg: 'Monitors a message/event.',
+        msg: ['Monitors a message/event.'],
         insert: 'OnMessage(${1:MsgNumber})',
         exp: [
             'OnMessage(MsgNumber , Function, MaxThreads := 1)',
@@ -1106,11 +1070,14 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '}',
         ],
     },
-    ORD: {
+    {
+        upName: 'ORD',
         group: 'Str',
         keyRawName: 'Ord',
         link: 'https://www.autohotkey.com/docs/commands/Ord.htm',
-        msg: 'Returns the ordinal value (numeric character code) of the first character in the specified string.\n\nApart from the Unicode supplementary character detection, this function is identical to [Asc()](https://www.autohotkey.com/docs/commands/Asc.htm).',
+        msg: [
+            'Returns the ordinal value (numeric character code) of the first character in the specified string.\n\nApart from the Unicode supplementary character detection, this function is identical to [Asc()](https://www.autohotkey.com/docs/commands/Asc.htm).',
+        ],
         insert: 'Ord(${1:String})',
         exp: [
             ';Both message boxes below show 116, because only the first character is considered.',
@@ -1118,7 +1085,8 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'MsgBox, % Ord("test")',
         ],
     },
-    REGEXMATCH: {
+    {
+        upName: 'REGEXMATCH',
         group: 'Str',
         keyRawName: 'RegExMatch',
         link: 'https://www.autohotkey.com/docs/commands/RegExMatch.htm',
@@ -1135,29 +1103,33 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '**Mode 2 (position-and-length):** If a capital P is present in the RegEx\'s options -- such as P)abc.\\*123 -- the _length_ of the entire-pattern match is stored in _OutputVar_ (or 0 if no match). If any [capturing subpatterns](https://www.autohotkey.com/docs/misc/RegEx-QuickRef.htm#subpat) are present, their positions and lengths are stored in two [pseudo-arrays](https://www.autohotkey.com/docs/misc/Arrays.htm#pseudo): _OutputVarPos_ and _OutputVarLen_. For example, if the variable\'s base name is _Match_, the one-based _position_ of the first subpattern\'s match would be stored in _MatchPos1_, and its length in _MatchLen1_ (zero is stored in both if the subpattern was not matched or the function returns 0). The exception to this is [named subpatterns](https://www.autohotkey.com/docs/commands/RegExMatch.htm#NamedSubPat): they are stored by name instead of number (e.g. _MatchPosYear_ and _MatchLenYear_).',
             '',
             '**Mode 3 (match object)** [\\[v1.1.05+\\]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.05.00 "Applies to AutoHotkey v1.1.05 and later")**:** If a capital O is present in the RegEx\'s options -- such as O)abc.\\*123 -- a [match object](https://www.autohotkey.com/docs/commands/RegExMatch.htm#MatchObject) is stored in _OutputVar_. This object can be used to retrieve the position, length and value of the overall match and of each [captured subpattern](https://www.autohotkey.com/docs/misc/RegEx-QuickRef.htm#subpat), if present.',
-        ].join('\n'),
+        ],
         insert: 'RegExMatch(${1:Haystack}, ${2:NeedleRegEx})',
         exp: [
             'FoundPos := RegExMatch(Haystack, NeedleRegEx , OutputVar, StartingPos := 1)',
             'MsgBox % RegExMatch("abc123123", "123$")',
         ],
     },
-    REGEXREPLACE: {
+    {
+        upName: 'REGEXREPLACE',
         group: 'Str',
         keyRawName: 'RegExReplace',
         link: 'https://www.autohotkey.com/docs/commands/RegExReplace.htm',
-        msg: 'Replaces occurrences of a pattern , link: "regular expression", inside a string.',
+        msg: ['Replaces occurrences of a pattern , link: "regular expression", inside a string.'],
         insert: 'RegExReplace(${1:Haystack}, ${2:NeedleRegEx})',
         exp: [
             'NewStr := RegExReplace(Haystack, NeedleRegEx , Replacement := "", OutputVarCount := "", Limit := -1, StartingPos := 1)',
             'MsgBox % RegExReplace("abc123123", "123$", "xyz")',
         ],
     },
-    REGISTERCALLBACK: {
+    {
+        upName: 'REGISTERCALLBACK',
         group: 'Lib',
         keyRawName: 'RegisterCallback',
         link: 'https://www.autohotkey.com/docs/commands/RegisterCallback.htm',
-        msg: 'Creates a machine-code address that when called, redirects the call to a [function](https://www.autohotkey.com/docs/Functions.htm) in the script.',
+        msg: [
+            'Creates a machine-code address that when called, redirects the call to a [function](https://www.autohotkey.com/docs/Functions.htm) in the script.',
+        ],
         insert: 'RegisterCallback("${1:FunctionName}")',
         exp: [
             'callback := RegisterCallback("TheFunc", "F", 3)  ; Parameter list size must be specified.',
@@ -1171,11 +1143,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '}',
         ],
     },
-    ROUND: {
+    {
+        upName: 'ROUND',
         group: 'Math',
         keyRawName: 'Round',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Round',
-        msg: ' Returns _Number_ rounded to _N_ decimal places.',
+        msg: [' Returns _Number_ rounded to _N_ decimal places.'],
         insert: 'Round(${1:Number}, ${2:N})',
         exp: [
             'Value := Round(Number , N)',
@@ -1185,11 +1158,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'MsgBox, % Round(345, -2) ; Returns 300',
         ],
     },
-    RTRIM: {
+    {
+        upName: 'RTRIM',
         group: 'Str',
         keyRawName: 'RTrim',
         link: 'https://www.autohotkey.com/docs/commands/Trim.htm',
-        msg: 'Trims characters from the beginning and/or end of a string.',
+        msg: ['Trims characters from the beginning and/or end of a string.'],
         insert: 'RTrim(${1:String})',
         exp: [
             'Result :=  Trim(String, OmitChars := " `t")',
@@ -1197,41 +1171,45 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'Result := RTrim(String, OmitChars := " `t")',
         ],
     },
-    SB_SETICON: {
+    {
+        upName: 'SB_SETICON',
         group: 'StatusBar',
         keyRawName: 'SB_SetIcon',
         link: 'https://www.autohotkey.com/docs/commands/GuiControls.htm#SB_SetIcon',
-        msg: 'Displays a small icon to the left of the text in the specified part.',
+        msg: ['Displays a small icon to the left of the text in the specified part.'],
         insert: 'SB_SetIcon(${1:Filename})',
         exp: [
             'SB_SetIcon(Filename , IconNumber, PartNumber)',
         ],
     },
-    SB_SETTEXT: {
+    {
+        upName: 'SB_SETTEXT',
         group: 'StatusBar',
         keyRawName: 'SB_SetText',
         link: 'https://www.autohotkey.com/docs/commands/GuiControls.htm#SB_SetText',
-        msg: 'Displays _NewText_ in the specified part of the status bar.',
+        msg: ['Displays _NewText_ in the specified part of the status bar.'],
         insert: 'SB_SetText(${1:NewText})',
         exp: [
             'SB_SetText(NewText , PartNumber, Style)',
         ],
     },
-    SB_SETPARTS: {
+    {
+        upName: 'SB_SETPARTS',
         group: 'StatusBar',
         keyRawName: 'SB_SetParts',
         link: 'https://www.autohotkey.com/docs/commands/GuiControls.htm#SB_SetParts',
-        msg: 'Divides the bar into multiple sections according to the specified widths (in pixels).',
+        msg: ['Divides the bar into multiple sections according to the specified widths (in pixels).'],
         insert: 'SB_SetParts($1)',
         exp: [
             'SB_SetParts(Width1, Width2, ... Width255)',
         ],
     },
-    SIN: {
+    {
+        upName: 'SIN',
         group: '△Math',
         keyRawName: 'Sin',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Sin',
-        msg: ' Returns the trigonometric sine/cosine/tangent of _Number_.',
+        msg: [' Returns the trigonometric sine/cosine/tangent of _Number_.'],
         insert: 'Sin(${1:Number})',
         exp: [
             'Value := Sin(Number)',
@@ -1243,22 +1221,24 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'MsgBox, % Sin(90*pi) ; Returns -0.0',
         ],
     },
-    SQRT: {
+    {
+        upName: 'SQRT',
         group: 'Math',
         keyRawName: 'Sqrt',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Sqrt',
-        msg: ' Returns the square root of _Number_.',
+        msg: [' Returns the square root of _Number_.'],
         insert: 'Sqrt(${1:Number})',
         exp: [
             'Value := Sqrt(Number)',
             'MsgBox, % Sqrt(16) ; Returns 4',
         ],
     },
-    STRGET: {
+    {
+        upName: 'STRGET',
         group: 'Lib',
         keyRawName: 'StrGet',
         link: 'https://www.autohotkey.com/docs/commands/StrGet.htm',
-        msg: 'Copies a string from a memory address, optionally converting it from a given code page.',
+        msg: ['Copies a string from a memory address, optionally converting it from a given code page.'],
         insert: 'StrGet(${1:Source})',
         exp: [
             'str := StrGet(address, "cp0")  ; Code page 0, unspecified length',
@@ -1266,21 +1246,23 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'str := StrGet(address, 0)      ; Maximum 0 chars (always blank)',
         ],
     },
-    STRLEN: {
+    {
+        upName: 'STRLEN',
         group: 'Str',
         keyRawName: 'StrLen',
         link: 'https://www.autohotkey.com/docs/commands/StrLen.htm',
-        msg: 'Retrieves the count of how many characters are in a string.',
+        msg: ['Retrieves the count of how many characters are in a string.'],
         insert: 'StrLen(${1:String})',
         exp: [
             'MsgBox % StrLen("0123456789") ; 10',
         ],
     },
-    STRPUT: {
+    {
+        upName: 'STRPUT',
         group: 'Lib',
         keyRawName: 'StrPut',
         link: 'https://www.autohotkey.com/docs/commands/StrPut.htm',
-        msg: 'Copies a string to a memory address, optionally converting it between code pages.',
+        msg: ['Copies a string to a memory address, optionally converting it between code pages.'],
         insert: 'StrPut(${1:String})',
         exp: [
             'StrPut(str, address, "cp0") ; Code page 0, unspecified buffer size',
@@ -1288,44 +1270,48 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'StrPut(str, address, 0)     ; Unsupported (maximum 0 chars)',
         ],
     },
-    STRREPLACE: {
+    {
+        upName: 'STRREPLACE',
         group: 'Str',
         keyRawName: 'StrReplace',
         link: 'https://www.autohotkey.com/docs/commands/StrReplace.htm',
-        msg: 'Replaces occurrences of the specified substring with a new string.',
+        msg: ['Replaces occurrences of the specified substring with a new string.'],
         insert: 'StrReplace(${1:Haystack}, ${2:Needle})',
         exp: [
             'ReplacedStr := StrReplace(Haystack, Needle , ReplaceText, OutputVarCount, Limit)',
             'MsgBox % StrReplace("aor,ayz, y=a*3", "a", "x")',
         ],
     },
-    STRSPLIT: {
+    {
+        upName: 'STRSPLIT',
         group: 'Str',
         keyRawName: 'StrSplit',
         link: 'https://www.autohotkey.com/docs/commands/StrSplit.htm',
-        msg: 'Separates a string into an array of substrings using the specified delimiters.',
+        msg: ['Separates a string into an array of substrings using the specified delimiters.'],
         insert: 'StrSplit(${1:String})',
         exp: [
             'Array := StrSplit(String , Delimiters, OmitChars, MaxParts)',
             'StrSplit("a,b,c", ",")',
         ],
     },
-    SUBSTR: {
+    {
+        upName: 'SUBSTR',
         group: 'Str',
         keyRawName: 'SubStr',
         link: 'https://www.autohotkey.com/docs/commands/SubStr.htm',
-        msg: 'Retrieves one or more characters from the specified position in a string.',
+        msg: ['Retrieves one or more characters from the specified position in a string.'],
         insert: 'SubStr(${1:String}, ${2:StartingPos})',
         exp: [
             'NewStr := SubStr(String, StartingPos , Length)',
             'MsgBox % SubStr("123abc789", 4, 3) ; Returns abc',
         ],
     },
-    TAN: {
+    {
+        upName: 'TAN',
         group: '△Math',
         keyRawName: 'Tan',
         link: 'https://www.autohotkey.com/docs/commands/Math.htm#Tan',
-        msg: ' Returns the trigonometric sine/cosine/tangent of _Number_.',
+        msg: [' Returns the trigonometric sine/cosine/tangent of _Number_.'],
         insert: 'Tan(${1:Number})',
         exp: [
             'Value := Tan(Number)',
@@ -1335,11 +1321,12 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'MsgBox, % Tan(45*pi) ; Returns -0.0',
         ],
     },
-    TRIM: {
+    {
+        upName: 'TRIM',
         group: 'Str',
         keyRawName: 'Trim',
         link: 'https://www.autohotkey.com/docs/commands/Trim.htm',
-        msg: 'Trims characters from the beginning and/or end of a string.',
+        msg: ['Trims characters from the beginning and/or end of a string.'],
         insert: 'Trim(${1:String})',
         exp: [
             'Result :=  Trim(String, OmitChars := " `t")',
@@ -1347,162 +1334,182 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             'Result := RTrim(String, OmitChars := " `t")',
         ],
     },
-    TV_ADD: {
+    {
+        upName: 'TV_ADD',
         group: 'TreeView',
         keyRawName: 'TV_Add',
         link: 'https://www.autohotkey.com/docs/commands/TreeView.htm#TV_Add',
-        msg: 'Adds a new item to the TreeView and returns its unique Item ID number (or 0 upon failure).',
+        msg: ['Adds a new item to the TreeView and returns its unique Item ID number (or 0 upon failure).'],
         insert: 'TV_Add(${1:Name})',
         exp: [
             'TV_Add(Name, ParentItemID, Options)',
         ],
     },
-    TV_DELETE: {
+    {
+        upName: 'TV_DELETE',
         group: 'TreeView',
         keyRawName: 'TV_Delete',
         link: 'https://www.autohotkey.com/docs/commands/TreeView.htm#TV_Delete',
-        msg: 'Deletes the specified item or all items.',
+        msg: ['Deletes the specified item or all items.'],
         insert: 'TV_Delete($0)',
         exp: [
             'TV_Delete(ItemID)',
         ],
     },
-    TV_GET: {
+    {
+        upName: 'TV_GET',
         group: 'TreeView',
         keyRawName: 'TV_Get',
         link: 'https://www.autohotkey.com/docs/commands/TreeView.htm#TV_Get',
-        msg: 'Returns the ID number of the specified item if it has the specified attribute.',
+        msg: ['Returns the ID number of the specified item if it has the specified attribute.'],
         insert: 'TV_Get(${1:ItemID}, ${2:Attribute})',
         exp: [
             'TV_Get(ItemID, Attribute)',
         ],
     },
-    TV_GETCHILD: {
+    {
+        upName: 'TV_GETCHILD',
         group: 'TreeView',
         keyRawName: 'TV_GetChild',
         link: 'https://www.autohotkey.com/docs/commands/TreeView.htm#TV_GetChild',
-        msg: 'Returns the ID number of the specified item\'s first/top child (or 0 if none).',
+        msg: ['Returns the ID number of the specified item\'s first/top child (or 0 if none).'],
         insert: 'TV_GetChild(${1:ParentItemID})',
         exp: [
             'TV_GetChild(ParentItemID)',
         ],
     },
-    TV_GETCOUNT: {
+    {
+        upName: 'TV_GETCOUNT',
         group: 'TreeView',
         keyRawName: 'TV_GetCount',
         link: 'https://www.autohotkey.com/docs/commands/TreeView.htm#TV_GetCount',
-        msg: 'Returns the total number of items in the control.',
+        msg: ['Returns the total number of items in the control.'],
         insert: 'TV_GetCount($0)',
         exp: [
             'TV_GetCount()',
         ],
     },
-    TV_GETNEXT: {
+    {
+        upName: 'TV_GETNEXT',
         group: 'TreeView',
         keyRawName: 'TV_GetNext',
         link: 'https://www.autohotkey.com/docs/commands/TreeView.htm#TV_GetNext',
-        msg: 'Returns the ID number of the next item below the specified item (or 0 if none).',
+        msg: ['Returns the ID number of the next item below the specified item (or 0 if none).'],
         insert: 'TV_GetNext($0)',
         exp: [
             'TV_GetNext(ItemID, ItemType)',
         ],
     },
-    TV_GETPARENT: {
+    {
+        upName: 'TV_GETPARENT',
         group: 'TreeView',
         keyRawName: 'TV_GetParent',
         link: 'https://www.autohotkey.com/docs/commands/TreeView.htm#TV_GetParent',
-        msg: 'Returns the specified item\'s parent as an item ID.',
+        msg: ['Returns the specified item\'s parent as an item ID.'],
         insert: 'TV_GetParent(${1:ItemID})',
         exp: [
             'TV_GetParent(ItemID)',
         ],
     },
-    TV_GETPREV: {
+    {
+        upName: 'TV_GETPREV',
         group: 'TreeView',
         keyRawName: 'TV_GetPrev',
         link: 'https://www.autohotkey.com/docs/commands/TreeView.htm#TV_GetPrev',
-        msg: 'Returns the ID number of the sibling above the specified item (or 0 if none).',
+        msg: ['Returns the ID number of the sibling above the specified item (or 0 if none).'],
         insert: 'TV_GetPrev(${1:ItemID})',
         exp: [
             'TV_GetPrev(ItemID)',
         ],
     },
-    TV_GETSELECTION: {
+    {
+        upName: 'TV_GETSELECTION',
         group: 'TreeView',
         keyRawName: 'TV_GetSelection',
         link: 'https://www.autohotkey.com/docs/commands/TreeView.htm#TV_GetSelection',
-        msg: 'Returns the selected item\'s ID number.',
+        msg: ['Returns the selected item\'s ID number.'],
         insert: 'TV_GetSelection($0)',
         exp: [
             'TV_GetSelection()',
         ],
     },
-    TV_GETTEXT: {
+    {
+        upName: 'TV_GETTEXT',
         group: 'TreeView',
         keyRawName: 'TV_GetText',
         link: 'https://www.autohotkey.com/docs/commands/TreeView.htm#TV_GetText',
-        msg: 'Retrieves the text/name of the specified _ItemID_ and stores it in _OutputVar_.',
+        msg: ['Retrieves the text/name of the specified _ItemID_ and stores it in _OutputVar_.'],
         insert: 'TV_GetText(${1:OutputVar}, ${2:ItemID})',
         exp: [
             'TV_GetText(OutputVar, ItemID)',
         ],
     },
-    TV_MODIFY: {
+    {
+        upName: 'TV_MODIFY',
         group: 'TreeView',
         keyRawName: 'TV_Modify',
         link: 'https://www.autohotkey.com/docs/commands/TreeView.htm#TV_Modify',
-        msg: 'Modifies the attributes and/or name of an item.',
+        msg: ['Modifies the attributes and/or name of an item.'],
         insert: 'TV_Modify(${1:ItemID})',
         exp: [
             'TV_Modify(ItemID , Options, NewName)',
         ],
     },
-    TV_SETIMAGELIST: {
+    {
+        upName: 'TV_SETIMAGELIST',
         group: 'TreeView',
         keyRawName: 'TV_SetImageList',
         link: 'https://www.autohotkey.com/docs/commands/TreeView.htm#TV_SetImageList',
-        msg: 'Sets or replaces an [ImageList](https://www.autohotkey.com/docs/commands/TreeView.htm#ImageList) for displaying icons.',
+        msg: [
+            'Sets or replaces an [ImageList](https://www.autohotkey.com/docs/commands/TreeView.htm#ImageList) for displaying icons.',
+        ],
         insert: 'TV_SetImageList(${1:ImageListID})',
         exp: [
             'TV_SetImageList(ImageListID , IconType)',
         ],
     },
-    VARSETCAPACITY: {
+    {
+        upName: 'VARSETCAPACITY',
         group: 'Lib',
         keyRawName: 'VarSetCapacity',
         link: 'https://www.autohotkey.com/docs/commands/VarSetCapacity.htm',
-        msg: 'Enlarges a variable\'s holding capacity or frees its memory.',
+        msg: ['Enlarges a variable\'s holding capacity or frees its memory.'],
         insert: 'VarSetCapacity(${1:TargetVar})',
         exp: [
             'VarSetCapacity(MyVar, 10240000)  ; ~10 MB',
         ],
     },
-    VERCOMPARE: {
+    {
+        upName: 'VERCOMPARE',
         group: 'Str',
         keyRawName: 'VerCompare',
         link: 'https://www.autohotkey.com/docs/commands/VerCompare.htm',
-        msg: 'Compares two version strings.',
+        msg: ['Compares two version strings.'],
         insert: 'VerCompare(${1:VersionA},${2:VersionB})',
         exp: [
             ';Demonstrates a range check.',
             'MsgBox % VerCompare("2.0.1", ">=2.0") && VerCompare("2.0.1", "<2.1")  ; Returns 1',
         ],
     },
-    WINACTIVE: {
+    {
+        upName: 'WINACTIVE',
         group: 'Window',
         keyRawName: 'WinActive',
         link: 'https://www.autohotkey.com/docs/commands/WinActive.htm',
-        msg: 'Checks if the specified window is active and returns its unique ID , link: "HWND",.',
+        msg: ['Checks if the specified window is active and returns its unique ID , link: "HWND",.'],
         insert: 'WinActive($1)',
         exp: [
             'UniqueID := WinActive(WinTitle, WinText, ExcludeTitle, ExcludeText)',
         ],
     },
-    WINEXIST: {
+    {
+        upName: 'WINEXIST',
         group: 'Window',
         keyRawName: 'WinExist',
         link: 'https://www.autohotkey.com/docs/commands/WinExist.htm',
-        msg: 'Checks if the specified window exists and returns the unique ID , link: "HWND", of the first matching window.',
+        msg: [
+            'Checks if the specified window exists and returns the unique ID , link: "HWND", of the first matching window.',
+        ],
         insert: 'WinExist($1)',
         exp: [
             'UniqueID := WinExist(WinTitle, WinText, ExcludeTitle, ExcludeText)',
@@ -1525,4 +1532,4 @@ export const BuiltInFunctionObj: Readonly<TBuiltInFuncbj> = {
             '',
         ],
     },
-};
+];

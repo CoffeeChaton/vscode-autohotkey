@@ -15,7 +15,7 @@
         "noPropertyAccessFromIndexSignature": true,
         "noUnusedLocals": false,
         "resolveJsonModule": true,
-        "rootDir": "src",
+        "rootDir": ".",
         "sourceMap": true,
         "strict": true,
         "target": "ES2021",

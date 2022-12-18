@@ -1,15 +1,15 @@
-import { ECommandOption, getCommandOptions } from '../../configUI';
+import { getCommandOptions } from '../../configUI';
+import { ECommandOption } from '../../configUI.data';
 import { enumLog } from '../enumErr';
 import { getAllFunc } from '../Func/getAllFunc';
-import type { TSnippetCommand } from './Command_tools';
-import { snippetCommand } from './Command_tools';
+import { snippetCommand } from './Command.tools';
 import type { CSnippetCommand } from './CSnippetCommand';
 
 const snippetCommandFilter: readonly CSnippetCommand[] = snippetCommand.filter((v) => v.recommended);
 
-export function getSnippetCommand(subStr: string): TSnippetCommand {
+export function getSnippetCommand(subStr: string): readonly CSnippetCommand[] {
     // ^ ~~ $  need close
-    const isOK: boolean = (/^\w*$/u).test(subStr)
+    const isOK: boolean = (/^\w+$/u).test(subStr)
         || (/^case\s[^:]+:\s*\w*$/iu).test(subStr)
         || (/^default\s*:\s*\w*$/iu).test(subStr)
         || (/::\s*\w*$/iu).test(subStr); // allow hotstring or hotkey
@@ -17,7 +17,11 @@ export function getSnippetCommand(subStr: string): TSnippetCommand {
     // || (/^[{}]\s*\w*$/iu).test(subStr);
     // { MsgBox hi!
     // ^---- "{" and cmd
-    // i know this is OK, but i don't want to Completion the case...
+    // i know this is OK, but i don't want to Completion this case...
+
+    // Try Hotkey, %Key1%, label1
+    // ;-----^ cmd
+    // i know this is OK, but i don't want to Completion this case...
 
     if (!isOK) return [];
 

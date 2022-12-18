@@ -40,9 +40,15 @@ function valTrackCore(
     const Head: string = ChapterArr[0];
 
     const reg: RegExp = ahkValDefRegex(Head);
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    const cacheReg = new RegExp(`\\b${Head}\\b`, 'ui');
 
     const classNameList: string[] = []; // value name
-    for (const { lStr } of AhkTokenList) {
+    for (const { lStr, fistWordUp } of AhkTokenList) {
+        if (fistWordUp === 'CATCH' && cacheReg.test(lStr)) {
+            // eslint-disable-next-line no-param-reassign
+            ahkBaseObj.ahkCatch = true;
+        }
         const col: number = lStr.search(reg);
         if (col === -1) continue;
         const strPart: string = lStr
@@ -62,6 +68,7 @@ export function valTrack(ChapterArr: readonly string[], AhkTokenList: TTokenStre
         ahkFileOpen: false,
         ahkFuncObject: false,
         ahkBase: false,
+        ahkCatch: false,
     };
     const itemS: vscode.CompletionItem[] = [];
 

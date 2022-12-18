@@ -69,7 +69,6 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 
    ![ListAllReferences](image/ListAllReferences.gif)
    > 🔍 Find All References (default via `Shift+F12`)
-   > // TODO: add great .gif
 
 ### Find Ref of Function
 
@@ -224,7 +223,8 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
 
 - The best way to improve startup times is to exclude unnecessary files, via [settings.json](https://code.visualstudio.com/docs/getstarted/settings) `AhkNekoHelp.baseScan.IgnoredList`
 - When editing becomes slow, split the file, via [`#Include`](https://www.autohotkey.com/docs/commands/_Include.htm)
-- TODO use...try to find each file parsing time.
+
+<!-- - TODO use...try to find each file parsing time. -->
 
 ## Credits
 

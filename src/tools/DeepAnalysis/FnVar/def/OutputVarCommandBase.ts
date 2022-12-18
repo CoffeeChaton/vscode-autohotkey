@@ -1,7 +1,7 @@
 import type { TValMetaIn } from '../../../../AhkSymbol/CAhkFunc';
+import { OutputCommandBaseMap } from '../../../Built-in/Command.tools';
 import type { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
-import { OutputCommandBaseMap } from './OutPut';
 
 /**
  * OutputVar

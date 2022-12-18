@@ -44,5 +44,3 @@ export function ahkSend(AhkFileData: TAhkFileData, position: vscode.Position): r
     }
     return [];
 }
-
-// TODO send Key names https://www.autohotkey.com/docs/commands/Send.htm#keynames

@@ -1,4 +1,5 @@
 {
+    // https://go.microsoft.com/fwlink/?LinkId=733558
     "version": "2.0.0",
     "tasks": [
         {
@@ -10,7 +11,7 @@
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": true // Ctrl+Shift+B  https://code.visualstudio.com/docs/editor/tasks#_typescript-hello-world
             }
         },
         {
@@ -25,4 +26,3 @@
         }
     ]
 }
-// https://go.microsoft.com/fwlink/?LinkId=733558

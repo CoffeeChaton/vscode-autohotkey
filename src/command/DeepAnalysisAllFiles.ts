@@ -57,8 +57,8 @@ my project:
 Deep Analysis All Files
 Deep Analysis : 744 Symbol
 paramMapSize is 1922
-valMapSize is 2030
-textMapSize is 440
+valMapSize is 2033 ;2030->2033 add `catch err`
+textMapSize is 437
 All Size is 4392
 Done in 4 ms
 */

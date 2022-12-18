@@ -14,7 +14,7 @@ const JoySnippets: readonly vscode.CompletionItem[] = ((): readonly vscode.Compl
         'JoyButtons',
         'JoyAxes',
         'JoyInfo',
-        'JoyZRUVPD',
+        // 'JoyZRUVPD', // ??
         'Joy1',
         'Joy2',
         'Joy3',

@@ -37,7 +37,7 @@ export function getHotkeyWrap(AhkTokenLine: TAhkTokenLine): TScanData | null {
         return getHotkeyData(lStr, fistWordUpCol);
     }
 
-    if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT') {
+    if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT' || fistWordUp === 'TRY') {
         const { SecondWordUp, SecondWordUpCol, lStr } = AhkTokenLine;
         return SecondWordUp === 'HOTKEY'
             ? getHotkeyData(lStr, SecondWordUpCol)

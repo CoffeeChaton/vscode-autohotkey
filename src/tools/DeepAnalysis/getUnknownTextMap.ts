@@ -11,10 +11,11 @@ import type {
 } from '../../AhkSymbol/CAhkFunc';
 import type { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
-import { hoverAVar } from '../Built-in/A_Variables';
-import { Bi_VarMDMap } from '../Built-in/BiVariables';
-import { CommandMDMap } from '../Built-in/Command_tools';
-import { StatementMDMap } from '../Built-in/statement_vsc';
+import { hoverAVar } from '../Built-in/A_Variables.tools';
+import { Bi_VarMDMap } from '../Built-in/BiVariables.tools';
+import { CommandMDMap } from '../Built-in/Command.tools';
+import { otherKeyword2MD } from '../Built-in/otherKeyword2.tools';
+import { StatementMDMap } from '../Built-in/statement.tools';
 import { newC502 } from './FnVar/def/c502';
 
 function pushRef(
@@ -132,6 +133,7 @@ export function getUnknownTextMap(
                     || (/^_+$/u).test(wordUp) // str
                     || (/^\d+$/u).test(wordUp) // just number
                     || (/^0X[\dA-F]+$/u).test(wordUp) // NumHexConst = 0 x [0-9a-fA-F]+
+                    || otherKeyword2MD.has(wordUp)
                     /*
                      * let decLiteral: number = 6;
                      * let hexLiteral: number = 0xf00d;

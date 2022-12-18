@@ -1,11 +1,16 @@
 import * as vscode from 'vscode';
-import type { TCommandElement } from './Command';
+import type { TCommandElement } from './Command.data';
 
 export class CSnippetCommand extends vscode.CompletionItem {
     public readonly upName: string;
     public readonly recommended: boolean;
-    public constructor(k: string, v: TCommandElement, md: vscode.MarkdownString) {
-        const { keyRawName, body, recommended } = v;
+    public constructor(v: TCommandElement, md: vscode.MarkdownString) {
+        const {
+            keyRawName,
+            body,
+            recommended,
+            upName,
+        } = v;
         super({
             label: keyRawName,
             description: 'Command',
@@ -13,7 +18,7 @@ export class CSnippetCommand extends vscode.CompletionItem {
         this.insertText = new vscode.SnippetString(body);
         this.detail = 'Command of AHK (neko-help)';
         this.documentation = md;
-        this.upName = k;
+        this.upName = upName;
         this.recommended = recommended;
     }
 }

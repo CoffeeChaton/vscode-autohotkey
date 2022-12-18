@@ -1,17 +1,18 @@
 {
-	"Print to console": {
-		"scope": "typescript",
-		//"prefix": ".00",
-		"body": [
-			"$CLIPBOARD : {",
-			"    keyRawName: '$CLIPBOARD',",
-			"    body : '',",
-			"    doc : '',",
-			"    recommended: true,",
-			"    link: '',",
-			"    exp: [],",
-			"},"
-		],
-		"description": "just a temp snippets"
-	}
+    "makeDoc": {
+        "scope": "typescript",
+        //   "prefix": ".00",
+        "body": [
+            "{",
+            "    keyRawName: '$CLIPBOARD',",
+            "    recommended: true,",
+            "    link: 'https://www.autohotkey.com/docs/v1/misc/Ahk2ExeDirectives.htm#$CLIPBOARD',",
+            "    doc : '',",
+            "    body : ';@Ahk2Exe-$CLIPBOARD',",
+            "    exp: [\n'',],",
+            "},"
+        ],
+        "description": "just a temp snippets"
+    }
 }
+// https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variables

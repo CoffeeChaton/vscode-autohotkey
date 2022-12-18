@@ -52,7 +52,7 @@ function diagDAFileCore(
         return cache.DADiagList;
     }
 
-    // FIXME WTF style
+    // TODO WTF style
     const code500List: C500Class[] = [];
     const code501List: C501Class[] = [];
     const code502List: C502Class[] = [];
@@ -70,7 +70,7 @@ function diagDAFileCore(
         c505ErrParamParsedError(paramMap, code505List);
         C506DiagNumberStyle(textMap, code506List);
         // if (paramMap.size > 12) {
-        // TODO auto Diag ?
+        // TODO add Diag ?
         // }
         // https://stackoverflow.com/questions/12684985/why-doesnt-autohotkey-support-default-parameters-in-the-middle-of-the-parameter
     }

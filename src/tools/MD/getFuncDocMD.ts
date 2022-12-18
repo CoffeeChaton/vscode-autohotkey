@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { EMode } from '../../Enum/EMode';
 import type { TTokenStream } from '../../globalEnum';
 import { EDetail } from '../../globalEnum';
-import { docCommentBlock, EDocBlock } from '../str/inCommentBlock';
 
 function getReturnText(lStr: string, textRaw: string, col: number): string {
     const name: string = textRaw
@@ -11,7 +10,7 @@ function getReturnText(lStr: string, textRaw: string, col: number): string {
         .replace(/^[\s,]+/ui, '')
         .trim();
 
-    if (name === '') return '';
+    if (name === '') return '    Return';
 
     const comment: string = textRaw.length > lStr.length
         ? textRaw.slice(lStr.length)
@@ -31,24 +30,33 @@ function getReturnText(lStr: string, textRaw: string, col: number): string {
         }
     }
 
+    // ------------be careful of comment----------
+
     // too long
     const maxLen = 30;
     if (name.length > maxLen) {
-        return `    Return ${name.slice(0, maxLen)} ... ${comment}`;
+        return `    Return ${name.slice(0, maxLen).replace(/\s;.*/u, '')} ... ${comment}`;
     }
     // else
-    return `    Return ${name.trim()} ${comment}`;
+    return `    Return ${name.trim()}`;
 }
 
 // eslint-disable-next-line max-lines-per-function
 export function getFuncDocCore(
-    fileName: string,
-    AhkTokenList: TTokenStream,
-    selectionRangeText: string,
-    classStack: string[],
+    {
+        fileName,
+        AhkTokenList,
+        ahkDoc,
+        selectionRangeText,
+        classStack,
+    }: {
+        fileName: string;
+        AhkTokenList: TTokenStream;
+        ahkDoc: string;
+        selectionRangeText: string;
+        classStack: string[];
+    },
 ): vscode.MarkdownString {
-    let flag: EDocBlock = EDocBlock.other;
-    const fnDocList: string[] = [];
     const returnList: string[] = [];
 
     for (const AhkTokenLine of AhkTokenList) {
@@ -62,16 +70,7 @@ export function getFuncDocCore(
             SecondWordUpCol,
         } = AhkTokenLine;
 
-        if (detail.includes(EDetail.inComment) || flag === EDocBlock.inDocCommentBlockEnd) {
-            const textRawTrim: string = textRaw.trimStart(); // **** MD ****** sensitive of \s && \n
-            flag = docCommentBlock(textRawTrim, flag);
-            if (
-                flag === EDocBlock.inDocCommentBlockMid
-                && (textRawTrim.startsWith('*') || textRawTrim.startsWith(';'))
-            ) {
-                // allow '*' and ';'
-                fnDocList.push(textRawTrim.slice(1)); // **** MD ****** sensitive of \s && \n
-            }
+        if (detail.includes(EDetail.inComment)) {
             continue;
         }
 
@@ -100,13 +99,13 @@ export function getFuncDocCore(
     const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
         .appendMarkdown(`(${kindStr})     of     ${fileName}\n`)
         .appendMarkdown(classStackStr)
-        .appendCodeblock(selectionRangeText, 'ahk')
+        .appendCodeblock(`${selectionRangeText}{`, 'ahk')
         .appendCodeblock(returnList.filter((s: string): boolean => s !== '').join('\n'), 'ahk')
         .appendCodeblock('}', 'ahk');
 
-    if (fnDocList.length > 0) {
+    if (ahkDoc !== '') {
         md.appendMarkdown('\n\n***\n\n')
-            .appendMarkdown(fnDocList.join('\n')); // **** MD ****** sensitive of \s && \n
+            .appendMarkdown(ahkDoc); // **** MD ****** sensitive of \s && \n
     }
 
     md.supportHtml = true;

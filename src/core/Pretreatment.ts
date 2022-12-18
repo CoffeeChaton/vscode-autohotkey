@@ -4,14 +4,18 @@
 
 import * as path from 'node:path';
 import * as vscode from 'vscode';
-import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum';
-import { EDetail, EDiagDeep, EMultiline } from '../globalEnum';
+import type {
+    TAhkTokenLine,
+    TMultilineFlag,
+    TTokenStream,
+} from '../globalEnum';
+import { EDetail, EMultiline } from '../globalEnum';
 import { getIgnore } from '../provider/Diagnostic/getIgnore';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';
 import { getMultiline } from '../tools/str/getMultiline';
 import { getMultilineLStr } from '../tools/str/getMultilineLStr';
-import { inCommentBlock } from '../tools/str/inCommentBlock';
+import { docCommentBlock, EDocBlock, inCommentBlock } from '../tools/str/inCommentBlock';
 import { getLStr } from '../tools/str/removeSpecialChar';
 import { isSetVarTradition, SetVarTradition } from '../tools/str/traditionSetVar';
 import { getFistWordUpData } from './getFistWordUpData';
@@ -103,8 +107,13 @@ export function Pretreatment(
     let ignoreLine = -1;
     let ignoreLineP = -1;
 
+    let flag: EDocBlock = EDocBlock.other;
+    const fnDocList: string[] = [];
+
     for (const textRaw of strArray) {
         line++;
+
+        let ahkDoc = '';
         const textTrimStart: string = textRaw.trimStart();
         if (deep < 0) {
             deep = 0;
@@ -119,6 +128,25 @@ export function Pretreatment(
         ignoreLineP = temp.ignoreLineP;
         const displayErr = line > ignoreLine;
         const displayFnErr = line > ignoreLineP;
+
+        flag = docCommentBlock(textTrimStart, flag);
+        if (
+            flag === EDocBlock.inDocCommentBlockMid
+            && (textTrimStart.startsWith('*') || textTrimStart.startsWith(';'))
+        ) {
+            // allow '*' and ';'
+            const mdLineText = textTrimStart.slice(1);
+            if ((/^\s*(?:@|-)/ui).test(mdLineText)) {
+                fnDocList.push(''); // add \n to-> fnDocList.join('\n');
+            }
+            fnDocList.push(mdLineText); // **** MD ****** sensitive of \s && \n
+        }
+
+        if (flag === EDocBlock.inDocCommentBlockEnd) {
+            ahkDoc = fnDocList.join('\n');
+            fnDocList.length = 0;
+        }
+
         if (multiline === EMultiline.none) {
             CommentBlock = inCommentBlock(textTrimStart, CommentBlock);
             if (CommentBlock) {
@@ -136,9 +164,9 @@ export function Pretreatment(
                     lineComment: '',
                     multiline,
                     multilineFlag: null,
-                    diagDeep: 0,
                     displayErr,
                     displayFnErr,
+                    ahkDoc,
                 });
                 continue;
             }
@@ -169,10 +197,41 @@ export function Pretreatment(
                 lineComment: '',
                 multiline,
                 multilineFlag,
-                diagDeep: 0,
                 displayErr,
                 displayFnErr,
+                ahkDoc,
             });
+            continue;
+        }
+
+        if (textTrimStart.startsWith(';')) {
+            const lineComment: string = textRaw.length - textTrimStart.length > 2
+                ? textRaw.slice(textTrimStart.length + 1).trim()
+                : '';
+
+            const detail: EDetail[] = [EDetail.inComment];
+            if (lineComment.startsWith(';')) {
+                detail.push(EDetail.hasDoubleSemicolon);
+            }
+            result.push({
+                fistWordUpCol: -1,
+                fistWordUp: '',
+                SecondWordUpCol: -1,
+                SecondWordUp: '',
+                lStr: '',
+                deep,
+                textRaw,
+                detail,
+                line,
+                cll: 0,
+                lineComment: '',
+                multiline,
+                multilineFlag: null,
+                displayErr,
+                displayFnErr,
+                ahkDoc,
+            });
+
             continue;
         }
 
@@ -191,9 +250,9 @@ export function Pretreatment(
                 lineComment: '',
                 multiline,
                 multilineFlag: null,
-                diagDeep: 0,
                 displayErr,
                 displayFnErr,
+                ahkDoc,
             });
             continue;
         }
@@ -232,14 +291,13 @@ export function Pretreatment(
                 lineComment,
                 multiline,
                 multilineFlag: null,
-                diagDeep: 0,
                 displayErr,
                 displayFnErr,
+                ahkDoc,
             });
             continue;
         }
 
-        let diagDeep: EDiagDeep = EDiagDeep.none;
         if (!lStrTrim.includes('::')) {
             // {$                     || ^{
             if (lStrTrim.endsWith('{') || lStrTrim.startsWith('{')) {
@@ -250,7 +308,6 @@ export function Pretreatment(
                 if (addDeep > 1) {
                     deep--;
                     deep += addDeep;
-                    diagDeep = EDiagDeep.multL;
                 }
             }
 
@@ -287,7 +344,6 @@ export function Pretreatment(
                 if (diffDeep > 1) {
                     deep++;
                     deep -= diffDeep;
-                    diagDeep = EDiagDeep.multR;
                 }
             }
         }
@@ -295,7 +351,7 @@ export function Pretreatment(
         const cll: 0 | 1 = ContinueLongLine(lStrTrim); // ex: line start with ","
 
         const { fistWordUpCol, fistWordUp } = getFistWordUpData({ lStrTrim, lStr, cll });
-        const { SecondWordUpCol, SecondWordUp } = getSecondUp(lStr, fistWordUp);
+        const { SecondWordUpCol, SecondWordUp } = getSecondUp(lStr, fistWordUp, fistWordUpCol);
 
         result.push({
             fistWordUpCol,
@@ -311,9 +367,9 @@ export function Pretreatment(
             lineComment,
             multiline,
             multilineFlag: null,
-            diagDeep,
             displayErr,
             displayFnErr,
+            ahkDoc,
         });
     }
 

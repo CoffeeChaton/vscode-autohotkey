@@ -38,9 +38,10 @@ export function activate(context: ExtensionContext): void {
     const selector: DocumentSelector = { language: 'ahk' }; // scheme: 'file'
     context.subscriptions.push(
         // languages-------------------
+        // languages.registerFoldingRangeProvider
         languages.registerCodeActionsProvider(selector, CodeActionProvider),
         languages.registerCodeLensProvider(selector, CodeLensProvider),
-        languages.registerCompletionItemProvider(selector, CompletionItemProvider, '', '.', '{', '#', '_'),
+        languages.registerCompletionItemProvider(selector, CompletionItemProvider, '', '@', '.', '{', '#', '_'),
         languages.registerDefinitionProvider(selector, DefProvider),
         languages.registerDocumentFormattingEditProvider(selector, FormatProvider),
         languages.registerDocumentRangeFormattingEditProvider(selector, RangeFormatProvider),
@@ -88,21 +89,7 @@ export function deactive(): void {
     rmAllDiag();
 }
 
-// TODO i18n of diag
 /*
-https://github.com/microsoft/vscode-extension-samples/tree/main/i18n-sample
-
-createTextEditorDecorationType
-vscode.Progress
-
-registerTextDocumentContentProvider
-registerSignatureHelpProvider(language, new SignatureHelpProvider(), '(', ')', ','),
-
-CodeLensProvider -> run this func/command DA
-FoldingRangeProvider
+nls -> l10n https://code.visualstudio.com/updates/v1_72#_localization-as-part-of-the-api
+i18n https://github.com/microsoft/vscode-extension-samples/tree/main/i18n-sample
 */
-// TODO %A_ScriptDir%\Lib\  ; Local library - requires [v1.0.90+].
-//      %A_MyDocuments%\AutoHotkey\Lib\  ; User library.
-//      directory-of-the-currently-running-AutoHotkey.exe\Lib\  ; Standard library.
-
-// l10n https://code.visualstudio.com/updates/v1_72#_localization-as-part-of-the-api

@@ -257,6 +257,7 @@
         "no-cond-assign": "error",
         "no-confusing-arrow": "error",
         "no-console": "off",
+        "no-constant-binary-expression": "error",
         "no-constant-condition": "error",
         "no-continue": "off",
         "no-else-return": "error",
@@ -285,7 +286,6 @@
                 "detectObjects": false
             }
         ],
-        "no-constant-binary-expression": "error",
         "no-mixed-operators": "warn",
         "no-multi-assign": "warn",
         "no-nested-ternary": "error",
@@ -367,6 +367,7 @@
                 }
             }
         ],
+        "unicorn/prefer-module": "off",
         "unicorn/prefer-set-has": "off",
         "unicorn/prevent-abbreviations": "off",
         "unicorn/switch-case-braces": [

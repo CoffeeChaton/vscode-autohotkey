@@ -1,4 +1,3 @@
-/* eslint-disable max-statements */
 import path from 'node:path';
 import * as vscode from 'vscode';
 import { pm } from '../../../core/ProjectManager';

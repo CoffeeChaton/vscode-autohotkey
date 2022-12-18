@@ -55,5 +55,5 @@ export const A_Send: TA_Send = {
     // 'Click 100, 200, 0',
 };
 
-// TODO send https://www.autohotkey.com/docs/commands/Send.htm#keynames
+// TODO send Key names https://www.autohotkey.com/docs/commands/Send.htm#keynames
 // https://www.autohotkey.com/docs/commands/Send.htm#vk

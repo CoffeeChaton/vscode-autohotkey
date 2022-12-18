@@ -1,6 +1,6 @@
 /* cSpell:disable */
 
-import { inPutVarMap, OutputCommandBaseMap, OutputCommandPlusMap } from './OutPut';
+import { inPutVarMap, OutputCommandBaseMap, OutputCommandPlusMap } from './Command.tools';
 
 const outBase = [
     'ControlGet, OutputVar, SubCommand, Value, Control, WinTitle, WinText, ExcludeTitle, ExcludeText',

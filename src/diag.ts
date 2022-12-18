@@ -2,11 +2,9 @@
 /* eslint-disable no-magic-numbers */
 import type { DeepReadonly } from './globalEnum';
 
-// TODO Literal commas and percent signs must be escaped (e.g. `%)"
 // ScriptError(_T("Global variables must not be declared in this function."), aLineText);
 // ScriptError(_T("Local variables must not be declared in this function."), aLineText);
-// "Too many params, param_start > 10
-// Duplicate parameter.
+
 export const enum EDiagCodeDA {
     // 501~599 Analysis Func or Method
     code500 = 500, // var is assigned but never used.
@@ -112,9 +110,6 @@ export const enum EDiagCode {
     code901 = 901,
     code902 = 902,
     code903 = 903,
-    // // of EDiagDeep
-    // code908 = 908, // {{{ of one Line
-    // code909 = 909, // }}} of one Line
 }
 
 type TLink =
@@ -124,9 +119,6 @@ export type TDiags = {
     [k in EDiagCode]: {
         msg: string;
         path: TLink;
-        // FIXME let  pack.json set diag value as
-        // 0 1 2
-        // none info warning
     };
 };
 

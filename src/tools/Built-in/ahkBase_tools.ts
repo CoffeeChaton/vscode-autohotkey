@@ -5,6 +5,7 @@ export type TAhkBaseObj = {
     ahkFileOpen: boolean;
     ahkFuncObject: boolean;
     ahkBase: boolean;
+    ahkCatch: boolean; // https://www.autohotkey.com/docs/commands/Throw.htm#Exception
 };
 
 export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
@@ -36,8 +37,22 @@ export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
     // https://www.autohotkey.com/docs/Objects.htm#Usage_Freeing_Objects
     // obj := {}  ; Creates an object.
     //        ^ ; this `{'
-    if (!Obj.ahkArray && (strPart.startsWith('{') || (/^Object\(/ui).test(strPart))) {
+    //
+    // obj1 := Object()
+    //            ^
+    if (!Obj.ahkBase && (strPart.startsWith('{') || (/^Object\(/ui).test(strPart))) {
         Obj.ahkBase = true;
+        return Obj;
+    }
+
+    // https://www.autohotkey.com/docs/commands/Throw.htm#Exception
+    // err := Exception()
+    // err.message = "some error"
+    // throw err
+    //
+    // catch e use valTrackCore() to search
+    if (!Obj.ahkCatch && (/^Exception\(/ui).test(strPart)) {
+        Obj.ahkCatch = true;
         return Obj;
     }
 

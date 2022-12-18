@@ -2,7 +2,7 @@ import type * as vscode from 'vscode';
 import { CAhkInclude } from '../../../AhkSymbol/CAhkInclude';
 import { CAhkDirectives } from '../../../AhkSymbol/CAhkLine';
 import type { TAhkSymbolList, TAstRoot } from '../../../AhkSymbol/TAhkSymbolIn';
-import { DirectivesMDMap } from '../../../tools/Built-in/Directives';
+import { DirectivesMDMap } from '../../../tools/Built-in/Directives.tool';
 
 function findDirectivesWithPos(
     AST: Readonly<TAhkSymbolList>,
@@ -18,7 +18,7 @@ function findDirectivesWithPos(
     return undefined;
 }
 
-export function HoverDirectives(
+export function hoverDirectives(
     position: vscode.Position,
     AstRoot: TAstRoot,
 ): vscode.MarkdownString | undefined {

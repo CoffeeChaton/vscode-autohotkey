@@ -4,8 +4,7 @@ import * as vscode from 'vscode';
 import { CAhkDirectives } from '../../../../AhkSymbol/CAhkLine';
 import type { TAhkSymbol } from '../../../../AhkSymbol/TAhkSymbolIn';
 import { EDiagCode } from '../../../../diag';
-import type { THashTagUPKey } from '../../../../tools/Built-in/Directives';
-import { DirectivesMDMap } from '../../../../tools/Built-in/Directives';
+import { DirectivesMDMap } from '../../../../tools/Built-in/Directives.tool';
 import { CDiagBase } from '../CDiagBase';
 
 type TDiagMsg = {
@@ -16,7 +15,7 @@ type TDiagMsg = {
 
 const DiagDirectivesMap: ReadonlyMap<string, TDiagMsg> = ((): ReadonlyMap<string, TDiagMsg> => {
     type TRulerErr = {
-        str: THashTagUPKey;
+        keyRawName: string;
         value: EDiagCode;
         severity: vscode.DiagnosticSeverity;
         tags: vscode.DiagnosticTag[];
@@ -24,14 +23,14 @@ const DiagDirectivesMap: ReadonlyMap<string, TDiagMsg> = ((): ReadonlyMap<string
     const arr: TRulerErr[] = [
         {
             // change of ` https://www.autohotkey.com/docs/commands/_EscapeChar.htm
-            str: 'ESCAPECHAR',
+            keyRawName: 'EscapeChar',
             value: EDiagCode.code901,
             severity: vscode.DiagnosticSeverity.Error,
             tags: [vscode.DiagnosticTag.Deprecated],
         },
         {
             // change of ; https://www.autohotkey.com/docs/commands/_CommentFlag.htm
-            str: 'COMMENTFLAG',
+            keyRawName: 'CommentFlag',
             value: EDiagCode.code902,
             severity: vscode.DiagnosticSeverity.Error,
             tags: [vscode.DiagnosticTag.Deprecated],
@@ -41,7 +40,7 @@ const DiagDirectivesMap: ReadonlyMap<string, TDiagMsg> = ((): ReadonlyMap<string
              * change of % , #DerefChar https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related
              * #DerefChar
              */
-            str: 'DEREFCHAR',
+            keyRawName: 'DerefChar',
             value: EDiagCode.code903,
             severity: vscode.DiagnosticSeverity.Error,
             tags: [vscode.DiagnosticTag.Deprecated],
@@ -51,14 +50,14 @@ const DiagDirectivesMap: ReadonlyMap<string, TDiagMsg> = ((): ReadonlyMap<string
              * change of % , #DerefChar https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related
              * #Delimiter
              */
-            str: 'DELIMITER',
+            keyRawName: 'Delimiter',
             value: EDiagCode.code903,
             severity: vscode.DiagnosticSeverity.Error,
             tags: [vscode.DiagnosticTag.Deprecated],
         },
         {
             // https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm
-            str: 'ALLOWSAMELINECOMMENTS',
+            keyRawName: 'AllowSameLineComments',
             value: EDiagCode.code825,
             severity: vscode.DiagnosticSeverity.Warning,
             tags: [vscode.DiagnosticTag.Deprecated],
@@ -68,13 +67,13 @@ const DiagDirectivesMap: ReadonlyMap<string, TDiagMsg> = ((): ReadonlyMap<string
     const map = new Map<string, TDiagMsg>();
     for (
         const {
-            str,
+            keyRawName,
             value,
             severity,
             tags,
         } of arr
     ) {
-        map.set(str, { value, severity, tags });
+        map.set(keyRawName.toUpperCase(), { value, severity, tags });
     }
 
     return map;

@@ -33,7 +33,7 @@ export function setBaseDiag(uri: vscode.Uri, DocStrMap: TTokenStream, AST: TAstR
     const baseDiagSet = new Set<CDiagBase>(baseDiagnostic(DocStrMap, AST));
 
     const DiagShow: CDiagBase[] = [];
-    const { code800Deprecated, code107LegacyAssignment, code300FuncSize } = getDiagConfig();
+    const { code800Deprecated, code107, code300fnSize } = getDiagConfig();
 
     for (const diag of baseDiagSet) {
         const { value } = diag.code;
@@ -42,13 +42,13 @@ export function setBaseDiag(uri: vscode.Uri, DocStrMap: TTokenStream, AST: TAstR
         }
         DiagShow.push(diag);
     }
-    if (code107LegacyAssignment) {
+    if (code107) {
         DiagShow.push(...getAssignErr(DocStrMap));
     }
 
     diagColl.set(uri, [
         ...getWithOutNekoDiag(diagColl.get(uri) ?? []),
         ...DiagShow,
-        ...getFuncSizeErr(getDAListTop(AST), DocStrMap, code300FuncSize),
+        ...getFuncSizeErr(getDAListTop(AST), DocStrMap, code300fnSize),
     ]);
 }

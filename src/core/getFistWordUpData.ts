@@ -7,7 +7,6 @@ export function getFistWordCore(lStrTrimFix: string): string {
 }
 
 function getFistWord(lStrTrim: string): string {
-    // TODO get FistWordUp
     // OK    const isOK: boolean = (/^\w*$/u).test(subStr)
     //           || (/^case\s[^:]+:/iu).test(subStr)
     //           || (/^default\s*:/iu).test(subStr)

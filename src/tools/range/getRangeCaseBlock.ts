@@ -36,7 +36,7 @@ export function getRangeCaseBlock(
             continue;
         }
         if (
-            (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT')
+            (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT' || fistWordUp === 'TRY')
             && lStr.includes(':')
         ) {
             const col = DocStrMap[line - 1].textRaw.length;

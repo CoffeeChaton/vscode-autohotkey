@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { EDiagCode } from '../../../../diag';
 import type { TAhkTokenLine } from '../../../../globalEnum';
-import { CommandErrMap } from '../../../../tools/Built-in/Command_tools';
+import { CommandErrMap } from '../../../../tools/Built-in/Command.tools';
 import { CDiagBase } from '../CDiagBase';
 
 function getLoopErr(lStr: string, line: number, col: number): CDiagBase | null {
@@ -27,7 +27,10 @@ function getLoopErr(lStr: string, line: number, col: number): CDiagBase | null {
     }
 
     if ((/^FilePattern$/ui).test(SecondSection)) {
+        // I can't recognize `Loop, FilePattern` syntax
+        // https://www.autohotkey.com/boards/viewtopic.php?p=494782#p494782
         // https://www.autohotkey.com/docs/commands/LoopFile.htm#old
+        // maybe is never error?
         return new CDiagBase({
             value: EDiagCode.code802,
             range: new vscode.Range(line, colL, line, colR),
@@ -36,6 +39,9 @@ function getLoopErr(lStr: string, line: number, col: number): CDiagBase | null {
         });
     }
 
+    //     201: {
+    //     msg: 'If Count is a variable reference such as `%varName%` or `% expression`',
+    //     path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag201',
     // https://www.autohotkey.com/docs/commands/Loop.htm
     return new CDiagBase({
         value: EDiagCode.code201,
@@ -58,7 +64,7 @@ function getCommandErrCore(params: TAhkTokenLine, keyWordUp: string, col: number
         return new CDiagBase({
             value: diag,
             range: new vscode.Range(line, colL, line, colL + keyWordUp.length),
-            severity: vscode.DiagnosticSeverity.Warning, // FIXME: if 700->
+            severity: vscode.DiagnosticSeverity.Warning,
             tags: [vscode.DiagnosticTag.Deprecated],
         });
     }
@@ -70,7 +76,7 @@ export function getCommandErr(params: TAhkTokenLine): CDiagBase | null {
 
     if (fistWordUp === '') return null; // miss
 
-    if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT') {
+    if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT' || fistWordUp === 'TRY') {
         const { SecondWordUp, SecondWordUpCol } = params;
         return getCommandErrCore(params, SecondWordUp, SecondWordUpCol);
     }

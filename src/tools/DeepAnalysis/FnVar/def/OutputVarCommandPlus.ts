@@ -1,10 +1,10 @@
+import { OutputCommandPlusMap } from '../../../Built-in/Command.tools';
 import type { TGetFnDefNeed } from '../TFnVarDef';
 import { getValMeta } from './getValMeta';
-import { OutputCommandPlusMap } from './OutPut';
 import type { TScanData } from './spiltCommandAll';
 import { spiltCommandAll } from './spiltCommandAll';
 
-function pickCommand(needArr: number[], AllCut: TScanData[]): TScanData[] {
+function pickCommand(needArr: number[] | readonly number[], AllCut: TScanData[]): TScanData[] {
     const needPartScan: TScanData[] = [];
 
     for (const make of needArr) {
@@ -18,7 +18,7 @@ function pickCommand(needArr: number[], AllCut: TScanData[]): TScanData[] {
 }
 
 export function OutputVarCommandPlus(need: TGetFnDefNeed, keyWord: string, col: number): null {
-    const needArr: number[] | undefined = OutputCommandPlusMap.get(keyWord);
+    const needArr: readonly number[] | undefined = OutputCommandPlusMap.get(keyWord);
     if (needArr === undefined) return null;
 
     const {

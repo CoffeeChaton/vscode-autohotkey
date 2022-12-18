@@ -1,56 +1,17 @@
 import * as vscode from 'vscode';
-import type { DeepReadonly } from './globalEnum';
+import type { ECommandOption, TCheckKey, TConfigs } from './configUI.data';
+import { EDiagMasterSwitch } from './configUI.data';
 import { statusBarItem } from './provider/vscWindows/statusBarItem';
 import { str2RegexListCheck } from './tools/str2RegexListCheck';
-
-export const enum ECommandOption {
-    All = 0, // "Don't filter Command, Provides all entered commands.",
-    Recommended = 1, // "filter not recommended Command. (Referral rules from AhkNekoHelp.)",
-    noSameFunc = 2, // "filter Command with the pack has same name function. exp: of ",
-    // eslint-disable-next-line no-magic-numbers
-    notProvided = 3, // "not provided any Command."
-}
-
-export const enum EDiagMasterSwitch {
-    never = 'never',
-    auto = 'auto',
-    alway = 'alway',
-}
-
-type TempConfigs = {
-    statusBarDisplayColor: string;
-    formatTextReplace: boolean;
-    baseScan: {
-        IgnoredList: readonly string[];
-    };
-    snippets: {
-        blockFilesList: readonly string[];
-        CommandOption: ECommandOption;
-    };
-    Diag: {
-        AMasterSwitch: EDiagMasterSwitch;
-        code107LegacyAssignment: boolean;
-        code300FuncSize: number;
-        code500Max: number; // NeverUsedVar
-        code502Max: number; // of var
-        code503Max: number; // of param
-        code800Deprecated: boolean;
-        useModuleValDiag: boolean;
-    };
-    useCodeLens: boolean;
-    useSymbolProvider: boolean;
-    // https://code.visualstudio.com/api/references/contribution-points%5C#Configuration-example
-};
-type TConfigs = DeepReadonly<TempConfigs>;
 
 /*
     ---set start---
 */
-
 const Config = 'AhkNekoHelp';
 let Configs: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration(Config);
 
-function getConfigs<T>(section: string): T {
+// WTF
+function getConfigs<T, V extends string>(section: TCheckKey<V>): T {
     const ed: T | undefined = Configs.get<T>(section);
     if (ed !== undefined) return ed;
     throw new Error(`${section}, not found err code--40--11--33-- at configUI.ts`);
@@ -58,31 +19,29 @@ function getConfigs<T>(section: string): T {
 
 function getConfig(): TConfigs {
     const ed: TConfigs = {
-        statusBarDisplayColor: getConfigs<string>('statusBar.displayColor'),
-        formatTextReplace: getConfigs<boolean>('format.textReplace'),
-        baseScan: {
-            IgnoredList: getConfigs<readonly string[]>('baseScan.IgnoredList'),
-        },
-        snippets: {
-            blockFilesList: getConfigs<readonly string[]>('snippets.blockFilesList'),
-            CommandOption: getConfigs<ECommandOption>('snippets.CommandOption'),
-        },
         Diag: {
-            AMasterSwitch: getConfigs<EDiagMasterSwitch>('Diag.AMasterSwitch'),
-            code107LegacyAssignment: getConfigs<boolean>('Diag.code107LegacyAssignment'), // of param
-            code300FuncSize: getConfigs<number>('Diag.code300FuncSize'),
-            code500Max: getConfigs<number>('Diag.code500'), // NeverUsedVar
-            code502Max: getConfigs<number>('Diag.code502'), // of var
-            code503Max: getConfigs<number>('Diag.code503'), // of param
-            code800Deprecated: getConfigs<boolean>('Diag.code800Deprecated'),
-            useModuleValDiag: getConfigs<boolean>('Diag.useModuleValDiag'),
+            AMasterSwitch: getConfigs<EDiagMasterSwitch, 'Diag.AMasterSwitch'>('Diag.AMasterSwitch'),
+            code107: getConfigs<boolean, 'Diag.code107LegacyAssignment'>('Diag.code107LegacyAssignment'),
+            code300fnSize: getConfigs<number, 'Diag.code300FuncSize'>('Diag.code300FuncSize'),
+            code500Max: getConfigs<number, 'Diag.code500'>('Diag.code500'), // NeverUsedVar
+            code502Max: getConfigs<number, 'Diag.code502'>('Diag.code502'), // of var
+            code503Max: getConfigs<number, 'Diag.code503'>('Diag.code503'), // of param
+            code800Deprecated: getConfigs<boolean, 'Diag.code800Deprecated'>('Diag.code800Deprecated'),
+            useModuleValDiag: getConfigs<boolean, 'Diag.useModuleValDiag'>('Diag.useModuleValDiag'),
         },
-        useCodeLens: getConfigs<boolean>('useCodeLens'),
-        useSymbolProvider: getConfigs<boolean>('useSymbolProvider'),
+        baseScanIgnoredList: getConfigs<readonly string[], 'baseScan.IgnoredList'>('baseScan.IgnoredList'),
+        formatTextReplace: getConfigs<boolean, 'format.textReplace'>('format.textReplace'),
+        snippets: {
+            blockFilesList: getConfigs<readonly string[], 'snippets.blockFilesList'>('snippets.blockFilesList'),
+            CommandOption: getConfigs<ECommandOption, 'snippets.CommandOption'>('snippets.CommandOption'),
+        },
+        statusBarDisplayColor: getConfigs<string, 'statusBar.displayColor'>('statusBar.displayColor'),
+        useCodeLens: getConfigs<boolean, 'useCodeLens'>('useCodeLens'),
+        useSymbolProvider: getConfigs<boolean, 'useSymbolProvider'>('useSymbolProvider'),
     } as const;
 
     statusBarItem.color = ed.statusBarDisplayColor;
-    void str2RegexListCheck(ed.baseScan.IgnoredList);
+    void str2RegexListCheck(ed.baseScanIgnoredList);
     void str2RegexListCheck(ed.snippets.blockFilesList);
     return ed;
 }
@@ -115,7 +74,7 @@ export function useSymbolProvider(): boolean {
 }
 
 export function getIgnoredList(): readonly RegExp[] {
-    return str2RegexListCheck(config.baseScan.IgnoredList);
+    return str2RegexListCheck(config.baseScanIgnoredList);
 }
 
 export function getSnippetBlockFilesList(): readonly RegExp[] {

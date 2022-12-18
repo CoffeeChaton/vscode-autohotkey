@@ -33,7 +33,7 @@ export function getSetTimerWrap(AhkTokenLine: TAhkTokenLine): TScanData | null {
         return getSetTimerData(lStr, fistWordUpCol);
     }
 
-    if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT') {
+    if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT' || fistWordUp === 'TRY') {
         const { SecondWordUp, SecondWordUpCol, lStr } = AhkTokenLine;
         return SecondWordUp === 'SETTIMER'
             ? getSetTimerData(lStr, SecondWordUpCol)

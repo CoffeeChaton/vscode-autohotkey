@@ -4,118 +4,32 @@
 
 import { EDiagCode } from '../../diag';
 
-// FIXME: check this
 type TStatementDiag =
     | EDiagCode.code806
     | EDiagCode.code899;
 
-type TOther =
-    | 'AND'
-    | 'BETWEEN'
-    | 'DEFAULT'
-    | 'IN'
-    | 'IS'
-    | 'NEW'
-    | 'NOT'
-    | 'OR'
-    | 'THIS';
-
-export type TStatementKeyList =
-    | 'AND'
-    | 'BETWEEN'
-    | 'BREAK'
-    | 'CASE'
-    | 'CATCH'
-    | 'CONTINUE'
-    | 'DEFAULT'
-    | 'ELSE'
-    | 'FINALLY'
-    | 'FOR'
-    | 'GOSUB'
-    | 'GOTO'
-    | 'IF'
-    | 'IFEQUAL'
-    | 'IFEXIST'
-    | 'IFGREATER'
-    | 'IFGREATEROREQUAL'
-    | 'IFINSTRING'
-    | 'IFLESS'
-    | 'IFLESSOREQUAL'
-    | 'IFMSGBOX'
-    | 'IFNOTEQUAL'
-    | 'IFNOTEXIST'
-    | 'IFNOTINSTRING'
-    | 'IFWINACTIVE'
-    | 'IFWINEXIST'
-    | 'IFWINNOTACTIVE'
-    | 'IFWINNOTEXIST'
-    | 'IN'
-    | 'IS'
-    | 'LOOP'
-    | 'NEW'
-    | 'NOT'
-    | 'OR'
-    | 'RETURN'
-    | 'SWITCH'
-    | 'THIS'
-    | 'THROW'
-    | 'TRY'
-    | 'UNTIL'
-    | 'WHILE';
-// Loop <file>
-
-export type TStatementElement = {
+type TStatementElement = Readonly<{
+    upName: string;
     keyRawName: string;
     body: string;
     doc: string;
-
     recommended: boolean;
     link: `https://www.autohotkey.com/docs/${string}`;
     exp: readonly string[];
+    //
     diag?: TStatementDiag;
-};
-
-export type TStatement = {
-    [k in TStatementKeyList]: TStatementElement;
-};
+    _DevNote?: readonly string[];
+    _paramType?: string[];
+}>;
 
 /**
- * Flow of Control
+ * after initialization clear
+ * FlowOfControl
  * FOC
  */
-export const Statement: TStatement = {
-    AND: {
-        keyRawName: 'And',
-        body: 'and',
-        doc: 'Both of these are **logical-AND**. For example: `x > 3 and x < 10`. To enhance performance, [short-circuit evaluation](https://www.autohotkey.com/docs/Functions.htm#ShortCircuit) is applied. Also, a line that begins with AND/OR/&&/|| (or any other operator) is automatically [appended to](https://www.autohotkey.com/docs/Scripts.htm#continuation) the line above it.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/Variables.htm#and',
-        exp: [
-            ';exp of "And"',
-            'x > 3 and x < 10',
-            'x > 3 && x < 10',
-            ';exp2',
-            'if (Color = "Red" or Color = "Green" or Color = "Blue"        ; Comment.',
-            '   or Color = "Black" or Color = "Gray" or Color = "White")   ; Comment.',
-            '   and ProductIsAvailableInColor(Product, Color)              ; Comment.',
-        ],
-    },
-    BETWEEN: {
-        keyRawName: 'Between',
-        body: 'between',
-        doc: 'Determines whether [traditional assignments](https://www.autohotkey.com/docs/commands/SetEnv.htm "Deprecated. New scripts should use Var := Value instead.") like `Var1 = %Var2%` omit spaces and tabs from the beginning and end of _Var2_.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/AutoTrim.htm',
-        exp: [
-            'if Var Between LowerBound and UpperBound',
-            'if Var not Between LowerBound and UpperBound',
-            '; exp',
-            'var := 2',
-            'if var between 1 and 5',
-            '    MsgBox, % var "is in the range 1 to 5, inclusive."',
-        ],
-    },
-    BREAK: {
+export const Statement: TStatementElement[] = [
+    {
+        upName: 'BREAK',
         keyRawName: 'Break',
         body: 'Break',
         doc: 'Exits (terminates) any type of [loop statement](https://www.autohotkey.com/docs/Language.htm#loop-statement).',
@@ -136,7 +50,8 @@ export const Statement: TStatement = {
             '}',
         ],
     },
-    CASE: {
+    {
+        upName: 'CASE',
         keyRawName: 'Case',
         body: 'Case $0:',
         doc: 'Executes one case from a list of mutually exclusive candidates.',
@@ -153,9 +68,10 @@ export const Statement: TStatement = {
             '}',
         ],
     },
-    CATCH: {
+    {
+        upName: 'CATCH',
         keyRawName: 'Catch',
-        body: 'Catch, $0',
+        body: 'Catch, ${1:error}',
         doc: 'Specifies the code to execute if an exception is raised during execution of a [try](https://www.autohotkey.com/docs/commands/Try.htm) statement.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Catch.htm',
@@ -163,13 +79,15 @@ export const Statement: TStatement = {
             'Try {',
             '    ...',
             '} Catch e {',
-            '    ...',
+            '    MsgBox, % "e is" e.Message',
+            '    MsgBox % "Error in " e.What ", which was called at line " e.Line ',
             '} Finally {',
             '    ...',
             '}',
         ],
     },
-    CONTINUE: {
+    {
+        upName: 'CONTINUE',
         keyRawName: 'Continue',
         body: 'Continue',
         doc: 'Skips the rest of a [loop statement](https://www.autohotkey.com/docs/Language.htm#loop-statement)\'s current iteration and begins a new one.',
@@ -186,7 +104,25 @@ export const Statement: TStatement = {
             '}',
         ],
     },
-    DEFAULT: {
+    {
+        upName: 'CRITICAL',
+        keyRawName: 'Critical',
+        body: 'Critical, ${1|Off,On|}',
+        doc: 'Prevents the current thread from being interrupted by other threads, or enables it to be interrupted.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/CoordMode.htm',
+        exp: [
+            'Critical [, OnOffNumeric]',
+            ';          TargetType',
+            ';                 -> On (defaults)',
+            ';                 -> Off',
+        ],
+        _paramType: [
+            'S',
+        ],
+    },
+    {
+        upName: 'DEFAULT',
         keyRawName: 'Default',
         body: 'Default : $0',
         doc: 'Executes one case from a list of mutually exclusive candidates.',
@@ -203,7 +139,8 @@ export const Statement: TStatement = {
             '}',
         ],
     },
-    ELSE: {
+    {
+        upName: 'ELSE',
         keyRawName: 'Else',
         body: 'else',
         link: 'https://www.autohotkey.com/docs/commands/Else.htm',
@@ -221,7 +158,45 @@ export const Statement: TStatement = {
             '}',
         ],
     },
-    FINALLY: {
+    {
+        upName: 'EXIT',
+        keyRawName: 'Exit',
+        body: 'Exit [, ${1:ExitCode}]',
+        doc: 'Exits the [current thread](https://www.autohotkey.com/docs/misc/Threads.htm) or (if the script is not [persistent](https://www.autohotkey.com/docs/commands/_Persistent.htm)) the entire script.\n* ExitCode\n\n> An integer between -2147483648 and 2147483647 (can be an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions)) that is returned to its caller when the script exits. This code is accessible to any program that spawned the script, such as another script (via RunWait) or a batch (.bat) file. If omitted, _ExitCode_ defaults to zero. Zero is traditionally used to indicate success.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/Exit.htm',
+        exp: [
+            '#z::',
+            '    Gosub, Sub2',
+            '    MsgBox, % "This MsgBox will never happen because of the EXIT."',
+            'Return',
+            '',
+            'Sub2:',
+            'Exit  ; Terminate this subroutine as well as the calling subroutine.',
+        ],
+        _paramType: [
+            'E',
+        ],
+    },
+    {
+        upName: 'EXITAPP',
+        keyRawName: 'ExitApp',
+        body: 'ExitApp [, ${1:ExitCode}]',
+        doc: 'Terminates the script.\n* ExitCode\n1. An integer between -2147483648 and 2147483647\n2. If omitted, _ExitCode_ defaults to zero.\n3. Zero is traditionally used to indicate success.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/commands/ExitApp.htm',
+        exp: [
+            'ExitApp [, ExitCode]',
+            '',
+            ';exp Press a hotkey to terminate the script.',
+            '#x::ExitApp  ; Win+X',
+        ],
+        _paramType: [
+            'E',
+        ],
+    },
+    {
+        upName: 'FINALLY',
         keyRawName: 'Finally',
         body: 'Finally',
         doc: 'Ensures that one or more statements are always executed after a [Try](https://www.autohotkey.com/docs/commands/Try.htm) statement finishes.',
@@ -237,7 +212,8 @@ export const Statement: TStatement = {
             '}',
         ],
     },
-    FOR: {
+    {
+        upName: 'FOR',
         keyRawName: 'For',
         body: 'For ${1:Key}, ${2:Value} in ${3:Expression} {\n}',
         doc: 'Repeats a series of commands once for each key-value pair in an object.',
@@ -252,14 +228,15 @@ export const Statement: TStatement = {
             '}',
         ],
     },
-    GOSUB: {
-        keyRawName: 'Gosub',
-        body: 'Gosub, ${1:Label}',
+    {
+        upName: 'GOSUB',
+        keyRawName: 'GoSub',
+        body: 'GoSub, ${1:Label}',
         doc: 'Jumps to the specified label and continues execution until [Return](https://www.autohotkey.com/docs/commands/Return.htm) is encountered.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/commands/Gosub.htm',
         exp: [
-            'Gosub, Label1 ',
+            'GoSub, Label1 ',
             '    MsgBox, The Label1 subroutine has returned (it is finished).',
             'return',
             '',
@@ -268,7 +245,8 @@ export const Statement: TStatement = {
             'return',
         ],
     },
-    GOTO: {
+    {
+        upName: 'GOTO',
         keyRawName: 'Goto',
         body: 'Goto, ${1:Label}',
         doc: 'Jumps to the specified label and continues execution.',
@@ -286,7 +264,8 @@ export const Statement: TStatement = {
             '',
         ],
     },
-    IF: {
+    {
+        upName: 'IF',
         keyRawName: 'If',
         body: 'if ($0)',
         doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if an [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions) evaluates to true.',
@@ -303,7 +282,8 @@ export const Statement: TStatement = {
             '}',
         ],
     },
-    IFEQUAL: {
+    {
+        upName: 'IFEQUAL',
         keyRawName: 'IfEqual',
         body: 'IfEqual, ${1:Var} [, ${2:Value} ]',
         doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
@@ -312,7 +292,8 @@ export const Statement: TStatement = {
         link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
         exp: ['IfEqual, Var , Value ; if Var = Value'],
     },
-    IFEXIST: {
+    {
+        upName: 'IFEXIST',
         keyRawName: 'IfExist',
         body: 'IfExist, ${1:FilePattern}',
         doc: 'Checks for the existence of a file or folder.',
@@ -328,7 +309,8 @@ export const Statement: TStatement = {
             '    MsgBox, At least one .txt file exists.',
         ],
     },
-    IFGREATER: {
+    {
+        upName: 'IFGREATER',
         keyRawName: 'IfGreater',
         body: 'IfGreater, ${1:Var} [, ${2:Value} ]',
         doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
@@ -337,7 +319,8 @@ export const Statement: TStatement = {
         link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
         exp: ['IfGreater, Var , Value ; if Var > Value'],
     },
-    IFGREATEROREQUAL: {
+    {
+        upName: 'IFGREATEROREQUAL',
         keyRawName: 'IfGreaterOrEqual',
         body: 'IfGreaterOrEqual, ${1:Var} [, ${2:Value} ]',
         doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
@@ -346,7 +329,8 @@ export const Statement: TStatement = {
         link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
         exp: ['IfGreaterOrEqual, Var , Value ; if Var >= Value'],
     },
-    IFINSTRING: {
+    {
+        upName: 'IFINSTRING',
         keyRawName: 'IfInString',
         body: 'IfInString, ${1:Var}, ${2:SearchString}',
         doc: 'Checks if a [variable](https://www.autohotkey.com/docs/Variables.htm) contains the specified string.',
@@ -358,7 +342,8 @@ export const Statement: TStatement = {
             'IfNotInString, Var, SearchString',
         ],
     },
-    IFLESS: {
+    {
+        upName: 'IFLESS',
         keyRawName: 'IfLess',
         body: 'IfLess, ${1:Var} [, ${2:Value} ]',
         doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
@@ -367,7 +352,8 @@ export const Statement: TStatement = {
         link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
         exp: ['IfLess, Var , Value ; if Var < Value'],
     },
-    IFLESSOREQUAL: {
+    {
+        upName: 'IFLESSOREQUAL',
         keyRawName: 'IfLessOrEqual',
         body: 'IfLessOrEqual, ${1:Var} [, ${2:Value} ]',
         doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
@@ -376,7 +362,8 @@ export const Statement: TStatement = {
         link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
         exp: ['IfLessOrEqual, Var , Value ; if Var <= Value'],
     },
-    IFMSGBOX: {
+    {
+        upName: 'IFMSGBOX',
         keyRawName: 'IfMsgBox',
         body: 'IfMsgBox, ${1|Yes,No,OK,Cancel,Abort,Ignore,Retry,Continue,TryAgain,Timeout|}',
         doc: 'Checks which button was pushed by the user during the most recent [MsgBox](https://www.autohotkey.com/docs/commands/MsgBox.htm) command.',
@@ -384,9 +371,17 @@ export const Statement: TStatement = {
         link: 'https://www.autohotkey.com/docs/commands/IfMsgBox.htm',
         exp: [
             'IfMsgBox, ButtonName',
+            '',
+            'Loop, Parse, clipboard, `n, `r',
+            '{',
+            '    MsgBox, 4, ,% "File number " A_Index " is " A_LoopField ".`n`nContinue?"',
+            '    IfMsgBox, No, break',
+            '',
+            '}',
         ],
     },
-    IFNOTEQUAL: {
+    {
+        upName: 'IFNOTEQUAL',
         keyRawName: 'IfNotEqual',
         body: 'IfNotEqual, ${1:Var} [, ${2:Value} ]',
         doc: 'Specifies one or more [statements](https://www.autohotkey.com/docs/Concepts.htm#statement) to execute if the comparison of a [variable](https://www.autohotkey.com/docs/Variables.htm) to a value evaluates to true.',
@@ -395,7 +390,8 @@ export const Statement: TStatement = {
         link: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
         exp: ['IfNotEqual, Var , Value ; if Var != Value'],
     },
-    IFNOTEXIST: {
+    {
+        upName: 'IFNOTEXIST',
         keyRawName: 'IfNotExist',
         body: 'IfNotExist, ${1:FilePattern}',
         doc: 'Checks for the existence of a file or folder.',
@@ -411,7 +407,8 @@ export const Statement: TStatement = {
             '    MsgBox, At least one .txt file exists.',
         ],
     },
-    IFNOTINSTRING: {
+    {
+        upName: 'IFNOTINSTRING',
         keyRawName: 'IfNotInString',
         body: 'IfNotInString, ${1:Var}, ${2:SearchString}',
         doc: 'Checks if a [variable](https://www.autohotkey.com/docs/Variables.htm) contains the specified string.',
@@ -423,7 +420,8 @@ export const Statement: TStatement = {
             'IfNotInString, Var, SearchString',
         ],
     },
-    IFWINACTIVE: {
+    {
+        upName: 'IFWINACTIVE',
         keyRawName: 'IfWinActive',
         body: 'IfWinActive [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Checks if the specified window exists and is currently active (foremost).',
@@ -435,7 +433,8 @@ export const Statement: TStatement = {
             'IfWinNotActive [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
     },
-    IFWINEXIST: {
+    {
+        upName: 'IFWINEXIST',
         keyRawName: 'IfWinExist',
         body: 'IfWinExist [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Checks if the specified window exists.',
@@ -447,7 +446,8 @@ export const Statement: TStatement = {
             'IfWinNotExist [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
     },
-    IFWINNOTACTIVE: {
+    {
+        upName: 'IFWINNOTACTIVE',
         keyRawName: 'IfWinNotActive',
         body: 'IfWinNotActive [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Checks if the specified window exists and is currently active (foremost).',
@@ -459,7 +459,8 @@ export const Statement: TStatement = {
             'IfWinNotActive [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
     },
-    IFWINNOTEXIST: {
+    {
+        upName: 'IFWINNOTEXIST',
         keyRawName: 'IfWinNotExist',
         body: 'IfWinNotExist  [, ${1:WinTitle}, ${2:WinText}, ${3:ExcludeTitle}, ${4:ExcludeText}]',
         doc: 'Checks if the specified window exists.',
@@ -471,34 +472,8 @@ export const Statement: TStatement = {
             'IfWinNotExist [, WinTitle, WinText, ExcludeTitle, ExcludeText]',
         ],
     },
-    IN: {
-        keyRawName: 'In',
-        body: 'in',
-        doc: '',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/IfIn.htm',
-        exp: [
-            ';EXP of If In',
-            'if Var in MatchList',
-            'if Var not in MatchList',
-            '',
-            'if Var contains MatchList',
-            'if Var not contains MatchList',
-        ],
-    },
-    IS: {
-        keyRawName: 'Is',
-        body: 'is',
-        doc: '',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/IfIs.htm',
-        exp: [
-            ';EXP of If Is',
-            'if Var is Type',
-            'if Var is not Type',
-        ],
-    },
-    LOOP: {
+    {
+        upName: 'LOOP',
         keyRawName: 'Loop',
         body: 'Loop, ${1:number}',
         doc: 'Performs a series of commands repeatedly: either the specified number of times or until [break](https://www.autohotkey.com/docs/commands/Break.htm) is encountered.',
@@ -524,62 +499,8 @@ export const Statement: TStatement = {
             '',
         ],
     },
-    NEW: {
-        keyRawName: 'New',
-        body: 'new',
-        doc: 'Creates a new object derived from another object.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/Variables.htm#new',
-        exp: [
-            'x := new y(z) ; (where y is a variable, not a function name)',
-            '',
-            '; https://www.autohotkey.com/docs/Objects.htm#Custom_NewDelete',
-            'm1 := new GMem(0, 20)',
-            '',
-            'class GMem',
-            '{',
-            '    __New(aFlags, aSize)',
-            '    {',
-            '        this.ptr := DllCall("GlobalAlloc", "UInt", aFlags, "Ptr", aSize, "Ptr")',
-            '        if !this.ptr',
-            '            return ""',
-            '        MsgBox % "New GMem of " aSize " bytes at address " this.ptr "."',
-            '        return this  ; This line can be omitted when using the \'new\' operator.',
-            '    }',
-            '',
-            '    __Delete()',
-            '    {',
-            '        MsgBox % "Delete GMem at address " this.ptr "."',
-            '        DllCall("GlobalFree", "Ptr", this.ptr)',
-            '    }',
-            '}',
-        ],
-    },
-    NOT: {
-        keyRawName: 'Not',
-        body: 'not',
-        doc: '**Logical-NOT**. Except for its lower precedence, this is the same as the **!** operator.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/Variables.htm#not',
-        exp: [
-            '; exp of "Not"',
-            'not (x = 3 or y = 3)',
-            '!(x = 3 or y = 3)',
-        ],
-    },
-    OR: {
-        keyRawName: 'Or',
-        body: 'or',
-        doc: 'Both of these are **logical-OR**. For example: `x <= 3 or x >= 10`. To enhance performance, [short-circuit evaluation](https://www.autohotkey.com/docs/Functions.htm#ShortCircuit) is applied.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/Variables.htm#or',
-        exp: [
-            '; exp of "Or"',
-            'x <= 3 or x >= 10',
-            'x <= 3 || x >= 10',
-        ],
-    },
-    RETURN: {
+    {
+        upName: 'RETURN',
         keyRawName: 'Return',
         body: 'Return',
         doc: 'Returns from a subroutine to which execution had previously jumped via [function-call](https://www.autohotkey.com/docs/Functions.htm), [Gosub](https://www.autohotkey.com/docs/commands/Gosub.htm), [Hotkey](https://www.autohotkey.com/docs/Hotkeys.htm) activation, [GroupActivate](https://www.autohotkey.com/docs/commands/GroupActivate.htm), or other means.',
@@ -595,7 +516,8 @@ export const Statement: TStatement = {
             '     Return FindColor(TargetColor)',
         ],
     },
-    SWITCH: {
+    {
+        upName: 'SWITCH',
         keyRawName: 'Switch',
         body: [
             'Switch ${1:key} {',
@@ -621,35 +543,8 @@ export const Statement: TStatement = {
             '}',
         ],
     },
-    THIS: {
-        keyRawName: 'This',
-        body: 'this',
-        doc: 'this ... i can\'t find documentation for "this"',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/Objects.htm#Custom_NewDelete',
-        exp: [
-            'm1 := new GMem(0, 20)',
-            '',
-            'class GMem',
-            '{',
-            '    __New(aFlags, aSize)',
-            '    {',
-            '        this.ptr := DllCall("GlobalAlloc", "UInt", aFlags, "Ptr", aSize, "Ptr")',
-            '        if !this.ptr',
-            '            return ""',
-            '        MsgBox % "New GMem of " aSize " bytes at address " this.ptr "."',
-            '        return this  ; This line can be omitted when using the \'new\' operator.',
-            '    }',
-            '',
-            '    __Delete()',
-            '    {',
-            '        MsgBox % "Delete GMem at address " this.ptr "."',
-            '        DllCall("GlobalFree", "Ptr", this.ptr)',
-            '    }',
-            '}',
-        ],
-    },
-    THROW: {
+    {
+        upName: 'THROW',
         keyRawName: 'Throw',
         body: 'Throw, Exception("${1:Message}" , ${2|"What",-1|}, "${3:Extra}")',
         doc: 'Signals the occurrence of an error. This signal can be caught by a [try](https://www.autohotkey.com/docs/commands/Try.htm)\\-[catch](https://www.autohotkey.com/docs/commands/Catch.htm) statement.',
@@ -663,7 +558,8 @@ export const Statement: TStatement = {
             'Throw { what: "Custom error", file: A_LineFile, line: A_LineNumber } ; Throws an object',
         ],
     },
-    TRY: {
+    {
+        upName: 'TRY',
         keyRawName: 'Try',
         body: 'Try',
         doc: 'Guards one or more statements (commands or expressions) against runtime errors and exceptions thrown by the [throw](https://www.autohotkey.com/docs/commands/Throw.htm) command.',
@@ -679,7 +575,8 @@ export const Statement: TStatement = {
             '}',
         ],
     },
-    WHILE: {
+    {
+        upName: 'WHILE',
         keyRawName: 'While',
         body: 'While ($0) {\n    \n}',
         doc: 'Performs a series of commands repeatedly until the specified [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions) evaluates to false.',
@@ -704,7 +601,8 @@ export const Statement: TStatement = {
             '}',
         ],
     },
-    UNTIL: {
+    {
+        upName: 'UNTIL',
         keyRawName: 'Until',
         body: 'Until $0',
         doc: 'Applies a condition to the continuation of a Loop or For-loop.',
@@ -716,4 +614,4 @@ export const Statement: TStatement = {
             '} Until Expression',
         ],
     },
-};
+];

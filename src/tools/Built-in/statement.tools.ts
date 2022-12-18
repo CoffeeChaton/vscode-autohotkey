@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { CommandMDMap } from './Command_tools';
-import { Statement } from './statement';
+import { CommandMDMap } from './Command.tools';
+import { Statement } from './statement.data';
 
 type TStatementMDMap = ReadonlyMap<string, vscode.MarkdownString>;
 type TSnippetStatement = readonly vscode.CompletionItem[];
@@ -8,7 +8,7 @@ type TSnippetStatement = readonly vscode.CompletionItem[];
 export const [StatementMDMap, snippetStatement] = ((): [TStatementMDMap, TSnippetStatement] => {
     const map1: Map<string, vscode.MarkdownString> = new Map<string, vscode.MarkdownString>();
     const List2: vscode.CompletionItem[] = [];
-    for (const [k, v] of Object.entries(Statement)) {
+    for (const v of Statement) {
         const {
             keyRawName,
             doc,
@@ -16,6 +16,7 @@ export const [StatementMDMap, snippetStatement] = ((): [TStatementMDMap, TSnippe
             exp,
             body,
             recommended,
+            upName,
         } = v;
         const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
             .appendCodeblock(keyRawName, 'ahk')
@@ -27,7 +28,7 @@ export const [StatementMDMap, snippetStatement] = ((): [TStatementMDMap, TSnippe
             .appendCodeblock(exp.join('\n'), 'ahk');
 
         md.supportHtml = true;
-        map1.set(k, md);
+        map1.set(upName, md);
 
         if (!recommended) continue;
         const item: vscode.CompletionItem = new vscode.CompletionItem({
@@ -42,6 +43,12 @@ export const [StatementMDMap, snippetStatement] = ((): [TStatementMDMap, TSnippe
         List2.push(item);
     }
 
+    /**
+     * after initialization clear
+     * Flow of Control
+     * FOC
+     */
+    Statement.length = 0;
     return [map1, List2]; // [Map(19), Array(19)]
 })();
 

@@ -32,23 +32,23 @@ function wrap(arg: TGetFnDefNeed, character: number, RawName: string): void {
     valMap.set(UpName, value);
 }
 
+// \s*for\b\s+[\w,\s]*\bin
 // For var1,var2 in Range
-export function forLoop(arg: TGetFnDefNeed): void {
+export function forLoop(arg: TGetFnDefNeed, keyWord: string, col: number): void {
+    if (keyWord !== 'FOR') return;
     const {
         lStrTrimLen,
         lStr,
     } = arg;
+    if (lStrTrimLen < 10) return; // "for a in b" ----> len 10
 
-    if (lStrTrimLen < 10) return; // for a in b ----> len 10
+    const col2: number = lStr.search(/[ \t]in[ \t]/ui); // (?:\s)in
+    if (col2 === -1 || col >= col2) return;
 
-    const col1: number = lStr.search(/\bFor\b\s/ui);
-    if (col1 === -1) return;
-    const col2: number = lStr.search(/\sin\s/ui); // (?:\s)in
-    if (col2 === -1 || col1 >= col2) return;
+    const replaceFor: number = col + 4; // 'for '.len = 4
 
-    const replaceFor: number = col1 + 4; // 'for '.len = 4
+    const strPart: string = lStr.slice(replaceFor, col2 + 1); // .padStart(lStr.length, ' ');
 
-    const strPart: string = lStr.slice(replaceFor, col2);
     const keyMatch: RegExpMatchArray | null = strPart.match(/\s*(\w+)[,\s]/ui);
     if (keyMatch === null) return;
 

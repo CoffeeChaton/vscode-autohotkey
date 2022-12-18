@@ -6,7 +6,6 @@
 - add `RegExMatch((Text := q.Read()), "OU)([^\x00-\x7F])", Found)` of `Found`...
 - add diag auto check of `catch{} ;null catch`
 - add diag of `%\w%\w`
-- add highlight of `"^\\s*#\\b(?i:include(?:Again)?)\\b\\s*(\\*i)?(.*)$"` lib mode,
 - add hover of `;@ahk-neko-ignore`
 - add test jest of `package.json.config` <---> `configUI.ts`
 - change `configUI.ts` fmt option to `enum`
@@ -17,6 +16,7 @@
 - move some `.ts` -> `ahk-doc.json`
 - add: support of `user-def-.h.ahk`
 - test: add vscode.test
+- add diag of [The "is" operator is not supported in expressions.](https://www.autohotkey.com/boards/viewtopic.php?f=76&t=111131)
 - auto-fix of code107
 
 ```ahk
@@ -27,34 +27,16 @@ a = -5
 a = 0x25
 ```
 
-// TODO fn()
-// ComObjParameter
-// IsByRef()
-// ObjAddRef()
-// ObjBindMethod()
-// ObjClone()
-// ObjClone()
-// ObjCount()
-// ObjCount()
-// ObjDelete()
-// ObjGetAddress()
-// ObjGetBase()
-// ObjGetCapacity()
-// ObjHasKey()
-// ObjInsert()
-// ObjInsertAt()
-// ObjLength()
-// ObjMaxIndex()
-// ObjMinIndex()
-// ObjNewEnum()
-// ObjPop()
-// ObjPush()
-// ObjRawGet()
-// ObjRawSet()
-// ObjRelease()
-// ObjRemove()
-// ObjRemoveAt()
-// ObjSetCapacity()
+```ahk
+Loop, Parse, clipboard, `n, `r
+{
+    MsgBox, 4, ,% "File number " A_Index " is " A_LoopField ".`n`nContinue?"
+    IfMsgBox, No, break
+    ;______________^
+}
+```
+
+// TODO obj fn()
 
 // -------
 // ObjClone()
@@ -75,7 +57,7 @@ a = 0x25
 // ObjRemoveAt()
 // ObjSetCapacity()
 // These functions are equivalent to built-in methods of the Object type. It is usually recommended to use the corresponding method instead.
+<https://www.autohotkey.com/docs/lib/index.htm>
 
-```js
-${3|Seconds,Minutes,Hours,Days|}
-```
+Object
+<https://www.autohotkey.com/docs/lib/RegExMatch.htm#MatchObject>
