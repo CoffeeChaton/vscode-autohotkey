@@ -4,11 +4,7 @@
 
 import * as path from 'node:path';
 import * as vscode from 'vscode';
-import type {
-    TAhkTokenLine,
-    TMultilineFlag,
-    TTokenStream,
-} from '../globalEnum';
+import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum';
 import { EDetail, EMultiline } from '../globalEnum';
 import { getIgnore } from '../provider/Diagnostic/getIgnore';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
@@ -160,7 +156,7 @@ export function Pretreatment(
                     textRaw,
                     detail: [EDetail.inComment],
                     line,
-                    cll: 0,
+                    cll: 1,
                     lineComment: '',
                     multiline,
                     multilineFlag: null,
@@ -193,7 +189,7 @@ export function Pretreatment(
                 textRaw,
                 detail: [],
                 line,
-                cll: 0,
+                cll: 1,
                 lineComment: '',
                 multiline,
                 multilineFlag,
@@ -205,14 +201,6 @@ export function Pretreatment(
         }
 
         if (textTrimStart.startsWith(';')) {
-            const lineComment: string = textRaw.length - textTrimStart.length > 2
-                ? textRaw.slice(textTrimStart.length + 1).trim()
-                : '';
-
-            const detail: EDetail[] = [EDetail.inComment];
-            if (lineComment.startsWith(';')) {
-                detail.push(EDetail.hasDoubleSemicolon);
-            }
             result.push({
                 fistWordUpCol: -1,
                 fistWordUp: '',
@@ -221,10 +209,12 @@ export function Pretreatment(
                 lStr: '',
                 deep,
                 textRaw,
-                detail,
+                detail: textTrimStart.startsWith(';;')
+                    ? [EDetail.inComment, EDetail.hasDoubleSemicolon]
+                    : [EDetail.inComment],
                 line,
-                cll: 0,
-                lineComment: '',
+                cll: 1,
+                lineComment: textTrimStart.replace(/^;\s*/u, ''),
                 multiline,
                 multilineFlag: null,
                 displayErr,

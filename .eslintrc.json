@@ -16,6 +16,7 @@
         "plugin:import/typescript",
         "plugin:import/warnings",
         "plugin:promise/recommended",
+        "plugin:regexp/recommended",
         "plugin:security/recommended",
         "plugin:unicorn/all",
         "sukka/typescript"
@@ -335,6 +336,7 @@
         "promise/param-names": "error",
         "promise/valid-params": "warn",
         "react/jsx-filename-extension": "off",
+        "regexp/no-useless-flag": "warn",
         "require-await": "error",
         "require-unicode-regexp": "error",
         "security/detect-object-injection": "off",

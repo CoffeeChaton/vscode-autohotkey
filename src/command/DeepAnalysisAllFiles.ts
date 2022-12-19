@@ -54,6 +54,8 @@ export function DeepAnalysisAllFiles(): null {
 /*
 my project:
 
+Problems (Ctrl+Shift+M) - Total 84 Problems
+
 Deep Analysis All Files
 Deep Analysis : 744 Symbol
 paramMapSize is 1922

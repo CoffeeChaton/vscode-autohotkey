@@ -12,14 +12,15 @@
   ,  v3 :=3
   ```
 
-## 0.0.18(2022-12-19)
+## beta 0.0.18(2022-12-19)
 
-- feat: ahk-doc position move to before fn_def 1 line.
+- break-change: ahk-doc position move to before fn_def 1 line.
   - TODO: add img and fix
 - add: `;@Ahk2Exe-` hover / Completion [Ahk2exe.data](src/tools/Built-in/Ahk2exe.data.ts)
 - add: semantic-highlight of `Goto label` and `GoSub label`
 - dev: add test lock [Built-in Data](src/tools/Built-in) and [ahk.tmLanguage.json](syntaxes/ahk.tmLanguage.json)
 - dev: add unit.text to `Test Suites: 12` `Tests: 26`
+- dev: more structured [ahk.tmLanguage.json](syntaxes/ahk.tmLanguage.json) reference js/c++ tmLanguage
 - fix: find variables of the `k` of `for k in array`
 - fix: find variables of the `err` of `catch err`
 
