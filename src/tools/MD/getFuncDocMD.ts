@@ -7,7 +7,7 @@ function getReturnText(lStr: string, textRaw: string, col: number): string {
     const name: string = textRaw
         // eslint-disable-next-line no-magic-numbers
         .slice(col + 6) // "Return".len
-        .replace(/^[\s,]+/ui, '')
+        .replace(/^[\s,]+/u, '')
         .trim();
 
     if (name === '') return '    Return';
@@ -80,7 +80,7 @@ export function getFuncDocCore(
             returnList.push(getReturnText(lStr, textRaw, SecondWordUpCol));
             // eslint-disable-next-line no-magic-numbers
         } else if (lStr.length > 8) { // "Return A".len
-            const col: number = lStr.search(/\bReturn\b/ui);
+            const col: number = lStr.search(/\bReturn\b/iu);
             if (col !== -1) {
                 returnList.push(getReturnText(lStr, textRaw, col));
             }

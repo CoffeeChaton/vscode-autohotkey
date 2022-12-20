@@ -50,8 +50,8 @@ function CompletionItemCore(
     const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
     const { lStr, textRaw, fistWordUp } = AhkTokenLine;
 
-    if ((/^\s*#Include(Again)?\s/ui).test(lStr)) return IncludeFsPath(document.uri.fsPath);
-    if ((/\bnew[ \t]+\w*$/ui).test(lStr.slice(0, position.character))) {
+    if ((/^\s*#Include(?:Again)?\s/iu).test(lStr)) return IncludeFsPath(document.uri.fsPath);
+    if ((/\bnew[ \t]+\w*$/iu).test(lStr.slice(0, position.character))) {
         return listAllFuncClass()
             .filter((v: vscode.CompletionItem): boolean => v.kind === vscode.CompletionItemKind.Class);
     }

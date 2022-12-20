@@ -8,7 +8,7 @@ export function getSwitchRange(
     textFix: string,
     line: number,
 ): vscode.Range | null {
-    if (!(/^\s*switch[\s,]/ui).test(textFix)) return null;
+    if (!(/^\s*switch[\s,]/iu).test(textFix)) return null;
 
     const lineFix = textFix.endsWith('{')
         ? line
@@ -27,7 +27,7 @@ export function inSwitchBlock(textFix: string, line: number, switchRangeArray: D
         if (sw.contains(Pos)) switchDeep++;
     }
     if (
-        (/^\s*case[\s,]/ui).test(textFix)
+        (/^\s*case[\s,]/iu).test(textFix)
         || (/^\s*default[\s:]/iu).test(textFix)
     ) {
         switchDeep--;

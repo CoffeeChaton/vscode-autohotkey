@@ -256,7 +256,7 @@ const justSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.Completi
 }))();
 
 export function getSnipJustSnip(subStr: string): readonly vscode.CompletionItem[] {
-    return (/(?<![.`#])\b(\w+)$/ui).test(subStr)
+    return (/(?<![.`#])\b\w+$/iu).test(subStr)
         ? justSnip
         : [];
 }

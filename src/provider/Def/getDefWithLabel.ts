@@ -108,7 +108,7 @@ export function getDefWithLabel(
         return [new vscode.Location(uri, position)]; // let auto call Ref
     }
 
-    if ((/\b(?:goto|goSub|Break|Continue|OnExit)\b[\s,]+\w*$/ui).test(lStrFix)) {
+    if ((/\b(?:goto|goSub|Break|Continue|OnExit)[\s,]+\w*$/iu).test(lStrFix)) {
         // OnExit , Label
         return getDefWithLabelCore(wordUpCase);
     }
@@ -116,7 +116,7 @@ export function getDefWithLabel(
     const HotkeyData: TScanData | null = getHotkeyWrap(AhkTokenLine);
     if (HotkeyData?.RawNameNew.toUpperCase() === wordUpCase) return getDefWithLabelCore(wordUpCase);
 
-    const ma: RegExpMatchArray | null = lStrFix.match(/\b(SetTimer\b[\s,%]+)\w*$/ui);
+    const ma: RegExpMatchArray | null = lStrFix.match(/\b(SetTimer[\s,%]+)\w*$/iu);
     if (ma !== null) {
         /**
          * ma1 has "%" -> aVar->HasObject()  ----> getValDefInFunc()

@@ -154,7 +154,7 @@ const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly vscode
 })();
 
 export function getSnipMouseKeyboard(subStr: string): readonly vscode.CompletionItem[] {
-    return (/(?<![.`#])\b(\w+)$/ui).test(subStr)
+    return (/(?<![.`#])\w+$/iu).test(subStr)
         ? MouseKeyboardSnip
         : [];
 }

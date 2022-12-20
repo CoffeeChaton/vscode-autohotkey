@@ -67,39 +67,39 @@ describe('check LineCommand ruler', () => {
         };
         const headMatch: TCommandErr[] = [
             {
-                reg: /^EnvDiv$/ui,
+                reg: /^EnvDiv$/iu,
                 code: EDiagCode.code803,
             },
             {
-                reg: /^EnvMult$/ui,
+                reg: /^EnvMult$/iu,
                 code: EDiagCode.code804,
             },
             {
-                reg: /^If(?:Equal|NotEqual|Less|LessOrEqual|Greater|GreaterOrEqual)$/ui,
+                reg: /^If(?:Equal|NotEqual|Less|LessOrEqual|Greater|GreaterOrEqual)$/iu,
                 code: EDiagCode.code806,
             },
             {
-                reg: /^SplashImage|Progress$/ui,
+                reg: /^SplashImage|Progress$/iu,
                 code: EDiagCode.code813,
             },
             {
-                reg: /^SetEnv$/ui,
+                reg: /^SetEnv$/iu,
                 code: EDiagCode.code814,
             },
             {
-                reg: /^SetFormat$/ui,
+                reg: /^SetFormat$/iu,
                 code: EDiagCode.code815,
             },
             {
-                reg: /^SplashText(?:On|Off)$/ui,
+                reg: /^SplashText(?:On|Off)$/iu,
                 code: EDiagCode.code816,
             },
             {
-                reg: /^Transform$/ui,
+                reg: /^Transform$/iu,
                 code: EDiagCode.code824,
             },
             {
-                reg: /^OnExit$/ui,
+                reg: /^OnExit$/iu,
                 code: EDiagCode.code812,
             },
             // Reg,,,... i need to Count colon  ??
@@ -140,7 +140,7 @@ describe('check LineCommand ruler', () => {
             const def: string[] = _paramType;
 
             // check grammar like ${1:out} or ${2|Option1,Option2|} // https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax
-            const maList: RegExpMatchArray[] = [...body.matchAll(/\$\{\d+[|:]([^}]+)\}/ug)];
+            const maList: RegExpMatchArray[] = [...body.matchAll(/\$\{\d+[|:]([^}]+)\}/gu)];
             if (maList.length !== def.length) {
                 errList2.push(keyRawName);
                 continue;

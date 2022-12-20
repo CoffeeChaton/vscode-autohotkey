@@ -1,5 +1,5 @@
 export function getFistWordCore(lStrTrimFix: string): string {
-    const ma1: string | undefined = lStrTrimFix.match(/^\b(default)\s*:/ui)?.[1];
+    const ma1: string | undefined = lStrTrimFix.match(/^(default)\s*:/iu)?.[1];
     if (ma1 !== undefined) return ma1;
 
     return lStrTrimFix.match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1]
@@ -22,7 +22,7 @@ function getFistWord(lStrTrim: string): string {
         // CAhkHotString -> :*:btw::
         // CAhkHotKeys   -> ^a::
         const lStrTrimFix: string = lStrTrim
-            .replace(/^:[^:]*?:[^:]+::\s*/u, '')
+            .replace(/^:[^:]*:[^:]+::\s*/u, '')
             .replace(/^[^:]+::\s*/u, '');
         return getFistWordCore(lStrTrimFix);
     }

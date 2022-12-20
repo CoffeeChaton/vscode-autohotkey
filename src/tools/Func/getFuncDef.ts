@@ -58,7 +58,7 @@ export function getFuncDef(DocStrMap: TTokenStream, defLine: number): TFuncDefDa
     if (fnHead === null) return null;
 
     const name: string = fnHead[1];
-    if ((/^(?:if|while)$/ui).test(name)) return null;
+    if ((/^(?:if|while)$/iu).test(name)) return null;
 
     const funcData: TFuncDefData | null = getFuncTail({
         DocStrMap,

@@ -1,5 +1,5 @@
 export function getCaseName(textRaw: string, lStr: string): string | null {
-    const caseS = lStr.search(/\bcase[\s,]/ui);
+    const caseS = lStr.search(/\bcase[\s,]/iu);
     if (caseS === -1) return null;
 
     const caseE = lStr.indexOf(':');
@@ -10,7 +10,7 @@ export function getCaseName(textRaw: string, lStr: string): string | null {
 }
 
 export function getSwitchName(textRaw: string): string {
-    return textRaw.replace(/^\s*\bswitch\b\s*/ui, '')
+    return textRaw.replace(/^\s*switch\b\s*/iu, '')
         .replace(/\{\s*$/u, '')
         .trim(); // ahk allow switchName === ''
 }

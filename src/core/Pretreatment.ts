@@ -76,10 +76,10 @@ function getRequiresVersion(textTrimStart: string): 0 | 1 | 2 {
     // #Requires AutoHotkey >2.0- <=2.1
     // #Requires AutoHotkey v2.0-rc.2 64-bit
     const Requires: RegExpMatchArray | null = textTrimStart
-        .match(/^#Requires[ \t]+AutoHotkey(?:\w*)[ \t]+(.*)/iu);
+        .match(/^#Requires[ \t]+AutoHotkey\w*[ \t]+(.*)/iu);
 
     if (Requires !== null) {
-        const ahkV: RegExpMatchArray | null = (Requires[1]).match(/[v>=][ \t]*(\d)\b/ui);
+        const ahkV: RegExpMatchArray | null = (Requires[1]).match(/[v>=][ \t]*(\d)\b/iu);
         if (ahkV !== null) {
             if (ahkV[1] === '1') return 1;
             if (ahkV[1] === '2') return 2;
@@ -136,7 +136,7 @@ export function Pretreatment(
         ) {
             // allow '*' and ';'
             const mdLineText = textTrimStart.slice(1);
-            if ((/^\s*(?:@|-)/ui).test(mdLineText)) {
+            if ((/^\s*(?:@|-)/u).test(mdLineText)) {
                 fnDocList.push(''); // add \n to-> fnDocList.join('\n');
             }
             fnDocList.push(mdLineText); // **** MD ****** sensitive of \s && \n

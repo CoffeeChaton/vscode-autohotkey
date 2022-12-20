@@ -42,7 +42,7 @@ export function getHoverOtherKeyWord1(wordUp: string): vscode.MarkdownString | u
 }
 
 export function getSnippetOtherKeyWord1(lStr: string): readonly CSnippetCommand[] {
-    return (/^[ \\t{]*\w*$/ui).test(lStr)
+    return (/^[ \t{]*\w*$/iu).test(lStr)
         ? snippetOtherKeyword
         : [];
 }

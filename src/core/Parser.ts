@@ -58,7 +58,7 @@ export const ParserBlock = {
         const { lStr, fistWordUp } = FuncInput.AhkTokenLine;
 
         if (fistWordUp !== 'DEFAULT') return null;
-        if (!(/^default\b\s*:/iu).test(lStr.trim())) return null;
+        if (!(/^default\s*:/iu).test(lStr.trim())) return null;
 
         const {
             RangeEndLine,

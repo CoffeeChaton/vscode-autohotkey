@@ -12,7 +12,7 @@ export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
     // fileOpen() https://www.autohotkey.com/docs/commands/FileOpen.htm
     // file := FileOpen(Filename, Flags , Encoding)
     //          ^
-    if (!Obj.ahkFileOpen && (/^FileOpen\(/ui).test(strPart)) {
+    if (!Obj.ahkFileOpen && (/^FileOpen\(/iu).test(strPart)) {
         Obj.ahkFileOpen = true;
         Obj.ahkBase = true;
         return Obj;
@@ -28,7 +28,7 @@ export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
     // https://www.autohotkey.com/docs/commands/Array.htm
     // Array := [Item1, Item2, ..., ItemN]
     //          ^ ; this `[`
-    if (!Obj.ahkArray && (strPart.startsWith('[') || (/^Array\(/ui).test(strPart))) {
+    if (!Obj.ahkArray && (strPart.startsWith('[') || (/^Array\(/iu).test(strPart))) {
         Obj.ahkArray = true;
         Obj.ahkBase = true;
         return Obj;
@@ -40,7 +40,7 @@ export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
     //
     // obj1 := Object()
     //            ^
-    if (!Obj.ahkBase && (strPart.startsWith('{') || (/^Object\(/ui).test(strPart))) {
+    if (!Obj.ahkBase && (strPart.startsWith('{') || (/^Object\(/iu).test(strPart))) {
         Obj.ahkBase = true;
         return Obj;
     }
@@ -51,7 +51,7 @@ export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
     // throw err
     //
     // catch e use valTrackCore() to search
-    if (!Obj.ahkCatch && (/^Exception\(/ui).test(strPart)) {
+    if (!Obj.ahkCatch && (/^Exception\(/iu).test(strPart)) {
         Obj.ahkCatch = true;
         return Obj;
     }

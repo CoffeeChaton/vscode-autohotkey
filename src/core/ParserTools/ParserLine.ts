@@ -56,7 +56,7 @@ const LineRuler = [
         ClassName: CAhkHotString,
 
         getName(strTrim: string): string | null {
-            const e: RegExpMatchArray | null = strTrim.match(/^(:[^:]*?:[^:]+::)/u);
+            const e: RegExpMatchArray | null = strTrim.match(/^(:[^:]*:[^:]+::)/u);
             return (e === null)
                 ? null
                 : e[1];
@@ -67,7 +67,7 @@ const LineRuler = [
             // HotString labels consist of a colon, zero or more options, another colon, an abbreviation and double-colon.
             // if (!strTrim.startsWith(':')) return false;
             if (!strTrim.includes('::')) return false;
-            return (/^:[^:]*?:[^:]+::/u).test(strTrim);
+            return (/^:[^:]*:[^:]+::/u).test(strTrim);
         },
     },
     {
@@ -93,7 +93,7 @@ const LineRuler = [
 
         getName(strTrim: string): string | null {
             // ex #NoEnv
-            const m: RegExpMatchArray | null = strTrim.match(/^(#\w+)(?:[\s,$])/u);
+            const m: RegExpMatchArray | null = strTrim.match(/^(#\w+)[\s,$]/u);
             return (m === null)
                 ? null
                 : m[1];
@@ -103,7 +103,7 @@ const LineRuler = [
             // Hotkey labels consist of a hotkey followed by double-colon.
             // if (strTrim.startsWith(':')) return false;
             if (!strTrim.startsWith('#')) return false;
-            return (/^#\w+(?:[\s,$])/u).test(strTrim);
+            return (/^#\w+[\s,$]/u).test(strTrim);
         },
     },
 ] as const satisfies readonly TLineRuler[];

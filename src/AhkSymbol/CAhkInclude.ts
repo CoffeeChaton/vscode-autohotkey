@@ -59,12 +59,12 @@ function setWarnMsg(path1: string): string {
 
 function getRawData(path1: string, fsPath: string): TRawData {
     const warnMsg = setWarnMsg(path1);
-    if ((/^%A_LineFile%/ui).test(path1)) {
+    if ((/^%A_LineFile%/iu).test(path1)) {
         // [v1.1.11+]: Use %A_LineFile%\.. to refer to the directory which contains the current file
         //    , even if it is not the main script file. For example, #Include %A_LineFile%\..\other.ahk.
         return {
             type: EInclude.A_LineFile,
-            mayPath: join(fsPath, `../${normalize(path1.replace(/^%A_LineFile%/ui, ''))}`),
+            mayPath: join(fsPath, `../${normalize(path1.replace(/^%A_LineFile%/iu, ''))}`),
             warnMsg,
         };
     }
@@ -130,9 +130,9 @@ export class CAhkInclude extends vscode.DocumentSymbol {
         super(name, '', vscode.SymbolKind.Module, range, selectionRange);
         this.uri = uri;
 
-        const path0: string = name.replace(/^\s*#include(Again)?\s/ui, '').trim();
-        this.IgnoreErrors = (/^\*i\s/ui).test(path0); //  For example: #Include *i SpecialOptions.ahk
-        const path1: string = path0.replace(/^\*i\s/ui, '').trim();
+        const path0: string = name.replace(/^\s*#include(?:Again)?\s/iu, '').trim();
+        this.IgnoreErrors = (/^\*i\s/iu).test(path0); //  For example: #Include *i SpecialOptions.ahk
+        const path1: string = path0.replace(/^\*i\s/iu, '').trim();
         this.rawData = getRawData(path1, uri.fsPath);
     }
 }

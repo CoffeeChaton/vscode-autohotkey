@@ -109,7 +109,7 @@ export function getFnVarDef(
 
         if (fistWordVarMix === 'LOCAL' || fistWordVarMix === 'STATIC') {
             const strF: string = lStr
-                .replace(/^\s*\{?\s*\b(?:static|local)\b[,\s]+/ui, ',')
+                .replace(/^[\s{]*(?:static|local)[,\s]+/iu, ',')
                 .padStart(lStr.length, ' ');
 
             const { varDataList, Brackets } = varMixedAnnouncement(strF, BracketsRaw);

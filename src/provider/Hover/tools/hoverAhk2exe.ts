@@ -9,7 +9,7 @@ export function hoverAhk2exe(AhkTokenLine: TAhkTokenLine, position: vscode.Posit
     const { lStr, textRaw } = AhkTokenLine;
     const lStrLen: number = lStr.length;
     const commentStr: string = textRaw.slice(lStrLen);
-    const maAhk2exe: RegExpMatchArray | null = commentStr.match(/^;@ahk2exe-(\S+)/ui);
+    const maAhk2exe: RegExpMatchArray | null = commentStr.match(/^;@ahk2exe-(\S+)/iu);
     if (maAhk2exe !== null) {
         const col = lStrLen + maAhk2exe[0].length;
         if (position.character > lStrLen && position.character < col) {

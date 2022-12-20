@@ -27,7 +27,7 @@ function HoverOfFunc(
     document: vscode.TextDocument,
     position: vscode.Position,
 ): vscode.MarkdownString | null {
-    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`#%])\b\w+\b(?=\()/u);
+    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`#%])\b\w+(?=\()/u);
     if (range === undefined) return null;
 
     const wordUp: string = document.getText(range).toUpperCase();

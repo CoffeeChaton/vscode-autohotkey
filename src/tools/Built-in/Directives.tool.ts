@@ -55,7 +55,7 @@ export const [SnippetDirectives, DirectivesMDMap] = ((): [TSnippetDirective, TDi
 })();
 
 export function snipDirectives(subStr: string): readonly vscode.CompletionItem[] {
-    return (/^#\w*$/ui).test(subStr)
+    return (/^#\w*$/iu).test(subStr)
         ? SnippetDirectives
         : [];
 }

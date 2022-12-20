@@ -12,7 +12,7 @@ function isLookLikeVar(rawName: string): boolean {
         !(/^\w+$/u).test(rawName)
         || (/^_+$/u).test(rawName) // str
         || (/^\d+$/u).test(rawName) // just number
-        || (/^0X[\dA-F]+$/ui).test(rawName) // NumHexConst = 0 x [0-9a-fA-F]+
+        || (/^0X[\dA-F]+$/iu).test(rawName) // NumHexConst = 0 x [0-9a-fA-F]+
     );
 }
 
@@ -36,7 +36,7 @@ export function varMixedAnnouncement(strF: string, BracketsRaw: TBrackets): TVar
         Brackets = calcBracket(RawNameNew, Brackets);
 
         if (RawNameNew.includes(':=')) {
-            for (const ma of RawNameNew.matchAll(/(?<![.`%])\b(\w+)\b\s*:=/gui)) {
+            for (const ma of RawNameNew.matchAll(/(?<![.`%])\b(\w+)\s*:=/giu)) {
                 const rawName: string = ma[1].trim();
                 if (isLookLikeVar(rawName)) {
                     varDataList.push({

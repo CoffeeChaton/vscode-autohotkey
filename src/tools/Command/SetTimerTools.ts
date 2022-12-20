@@ -8,7 +8,7 @@ function getSetTimerData(lStr: string, col: number): TScanData | null {
 
     const strF: string = lStr
         .slice(col)
-        .replace(/^\s*\bSetTimer\b\s*,?\s*/ui, 'SetTimer,')
+        .replace(/^\s*SetTimer\b\s*,?\s*/iu, 'SetTimer,')
         .padStart(lStr.length, ' ');
 
     const arr: TScanData[] = spiltCommandAll(strF);

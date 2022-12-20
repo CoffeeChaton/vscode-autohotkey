@@ -140,7 +140,7 @@ export function getFuncDef(
         `(?:(?<![.\`%#])\\b(${wordUp})\\b\\()|(?:(?<=")(${wordUp})")`,
         //                          funcName(                  "funcName"
         // --------------------------------------------------- RegisterCallback("funcName") or Func("funcName")
-        'iug',
+        'giu',
     );
 
     if (document.getWordRangeAtPosition(position, regBase) === undefined) {

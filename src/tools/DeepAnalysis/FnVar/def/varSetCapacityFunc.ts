@@ -22,7 +22,7 @@ export function varSetCapacityFunc({
 
     if (!lStr.includes('(')) return;
     for (
-        const v of lStr.matchAll(/(?<![.%`])\b(?:VarSetCapacity|NumGet|[TL]V_GetText)\b\(\s*&?(\w+)\b(?!\()/gui)
+        const v of lStr.matchAll(/(?<![.%`])\b(?:VarSetCapacity|NumGet|[TL]V_GetText)\(\s*&?(\w+)\b(?!\()/giu)
     ) {
         const ch: number | undefined = v.index;
         if (ch === undefined) continue;

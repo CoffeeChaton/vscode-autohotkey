@@ -11,11 +11,11 @@ export function getClassInstanceVar(FuncInput: TFuncInput): CAhkClassInstanceVar
     const { AhkTokenLine, uri } = FuncInput;
     const { line, textRaw } = AhkTokenLine;
 
-    const isStatic = (/^static\s/ui).test(lStr.trimStart());
+    const isStatic = (/^static\s/iu).test(lStr.trimStart());
 
     const name = lStr
         .slice(0, index)
-        .replace(/^\s*static\s+/ui, '')
+        .replace(/^\s*static\s+/iu, '')
         .trim();
 
     const col = lStr.lastIndexOf(name, index);

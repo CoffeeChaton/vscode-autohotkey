@@ -38,7 +38,7 @@ function HotkeyHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLea
             new vscode.Position(line, lPos),
             new vscode.Position(line, lPos + RawNameNew.length),
         ),
-        tokenType: (/^(?:On|Off|Toggle|AltTab)$/ui).test(RawNameNew)
+        tokenType: (/^(?:On|Off|Toggle|AltTab)$/iu).test(RawNameNew)
             ? 'keyword'
             : 'function', // label .... ahk.tmLanguage.json is user "entity.name.function.label.ahk"
         tokenModifiers: [],

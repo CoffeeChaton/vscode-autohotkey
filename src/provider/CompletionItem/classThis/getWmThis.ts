@@ -16,7 +16,7 @@ const WmThis = new CMemo<CAhkClass, vscode.CompletionItem[]>((AhkClassSymbol: CA
     const mapStrNumber = new Map<string, number>();
 
     for (const { lStr, line } of AhkTokenList) {
-        for (const ma of lStr.matchAll(/\bthis\.(\w+)\b(?!\()/gui)) {
+        for (const ma of lStr.matchAll(/\bthis\.(\w+)\b(?!\()/giu)) {
             const valName = ma[1];
             if (!mapStrNumber.has(valName)) {
                 mapStrNumber.set(valName, line);

@@ -22,7 +22,7 @@ function DefProviderCore(
     if (range === undefined) return null;
     const wordUp: string = document.getText(range).toUpperCase();
 
-    if ((/^0x[A-F\d]+$/ui).test(wordUp) || (/^\d+$/ui).test(wordUp)) return null;
+    if ((/^0x[A-F\d]+$/iu).test(wordUp) || (/^\d+$/u).test(wordUp)) return null;
 
     const listAllUsing = false;
 

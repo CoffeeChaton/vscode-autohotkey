@@ -3,7 +3,7 @@ import { pm } from '../../core/ProjectManager';
 
 export function searchAllVarRef(wordUp: string): vscode.Location[] {
     // eslint-disable-next-line security/detect-non-literal-regexp
-    const reg = new RegExp(`\\b(${wordUp})\\b`, 'iug');
+    const reg = new RegExp(`\\b(${wordUp})\\b`, 'giu');
     const refFn = (lineStr: string): IterableIterator<RegExpMatchArray> => lineStr.matchAll(reg);
 
     const List: vscode.Location[] = [];

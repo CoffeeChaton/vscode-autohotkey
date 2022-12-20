@@ -47,7 +47,7 @@ function setGlobalVar(
 
 function isGlobal(detail: readonly EDetail[], lStr: string): boolean {
     return detail.includes(EDetail.deepAdd)
-        && (/^\s*\{\s*\bglobal\b[,\s]/ui).test(lStr);
+        && (/^\s*\{\s*global[,\s]/iu).test(lStr);
 }
 
 export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
@@ -64,7 +64,7 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
         } of DocStrMap
     ) {
         if (fistWordUp === 'GLOBAL' || isGlobal(detail, lStr)) {
-            if ((/\bGLOBAL\b\s*$/ui).test(lStr)) continue;
+            if ((/\bGLOBAL\s*$/iu).test(lStr)) continue;
             lastLineIsGlobal = true;
             BracketsRaw = [0, 0, 0];
         } else if (lastLineIsGlobal && cll === 1) {
@@ -75,7 +75,7 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
         }
 
         const strF: string = lStr
-            .replace(/^\s*\{?\s*\bglobal\b[,\s]+/ui, ',')
+            .replace(/^[\s{]*global[,\s]+/iu, ',')
             .padStart(lStr.length, ' ');
 
         const { varDataList, Brackets } = varMixedAnnouncement(strF, BracketsRaw);

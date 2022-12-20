@@ -36,7 +36,7 @@ export function ahkSend(AhkFileData: TAhkFileData, position: vscode.Position): r
     const { DocStrMap } = AhkFileData;
     const { textRaw, lStr } = DocStrMap[position.line];
     if (
-        (/\b(?:Control)?Send(?:Input|Play|Event)?\b/ui).test(lStr)
+        (/\b(?:Control)?Send(?:Input|Play|Event)?\b/iu).test(lStr)
         || lStr.includes('::')
         || isPosAtStrNext(textRaw, lStr, position)
     ) {

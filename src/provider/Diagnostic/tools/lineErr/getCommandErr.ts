@@ -5,18 +5,18 @@ import { CommandErrMap } from '../../../../tools/Built-in/Command.tools';
 import { CDiagBase } from '../CDiagBase';
 
 function getLoopErr(lStr: string, line: number, col: number): CDiagBase | null {
-    const matchLoop: RegExpMatchArray | null = lStr.match(/\bLoop\b\s*,?\s*(\w+)/iu);
+    const matchLoop: RegExpMatchArray | null = lStr.match(/\bLoop\b[\s,]*(\w+)/iu);
     if (matchLoop === null) return null; // miss
 
     const SecondSection = matchLoop[1];
-    if ((/^(?:\d+|Files|Parse|Read|Reg)$/ui).test(SecondSection)) {
+    if ((/^(?:\d+|Files|Parse|Read|Reg)$/iu).test(SecondSection)) {
         return null; // OK
     }
 
     // eslint-disable-next-line no-magic-numbers
     const colL = lStr.indexOf(SecondSection, col + 4);
     const colR = colL + SecondSection.length;
-    if ((/^RootKey$/ui).test(SecondSection)) {
+    if ((/^RootKey$/iu).test(SecondSection)) {
         // https://www.autohotkey.com/docs/commands/LoopReg.htm#old
         return new CDiagBase({
             value: EDiagCode.code801,
@@ -26,7 +26,7 @@ function getLoopErr(lStr: string, line: number, col: number): CDiagBase | null {
         });
     }
 
-    if ((/^FilePattern$/ui).test(SecondSection)) {
+    if ((/^FilePattern$/iu).test(SecondSection)) {
         // I can't recognize `Loop, FilePattern` syntax
         // https://www.autohotkey.com/boards/viewtopic.php?p=494782#p494782
         // https://www.autohotkey.com/docs/commands/LoopFile.htm#old

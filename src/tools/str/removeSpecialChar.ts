@@ -11,7 +11,7 @@ export function getLStr(textRaw: string): string {
     if ((/^\s*;/u).test(textRaw)) return '';
 
     // https://www.autohotkey.com/docs/misc/EscapeChar.htm
-    const textFix = textRaw.replaceAll(/`[,%`;nrbtvaf]/uig, '__').replaceAll(/"[^"]*?"/ug, fnReplacerStr);
+    const textFix = textRaw.replaceAll(/`[,%`;nrbtvaf]/gu, '__').replaceAll(/"[^"]*"/gu, fnReplacerStr);
     const i = textFix.indexOf(';');
 
     switch (i) {

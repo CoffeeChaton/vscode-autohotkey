@@ -4,11 +4,7 @@ import type {
     TMultilineFlag,
     TPos,
 } from '../../globalEnum';
-import {
-    EDetail,
-    EMultiline,
-} from '../../globalEnum';
-
+import { EDetail, EMultiline } from '../../globalEnum';
 import { replacerSpace } from './removeSpecialChar';
 
 type TGetMultilineFlag = {
@@ -20,7 +16,7 @@ type TGetMultilineFlag = {
 // eslint-disable-next-line max-lines-per-function, max-statements
 function getMultilineFlag({ textRaw, result, line }: TGetMultilineFlag): TMultilineFlag {
     const arr: readonly string[] = textRaw
-        .replace(/^\s*\(\s*/ui, replacerSpace)
+        .replace(/^\s*\(\s*/u, replacerSpace)
         .split(' ')
         .filter((str: string): boolean => str.trim().length > 0);
 
@@ -47,13 +43,13 @@ function getMultilineFlag({ textRaw, result, line }: TGetMultilineFlag): TMultil
             len: str.length,
         };
         //
-        if ((/^Join.*$/ui).test(str)) {
+        if ((/^Join.*$/iu).test(str)) {
             flag.Join.push(pos);
-        } else if ((/^LTrim$/ui).test(str)) {
+        } else if ((/^LTrim$/iu).test(str)) {
             flag.LTrim.push(pos);
-        } else if ((/^RTrim0$/ui).test(str)) {
+        } else if ((/^RTrim0$/iu).test(str)) {
             flag.RTrim0.push(pos);
-        } else if ((/^(Comments|Comment|Com|C)$/ui).test(str)) {
+        } else if ((/^(?:Comments|Comment|Com|C)$/iu).test(str)) {
             flag.CommentFlag.push(pos);
         } else if (str.startsWith(';')) {
             flag.R = col;

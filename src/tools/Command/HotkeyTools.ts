@@ -10,7 +10,7 @@ function getHotkeyData(lStr: string, col: number): TScanData | null {
     // NG Hotkey, If, % FunctionObject
     const strF: string = lStr
         .slice(col)
-        .replace(/^\s*\bHotkey\b\s*,?\s*/ui, 'Hotkey,')
+        .replace(/^\s*Hotkey\b\s*,?\s*/iu, 'Hotkey,')
         .padStart(lStr.length, ' ');
 
     const arr: TScanData[] = spiltCommandAll(strF);
@@ -18,7 +18,7 @@ function getHotkeyData(lStr: string, col: number): TScanData | null {
     if (arr.length < 3) return null;
 
     const [_a1, a2, a3] = arr;
-    if ((/^if/ui).test(a2.RawNameNew)) return null;
+    if ((/^if/iu).test(a2.RawNameNew)) return null;
 
     const { RawNameNew, lPos } = a3;
 

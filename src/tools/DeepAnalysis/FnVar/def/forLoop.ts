@@ -42,14 +42,14 @@ export function forLoop(arg: TGetFnDefNeed, keyWord: string, col: number): void 
     } = arg;
     if (lStrTrimLen < 10) return; // "for a in b" ----> len 10
 
-    const col2: number = lStr.search(/[ \t]in[ \t]/ui); // (?:\s)in
+    const col2: number = lStr.search(/[ \t]in[ \t]/iu); // (?:\s)in
     if (col2 === -1 || col >= col2) return;
 
     const replaceFor: number = col + 4; // 'for '.len = 4
 
     const strPart: string = lStr.slice(replaceFor, col2 + 1); // .padStart(lStr.length, ' ');
 
-    const keyMatch: RegExpMatchArray | null = strPart.match(/\s*(\w+)[,\s]/ui);
+    const keyMatch: RegExpMatchArray | null = strPart.match(/\s*(\w+)[,\s]/iu);
     if (keyMatch === null) return;
 
     const keyPos: number = replaceFor + keyMatch[0].lastIndexOf(keyMatch[1]);
@@ -60,7 +60,7 @@ export function forLoop(arg: TGetFnDefNeed, keyWord: string, col: number): void 
     // has value
 
     const replaceComma: number = col3 + 1;
-    const valMatch: RegExpMatchArray | null = strPart.slice(replaceComma).match(/\s*(\w+)\b/ui);
+    const valMatch: RegExpMatchArray | null = strPart.slice(replaceComma).match(/\s*(\w+)\b/iu);
     if (valMatch === null) return;
 
     const valuePos: number = replaceFor + replaceComma + valMatch[0].lastIndexOf(valMatch[1]);

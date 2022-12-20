@@ -41,7 +41,7 @@ function valTrackCore(
 
     const reg: RegExp = ahkValDefRegex(Head);
     // eslint-disable-next-line security/detect-non-literal-regexp
-    const cacheReg = new RegExp(`\\b${Head}\\b`, 'ui');
+    const cacheReg = new RegExp(`\\b${Head}\\b`, 'iu');
 
     const classNameList: string[] = []; // value name
     for (const { lStr, fistWordUp } of AhkTokenList) {

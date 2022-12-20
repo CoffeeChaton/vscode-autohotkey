@@ -18,7 +18,7 @@ function ReferenceProviderCore(
     const { textRaw, lStr } = AhkFileData.DocStrMap[position.line];
     if (isPosAtStrNext(textRaw, lStr, position)) return null;
 
-    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/ui);
+    const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/iu);
     if (range === undefined) return null;
     const wordUp: string = document.getText(range).toUpperCase();
 

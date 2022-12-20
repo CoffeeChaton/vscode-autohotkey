@@ -10,9 +10,9 @@ type TParamData = {
 };
 
 function getKeyRawName(param: string): TParamData {
-    const isByRef: boolean = (/^ByRef\s+/ui).test(param);
+    const isByRef: boolean = (/^ByRef\s+/iu).test(param);
     const key0: string = isByRef
-        ? param.replace(/^ByRef\s+/ui, '')
+        ? param.replace(/^ByRef\s+/iu, '')
         : param;
     const isVariadic: boolean = param.endsWith('*'); // https://www.autohotkey.com/docs/Functions.htm#Variadic
     const keyRawName: string = isVariadic
@@ -67,20 +67,24 @@ export function getParamDef(fnName: string, selectionRange: vscode.Range, DocStr
         if (line > endLine) break;
         let lStrFix: string = lStr;
         if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w+\(/u, replacerSpace);
-        if (endLine === line) lStrFix = lStrFix.replace(/\)\s*\{?\s*$/u, replacerSpace);
+        if (endLine === line) {
+            lStrFix = lStrFix
+                .replace(/\{\s*$/u, replacerSpace)
+                .replace(/\)\s*$/u, replacerSpace);
+        }
 
         if (lStrFix.trim() === '') break;
 
         const strF: string = lStrFix
-            .replaceAll(/:?=\s*[-+]?[.\w]+/ug, replacerSpace); // Test 0x00ffffff  , -0.5 , 0.8
+            .replaceAll(/:?=\s*[-+]?[.\w]+/gu, replacerSpace); // Test 0x00ffffff  , -0.5 , 0.8
 
-        const strF2: string = strF.replaceAll(/\bByRef\b/uig, replacerSpace);
+        const strF2: string = strF.replaceAll(/\bByRef\b/giu, replacerSpace);
 
-        for (const ma of strF.matchAll(/\s*([^,]+),?/uig)) {
+        for (const ma of strF.matchAll(/\s*([^,]+),?/gu)) {
             const param: string = ma[1].trim();
             if (param === '') continue;
 
-            const find: string = param.replace(/\bByRef\b\s*/ui, '');
+            const find: string = param.replace(/\bByRef\b\s*/iu, '');
             const ch: number = strF2.indexOf(find, ma.index);
 
             const ArgAnalysis: TParamMetaIn = getParamDefNeed(param, line, ch, lineComment);

@@ -30,7 +30,7 @@ export function walrusOperator({
     // >>=
     // <<=
     // >>>=
-    for (const v of lStr.matchAll(/(?<![.%])\b(\w+)\b\s*:=/gu)) {
+    for (const v of lStr.matchAll(/(?<![.%])\b(\w+)\s*:=/gu)) {
         const character: number | undefined = v.index;
         if (character === undefined) continue;
 

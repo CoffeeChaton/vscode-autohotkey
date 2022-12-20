@@ -12,7 +12,7 @@ export function getObjChapterArr(textRaw: string, character: number): readonly s
 
     if (ChapterList.length === 0) return null;
 
-    return (/^\d+$/ui).test(ChapterList[0]) // ex: 0.5
+    return (/^\d+$/u).test(ChapterList[0]) // ex: 0.5
         ? null
         : ChapterList;
 }

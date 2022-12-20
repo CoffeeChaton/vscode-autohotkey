@@ -31,7 +31,7 @@ export function getThisMethod(
     const { lStr } = AhkTokenLine;
 
     const { character } = position;
-    for (const ma of lStr.matchAll(/(?<=\bthis)\.(\w+)\(/gui)) {
+    for (const ma of lStr.matchAll(/(?<=\bthis)\.(\w+)\(/giu)) {
         const { index } = ma;
         if (undefined === index) continue;
         const wordRaw: string = ma[1];

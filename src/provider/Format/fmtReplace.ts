@@ -2,35 +2,35 @@ import { EDetail, EMultiline } from '../../globalEnum';
 
 function textReplace(textElement: string): string {
     return textElement.replaceAll(/ *, */gu, ', ')
-        .replaceAll(/ *:= */ug, ' := ')
-        .replaceAll(/ *!= */ug, ' != ')
+        .replaceAll(/ *:= */gu, ' := ')
+        .replaceAll(/ *!= */gu, ' != ')
         // .replaceAll(/ *== */g, ' == ') test err
         // .replaceAll(/ *>= */g, ' >= ') test err
         // .replaceAll(/ *<= */g, ' <= ') test err
-        .replaceAll(/ *\.= */ug, ' .= ')
-        .replaceAll(/ *\+= */ug, ' += ')
-        .replaceAll(/ *-= */ug, ' -= ')
-        .replaceAll(/ *\|\| */ug, ' || ')
-        .replaceAll(/ *&& */ug, ' && ')
-        .replaceAll(/ *<> */ug, ' <> ')
-        .replaceAll(/\breturn\s+/ug, 'return ')
-        .replaceAll(/\bReturn\s+/ug, 'Return ')
+        .replaceAll(/ *\.= */gu, ' .= ')
+        .replaceAll(/ *\+= */gu, ' += ')
+        .replaceAll(/ *-= */gu, ' -= ')
+        .replaceAll(/ *\|\| */gu, ' || ')
+        .replaceAll(/ *&& */gu, ' && ')
+        .replaceAll(/ *<> */gu, ' <> ')
+        .replaceAll(/\breturn\s+/gu, 'return ')
+        .replaceAll(/\bReturn\s+/gu, 'Return ')
         // .replaceAll(/ *\? */g, ' ? ')
-        .replaceAll(/\( */ug, '(')
-        .replaceAll(/ *\)/ug, ')')
-        .replaceAll(/\[ */ug, '[')
-        .replaceAll(/ *\]/ug, ']')
+        .replaceAll(/\( */gu, '(')
+        .replaceAll(/ *\)/gu, ')')
+        .replaceAll(/\[ */gu, '[')
+        .replaceAll(/ *\]/gu, ']')
         // .replaceAll(/ *\{ */ug, ' {')
         // .replaceAll(/ *\}/ug, '}')
         // .replaceAll(/\}\s+/ug, '} ')
-        .replaceAll(/\)\s*\{ */ug, ') {')
-        .replaceAll(/\bif\s*\(/ug, 'if (')
-        .replaceAll(/\bIf\s*\(/ug, 'If (')
-        .replaceAll(/\bIF\s*\(/ug, 'IF (')
-        .replaceAll(/\bwhile\s*\(/ug, 'while (')
-        .replaceAll(/\bWhile\s*\(/ug, 'While (')
-        .replaceAll(/\bWHILE\s*\(/ug, 'WHILE (')
-        .replaceAll(/ *;/ug, ' ;');
+        .replaceAll(/\)\s*\{ */gu, ') {')
+        .replaceAll(/\bif\s*\(/gu, 'if (')
+        .replaceAll(/\bIf\s*\(/gu, 'If (')
+        .replaceAll(/\bIF\s*\(/gu, 'IF (')
+        .replaceAll(/\bwhile\s*\(/gu, 'while (')
+        .replaceAll(/\bWhile\s*\(/gu, 'While (')
+        .replaceAll(/\bWHILE\s*\(/gu, 'WHILE (')
+        .replaceAll(/ *;/gu, ' ;');
 
     // \s === [ \f\n\r\t\v]
     // need more TEST & options

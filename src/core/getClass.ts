@@ -13,7 +13,7 @@ import { getFunc } from './ParserFunc';
 function setClassInsertText(children: TAhkSymbolList): string {
     for (const ch of children) {
         if (ch instanceof CAhkFunc && ch.upName === '__NEW') {
-            return ch.selectionRangeText.replace(/^__NEW/ui, '');
+            return ch.selectionRangeText.replace(/^__NEW/iu, '');
         }
     }
     return '';
@@ -33,7 +33,7 @@ export function getClass(FuncInput: TFuncInput): CAhkClass | null {
 
     if (fistWordUp !== 'CLASS') return null;
     // class ClassName extends BaseClassName
-    const ma: RegExpMatchArray | null = lStr.match(/(?<=^\s*\bClass\b\s+)(\w+)/ui);
+    const ma: RegExpMatchArray | null = lStr.match(/(?<=^\s*Class\s+)(\w+)/iu);
     if (ma === null) return null;
 
     const {
@@ -59,7 +59,7 @@ export function getClass(FuncInput: TFuncInput): CAhkClass | null {
         },
     );
 
-    const col = ma.index ?? lStr.replace(/^\s*Class\s+/ui, replacerSpace).indexOf(name);
+    const col = ma.index ?? lStr.replace(/^\s*Class\s+/iu, replacerSpace).indexOf(name);
 
     return new CAhkClass({
         name,

@@ -60,7 +60,7 @@ export function getSnipAhk2exe(
 ): vscode.CompletionItem[] | null {
     const subStr: string = document.lineAt(position.line).text.slice(0, position.character);
 
-    return (/^\s*;@$/ui).test(subStr)
+    return (/^\s*;@$/u).test(subStr)
         ? [...snippetAhk2exe]
         : null;
 }

@@ -24,7 +24,7 @@ export function IncludeFsPath(fromPath: string): vscode.CompletionItem[] {
 
         // Lib
         if (fsPath.endsWith(`\\Lib\\${basename}`)) {
-            list.push(`<${basename.replace(/\.ahk$/ui, '')}>`);
+            list.push(`<${basename.replace(/\.ahk$/iu, '')}>`);
         }
 
         item.insertText = new vscode.SnippetString().appendChoice(list);

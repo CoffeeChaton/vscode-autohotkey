@@ -3,7 +3,7 @@ import { to0X, winMsgRe } from './Windows_Messages';
 
 // https://www.autohotkey.com/docs/Concepts.htm#numbers
 function str2Number(str: string): number | null {
-    if ((/^0x[0-9A-F]+$/ui).test(str)) {
+    if ((/^0x[\dA-F]+$/iu).test(str)) {
         // base 16
         // 0x1D: Hexadecimal
         return Number.parseInt(str, 16);
