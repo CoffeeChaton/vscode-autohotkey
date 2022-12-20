@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { otherKeyword2 } from './otherKeyword2.data';
 
-export const [otherKeyword2MD, snippetOtherKeyword2]
-    = ((): [ReadonlyMap<string, vscode.MarkdownString>, readonly vscode.CompletionItem[]] => {
+export const [otherKeyword2MD, snippetOtherKeyword2] =
+    ((): [ReadonlyMap<string, vscode.MarkdownString>, readonly vscode.CompletionItem[]] => {
         const map1 = new Map<string, vscode.MarkdownString>();
         const List2: vscode.CompletionItem[] = [];
         //

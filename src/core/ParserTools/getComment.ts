@@ -18,12 +18,12 @@ export function getComment(FuncInput: TFuncInput): CAhkComment | null {
     const { AhkTokenLine, uri } = FuncInput;
     const { line } = AhkTokenLine;
 
-    const doubleSemicolon: number = textRaw.indexOf(';;', 0);
+    const doubleSemicolon: number = textRaw.indexOf(';;');
 
     const name: string = textRaw.trim();
     // FIXME
     const range: vscode.Range = new vscode.Range(
-        new vscode.Position(line, doubleSemicolon + 2),
+        new vscode.Position(line, doubleSemicolon),
         new vscode.Position(line, textRaw.length),
     );
     return new CAhkComment({
