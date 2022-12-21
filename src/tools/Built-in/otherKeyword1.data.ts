@@ -60,7 +60,7 @@ export const otherKeyword1: TCommandElement[] = [
     {
         upName: 'STATIC',
         keyRawName: 'Static',
-        body: 'Static',
+        body: 'static',
         doc: 'Static variables are always implicitly local, but differ from locals because their values are remembered between calls.',
         recommended: true,
         link: 'https://www.autohotkey.com/docs/Functions.htm#static',

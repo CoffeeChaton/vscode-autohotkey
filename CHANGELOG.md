@@ -3,57 +3,70 @@
 ## NEXT 0.0.19(2022-12-XX)
 
 - TODO add: more doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
-- TODO fix: find variables of comment to next line
+
+## 0.0.18(2022-12-21)
+
+- _break-change_: ahk-doc position move to before fn_def 1 line.
 
   ```ahk
-  global v1 := 1
-  , v2 :=2
-  ; comment line but v3 also is global variable
-  ,  v3 :=3
+  /**
+  * @new ahk-doc new position
+  */
+  func_new(){
+    ;...
+  }
+
+  func_old(){
+    /**
+    * @old ahk-doc old position
+    */
+  }
   ```
 
-## beta 0.0.18(2022-12-19)
-
-- break-change: ahk-doc position move to before fn_def 1 line.
-  - TODO: add img and fix
 - add: `;@Ahk2Exe-` hover / Completion [Ahk2exe.data](src/tools/Built-in/Ahk2exe.data.ts)
 - add: semantic-highlight of `Goto label` and `GoSub label`
 - dev: add test lock [Built-in Data](src/tools/Built-in) and [ahk.tmLanguage.json](syntaxes/ahk.tmLanguage.json)
 - dev: add unit.text to `Test Suites: 12` `Tests: 26`
 - dev: more structured [ahk.tmLanguage.json](syntaxes/ahk.tmLanguage.json) reference js/c++ tmLanguage
 - fix: find variables of the `k` of `for k in array`
-- fix: find variables of the `err` of `catch err`
+- fix: find variables of the `err` of `catch err`, and +Completion of `err.Message` ex:
 
-  - add Completion of `err.Message` etr...
+  ```ahk
+  Key1 := "F11"
+  Try, Hotkey, %Key1%, label1
 
-  - ```ahk
-    Key1 := "F11"
-    Try, Hotkey, %Key1%, label1
-
-    Catch err {
-      ; try to use `.` to err
-      MsgBox, % "Extra : " err.Extra ;Extra : label1
-      MsgBox, % "File : " err.File ; C:\XXXX\exp.ahk
-      MsgBox, % "Line : " err.Line ; 10
-      MsgBox, % "Message : " err.Message ;Target label does not exist.
-      MsgBox, % "What : " err.What ;Hotkey
-    }
-    ```
+  Catch err {
+    ; try to use `.` to err
+    MsgBox, % "Extra : " err.Extra ;Extra : label1
+    MsgBox, % "File : " err.File ; C:\XXXX\exp.ahk
+    MsgBox, % "Line : " err.Line ; 10
+    MsgBox, % "Message : " err.Message ;Target label does not exist.
+    MsgBox, % "What : " err.What ;Hotkey
+  }
+  ```
 
 - fix: match [command](src/tools/Built-in/Command.data.ts) after `try`
 
-  - ```ahk
-    Key1 := "F11"
-    Try Hotkey, %Key1%, label1
-    ;_____^ match command after `try`
-    Catch, e {
-        MsgBox, % e.Message ;Target label does not exist.
-    }
-    ::ahk,,::AutoHotKey
-    ; label1:
-    ; MsgBox, % "CC"
-    ; Return
-    ```
+  ```ahk
+  Key1 := "F11"
+  Try Hotkey, %Key1%, label1
+  ;     ^ match command after `try`
+  Catch, e {
+      MsgBox, % e.Message ;Target label does not exist.
+  }
+  ; label1:
+  ; MsgBox, % "CC"
+  ; Return
+  ```
+
+- fix: match variables of comment to next line
+
+  ```ahk
+  global v1 := 1
+    , v2 :=2
+    ; comment line but v3 also is global variable
+    , v3 :=3
+  ```
 
 ## 0.0.17(2022-12-3)
 

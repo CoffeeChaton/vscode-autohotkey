@@ -2,7 +2,7 @@ import type { DeepReadonly } from '../../globalEnum';
 import { ContinueLongLine } from './ContinueLongLine';
 
 const commandRegexps: DeepReadonly<RegExp[]> = [
-    /^if(?:Msgbox)?\b/iu,
+    /^if(?:MsgBox)?\b/iu,
     /^else\b/iu,
     /^loop\b/iu,
     /^for\b/iu,
