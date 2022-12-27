@@ -1,4 +1,4 @@
-import * as tmLanguage from '../../../syntaxes/ahk.tmLanguage.json';
+import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { BiVariables } from './BiVariables.data';
 
 describe('check BiVariables ruler', () => {
@@ -21,7 +21,7 @@ describe('check BiVariables ruler', () => {
     it('check : tmLanguage', () => {
         expect.hasAssertions();
 
-        const st1 = (tmLanguage.repository.builtin_variable.patterns[1].match)
+        const st1: string = (repository.builtin_variable.patterns[1].match)
             .replace('(?<![.#])\\b(?i:', '')
             .replace(')\\b', '');
 

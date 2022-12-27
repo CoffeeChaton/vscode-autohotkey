@@ -1,4 +1,4 @@
-import * as tmLanguage from '../../../syntaxes/ahk.tmLanguage.json';
+import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { otherKeyword1 } from './otherKeyword1.data';
 
 describe('check otherKeyword1 ruler', () => {
@@ -10,7 +10,7 @@ describe('check otherKeyword1 ruler', () => {
             .join('|')
             .replace('Class|', '');
 
-        const st1 = (tmLanguage.repository.other_keyword.patterns[0].match)
+        const st1 = (repository.other_keyword.patterns[0].match)
             .replace('(?:^|[ \\t{])(?i:', '')
             .replace(')(?:$|[ \\t])', '');
 

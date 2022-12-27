@@ -1,4 +1,4 @@
-import * as tmLanguage from '../../../syntaxes/ahk.tmLanguage.json';
+import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { DirectivesList } from './Directives.data';
 
 describe('check #Directive ruler', () => {
@@ -18,7 +18,7 @@ describe('check #Directive ruler', () => {
     it('check : tmLanguage', () => {
         expect.hasAssertions();
 
-        const st1 = (tmLanguage.repository.directives.patterns[1].match)
+        const st1 = (repository.directives.patterns[1].match)
             .replace('^[ \\t]*#\\b(?i:', '')
             .replace(')\\b([^;]*)([ \\t]+;.*)?$', '');
 

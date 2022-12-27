@@ -1,4 +1,4 @@
-import * as tmLanguage from '../../../syntaxes/ahk.tmLanguage.json';
+import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { AVariablesList } from './A_Variables.data';
 
 describe('check A_Variables ruler', () => {
@@ -16,7 +16,7 @@ describe('check A_Variables ruler', () => {
     it('check : tmLanguage', () => {
         expect.hasAssertions();
 
-        const st1 = (tmLanguage.repository.builtin_variable.patterns[0].match)
+        const st1 = (repository.builtin_variable.patterns[0].match)
             .replace('(?<![.#])\\b(?i:A_(?:', '')
             .replace('))\\b', '');
 

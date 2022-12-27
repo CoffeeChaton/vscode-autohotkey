@@ -2,7 +2,7 @@
 /* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
 
-import * as tmLanguage from '../../../syntaxes/ahk.tmLanguage.json';
+import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { EDiagCode } from '../../diag';
 import { LineCommand } from './Command.data';
 
@@ -197,7 +197,7 @@ describe('check LineCommand ruler', () => {
             .join('|');
 
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const st1 = (tmLanguage.repository.command.patterns.at(-1)!.begin)
+        const st1 = (repository.command.patterns.at(-1)!.begin)
             .replace('(?:^|[ \\t:])\\b(?i:', '')
             .replace(')\\b(?!\\()', '');
 

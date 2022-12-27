@@ -1,4 +1,4 @@
-import * as tmLanguage from '../../../syntaxes/ahk.tmLanguage.json';
+import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { BuiltInFunctionObj } from './func.data';
 
 describe('check BuiltInFunctionObj ruler', () => {
@@ -56,7 +56,7 @@ describe('check BuiltInFunctionObj ruler', () => {
     it('check : tmLanguage', () => {
         expect.hasAssertions();
 
-        const st1 = (tmLanguage.repository.func_call.patterns[0].match)
+        const st1 = (repository.func_call.patterns[0].match)
             .replace('(?<![.`%#])\\b(?i:', '')
             .replace(')(?=\\()\\b', '');
 

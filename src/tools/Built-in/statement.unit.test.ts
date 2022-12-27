@@ -1,4 +1,4 @@
-import * as tmLanguage from '../../../syntaxes/ahk.tmLanguage.json';
+import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { Statement } from './statement.data';
 
 /**
@@ -64,7 +64,7 @@ describe('check Statement ruler', () => {
 
         const arr1: string[] = Statement.map((v): string => v.keyRawName);
 
-        const st1: string = (tmLanguage.repository.flow_of_control.patterns.at(-1)?.match ?? '')
+        const st1: string = (repository.flow_of_control.patterns.at(-1)?.match ?? '')
             .replace('\\b(?!MsgBox)(?<![.#])(?i:', '')
             .replace(')\\b', '');
 
