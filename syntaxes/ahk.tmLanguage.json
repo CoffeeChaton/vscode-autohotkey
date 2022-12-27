@@ -196,18 +196,27 @@
         "flow_of_control": {
             "patterns": [
                 {
-                    "match": "\\b(?!MsgBox)(?<![.#])(?i:(Goto|GoSub))\\b[ \\t]*?[ \\t,][ \\t]*([a-zA-Z_]*\\w*)",
+                    "match": "\\b(?!MsgBox)(?<![.#])(?i:(Goto|GoSub))\\b[ \\t]*?,?[ \\t]*([a-zA-Z_]*\\w*)",
                     "name": "meta.goto.gosub.ahk",
                     "captures": {
                         "1": { "name": "keyword.control.flow.ahk" },
                         "2": { "name": "entity.name.function.label.ahk" }
                     }
                 },
+                { "include": "#flow_of_control_loop_plus" },
                 {
                     "match": "\\b(?!MsgBox)(?<![.#])(?i:Break|Case|Catch|Continue|Critical|Default|Else|Exit|ExitApp|Finally|For|GoSub|Goto|If|IfEqual|IfExist|IfGreater|IfGreaterOrEqual|IfInString|IfLess|IfLessOrEqual|IfMsgBox|IfNotEqual|IfNotExist|IfNotInString|IfWinActive|IfWinExist|IfWinNotActive|IfWinNotExist|Loop|Return|Switch|Throw|Try|While|Until)\\b",
                     "name": "keyword.control.flow.ahk"
                 }
             ]
+        },
+        "flow_of_control_loop_plus": {
+            "match": "\\b(?!MsgBox)(?<![.#])(?i:\\b(loop)\\b[ \\t]*?,?[ \\t]*(Files|Parse|Read|Reg))",
+            "name": "meta.loop.ahk",
+            "captures": {
+                "1": { "name": "keyword.loop.control.flow.ahk" },
+                "2": { "name": "keyword.loop.param.control.flow.ahk" }
+            }
         },
         "func_call": {
             "patterns": [

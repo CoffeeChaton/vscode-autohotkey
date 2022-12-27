@@ -3,6 +3,7 @@
 ## NEXT 0.0.19(2022-12-XX)
 
 - TODO add: more doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
+- fix: syntax-highlight of `Loop, Files|Parse|Read|Reg`
 
 ## 0.0.18(2022-12-21)
 
