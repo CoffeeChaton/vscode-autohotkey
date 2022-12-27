@@ -352,7 +352,7 @@
             {
                 "onlyIfContainsSeparator": false,
                 "hexadecimal": {
-                    "minimumDigits": 0,
+                    "minimumDigits": 8,
                     "groupLength": 4
                 },
                 "binary": {

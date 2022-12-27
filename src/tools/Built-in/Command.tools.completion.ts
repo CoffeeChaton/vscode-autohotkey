@@ -5,7 +5,7 @@ import { getAllFunc } from '../Func/getAllFunc';
 import { snippetCommand } from './Command.tools';
 import type { CSnippetCommand } from './CSnippetCommand';
 
-const snippetCommandFilter: readonly CSnippetCommand[] = snippetCommand.filter((v) => v.recommended);
+const snippetCommandFilter: readonly CSnippetCommand[] = snippetCommand.filter((v: CSnippetCommand) => v.recommended);
 
 export function getSnippetCommand(subStr: string): readonly CSnippetCommand[] {
     // ^ ~~ $  need close

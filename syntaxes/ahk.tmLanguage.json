@@ -100,7 +100,7 @@
                 },
                 {
                     "captures": { "1": { "name": "punctuation.definition.comment.ahk" } },
-                    "match": "(?:^|[ \\t]+)(;).*",
+                    "match": "(?:^|[ \\t])(;).*",
                     "name": "comment.line.semicolon.ahk"
                 },
                 {

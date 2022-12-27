@@ -69,6 +69,7 @@ export function activate(context: ExtensionContext): void {
         // commands--------------------
         commands.registerCommand('ahk.nekoHelp.bar', statusBarClick),
         commands.registerCommand('ahk.nekoHelp.refreshResource', UpdateCacheUi),
+        // commands.registerCommand(ECommand.CompletionMsgBox, CompletionMsgBox),
         commands.registerCommand(ECommand.ListAllFunc, ListAllFuncMain),
         commands.registerCommand(ECommand.ListAllInclude, ListAllInclude),
         commands.registerCommand(ECommand.ListIncludeTree, ListIncludeTree),

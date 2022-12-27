@@ -9,7 +9,15 @@
 - add hover of `;@ahk-neko-ignore`
 - add test jest of `package.json.config` <---> `configUI.ts`
 - change `configUI.ts` fmt option to `enum`
-- list all func add some Data at tail
+- fix: label/func match with `Menu`
+
+  ```ahk
+  Menu, MenuName, Add , MenuItemName, LabelOrSubmenu, Options
+  ;                                   ^
+  Menu, MenuName, Insert , MenuItemName, ItemToInsert, LabelOrSubmenu, Options
+  ;                                                       ^
+  ```
+
 - Parser: -> AST
 - Scanner: -> Token
 - test of <https://www.autohotkey.com/docs/scripts/index.htm>

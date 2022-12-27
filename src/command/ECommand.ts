@@ -1,7 +1,8 @@
 export const enum ECommand {
+    CompletionMsgBox = 'ahk.nekoHelp.CompletionMsgBox',
+    ListAllFunc = 'ahk.nekoHelp.ListAllFunc',
+    ListAllInclude = 'ahk.nekoHelp.ListAllInclude',
+    ListIncludeTree = 'ahk.nekoHelp.ListIncludeTree',
     showFuncAnalyze = 'ahk.nekoHelp.showFuncAnalyze',
     showUnknownAnalyze = 'ahk.nekoHelp.showUnknownAnalyze',
-    ListAllInclude = 'ahk.nekoHelp.ListAllInclude',
-    ListAllFunc = 'ahk.nekoHelp.ListAllFunc',
-    ListIncludeTree = 'ahk.nekoHelp.ListIncludeTree',
 }

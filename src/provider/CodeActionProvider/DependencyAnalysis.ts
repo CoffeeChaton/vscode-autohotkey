@@ -3,17 +3,14 @@ import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import { ECommand } from '../../command/ECommand';
 import type { TAhkFileData } from '../../core/ProjectManager';
-import { pm } from '../../core/ProjectManager';
 import { getFileAllFunc } from '../../tools/visitor/getFileAllFuncList';
 import type { TShowUnknownAnalyze } from '../CodeLens/showUnknownAnalyze';
 
 export function DependencyAnalysis(
-    document: vscode.TextDocument,
+    AhkFileData: TAhkFileData,
     selection: vscode.Range | vscode.Selection,
 ): vscode.Command[] {
     if (!(selection instanceof vscode.Selection)) return [];
-    const AhkFileData: TAhkFileData | undefined = pm.getDocMap(document.uri.fsPath);
-    if (AhkFileData === undefined) return [];
     const { AST, DocStrMap } = AhkFileData;
 
     const { active } = selection;

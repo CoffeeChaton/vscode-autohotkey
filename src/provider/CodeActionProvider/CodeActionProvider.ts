@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import type { TAhkFileData } from '../../core/ProjectManager';
+import { pm } from '../../core/ProjectManager';
 import { Diags, DiagsDA, EDiagCodeDA } from '../../diag';
 import { EDiagBase } from '../../Enum/EDiagBase';
 import { isAhk } from '../../tools/fsTools/isAhk';
@@ -17,9 +19,8 @@ type TEditNeed = {
     Position: vscode.Position;
 };
 
-function getEditNeed(document: vscode.TextDocument, diag: CDiagBase | CDiagFn): TEditNeed {
-    const { uri } = document;
-    const { line } = diag.range.start;
+function getEditNeed(AhkFileData: TAhkFileData, line: number): TEditNeed {
+    const { uri, DocStrMap } = AhkFileData;
     if (line === 0) {
         return {
             uri,
@@ -28,8 +29,8 @@ function getEditNeed(document: vscode.TextDocument, diag: CDiagBase | CDiagFn): 
         };
     }
 
-    const { text } = document.lineAt(line - 1);
-    if ((/^\s*\*\//u).test(text)) {
+    const text: string | undefined = DocStrMap.at(line - 1)?.textRaw;
+    if (text !== undefined && (/^\s*\*\//u).test(text)) {
         return {
             uri,
             ignoreLine: 2,
@@ -43,8 +44,8 @@ function getEditNeed(document: vscode.TextDocument, diag: CDiagBase | CDiagFn): 
     };
 }
 
-function setIgnore(document: vscode.TextDocument, diag: CDiagBase): vscode.CodeAction {
-    const { uri, ignoreLine, Position } = getEditNeed(document, diag);
+function setIgnore(diag: CDiagBase, editNeed: TEditNeed): vscode.CodeAction {
+    const { uri, ignoreLine, Position } = editNeed;
     const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
     const { path } = Diags[diag.code.value];
     edit.insert(
@@ -60,8 +61,8 @@ function setIgnore(document: vscode.TextDocument, diag: CDiagBase): vscode.CodeA
     return CA;
 }
 
-function codeActionOfDA(document: vscode.TextDocument, diag: CDiagFn): vscode.CodeAction[] {
-    const { uri, ignoreLine, Position } = getEditNeed(document, diag);
+function setIgnoreDA(diag: CDiagFn, editNeed: TEditNeed): vscode.CodeAction[] {
+    const { uri, ignoreLine, Position } = editNeed;
     const { code, range } = diag;
     const { value } = code;
 
@@ -83,15 +84,15 @@ function codeActionOfDA(document: vscode.TextDocument, diag: CDiagFn): vscode.Co
     return [CA];
 }
 
-function fixDiag(document: vscode.TextDocument, diagnostics: readonly vscode.Diagnostic[]): vscode.CodeAction[] {
-    if (!isAhk(document.uri.fsPath)) return [];
+function fixDiag(AhkFileData: TAhkFileData, diagnostics: readonly vscode.Diagnostic[]): vscode.CodeAction[] {
+    if (!isAhk(AhkFileData.uri.fsPath)) return [];
 
     const CAList: vscode.CodeAction[] = [];
     for (const diag of diagnostics) {
         if (diag instanceof CDiagBase) {
-            CAList.push(setIgnore(document, diag));
+            CAList.push(setIgnore(diag, getEditNeed(AhkFileData, diag.range.start.line)));
         } else if (diag instanceof CDiagFn) {
-            CAList.push(...codeActionOfDA(document, diag));
+            CAList.push(...setIgnoreDA(diag, getEditNeed(AhkFileData, diag.range.start.line)));
         }
     }
 
@@ -105,9 +106,13 @@ export const CodeActionProvider: vscode.CodeActionProvider = {
         context: vscode.CodeActionContext,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<(vscode.CodeAction | vscode.Command)[] | null> {
+        const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
+        if (AhkFileData === null) return [];
+
         return [
-            ...fixDiag(document, context.diagnostics),
-            ...DependencyAnalysis(document, range),
+            ...fixDiag(AhkFileData, context.diagnostics),
+            ...DependencyAnalysis(AhkFileData, range),
+            // ...CommandCodeAction(AhkFileData, range),
         ];
     },
 };

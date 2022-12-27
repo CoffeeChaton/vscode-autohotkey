@@ -51,6 +51,13 @@ function HotkeyHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLea
     return 1;
 }
 
+// TODO support Menu
+// Menu, MenuName, Add , MenuItemName,        LabelOrSubmenu, Options
+// Menu, Tray,     add, Force Update Scripts, UpdateScripts,
+//                                             ^
+// Menu, MenuName, Insert , MenuItemName, ItemToInsert, LabelOrSubmenu, Options
+//                                                            ^
+
 export function funcHighlight(DocStrMap: TTokenStream): TSemanticTokensLeaf[] {
     const Tokens: TSemanticTokensLeaf[] = [];
 
