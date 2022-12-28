@@ -18,7 +18,6 @@ export const ahkSnippetsData: string[] = [
     'REG_RESOURCE_LIST',
     'REG_RESOURCE_REQUIREMENTS_LIST',
     //
-    'unicode',
     'Pixel',
     'Mouse',
     'Screen',

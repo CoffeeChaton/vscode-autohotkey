@@ -6,7 +6,7 @@ describe('check ahkSnippets ruler', () => {
     // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
     const snipList: string[] = ahkSnippetsData.map((v: string): string => v.toLowerCase()).sort();
 
-    const max = 237;
+    const max = 236;
 
     it(`check : ahkSnippets length .EQ. ${max}`, () => {
         expect.hasAssertions();
@@ -36,15 +36,6 @@ describe('check ahkSnippets ruler', () => {
             // just in this cmd https://www.autohotkey.com/docs/v1/lib/SetNumScrollCapsLockState.htm
             'AlwaysOn',
             'AlwaysOff',
-            // just in this cmd Transform https://www.autohotkey.com/docs/v1/lib/Transform.htm#SubCommands
-            'BitAnd',
-            'BitNot',
-            'BitOr',
-            'BitXOr',
-            'BitShiftLeft',
-            'BitShiftRight',
-            'Pow',
-            'Deref',
 
             // GUI -> // bold, italic, strike, underline
             // 'Bold',

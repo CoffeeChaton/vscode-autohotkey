@@ -18,6 +18,7 @@
   ;                                                       ^
   ```
 
+- [info magic of `,`](https://www.autohotkey.com/docs/v1/Variables.htm#comma) ex: `x:=1, y=2, a=b=c` or `x:=1, %y%=2`
 - Parser: -> AST
 - Scanner: -> Token
 - test of <https://www.autohotkey.com/docs/scripts/index.htm>
