@@ -22,6 +22,7 @@
         "HKEY",
         "HKLM",
         "hotstring",
+        "HWND",
         "Mult",
         "Neko",
         "nekohelp",

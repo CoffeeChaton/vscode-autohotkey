@@ -123,6 +123,7 @@ const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly vscode
             // 'Sleep',
         ],
     };
+    // TODO https://www.autohotkey.com/docs/v1/lib/Send.htm#keynames
 
     function makeSnip(params: TListKeys): vscode.CompletionItem[] {
         const List: vscode.CompletionItem[] = [];

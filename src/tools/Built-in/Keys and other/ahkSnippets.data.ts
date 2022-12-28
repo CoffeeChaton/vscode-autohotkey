@@ -1,27 +1,35 @@
 /* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
-import * as vscode from 'vscode';
 
-// dprint-ignore
-const justSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => [
+/**
+ * after initialization clear
+ */
+export const ahkSnippetsData: string[] = [
+    // GUI
+    'Bold',
+    'italic',
+    'strike',
+    'underline',
     //
+    'Raw',
+    'REG_DWORD_BIG_ENDIAN',
+    'REG_FULL_RESOURCE_DESCRIPTOR',
+    'REG_LINK',
+    'REG_QWORD',
+    'REG_RESOURCE_LIST',
+    'REG_RESOURCE_REQUIREMENTS_LIST',
+    //
+    'unicode',
     'Pixel',
     'Mouse',
     'Screen',
     'Relative',
     'RGB',
-    'Join',
     'Low',
     'BelowNormal',
     'Normal',
     'AboveNormal',
     'High',
     'Realtime',
-    'ahk_id',
-    'ahk_pid',
-    'ahk_class',
-    'ahk_group',
-    'ahk_exe',
     'Contains',
     'Integer',
     'Float',
@@ -166,7 +174,6 @@ const justSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.Completi
     'WantReturn',
     'Group',
     'Background',
-    'underline',
     'norm',
     'BackgroundTrans',
     'Theme',
@@ -207,7 +214,6 @@ const justSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.Completi
     'Interrupt',
     'Priority',
     'WaitClose',
-    'Wait',
     'Exist',
     'Yes',
     'No',
@@ -236,27 +242,7 @@ const justSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.Completi
     'REG_DWORD',
     'REG_BINARY',
     'DPIScale',
-    'Hwnd',
     'Parent',
-].map((key: string) => {
-    const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
-        .appendCodeblock(key, 'ahk');
-
-    const item: vscode.CompletionItem = new vscode.CompletionItem({
-        label: key, // Left
-        description: 'other', // Right
-    });
-        // icon of https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
-    item.kind = vscode.CompletionItemKind.Snippet;
-    item.insertText = key;
-    item.detail = 'other';
-    item.documentation = md;
-
-    return item;
-}))();
-
-export function getSnipJustSnip(subStr: string): readonly vscode.CompletionItem[] {
-    return (/(?<![.`#])\b\w+$/iu).test(subStr)
-        ? justSnip
-        : [];
-}
+    'Tab',
+    'Text',
+];

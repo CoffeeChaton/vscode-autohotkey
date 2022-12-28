@@ -6,7 +6,7 @@ import { AVariablesList } from './A_Variables.data';
 type TA_MD_Map = ReadonlyMap<string, vscode.MarkdownString>;
 type TA_snippet_list = readonly vscode.CompletionItem[];
 
-const [A_VariablesMDMap, snippetStartWihA] = ((): [TA_MD_Map, TA_snippet_list] => {
+export const [AVariablesMDMap, snippetStartWihA] = ((): [TA_MD_Map, TA_snippet_list] => {
     const map1 = new Map<string, vscode.MarkdownString>();
     const List2: vscode.CompletionItem[] = [];
     //
@@ -51,5 +51,5 @@ export function getSnippetStartWihA(PartStr: string): readonly vscode.Completion
 }
 
 export function hoverAVar(wordUp: string): vscode.MarkdownString | undefined {
-    return A_VariablesMDMap.get(wordUp);
+    return AVariablesMDMap.get(wordUp);
 }

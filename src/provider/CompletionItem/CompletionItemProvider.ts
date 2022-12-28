@@ -10,7 +10,7 @@ import { getSnipBiVar } from '../../tools/Built-in/BiVariables.tools';
 import { getSnippetCommand } from '../../tools/Built-in/Command.tools.completion';
 import { snipDirectives } from '../../tools/Built-in/Directives.tool';
 import { BuiltInFunc2Completion } from '../../tools/Built-in/func.tools';
-import { getSnipJustSnip } from '../../tools/Built-in/Keys and other/ahk.snippets';
+import { getSnipJustSnip } from '../../tools/Built-in/Keys and other/ahkSnippets.tools';
 import { getSnipStartJoy } from '../../tools/Built-in/Keys and other/Joystick';
 import { getSnipStartF } from '../../tools/Built-in/Keys and other/keyF12';
 import { getSnipMouseKeyboard } from '../../tools/Built-in/Keys and other/MouseKeyboard';
@@ -28,6 +28,7 @@ import { globalValCompletion } from './global/globalValCompletion';
 import { IncludeFsPath } from './Include_fsPath/Include_fsPath';
 import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
 import { ModuleVar2Completion } from './ModuleVar/ModuleVar2Completion';
+import { getSnippetWinTitleParam } from '../../tools/Built-in/WinTitle/WinTitleParameter.tools';
 
 function getPartStr(lStr: string, position: vscode.Position): string | null {
     const match: RegExpMatchArray | null = lStr
@@ -77,6 +78,7 @@ function CompletionItemCore(
     if (PartStr !== null) {
         completions.push(
             ...getSnippetStartWihA(PartStr),
+            ...getSnippetWinTitleParam(PartStr),
             ...getSnippetStatement(PartStr, fistWordUp),
             ...getSnippetWinMsg(PartStr),
             ...getSnipBiVar(PartStr),

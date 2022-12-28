@@ -22,6 +22,7 @@ import { hoverClassName } from './tools/hoverClassName';
 import { hoverDirectives } from './tools/hoverDirectives';
 import { hoverGlobalVar } from './tools/hoverGlobalVar';
 import { hoverMultiLine } from './tools/hoverMultiLine';
+import { hoverWinTitleParam } from '../../tools/Built-in/WinTitle/WinTitleParameter.tools';
 
 function HoverOfFunc(
     document: vscode.TextDocument,
@@ -93,6 +94,7 @@ function HoverProviderCore(
         getHoverOtherKeyWord2,
         getHoverStatement,
         hoverAVar,
+        hoverWinTitleParam,
         hoverBiVar,
         hoverGlobalVar,
         hover2winMsgMd,
