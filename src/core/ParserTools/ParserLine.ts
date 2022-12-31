@@ -19,9 +19,9 @@ type TClassName =
     | typeof CAhkLabel;
 
 type TLineRuler = Readonly<{
-    ClassName: TClassName;
-    getName: (strTrim: string) => string | null;
-    test: (strTrim: string) => boolean;
+    ClassName: TClassName,
+    getName: (strTrim: string) => string | null,
+    test: (strTrim: string) => boolean,
 }>;
 
 const LineRuler = [

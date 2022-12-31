@@ -34,8 +34,8 @@ const ignoreList = [
 ] as const;
 
 type TMsg = {
-    line: number;
-    textRaw: string;
+    line: number,
+    textRaw: string,
 };
 //                      keyUp       line
 type TCommandInfoMap = Map<string, TMsg[]>;

@@ -6,8 +6,8 @@ import * as vscode from 'vscode';
 import type { TAhkBaseObj } from './ahkBase_tools';
 
 type TDescription = Readonly<{
-    label: string;
-    documentation: string[];
+    label: string,
+    documentation: string[],
 }>;
 
 const ItemOfAhkObj: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {

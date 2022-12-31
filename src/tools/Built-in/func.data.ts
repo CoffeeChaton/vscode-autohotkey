@@ -27,13 +27,13 @@ type TElementGroup =
     | 'Window'; // OBJ_XX
 
 type TBuiltInFuncElement = Readonly<{
-    upName: string;
-    keyRawName: string;
-    group: TElementGroup;
-    link: `https://www.autohotkey.com/docs/${string}`;
-    msg: readonly string[];
-    insert: string;
-    exp: readonly string[];
+    upName: string,
+    keyRawName: string,
+    group: TElementGroup,
+    link: `https://www.autohotkey.com/docs/${string}`,
+    msg: readonly string[],
+    insert: string,
+    exp: readonly string[],
 }>;
 
 /**

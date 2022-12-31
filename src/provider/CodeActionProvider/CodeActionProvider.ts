@@ -14,9 +14,9 @@ import { c502c503CodeAction } from './tools/c502c503CodeAction';
 import { c506CodeAction } from './tools/c506CodeAction';
 
 type TEditNeed = {
-    uri: vscode.Uri;
-    ignoreLine: 1 | 2;
-    Position: vscode.Position;
+    uri: vscode.Uri,
+    ignoreLine: 1 | 2,
+    Position: vscode.Position,
 };
 
 function getEditNeed(AhkFileData: TAhkFileData, line: number): TEditNeed {

@@ -24,9 +24,9 @@ import { getDAListTop } from './getDAList';
 import { getUnknownTextMap } from './getUnknownTextMap';
 
 export type TModuleVar = {
-    readonly ModuleValMap: TValMapOut;
-    readonly ModuleTextMap: TTextMapOut;
-    readonly allowList: readonly boolean[];
+    readonly ModuleValMap: TValMapOut,
+    readonly ModuleTextMap: TTextMapOut,
+    readonly allowList: readonly boolean[],
 };
 
 function getModuleAllowList(DocStrMap: TTokenStream, Ast: TAstRoot): readonly boolean[] {

@@ -1,11 +1,11 @@
 /* eslint-disable no-param-reassign */
 
 export type TAhkBaseObj = {
-    ahkArray: boolean;
-    ahkFileOpen: boolean;
-    ahkFuncObject: boolean;
-    ahkBase: boolean;
-    ahkCatch: boolean; // https://www.autohotkey.com/docs/commands/Throw.htm#Exception
+    ahkArray: boolean,
+    ahkFileOpen: boolean,
+    ahkFuncObject: boolean,
+    ahkBase: boolean,
+    ahkCatch: boolean, // https://www.autohotkey.com/docs/commands/Throw.htm#Exception
 };
 
 export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {

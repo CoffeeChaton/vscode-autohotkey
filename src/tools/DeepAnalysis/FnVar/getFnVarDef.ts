@@ -16,11 +16,11 @@ import { EFnMode } from './EFnMode';
 import type { TGetFnDefNeed } from './TFnVarDef';
 
 type TParam = {
-    varDataList: TVarData[];
-    line: number;
-    valMap: TValMapIn;
-    lineComment: string;
-    fistWordVarMix: 'LOCAL' | 'STATIC';
+    varDataList: TVarData[],
+    line: number,
+    valMap: TValMapIn,
+    lineComment: string,
+    fistWordVarMix: 'LOCAL' | 'STATIC',
 };
 function setVarMix({
     varDataList,
@@ -57,8 +57,8 @@ function setFnMode(fistWordUp: string, lStrTrimLen: number, fnMode: EFnMode): EF
 }
 
 type TFnVarDef = {
-    valMap: TValMapIn;
-    fnMode: EFnMode;
+    valMap: TValMapIn,
+    fnMode: EFnMode,
 };
 
 export function getFnVarDef(

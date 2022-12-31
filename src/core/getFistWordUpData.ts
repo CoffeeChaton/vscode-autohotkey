@@ -32,12 +32,12 @@ function getFistWord(lStrTrim: string): string {
 }
 
 type TFistWordUpData = {
-    fistWordUpCol: number;
-    fistWordUp: string;
+    fistWordUpCol: number,
+    fistWordUp: string,
 };
 
 export function getFistWordUpData(
-    { lStrTrim, lStr, cll }: { lStrTrim: string; lStr: string; cll: 0 | 1 },
+    { lStrTrim, lStr, cll }: { lStrTrim: string, lStr: string, cll: 0 | 1 },
 ): TFistWordUpData {
     if (cll === 1) {
         return {

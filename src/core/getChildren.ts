@@ -3,22 +3,22 @@ import type { TAhkTokenLine, TTokenStream } from '../globalEnum';
 import type { TGValMap } from './ParserTools/ahkGlobalDef';
 
 export type TFuncInput = Readonly<{
-    AhkTokenLine: TAhkTokenLine;
+    AhkTokenLine: TAhkTokenLine,
     //
-    defStack: string[];
-    DocStrMap: TTokenStream;
-    GValMap: TGValMap;
-    RangeEndLine: number;
-    uri: vscode.Uri;
+    defStack: string[],
+    DocStrMap: TTokenStream,
+    GValMap: TGValMap,
+    RangeEndLine: number,
+    uri: vscode.Uri,
 }>;
 
 type ChildType = Readonly<{
-    defStack: string[];
-    DocStrMap: TTokenStream;
-    GValMap: TGValMap;
-    RangeEndLine: number;
-    RangeStartLine: number;
-    uri: vscode.Uri;
+    defStack: string[],
+    DocStrMap: TTokenStream,
+    GValMap: TGValMap,
+    RangeEndLine: number,
+    RangeStartLine: number,
+    uri: vscode.Uri,
 }>;
 
 type TChildrenType<T extends vscode.DocumentSymbol> = T['children'][number];

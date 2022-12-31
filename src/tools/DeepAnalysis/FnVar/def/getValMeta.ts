@@ -4,12 +4,12 @@ import type { EFnMode } from '../EFnMode';
 import { wrapFnValDef } from './wrapFnValDef';
 
 type TValMeta = {
-    line: number;
-    character: number;
-    RawName: string;
-    valMap: TValMapIn;
-    lineComment: string;
-    fnMode: EFnMode;
+    line: number,
+    character: number,
+    RawName: string,
+    valMap: TValMapIn,
+    lineComment: string,
+    fnMode: EFnMode,
 };
 
 export function getValMeta(

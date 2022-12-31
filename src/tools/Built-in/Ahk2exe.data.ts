@@ -3,11 +3,11 @@
 /* eslint-disable max-len */
 
 type TAhk2exeDataElement = {
-    keyRawName: string;
-    body: string;
-    link: `https://www.autohotkey.com/docs/v1/misc/Ahk2ExeDirectives.htm#${string}`;
-    doc: string;
-    exp: readonly string[];
+    keyRawName: string,
+    body: string,
+    link: `https://www.autohotkey.com/docs/v1/misc/Ahk2ExeDirectives.htm#${string}`,
+    doc: string,
+    exp: readonly string[],
 };
 
 const keep = {

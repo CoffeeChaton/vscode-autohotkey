@@ -58,17 +58,17 @@ export type TSemanticTokensLeaf = {
     /**
      * The range of the token. Must be single-line.
      */
-    range: vscode.Range;
+    range: vscode.Range,
 
     /**
      * tokenType The token type.
      */
-    tokenType: typeof TokenTypes[number];
+    tokenType: typeof TokenTypes[number],
 
     /**
      * tokenModifiers The token modifiers.
      */
-    tokenModifiers: (typeof TokenModifiers[number])[] | [];
+    tokenModifiers: (typeof TokenModifiers[number])[] | [],
 };
 
 export function pushToken(token: TSemanticTokensLeaf[], tokensBuilder: vscode.SemanticTokensBuilder): void {

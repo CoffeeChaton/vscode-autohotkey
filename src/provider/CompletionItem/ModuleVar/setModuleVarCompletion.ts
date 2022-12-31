@@ -20,7 +20,7 @@ export function setModuleVarCompletion(
         fileName,
         recMap,
         DA,
-    }: { ModuleValMap: TValMapOut; fileName: string; recMap: TSnippetRecMap; DA: CAhkFunc | null },
+    }: { ModuleValMap: TValMapOut, fileName: string, recMap: TSnippetRecMap, DA: CAhkFunc | null },
 ): vscode.CompletionItem[] {
     return [...ModuleValMap.values()].map((v: TValMetaOut): vscode.CompletionItem => {
         const {

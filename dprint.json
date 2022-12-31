@@ -25,7 +25,9 @@
         "binaryExpression.operatorPosition": "nextLine",
         "importDeclaration.preferSingleLine": false, // keep eslint <-> dprint friendly
         "quoteStyle": "alwaysSingle",
-        "semiColons": "prefer"
+        "semiColons": "prefer",
+        "typeLiteral.separatorKind.multiLine": "comma",
+        "typeLiteral.separatorKind.singleLine": "comma"
     }
 }
 // https://dprint.dev/plugins/typescript/config/

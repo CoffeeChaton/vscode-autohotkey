@@ -4,18 +4,18 @@ import { DiagsDA } from '../../../diag';
 import { EDiagBase } from '../../../Enum/EDiagBase';
 
 type TCDiagFnParam = {
-    value: EDiagCodeDA;
-    range: vscode.Range;
-    severity: vscode.DiagnosticSeverity;
-    tags: vscode.DiagnosticTag[];
-    message: string;
+    value: EDiagCodeDA,
+    range: vscode.Range,
+    severity: vscode.DiagnosticSeverity,
+    tags: vscode.DiagnosticTag[],
+    message: string,
 };
 
 export class CDiagFn extends vscode.Diagnostic {
     public override readonly source: EDiagBase.sourceDA = EDiagBase.sourceDA;
     public override code: {
-        value: EDiagCodeDA;
-        target: vscode.Uri;
+        value: EDiagCodeDA,
+        target: vscode.Uri,
     };
 
     public constructor({

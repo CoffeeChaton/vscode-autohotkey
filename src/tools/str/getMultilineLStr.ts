@@ -9,7 +9,7 @@ import type { TMultilineFlag } from '../../globalEnum';
  * -> look % like str...
  */
 function getMultilineLStrStyle1(
-    { textRaw, CFlag, PercentFlag }: { textRaw: string; CFlag: boolean; PercentFlag: boolean },
+    { textRaw, CFlag, PercentFlag }: { textRaw: string, CFlag: boolean, PercentFlag: boolean },
 ): string {
     /**
      * flag of '%'
@@ -88,7 +88,7 @@ function getMultilineLStrStyle1(
  * just allow `EMultiline.mid`
  */
 export function getMultilineLStrStyle2(
-    { textRaw, CFlag }: { textRaw: string; CFlag: boolean },
+    { textRaw, CFlag }: { textRaw: string, CFlag: boolean },
 ): string {
     /**
      * flag of '"'
@@ -158,7 +158,7 @@ export function getMultilineLStrStyle2(
  * just allow `EMultiline.mid`
  */
 export function getMultilineLStr(
-    { multilineFlag, textRaw }: { multilineFlag: TMultilineFlag; textRaw: string },
+    { multilineFlag, textRaw }: { multilineFlag: TMultilineFlag, textRaw: string },
 ): string {
     if (multilineFlag === null) {
         return '';

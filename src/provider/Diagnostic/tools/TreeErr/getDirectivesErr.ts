@@ -8,17 +8,17 @@ import { DirectivesMDMap } from '../../../../tools/Built-in/Directives.tool';
 import { CDiagBase } from '../CDiagBase';
 
 type TDiagMsg = {
-    value: EDiagCode;
-    severity: vscode.DiagnosticSeverity;
-    tags: vscode.DiagnosticTag[];
+    value: EDiagCode,
+    severity: vscode.DiagnosticSeverity,
+    tags: vscode.DiagnosticTag[],
 };
 
 const DiagDirectivesMap: ReadonlyMap<string, TDiagMsg> = ((): ReadonlyMap<string, TDiagMsg> => {
     type TRulerErr = {
-        keyRawName: string;
-        value: EDiagCode;
-        severity: vscode.DiagnosticSeverity;
-        tags: vscode.DiagnosticTag[];
+        keyRawName: string,
+        value: EDiagCode,
+        severity: vscode.DiagnosticSeverity,
+        tags: vscode.DiagnosticTag[],
     };
     const arr: TRulerErr[] = [
         {

@@ -1,8 +1,8 @@
 import type { TTokenStream } from '../../globalEnum';
 
 type TMsg = {
-    textRaw: string;
-    line: number;
+    textRaw: string,
+    line: number,
 };
 
 export function AnalyzeGlobalVal(AhkTokenList: TTokenStream): string[] {

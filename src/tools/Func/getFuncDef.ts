@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import type { TTokenStream } from '../../globalEnum';
 
 export type TFuncDefData = {
-    name: string;
-    selectionRange: vscode.Range;
+    name: string,
+    selectionRange: vscode.Range,
 };
 
 function getFuncDefData(DocStrMap: TTokenStream, defLine: number, searchLine: number, name: string): TFuncDefData {
@@ -18,11 +18,11 @@ function getFuncDefData(DocStrMap: TTokenStream, defLine: number, searchLine: nu
 }
 
 type TFuncTailType = {
-    DocStrMap: TTokenStream;
-    searchTextTrim: string;
-    name: string;
-    searchLine: number;
-    defLine: number;
+    DocStrMap: TTokenStream,
+    searchTextTrim: string,
+    name: string,
+    searchLine: number,
+    defLine: number,
 };
 
 function getFuncTail({

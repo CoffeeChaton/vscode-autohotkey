@@ -20,11 +20,11 @@ import { c505ErrParamParsedError } from './param/paramParsedErrRange';
 import { paramVariadicErr } from './param/paramVariadicErr';
 
 type TDaDiagCache = {
-    DADiagList: readonly CDiagFn[];
-    code500Max: number;
-    code502Max: number;
-    code503Max: number;
-    useModuleValDiag: boolean;
+    DADiagList: readonly CDiagFn[],
+    code500Max: number,
+    code502Max: number,
+    code503Max: number,
+    useModuleValDiag: boolean,
 };
 
 const wm = new WeakMap<readonly CAhkFunc[], TDaDiagCache>();

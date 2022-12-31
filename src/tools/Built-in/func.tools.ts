@@ -11,8 +11,8 @@ type TrGroup = typeof baseGroup[number];
 type TSnip = { readonly [k in TrGroup]: readonly vscode.CompletionItem[] };
 
 type TBiFuncMsg = {
-    readonly md: vscode.MarkdownString;
-    readonly keyRawName: string;
+    readonly md: vscode.MarkdownString,
+    readonly keyRawName: string,
 };
 type TBiFuncMap = ReadonlyMap<string, TBiFuncMsg>;
 

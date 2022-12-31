@@ -3,9 +3,9 @@ import * as vscode from 'vscode';
 
 const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => {
     type TListKeys = {
-        group: string;
-        uri: `https://www.autohotkey.com/docs/KeyList.htm#${string}`;
-        list: readonly string[];
+        group: string,
+        uri: `https://www.autohotkey.com/docs/KeyList.htm#${string}`,
+        list: readonly string[],
     };
 
     const Mouse: TListKeys = {

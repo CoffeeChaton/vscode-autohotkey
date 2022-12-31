@@ -9,8 +9,8 @@ describe('check gui subCmd ruler', () => {
         expect.hasAssertions();
 
         type TErrObj = {
-            case: number;
-            SubCommand: string;
+            case: number,
+            SubCommand: string,
         };
 
         const errList: TErrObj[] = [];
@@ -40,8 +40,8 @@ describe('check gui subCmd ruler', () => {
         expect.hasAssertions();
 
         type TErrObj = {
-            msg: string;
-            value: unknown;
+            msg: string,
+            value: unknown,
         };
 
         const errList0: TErrObj[] = [];

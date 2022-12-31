@@ -3,8 +3,8 @@ import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { Ahk2exeData } from './Ahk2exe.data';
 
 type TErrObj = {
-    msg: string;
-    value: unknown;
+    msg: string,
+    value: unknown,
 };
 
 describe('check Ahk2exeData ruler', () => {

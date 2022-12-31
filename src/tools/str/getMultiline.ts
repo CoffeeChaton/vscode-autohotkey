@@ -8,9 +8,9 @@ import { EDetail, EMultiline } from '../../globalEnum';
 import { replacerSpace } from './removeSpecialChar';
 
 type TGetMultilineFlag = {
-    textRaw: string;
-    result: readonly TAhkTokenLine[];
-    line: number;
+    textRaw: string,
+    result: readonly TAhkTokenLine[],
+    line: number,
 };
 
 // eslint-disable-next-line max-lines-per-function, max-statements
@@ -99,12 +99,12 @@ function getMultilineFlag({ textRaw, result, line }: TGetMultilineFlag): TMultil
 }
 
 type TGetMultiline = {
-    textTrimStart: string;
-    multiline: EMultiline;
-    multilineFlag: TMultilineFlag;
-    textRaw: string;
-    result: readonly TAhkTokenLine[];
-    line: number;
+    textTrimStart: string,
+    multiline: EMultiline,
+    multilineFlag: TMultilineFlag,
+    textRaw: string,
+    result: readonly TAhkTokenLine[],
+    line: number,
 };
 
 export function getMultiline(

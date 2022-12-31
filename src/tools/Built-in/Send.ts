@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 type TA_SendCore = {
-    label: string;
-    icon: string;
-    doc: string[];
-    body: string;
-    link: `https://www.autohotkey.com/docs/${string}`;
+    label: string,
+    icon: string,
+    doc: string[],
+    body: string,
+    link: `https://www.autohotkey.com/docs/${string}`,
 };
 
 type TA_Send = {

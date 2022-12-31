@@ -19,8 +19,8 @@ export const enum EDiagCodeDA {
 
 export type TDiagsDA = {
     [k in EDiagCodeDA]: {
-        msg: string;
-        path: `https://www.autohotkey.com/docs/${string}`;
+        msg: string,
+        path: `https://www.autohotkey.com/docs/${string}`,
     };
 };
 
@@ -117,8 +117,8 @@ type TLink =
     | `https://www.autohotkey.com/docs/${string}`;
 export type TDiags = {
     [k in EDiagCode]: {
-        msg: string;
-        path: TLink;
+        msg: string,
+        path: TLink,
     };
 };
 

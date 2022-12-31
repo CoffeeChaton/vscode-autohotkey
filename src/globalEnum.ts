@@ -30,8 +30,8 @@ export const enum EMultiline {
 }
 
 export type TPos = Readonly<{
-    col: number;
-    len: number;
+    col: number,
+    len: number,
 }>;
 
 /**
@@ -39,45 +39,45 @@ export type TPos = Readonly<{
  */
 export type TMultilineFlag =
     | DeepReadonly<{
-        Join: TPos[]; // https://www.autohotkey.com/docs/Scripts.htm#Join
-        LTrim: TPos[]; // https://www.autohotkey.com/docs/Scripts.htm#LTrim
-        RTrim0: TPos[];
-        CommentFlag: TPos[]; // C
-        PercentFlag: TPos[]; // %
-        commaFlag: TPos[]; // ,
-        accentFlag: TPos[]; // `
+        Join: TPos[], // https://www.autohotkey.com/docs/Scripts.htm#Join
+        LTrim: TPos[], // https://www.autohotkey.com/docs/Scripts.htm#LTrim
+        RTrim0: TPos[],
+        CommentFlag: TPos[], // C
+        PercentFlag: TPos[], // %
+        commaFlag: TPos[], // ,
+        accentFlag: TPos[], // `
         // ---
-        unknownFlag: TPos[];
-        L: number; // (
-        R: number; // ;
+        unknownFlag: TPos[],
+        L: number, // (
+        R: number, // ;
 
         /**
          * false : end with ')'
          * true : end with ')' and '#' expression syntax (recommended):
          */
-        isExpress: boolean;
+        isExpress: boolean,
     }>
     | null;
 
 export type TAhkTokenLine = DeepReadonly<{
     // TODO: replace as ([upName,col])[]
-    fistWordUpCol: number;
-    fistWordUp: string;
-    SecondWordUp: string;
-    SecondWordUpCol: number;
+    fistWordUpCol: number,
+    fistWordUp: string,
+    SecondWordUp: string,
+    SecondWordUpCol: number,
     // --
-    lStr: string;
-    textRaw: string;
-    deep: number;
-    detail: readonly EDetail[];
-    line: number;
-    multiline: EMultiline;
-    multilineFlag: TMultilineFlag;
-    cll: 0 | 1;
-    lineComment: string;
-    displayErr: boolean;
-    displayFnErr: boolean;
-    ahkDoc: string;
+    lStr: string,
+    textRaw: string,
+    deep: number,
+    detail: readonly EDetail[],
+    line: number,
+    multiline: EMultiline,
+    multilineFlag: TMultilineFlag,
+    cll: 0 | 1,
+    lineComment: string,
+    displayErr: boolean,
+    displayFnErr: boolean,
+    ahkDoc: string,
     // I know this is not Complete and correct Token.
 }>;
 

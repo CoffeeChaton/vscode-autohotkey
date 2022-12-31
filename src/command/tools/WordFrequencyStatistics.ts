@@ -2,10 +2,10 @@ import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import { OutputChannel } from '../../provider/vscWindows/OutputChannel';
 
 export type TWordFrequencyStatistics = {
-    paramMapSize: number;
-    valMapSize: number;
-    textMapSize: number;
-    topFuncNum: number;
+    paramMapSize: number,
+    valMapSize: number,
+    textMapSize: number,
+    topFuncNum: number,
 };
 
 // WordFrequencyStatistics
@@ -25,8 +25,8 @@ export function WordFrequencyStatistics(need: CAhkFunc[]): TWordFrequencyStatist
     }
 
     type TElement = {
-        k: string;
-        v: number;
+        k: string,
+        v: number,
     };
     const e5: TElement[] = [];
     for (const [k, v] of DEB) {

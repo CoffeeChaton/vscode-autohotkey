@@ -17,12 +17,12 @@ function RangeList2Str(RangeList: readonly vscode.Range[]): string {
 }
 
 type TSetMD = {
-    prefix: EPrefix;
-    refRangeList: readonly vscode.Range[];
-    defRangeList: readonly vscode.Range[];
-    funcName: string;
-    recStr: ESnippetRecBecause | '';
-    commentList: readonly string[];
+    prefix: EPrefix,
+    refRangeList: readonly vscode.Range[],
+    defRangeList: readonly vscode.Range[],
+    funcName: string,
+    recStr: ESnippetRecBecause | '',
+    commentList: readonly string[],
 };
 
 export function setMD(

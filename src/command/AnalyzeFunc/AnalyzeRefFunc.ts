@@ -5,8 +5,8 @@ import { getBuiltInFuncMD } from '../../tools/Built-in/func.tools';
 import type { TFullFuncMap } from '../../tools/Func/getAllFunc';
 
 type TMsg = {
-    line: number;
-    textRaw: string;
+    line: number,
+    textRaw: string,
 };
 //                      keyUp       line
 type TRefFuncInfoMap = Map<string, TMsg[]>;

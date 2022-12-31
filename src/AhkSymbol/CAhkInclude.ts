@@ -18,9 +18,9 @@ export const enum EInclude {
 }
 
 export type TRawData = {
-    readonly type: EInclude;
-    readonly mayPath: string;
-    readonly warnMsg: string;
+    readonly type: EInclude,
+    readonly mayPath: string,
+    readonly warnMsg: string,
 };
 
 const list = [

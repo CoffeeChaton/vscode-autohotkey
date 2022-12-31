@@ -17,7 +17,7 @@ export const enum EDiagMasterSwitch {
 
 type TempConfigs = {
     Diag: {
-        AMasterSwitch: EDiagMasterSwitch;
+        AMasterSwitch: EDiagMasterSwitch,
         /**
          * code107LegacyAssignment
          *
@@ -26,23 +26,23 @@ type TempConfigs = {
          * a := "this line is string"
          * ```
          */
-        code107: boolean;
-        code300fnSize: number;
-        code500Max: number; // NeverUsedVar
-        code502Max: number; // of var
-        code503Max: number; // of param
-        code800Deprecated: boolean;
-        useModuleValDiag: boolean;
-    };
-    baseScanIgnoredList: readonly string[];
-    formatTextReplace: boolean;
+        code107: boolean,
+        code300fnSize: number,
+        code500Max: number, // NeverUsedVar
+        code502Max: number, // of var
+        code503Max: number, // of param
+        code800Deprecated: boolean,
+        useModuleValDiag: boolean,
+    },
+    baseScanIgnoredList: readonly string[],
+    formatTextReplace: boolean,
     snippets: {
-        blockFilesList: readonly string[];
-        CommandOption: ECommandOption;
-    };
-    statusBarDisplayColor: string;
-    useCodeLens: boolean;
-    useSymbolProvider: boolean;
+        blockFilesList: readonly string[],
+        CommandOption: ECommandOption,
+    },
+    statusBarDisplayColor: string,
+    useCodeLens: boolean,
+    useSymbolProvider: boolean,
 };
 
 /**

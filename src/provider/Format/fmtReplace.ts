@@ -80,7 +80,7 @@ export function lineReplace({
     lStrTrim,
     detail,
     multiline,
-}: { text: string; lStrTrim: string; detail: readonly EDetail[]; multiline: EMultiline }): string {
+}: { text: string, lStrTrim: string, detail: readonly EDetail[], multiline: EMultiline }): string {
     return (lStrTrim === ''
             || detail.includes(EDetail.inSkipSign2)
             || detail.includes(EDetail.inComment)

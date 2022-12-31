@@ -22,11 +22,11 @@ class CTopClass extends vscode.DocumentSymbol {
 }
 
 export type TMemo = Readonly<{
-    readonly AST: TAstRoot;
-    readonly DocStrMap: TTokenStream;
-    readonly DocFullSize: number;
-    readonly uri: vscode.Uri;
-    readonly ModuleVar: TModuleVar;
+    readonly AST: TAstRoot,
+    readonly DocStrMap: TTokenStream,
+    readonly DocFullSize: number,
+    readonly uri: vscode.Uri,
+    readonly ModuleVar: TModuleVar,
 }>;
 
 function strListDeepEq(DocStrMap: TTokenStream, fullTextList: readonly string[]): boolean {

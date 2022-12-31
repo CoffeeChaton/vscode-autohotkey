@@ -1,13 +1,13 @@
 import { getFistWordCore } from './getFistWordUpData';
 
 type TSecondUpData = {
-    SecondWordUp: string;
-    SecondWordUpCol: number;
+    SecondWordUp: string,
+    SecondWordUpCol: number,
 };
 
 type TPatternMatch = {
-    name: string;
-    fn: (lStr: string, fistWordUpCol: number) => string;
+    name: string,
+    fn: (lStr: string, fistWordUpCol: number) => string,
 };
 
 const patternMatch = [

@@ -4,15 +4,15 @@ import { setMD } from '../../../../tools/MD/setMD';
 import type { ESnippetRecBecause, TSnippetRecMap } from '../ESnippetRecBecause';
 
 type TSetItem = {
-    prefix: EPrefix;
-    recMap: TSnippetRecMap;
-    keyRawName: string;
-    funcName: string;
-    refRangeList: readonly vscode.Range[];
-    defRangeList: readonly vscode.Range[];
-    snipKind: vscode.CompletionItemKind;
-    kind: vscode.SymbolKind.Function | vscode.SymbolKind.Method;
-    commentList: readonly string[];
+    prefix: EPrefix,
+    recMap: TSnippetRecMap,
+    keyRawName: string,
+    funcName: string,
+    refRangeList: readonly vscode.Range[],
+    defRangeList: readonly vscode.Range[],
+    snipKind: vscode.CompletionItemKind,
+    kind: vscode.SymbolKind.Function | vscode.SymbolKind.Method,
+    commentList: readonly string[],
 };
 
 export function setItemCore(

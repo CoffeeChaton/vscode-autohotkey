@@ -6,13 +6,13 @@ import type { TVarData } from './varMixedAnnouncement';
 import { varMixedAnnouncement } from './varMixedAnnouncement';
 
 type TGValData = {
-    rawName: string;
-    range: vscode.Range;
+    rawName: string,
+    range: vscode.Range,
 };
 
 export type TGlobalVal = {
-    defRangeList: TGValData[];
-    refRangeList: TGValData[];
+    defRangeList: TGValData[],
+    refRangeList: TGValData[],
 };
 
 type TUpName = string;
@@ -20,7 +20,7 @@ export type TGValMap = ReadonlyMap<TUpName, TGlobalVal>;
 export type TGValMapReadOnly = ReadonlyMap<TUpName, Readonly<TGlobalVal>>;
 
 function setGlobalVar(
-    { varDataList, line, GValMap }: { varDataList: TVarData[]; line: number; GValMap: Map<string, TGlobalVal> },
+    { varDataList, line, GValMap }: { varDataList: TVarData[], line: number, GValMap: Map<string, TGlobalVal> },
 ): void {
     for (const { ch, rawName } of varDataList) {
         const ValUpName: string = rawName.toUpperCase();

@@ -17,24 +17,24 @@ export type TAllowDiagCode =
     | EDiagCode.code899;
 
 type TCommandParams = {
-    sign: string;
-    name: string;
-    isOpt: boolean;
-    defVal: string;
+    sign: string,
+    name: string,
+    isOpt: boolean,
+    defVal: string,
 };
 
 export type TCommandElement = Readonly<{
-    upName: string;
-    keyRawName: string;
-    body: string;
-    doc: string;
-    recommended: boolean;
-    link: `https://www.autohotkey.com/docs/${string}`;
-    exp: readonly string[];
+    upName: string,
+    keyRawName: string,
+    body: string,
+    doc: string,
+    recommended: boolean,
+    link: `https://www.autohotkey.com/docs/${string}`,
+    exp: readonly string[],
     //
-    diag?: TAllowDiagCode;
-    _DevNote?: readonly string[];
-    _params?: TCommandParams[];
+    diag?: TAllowDiagCode,
+    _DevNote?: readonly string[],
+    _params?: TCommandParams[],
 
     /**
      * S -> string?
@@ -45,7 +45,7 @@ export type TCommandElement = Readonly<{
      * L -> label
      * FO -> funcObject
      */
-    _paramType: string[];
+    _paramType: string[],
 }>;
 
 /**

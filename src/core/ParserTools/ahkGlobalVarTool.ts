@@ -1,8 +1,8 @@
 import { pm } from '../ProjectManager';
 
 type TData = {
-    fsPathList: string[];
-    keyRawName: string;
+    fsPathList: string[],
+    keyRawName: string,
     // and any you want to has Data
 };
 

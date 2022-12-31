@@ -5,10 +5,10 @@ import { OutputFormatChannel } from '../vscWindows/OutputChannel';
 import type { TDiffMap } from './TFormat';
 
 type TDiffParm = {
-    DiffMap: TDiffMap;
-    fsPath: string;
-    timeStart: number;
-    from: EFormatChannel;
+    DiffMap: TDiffMap,
+    fsPath: string,
+    timeStart: number,
+    from: EFormatChannel,
 };
 
 export function fmtDiffInfo(

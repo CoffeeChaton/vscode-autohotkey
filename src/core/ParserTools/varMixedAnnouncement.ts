@@ -3,8 +3,8 @@ import { calcBracket } from '../../tools/Bracket';
 import { spiltCommandAll } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 
 export type TVarData = {
-    rawName: string;
-    ch: number;
+    rawName: string,
+    ch: number,
 };
 
 function isLookLikeVar(rawName: string): boolean {
@@ -17,8 +17,8 @@ function isLookLikeVar(rawName: string): boolean {
 }
 
 type TVarDataResult = {
-    varDataList: TVarData[];
-    Brackets: TBrackets;
+    varDataList: TVarData[],
+    Brackets: TBrackets,
 };
 
 /**

@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
 /* eslint-disable no-template-curly-in-string */
 export type TGuiCmdElement = Readonly<{
-    SubCommand: string;
-    body: string;
-    doc: string;
-    link: `https://www.autohotkey.com/docs/v1/lib/Gui.htm#${string}`;
-    exp: readonly string[];
+    SubCommand: string,
+    body: string,
+    doc: string,
+    link: `https://www.autohotkey.com/docs/v1/lib/Gui.htm#${string}`,
+    exp: readonly string[],
 }>;
 
 /**

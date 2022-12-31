@@ -23,8 +23,8 @@ function fnErrCheck(DocStrMap: TTokenStream, func: TAhkSymbol, maxFnSize: number
 }
 
 type TFuncMaxSizeLint = {
-    cacheDiag: readonly CDiagBase[];
-    maxFnSize: number;
+    cacheDiag: readonly CDiagBase[],
+    maxFnSize: number,
 };
 const wm = new WeakMap<TTokenStream, TFuncMaxSizeLint>();
 

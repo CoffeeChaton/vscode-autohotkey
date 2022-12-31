@@ -5,9 +5,9 @@ import { EDiagCode } from '../../../../diag';
 import { CDiagBase } from '../CDiagBase';
 
 type TDiagMsg = {
-    code: EDiagCode;
+    code: EDiagCode,
     // severity: vscode.DiagnosticSeverity.Warning,
-    tags: vscode.DiagnosticTag[];
+    tags: vscode.DiagnosticTag[],
 };
 
 const DiagLabelErrMap: ReadonlyMap<string, TDiagMsg> = new Map([

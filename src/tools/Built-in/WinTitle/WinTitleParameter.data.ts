@@ -1,10 +1,10 @@
 /* eslint-disable max-lines */
 
 type TElement = {
-    body: `ahk_${string}`;
-    uri: `https://www.autohotkey.com/docs/v1/misc/WinTitle.htm#ahk_${string}`;
-    tittleMD: `[${string}](https://www.autohotkey.com/docs/v1/misc/WinTitle.htm#ahk_${string})`;
-    exp: string[];
+    body: `ahk_${string}`,
+    uri: `https://www.autohotkey.com/docs/v1/misc/WinTitle.htm#ahk_${string}`,
+    tittleMD: `[${string}](https://www.autohotkey.com/docs/v1/misc/WinTitle.htm#ahk_${string})`,
+    exp: string[],
 };
 
 /**

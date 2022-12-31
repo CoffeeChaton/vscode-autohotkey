@@ -1,8 +1,8 @@
 import { FindExprDelim } from '../../../zFromCpp/FindExprDelim';
 
 export type TScanData = {
-    RawNameNew: string;
-    lPos: number;
+    RawNameNew: string,
+    lPos: number,
 };
 
 /**

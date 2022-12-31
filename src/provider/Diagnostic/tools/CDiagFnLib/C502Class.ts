@@ -8,11 +8,11 @@ export const enum EPrefixC502 {
 }
 
 type TC502Data = Readonly<{
-    defRange: vscode.Range;
-    defStr: string;
-    prefix: EPrefixC502;
-    refRange: vscode.Range;
-    refStr: string;
+    defRange: vscode.Range,
+    defStr: string,
+    prefix: EPrefixC502,
+    refRange: vscode.Range,
+    refStr: string,
 }>;
 
 export class C502Class extends CDiagFn {

@@ -18,8 +18,8 @@ export function stdDevFn(arr: number[]): number {
 // s 1.56524758425
 
 type TAvgMin5 = {
-    subAvg: number;
-    subAvgArr: number[];
+    subAvg: number,
+    subAvgArr: number[],
 };
 
 export function avgMin5(arr: readonly number[]): TAvgMin5 {
@@ -48,8 +48,8 @@ export function avgMin5(arr: readonly number[]): TAvgMin5 {
 }
 
 type TStdMin5 = {
-    subStd: number;
-    subStdArr: number[];
+    subStd: number,
+    subStdArr: number[],
 };
 
 export function stdMin5(arr: readonly number[]): TStdMin5 {

@@ -7,8 +7,8 @@ import { EDiagCode } from '../../diag';
 import { LineCommand } from './Command.data';
 
 type TErrObj = {
-    msg: string;
-    value: unknown;
+    msg: string,
+    value: unknown,
 };
 
 describe('check LineCommand ruler', () => {
@@ -61,8 +61,8 @@ describe('check LineCommand ruler', () => {
         expect.hasAssertions();
 
         type TCommandErr = {
-            reg: RegExp;
-            code: EDiagCode;
+            reg: RegExp,
+            code: EDiagCode,
         };
         const headMatch: TCommandErr[] = [
             {

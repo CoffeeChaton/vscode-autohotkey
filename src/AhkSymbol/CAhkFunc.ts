@@ -15,14 +15,14 @@ type TUpName = string;
 export type TC502New = string | 0;
 
 export type TParamMetaIn = {
-    keyRawName: string;
-    defRangeList: vscode.Range[];
-    refRangeList: vscode.Range[];
-    c502Array: TC502New[];
-    parsedErrRange: vscode.Range | null;
-    isByRef: boolean;
-    isVariadic: boolean; // https://www.autohotkey.com/docs/Functions.htm#Variadic
-    commentList: string[];
+    keyRawName: string,
+    defRangeList: vscode.Range[],
+    refRangeList: vscode.Range[],
+    c502Array: TC502New[],
+    parsedErrRange: vscode.Range | null,
+    isByRef: boolean,
+    isVariadic: boolean, // https://www.autohotkey.com/docs/Functions.htm#Variadic
+    commentList: string[],
 };
 export type TParamMetaOut = DeepReadonly<TParamMetaIn>;
 
@@ -31,12 +31,12 @@ export type TParamMapIn = Map<TUpName, TParamMetaIn>; // k = valNameUP
 export type TParamMapOut = ReadonlyMap<TUpName, TParamMetaOut>; // k = valNameUP
 
 export type TValMetaIn = {
-    keyRawName: string;
-    defRangeList: vscode.Range[];
-    refRangeList: vscode.Range[];
-    c502Array: TC502New[];
-    commentList: string[];
-    fnMode: EFnMode;
+    keyRawName: string,
+    defRangeList: vscode.Range[],
+    refRangeList: vscode.Range[],
+    c502Array: TC502New[],
+    commentList: string[],
+    fnMode: EFnMode,
 };
 export type TValMetaOut = DeepReadonly<TValMetaIn>;
 
@@ -48,9 +48,9 @@ export type TValMapIn = Map<TUpName, TValMetaIn>; // k = valNameUP
 export type TValMapOut = ReadonlyMap<TUpName, TValMetaOut>;
 
 export type TTextMetaIn = {
-    keyRawName: string;
+    keyRawName: string,
     // defRangeList: never[];
-    refRangeList: vscode.Range[];
+    refRangeList: vscode.Range[],
 };
 export type TTextMetaOut = DeepReadonly<TTextMetaIn>;
 
@@ -59,22 +59,22 @@ export type TTextMapIn = Map<TUpName, TTextMetaIn>; // k = valNameUP
 export type TTextMapOut = ReadonlyMap<TUpName, TTextMetaOut>; // k = valNameUP
 
 type TCAhkFuncParam = {
-    name: string;
-    detail: string;
+    name: string,
+    detail: string,
 
-    range: vscode.Range;
-    selectionRange: vscode.Range;
+    range: vscode.Range,
+    selectionRange: vscode.Range,
     //
-    selectionRangeText: string;
-    md: vscode.MarkdownString;
-    uri: vscode.Uri;
-    defStack: string[];
-    paramMap: TParamMapOut;
-    valMap: TValMapOut;
-    textMap: TTextMapOut;
-    ch: (CAhkSwitch | TLineClass)[];
-    nameRange: vscode.Range;
-    fnMode: EFnMode;
+    selectionRangeText: string,
+    md: vscode.MarkdownString,
+    uri: vscode.Uri,
+    defStack: string[],
+    paramMap: TParamMapOut,
+    valMap: TValMapOut,
+    textMap: TTextMapOut,
+    ch: (CAhkSwitch | TLineClass)[],
+    nameRange: vscode.Range,
+    fnMode: EFnMode,
 };
 
 // AhkSymbol instanceof CAhkFunc

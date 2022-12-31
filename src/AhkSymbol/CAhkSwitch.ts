@@ -18,11 +18,11 @@ export class CAhkSwitch extends vscode.DocumentSymbol {
             uri,
             ch,
         }: {
-            name: string;
-            range: vscode.Range;
-            selectionRange: vscode.Range;
-            uri: vscode.Uri;
-            ch: (CAhkCase | CAhkDefault)[];
+            name: string,
+            range: vscode.Range,
+            selectionRange: vscode.Range,
+            uri: vscode.Uri,
+            ch: (CAhkCase | CAhkDefault)[],
         },
     ) {
         super(name, 'Switch', vscode.SymbolKind.Enum, range, selectionRange);
@@ -46,11 +46,11 @@ export class CAhkCase extends vscode.DocumentSymbol {
             uri,
             ch,
         }: {
-            name: string;
-            range: vscode.Range;
-            selectionRange: vscode.Range;
-            uri: vscode.Uri;
-            ch: (CAhkSwitch | TLineClass)[];
+            name: string,
+            range: vscode.Range,
+            selectionRange: vscode.Range,
+            uri: vscode.Uri,
+            ch: (CAhkSwitch | TLineClass)[],
         },
     ) {
         super(name, 'Case', vscode.SymbolKind.EnumMember, range, selectionRange);
@@ -73,10 +73,10 @@ export class CAhkDefault extends vscode.DocumentSymbol {
             uri,
             ch,
         }: {
-            range: vscode.Range;
-            selectionRange: vscode.Range;
-            uri: vscode.Uri;
-            ch: (CAhkSwitch | TLineClass)[];
+            range: vscode.Range,
+            selectionRange: vscode.Range,
+            uri: vscode.Uri,
+            ch: (CAhkSwitch | TLineClass)[],
         },
     ) {
         super('Default :', 'Default', vscode.SymbolKind.EnumMember, range, selectionRange);

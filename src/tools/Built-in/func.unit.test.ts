@@ -2,8 +2,8 @@ import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { funcDataList } from './func.data';
 
 type TErrObj = {
-    msg: string;
-    value: unknown;
+    msg: string,
+    value: unknown,
 };
 
 describe('check BuiltInFunctionObj ruler', () => {

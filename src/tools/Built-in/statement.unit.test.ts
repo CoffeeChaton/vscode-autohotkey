@@ -22,8 +22,8 @@ function isAllowList(keyRawName: string, upName: string): boolean {
 }
 
 type TErrObj = {
-    msg: string;
-    value: unknown;
+    msg: string,
+    value: unknown,
 };
 
 describe('check Statement ruler', () => {

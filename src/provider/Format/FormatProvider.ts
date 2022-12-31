@@ -10,12 +10,12 @@ import type { TDiffMap } from './TFormat';
 import { fn_Warn_thisLineText_WARN } from './TWarnUse';
 
 type TFmtCoreArgs = {
-    document: vscode.TextDocument;
-    options: vscode.FormattingOptions;
-    fmtStart: number;
-    fmtEnd: number;
-    from: EFormatChannel;
-    needDiff: boolean;
+    document: vscode.TextDocument,
+    options: vscode.FormattingOptions,
+    fmtStart: number,
+    fmtEnd: number,
+    from: EFormatChannel,
+    needDiff: boolean,
 };
 
 export function FormatCore(

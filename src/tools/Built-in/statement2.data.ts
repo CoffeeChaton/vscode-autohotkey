@@ -2,11 +2,11 @@
 /* eslint-disable no-template-curly-in-string */
 
 type TStatement2Element = Readonly<{
-    keyRawName: string;
-    body: string;
-    doc: string;
-    link: `https://www.autohotkey.com/docs/${string}`;
-    exp: readonly string[];
+    keyRawName: string,
+    body: string,
+    doc: string,
+    link: `https://www.autohotkey.com/docs/${string}`,
+    exp: readonly string[],
 }>;
 
 /**

@@ -1,15 +1,15 @@
 import { EDiagBase } from '../../Enum/EDiagBase';
 
 type TGetIgnoreParam = {
-    textTrimStart: string;
-    line: number;
-    ignoreLine: number;
-    ignoreLineP: number;
+    textTrimStart: string,
+    line: number,
+    ignoreLine: number,
+    ignoreLineP: number,
 };
 
 type TIgnoreOut = {
-    ignoreLine: number;
-    ignoreLineP: number;
+    ignoreLine: number,
+    ignoreLineP: number,
 };
 
 export function getIgnore({

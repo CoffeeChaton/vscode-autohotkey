@@ -1,14 +1,14 @@
 /* eslint-disable max-len */
 
 type TOtherKeywordElement = {
-    upName: string;
-    keyRawName: string;
-    body: string;
-    doc: string;
+    upName: string,
+    keyRawName: string,
+    body: string,
+    doc: string,
 
-    recommended: boolean;
-    link: `https://www.autohotkey.com/docs/${string}`;
-    exp: readonly string[];
+    recommended: boolean,
+    link: `https://www.autohotkey.com/docs/${string}`,
+    exp: readonly string[],
 };
 
 /**

@@ -4,9 +4,9 @@ import type { TTokenStream } from '../../globalEnum';
 import { replacerSpace } from '../str/removeSpecialChar';
 
 type TParamData = {
-    isByRef: boolean;
-    isVariadic: boolean;
-    keyRawName: string;
+    isByRef: boolean,
+    isVariadic: boolean,
+    keyRawName: string,
 };
 
 function getKeyRawName(param: string): TParamData {

@@ -3,10 +3,10 @@ import * as vscode from 'vscode';
 import type { CAhkInclude } from './CAhkInclude';
 
 export type TBaseLineParam = {
-    name: string;
-    range: vscode.Range;
-    selectionRange: vscode.Range;
-    uri: vscode.Uri;
+    name: string,
+    range: vscode.Range,
+    selectionRange: vscode.Range,
+    uri: vscode.Uri,
 };
 
 export class CAhkDirectives extends vscode.DocumentSymbol {

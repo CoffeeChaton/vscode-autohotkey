@@ -1,10 +1,10 @@
 /* eslint-disable max-lines */
 
 type TElement = {
-    body: `A_${string}`;
-    group: 'Date' | 'GUI' | 'Hotkeys' | 'Loop' | 'Misc.' | 'OS' | 'Script' | 'Setting' | 'Spec' | 'User Idle Time';
-    uri: `https://www.autohotkey.com/docs/${string}`;
-    doc?: string; // TODO add doc
+    body: `A_${string}`,
+    group: 'Date' | 'GUI' | 'Hotkeys' | 'Loop' | 'Misc.' | 'OS' | 'Script' | 'Setting' | 'Spec' | 'User Idle Time',
+    uri: `https://www.autohotkey.com/docs/${string}`,
+    doc?: string, // TODO add doc
 };
 
 /**

@@ -4,11 +4,11 @@ import type { EFnMode } from '../EFnMode';
 import { newC502 } from './c502';
 
 type TGetValue = {
-    RawNameNew: string;
-    valMap: TValMapIn;
-    defRange: vscode.Range;
-    lineComment: string;
-    fnMode: EFnMode;
+    RawNameNew: string,
+    valMap: TValMapIn,
+    defRange: vscode.Range,
+    lineComment: string,
+    fnMode: EFnMode,
 };
 
 export function wrapFnValDef({

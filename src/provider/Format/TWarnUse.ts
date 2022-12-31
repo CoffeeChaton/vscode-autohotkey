@@ -13,15 +13,15 @@ import type { TDiffMap } from './TFormat';
 
 type TWarnUse =
     & DeepReadonly<{
-        document: vscode.TextDocument;
-        lStrTrim: string;
-        occ: number;
-        oldDeep: number;
-        options: vscode.FormattingOptions;
-        switchRangeArray: vscode.Range[];
+        document: vscode.TextDocument,
+        lStrTrim: string,
+        occ: number,
+        oldDeep: number,
+        options: vscode.FormattingOptions,
+        switchRangeArray: vscode.Range[],
     }>
     & {
-        DiffMap: TDiffMap;
+        DiffMap: TDiffMap,
     };
 
 function wrap(args: TWarnUse, text: string, AhkTokenLine: TAhkTokenLine): vscode.TextEdit {

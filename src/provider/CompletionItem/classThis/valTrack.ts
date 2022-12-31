@@ -10,9 +10,9 @@ import { getWmThis } from './getWmThis';
 import { parsingUserDefClassRecursive } from './parsingUserDefClassRecursive';
 
 type TMathName = {
-    ChapterArr: readonly string[];
-    strPart: string;
-    ahkBaseObj: TAhkBaseObj;
+    ChapterArr: readonly string[],
+    strPart: string,
+    ahkBaseObj: TAhkBaseObj,
 };
 
 function matchClassName({ ChapterArr, strPart, ahkBaseObj }: TMathName): string | null {

@@ -6,8 +6,8 @@ import type { TTreeResult } from '../ListIncludeTree';
  * value : hint
  */
 type TValue = {
-    hint: number;
-    dataList: TTreeResult[];
+    hint: number,
+    dataList: TTreeResult[],
 };
 
 function initializeDiagIncludeTreeMap(result: TTreeResult[]): ReadonlyMap<string, TValue> {

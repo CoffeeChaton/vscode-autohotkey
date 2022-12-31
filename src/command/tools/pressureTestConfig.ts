@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 
 export type TPickReturn = {
-    label: string;
-    cycles: number;
+    label: string,
+    cycles: number,
 };
 
 export function pressureTestConfig(): Thenable<TPickReturn | undefined> {

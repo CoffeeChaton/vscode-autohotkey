@@ -3,8 +3,8 @@ import { DiagsDA, EDiagCodeDA } from '../../../../diag';
 import { CDiagFn } from '../CDiagFn';
 
 type TC506Param = {
-    range: vscode.Range;
-    keyUpName: string;
+    range: vscode.Range,
+    keyUpName: string,
 };
 
 // if ((/^0b[0-1]+$/ui).test(str)) {

@@ -3,12 +3,12 @@ import * as vscode from 'vscode';
 import type { CAhkFunc } from './CAhkFunc';
 
 type TCAhkClassInstanceVarParam = {
-    name: string;
-    range: vscode.Range;
-    selectionRange: vscode.Range;
-    uri: vscode.Uri;
-    detail: 'Instance Var' | 'static ClassVar';
-    isStatic: boolean;
+    name: string,
+    range: vscode.Range,
+    selectionRange: vscode.Range,
+    uri: vscode.Uri,
+    detail: 'Instance Var' | 'static ClassVar',
+    isStatic: boolean,
 };
 
 export class CAhkClassInstanceVar extends vscode.DocumentSymbol {
@@ -51,10 +51,10 @@ export class CAhkClassGetSet extends vscode.DocumentSymbol {
             selectionRange,
             uri,
         }: {
-            name: string;
-            range: vscode.Range;
-            selectionRange: vscode.Range;
-            uri: vscode.Uri;
+            name: string,
+            range: vscode.Range,
+            selectionRange: vscode.Range,
+            uri: vscode.Uri,
         },
     ) {
         super(name, 'Property', vscode.SymbolKind.Property, range, selectionRange);
@@ -88,13 +88,13 @@ export class CAhkClass extends vscode.DocumentSymbol {
             ch,
             Base,
         }: {
-            name: string;
-            range: vscode.Range;
-            selectionRange: vscode.Range;
-            insertText: string;
-            uri: vscode.Uri;
-            ch: TClassChildren[];
-            Base: string;
+            name: string,
+            range: vscode.Range,
+            selectionRange: vscode.Range,
+            insertText: string,
+            uri: vscode.Uri,
+            ch: TClassChildren[],
+            Base: string,
         },
     ) {
         super(name, '', vscode.SymbolKind.Class, range, selectionRange);

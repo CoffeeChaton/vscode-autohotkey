@@ -9,17 +9,17 @@ type TStatementDiag =
     | EDiagCode.code899;
 
 type TStatementElement = Readonly<{
-    upName: string;
-    keyRawName: string;
-    body: string;
-    doc: string;
-    recommended: boolean;
-    link: `https://www.autohotkey.com/docs/${string}`;
-    exp: readonly string[];
+    upName: string,
+    keyRawName: string,
+    body: string,
+    doc: string,
+    recommended: boolean,
+    link: `https://www.autohotkey.com/docs/${string}`,
+    exp: readonly string[],
     //
-    diag?: TStatementDiag;
-    _DevNote?: readonly string[];
-    _paramType?: string[];
+    diag?: TStatementDiag,
+    _DevNote?: readonly string[],
+    _paramType?: string[],
 }>;
 
 /**

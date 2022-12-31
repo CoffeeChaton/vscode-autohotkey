@@ -14,8 +14,8 @@ function _commandHeadStatistics(commandHead: string): void {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (isDebug) {
         type TElement = {
-            k: string;
-            v: number;
+            k: string,
+            v: number,
         };
         const e5: TElement[] = [];
         for (const [k, v] of DEB) {

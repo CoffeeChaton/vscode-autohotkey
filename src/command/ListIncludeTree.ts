@@ -11,8 +11,8 @@ import { diagOfIncludeTree } from './tools/diagOfIncludeTree';
 type TIncludeMap = Map<string, CAhkInclude[]>;
 
 type TPick2 = {
-    label: string;
-    fsPath: string;
+    label: string,
+    fsPath: string,
 };
 
 function getIncludeMap(): TIncludeMap {
@@ -56,11 +56,11 @@ function getSearchPath(docPath: string, { type, mayPath }: TRawData): string {
 }
 
 export type TTreeResult = {
-    deep: number;
-    name: string;
-    hasFile: boolean;
-    searchPath: string;
-    startPos: string;
+    deep: number,
+    name: string,
+    hasFile: boolean,
+    searchPath: string,
+    startPos: string,
 };
 
 function IncludeTree(docPath: string, searchStack: string[], IncludeMap: TIncludeMap): TTreeResult[] {

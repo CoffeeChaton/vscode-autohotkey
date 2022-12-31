@@ -74,6 +74,7 @@
     ],
     "root": true,
     "rules": {
+        "@typescript-eslint/member-delimiter-style": "off",
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",
         "@typescript-eslint/await-thenable": "error",

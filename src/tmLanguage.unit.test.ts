@@ -18,8 +18,8 @@ describe('check tmLanguage ruler', () => {
         expect.hasAssertions();
 
         type TErrObj = {
-            msg: string;
-            value: unknown;
+            msg: string,
+            value: unknown,
         };
 
         const errList0: TErrObj[] = [];

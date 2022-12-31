@@ -4,13 +4,13 @@
 /* eslint-disable no-template-curly-in-string */
 
 type TDirectivesList = Readonly<{
-    keyRawName: string;
-    insert: string;
-    doc: string;
+    keyRawName: string,
+    insert: string,
+    doc: string,
 
-    recommended: boolean;
-    link: `https://www.autohotkey.com/docs/${string}`;
-    exp: readonly string[];
+    recommended: boolean,
+    link: `https://www.autohotkey.com/docs/${string}`,
+    exp: readonly string[],
 }>;
 
 /**

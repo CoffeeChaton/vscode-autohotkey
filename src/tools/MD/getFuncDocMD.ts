@@ -50,11 +50,11 @@ export function getFuncDocCore(
         selectionRangeText,
         classStack,
     }: {
-        fileName: string;
-        AhkTokenList: TTokenStream;
-        ahkDoc: string;
-        selectionRangeText: string;
-        classStack: string[];
+        fileName: string,
+        AhkTokenList: TTokenStream,
+        ahkDoc: string,
+        selectionRangeText: string,
+        classStack: string[],
     },
 ): vscode.MarkdownString {
     const returnList: string[] = [];
