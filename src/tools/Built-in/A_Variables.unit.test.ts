@@ -5,14 +5,8 @@ describe('check A_Variables ruler', () => {
     const arr1: string[] = AVariablesList
         .map((v): string => v.body.replace('A_', ''));
 
-    it('check : A_Variables length .EQ. 158', () => {
-        expect.hasAssertions();
+    const max = 158;
 
-        // eslint-disable-next-line no-magic-numbers
-        expect(arr1.length === 158).toBeTruthy();
-    });
-
-    //
     it('check : tmLanguage', () => {
         expect.hasAssertions();
 
@@ -20,6 +14,7 @@ describe('check A_Variables ruler', () => {
             .replace('(?<![.#])\\b(?i:A_(?:', '')
             .replace('))\\b', '');
 
-        expect(st1 === arr1.join('|')).toBeTruthy();
+        expect(arr1).toHaveLength(max);
+        expect(st1).toBe(arr1.join('|'));
     });
 });

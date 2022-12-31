@@ -14,11 +14,6 @@ describe('check otherKeyword1 ruler', () => {
             .replace('(?:^|[ \\t{])(?i:', '')
             .replace(')(?:$|[ \\t])', '');
 
-        if (st1 !== tsStr) {
-            console.warn('🚀 ~ tsStr', tsStr);
-            console.warn('🚀 ~ st1', st1);
-        }
-
-        expect(st1 === tsStr).toBeTruthy();
+        expect(st1).toBe(tsStr);
     });
 });

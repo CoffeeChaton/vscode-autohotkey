@@ -6,6 +6,11 @@ import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { EDiagCode } from '../../diag';
 import { LineCommand } from './Command.data';
 
+type TErrObj = {
+    msg: string;
+    value: unknown;
+};
+
 describe('check LineCommand ruler', () => {
     const max = 180;
 
@@ -18,7 +23,7 @@ describe('check LineCommand ruler', () => {
     it('check: name ruler', () => {
         expect.hasAssertions();
 
-        let errState = 0;
+        const errList: TErrObj[] = [];
         for (const v of LineCommand) {
             const {
                 keyRawName,
@@ -34,10 +39,9 @@ describe('check LineCommand ruler', () => {
             const v4 = !exp.join('\n').includes(keyRawName);
             const v5 = diag !== undefined && recommended;
             if (v1 || v2 || v3 || v4 || v5) {
-                errState++;
-                console.error(
-                    '--86--32--51--78--64',
-                    {
+                errList.push({
+                    msg: '--86--32--51--78--64',
+                    value: {
                         v1,
                         v2,
                         v3,
@@ -46,12 +50,11 @@ describe('check LineCommand ruler', () => {
                         upName,
                         v,
                     },
-                );
-                break;
+                });
             }
         }
 
-        expect(errState).toBe(0);
+        expect(errList).toHaveLength(0);
     });
 
     it('check EDiagCode.OtherCommandErr', (): void => {
@@ -103,7 +106,7 @@ describe('check LineCommand ruler', () => {
             // Old: RegRead, OutputVar, RootKey, SubKey , ValueName
         ];
 
-        let errState = 0;
+        const errList: TErrObj[] = [];
         for (const v of LineCommand) {
             const { diag, keyRawName } = v;
 
@@ -115,13 +118,11 @@ describe('check LineCommand ruler', () => {
             const { code } = find;
 
             if ((diag === undefined || diag !== code)) {
-                errState++;
-                console.error('--86--39--126', { keyRawName, find });
-                break;
+                errList.push({ msg: '--86--39--126', value: { keyRawName, find } });
             }
         }
 
-        expect(errState).toBe(0);
+        expect(errList).toHaveLength(0);
     });
 
     it('check: command param naming rules', () => {

@@ -1,43 +1,32 @@
 import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
-import { BuiltInFunctionObj } from './func.data';
+import { funcDataList } from './func.data';
+
+type TErrObj = {
+    msg: string;
+    value: unknown;
+};
 
 describe('check BuiltInFunctionObj ruler', () => {
-    const arr1: string[] = [];
-
-    it('check: Command size .EQ. 111', () => {
-        expect.hasAssertions();
-
-        // eslint-disable-next-line no-magic-numbers
-        if (BuiltInFunctionObj.length !== 111) {
-            console.warn('🚀 ~ BuiltInFunctionObj.length', BuiltInFunctionObj.length);
-        }
-
-        // eslint-disable-next-line no-magic-numbers
-        expect(BuiltInFunctionObj.length === 111).toBeTruthy();
-    });
-
     it('exp : ABS() .. WinExist()', () => {
         expect.hasAssertions();
 
-        let errState = 0;
-        for (const v of BuiltInFunctionObj) {
+        const errList: TErrObj[] = [];
+        for (const v of funcDataList) {
             const {
                 keyRawName,
                 insert,
                 exp,
                 upName,
             } = v;
-            arr1.push(keyRawName);
 
             const v1 = upName.toUpperCase() !== upName;
             const v2 = keyRawName.toUpperCase() !== upName;
             const v3 = !insert.startsWith(keyRawName);
             const v4 = !exp.join('\n').includes(keyRawName);
             if (v1 || v2 || v3 || v4) {
-                errState++;
-                console.error(
-                    '--04--85--15--15',
-                    {
+                errList.push({
+                    msg: '--04--85--15--15',
+                    value: {
                         v1,
                         v2,
                         v3,
@@ -45,21 +34,25 @@ describe('check BuiltInFunctionObj ruler', () => {
                         upName,
                         v,
                     },
-                );
-                break;
+                });
             }
         }
 
-        expect(errState === 0).toBeTruthy();
+        expect(errList).toHaveLength(0);
     });
 
     it('check : tmLanguage', () => {
         expect.hasAssertions();
 
+        const arr1: string[] = funcDataList.map((v): string => v.keyRawName);
+
         const st1 = (repository.func_call.patterns[0].match)
             .replace('(?<![.`%#])\\b(?i:', '')
             .replace(')(?=\\()\\b', '');
 
-        expect(st1 === arr1.join('|')).toBeTruthy();
+        const max = 111;
+
+        expect(funcDataList).toHaveLength(max);
+        expect(st1).toBe(arr1.join('|'));
     });
 });

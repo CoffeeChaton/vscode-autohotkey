@@ -2,11 +2,24 @@ import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 
 import { Ahk2exeData } from './Ahk2exe.data';
 
+type TErrObj = {
+    msg: string;
+    value: unknown;
+};
+
 describe('check Ahk2exeData ruler', () => {
+    const max = 30;
+
+    it('check : Ahk2exeData length .EQ. 30', () => {
+        expect.hasAssertions();
+
+        expect(Ahk2exeData).toHaveLength(max);
+    });
+
     it('check : name ruler', () => {
         expect.hasAssertions();
 
-        let errState = 0;
+        const errList: TErrObj[] = [];
         for (const v of Ahk2exeData) {
             const {
                 keyRawName,
@@ -14,25 +27,24 @@ describe('check Ahk2exeData ruler', () => {
                 exp,
             } = v;
 
-            const V3 = !body.toUpperCase().includes(keyRawName.toUpperCase());
+            const v3 = !body.toUpperCase().includes(keyRawName.toUpperCase());
             const v4 = !exp.join('\n').includes(keyRawName);
 
-            if (V3 || v4) {
-                errState++;
-                console.error(
-                    '--15--37--51--76--66',
-                    {
-                        V3,
+            if (v3 || v4) {
+                errList.push({
+                    msg: '--15--37--51--76--66',
+                    value: {
+                        v3,
                         v4,
                         keyRawName,
                         v,
                     },
-                );
+                });
                 break;
             }
         }
 
-        expect(errState === 0).toBeTruthy();
+        expect(errList).toHaveLength(0);
     });
 
     it('check : tmLanguage', () => {
@@ -46,18 +58,6 @@ describe('check Ahk2exeData ruler', () => {
             .map((v): string => v.keyRawName)
             .join('|');
 
-        expect(st1 === arr).toBeTruthy();
-    });
-
-    it('check : Ahk2exeData length .EQ. 30', () => {
-        expect.hasAssertions();
-
-        // eslint-disable-next-line no-magic-numbers
-        if (Ahk2exeData.length !== 30) {
-            console.warn('🚀 ~ arr1.length', Ahk2exeData.length);
-        }
-
-        // eslint-disable-next-line no-magic-numbers
-        expect(Ahk2exeData.length === 30).toBeTruthy();
+        expect(st1).toBe(arr);
     });
 });

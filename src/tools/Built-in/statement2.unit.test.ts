@@ -16,8 +16,7 @@ describe('check Statement2 ruler', () => {
             .replace('\\b(?!MsgBox)(?<![.#])(?i:\\b(loop)\\b[ \\t]*?,?[ \\t]*(', '')
             .replace('))', '');
 
-        expect(str1 === 'Files|Parse|Read|Reg').toBeTruthy();
-
-        expect(str1 === str2).toBeTruthy();
+        expect(str1).toBe('Files|Parse|Read|Reg');
+        expect(str1).toBe(str2);
     });
 });

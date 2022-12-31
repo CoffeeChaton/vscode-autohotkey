@@ -5,19 +5,8 @@ describe('check BiVariables ruler', () => {
     const arr1: string[] = BiVariables
         .map((v): string => v.keyRawName);
 
-    it('check : BiVariables length .EQ. 8', () => {
-        expect.hasAssertions();
+    const max = 8;
 
-        // eslint-disable-next-line no-magic-numbers
-        if (arr1.length !== 8) {
-            console.warn('🚀 ~ arr1.length', arr1.length);
-        }
-
-        // eslint-disable-next-line no-magic-numbers
-        expect(arr1.length === 8).toBeTruthy();
-    });
-
-    //
     it('check : tmLanguage', () => {
         expect.hasAssertions();
 
@@ -25,6 +14,7 @@ describe('check BiVariables ruler', () => {
             .replace('(?<![.#])\\b(?i:', '')
             .replace(')\\b', '');
 
-        expect(st1 === arr1.join('|')).toBeTruthy();
+        expect(arr1).toHaveLength(max);
+        expect(st1).toBe(arr1.join('|'));
     });
 });

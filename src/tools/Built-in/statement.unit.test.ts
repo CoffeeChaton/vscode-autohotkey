@@ -21,11 +21,16 @@ function isAllowList(keyRawName: string, upName: string): boolean {
     return keyRawName !== CapitalizeLowercase(upName);
 }
 
+type TErrObj = {
+    msg: string;
+    value: unknown;
+};
+
 describe('check Statement ruler', () => {
     it('exp: and or break if return', () => {
         expect.hasAssertions();
 
-        let errState = 0;
+        const errList: TErrObj[] = [];
         for (const v of Statement) {
             const {
                 keyRawName,
@@ -40,10 +45,9 @@ describe('check Statement ruler', () => {
             const v4 = !exp.join('\n').includes(keyRawName);
             const v5 = isAllowList(keyRawName, upName);
             if (v1 || v2 || v3 || v4 || v5) {
-                errState++;
-                console.error(
-                    '--15--36--49--76--56',
-                    {
+                errList.push({
+                    msg: '--15--36--49--76--56',
+                    value: {
                         v1,
                         v2,
                         v3,
@@ -51,12 +55,11 @@ describe('check Statement ruler', () => {
                         upName,
                         v,
                     },
-                );
-                break;
+                });
             }
         }
 
-        expect(errState === 0).toBeTruthy();
+        expect(errList).toHaveLength(0);
     });
 
     it('check : tmLanguage', () => {
@@ -68,6 +71,6 @@ describe('check Statement ruler', () => {
             .replace('\\b(?!MsgBox)(?<![.#])(?i:', '')
             .replace(')\\b', '');
 
-        expect(st1 === arr1.join('|')).toBeTruthy();
+        expect(st1).toBe(arr1.join('|'));
     });
 });

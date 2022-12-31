@@ -2,7 +2,7 @@
 /* eslint-disable max-lines-per-function */
 /* eslint no-magic-numbers: ["error", { "ignore": [0,3] }] */
 import * as vscode from 'vscode';
-import { BuiltInFunctionObj } from './func.data';
+import { funcDataList } from './func.data';
 
 const baseGroup = ['COM', 'IL_', 'LV_', 'OBJ', 'SB_', 'TV_', '_'] as const;
 
@@ -33,7 +33,7 @@ const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TBiFuncMap] => {
 
     const map2 = new Map<string, TBiFuncMsg>();
 
-    type TV = typeof BuiltInFunctionObj[number];
+    type TV = typeof funcDataList[number];
 
     const makeMd = (v: TV): vscode.MarkdownString => {
         const {
@@ -147,7 +147,7 @@ const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TBiFuncMap] => {
         map2.set(upName, { keyRawName, md });
     }
 
-    for (const v of BuiltInFunctionObj) {
+    for (const v of funcDataList) {
         const { keyRawName, upName } = v;
         const md: vscode.MarkdownString = makeMd(v);
         map2.set(upName, { keyRawName, md });
@@ -162,7 +162,7 @@ const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TBiFuncMap] => {
     /**
      * after initialization clear
      */
-    BuiltInFunctionObj.length = 0;
+    funcDataList.length = 0;
 
     return [Obj1, map2];
 })();

@@ -39,7 +39,7 @@ type TBuiltInFuncElement = Readonly<{
 /**
  * after initialization clear
  */
-export const BuiltInFunctionObj: TBuiltInFuncElement[] = [
+export const funcDataList: TBuiltInFuncElement[] = [
     {
         upName: 'ABS',
         group: 'Math',
