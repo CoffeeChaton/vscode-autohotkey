@@ -21,6 +21,7 @@ import { ahkSend } from '../../tools/Built-in/Send_tools';
 import { getSnippetStatement } from '../../tools/Built-in/statement.tools';
 import { getSnipStatement2 } from '../../tools/Built-in/statement2.tools';
 import { getSnippetWinMsg } from '../../tools/Built-in/Windows_Messages_Tools';
+import { getSnippetWinTitleParam } from '../../tools/Built-in/WinTitle/WinTitleParameter.tools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { wrapClass } from './classThis/wrapClass';
 import { DeepAnalysisToCompletionItem } from './DA/DeepAnalysisToCompletionItem';
@@ -28,7 +29,6 @@ import { globalValCompletion } from './global/globalValCompletion';
 import { IncludeFsPath } from './Include_fsPath/Include_fsPath';
 import { listAllFuncClass } from './listAllFuncClass/listAllFuncClass';
 import { ModuleVar2Completion } from './ModuleVar/ModuleVar2Completion';
-import { getSnippetWinTitleParam } from '../../tools/Built-in/WinTitle/WinTitleParameter.tools';
 
 function getPartStr(lStr: string, position: vscode.Position): string | null {
     const match: RegExpMatchArray | null = lStr

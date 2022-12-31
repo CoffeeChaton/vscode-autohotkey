@@ -11,7 +11,7 @@ describe('check ahkSnippets ruler', () => {
     it(`check : ahkSnippets length .EQ. ${max}`, () => {
         expect.hasAssertions();
 
-        expect(snipList.length === max).toBeTruthy();
+        expect(snipList).toHaveLength(max);
     });
 
     //

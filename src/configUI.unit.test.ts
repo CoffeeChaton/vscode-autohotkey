@@ -12,11 +12,7 @@ describe('check package ruler', () => {
             msg.push([k, v.type]);
         }
 
-        // console.log(msg);
-
-        if (errList0.length > 0) console.warn('🚀 ~ errList', errList0);
-
-        expect(errList0.length === 0).toBeTruthy();
+        expect(errList0).toHaveLength(0);
         expect(msg).toStrictEqual(
             [
                 ['AhkNekoHelp.Diag.AMasterSwitch', 'string'],

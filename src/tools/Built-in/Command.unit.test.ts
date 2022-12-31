@@ -7,16 +7,12 @@ import { EDiagCode } from '../../diag';
 import { LineCommand } from './Command.data';
 
 describe('check LineCommand ruler', () => {
-    it('check: Command size .EQ. 180', () => {
+    const max = 180;
+
+    it(`check: Command size .EQ. ${max}`, () => {
         expect.hasAssertions();
 
-        // eslint-disable-next-line no-magic-numbers
-        if (LineCommand.length !== 180) {
-            console.error('🚀 ~ LineCommand.length', LineCommand.length);
-        }
-
-        // eslint-disable-next-line no-magic-numbers
-        expect(LineCommand.length === 180).toBeTruthy();
+        expect(LineCommand).toHaveLength(max);
     });
 
     it('check: name ruler', () => {
@@ -55,7 +51,7 @@ describe('check LineCommand ruler', () => {
             }
         }
 
-        expect(errState === 0).toBeTruthy();
+        expect(errState).toBe(0);
     });
 
     it('check EDiagCode.OtherCommandErr', (): void => {
@@ -125,7 +121,7 @@ describe('check LineCommand ruler', () => {
             }
         }
 
-        expect(errState === 0).toBeTruthy();
+        expect(errState).toBe(0);
     });
 
     it('check: command param naming rules', () => {
@@ -169,24 +165,10 @@ describe('check LineCommand ruler', () => {
             }
         }
 
-        if (errList2.length > 0) {
-            console.warn('🚀 ~ number of parameters', errList2);
-        }
-        if (errList3.length > 0) {
-            console.error('🚀 ~ param of OutVal should startWith "Out"', errList3);
-        }
-        if (errList4.length > 0) {
-            // eslint-disable-next-line no-template-curly-in-string
-            console.error('🚀 ~ param of Option should use "${1|Option1,Option2|}"', errList4);
-        }
-        if (errList5.length > 0) {
-            console.error('🚀 ~ complex parameter names', errList5);
-        }
-
-        expect(errList2.length === 0).toBeTruthy();
-        expect(errList3.length === 0).toBeTruthy();
-        expect(errList4.length === 0).toBeTruthy();
-        expect(errList5.length === 0).toBeTruthy();
+        expect(errList2).toStrictEqual([]);
+        expect(errList3).toStrictEqual([]);
+        expect(errList4).toStrictEqual([]);
+        expect(errList5).toStrictEqual([]);
     });
 
     it('check: tmLanguage', () => {
@@ -196,12 +178,10 @@ describe('check LineCommand ruler', () => {
             .map((v) => v.keyRawName)
             .join('|');
 
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const st1 = (repository.command.patterns.at(-1)!.begin)
+        const st1 = (repository.command.patterns.at(-1)?.begin ?? '')
             .replace('(?:^|[ \\t:])\\b(?i:', '')
             .replace(')\\b(?!\\()', '');
 
-        // eslint-disable-next-line no-magic-numbers
-        expect(tsData === st1).toBeTruthy();
+        expect(tsData).toBe(st1);
     });
 });

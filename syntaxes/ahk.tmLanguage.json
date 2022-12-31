@@ -41,16 +41,16 @@
                 "1": { "name": "storage.type.class.ahk" },
                 "2": { "name": "entity.name.type.class.ahk" },
                 "3": { "name": "storage.modifier.type.class.extends.ahk" },
-                "4": { "name": "entity.name.type.classahk" }
+                "4": { "name": "entity.name.type.class.ahk" }
             }
         },
         "command": {
             "patterns": [
                 {
                     "name": "meta.command.line.ahk",
-                    "begin": "(?:^|[ \\t:])\\b(?i:AutoTrim)\\b(?!\\()",
+                    "begin": "(?:^|[ \\t:])\\b(?i:(AutoTrim))\\b(?!\\()",
                     "end": "(\\n)",
-                    "beginCaptures": { "0": { "name": "support.function.ahk" } },
+                    "beginCaptures": { "1": { "name": "support.function.ahk" } },
                     "patterns": [
                         {
                             "name": "keyword.command.option.ahk",
@@ -74,6 +74,7 @@
                         { "include": "#number" }
                     ]
                 },
+                { "include": "#command_gui" },
                 {
                     "name": "meta.command.line.ahk",
                     "begin": "(?:^|[ \\t:])\\b(?i:AutoTrim|BlockInput|Click|ClipWait|Control|ControlClick|ControlFocus|ControlGet|ControlGetFocus|ControlGetPos|ControlGetText|ControlMove|ControlSend|ControlSendRaw|ControlSetText|CoordMode|DetectHiddenText|DetectHiddenWindows|Drive|DriveGet|DriveSpaceFree|Edit|EnvAdd|EnvDiv|EnvGet|EnvMult|EnvSet|EnvSub|EnvUpdate|FileAppend|FileCopy|FileCopyDir|FileCreateDir|FileCreateShortcut|FileDelete|FileEncoding|FileGetAttrib|FileGetShortcut|FileGetSize|FileGetTime|FileGetVersion|FileInstall|FileMove|FileMoveDir|FileRead|FileReadLine|FileRecycle|FileRecycleEmpty|FileRemoveDir|FileSelectFile|FileSelectFolder|FileSetAttrib|FileSetTime|FormatTime|GetKeyState|GroupActivate|GroupAdd|GroupClose|GroupDeactivate|Gui|GuiControl|GuiControlGet|Hotkey|ImageSearch|IniDelete|IniRead|IniWrite|Input|InputBox|KeyHistory|KeyWait|ListHotkeys|ListLines|ListVars|Menu|MouseClick|MouseClickDrag|MouseGetPos|MouseMove|MsgBox|OnExit|OutputDebug|Pause|PixelGetColor|PixelSearch|PostMessage|Process|Progress|Random|RegDelete|RegRead|RegWrite|Reload|Run|RunAs|RunWait|Send|SendEvent|SendInput|SendLevel|SendMessage|SendMode|SendPlay|SendRaw|SetBatchLines|SetCapsLockState|SetControlDelay|SetDefaultMouseSpeed|SetEnv|SetFormat|SetKeyDelay|SetMouseDelay|SetNumLockState|SetRegView|SetScrollLockState|SetStoreCapsLockMode|SetTimer|SetTitleMatchMode|SetWinDelay|SetWorkingDir|Shutdown|Sleep|Sort|SoundBeep|SoundGet|SoundGetWaveVolume|SoundPlay|SoundSet|SoundSetWaveVolume|SplashImage|SplashTextOff|SplashTextOn|SplitPath|StatusBarGetText|StatusBarWait|StringCaseSense|StringGetPos|StringLeft|StringLen|StringLower|StringMid|StringReplace|StringRight|StringSplit|StringTrimLeft|StringTrimRight|StringUpper|Suspend|SysGet|Thread|ToolTip|Transform|TrayTip|UrlDownloadToFile|WinActivate|WinActivateBottom|WinClose|WinGet|WinGetActiveStats|WinGetActiveTitle|WinGetClass|WinGetPos|WinGetText|WinGetTitle|WinHide|WinKill|WinMaximize|WinMenuSelectItem|WinMinimize|WinMinimizeAll|WinMinimizeAllUndo|WinMove|WinRestore|WinSet|WinSetTitle|WinShow|WinWait|WinWaitActive|WinWaitClose|WinWaitNotActive)\\b(?!\\()",
@@ -88,7 +89,61 @@
         },
         "command_options": {
             "name": "keyword.command.option.ahk",
-            "match": "\\b(?!MsgBox)(?<![.#])(?i:abort|exist|abovenormal|add|ahk_class|ahk_exe|ahk_group|ahk_id|ahk_pid|all|alnum|alpha|altsubmit|alttab|alttabandmenu|alttabmenu|alttabmenudismiss|alwaysoff|alwayson|alwaysontop|autosize|background|backgroundtrans|belownormal|blind|bold|border|bottom|button|buttons|byref|cancel|capacity|caption|center|check|check3|checkbox|checked|checkedgray|choose|choosestring|click|close|color|combobox|contains|controllist|count|date|datetime|days|ddl|delete|deleteall|delimiter|destroy|digit|disable|disabled|dpiscale|dropdownlist|eject|enable|enabled|error|expand|exstyle|filesystem|first|flash|float|floatfast|focus|font|grid|group|groupbox|guiclose|guicontextmenu|guidropfiles|guiescape|guisize|hdr|hidden|hide|high|hkcc|hkcr|hkcu|hkey_classes_root|hkey_current_config|hkey_current_user|hkey_local_machine|hkey_users|hklm|hku|hours|hscroll|icon|iconsmall|id|idlast|ignore|imagelist|integer|integerfast|interrupt|italic|label|lastfound|lastfoundexist|limit|lines|list|listbox|listview|lock|logoff|low|lower|lowercase|mainwindow|margin|maximize|maximizebox|maxsize|minimize|minimizebox|minmax|minsize|minutes|monthcal|mouse|move|multi|na|no|noactivate|nodefault|nohide|noicon|nomainwindow|norm|normal|nosort|nosorthdr|nostandard|notab|notimers|number|off|ok|on|owndialogs|owner|parent|parse|password|pic|picture|pixel|pos|priority|processname|radio|range|raw|read|readonly|realtime|redraw|reg_binary|reg_dword|reg_dword_big_endian|reg_expand_sz|reg_full_resource_descriptor|reg_link|reg_multi_sz|reg_qword|reg_resource_list|reg_resource_requirements_list|reg_sz|region|relative|rename|report|resize|restore|retry|rgb|screen|seconds|section|serial|setlabel|shiftalttab|show|single|slider|sortdesc|standard|status|statusbar|statuscd|strike|style|submit|sysmenu|tab|tab2|tabstop|text|theme|tile|time|tip|togglecheck|toggleenable|toolwindow|top|topmost|transcolor|transparent|tray|treeview|tryagain|type|uncheck|underline|unicode|unlock|updown|upper|uppercase|useerrorlevel|vis|visfirst|visible|vscroll|waitclose|wantctrla|wantf2|wantreturn|wrap|xdigit|xm|xp|xs|yes|ym|yp|ys)(?![(.\\[])\\b"
+            "match": "\\b(?!MsgBox)(?<![.#])(?i:abort|exist|abovenormal|add|ahk_class|ahk_exe|ahk_group|ahk_id|ahk_pid|all|alnum|alpha|altsubmit|alttab|alttabandmenu|alttabmenu|alttabmenudismiss|alwaysoff|alwayson|alwaysontop|autosize|background|backgroundtrans|belownormal|blind|bold|border|bottom|button|buttons|byref|cancel|capacity|caption|center|check|check3|checkbox|checked|checkedgray|choose|choosestring|click|close|color|combobox|contains|controllist|count|date|datetime|days|ddl|delete|deleteall|delimiter|destroy|digit|disable|disabled|dpiscale|dropdownlist|eject|enable|enabled|error|expand|exstyle|filesystem|first|flash|float|floatfast|focus|font|grid|group|groupbox|guiclose|guicontextmenu|guidropfiles|guiescape|guisize|hdr|hidden|hide|high|hkcc|hkcr|hkcu|hkey_classes_root|hkey_current_config|hkey_current_user|hkey_local_machine|hkey_users|hklm|hku|hours|hscroll|icon|iconsmall|id|idlast|ignore|imagelist|integer|integerfast|interrupt|italic|label|lastfound|lastfoundexist|limit|lines|list|listbox|listview|lock|logoff|low|lower|lowercase|mainwindow|margin|maximize|maximizebox|maxsize|minimize|minimizebox|minmax|minsize|minutes|monthcal|mouse|move|multi|na|no|noactivate|nodefault|nohide|noicon|nomainwindow|norm|normal|nosort|nosorthdr|nostandard|notab|notimers|number|off|ok|on|owndialogs|owner|parent|parse|password|pic|picture|pixel|pos|priority|processname|radio|range|raw|read|readonly|realtime|redraw|reg_binary|reg_dword|reg_dword_big_endian|reg_expand_sz|reg_full_resource_descriptor|reg_link|reg_multi_sz|reg_qword|reg_resource_list|reg_resource_requirements_list|reg_sz|region|relative|rename|report|resize|restore|retry|rgb|screen|seconds|section|serial|setlabel|shiftalttab|show|single|slider|sortdesc|standard|status|statusbar|statuscd|strike|style|submit|sysmenu|tab|tab2|tabstop|text|theme|tile|time|tip|togglecheck|toggleenable|toolwindow|top|topmost|transcolor|transparent|tray|treeview|tryagain|type|uncheck|underline|unlock|updown|upper|uppercase|useerrorlevel|vis|visfirst|visible|vscroll|waitclose|wantctrla|wantf2|wantreturn|wrap|xdigit|xm|xp|xs|yes|ym|yp|ys)(?![(.\\[])\\b"
+        },
+        "command_gui": {
+            "name": "meta.command.line.gui.ahk",
+            "begin": "(?:^|[ \\t:])\\b(?i:(Gui)\\b[ \\t]*,?[ \\t]*(\\w+:)?\\b(New|Add|Show|Submit|Cancel|Hide|Destroy|Font|Color|Margin|Options|Menu|Minimize|Maximize|Restore|Flash|Default)\\b)",
+            "end": "(\\n)",
+            "beginCaptures": {
+                "1": { "name": "support.function.gui.command.ahk" },
+                "2": { "name": "variable.other.constant.gui.name.ahk" },
+                "3": { "name": "keyword.command.option.gui.param.ahk" }
+            },
+            "patterns": [
+                {
+                    "match": "\\b(?i:[WHXY](\\d+)|Center|xCenter|yCenter|AutoSize|Minimize|Maximize|Restore|NoActivate|NA|Hide)\\b",
+                    "name": "keyword.string.gui.show.ahk",
+                    "captures": {
+                        "1": { "name": "constant.numeric.gui.ahk" }
+                    }
+                },
+                {
+                    "match": "\\b(?i:(?:c|0x)?([a-fA-F0-9]{6}))\\b",
+                    "name": "keyword.string.gui.color.ahk",
+                    "captures": { "1": { "name": "constant.numeric.gui.ahk" } }
+                },
+                {
+                    "match": "\\b(?i:c?(Default|Black|Silver|Gray|White|Maroon|Red|Purple|Fuchsia|Green|Lime|Olive|Yellow|Navy|Blue|Teal|Aqua))\\b",
+                    "name": "keyword.string.gui.color.ahk"
+                },
+                {
+                    "match": "\\b(?i:s([1-9]\\d*))\\b",
+                    "name": "keyword.string.gui.font.size.ahk",
+                    "captures": { "1": { "name": "constant.numeric.gui.ahk" } }
+                },
+                {
+                    "match": "\\b(?i:w([1-9]\\d{0,3}))\\b",
+                    "name": "keyword.string.gui.font.weight.ahk",
+                    "captures": { "1": { "name": "constant.numeric.gui.ahk" } }
+                },
+                {
+                    "match": "\\b(?i:bold|italic|strike|underline|norm)\\b",
+                    "name": "keyword.string.gui.font.style.ahk"
+                },
+                {
+                    "match": "\\b(?i:q([0-5]))\\b",
+                    "name": "keyword.string.gui.font.quality.ahk",
+                    "captures": { "1": { "name": "constant.numeric.gui.ahk" } }
+                },
+                {
+                    "match": "\\b(?i:AlwaysOnTop|Border|Caption|Delimiter|Disabled|DPIScale|HwndOutputVar|LabelName|LastFound|LastFoundExist|MaximizeBox|MaxSize|MinimizeBox|MinSize|OwnDialogs|Owner|Parent|Resize|SysMenu|Theme|ToolWindow)\\b",
+                    "name": "keyword.string.gui.other.options.ahk",
+                    "captures": { "1": { "name": "constant.numeric.gui.ahk" } }
+                },
+                { "include": "#command_options" },
+                { "include": "#expression" }
+            ]
         },
         "comment_ahk2exe": {
             "captures": { "1": { "name": "keyword.comment.ahk2exe.ahk" } },
@@ -260,7 +315,7 @@
         "hotkey": {
             "captures": {
                 "1": { "name": "entity.name.function.label.ahk" },
-                "2": { "name": "punctuation.definition.equals.colon" }
+                "2": { "name": "punctuation.definition.equals.colon.ahk" }
             },
             "match": "^[ \\t]*([^:;\"]+)(::)",
             "name": "hotkey.ahk"
@@ -268,7 +323,7 @@
         "hotstring": {
             "captures": {
                 "1": { "name": "entity.name.function.label.ahk" },
-                "2": { "name": "punctuation.definition.equals.colon" }
+                "2": { "name": "punctuation.definition.equals.colon.ahk" }
             },
             "match": "^[ \\t]*:[^:]*?:([^:]+)(::)",
             "name": "hotstring.ahk"

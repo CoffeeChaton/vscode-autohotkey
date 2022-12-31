@@ -13,6 +13,7 @@ import { getHoverOtherKeyWord2 } from '../../tools/Built-in/otherKeyword2.tools'
 import { getHoverStatement } from '../../tools/Built-in/statement.tools';
 import { hover2winMsgMd } from '../../tools/Built-in/Windows_Messages_Tools';
 import { numberFindWinMsg } from '../../tools/Built-in/Windows_MessagesRe_Tools';
+import { hoverWinTitleParam } from '../../tools/Built-in/WinTitle/WinTitleParameter.tools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStrNext } from '../../tools/isPosAtStr';
@@ -22,7 +23,6 @@ import { hoverClassName } from './tools/hoverClassName';
 import { hoverDirectives } from './tools/hoverDirectives';
 import { hoverGlobalVar } from './tools/hoverGlobalVar';
 import { hoverMultiLine } from './tools/hoverMultiLine';
-import { hoverWinTitleParam } from '../../tools/Built-in/WinTitle/WinTitleParameter.tools';
 
 function HoverOfFunc(
     document: vscode.TextDocument,

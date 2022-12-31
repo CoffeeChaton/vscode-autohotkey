@@ -8,6 +8,6 @@ describe('check WinTitle ruler', () => {
             .map((v): string => v.body)
             .join('|');
 
-        expect(str1 === 'ahk_class|ahk_id|ahk_pid|ahk_exe|ahk_group').toBeTruthy();
+        expect(str1).toBe('ahk_class|ahk_id|ahk_pid|ahk_exe|ahk_group');
     });
 });
