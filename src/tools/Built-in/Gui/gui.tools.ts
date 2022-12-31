@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import * as vscode from 'vscode';
+import { getCommandOptions } from '../../../configUI';
+import { ECommandOption } from '../../../configUI.data';
+import { enumLog } from '../../enumErr';
 import { guiSubCommandList } from './gui.data';
 
 const { snippetGui, GuiMDMap } = (() => {
@@ -28,8 +31,8 @@ const { snippetGui, GuiMDMap } = (() => {
         MDMapRW.set(upName, md);
 
         const item: vscode.CompletionItem = new vscode.CompletionItem({
-            label: `Gui${SubCommand}`, // Left
-            description: 'Gui', // Right
+            label: `Gui, ${SubCommand}`, // Left
+            description: 'Gui-sub-command', // Right
         });
         item.kind = vscode.CompletionItemKind.Keyword;
         item.insertText = body;
@@ -55,3 +58,30 @@ const { snippetGui, GuiMDMap } = (() => {
 // export function getHoverCommand2(wordUp: string): vscode.MarkdownString | undefined {
 //     return CommandMDMap.get(wordUp);
 // }
+export function getSnippetGui(subStr: string): readonly vscode.CompletionItem[] {
+    const isOK: boolean = (/^G\w*$/iu).test(subStr)
+        || (/^case\s[^:]+:\s*G\w*$/iu).test(subStr)
+        || (/^default\s*:\s*G\w*$/iu).test(subStr)
+        || (/::\s*G\w*$/iu).test(subStr); // allow hotstring or hotkey
+
+    if (!isOK) return [];
+
+    //
+    const opt: ECommandOption = getCommandOptions();
+
+    switch (opt) {
+        case ECommandOption.All:
+        case ECommandOption.Recommended:
+            return snippetGui;
+
+        case ECommandOption.noSameFunc:
+            return snippetGui;
+
+        case ECommandOption.notProvided:
+            return [];
+
+        default:
+            enumLog(opt);
+            return [];
+    }
+}

@@ -3,6 +3,7 @@
 
 1. [syntax-highlight](https://code.visualstudio.com/api/language-extensions/syntax-highlight-guide#semantic-theming)
 2. [semantic-highlight](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide)
+3. TODO if vscode [Tokenization](https://github.com/microsoft/vscode/issues/77140) support [Tree-Sitter](https://github.com/microsoft/vscode/pull/161479), maybe i will learn compilation and move `tmLanguage` -> `Tree-Sitter` .
 
 [numbers-highlight](https://www.autohotkey.com/docs/Concepts.htm#numbers)
 

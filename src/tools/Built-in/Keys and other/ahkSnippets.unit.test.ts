@@ -6,7 +6,7 @@ describe('check ahkSnippets ruler', () => {
     // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
     const snipList: string[] = ahkSnippetsData.map((v: string): string => v.toLowerCase()).sort();
 
-    const max = 236;
+    const max = 231;
 
     it(`check : ahkSnippets length .EQ. ${max}`, () => {
         expect.hasAssertions();

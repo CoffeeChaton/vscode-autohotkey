@@ -10,6 +10,7 @@ import { getSnipBiVar } from '../../tools/Built-in/BiVariables.tools';
 import { getSnippetCommand } from '../../tools/Built-in/Command.tools.completion';
 import { snipDirectives } from '../../tools/Built-in/Directives.tool';
 import { BuiltInFunc2Completion } from '../../tools/Built-in/func.tools';
+import { getSnippetGui } from '../../tools/Built-in/Gui/gui.tools';
 import { getSnipJustSnip } from '../../tools/Built-in/Keys and other/ahkSnippets.tools';
 import { getSnipStartJoy } from '../../tools/Built-in/Keys and other/Joystick';
 import { getSnipStartF } from '../../tools/Built-in/Keys and other/keyF12';
@@ -69,6 +70,7 @@ function CompletionItemCore(
         ...snipDirectives(subStr),
         ...getSnippetOtherKeyWord1(lStr),
         ...getSnippetCommand(subStr),
+        ...getSnippetGui(subStr),
         ...globalValCompletion(DocStrMap, position),
         ...getSnipStatement2(subStr),
         ...getSnipJustSnip(subStr),
