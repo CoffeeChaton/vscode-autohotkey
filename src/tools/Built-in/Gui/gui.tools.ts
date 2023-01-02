@@ -55,9 +55,6 @@ const { snippetGui, GuiMDMap } = (() => {
     };
 })();
 
-// export function getHoverCommand2(wordUp: string): vscode.MarkdownString | undefined {
-//     return CommandMDMap.get(wordUp);
-// }
 export function getSnippetGui(subStr: string): readonly vscode.CompletionItem[] {
     const isOK: boolean = (/^G\w*$/iu).test(subStr)
         || (/^case\s[^:]+:\s*G\w*$/iu).test(subStr)
@@ -85,3 +82,31 @@ export function getSnippetGui(subStr: string): readonly vscode.CompletionItem[] 
             return [];
     }
 }
+
+// function getGuiSubCmdDoc(
+//     DocStrMap: TTokenStream,
+//     position: vscode.Position,
+// ): vscode.MarkdownString | undefined {
+//     const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
+//     const {
+//         fistWordUp,
+//         fistWordUpCol,
+//         SecondWordUp,
+//         SecondWordUpCol,
+//     } = AhkTokenLine;
+
+//     // eslint-disable-next-line no-nested-ternary
+//     const col: number = fistWordUp === 'GUI'
+//         ? fistWordUpCol
+//         : (SecondWordUp === 'GUI'
+//             ? SecondWordUpCol
+//             : 0);
+
+//     if (col === 0) return undefined;
+
+//     if (position.character < col + 'gui,'.length) return undefined;
+//     //
+//     console.log('🚀 ~ position', position);
+
+//     return undefined;
+// }

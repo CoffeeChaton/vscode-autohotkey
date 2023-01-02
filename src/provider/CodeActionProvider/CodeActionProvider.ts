@@ -112,7 +112,6 @@ export const CodeActionProvider: vscode.CodeActionProvider = {
         return [
             ...fixDiag(AhkFileData, context.diagnostics),
             ...DependencyAnalysis(AhkFileData, range),
-            // ...CommandCodeAction(AhkFileData, range),
         ];
     },
 };

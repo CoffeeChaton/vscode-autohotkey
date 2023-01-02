@@ -88,20 +88,21 @@ function HoverProviderCore(
     }
 
     type TFn = (wordUp: string) => vscode.MarkdownString | null | undefined;
-    const fnList: TFn[] = [
-        getHoverCommand2,
-        getHoverOtherKeyWord1,
-        getHoverOtherKeyWord2,
-        getHoverStatement,
-        hoverAVar,
-        hoverWinTitleParam,
-        hoverBiVar,
-        hoverGlobalVar,
-        hover2winMsgMd,
-        numberFindWinMsg,
-    ];
 
-    for (const fn of fnList) {
+    for (
+        const fn of [
+            getHoverCommand2,
+            getHoverOtherKeyWord1,
+            getHoverOtherKeyWord2,
+            getHoverStatement,
+            hoverAVar,
+            hoverWinTitleParam,
+            hoverBiVar,
+            hoverGlobalVar,
+            hover2winMsgMd,
+            numberFindWinMsg,
+        ] as const satisfies readonly TFn[]
+    ) {
         const md: vscode.MarkdownString | null | undefined = fn(wordUp);
         if (md !== undefined && md !== null) return new vscode.Hover(md);
     }

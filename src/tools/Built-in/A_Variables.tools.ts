@@ -20,7 +20,7 @@ export const [AVariablesMDMap, snippetStartWihA] = ((): [TA_MD_Map, TA_snippet_l
         const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
             .appendCodeblock(body, 'ahk')
             .appendMarkdown(group)
-            .appendMarkdown(`${doc ?? ''}\n\n`) // FIXME: add A_Variables doc
+            .appendMarkdown(`\n\n${doc ?? ''}\n\n`) // FIXME: add A_Variables doc
             .appendMarkdown(`[Read Doc](${uri})`);
         md.supportHtml = true;
         map1.set(body.toUpperCase(), md);
