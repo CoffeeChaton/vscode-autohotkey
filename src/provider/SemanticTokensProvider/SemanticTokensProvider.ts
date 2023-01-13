@@ -26,8 +26,7 @@ const Semantic = new CMemo<TAhkFileData, vscode.SemanticTokens>((AhkFileData: TA
         ...MultilineHighlight(DocStrMap),
     ], tokensBuilder);
 
-    const SemanticTokens: vscode.SemanticTokens = tokensBuilder.build();
-    return SemanticTokens;
+    return tokensBuilder.build();
 });
 
 // semantic token type

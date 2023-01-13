@@ -11,6 +11,15 @@ export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> }
 
 export type NonNull<T> = Exclude<T, null>;
 
+/**
+ * @param str input str
+ * @param Sub search str
+ * @param NSub replace str
+ * @example ReplaceAll<'h-e-l-l-o world', '-', ''> === "hello world"
+ */
+export type ReplaceAll<Str extends string, Sub extends string, NSub extends string> = Str extends
+    `${infer Before}${Sub}${infer Rest}` ? `${Before}${NSub}${ReplaceAll<Rest, Sub, NSub>}` : Str;
+
 export const enum EDetail {
     inComment = 3,
     inSkipSign2 = 4,

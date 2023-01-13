@@ -7,11 +7,10 @@ type TClassMap = ReadonlyMap<string, CAhkClass>;
 
 const FileAllClassMemo = new CMemo<TAstRoot, TClassMap>((ASTRoot: TAstRoot) => {
     type TMapMake = [string, CAhkClass];
-    const result: TClassMap = new Map<string, CAhkClass>(
+    return new Map<string, CAhkClass>(
         getFileAllClass(ASTRoot)
             .map((ahkFunc: CAhkClass): TMapMake => [ahkFunc.upName, ahkFunc]),
     );
-    return result;
 });
 
 export function getFileAllClassMap(ASTRoot: TAstRoot): TClassMap {

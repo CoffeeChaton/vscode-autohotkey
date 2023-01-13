@@ -1,3 +1,4 @@
+/* eslint-disable @fluffyfox/prefer-timer-id */
 import * as vscode from 'vscode';
 import type { TAhkFileData } from '../core/ProjectManager';
 import { OutputChannel } from '../provider/vscWindows/OutputChannel';

@@ -50,7 +50,7 @@ function getSearchPath(docPath: string, { type, mayPath }: TRawData): string {
             return path.join(path.dirname(docPath), 'Lib', `${mayPath}.ahk`);
 
         default:
-            enumLog(type);
+            enumLog(type, getSearchPath.name);
             return '';
     }
 }

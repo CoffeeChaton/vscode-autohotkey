@@ -131,7 +131,7 @@ const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly vscode
         for (const key of list) {
             const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
                 .appendCodeblock(key, 'ahk')
-                .appendMarkdown(`${group}`)
+                .appendMarkdown(group)
                 .appendMarkdown(`[\\(Read Doc\\)](${uri})`);
             md.supportHtml = true;
 

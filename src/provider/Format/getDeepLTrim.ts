@@ -16,7 +16,7 @@ export function getDeepLTrim(Multiline: EMultiline, multilineFlag: TMultilineFla
         case EMultiline.end:
             return 1;
         default:
-            enumLog(Multiline);
+            enumLog(Multiline, getDeepLTrim.name);
             return 0;
     }
 }

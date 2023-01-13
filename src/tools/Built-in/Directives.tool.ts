@@ -35,7 +35,7 @@ export const [SnippetDirectives, DirectivesMDMap] = ((): [TSnippetDirective, TDi
         if (!recommended) continue;
 
         const item: vscode.CompletionItem = new vscode.CompletionItem({
-            label: `${keyRawName}`, // Left
+            label: keyRawName, // Left
             description: '#Directives', // Right
         });
         item.kind = vscode.CompletionItemKind.Event;

@@ -11,7 +11,7 @@ function globalValCompletionCore(): vscode.CompletionItem[] {
     for (const { fsPathList, keyRawName } of map.values()) {
         //
         const item: vscode.CompletionItem = new vscode.CompletionItem({
-            label: `${keyRawName}`,
+            label: keyRawName,
             description: 'Global',
         });
 

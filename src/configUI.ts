@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import type { ECommandOption, TCheckKey, TConfigs } from './configUI.data';
 import { EDiagMasterSwitch } from './configUI.data';
 import { statusBarItem } from './provider/vscWindows/statusBarItem';
+import { CConfigError } from './tools/DevClass/CConfigError';
 import { str2RegexListCheck } from './tools/str2RegexListCheck';
 
 /*
@@ -14,7 +15,7 @@ let Configs: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration(C
 function getConfigs<T, V extends string>(section: TCheckKey<V>): T {
     const ed: T | undefined = Configs.get<T>(section);
     if (ed !== undefined) return ed;
-    throw new Error(`${section}, not found err code--40--11--33-- at configUI.ts`);
+    throw new CConfigError(section);
 }
 
 function getConfig(): TConfigs {

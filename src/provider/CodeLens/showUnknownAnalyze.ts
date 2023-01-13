@@ -10,7 +10,7 @@ export function showUnknownAnalyze(DA: CAhkFunc): void {
     Out.appendLine(`;show Unknown text of ${name}()`);
 
     for (const TextMetaOut of textMap.values()) {
-        Out.appendLine(`${TextMetaOut.keyRawName}`);
+        Out.appendLine(TextMetaOut.keyRawName);
         for (const range of TextMetaOut.refRangeList) {
             const { line, character } = range.start;
             Out.appendLine(`    at line ${line + 1} ;${fsPath}:${line + 1}:${character + 1}`);
