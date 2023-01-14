@@ -1,4 +1,4 @@
-import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { log } from '../provider/vscWindows/log';
 import { CMemo } from './CMemo';
 
 const RegexMemo = new CMemo<readonly string[], readonly RegExp[]>((strList: readonly string[]): readonly RegExp[] => {
@@ -22,20 +22,28 @@ const RegexMemo = new CMemo<readonly string[], readonly RegExp[]>((strList: read
         let message = 'Unknown Error';
         if (error instanceof Error) {
             message = error.message;
+            log.error(error, 'AhkNekoHelp.baseScan.IgnoredList');
         }
-        console.error(error);
-        OutputChannel.appendLine(';AhkNekoHelp.baseScan.IgnoredList Error Start------------');
-        OutputChannel.appendLine('"settings.json" -> "AhkNekoHelp.baseScan.IgnoredList"');
+
+        const msgList: string[] = [
+            ';AhkNekoHelp.baseScan.IgnoredList Error Start------------',
+            '"settings.json" -> "AhkNekoHelp.baseScan.IgnoredList"',
+        ];
         for (const [i, str] of strList.entries()) {
-            const msg = i < regexList.length
-                ? `OK -> "${str}"`
-                : `NG -> "${str}"`;
-            OutputChannel.appendLine(msg);
+            msgList.push(
+                i < regexList.length
+                    ? `OK -> "${str}"`
+                    : `NG -> "${str}"`,
+            );
         }
-        OutputChannel.appendLine(`has error of this regex: "${errRuler}"`);
-        OutputChannel.appendLine(message);
-        OutputChannel.appendLine(';AhkNekoHelp.baseScan.IgnoredList Error End--------------');
-        OutputChannel.show();
+        msgList.push(
+            `has error of this regex: "${errRuler}"`,
+            message,
+            ';AhkNekoHelp.baseScan.IgnoredList Error End--------------',
+        );
+
+        log.error(msgList.join('\n'));
+        log.show();
     }
     return regexList;
 });

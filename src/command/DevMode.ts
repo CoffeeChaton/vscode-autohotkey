@@ -1,7 +1,7 @@
 /* eslint-disable @fluffyfox/prefer-timer-id */
 import * as vscode from 'vscode';
 import type { TAhkFileData } from '../core/ProjectManager';
-import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { log } from '../provider/vscWindows/log';
 import { statusBarItem } from '../provider/vscWindows/statusBarItem';
 import {
     arrSum,
@@ -28,9 +28,8 @@ function devTestDA(cycles: number): void {
             return null;
         })
         .catch((error: Error): void => {
-            console.error('🚀 ~ devTestDA ~ error.message', error);
-            OutputChannel.appendLine(error.message);
-            OutputChannel.show();
+            log.error(error, '🚀 ~ devTestDA ~ error.message');
+            log.show();
         });
 }
 
@@ -45,7 +44,7 @@ function devTestEnd(cycles: number): void {
     const { subAvg, subAvgArr } = avgMin5(statistics);
     const { subStd, subStdArr } = stdMin5(statistics);
 
-    OutputChannel.appendLine([
+    log.appendLine([
         '---------------------------------------------',
         'The task be completed, please confirm!',
         `resolve ${len} of ${cycles}`,
@@ -65,7 +64,7 @@ function devTestEnd(cycles: number): void {
     statusBarItem.text = '$(heart) dev task OK!';
     statusBarItem.show();
 
-    OutputChannel.show();
+    log.show();
 }
 
 function validateInput(value: string): vscode.InputBoxValidationMessage | null {
@@ -100,10 +99,10 @@ export async function pressureTest(): Promise<null> {
 
     const { cycles, label } = pick;
 
-    OutputChannel.appendLine('---------------------------------------------');
-    OutputChannel.appendLine('>> this is Dev tools, open "vscode-js-profile-flame" to get ".cpuprofile"');
-    OutputChannel.appendLine(`    please wait of [${label}]`);
-    OutputChannel.show();
+    log.appendLine('---------------------------------------------');
+    log.appendLine('>> this is Dev tools, open "vscode-js-profile-flame" to get ".cpuprofile"');
+    log.appendLine(`    please wait of [${label}]`);
+    log.show();
 
     const delay: number = Number.parseInt(msStr, 10);
     for (let i = 1; i <= cycles; i++) {

@@ -1,11 +1,11 @@
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { OutputChannel } from '../../provider/vscWindows/OutputChannel';
 
 export type TWordFrequencyStatistics = {
     paramMapSize: number,
     valMapSize: number,
     textMapSize: number,
     topFuncNum: number,
+    WordFrequency: string[],
 };
 
 // WordFrequencyStatistics
@@ -36,18 +36,18 @@ export function WordFrequencyStatistics(need: CAhkFunc[]): TWordFrequencyStatist
         }
     }
     e5.sort((a: TElement, b: TElement): number => b.v - a.v);
-    OutputChannel.clear();
-    OutputChannel.appendLine('------>>>------this package: unknown Word frequency statistics----->>>-----');
-    for (const { k, v } of e5) { //
-        OutputChannel.appendLine(`${k}: ${v}`);
-    }
-    OutputChannel.appendLine('------<<<------this package: unknown Word frequency statistics-----<<<-----');
+
+    const max = 100;
+    const e6 = e5.length > max
+        ? e5.slice(0, max)
+        : e5;
 
     return {
         paramMapSize,
         valMapSize,
         textMapSize,
         topFuncNum: need.length,
+        WordFrequency: e6.map(({ k, v }: TElement): string => `${k}: ${v}`),
     };
 }
 

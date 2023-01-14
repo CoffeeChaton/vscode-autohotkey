@@ -1,7 +1,7 @@
 import { CAhkInclude } from '../AhkSymbol/CAhkInclude';
 import type { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
 import { pm } from '../core/ProjectManager';
-import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { log } from '../provider/vscWindows/log';
 
 export function collectInclude(AST: Readonly<TAhkSymbolList>): CAhkInclude[] {
     const List: CAhkInclude[] = [];
@@ -27,14 +27,13 @@ export function ListAllInclude(): null {
         }
     }
 
-    OutputChannel.clear();
-    OutputChannel.appendLine([
+    log.info([
         '[neko-help] List All #Include',
         ...AllList,
         '\n',
         `Done in ${Date.now() - t1} ms`,
     ].join('\n'));
-    OutputChannel.show();
+    log.show();
 
     return null;
 }

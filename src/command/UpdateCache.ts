@@ -3,7 +3,7 @@ import { rmAllDiag } from '../core/diagColl';
 import { BaseScanMemo } from '../core/ParserTools/getFileAST';
 import type { TAhkFileData } from '../core/ProjectManager';
 import { pm } from '../core/ProjectManager';
-import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { log } from '../provider/vscWindows/log';
 import { getUriList } from '../tools/fsTools/getUriList';
 
 export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileData[] | null> {
@@ -35,6 +35,6 @@ export async function UpdateCacheUi(): Promise<void> {
     const t1: number = Date.now();
     await UpdateCacheAsync(true);
     const t2: number = Date.now();
-    OutputChannel.appendLine(`Refresh Resource ${t2 - t1} ms`);
-    OutputChannel.show();
+    log.info(`Refresh Resource ${t2 - t1} ms`);
+    log.show();
 }

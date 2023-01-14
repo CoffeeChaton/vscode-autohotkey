@@ -1,4 +1,4 @@
-import { OutputChannel } from '../../../vscWindows/OutputChannel';
+import { log } from '../../../vscWindows/log';
 
 const DEB = new Map<string, number>();
 
@@ -26,10 +26,12 @@ function _commandHeadStatistics(commandHead: string): void {
         }
 
         e5.sort((a: TElement, b: TElement): number => a.v - b.v);
-        for (const { k, v } of e5) { //
-            OutputChannel.appendLine(`${k}: ${v}`);
-        }
-        OutputChannel.show();
+
+        log.info(
+            e5.map(({ k, v }: TElement): string => `${k}: ${v}`)
+                .join('\n'),
+        );
+        log.show();
     }
 }
 

@@ -9,7 +9,7 @@ import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandA
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
-import { OutputChannel } from '../vscWindows/OutputChannel';
+import { log } from '../vscWindows/log';
 import { isPosAtMethodName } from './isPosAtMethodName';
 
 function searchHotkeyFuncRef(AhkTokenLine: TAhkTokenLine, wordUp: string): number {
@@ -110,7 +110,7 @@ export function getFuncReference(refFn: TFnFindCol, timeStart: number, funcSymbo
         oldMap.set(wordUp, list);
         wm.set(AhkFileData, oldMap);
     }
-    OutputChannel.appendLine(`find Ref of ${funcSymbolName}() , use ${Date.now() - timeStart} ms`);
+    log.info(`find Ref of ${funcSymbolName}() , use ${Date.now() - timeStart} ms`);
     return allList;
 }
 
@@ -170,6 +170,6 @@ export function getFuncDef(
         return [new vscode.Location(document.uri, funcSymbol.nameRange)]; // let auto use getReference
     }
 
-    OutputChannel.appendLine(`goto def of ${funcSymbol.name}() , use ${Date.now() - timeStart} ms`); // ssd -> 0~1ms
+    log.info(`goto def of ${funcSymbol.name}() , use ${Date.now() - timeStart} ms`); // ssd -> 0~1ms
     return [new vscode.Location(funcSymbol.uri, funcSymbol.selectionRange)];
 }

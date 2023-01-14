@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import type { CAhkInclude, TRawData } from '../AhkSymbol/CAhkInclude';
 import { EInclude } from '../AhkSymbol/CAhkInclude';
 import { pm } from '../core/ProjectManager';
-import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { log } from '../provider/vscWindows/log';
 import { enumLog } from '../tools/enumErr';
 import { collectInclude } from './ListAllInclude';
 import { diagOfIncludeTree } from './tools/diagOfIncludeTree';
@@ -142,8 +142,8 @@ export async function ListIncludeTree(): Promise<null> {
 
     const result: TTreeResult[] = IncludeTree(selectPath.fsPath, [], map);
     const diagList: string[] = diagOfIncludeTree(result, selectPath.fsPath);
-    OutputChannel.clear();
-    OutputChannel.appendLine([
+
+    log.info([
         '----------------------------------------',
         '[neko-help] List All #Include Tree',
         '',
@@ -154,7 +154,7 @@ export async function ListIncludeTree(): Promise<null> {
         `Done in ${Date.now() - t1} ms`,
     ].join('\n'));
 
-    OutputChannel.show();
+    log.show();
 
     return null;
 }

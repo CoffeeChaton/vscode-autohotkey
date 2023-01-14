@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { pm } from '../core/ProjectManager';
-import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { log } from '../provider/vscWindows/log';
 import { msgWithPos } from './tools/msgWithPos';
 import type { TPick } from './TPick';
 
@@ -11,7 +11,7 @@ function ListAllFunc(showLink: boolean): null {
     let funcHint = 0;
     let fileHint = 0;
     for (const { uri, AST } of pm.DocMap.values()) { // should keep output order
-        AllList.push(uri.fsPath);
+        AllList.push(`;${uri.fsPath}`);
 
         for (const DocumentSymbol of AST) {
             if (DocumentSymbol.kind === vscode.SymbolKind.Function) {
@@ -27,14 +27,14 @@ function ListAllFunc(showLink: boolean): null {
         fileHint++;
     }
 
-    OutputChannel.clear();
-    OutputChannel.appendLine('[neko-help] List All Function()');
-    OutputChannel.append(AllList.join('\n'));
-    OutputChannel.appendLine(`file: ${fileHint}`);
-    OutputChannel.appendLine(`func: ${funcHint}`);
-
-    OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
-    OutputChannel.show();
+    log.info([
+        '[neko-help] List All Function()',
+        ...AllList,
+        `file: ${fileHint}`,
+        `func: ${funcHint}`,
+        `Done in ${Date.now() - t1} ms`,
+    ].join('\n'));
+    log.show();
 
     return null;
 }
@@ -67,13 +67,15 @@ function ListAllFuncSort(reverse: boolean): null {
         ? 'z -> a'
         : 'a -> z';
 
-    OutputChannel.clear();
-    OutputChannel.appendLine(`[neko-help] List All Function() ; Sort with ${re}`);
-    OutputChannel.appendLine(appendText);
-    OutputChannel.appendLine(`\nfile: ${fileHint}`);
-    OutputChannel.appendLine(`func: ${funcHint}`);
-    OutputChannel.appendLine(`Done in ${Date.now() - t1} ms`);
-    OutputChannel.show();
+    log.info([
+        `[neko-help] List All Function() ; Sort with ${re}`,
+        appendText,
+        `file: ${fileHint}`,
+        `func: ${funcHint}`,
+        `Done in ${Date.now() - t1} ms`,
+    ].join('\n'));
+
+    log.show();
 
     return null;
 }

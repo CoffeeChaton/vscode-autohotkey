@@ -29,7 +29,7 @@ import { ReferenceProvider } from './provider/Ref/ReferenceProvider';
 import { RenameProvider } from './provider/Rename/RenameProvider';
 import { AhkFullSemanticHighlight, legend } from './provider/SemanticTokensProvider/SemanticTokensProvider';
 import { SymbolProvider } from './provider/SymbolProvider/SymbolProvider';
-import { OutputChannel } from './provider/vscWindows/OutputChannel';
+import { log } from './provider/vscWindows/log';
 import { statusBarItem } from './provider/vscWindows/statusBarItem';
 import { WorkspaceSymbolProvider } from './provider/WorkspaceSymbolProvider/WorkspaceSymbolProvider';
 
@@ -76,7 +76,7 @@ export function activate(context: ExtensionContext): void {
         commands.registerCommand(ECommand.showFuncAnalyze, AnalyzeFuncMain),
         commands.registerCommand(ECommand.showUnknownAnalyze, showUnknownAnalyze),
         // root dispose
-        OutputChannel,
+        log,
         statusBarItem,
         diagColl,
     );

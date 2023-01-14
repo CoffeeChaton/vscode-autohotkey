@@ -1,4 +1,4 @@
-import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { log } from '../provider/vscWindows/log';
 
 export class CEnumError extends Error {
     public constructor(fnName: string) {
@@ -9,8 +9,7 @@ export class CEnumError extends Error {
 }
 
 export function enumLog(params: never, fnName: string): void {
-    console.log('enumLog ~ params', params);
-    OutputChannel.appendLine('enumLog ~ params');
-    OutputChannel.show();
+    log.error(fnName, 'enumLog ~ params');
+    log.show();
     throw new CEnumError(fnName);
 }

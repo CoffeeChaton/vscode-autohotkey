@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { ECommand } from '../command/ECommand';
 import { getIgnoredList } from '../configUI';
 import type { TFsPath } from '../globalEnum';
-import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { log } from '../provider/vscWindows/log';
 import { fsPathIsAllow } from '../tools/fsTools/getUriList';
 import { isAhk } from '../tools/fsTools/isAhk';
 import { rmFileDiag } from './diagColl';
@@ -67,7 +67,7 @@ export const pm = {
 
         await vscode.commands.executeCommand(ECommand.ListAllInclude);
 
-        OutputChannel.appendLine([
+        log.info([
             '',
             '----------------------',
             '',
@@ -76,7 +76,7 @@ export const pm = {
             '',
             '> please check #Include',
         ].join('\n'));
-        OutputChannel.show();
+        log.show();
     },
 
     updateDocDef(document: vscode.TextDocument): TAhkFileData | null {

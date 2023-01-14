@@ -1,7 +1,7 @@
 import * as path from 'node:path';
 import { EVersion } from '../../Enum/EVersion';
 import type { EFormatChannel } from '../../globalEnum';
-import { OutputFormatChannel } from '../vscWindows/OutputChannel';
+import { fmtLog } from '../vscWindows/log';
 import type { TDiffMap } from './TFormat';
 
 type TDiffParm = {
@@ -22,6 +22,7 @@ export function fmtDiffInfo(
     if (DiffMap.size === 0) return;
 
     const msg = [
+        '\n',
         '-----------Format Diff Start--------------------------------',
         `${from} ${EVersion.formatRange} "${path.basename(fsPath)}", ${Date.now() - timeStart} ms`,
     ];
@@ -36,7 +37,7 @@ export function fmtDiffInfo(
 
     msg.push('-----------Format Diff End----------------------------------');
 
-    OutputFormatChannel.appendLine(msg.join('\n'));
+    fmtLog.info(msg.join('\n'));
     // do not callDiff(diffVar);
     // using setTimeout call.
 }

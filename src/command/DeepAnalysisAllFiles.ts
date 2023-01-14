@@ -1,7 +1,7 @@
 import type { CAhkFunc } from '../AhkSymbol/CAhkFunc';
 import { pm } from '../core/ProjectManager';
 import { setBaseDiag } from '../provider/Diagnostic/setBaseDiag';
-import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { log } from '../provider/vscWindows/log';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAListTop } from '../tools/DeepAnalysis/getDAList';
 import type { TWordFrequencyStatistics } from './tools/WordFrequencyStatistics';
@@ -13,9 +13,14 @@ function showOutputChannel(results: TWordFrequencyStatistics, timeSpend: number)
         valMapSize,
         textMapSize,
         topFuncNum,
+        WordFrequency,
     } = results;
 
-    OutputChannel.appendLine([
+    log.info([
+        'Command > "5 -> DeepAnalysis All File"',
+        '---unknown Word frequency statistics---------------',
+        ...WordFrequency,
+        '---other information-------------------------------',
         'Deep Analysis All Files',
         `Deep Analysis : ${topFuncNum} Symbol`,
         `paramMapSize is ${paramMapSize}`,
@@ -24,7 +29,7 @@ function showOutputChannel(results: TWordFrequencyStatistics, timeSpend: number)
         `All Size is ${paramMapSize + valMapSize + textMapSize}`,
         `Done in ${timeSpend} ms`,
     ].join('\n'));
-    OutputChannel.show();
+    log.show();
 }
 
 export function DeepAnalysisAllFiles(): null {

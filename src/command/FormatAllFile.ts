@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import { EFormatChannel } from '../globalEnum';
 import { FormatCore } from '../provider/Format/FormatProvider';
-import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { log } from '../provider/vscWindows/log';
 import { getUriList } from '../tools/fsTools/getUriList';
 import type { TPick } from './TPick';
 import { UpdateCacheAsync } from './UpdateCache';
@@ -89,14 +89,12 @@ export async function FormatAllFile(): Promise<null> {
     await Promise.all(results);
     const t2: number = Date.now();
 
-    OutputChannel.appendLine('-----------------------------------------------');
-    OutputChannel.appendLine(`FormatAllFile -> ${t2 - t1} ms`);
-    OutputChannel.show();
+    log.info(`FormatAllFile -> ${t2 - t1} ms`);
+    log.show();
 
     await UpdateCacheAsync(false);
     const t3: number = Date.now();
-    OutputChannel.appendLine(`UpdateCacheAsync -> ${t3 - t2} ms`);
-    OutputChannel.appendLine('-----------------------------------------------');
-    OutputChannel.show();
+    log.info(`UpdateCacheAsync -> ${t3 - t2} ms`);
+    log.show();
     return null;
 }

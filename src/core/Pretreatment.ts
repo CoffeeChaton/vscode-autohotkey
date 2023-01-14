@@ -8,7 +8,7 @@ import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum'
 import { EDetail, EMultiline } from '../globalEnum';
 import { getIgnore } from '../provider/Diagnostic/getIgnore';
 import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
-import { OutputChannel } from '../provider/vscWindows/OutputChannel';
+import { log } from '../provider/vscWindows/log';
 import { getMultiline } from '../tools/str/getMultiline';
 import { getMultilineLStr } from '../tools/str/getMultilineLStr';
 import { docCommentBlock, EDocBlock, inCommentBlock } from '../tools/str/inCommentBlock';
@@ -51,9 +51,8 @@ function infoAddAhk2(document: vscode.TextDocument, ahkV0: string): 'isAhk2' {
             // }
 
             const fileName: string = path.basename(fsPath);
-            const t1: string = (new Date()).toLocaleString();
-            OutputChannel.appendLine(
-                `[${t1}] some file like "${fileName}" is "${ahkV0.trim()}" ;NekoHelp not support ahk2, suggest to use other Extensions`,
+            log.info(
+                `some file like "${fileName}" is "${ahkV0.trim()}" ;NekoHelp not support ahk2, suggest to use other Extensions`,
             );
 
             HintInfoChangeToAhk = 1;
