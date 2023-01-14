@@ -5,13 +5,15 @@ import { FormatAllFile } from './FormatAllFile';
 import { ListAllFuncMain } from './ListAllFunc';
 import { ListAllInclude } from './ListAllInclude';
 import { ListIncludeTree } from './ListIncludeTree';
-import type { TPick } from './TPick';
 import { UpdateCacheUi } from './UpdateCache';
 
 export function statusBarClick(): void {
-    type TCommand = TPick<void>;
+    type TPick = {
+        label: string,
+        fn: () => void,
+    };
 
-    const items: TCommand[] = [
+    void vscode.window.showQuickPick<TPick>([
         { label: '0 -> Refresh Resource', fn: UpdateCacheUi },
         { label: '1 -> dev tools', fn: pressureTest },
         { label: '2 -> list all #Include List', fn: ListAllInclude },
@@ -19,13 +21,10 @@ export function statusBarClick(): void {
         { label: '4 -> list all Function()', fn: ListAllFuncMain },
         { label: '5 -> DeepAnalysis All File', fn: DeepAnalysisAllFiles },
         { label: '6 -> format All File', fn: FormatAllFile },
-    ];
-
-    void vscode.window.showQuickPick<TCommand>(items)
-        .then((pick: TPick<void> | undefined): null => {
+    ])
+        .then((pick: TPick | undefined): null => {
             //
-            //
-            void pick?.fn();
+            pick?.fn();
             return null;
         });
 }

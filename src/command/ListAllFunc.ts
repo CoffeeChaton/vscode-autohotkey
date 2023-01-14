@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { pm } from '../core/ProjectManager';
 import { log } from '../provider/vscWindows/log';
 import { msgWithPos } from './tools/msgWithPos';
-import type { TPick } from './TPick';
 
 function ListAllFunc(showLink: boolean): null {
     const t1: number = Date.now();
@@ -82,7 +81,10 @@ function ListAllFuncSort(reverse: boolean): null {
 }
 
 export function ListAllFuncMain(): void {
-    type TCommand = TPick<void>;
+    type TCommand = {
+        label: string,
+        fn: () => void,
+    };
 
     const items: TCommand[] = [
         { label: '1 -> list all Function()', fn: (): null => ListAllFunc(false) },
@@ -92,7 +94,7 @@ export function ListAllFuncMain(): void {
     ];
 
     void vscode.window.showQuickPick<TCommand>(items)
-        .then((pick: TPick<void> | undefined): undefined => void pick?.fn());
+        .then((pick: TCommand | undefined): void => pick?.fn());
 }
 
 // file: 29

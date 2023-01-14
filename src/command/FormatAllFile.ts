@@ -5,7 +5,6 @@ import { EFormatChannel } from '../globalEnum';
 import { FormatCore } from '../provider/Format/FormatProvider';
 import { log } from '../provider/vscWindows/log';
 import { getUriList } from '../tools/fsTools/getUriList';
-import type { TPick } from './TPick';
 import { UpdateCacheAsync } from './UpdateCache';
 
 async function formatByPathAsync(
@@ -30,46 +29,45 @@ async function formatByPathAsync(
 }
 
 async function setFormattingOptions(): Promise<vscode.FormattingOptions | null> {
-    const TabOrSpacePick: TPick<boolean> | undefined = await vscode.window.showQuickPick<TPick<boolean>>(
-        [
-            { label: '1 -> indent Using Tabs', fn: () => false },
-            { label: '2 -> indent Using Spaces', fn: () => true },
-        ],
-        {
-            title: 'Select Formatting Options',
-        },
-    );
+    type TSelectTabOrSpace = {
+        label: string,
+        useTabs: boolean,
+    };
+
+    const TabOrSpacePick: TSelectTabOrSpace | undefined = await vscode.window.showQuickPick<TSelectTabOrSpace>([
+        { label: '1 -> indent Using Tabs', useTabs: true },
+        { label: '2 -> indent Using Spaces', useTabs: false },
+    ], { title: 'Select Formatting Options' });
 
     if (TabOrSpacePick === undefined) return null;
 
-    const TabOrSpace: boolean = await TabOrSpacePick.fn();
-    if (!TabOrSpace) { // Tab
+    if (TabOrSpacePick.useTabs) { // Tab
         return {
             tabSize: 0,
             insertSpaces: false,
         };
     }
 
-    type T1to8 = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-    type TTabSize = TPick<T1to8>;
-    const items: TTabSize[] = [
-        { label: '1', fn: () => 1 },
-        { label: '2', fn: () => 2 },
-        { label: '3', fn: () => 3 },
-        { label: '4', fn: () => 4 },
-        { label: '5', fn: () => 5 },
-        { label: '6', fn: () => 6 },
-        { label: '7', fn: () => 7 },
-        { label: '8', fn: () => 8 },
-    ];
-    const tabSizePick: TTabSize | undefined = await vscode.window.showQuickPick<TTabSize>(items, {
-        title: 'set format ident size',
-    });
-    if (tabSizePick === undefined) return null;
-    const tabSize: T1to8 = await tabSizePick.fn();
+    type TSize = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+    type TTabSize = {
+        label: `${TSize}`,
+        size: TSize,
+    };
+
+    const sizePick: TTabSize | undefined = await vscode.window.showQuickPick<TTabSize>([
+        { label: '1', size: 1 },
+        { label: '2', size: 2 },
+        { label: '3', size: 3 },
+        { label: '4', size: 4 },
+        { label: '5', size: 5 },
+        { label: '6', size: 6 },
+        { label: '7', size: 7 },
+        { label: '8', size: 8 },
+    ], { title: 'set format ident size' });
+    if (sizePick === undefined) return null;
 
     return {
-        tabSize,
+        tabSize: sizePick.size,
         insertSpaces: true,
     };
 }
@@ -93,8 +91,5 @@ export async function FormatAllFile(): Promise<null> {
     log.show();
 
     await UpdateCacheAsync(false);
-    const t3: number = Date.now();
-    log.info(`UpdateCacheAsync -> ${t3 - t2} ms`);
-    log.show();
     return null;
 }

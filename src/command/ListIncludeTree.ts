@@ -10,11 +10,6 @@ import { diagOfIncludeTree } from './tools/diagOfIncludeTree';
 
 type TIncludeMap = Map<string, CAhkInclude[]>;
 
-type TPick2 = {
-    label: string,
-    fsPath: string,
-};
-
 function getIncludeMap(): TIncludeMap {
     const map: Map<string, CAhkInclude[]> = new Map<string, CAhkInclude[]>();
     for (const [fsPath, AhkFileData] of pm.DocMap) { // keep output order
@@ -25,15 +20,6 @@ function getIncludeMap(): TIncludeMap {
         }
     }
     return map;
-}
-
-function getTPickList(map: TIncludeMap): readonly TPick2[] {
-    const items: TPick2[] = [];
-    // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
-    for (const [i, fsPath] of [...map.keys()].sort().entries()) { // entries() is need i
-        items.push({ label: `${i} -> ${fsPath}`, fsPath });
-    }
-    return items;
 }
 
 function getSearchPath(docPath: string, { type, mayPath }: TRawData): string {
@@ -129,6 +115,20 @@ function treeResult2StrList(result: TTreeResult[]): string[] {
         msg.push(`${head}    |${hasFileStr}|    ${searchPath}`);
     }
     return msg;
+}
+
+type TPick2 = {
+    label: string,
+    fsPath: string,
+};
+
+function getTPickList(map: TIncludeMap): readonly TPick2[] {
+    const items: TPick2[] = [];
+    // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
+    for (const [i, fsPath] of [...map.keys()].sort().entries()) { // entries() is need i
+        items.push({ label: `${i} -> ${fsPath}`, fsPath });
+    }
+    return items;
 }
 
 export async function ListIncludeTree(): Promise<null> {
