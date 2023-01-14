@@ -7,11 +7,7 @@ import { isAhk } from './isAhk';
 type TFsPath = string;
 
 export function fsPathIsAllow(fsPath: string, blockList: readonly RegExp[]): boolean {
-    // OutputChannel.appendLine(fsPath);
-    for (const reg of blockList) {
-        if (reg.test(fsPath)) return false;
-    }
-    return true;
+    return !blockList.some((reg: RegExp) => reg.test(fsPath));
 }
 
 function CollectorFsPath(fsPath: TFsPath, blockList: readonly RegExp[], Collector: Set<TFsPath>): void {

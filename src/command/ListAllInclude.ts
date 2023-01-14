@@ -28,10 +28,10 @@ export function ListAllInclude(): null {
     }
 
     log.info([
-        '[neko-help] List All #Include',
+        '> "List All #Include"',
         ...AllList,
-        '\n',
-        `Done in ${Date.now() - t1} ms`,
+        '',
+        `Done : ${Date.now() - t1} ms`,
     ].join('\n'));
     log.show();
 

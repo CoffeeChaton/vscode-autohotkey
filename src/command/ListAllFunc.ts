@@ -23,16 +23,17 @@ function ListAllFunc(showLink: boolean): null {
                 funcHint++;
             }
         }
-        AllList.push('\n');
+        AllList.push('');
         fileHint++;
     }
 
     log.info([
-        '[neko-help] List All Function()',
+        '> "List All Function()"',
         ...AllList,
+        '',
         `file: ${fileHint}`,
         `func: ${funcHint}`,
-        `Done in ${Date.now() - t1} ms`,
+        `Done:${Date.now() - t1} ms`,
     ].join('\n'));
     log.show();
 
@@ -68,13 +69,13 @@ function ListAllFuncSort(reverse: boolean): null {
         : 'a -> z';
 
     log.info([
-        `[neko-help] List All Function() ; Sort with ${re}`,
-        appendText,
+        `> "List All Function(), Sort with ${re} "`,
+        ...appendText,
+        '',
         `file: ${fileHint}`,
         `func: ${funcHint}`,
-        `Done in ${Date.now() - t1} ms`,
+        `Done:${Date.now() - t1} ms`,
     ].join('\n'));
-
     log.show();
 
     return null;

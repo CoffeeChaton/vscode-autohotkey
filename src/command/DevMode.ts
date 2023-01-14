@@ -28,7 +28,7 @@ function devTestDA(cycles: number): void {
             return null;
         })
         .catch((error: Error): void => {
-            log.error(error, '🚀 ~ devTestDA ~ error.message');
+            log.error(error, 'devTestDA.error');
             log.show();
         });
 }
@@ -44,7 +44,7 @@ function devTestEnd(cycles: number): void {
     const { subAvg, subAvgArr } = avgMin5(statistics);
     const { subStd, subStdArr } = stdMin5(statistics);
 
-    log.appendLine([
+    log.info([
         '---------------------------------------------',
         'The task be completed, please confirm!',
         `resolve ${len} of ${cycles}`,
@@ -99,9 +99,11 @@ export async function pressureTest(): Promise<null> {
 
     const { cycles, label } = pick;
 
-    log.appendLine('---------------------------------------------');
-    log.appendLine('>> this is Dev tools, open "vscode-js-profile-flame" to get ".cpuprofile"');
-    log.appendLine(`    please wait of [${label}]`);
+    log.info([
+        '> "1 -> dev tools"',
+        '>> this is Dev tools, open "vscode-js-profile-flame" to get ".cpuprofile"',
+        `    please wait of [${label}]`,
+    ].join('\n'));
     log.show();
 
     const delay: number = Number.parseInt(msStr, 10);

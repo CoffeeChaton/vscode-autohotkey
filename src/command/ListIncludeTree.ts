@@ -144,16 +144,14 @@ export async function ListIncludeTree(): Promise<null> {
     const diagList: string[] = diagOfIncludeTree(result, selectPath.fsPath);
 
     log.info([
-        '----------------------------------------',
-        '[neko-help] List All #Include Tree',
+        '> "List All #Include Tree"',
         '',
         selectPath.fsPath,
         ...treeResult2StrList(result),
-        '\n',
+        '',
         ...diagList,
-        `Done in ${Date.now() - t1} ms`,
+        `Done: ${Date.now() - t1} ms`,
     ].join('\n'));
-
     log.show();
 
     return null;

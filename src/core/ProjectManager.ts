@@ -68,13 +68,10 @@ export const pm = {
         await vscode.commands.executeCommand(ECommand.ListAllInclude);
 
         log.info([
-            '',
-            '----------------------',
-            '',
-            '[neko-help] FileRenameEvent',
+            '> ["FileRenameEvent"]',
             ...eventMsg,
             '',
-            '> please check #Include',
+            '> "please check #Include"',
         ].join('\n'));
         log.show();
     },
