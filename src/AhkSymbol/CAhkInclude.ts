@@ -110,7 +110,6 @@ export class CAhkInclude extends vscode.DocumentSymbol {
     // #Include %A_LineFile%\..\other.ahk.
 
     public readonly hashtag = 'INCLUDE'; //
-    public readonly rawData: TRawData;
 
     public readonly IgnoreErrors: boolean;
     public readonly uri: vscode.Uri;
@@ -118,6 +117,8 @@ export class CAhkInclude extends vscode.DocumentSymbol {
     declare public readonly kind: vscode.SymbolKind.Module;
     declare public readonly detail: '';
     declare public readonly children: never[];
+
+    private _rawData: TRawData | null = null;
 
     public constructor(
         {
@@ -132,7 +133,21 @@ export class CAhkInclude extends vscode.DocumentSymbol {
 
         const path0: string = name.replace(/^\s*#include(?:Again)?\s/iu, '').trim();
         this.IgnoreErrors = (/^\*i\s/iu).test(path0); //  For example: #Include *i SpecialOptions.ahk
-        const path1: string = path0.replace(/^\*i\s/iu, '').trim();
-        this.rawData = getRawData(path1, uri.fsPath);
+    }
+
+    public get rawData(): TRawData {
+        if (this._rawData !== null) {
+            return this._rawData;
+        }
+
+        const path1: string = this.name
+            .replace(/^\s*#include(?:Again)?\s/iu, '')
+            .trim()
+            .replace(/^\*i\s/iu, '')
+            .trim();
+
+        const _rawData: TRawData = getRawData(path1, this.uri.fsPath);
+        this._rawData = _rawData;
+        return _rawData;
     }
 }
