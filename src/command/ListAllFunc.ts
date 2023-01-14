@@ -32,7 +32,7 @@ function ListAllFunc(showLink: boolean): null {
         '',
         `file: ${fileHint}`,
         `func: ${funcHint}`,
-        `Done:${Date.now() - t1} ms`,
+        `Done: ${Date.now() - t1} ms`,
     ].join('\n'));
     log.show();
 
@@ -57,23 +57,19 @@ function ListAllFuncSort(reverse: boolean): null {
 
     // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
     AllList.sort(); // a->z
-    const appendText: string = reverse
-        ? AllList
-            .reverse()
-            .join('\n')
-        : AllList.join('\n');
 
+    if (reverse) AllList.reverse();
     const re = reverse
         ? 'z -> a'
         : 'a -> z';
 
     log.info([
         `> "List All Function(), Sort with ${re} "`,
-        ...appendText,
+        ...AllList,
         '',
         `file: ${fileHint}`,
         `func: ${funcHint}`,
-        `Done:${Date.now() - t1} ms`,
+        `Done: ${Date.now() - t1} ms`,
     ].join('\n'));
     log.show();
 
