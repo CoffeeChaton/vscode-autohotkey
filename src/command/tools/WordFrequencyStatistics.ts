@@ -1,20 +1,37 @@
+/* eslint no-magic-numbers: ["error", { "ignore": [0,10,20] }] */
+
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import { log } from '../../provider/vscWindows/log';
 
-export type TWordFrequencyStatistics = {
-    paramMapSize: number,
-    valMapSize: number,
-    textMapSize: number,
-    topFuncNum: number,
-    WordFrequency: string[],
-};
+function getWordFrequency(DEB: Map<string, number>): string[] {
+    type TElement = {
+        k: string,
+        v: number,
+    };
 
-// WordFrequencyStatistics
-export function WordFrequencyStatistics(need: CAhkFunc[]): TWordFrequencyStatistics {
+    let e5: TElement[] = [];
+    const { size } = DEB;
+    for (const [k, v] of DEB) {
+        if (v > 10 || size < 20) {
+            e5.push({ k, v });
+        }
+    }
+
+    e5.sort((a: TElement, b: TElement): number => b.v - a.v);
+
+    if (e5.length > 20) {
+        e5 = e5.slice(0, 20);
+    }
+
+    return e5.map(({ k, v }: TElement): string => `${k}: ${v}`);
+}
+
+export function WordFrequencyStatistics(ahkFnList: CAhkFunc[], timeSpend: number): void {
     let paramMapSize = 0;
     let valMapSize = 0;
     let textMapSize = 0;
     const DEB = new Map<string, number>();
-    for (const ed of need) {
+    for (const ed of ahkFnList) {
         paramMapSize += ed.paramMap.size;
         valMapSize += ed.valMap.size;
         textMapSize += ed.textMap.size;
@@ -24,31 +41,21 @@ export function WordFrequencyStatistics(need: CAhkFunc[]): TWordFrequencyStatist
         }
     }
 
-    type TElement = {
-        k: string,
-        v: number,
-    };
-    const e5: TElement[] = [];
-    for (const [k, v] of DEB) {
-        // eslint-disable-next-line no-magic-numbers
-        if (v > 10) {
-            e5.push({ k, v });
-        }
-    }
-    e5.sort((a: TElement, b: TElement): number => b.v - a.v);
+    log.info([
+        'Command > "5 -> DeepAnalysis All File"',
+        '---unknown Word frequency statistics---------------',
+        ...getWordFrequency(DEB),
+        '---other information-------------------------------',
+        'Deep Analysis All Files',
+        `Deep Analysis : ${ahkFnList.length} Symbol`,
+        `paramMapSize is ${paramMapSize}`,
+        `valMapSize is ${valMapSize}`,
+        `textMapSize is ${textMapSize}`,
+        `All Size is ${paramMapSize + valMapSize + textMapSize}`,
+        `Done in ${timeSpend} ms`,
+    ].join('\n'));
 
-    const max = 100;
-    const e6 = e5.length > max
-        ? e5.slice(0, max)
-        : e5;
-
-    return {
-        paramMapSize,
-        valMapSize,
-        textMapSize,
-        topFuncNum: need.length,
-        WordFrequency: e6.map(({ k, v }: TElement): string => `${k}: ${v}`),
-    };
+    log.show();
 }
 
 // PointsF: 35

@@ -1,41 +1,14 @@
 import type { CAhkFunc } from '../AhkSymbol/CAhkFunc';
 import { pm } from '../core/ProjectManager';
 import { setBaseDiag } from '../provider/Diagnostic/setBaseDiag';
-import { log } from '../provider/vscWindows/log';
 import { digDAFile } from '../tools/DeepAnalysis/Diag/digDAFile';
 import { getDAListTop } from '../tools/DeepAnalysis/getDAList';
-import type { TWordFrequencyStatistics } from './tools/WordFrequencyStatistics';
 import { WordFrequencyStatistics } from './tools/WordFrequencyStatistics';
-
-function showOutputChannel(results: TWordFrequencyStatistics, timeSpend: number): void {
-    const {
-        paramMapSize,
-        valMapSize,
-        textMapSize,
-        topFuncNum,
-        WordFrequency,
-    } = results;
-
-    log.info([
-        'Command > "5 -> DeepAnalysis All File"',
-        '---unknown Word frequency statistics---------------',
-        ...WordFrequency,
-        '---other information-------------------------------',
-        'Deep Analysis All Files',
-        `Deep Analysis : ${topFuncNum} Symbol`,
-        `paramMapSize is ${paramMapSize}`,
-        `valMapSize is ${valMapSize}`,
-        `textMapSize is ${textMapSize}`,
-        `All Size is ${paramMapSize + valMapSize + textMapSize}`,
-        `Done in ${timeSpend} ms`,
-    ].join('\n'));
-    log.show();
-}
 
 export function DeepAnalysisAllFiles(): null {
     const t1: number = Date.now();
 
-    const need: CAhkFunc[] = [];
+    const ahkFnList: CAhkFunc[] = [];
     for (
         const {
             uri,
@@ -45,13 +18,12 @@ export function DeepAnalysisAllFiles(): null {
         } of pm.DocMap.values()
     ) { // keep output order is OK
         const DAList: readonly CAhkFunc[] = getDAListTop(AST);
-        need.push(...DAList);
+        ahkFnList.push(...DAList);
         setBaseDiag(uri, DocStrMap, AST);
         digDAFile(DAList, ModuleVar, uri, DocStrMap);
     }
 
-    const t2: number = Date.now();
-    showOutputChannel(WordFrequencyStatistics(need), t2 - t1);
+    WordFrequencyStatistics(ahkFnList, Date.now() - t1);
 
     return null;
 }
