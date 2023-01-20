@@ -18,8 +18,8 @@ export function hoverAhk2exe(AhkTokenLine: TAhkTokenLine, position: vscode.Posit
             if (md !== undefined) return new vscode.Hover(md);
 
             // if (%)
-            // console.log('🚀 ~ maAhk2exe', maAhk2exe[0]);
-            // console.log('🚀 ~ maAhk2exe', maAhk2exe[1]);
+            // .log('maAhk2exe', maAhk2exe[0]);
+            // .log('maAhk2exe', maAhk2exe[1]);
             // return new vscode.Hover(maAhk2exe[1]);
         }
 

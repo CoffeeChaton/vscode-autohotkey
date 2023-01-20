@@ -42,7 +42,6 @@ function infoAddAhk2(document: vscode.TextDocument, ahkV0: string): 'isAhk2' {
             //         message = error.message;
             //     }
             //     if (message !== 'Unknown language id: ahk2') {
-            //         console.error(error);
             //         OutputChannel.appendLine(';AhkNekoHelp.switchAhk2 Error Start------------');
             //         OutputChannel.appendLine(message);
             //         OutputChannel.appendLine(';AhkNekoHelp.switchAhk2 Error End--------------');

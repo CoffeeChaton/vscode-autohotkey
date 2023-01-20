@@ -109,12 +109,8 @@ describe('check outList Command cover', () => {
         const errList1: string[] = DataCheck(outPlus, OutputCommandPlusMap);
         const errList2: string[] = DataCheck(inputList, inPutVarMap);
 
-        if (errList0.length > 0) console.error('🚀 ~ OutPut Base', errList0);
-        if (errList1.length > 0) console.error('🚀 ~ OutPut Plus', errList1);
-        if (errList2.length > 0) console.error('🚀 ~ InPut', errList2);
-
-        expect(errList0.length === 0).toBeTruthy();
-        expect(errList1.length === 0).toBeTruthy();
-        expect(errList2.length === 0).toBeTruthy();
+        expect(errList0).toHaveLength(0);
+        expect(errList1).toHaveLength(0);
+        expect(errList2).toHaveLength(0);
     });
 });

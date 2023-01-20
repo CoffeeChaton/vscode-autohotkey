@@ -106,7 +106,7 @@ export function getSnippetGui(subStr: string): readonly vscode.CompletionItem[] 
 
 //     if (position.character < col + 'gui,'.length) return undefined;
 //     //
-//     console.log('🚀 ~ position', position);
+//     .log('position', position);
 
 //     return undefined;
 // }

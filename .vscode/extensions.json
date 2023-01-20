@@ -4,7 +4,6 @@
     "recommendations": [
         "alefragnani.project-manager",
         "bierner.markdown-preview-github-styles",
-        "chakrounanas.turbo-console-log",
         "christian-kohler.path-intellisense",
         "davidanson.vscode-markdownlint",
         "dbaeumer.vscode-eslint",

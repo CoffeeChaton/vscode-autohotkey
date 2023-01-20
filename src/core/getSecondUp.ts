@@ -1,3 +1,4 @@
+import { log } from '../provider/vscWindows/log';
 import { getFistWordCore } from './getFistWordUpData';
 
 type TSecondUpData = {
@@ -61,7 +62,7 @@ export function getSecondUp(lStr: string, fistWordUp: string, fistWordUpCol: num
 
     const col: number = lStrFix.padStart(lStr.length, ' ').indexOf(SecondWord);
     if (col === -1) {
-        console.warn('🚀', col);
+        log.warn('"get SecondWordCol error"', lStr, SecondWord);
         return { SecondWordUpCol: -1, SecondWordUp: '' };
     }
 

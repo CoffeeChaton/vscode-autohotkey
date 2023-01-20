@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import type { TTokenStream } from '../../globalEnum';
 import { EDetail } from '../../globalEnum';
+import { log } from '../../provider/vscWindows/log';
 
 function getSearchLineFix(DocStrMap: TTokenStream, searchLine: number, RangeEnd: number): number {
     for (let line = searchLine; line < RangeEnd; line++) {
@@ -19,7 +20,10 @@ export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: n
     for (let line = searchLineFix + 1; line <= RangeEnd; line++) {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (DocStrMap[line] === undefined) {
-            console.error('🚀 ~ getRange ~ DocStrMap[line - 1].textRaw', DocStrMap[line - 1].textRaw);
+            log.error(
+                '"DocStrMap[line] === undefined"\nDocStrMap[line - 1] is ',
+                DocStrMap[line - 1],
+            );
 
             break;
         }
@@ -29,17 +33,15 @@ export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: n
         }
     }
 
-    const errMsg: string = [
-        `🚀 ~ startDeep${startDeep}`,
-        '  DocStrMap[line].deep',
-        'get Range ERROR Start --904--321--33 -------',
-        `  textRaw: ${DocStrMap[searchLine].textRaw}`,
-        `  defLine ${defLine}`,
-        `  searchLineFix ${searchLineFix}`,
-        `  startDeep ${startDeep}`,
-        `  RangeEnd ${RangeEnd}`,
-        'get Range ERROR END --904--321--33 -------',
-    ].join('\n');
-    console.error(errMsg);
+    log.error([
+        '"get Range Error"',
+        `startDeep${startDeep}`,
+        'DocStrMap[line].deep',
+        `textRaw: ${DocStrMap[searchLine].textRaw}`,
+        `defLine ${defLine}`,
+        `searchLineFix ${searchLineFix}`,
+        `startDeep ${startDeep}`,
+        `RangeEnd ${RangeEnd}`,
+    ].join('\n'));
     return new vscode.Range(defLine, 0, searchLine + 1, 0);
 }

@@ -1,4 +1,4 @@
-/* eslint-disable no-magic-numbers */
+/* eslint no-magic-numbers: ["error", { "ignore": [-5,-1,0,1,10] }] */
 import * as vscode from 'vscode';
 import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TFsPath, TTokenStream } from '../../globalEnum';
@@ -120,7 +120,7 @@ export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
 
     // const ms = Date.now() - t1;
     // if (ms > 30) {
-    //     console.log('🚀 ~ getFileAST', { ms, fsPath });
+    //     .log('getFileAST', { ms, fsPath });
     // }
 
     // {
