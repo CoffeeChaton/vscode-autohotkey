@@ -51,6 +51,6 @@ type TempConfigs = {
 export type TConfigs = DeepReadonly<TempConfigs>;
 
 type TConfigJson = typeof contributes.configuration.properties;
-type TConfigKey = keyof TConfigJson;
+export type TConfigKey = keyof TConfigJson;
 
-export type TCheckKey<T extends string> = `AhkNekoHelp.${T}` extends TConfigKey ? T : never;
+// export type TCheckKey<T extends string> = `AhkNekoHelp.${T}` extends TConfigKey ? T : never;

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import type { ECommandOption, TCheckKey, TConfigs } from './configUI.data';
+import type { ECommandOption, TConfigKey, TConfigs } from './configUI.data';
 import { EDiagMasterSwitch } from './configUI.data';
 import { statusBarItem } from './provider/vscWindows/statusBarItem';
 import { CConfigError } from './tools/DevClass/CConfigError';
@@ -8,37 +8,37 @@ import { str2RegexListCheck } from './tools/str2RegexListCheck';
 /*
     ---set start---
 */
-const Config = 'AhkNekoHelp';
-let Configs: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration(Config);
+const enum EStr {
+    Config = 'AhkNekoHelp',
+}
 
-// WTF
-function getConfigs<T, V extends string>(section: TCheckKey<V>): T {
-    const ed: T | undefined = Configs.get<T>(section);
+function getConfigs<T>(Configs: vscode.WorkspaceConfiguration, section: TConfigKey): T {
+    const ed: T | undefined = Configs.get<T>(section.replace('AhkNekoHelp.', ''));
     if (ed !== undefined) return ed;
     throw new CConfigError(section);
 }
 
-function getConfig(): TConfigs {
+function getConfig(Configs: vscode.WorkspaceConfiguration): TConfigs {
     const ed: TConfigs = {
         Diag: {
-            AMasterSwitch: getConfigs<EDiagMasterSwitch, 'Diag.AMasterSwitch'>('Diag.AMasterSwitch'),
-            code107: getConfigs<boolean, 'Diag.code107LegacyAssignment'>('Diag.code107LegacyAssignment'),
-            code300fnSize: getConfigs<number, 'Diag.code300FuncSize'>('Diag.code300FuncSize'),
-            code500Max: getConfigs<number, 'Diag.code500'>('Diag.code500'), // NeverUsedVar
-            code502Max: getConfigs<number, 'Diag.code502'>('Diag.code502'), // of var
-            code503Max: getConfigs<number, 'Diag.code503'>('Diag.code503'), // of param
-            code800Deprecated: getConfigs<boolean, 'Diag.code800Deprecated'>('Diag.code800Deprecated'),
-            useModuleValDiag: getConfigs<boolean, 'Diag.useModuleValDiag'>('Diag.useModuleValDiag'),
+            AMasterSwitch: getConfigs<EDiagMasterSwitch>(Configs, 'AhkNekoHelp.Diag.AMasterSwitch'),
+            code107: getConfigs<boolean>(Configs, 'AhkNekoHelp.Diag.code107LegacyAssignment'),
+            code300fnSize: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code300FuncSize'),
+            code500Max: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code500'), // NeverUsedVar
+            code502Max: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code502'), // of var
+            code503Max: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code503'), // of param
+            code800Deprecated: getConfigs<boolean>(Configs, 'AhkNekoHelp.Diag.code800Deprecated'),
+            useModuleValDiag: getConfigs<boolean>(Configs, 'AhkNekoHelp.Diag.useModuleValDiag'),
         },
-        baseScanIgnoredList: getConfigs<readonly string[], 'baseScan.IgnoredList'>('baseScan.IgnoredList'),
-        formatTextReplace: getConfigs<boolean, 'format.textReplace'>('format.textReplace'),
+        baseScanIgnoredList: getConfigs<readonly string[]>(Configs, 'AhkNekoHelp.baseScan.IgnoredList'),
+        formatTextReplace: getConfigs<boolean>(Configs, 'AhkNekoHelp.format.textReplace'),
         snippets: {
-            blockFilesList: getConfigs<readonly string[], 'snippets.blockFilesList'>('snippets.blockFilesList'),
-            CommandOption: getConfigs<ECommandOption, 'snippets.CommandOption'>('snippets.CommandOption'),
+            blockFilesList: getConfigs<readonly string[]>(Configs, 'AhkNekoHelp.snippets.blockFilesList'),
+            CommandOption: getConfigs<ECommandOption>(Configs, 'AhkNekoHelp.snippets.CommandOption'),
         },
-        statusBarDisplayColor: getConfigs<string, 'statusBar.displayColor'>('statusBar.displayColor'),
-        useCodeLens: getConfigs<boolean, 'useCodeLens'>('useCodeLens'),
-        useSymbolProvider: getConfigs<boolean, 'useSymbolProvider'>('useSymbolProvider'),
+        statusBarDisplayColor: getConfigs<string>(Configs, 'AhkNekoHelp.statusBar.displayColor'),
+        useCodeLens: getConfigs<boolean>(Configs, 'AhkNekoHelp.useCodeLens'),
+        useSymbolProvider: getConfigs<boolean>(Configs, 'AhkNekoHelp.useSymbolProvider'),
     } as const;
 
     statusBarItem.color = ed.statusBarDisplayColor;
@@ -47,11 +47,10 @@ function getConfig(): TConfigs {
     return ed;
 }
 
-let config: TConfigs = getConfig();
+let config: TConfigs = getConfig(vscode.workspace.getConfiguration(EStr.Config));
 
 export function configChangEvent(): void {
-    Configs = vscode.workspace.getConfiguration(Config);
-    config = getConfig();
+    config = getConfig(vscode.workspace.getConfiguration(EStr.Config));
 }
 
 /*
