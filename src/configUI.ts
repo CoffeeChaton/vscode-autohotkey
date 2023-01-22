@@ -104,18 +104,3 @@ export function needDiag(): boolean {
 // vscode.window.showErrorMessage()
 // vscode.window.showInformationMessage()
 // ❤♡
-
-// eslint-disable-next-line @typescript-eslint/naming-convention, init-declarations
-declare const __nominal__type: unique symbol;
-// type IPv4 = string & { [__nominal__type]: 'IPv4' };
-
-// function isIPv4(input: any): input is IPv4 {
-//     // nothing...
-//     return true;
-// }
-
-// const ip = '192.168.0.0';
-// if (isIPv4(ip)) {
-//     console.log(ip);
-//     //          ^?
-// }
