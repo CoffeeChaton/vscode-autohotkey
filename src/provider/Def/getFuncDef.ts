@@ -11,7 +11,7 @@ import { isPosAtMethodName } from './isPosAtMethodName';
 import { posAtFnRef } from './posAtFnRef';
 
 export function getFuncDef(
-    document: vscode.TextDocument,
+    document: vscode.TextDocument, // FIXME rm this...
     position: vscode.Position,
     wordUp: string,
     listAllUsing: boolean,
@@ -48,14 +48,15 @@ export function getFuncDef(
         return locList;
     }
 
+    const { uri } = AhkFileData;
     if (
-        (funcSymbol.uri.fsPath === document.uri.fsPath
+        (funcSymbol.uri.fsPath === uri.fsPath
             && funcSymbol.nameRange.contains(position))
     ) {
         // OK..i know who to go to References...
         // keep uri as old uri && return old pos/range
         // don't new vscode.Uri.file()
-        return [new vscode.Location(document.uri, funcSymbol.nameRange)]; // let auto use getReference
+        return [new vscode.Location(uri, funcSymbol.nameRange)]; // let auto use getReference
     }
 
     log.info(`goto def of ${funcSymbol.name}() , use ${Date.now() - timeStart} ms`); // ssd -> 0~1ms

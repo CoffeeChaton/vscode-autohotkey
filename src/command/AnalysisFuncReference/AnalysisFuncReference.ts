@@ -3,7 +3,6 @@ import * as path from 'node:path';
 import * as vscode from 'vscode';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
-import type { TFnRefLike } from '../../provider/Def/getFnRef';
 import { getFuncRef } from '../../provider/Def/getFnRef';
 import { log } from '../../provider/vscWindows/log';
 import { isAhkTab } from '../../tools/fsTools/isAhk';
@@ -24,10 +23,9 @@ function getEachFnRefNumber(AhkFileData: TAhkFileData): TRef {
     const RefN: string[] = [];
 
     for (const funcSymbol of getFileAllFunc(AhkFileData.AST)) {
-        const fnRefLikeList: readonly TFnRefLike[] = getFuncRef(funcSymbol);
         const { name } = funcSymbol;
 
-        const len: number = fnRefLikeList.length - 1;
+        const len: number = getFuncRef(funcSymbol).length - 1;
         switch (len) {
             case 0:
                 Ref0.push(`${name}()`);

@@ -39,7 +39,7 @@ function CodeLensCore(fsPath: string): vscode.CodeLens[] {
         }
 
         const cmd2: vscode.Command = {
-            title: `Reference ${getFuncRef(fnSymbol).length}`,
+            title: `Reference ${getFuncRef(fnSymbol).length - 1}`,
             command: ECommand.AnalyzeFuncRef,
             tooltip: 'by neko-help dev tools',
             arguments: [

@@ -4,7 +4,7 @@ import type { TAhkFileData } from '../../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../../globalEnum';
 import type { TCompletionMsgBoxParam } from './CompletionMsgBox';
 
-export function CommandCodeAction(
+function CommandCodeAction(
     AhkFileData: TAhkFileData,
     selection: vscode.Range | vscode.Selection,
 ): vscode.Command[] {
