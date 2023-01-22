@@ -3,120 +3,15 @@ import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
-import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
-import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
-import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
-import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { log } from '../vscWindows/log';
+import { RefLike2Location } from './getFnRef';
 import { isPosAtMethodName } from './isPosAtMethodName';
+import { posAtFnRef } from './posAtFnRef';
 
-function searchHotkeyFuncRef(AhkTokenLine: TAhkTokenLine, wordUp: string): number {
-    const HotkeyData: TScanData | null = getHotkeyWrap(AhkTokenLine);
-    if (HotkeyData !== null && HotkeyData.RawNameNew.toUpperCase() === wordUp) {
-        return HotkeyData.lPos;
-    }
-    return -1;
-}
-
-function searchSetTimerFuncRef(AhkTokenLine: TAhkTokenLine, wordUp: string): number {
-    const setTimerData: TScanData | null = getSetTimerWrap(AhkTokenLine);
-    if (setTimerData !== null && setTimerData.RawNameNew.toUpperCase() === wordUp) {
-        return setTimerData.lPos;
-    }
-    return -1;
-}
-
-function fnMake(regBase: RegExp, wordUp: string): TFnFindCol {
-    return (AhkTokenLine: TAhkTokenLine, partTextRaw: string): number[] => {
-        //  funcName( | "funcName"
-        const arr: number[] = [...partTextRaw.matchAll(regBase)].map((ma: RegExpMatchArray): number => ma.index ?? -1);
-
-        const setTimerFuncCol: number = searchSetTimerFuncRef(AhkTokenLine, wordUp);
-        if (setTimerFuncCol !== -1) {
-            arr.push(setTimerFuncCol);
-        }
-
-        const HotkeyFuncCol: number = searchHotkeyFuncRef(AhkTokenLine, wordUp);
-        if (HotkeyFuncCol !== -1) {
-            arr.push(HotkeyFuncCol);
-        }
-
-        return arr;
-    };
-}
-
-type TFnFindCol = (AhkTokenLine: TAhkTokenLine, partTextRaw: string) => number[];
-
-function getFuncReferenceCore(
-    refFn: TFnFindCol,
-    AhkFileData: TAhkFileData,
-    wordUpLen: number,
-): readonly vscode.Location[] {
-    const List: vscode.Location[] = [];
-    const { DocStrMap, AST, uri } = AhkFileData;
-    const filterLineList: number[] = getDAListTop(AST)
-        .filter((DA: CAhkFunc): boolean => DA.kind === vscode.SymbolKind.Method)
-        .map((DA: CAhkFunc): number => DA.nameRange.start.line);
-
-    for (const AhkTokenLine of DocStrMap) {
-        const { textRaw, line, lStr } = AhkTokenLine;
-
-        if (/* lStr.trim().length === 0 || */ filterLineList.includes(line)) {
-            continue;
-        }
-
-        for (const col of refFn(AhkTokenLine, textRaw.slice(0, lStr.length))) {
-            if (col === -1) {
-                continue;
-            }
-
-            const Location: vscode.Location = new vscode.Location(
-                uri,
-                new vscode.Range(
-                    new vscode.Position(line, col),
-                    new vscode.Position(line, col + wordUpLen),
-                ),
-            );
-            List.push(Location);
-        }
-    }
-
-    return List;
-}
-
-type TMap = Map<string, readonly vscode.Location[]>;
-const wm = new WeakMap<TAhkFileData, TMap>();
-
-export function getFuncReference(refFn: TFnFindCol, timeStart: number, funcSymbolName: string): vscode.Location[] {
-    const wordUp: string = funcSymbolName.toUpperCase();
-    const wordUpLen: number = wordUp.length;
-
-    const allList: vscode.Location[] = [];
-    for (const AhkFileData of pm.getDocMapValue()) {
-        const oldMap: TMap = wm.get(AhkFileData) ?? new Map<string, readonly vscode.Location[]>();
-
-        const oldList: readonly vscode.Location[] | undefined = oldMap.get(wordUp);
-        if (oldList !== undefined) {
-            allList.push(...oldList);
-            continue;
-        }
-
-        //
-        const list: readonly vscode.Location[] = getFuncReferenceCore(refFn, AhkFileData, wordUpLen);
-        allList.push(...list);
-
-        oldMap.set(wordUp, list);
-        wm.set(AhkFileData, oldMap);
-    }
-    log.info(`find Ref of ${funcSymbolName}() , use ${Date.now() - timeStart} ms`);
-    return allList;
-}
-
-// TODO: spilt this func, just need input ahkFunc
 export function getFuncDef(
-    document: vscode.TextDocument, // TODO: remove this
+    document: vscode.TextDocument,
     position: vscode.Position,
     wordUp: string,
     listAllUsing: boolean,
@@ -132,33 +27,26 @@ export function getFuncDef(
     const funcSymbol: CAhkFunc | null = getFuncWithName(wordUp);
     if (funcSymbol === null) return null;
 
-    const AhkTokenLine = DocStrMap[position.line];
+    const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
 
-    // funcName( | "funcName"
-    // eslint-disable-next-line security/detect-non-literal-regexp
-    const regBase = new RegExp(
-        `(?:(?<![.\`%#])\\b(${wordUp})\\b\\()|(?:(?<=")(${wordUp})")`,
-        //                          funcName(                  "funcName"
-        // --------------------------------------------------- RegisterCallback("funcName") or Func("funcName")
-        'giu',
-    );
-
-    if (document.getWordRangeAtPosition(position, regBase) === undefined) {
-        let atFuncName = 0;
-
-        const setTimerFuncCol: number = searchSetTimerFuncRef(AhkTokenLine, wordUp);
-        if (setTimerFuncCol !== -1) atFuncName++;
-
-        const HotkeyFuncCol: number = searchHotkeyFuncRef(AhkTokenLine, wordUp);
-        if (HotkeyFuncCol !== -1) atFuncName++;
-
-        if (atFuncName === 0) return null;
+    if (
+        !posAtFnRef({
+            AhkTokenLine,
+            document,
+            position,
+            wordUp,
+        })
+    ) {
+        // c := c();
+        // No   Yes check pos at like func()
+        return null;
     }
 
-    // c := c();
-    // No   Yes check pos at like func()
-
-    if (listAllUsing) return getFuncReference(fnMake(regBase, wordUp), timeStart, funcSymbol.name);
+    if (listAllUsing) {
+        const locList: vscode.Location[] = RefLike2Location(funcSymbol);
+        log.info(`list Ref of ${funcSymbol.name}() , use ${Date.now() - timeStart} ms`);
+        return locList;
+    }
 
     if (
         (funcSymbol.uri.fsPath === document.uri.fsPath
