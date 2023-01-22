@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { AnalysisFuncReferenceWrap } from './AnalysisFuncReference/AnalysisFuncReference';
 import { DeepAnalysisAllFiles } from './DeepAnalysisAllFiles';
 import { pressureTest } from './DevMode';
 import { FormatAllFile } from './FormatAllFile';
@@ -21,6 +22,7 @@ export function statusBarClick(): void {
         { label: '4 -> list all Function()', fn: ListAllFuncMain },
         { label: '5 -> DeepAnalysis All File', fn: DeepAnalysisAllFiles },
         { label: '6 -> format All File', fn: FormatAllFile },
+        { label: '7 -> Analysis this file def func Reference', fn: AnalysisFuncReferenceWrap },
     ])
         .then((pick: TPick | undefined): null => {
             //

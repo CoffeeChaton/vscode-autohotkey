@@ -25,7 +25,7 @@
         "source.fixAll": true,
         "source.organizeImports": true
     },
-    "editor.defaultFormatter": "dprint.dprint",
+    // "editor.defaultFormatter": "dprint.dprint",
     "eslint.enable": true,
     "eslint.options": {
         "extensions": [
