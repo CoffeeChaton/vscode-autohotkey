@@ -21,7 +21,7 @@ function RenameProviderCore(
         return null;
     }
 
-    const userDefLink: vscode.Location[] | null = getFuncDef(document, position, DA.upName, true);
+    const userDefLink: vscode.Location[] | null = getFuncDef(AhkFileData, position, DA.upName, true);
     if (userDefLink === null) return null;
 
     const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();

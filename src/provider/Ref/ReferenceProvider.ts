@@ -29,7 +29,7 @@ function ReferenceProviderCore(
     if (swLoc !== null) return swLoc;
 
     const listAllUsing = true;
-    const userDefLink: vscode.Location[] | null = getFuncDef(document, position, wordUp, listAllUsing);
+    const userDefLink: vscode.Location[] | null = getFuncDef(AhkFileData, position, wordUp, listAllUsing);
     if (userDefLink !== null) return userDefLink;
 
     const classDef: vscode.Location[] | null = getClassDef(wordUp, listAllUsing);

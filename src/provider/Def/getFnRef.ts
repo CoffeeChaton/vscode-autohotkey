@@ -17,17 +17,16 @@ type TLineFnCall = {
     col: number,
 };
 
-type TFuncRef = Omit<TLineFnCall, 'upName'> & {
-    // /**
-    //  * 1.lStr    exp funcName(
-    //  * 2. textRaw exp "funcName"
-    //  * 3. by Hotkey
-    //  * 4. by SetTimer
-    //  */
-    // by: 1 | 2 | 3 | 4,
-};
+// /**
+//  * 1.lStr    exp funcName(
+//  * 2. textRaw exp "funcName"
+//  * 3. by Hotkey
+//  * 4. by SetTimer
+//  * by: 1 | 2 | 3 | 4
+//  */
+type TFuncRef = Omit<TLineFnCall, 'upName'>;
 
-function fnRefLStr(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
+export function fnRefLStr(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
     const { lStr, line } = AhkTokenLine;
     const arr: TLineFnCall[] = [];
     for (const ma of lStr.matchAll(/(?<![.`%#])\b(\w+)\(/giu)) {
@@ -51,7 +50,7 @@ function fnRefLStr(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
     return arr;
 }
 
-function fnRefTextRaw(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
+export function fnRefTextRaw(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
     const { lStr, textRaw, line } = AhkTokenLine;
     const arr: TLineFnCall[] = [];
     for (const ma of textRaw.slice(0, lStr.length).matchAll(/(?<=")(\w+)"/giu)) {
@@ -94,7 +93,10 @@ const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[]>>(
             if (lStr.length === 0) continue;
             if (filterLineList.includes(line)) continue;
 
-            for (const { upName, col } of [...fnRefLStr(AhkTokenLine), ...fnRefTextRaw(AhkTokenLine)]) {
+            for (
+                const { upName, col } of [...fnRefLStr(AhkTokenLine), ...fnRefTextRaw(AhkTokenLine)]
+                    .sort((a: TLineFnCall, b: TLineFnCall): number => a.col - b.col)
+            ) {
                 const arr: TFuncRef[] = map.get(upName) ?? [];
                 arr.push({
                     line,

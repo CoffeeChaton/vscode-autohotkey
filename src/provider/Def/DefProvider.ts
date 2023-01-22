@@ -32,7 +32,7 @@ function DefProviderCore(
     const LabelDef: vscode.Location[] | null = getDefWithLabel(AhkFileData, document.uri, position, wordUp);
     if (LabelDef !== null) return LabelDef;
 
-    const userDefFuncLink: vscode.Location[] | null = getFuncDef(document, position, wordUp, listAllUsing);
+    const userDefFuncLink: vscode.Location[] | null = getFuncDef(AhkFileData, position, wordUp, listAllUsing);
     if (userDefFuncLink !== null) return userDefFuncLink;
 
     const classDef: vscode.Location[] | null = getClassDef(wordUp, listAllUsing);
