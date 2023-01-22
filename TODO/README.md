@@ -7,8 +7,6 @@
 - add diag auto check of `catch{} ;null catch`
 - add diag of `%\w%\w`
 - add hover of `;@ahk-neko-ignore`
-- add test jest of `package.json.config` <---> `configUI.ts`
-- change `configUI.ts` fmt option to `enum`
 - fix: label/func match with `Menu`
 
   ```ahk

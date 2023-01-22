@@ -88,6 +88,7 @@ export function activate(context: ExtensionContext): void {
 // this method is called when your extension is deactivated
 export function deactive(): void {
     rmAllDiag();
+    statusBarItem.hide(); // just .hide() not .dispose()
 }
 
 /*
