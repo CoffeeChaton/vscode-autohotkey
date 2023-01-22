@@ -38,17 +38,23 @@ function CodeLensCore(fsPath: string): vscode.CodeLens[] {
             need.push(new vscode.CodeLens(fnSymbol.range, cmd1));
         }
 
-        const cmd2: vscode.Command = {
-            title: `Reference ${getFuncRef(fnSymbol).length - 1}`,
-            command: ECommand.AnalyzeFuncRef,
-            tooltip: 'by neko-help dev tools',
-            arguments: [
-                uri,
-                fnSymbol.range.start,
-                fnSymbol,
-            ] satisfies TAnalyzeFuncRef,
-        };
-        need.push(new vscode.CodeLens(fnSymbol.range, cmd2));
+        if (fnSymbol.kind === vscode.SymbolKind.Function) {
+            const len: number = getFuncRef(fnSymbol).length;
+            const lenFix: number = len <= 2
+                ? len - 1
+                : len;
+            const cmd2: vscode.Command = {
+                title: `Reference ${lenFix}`,
+                command: ECommand.AnalyzeFuncRef,
+                tooltip: 'by neko-help dev tools',
+                arguments: [
+                    uri,
+                    fnSymbol.range.start,
+                    fnSymbol,
+                ] satisfies TAnalyzeFuncRef,
+            };
+            need.push(new vscode.CodeLens(fnSymbol.range, cmd2));
+        }
     }
 
     return need;
