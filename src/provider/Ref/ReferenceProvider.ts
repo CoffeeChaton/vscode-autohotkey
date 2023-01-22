@@ -53,7 +53,7 @@ function just2Ref(
     const loc: vscode.Location[] | null = ReferenceProviderCore(document, position);
     if (loc === null || loc.length !== 2) return loc;
 
-    const loc0 = loc[0];
+    const loc0: vscode.Location = loc[0];
     if (loc0.uri.fsPath === document.uri.fsPath && loc0.range.contains(position)) {
         return [loc[1]];
     }

@@ -8,9 +8,9 @@
  * Returns the index of the next delimiter, taking into account quotes, parentheses, etc.
  *
  * If the delimiter is not found, returns the length of aBuf.
- * @param aBuf as LPCTSTR
- * @param aDelimiter as TCHAR
- * @param aStartIndex as Int
+ * @param aBuf LPCTSTR
+ * @param aDelimiter TCHAR
+ * @param aStartIndex Int
  * @returns Returns the index of the next delimiter, If not found, returns the length of aBuf.
  * @from https://github.com/Lexikos/AutoHotkey_L/blob/master/source/util.cpp#L2788
  */
