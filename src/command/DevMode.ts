@@ -129,3 +129,9 @@ export async function pressureTest(): Promise<null> {
 // subStd is 0.4472135954999579
 // subStdArr len is [80, 81, 80, 80, 80]
 // ---------------------------------------------
+
+// other perf
+// Add an exclusion to Windows Security
+// https://support.microsoft.com/en-us/windows/add-an-exclusion-to-windows-security-811816c0-4dfd-af4a-47e4-c301afe13b26
+//
+// Code Spell Checker

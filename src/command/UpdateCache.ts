@@ -33,8 +33,13 @@ export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileDat
 
 export async function UpdateCacheUi(): Promise<void> {
     const t1: number = Date.now();
-    await UpdateCacheAsync(true);
+    const list: TAhkFileData[] | null = await UpdateCacheAsync(true) ?? [];
     const t2: number = Date.now();
-    log.info(`Refresh Resource ${t2 - t1} ms`);
+    log.info(`Refresh Resource ${t2 - t1} ms, file: ${list.length}`);
+    // log.info(`file: [\n${
+    //     list
+    //         .map((AhkFileData: TAhkFileData): string => AhkFileData.uri.fsPath)
+    //         .join('\n')
+    // }\n]`);
     log.show();
 }
