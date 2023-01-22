@@ -5,6 +5,7 @@ import {
     window,
     workspace,
 } from 'vscode';
+import { AnalyzeFuncRef } from './command/AnalyzeFunc/AnalyzeFuncRef';
 import { AnalyzeFuncMain } from './command/AnalyzeFunc/AnalyzeThisFunc';
 import { statusBarClick } from './command/Command';
 import { ECommand } from './command/ECommand';
@@ -70,6 +71,7 @@ export function activate(context: ExtensionContext): void {
         commands.registerCommand('ahk.nekoHelp.bar', statusBarClick),
         commands.registerCommand('ahk.nekoHelp.refreshResource', UpdateCacheUi),
         // commands.registerCommand(ECommand.CompletionMsgBox, CompletionMsgBox),
+        commands.registerCommand(ECommand.AnalyzeFuncRef, AnalyzeFuncRef),
         commands.registerCommand(ECommand.ListAllFunc, ListAllFuncMain),
         commands.registerCommand(ECommand.ListAllInclude, ListAllInclude),
         commands.registerCommand(ECommand.ListIncludeTree, ListIncludeTree),

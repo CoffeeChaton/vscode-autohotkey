@@ -105,13 +105,13 @@ export const CodeActionProvider: vscode.CodeActionProvider = {
         range: vscode.Range | vscode.Selection,
         context: vscode.CodeActionContext,
         _token: vscode.CancellationToken,
-    ): vscode.ProviderResult<(vscode.CodeAction | vscode.Command)[] | null> {
+    ): vscode.ProviderResult<vscode.CodeAction[]> {
         const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
         if (AhkFileData === null) return [];
 
         return [
             ...fixDiag(AhkFileData, context.diagnostics),
-            ...DependencyAnalysis(AhkFileData, range),
+            ...DependencyAnalysis(AhkFileData, range, document),
         ];
     },
 };
