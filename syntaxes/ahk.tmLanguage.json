@@ -1,5 +1,5 @@
 {
-    "fileTypes": ["ahk"],
+    "fileTypes": [ "ahk" ],
     "name": "AutoHotkey",
     "patterns": [
         { "include": "#escaped_char" },
@@ -63,9 +63,7 @@
                     "name": "meta.command.line.ahk",
                     "begin": "(?:^|[ \\t:])\\b(?i:(Transform))\\b(?!\\()",
                     "end": "(\\n)",
-                    "beginCaptures": {
-                        "1": { "name": "support.function.ahk" }
-                    },
+                    "beginCaptures": { "1": { "name": "support.function.ahk" } },
                     "patterns": [
                         {
                             "name": "keyword.command.option.ahk",
@@ -104,9 +102,7 @@
                 {
                     "match": "\\b(?i:[WHXY](\\d+)|Center|xCenter|yCenter|AutoSize|Minimize|Maximize|Restore|NoActivate|NA|Hide)\\b",
                     "name": "keyword.string.gui.show.ahk",
-                    "captures": {
-                        "1": { "name": "constant.numeric.gui.ahk" }
-                    }
+                    "captures": { "1": { "name": "constant.numeric.gui.ahk" } }
                 },
                 {
                     "match": "\\b(?i:(?:c|0x)?([a-fA-F0-9]{6}))\\b",
@@ -421,6 +417,10 @@
                 {
                     "match": "(?:^|[ \\t])(?i:and|Between|in|is|new|not|or)(?:$|[ \\t])",
                     "name": "keyword.other.operator.hasdoc.ahk"
+                },
+                {
+                    "match": "\\b(?i:ByRef)\\b(?:[ \\t])",
+                    "name": "keyword.other.operator.hasdoc.ahk"
                 }
             ]
         },
@@ -449,7 +449,7 @@
             },
             "end": "^[ \\t]*\\)",
             "name": "string.multiline.ahk",
-            "patterns": [{ "include": "#escaped_char" }]
+            "patterns": [ { "include": "#escaped_char" } ]
         }
     },
     "scopeName": "source.ahk"
