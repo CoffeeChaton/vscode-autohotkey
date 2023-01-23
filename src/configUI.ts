@@ -20,6 +20,10 @@ function getConfigs<T>(Configs: vscode.WorkspaceConfiguration, section: TConfigK
 
 function getConfig(Configs: vscode.WorkspaceConfiguration): TConfigs {
     const ed: TConfigs = {
+        CodeLens: {
+            showFuncReference: getConfigs<boolean>(Configs, 'AhkNekoHelp.CodeLens.showFuncReference'),
+            showDevTool: getConfigs<boolean>(Configs, 'AhkNekoHelp.CodeLens.showDevTool'),
+        },
         Diag: {
             AMasterSwitch: getConfigs<EDiagMasterSwitch>(Configs, 'AhkNekoHelp.Diag.AMasterSwitch'),
             code107: getConfigs<boolean>(Configs, 'AhkNekoHelp.Diag.code107LegacyAssignment'),
@@ -37,8 +41,10 @@ function getConfig(Configs: vscode.WorkspaceConfiguration): TConfigs {
             CommandOption: getConfigs<ECommandOption>(Configs, 'AhkNekoHelp.snippets.CommandOption'),
         },
         statusBarDisplayColor: getConfigs<string>(Configs, 'AhkNekoHelp.statusBar.displayColor'),
-        useCodeLens: getConfigs<boolean>(Configs, 'AhkNekoHelp.useCodeLens'),
         useSymbolProvider: getConfigs<boolean>(Configs, 'AhkNekoHelp.useSymbolProvider'),
+        customize: {
+            CodeAction2GotoDefRef: getConfigs<boolean>(Configs, 'AhkNekoHelp.customize.CodeAction2GotoDefRef'),
+        },
     } as const;
 
     statusBarItem.color = ed.statusBarDisplayColor;
@@ -61,8 +67,8 @@ export function showTimeSpend(showText: string): void {
     statusBarItem.show();
 }
 
-export function getCodeLenConfig(): boolean {
-    return config.useCodeLens;
+export function getCodeLenConfig(): TConfigs['CodeLens'] {
+    return config.CodeLens;
 }
 
 export function getFormatConfig(): boolean {
@@ -87,6 +93,10 @@ export function getCommandOptions(): ECommandOption {
 
 export function getDiagConfig(): TConfigs['Diag'] {
     return config.Diag;
+}
+
+export function getCustomize(): TConfigs['customize'] {
+    return config.customize;
 }
 
 export function needDiag(): boolean {

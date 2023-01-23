@@ -16,6 +16,10 @@ export const enum EDiagMasterSwitch {
 }
 
 type TempConfigs = {
+    CodeLens: {
+        showFuncReference: boolean,
+        showDevTool: boolean,
+    },
     Diag: {
         AMasterSwitch: EDiagMasterSwitch,
         /**
@@ -41,8 +45,10 @@ type TempConfigs = {
         CommandOption: ECommandOption,
     },
     statusBarDisplayColor: string,
-    useCodeLens: boolean,
     useSymbolProvider: boolean,
+    customize: {
+        CodeAction2GotoDefRef: boolean,
+    },
 };
 
 /**
@@ -50,7 +56,7 @@ type TempConfigs = {
  */
 export type TConfigs = DeepReadonly<TempConfigs>;
 
-type TConfigJson = typeof contributes.configuration.properties;
+type TConfigJson = typeof contributes.configuration[number]['properties'];
 export type TConfigKey = keyof TConfigJson;
 
 // export type TCheckKey<T extends string> = `AhkNekoHelp.${T}` extends TConfigKey ? T : never;

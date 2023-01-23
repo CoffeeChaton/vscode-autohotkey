@@ -4,6 +4,7 @@ import type { AnalyzeFuncMain } from '../../command/AnalyzeFunc/AnalyzeThisFunc'
 import type { CmdFindFuncRef } from '../../command/CmdFindFuncRef';
 import type { CmdGotoFuncDef } from '../../command/CmdGotoFuncDef';
 import { ECommand } from '../../command/ECommand';
+import { getCustomize } from '../../configUI';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
@@ -11,7 +12,12 @@ import { getFileAllFunc } from '../../tools/visitor/getFileAllFuncList';
 import type { showUnknownAnalyze } from '../CodeLens/showUnknownAnalyze';
 import { posAtFnRef } from '../Def/posAtFnRef';
 
-function atFnHead(ahkFn: CAhkFunc, AhkFileData: TAhkFileData, active: vscode.Position): vscode.CodeAction[] {
+function atFnHead(
+    ahkFn: CAhkFunc,
+    AhkFileData: TAhkFileData,
+    active: vscode.Position,
+    CodeAction2GotoDefRef: boolean,
+): vscode.CodeAction[] {
     const { DocStrMap, uri } = AhkFileData;
     const need: vscode.CodeAction[] = [];
 
@@ -38,18 +44,20 @@ function atFnHead(ahkFn: CAhkFunc, AhkFileData: TAhkFileData, active: vscode.Pos
         need.push(CA2);
     }
 
-    const CA3 = new vscode.CodeAction('Find All Reference');
-    CA3.command = {
-        title: 'Find All Reference',
-        command: ECommand.CmdFindFuncRef,
-        tooltip: 'by neko-help dev tools',
-        arguments: [
-            uri,
-            active,
-            ahkFn,
-        ] satisfies Parameters<typeof CmdFindFuncRef>,
-    };
-    need.push(CA3);
+    if (CodeAction2GotoDefRef) {
+        const CA3 = new vscode.CodeAction('Find All Reference');
+        CA3.command = {
+            title: 'Find All Reference',
+            command: ECommand.CmdFindFuncRef,
+            tooltip: 'by neko-help dev tools',
+            arguments: [
+                uri,
+                active,
+                ahkFn,
+            ] satisfies Parameters<typeof CmdFindFuncRef>,
+        };
+        need.push(CA3);
+    }
 
     return need;
 }
@@ -96,14 +104,18 @@ export function otherCodeAction(
 
     const need: vscode.CodeAction[] = [];
 
-    if (ahkFn === undefined) {
+    const { CodeAction2GotoDefRef } = getCustomize();
+
+    if (ahkFn !== undefined) {
+        need.push(...atFnHead(ahkFn, AhkFileData, active, CodeAction2GotoDefRef));
+    }
+
+    if (ahkFn === undefined && CodeAction2GotoDefRef) {
         const range: vscode.Range | undefined = document.getWordRangeAtPosition(active, /(?<![.`#])\b\w+\b/u);
         if (range === undefined) return [];
         const wordUp: string = document.getText(range).toUpperCase();
 
         need.push(...posAtFnReference(AhkFileData, active, wordUp));
-    } else {
-        need.push(...atFnHead(ahkFn, AhkFileData, active));
     }
 
     return need;

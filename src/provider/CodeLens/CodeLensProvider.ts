@@ -9,42 +9,43 @@ import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { getFuncRef } from '../Def/getFnRef';
 import type { showUnknownAnalyze } from './showUnknownAnalyze';
 
-function CodeLensCore(fsPath: string): vscode.CodeLens[] {
-    const AhkFileData: TAhkFileData | undefined = pm.getDocMap(fsPath);
+function CodeLensCore(
+    fsPath: string,
+    { showFuncReference, showDevTool }: { showFuncReference: boolean, showDevTool: boolean },
+): vscode.CodeLens[] {
+    const AhkFileData: TAhkFileData | undefined = pm.getDocMap(fsPath); // i don't what to show CodeLens with temp-file
     if (AhkFileData === undefined) return [];
 
     const { AST, DocStrMap, uri } = AhkFileData;
 
     const need: vscode.CodeLens[] = [];
     for (const fnSymbol of getDAListTop(AST)) {
-        const cmd0: vscode.Command = {
-            title: 'Analyze',
-            command: ECommand.showFuncAnalyze,
-            tooltip: 'by neko-help dev tools',
-            arguments: [
-                fnSymbol,
-                DocStrMap.slice(fnSymbol.selectionRange.start.line + 1, fnSymbol.range.end.line + 1),
-            ] satisfies Parameters<typeof AnalyzeFuncMain>,
-        };
-        need.push(new vscode.CodeLens(fnSymbol.range, cmd0));
-
-        if (fnSymbol.textMap.size > 0) {
-            const cmd1: vscode.Command = {
-                title: 'unknownText',
-                command: ECommand.showUnknownAnalyze,
+        if (showDevTool) {
+            const cmd0: vscode.Command = {
+                title: 'Analyze',
+                command: ECommand.showFuncAnalyze,
                 tooltip: 'by neko-help dev tools',
-                arguments: [fnSymbol] satisfies Parameters<typeof showUnknownAnalyze>,
+                arguments: [
+                    fnSymbol,
+                    DocStrMap.slice(fnSymbol.selectionRange.start.line + 1, fnSymbol.range.end.line + 1),
+                ] satisfies Parameters<typeof AnalyzeFuncMain>,
             };
-            need.push(new vscode.CodeLens(fnSymbol.range, cmd1));
+            need.push(new vscode.CodeLens(fnSymbol.range, cmd0));
+
+            if (fnSymbol.textMap.size > 0) {
+                const cmd1: vscode.Command = {
+                    title: 'unknownText',
+                    command: ECommand.showUnknownAnalyze,
+                    tooltip: 'by neko-help dev tools',
+                    arguments: [fnSymbol] satisfies Parameters<typeof showUnknownAnalyze>,
+                };
+                need.push(new vscode.CodeLens(fnSymbol.range, cmd1));
+            }
         }
 
-        if (fnSymbol.kind === vscode.SymbolKind.Function) {
-            const len: number = getFuncRef(fnSymbol).length;
-            const lenFix: number = len <= 2
-                ? len - 1
-                : len;
+        if (showFuncReference && fnSymbol.kind === vscode.SymbolKind.Function) {
             const cmd2: vscode.Command = {
-                title: `Reference ${lenFix}`,
+                title: `Reference ${getFuncRef(fnSymbol).length - 1}`,
                 command: ECommand.CmdFindFuncRef,
                 tooltip: 'by neko-help dev tools',
                 arguments: [
@@ -66,8 +67,9 @@ export const CodeLensProvider: vscode.CodeLensProvider = {
         document: vscode.TextDocument,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.CodeLens[]> {
-        return getCodeLenConfig()
-            ? CodeLensCore(document.uri.fsPath)
-            : null;
+        const { showFuncReference, showDevTool } = getCodeLenConfig();
+        if (!showFuncReference && !showDevTool) return null;
+
+        return CodeLensCore(document.uri.fsPath, { showFuncReference, showDevTool });
     },
 };
