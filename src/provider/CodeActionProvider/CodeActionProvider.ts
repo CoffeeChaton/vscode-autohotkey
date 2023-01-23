@@ -8,7 +8,7 @@ import { CDiagBase } from '../Diagnostic/tools/CDiagBase';
 import { CDiagFn } from '../Diagnostic/tools/CDiagFn';
 import { C502Class } from '../Diagnostic/tools/CDiagFnLib/C502Class';
 import { C506Class } from '../Diagnostic/tools/CDiagFnLib/C506Class';
-import { DependencyAnalysis } from './DependencyAnalysis';
+import { otherCodeAction } from './otherCodeAction';
 import { c501ignoreArgNeverUsed } from './tools/c501ignoreArgNeverUsed';
 import { c502c503CodeAction } from './tools/c502c503CodeAction';
 import { c506CodeAction } from './tools/c506CodeAction';
@@ -111,7 +111,7 @@ export const CodeActionProvider: vscode.CodeActionProvider = {
 
         return [
             ...fixDiag(AhkFileData, context.diagnostics),
-            ...DependencyAnalysis(AhkFileData, range, document),
+            ...otherCodeAction(AhkFileData, range, document),
         ];
     },
 };

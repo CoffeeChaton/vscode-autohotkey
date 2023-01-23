@@ -22,7 +22,7 @@ esbuild
         outdir: 'dist',
         platform: 'node',
         sourcemap: isDev,
-        target: ['es2021', 'node16.14'],
+        target: ['es2022', 'node16.14'],
         treeShaking: true,
     })
     .then(() => process.exit(0))

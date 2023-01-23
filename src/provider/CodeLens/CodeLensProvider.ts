@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
-import type { TAnalyzeFuncRef } from '../../command/AnalyzeFunc/AnalyzeFuncRef';
-import type { TShowAnalyze } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
+import type { AnalyzeFuncMain } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
+import type { CmdFindFuncRef } from '../../command/CmdFindFuncRef';
 import { ECommand } from '../../command/ECommand';
 import { getCodeLenConfig } from '../../configUI';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { getFuncRef } from '../Def/getFnRef';
-import type { TShowUnknownAnalyze } from './showUnknownAnalyze';
+import type { showUnknownAnalyze } from './showUnknownAnalyze';
 
 function CodeLensCore(fsPath: string): vscode.CodeLens[] {
     const AhkFileData: TAhkFileData | undefined = pm.getDocMap(fsPath);
@@ -24,7 +24,7 @@ function CodeLensCore(fsPath: string): vscode.CodeLens[] {
             arguments: [
                 fnSymbol,
                 DocStrMap.slice(fnSymbol.selectionRange.start.line + 1, fnSymbol.range.end.line + 1),
-            ] satisfies TShowAnalyze,
+            ] satisfies Parameters<typeof AnalyzeFuncMain>,
         };
         need.push(new vscode.CodeLens(fnSymbol.range, cmd0));
 
@@ -33,7 +33,7 @@ function CodeLensCore(fsPath: string): vscode.CodeLens[] {
                 title: 'unknownText',
                 command: ECommand.showUnknownAnalyze,
                 tooltip: 'by neko-help dev tools',
-                arguments: [fnSymbol] satisfies TShowUnknownAnalyze,
+                arguments: [fnSymbol] satisfies Parameters<typeof showUnknownAnalyze>,
             };
             need.push(new vscode.CodeLens(fnSymbol.range, cmd1));
         }
@@ -45,13 +45,13 @@ function CodeLensCore(fsPath: string): vscode.CodeLens[] {
                 : len;
             const cmd2: vscode.Command = {
                 title: `Reference ${lenFix}`,
-                command: ECommand.AnalyzeFuncRef,
+                command: ECommand.CmdFindFuncRef,
                 tooltip: 'by neko-help dev tools',
                 arguments: [
                     uri,
                     fnSymbol.range.start,
                     fnSymbol,
-                ] satisfies TAnalyzeFuncRef,
+                ] satisfies Parameters<typeof CmdFindFuncRef>,
             };
             need.push(new vscode.CodeLens(fnSymbol.range, cmd2));
         }

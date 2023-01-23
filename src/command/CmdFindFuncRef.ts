@@ -1,12 +1,10 @@
 import * as vscode from 'vscode';
-import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { RefLike2Location } from '../../provider/Def/getFnRef';
+import type { CAhkFunc } from '../AhkSymbol/CAhkFunc';
+import { RefLike2Location } from '../provider/Def/getFnRef';
 
 // --------
 
-export async function AnalyzeFuncRef(uri: vscode.Uri, position: vscode.Position, funcSymbol: CAhkFunc): Promise<void> {
-    //  console.log('funcSymbol', funcSymbol);
-
+export async function CmdFindFuncRef(uri: vscode.Uri, position: vscode.Position, funcSymbol: CAhkFunc): Promise<void> {
     const locList: vscode.Location[] = RefLike2Location(funcSymbol);
     if (locList.length === 2) {
         const loc0: vscode.Location = locList[0];
@@ -31,5 +29,4 @@ export async function AnalyzeFuncRef(uri: vscode.Uri, position: vscode.Position,
     );
 }
 
-export type TAnalyzeFuncRef = Parameters<typeof AnalyzeFuncRef>;
 // 'executeReferenceProvider'

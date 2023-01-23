@@ -75,5 +75,3 @@ export async function AnalyzeFuncMain(DA: CAhkFunc, AhkTokenList: TTokenStream):
 
     await vscode.window.showTextDocument(document);
 }
-
-export type TShowAnalyze = Parameters<typeof AnalyzeFuncMain>;

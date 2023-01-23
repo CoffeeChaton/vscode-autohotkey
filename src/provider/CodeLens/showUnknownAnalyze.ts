@@ -22,5 +22,3 @@ export function showUnknownAnalyze(DA: CAhkFunc): void {
     log.info(msgList.join('\n'));
     log.show();
 }
-
-export type TShowUnknownAnalyze = Parameters<typeof showUnknownAnalyze>;

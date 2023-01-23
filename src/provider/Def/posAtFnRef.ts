@@ -43,5 +43,16 @@ export function posAtFnRef(
     const HotkeyData: TScanData | null = getHotkeyWrap(AhkTokenLine);
     if (HotkeyData !== null) return true;
 
+    // not ref... but allow goto-def
+    // expansion--start
+    for (const ma of AhkTokenLine.textRaw.matchAll(/(?<![.`%#])\b(\w+)\(/giu)) {
+        const col: number | undefined = ma.index;
+        if (col === undefined) continue;
+
+        const upName: string = ma[1].toUpperCase();
+        if (upName === wordUp && (character >= col || character <= col + len)) return true;
+    }
+    // expansion--end
+
     return false;
 }
