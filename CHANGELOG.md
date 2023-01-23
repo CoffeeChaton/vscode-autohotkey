@@ -1,12 +1,40 @@
 # Changelog
 
-## NEXT 0.0.19(2022-12-XX)
+## NEXT 0.0.20(2023-02-XX)
 
-- TODO add: more Completion of `gui`
 - TODO add: more doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
-- add: syntax-highlight Completion hover of [ahk_class ahk_id ...](https://www.autohotkey.com/docs/v1/misc/WinTitle.htm)
+- TODO add: diag `OnMessage(MsgNumber , fn)` fn-param-lint
+- TODO add: diag don't allow `label-name` or `var-name` name like func.
+
+## NEXT 0.0.19(2023-01-23)
+
+> add: ahk v2 [announcement](https://www.autohotkey.com/boards/viewtopic.php?f=24&t=112989) with [README.md](README.md), happy to ahk v2 </br>
+> this pack while support until ahk v1 while not fix bug.
+
+- add: more Completion of [`gui`](src/tools/Built-in/Gui/gui.data.ts) exp: `GuiAdd` `GuiShow`
+- add: syntax-highlight && Completion && hover of [ahk_class ahk_id etc...](https://www.autohotkey.com/docs/v1/misc/WinTitle.htm)
+- add: cmd `list this file-def-functions ref` [#11](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/11)
+- add: CodeLens with func ref of all pack [CodeLensFuncRef](image/CodeLensFuncRef.png)
+- add: `log.info('Extension active!')` [#8](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/8)
+- fix: Structured of config [configStructured](image/CHANGELOG/v0-0-19.png)
 - fix: syntax-highlight of `Loop, Files|Parse|Read|Reg`
 - fix: syntax-highlight of `gui`
+- fix: syntax-highlight of `byRef`
+- dev: (console.log() && OutputChannel) -> LogOutputChannel
+- customize: Hover function name ballon clickable [#10](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/10)
+- perf: find all references of function
+
+> - old : 26ms 28ms 24ms 27ms ... usually at 15~30ms with my test pack
+> - now : 52ms 1ms 3ms 2ms ... use map to remember
+
+- fix: ref error
+
+  ```ahk
+  MsgBox,
+  ( LTrim c
+    fnName() ; <- this is not fn-ref
+  )
+  ```
 
 ## 0.0.18(2022-12-21)
 

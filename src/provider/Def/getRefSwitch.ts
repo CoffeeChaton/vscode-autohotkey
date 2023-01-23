@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import type { CAhkCase, CAhkDefault } from '../../AhkSymbol/CAhkSwitch';
 import { CAhkSwitch } from '../../AhkSymbol/CAhkSwitch';
 import type { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TAhkFileData } from '../../core/ProjectManager';
@@ -35,7 +36,7 @@ export function getRefSwitch(
 
         return sw
             .children
-            .map((ch): vscode.Location => new vscode.Location(ch.uri, ch.selectionRange));
+            .map((ch: CAhkCase | CAhkDefault): vscode.Location => new vscode.Location(ch.uri, ch.selectionRange));
     }
 
     return null;

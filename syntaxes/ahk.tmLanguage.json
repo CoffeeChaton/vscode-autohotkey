@@ -1,5 +1,5 @@
 {
-    "fileTypes": [ "ahk" ],
+    "fileTypes": ["ahk"],
     "name": "AutoHotkey",
     "patterns": [
         { "include": "#escaped_char" },
@@ -449,7 +449,7 @@
             },
             "end": "^[ \\t]*\\)",
             "name": "string.multiline.ahk",
-            "patterns": [ { "include": "#escaped_char" } ]
+            "patterns": [{ "include": "#escaped_char" }]
         }
     },
     "scopeName": "source.ahk"

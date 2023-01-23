@@ -1,9 +1,10 @@
 # vscode-autohotkey-NekoHelp
 
 > Base of [cweijan /vscode-autohotkey](https://github.com/cweijan/vscode-autohotkey)</br>
-> Base of regexp match, not the principles of compilation, so parser inaccurate.
+> Base of regexp match, not the principles of compilation, so parser inaccurate.</br>
+> AutoHotkey v2 has been released and will be considered the default/main version [announcement](https://www.autohotkey.com/boards/viewtopic.php?f=24&t=112989), if you need to write new ahk, I suggest you to use ahk v2 && [AutoHotkey v2 Language Support](https://marketplace.visualstudio.com/items?itemName=thqby.vscode-autohotkey2-lsp), ahk v1 so complicated.
 
-AutoHotKey language support for VS Code
+AutoHotKey v1 edit-support for VS Code
 
 - [vscode-autohotkey-NekoHelp](#vscode-autohotkey-nekohelp)
   - [Install](#install)
@@ -83,6 +84,7 @@ support to find like
 
 3. [SetTimer](https://www.autohotkey.com/docs/commands/SetTimer.htm), exp: `SetTimer , Label_or_functionName`
 4. [Hotkey](https://www.autohotkey.com/docs/commands/Hotkey.htm), exp: `Hotkey, KeyName , Label_or_functionName`
+5. read more of [funcRef](src/command/AnalysisFuncReference/funcRef.ahk)
 
 ## Function rename
 

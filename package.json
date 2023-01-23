@@ -64,7 +64,7 @@
         "configuration": [
             {
                 "type": "object",
-                "title": "CodeLens",
+                "title": "1. CodeLens",
                 "properties": {
                     "AhkNekoHelp.CodeLens.showFuncReference": {
                         "type": "boolean",
@@ -80,7 +80,7 @@
             },
             {
                 "type": "object",
-                "title": "Diagnostics and Lint",
+                "title": "2. Diagnostics and Lint",
                 "properties": {
                     "AhkNekoHelp.Diag.AMasterSwitch": {
                         "type": "string",
@@ -144,7 +144,7 @@
             },
             {
                 "type": "object",
-                "title": "misc",
+                "title": "3. misc",
                 "properties": {
                     "AhkNekoHelp.baseScan.IgnoredList": {
                         "type": "array",
@@ -208,7 +208,7 @@
                     "AhkNekoHelp.customize.CodeAction2GotoDefRef": {
                         "type": "boolean",
                         "default": false,
-                        "markdownDescription": "use *light bulb* gotoDef / fundAllRef, [look Issues #10](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/10#issuecomment-1399824111)"
+                        "markdownDescription": "use *light bulb* gotoDef / fundAllRef, [look Issues #10](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/10)"
                     }
                 }
             }
