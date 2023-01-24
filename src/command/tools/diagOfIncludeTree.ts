@@ -42,8 +42,8 @@ function hint0Msg(hint0: string[]): string[] {
     const msg: string[] = [];
     msg.push(
         '[hint = 0] some file not "include" or not use "#Include"',
-        '    suggest explicit use "#Include"',
-        '    not     implicit https://www.autohotkey.com/docs/Functions.htm#lib',
+        '    just support explicit use "#Include"',
+        '    not  support implicit now ;https://www.autohotkey.com/docs/Functions.htm#lib',
         '',
     );
     for (const fsPath of hint0) {
@@ -98,8 +98,8 @@ export function diagOfIncludeTree(result: TTreeResult[], selectPath: string): st
     }
 
     const msg: string[] = [
-        '----------------------------------------',
-        '[neko-help] List All #Include Tree diag',
+        ';----------------------------------------',
+        '> "List All #Include Tree" Report',
     ];
 
     if (hint0.length > 0) {

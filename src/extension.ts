@@ -93,6 +93,7 @@ export function activate(context: ExtensionContext): void {
 export function deactive(): void {
     rmAllDiag();
     statusBarItem.hide(); // just .hide() not .dispose()
+    log.clear();
 }
 
 /*

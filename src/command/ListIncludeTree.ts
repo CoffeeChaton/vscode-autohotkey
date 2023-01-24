@@ -3,7 +3,6 @@ import * as vscode from 'vscode';
 import type { CAhkInclude, TRawData } from '../AhkSymbol/CAhkInclude';
 import { EInclude } from '../AhkSymbol/CAhkInclude';
 import { pm } from '../core/ProjectManager';
-import { log } from '../provider/vscWindows/log';
 import { enumLog } from '../tools/enumErr';
 import { collectInclude } from './ListAllInclude';
 import { diagOfIncludeTree } from './tools/diagOfIncludeTree';
@@ -143,16 +142,19 @@ export async function ListIncludeTree(): Promise<null> {
     const result: TTreeResult[] = IncludeTree(selectPath.fsPath, [], map);
     const diagList: string[] = diagOfIncludeTree(result, selectPath.fsPath);
 
-    log.info([
-        '> "List All #Include Tree"',
-        '',
-        selectPath.fsPath,
-        ...treeResult2StrList(result),
-        '',
-        ...diagList,
-        `Done: ${Date.now() - t1} ms`,
-    ].join('\n'));
-    log.show();
+    void vscode.workspace.openTextDocument({
+        language: 'ahk',
+        content: [
+            'this is not ahk, just Report',
+            ';> "List All #Include Tree"',
+            '',
+            `;${selectPath.fsPath}`,
+            ...treeResult2StrList(result),
+            '',
+            ...diagList,
+            `Done: ${Date.now() - t1} ms`,
+        ].join('\r\n'),
+    }).then((doc: vscode.TextDocument): Thenable<vscode.TextEditor> => vscode.window.showTextDocument(doc));
 
     return null;
 }

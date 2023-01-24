@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { pm } from '../core/ProjectManager';
-import { log } from '../provider/vscWindows/log';
 import { msgWithPos } from './tools/msgWithPos';
 
 function ListAllFunc(showLink: boolean): null {
@@ -26,15 +25,20 @@ function ListAllFunc(showLink: boolean): null {
         fileHint++;
     }
 
-    log.info([
-        '> "List All Function()"',
-        ...AllList,
-        '',
-        `file: ${fileHint}`,
-        `func: ${funcHint}`,
-        `Done: ${Date.now() - t1} ms`,
-    ].join('\n'));
-    log.show();
+    void vscode.workspace.openTextDocument({
+        language: 'ahk',
+        content: [
+            '; > "List All Function()"',
+            ...AllList,
+            '',
+            'MsgBox,',
+            '    ( LTrim',
+            `        file: ${fileHint}`,
+            `        func: ${funcHint}`,
+            `        Done: ${Date.now() - t1} ms`,
+            '    )',
+        ].join('\n'),
+    }).then((doc: vscode.TextDocument): Thenable<vscode.TextEditor> => vscode.window.showTextDocument(doc));
 
     return null;
 }
@@ -63,15 +67,20 @@ function ListAllFuncSort(reverse: boolean): null {
         ? 'z -> a'
         : 'a -> z';
 
-    log.info([
-        `> "List All Function(), Sort with ${re} "`,
-        ...AllList,
-        '',
-        `file: ${fileHint}`,
-        `func: ${funcHint}`,
-        `Done: ${Date.now() - t1} ms`,
-    ].join('\n'));
-    log.show();
+    void vscode.workspace.openTextDocument({
+        language: 'ahk',
+        content: [
+            `> "List All Function(), Sort with ${re} "`,
+            ...AllList,
+            '',
+            'MsgBox,',
+            '    ( LTrim',
+            `        file: ${fileHint}`,
+            `        func: ${funcHint}`,
+            `        Done: ${Date.now() - t1} ms`,
+            '    )',
+        ].join('\n'),
+    }).then((doc: vscode.TextDocument): Thenable<vscode.TextEditor> => vscode.window.showTextDocument(doc));
 
     return null;
 }

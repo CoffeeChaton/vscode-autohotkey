@@ -1,7 +1,7 @@
+import * as vscode from 'vscode';
 import { CAhkInclude } from '../AhkSymbol/CAhkInclude';
 import type { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
 import { pm } from '../core/ProjectManager';
-import { log } from '../provider/vscWindows/log';
 
 export function collectInclude(AST: Readonly<TAhkSymbolList>): CAhkInclude[] {
     const List: CAhkInclude[] = [];
@@ -23,17 +23,20 @@ export function ListAllInclude(): null {
         const List: CAhkInclude[] = collectInclude(AST);
 
         if (List.length > 0) {
-            AllList.push(`\n${uri.fsPath}`, ...List.map((ahkInclude) => ahkInclude.name));
+            AllList.push(`\n;${uri.fsPath}`, ...List.map((ahkInclude) => `    ${ahkInclude.name}`));
         }
     }
 
-    log.info([
-        '> "List All #Include"',
-        ...AllList,
-        '',
-        `Done : ${Date.now() - t1} ms`,
-    ].join('\n'));
-    log.show();
+    void vscode.workspace.openTextDocument({
+        language: 'ahk',
+        content: [
+            'this is not ahk, just Report',
+            '> "List All #Include"',
+            ...AllList,
+            '',
+            `Done : ${Date.now() - t1} ms`,
+        ].join('\n'),
+    }).then((doc: vscode.TextDocument): Thenable<vscode.TextEditor> => vscode.window.showTextDocument(doc));
 
     return null;
 }

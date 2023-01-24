@@ -5,6 +5,7 @@
 - TODO add: more doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
 - TODO add: diag `OnMessage(MsgNumber , fn)` fn-param-lint
 - TODO add: diag don't allow `label-name` or `var-name` name like func.
+- TODO doc: move built-in uri to ahk doc v1
 
 ## NEXT 0.0.19(2023-01-23)
 
@@ -16,6 +17,7 @@
 - add: cmd `list this file-def-functions ref` [#11](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/11)
 - add: CodeLens with func ref of all pack [CodeLensFuncRef](image/CodeLensFuncRef.png)
 - add: `log.info('Extension active!')` [#8](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/8)
+- feat: move reoprt to new-file, not use OUTPUT
 - fix: Structured of config [configStructured](image/CHANGELOG/v0-0-19.png)
 - fix: syntax-highlight of `Loop, Files|Parse|Read|Reg`
 - fix: syntax-highlight of `gui`
