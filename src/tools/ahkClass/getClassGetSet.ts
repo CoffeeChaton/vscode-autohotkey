@@ -22,7 +22,7 @@ export function getClassGetSet(FuncInput: TFuncInput): CAhkClassGetSet | null {
 
     return new CAhkClassGetSet({
         name: ma[1],
-        range: getRange(DocStrMap, line, line, RangeEndLine),
+        range: getRange(DocStrMap, line, line, RangeEndLine, textRaw.search(/\w/u)),
         selectionRange: getRangeOfLine(line, lStr, textRaw.length),
         uri,
     });

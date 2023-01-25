@@ -30,6 +30,8 @@ export function WordFrequencyStatistics(ahkFnList: CAhkFunc[], timeSpend: number
     let paramMapSize = 0;
     let valMapSize = 0;
     let textMapSize = 0;
+    let fnNumber = 0;
+    let methodNumber = 0;
     const DEB = new Map<string, number>();
     for (const ed of ahkFnList) {
         paramMapSize += ed.paramMap.size;
@@ -39,6 +41,11 @@ export function WordFrequencyStatistics(ahkFnList: CAhkFunc[], timeSpend: number
             const oldNum: number = DEB.get(k) ?? 0;
             DEB.set(k, oldNum + v.refRangeList.length);
         }
+        if (ed.defStack.length === 0) {
+            fnNumber++;
+        } else {
+            methodNumber++;
+        }
     }
 
     log.info([
@@ -47,7 +54,7 @@ export function WordFrequencyStatistics(ahkFnList: CAhkFunc[], timeSpend: number
         ...getWordFrequency(DEB),
         '---other information-------------------------------',
         'Deep Analysis All Files',
-        `Deep Analysis : ${ahkFnList.length} Symbol`,
+        `Deep Analysis : ${ahkFnList.length} Symbol, function : ${fnNumber} , method: ${methodNumber}`,
         `paramMapSize is ${paramMapSize}`,
         `valMapSize is ${valMapSize}`,
         `textMapSize is ${textMapSize}`,

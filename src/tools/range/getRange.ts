@@ -12,7 +12,7 @@ function getSearchLineFix(DocStrMap: TTokenStream, searchLine: number, RangeEnd:
     return RangeEnd;
 }
 
-export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: number, RangeEnd: number): vscode.Range {
+export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: number, RangeEnd: number, startCharacter: number): vscode.Range {
     //  selectionRange must be contained in fullRange
 
     const searchLineFix = getSearchLineFix(DocStrMap, searchLine, RangeEnd);
@@ -27,10 +27,14 @@ export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: n
 
             break;
         }
-        if (DocStrMap[line].deep <= startDeep) {
-            const col = DocStrMap[line].lStr.lastIndexOf('}');
-            return new vscode.Range(defLine, 0, line, col);
+        if (DocStrMap[line].deep2.includes(startDeep)) {
+            const col = DocStrMap[line].lStr.lastIndexOf('}'); // FIXME
+            return new vscode.Range(defLine, startCharacter, line, col);
         }
+        // if (DocStrMap[line].deep <= startDeep) {
+        //     const col = DocStrMap[line].lStr.lastIndexOf('}');
+        //     return new vscode.Range(defLine, 0, line, col);
+        // }
     }
 
     log.error([

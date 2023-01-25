@@ -16,7 +16,7 @@ import { getLStr } from '../tools/str/removeSpecialChar';
 import { isSetVarTradition, SetVarTradition } from '../tools/str/traditionSetVar';
 import { getFistWordUpData } from './getFistWordUpData';
 import { getSecondUp } from './getSecondUp';
-import { callDeep } from './ParserTools/calcDeep';
+import { callDeep2 } from './ParserTools/calcDeep';
 
 /**
  * Avoid too many messages
@@ -151,6 +151,7 @@ export function Pretreatment(
                     SecondWordUp: '',
                     lStr: '',
                     deep,
+                    deep2: [deep],
                     textRaw,
                     detail: [EDetail.inComment],
                     line,
@@ -184,6 +185,7 @@ export function Pretreatment(
                     ? getMultilineLStr({ multilineFlag, textRaw })
                     : '',
                 deep,
+                deep2: [deep],
                 textRaw,
                 detail: [],
                 line,
@@ -206,6 +208,7 @@ export function Pretreatment(
                 SecondWordUp: '',
                 lStr: '',
                 deep,
+                deep2: [deep],
                 textRaw,
                 detail: textTrimStart.startsWith(';;')
                     ? [EDetail.inComment, EDetail.hasDoubleSemicolon]
@@ -231,6 +234,7 @@ export function Pretreatment(
                 SecondWordUp: '',
                 lStr: SetVarTradition(textRaw),
                 deep,
+                deep2: [deep],
                 textRaw,
                 detail: [EDetail.inSkipSign2],
                 line,
@@ -272,6 +276,7 @@ export function Pretreatment(
                 SecondWordUp: '',
                 lStr: '',
                 deep,
+                deep2: [deep],
                 textRaw,
                 detail,
                 line,
@@ -286,17 +291,14 @@ export function Pretreatment(
             continue;
         }
 
+        /**
+         * // FIXME deep2
+         */
+        let deep2: number[] = [deep];
         if (!lStrTrim.includes('::')) {
             // {$                     || ^{
             if (lStrTrim.endsWith('{') || lStrTrim.startsWith('{')) {
                 detail.push(EDetail.deepAdd);
-                deep++;
-                // {{{{
-                const addDeep: number = callDeep(lStrTrim, '{');
-                if (addDeep > 1) {
-                    deep--;
-                    deep += addDeep;
-                }
             }
 
             /**
@@ -318,22 +320,36 @@ export function Pretreatment(
              *        return SetView(view[wParam])
              * }
              */
-            const lStrTrimFix = lStrTrim.replace(/^\)\s*/u, '');
+            const lStrTrimFix: string = multiline === EMultiline.end
+                ? lStrTrim.replace(/^\)\s*/u, '')
+                : lStrTrim;
 
             // ^}
             if (lStrTrimFix.startsWith('}')) {
                 detail.push(EDetail.deepSubtract);
-                deep--;
-
-                // eslint-disable-next-line no-tabs
-                // }   } else RunWait "%AhkPath%" %AhkSw% "%wk%",,Hide
-
-                const diffDeep: number = callDeep(lStrTrimFix, '}');
-                if (diffDeep > 1) {
-                    deep++;
-                    deep -= diffDeep;
-                }
             }
+            deep2 = callDeep2(lStrTrimFix, deep);
+            // eslint-disable-next-line unicorn/prefer-at
+            deep = deep2[deep2.length - 1];
+            // deep++;
+
+            // // {{{{
+            // const addDeep: number = callDeep(lStrTrim, '{');
+            // if (addDeep > 1) {
+            //     deep--;
+            //     deep += addDeep;
+            // }
+
+            // deep--;
+
+            // // eslint-disable-next-line no-tabs
+            // // }   } else RunWait "%AhkPath%" %AhkSw% "%wk%",,Hide
+
+            // const diffDeep: number = callDeep(lStrTrimFix, '}');
+            // if (diffDeep > 1) {
+            //     deep++;
+            //     deep -= diffDeep;
+            // }
         }
 
         const cll: 0 | 1 = ContinueLongLine(lStrTrim); // ex: line start with ","
@@ -348,6 +364,7 @@ export function Pretreatment(
             SecondWordUp,
             lStr,
             deep,
+            deep2,
             textRaw,
             detail,
             line,

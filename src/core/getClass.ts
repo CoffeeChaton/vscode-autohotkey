@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import type { TClassChildren } from '../AhkSymbol/CAhkClass';
 import { CAhkClass } from '../AhkSymbol/CAhkClass';
 import { CAhkFunc } from '../AhkSymbol/CAhkFunc';
 import type { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
@@ -7,7 +8,7 @@ import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
 import { getRange } from '../tools/range/getRange';
 import { replacerSpace } from '../tools/str/removeSpecialChar';
 import type { TFuncInput } from './getChildren';
-import { getChildren } from './getChildren';
+import { EFatherName, getChildren } from './getChildren';
 import { getFunc } from './ParserFunc';
 
 function setClassInsertText(children: TAhkSymbolList): string {
@@ -29,7 +30,9 @@ function setClassBase(lStr: string, colFix: number, name: string): string {
 }
 
 export function getClass(FuncInput: TFuncInput): CAhkClass | null {
-    const { lStr, fistWordUp, line } = FuncInput.AhkTokenLine;
+    const {
+        lStr, fistWordUp, fistWordUpCol, line
+    } = FuncInput.AhkTokenLine;
 
     if (fistWordUp !== 'CLASS') return null;
     // class ClassName extends BaseClassName
@@ -44,10 +47,10 @@ export function getClass(FuncInput: TFuncInput): CAhkClass | null {
         defStack,
     } = FuncInput;
 
-    const range = getRange(DocStrMap, line, line, RangeEndLine);
-    const name = ma[1];
+    const range = getRange(DocStrMap, line, line, RangeEndLine, fistWordUpCol);
+    const name: string = ma[1];
 
-    const ch = getChildren<CAhkClass>(
+    const ch: TClassChildren[] = getChildren<CAhkClass>(
         [getClass, getFunc, getClassGetSet, getClassInstanceVar],
         {
             DocStrMap,
@@ -57,9 +60,10 @@ export function getClass(FuncInput: TFuncInput): CAhkClass | null {
             uri,
             GValMap,
         },
+        EFatherName.AClass,
     );
 
-    const col = ma.index ?? lStr.replace(/^\s*Class\s+/iu, replacerSpace).indexOf(name);
+    const col: number = ma.index ?? lStr.replace(/^\s*Class\s+/iu, replacerSpace).indexOf(name);
 
     return new CAhkClass({
         name,

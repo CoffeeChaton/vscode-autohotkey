@@ -28,10 +28,10 @@ export function getRangeCaseBlock(
     for (let line = nextLine; line <= RangeEnd; line++) {
         if (line < Resolved) continue;
 
-        const { lStr, fistWordUp } = DocStrMap[line];
+        const { lStr, fistWordUp, fistWordUpCol } = DocStrMap[line];
 
         if (fistWordUp === 'SWITCH') {
-            const SwitchRange = getRange(DocStrMap, line, line, RangeEnd);
+            const SwitchRange: vscode.Range = getRange(DocStrMap, line, line, RangeEnd, fistWordUpCol);
             Resolved = SwitchRange.end.line;
             continue;
         }

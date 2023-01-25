@@ -66,7 +66,8 @@ export function getParamDef(fnName: string, selectionRange: vscode.Range, DocStr
         if (line < startLine) continue;
         if (line > endLine) break;
         let lStrFix: string = lStr;
-        if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w+\(/u, replacerSpace);
+        if (startLine === line) lStrFix = lStrFix.replace(/^[ \t}]*\w+\(/u, replacerSpace);
+        //  if (startLine === line) lStrFix = lStrFix.replace(/^\s*\w+\(/u, replacerSpace);
         if (endLine === line) {
             lStrFix = lStrFix
                 .replace(/\{\s*$/u, replacerSpace)

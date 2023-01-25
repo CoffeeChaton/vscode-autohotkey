@@ -2,6 +2,8 @@ import * as path from 'node:path';
 import * as vscode from 'vscode';
 import type { TParamMapIn, TTextMapIn } from '../AhkSymbol/CAhkFunc';
 import { CAhkFunc } from '../AhkSymbol/CAhkFunc';
+import type { TLineClass } from '../AhkSymbol/CAhkLine';
+import type { CAhkSwitch } from '../AhkSymbol/CAhkSwitch';
 import type { TTokenStream } from '../globalEnum';
 import { EFnMode } from '../tools/DeepAnalysis/FnVar/EFnMode';
 import { getFnVarDef } from '../tools/DeepAnalysis/FnVar/getFnVarDef';
@@ -14,7 +16,7 @@ import { getTextInRange } from '../tools/getTextInRange';
 import { getFuncDocCore } from '../tools/MD/getFuncDocMD';
 import { getRange } from '../tools/range/getRange';
 import type { TFuncInput } from './getChildren';
-import { getChildren } from './getChildren';
+import { EFatherName, getChildren } from './getChildren';
 import { ParserBlock } from './Parser';
 import { ParserLine } from './ParserTools/ParserLine';
 
@@ -46,7 +48,7 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
     const { line, lStr } = FuncInput.AhkTokenLine;
 
     const col: number = lStr.indexOf('(');
-    if (lStr.length === 0 || col === -1 || lStr.includes('}')) return null;
+    if (lStr.length === 0 || col === -1) return null;
 
     const {
         DocStrMap,
@@ -61,8 +63,8 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
 
     const { name, selectionRange } = fnDefData;
 
-    const range = getRange(DocStrMap, line, selectionRange.end.line, RangeEndLine);
-    const ch = getChildren<CAhkFunc>(
+    const range = getRange(DocStrMap, line, selectionRange.end.line, RangeEndLine, selectionRange.start.character);
+    const ch: (CAhkSwitch | TLineClass)[] = getChildren<CAhkFunc>(
         [ParserBlock.getSwitchBlock, ParserLine],
         {
             DocStrMap,
@@ -72,6 +74,7 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
             uri,
             GValMap,
         },
+        EFatherName.AFunc,
     );
 
     const AhkTokenList: TTokenStream = getDocStrMapMask(range, DocStrMap);

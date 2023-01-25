@@ -52,7 +52,7 @@ function getFuncTail({
 
 export function getFuncDef(DocStrMap: TTokenStream, defLine: number): TFuncDefData | null {
     if (defLine + 1 === DocStrMap.length) return null;
-    const textFixTrim: string = DocStrMap[defLine].lStr.trim();
+    const textFixTrim: string = DocStrMap[defLine].lStr.replace(/^[ \t}]*/u, '').trim();
 
     const fnHead: RegExpMatchArray | null = textFixTrim.match(/^(\w+)\(/u); //  funcName(...
     if (fnHead === null) return null;

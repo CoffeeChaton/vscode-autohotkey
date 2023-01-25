@@ -8,13 +8,14 @@ export function getSwitchRange(
     textFix: string,
     line: number,
 ): vscode.Range | null {
-    if (!(/^\s*switch[\s,]/iu).test(textFix)) return null;
+    const { fistWordUp, fistWordUpCol } = DocStrMap[line];
+    if (fistWordUp !== 'SWITCH') return null;
 
     const lineFix = textFix.endsWith('{')
         ? line
         : line + 1;
     const RangeEnd = document.lineCount;
-    const range = getRange(DocStrMap, lineFix, lineFix, RangeEnd);
+    const range = getRange(DocStrMap, lineFix, lineFix, RangeEnd, fistWordUpCol);
     const PosStart = new vscode.Position(range.start.line, document.lineAt(range.start.line + 1).range.end.character);
     const PosEnd = new vscode.Position(range.end.line - 1, document.lineAt(range.end.line - 1).range.end.character);
     return new vscode.Range(PosStart, PosEnd);

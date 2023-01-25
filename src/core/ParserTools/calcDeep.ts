@@ -1,18 +1,28 @@
-export function callDeep(lStrTrim: string, v: '{' | '}'): number {
-    let d = 0;
+export function callDeep2(lStrTrim: string, deep: number): number[] {
+    const deepList: number[] = [deep];
+    let d = deep;
     for (const s of lStrTrim) {
         switch (s) {
             case ' ':
             case '\t':
                 break;
 
-            case v:
+            case '{':
                 d++;
+                deepList.push(d);
+                break;
+            case '}':
+                d--;
+                deepList.push(d);
                 break;
 
             default:
-                return d;
+                if (lStrTrim.endsWith('{')) {
+                    d++;
+                    deepList.push(d);
+                }
+                return deepList;
         }
     }
-    return d;
+    return deepList;
 }

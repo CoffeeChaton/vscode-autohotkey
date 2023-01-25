@@ -34,10 +34,10 @@ my project:
 Problems (Ctrl+Shift+M) - Total 84 Problems
 
 Deep Analysis All Files
-Deep Analysis : 744 Symbol
-paramMapSize is 1922
-valMapSize is 2033 ;2030->2033 add `catch err`
-textMapSize is 437
-All Size is 4392
-Done in 4 ms
+Deep Analysis : 745 Symbol, function : 665 , method: 80
+paramMapSize is 1926
+valMapSize is 2033
+textMapSize is 434
+All Size is 4393
+Done in 3 ms
 */

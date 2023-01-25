@@ -6,6 +6,32 @@
 - TODO add: diag `OnMessage(MsgNumber , fn)` fn-param-lint
 - TODO add: diag don't allow `label-name` or `var-name` name like func.
 - TODO doc: move built-in uri to ahk doc v1
+- fix: fn-Def
+
+```ahk
+fnDef1(){
+    ;
+} fnDef2(){ ; also a fn def
+    ;
+}
+
+class ClassExp {
+    method1(){
+
+    } method2(){  ; also a  method def
+
+    }
+}
+```
+
+- FIXME: fix: syntax-highlight
+
+```ahk
+GetKeyState(WhichKey, Mode = "") {
+    GetKeyState, v, %WhichKey%, %Mode%
+    Return, v
+}
+```
 
 ## NEXT 0.0.19(2023-01-23)
 
