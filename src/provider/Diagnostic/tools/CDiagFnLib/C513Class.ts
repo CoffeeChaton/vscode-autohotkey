@@ -11,7 +11,7 @@ export class C513Class extends CDiagFn {
             range: v.selectionRange,
             severity: vscode.DiagnosticSeverity.Information,
             tags: [],
-            message: `label "${v.name}:" is the same func "${ahkFn.name}()"`,
+            message: `label "${v.name}" is the same func-name "${ahkFn.name}()"`,
         });
     }
 }

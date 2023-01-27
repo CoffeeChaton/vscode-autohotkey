@@ -36,9 +36,9 @@
 
 - add: diag don't allow `label-name` or `var-name` name like func.
   >
-  > - [c511 var/param "varName" is the same func "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C511Class.ts)
-  > - [c512 global-val "varName" is the same func "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C512Class.ts)
-  > - [c513 label "varName" is the same func "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C513Class.ts)
+  > - `c511` diag [var/param "varName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C511Class.ts)
+  > - `c512` diag [global-val "varName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C512Class.ts)
+  > - `c513` diag [label "labelName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C513Class.ts)
 
 - fix: fn-Def `startWith("}")`
   <details>

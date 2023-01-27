@@ -10,7 +10,7 @@ export class C512Class extends CDiagFn {
             range: v.defRangeList[0],
             severity: vscode.DiagnosticSeverity.Information,
             tags: [],
-            message: `global-val "${v.keyRawName}" is the same func "${ahkFn.name}()"`,
+            message: `global-val "${v.keyRawName}" is the same func-name "${ahkFn.name}()"`,
         });
     }
 }
