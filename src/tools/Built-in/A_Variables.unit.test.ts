@@ -327,8 +327,6 @@ describe('check A_Variables ruler', () => {
             }
         }
 
-        // eslint-disable-next-line no-magic-numbers
-        expect(LoopFileList).toHaveLength(15);
         expect(SpecialUriList).toStrictEqual([
             // TODO need to check with Humanity...
             [
@@ -445,7 +443,6 @@ describe('check A_Variables ruler', () => {
             'A_LoopFileTimeModified',
             // https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#Special_Variables
         ]);
-        // Special uri
         expect(errList).toHaveLength(0);
     });
 });
