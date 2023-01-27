@@ -5,6 +5,7 @@
 - [not use switch in js](https://github.com/microsoft/TypeScript/pull/50225)
 - add `RegExMatch((Text := q.Read()), "OU)([^\x00-\x7F])", Found)` of `Found`...
 - add diag auto check of `catch{} ;null catch`
+- add diag `OnMessage(MsgNumber , fn)` fn-param-lint
 - add diag of `%\w%\w`
 - add hover of `;@ahk-neko-ignore`
 - fix: syntax-highlight

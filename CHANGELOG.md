@@ -2,7 +2,8 @@
 
 ## NEXT 0.0.21(2023-02-28)
 
-<https://www.autohotkey.com/docs/v1/Language.htm#commands-vs-functions>
+1. TODO test `#tag` of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
+2. <https://www.autohotkey.com/docs/v1/Language.htm#commands-vs-functions>
 
 - [Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose
 - [Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
@@ -12,8 +13,7 @@
 
 ## NEXT 0.0.20(2023-02-XX)
 
-- TODO add: more doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
-- TODO add: diag `OnMessage(MsgNumber , fn)` fn-param-lint
+- add: 100% doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
 - doc: move built-in uri to ahk doc v1
 - add: diag don't allow `label-name` or `var-name` name like func.
   >
@@ -22,8 +22,7 @@
   > - `c513` diag [label "labelName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C513Class.ts)
 
 - fix: Def `startWith("}")`
-  <details>
-    <summary>exp code</summary>
+  <details><summary>example code</summary>
 
   ```ahk
   fnDef1(){
