@@ -14,7 +14,7 @@
 
 - TODO add: more doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
 - TODO add: diag `OnMessage(MsgNumber , fn)` fn-param-lint
-- TODO doc: move built-in uri to ahk doc v1
+- doc: move built-in uri to ahk doc v1
 - add: diag don't allow `label-name` or `var-name` name like func.
   >
   > - `c511` diag [var/param "varName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C511Class.ts)

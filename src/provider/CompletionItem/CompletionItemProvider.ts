@@ -11,11 +11,11 @@ import { getSnippetCommand } from '../../tools/Built-in/Command.tools.completion
 import { snipDirectives } from '../../tools/Built-in/Directives.tool';
 import { BuiltInFunc2Completion } from '../../tools/Built-in/func.tools';
 import { getSnippetGui } from '../../tools/Built-in/Gui/gui.tools';
-import { getSnipJustSnip } from '../../tools/Built-in/Keys and other/ahkSnippets.tools';
-import { getSnipStartJoy } from '../../tools/Built-in/Keys and other/Joystick';
-import { getSnipStartF } from '../../tools/Built-in/Keys and other/keyF12';
-import { getSnipMouseKeyboard } from '../../tools/Built-in/Keys and other/MouseKeyboard';
-import { getSnipStartNum } from '../../tools/Built-in/Keys and other/NumpadSnippets';
+import { getSnipJustSnip } from '../../tools/Built-in/Keys_and_other/ahkSnippets.tools';
+import { getSnipStartJoy } from '../../tools/Built-in/Keys_and_other/Joystick';
+import { getSnipStartF } from '../../tools/Built-in/Keys_and_other/keyF12';
+import { getSnipMouseKeyboard } from '../../tools/Built-in/Keys_and_other/MouseKeyboard';
+import { getSnipStartNum } from '../../tools/Built-in/Keys_and_other/NumpadSnippets';
 import { getSnippetOtherKeyWord1 } from '../../tools/Built-in/otherKeyword1.tools';
 import { getSnippetOtherKeyWord2 } from '../../tools/Built-in/otherKeyword2.tools';
 import { ahkSend } from '../../tools/Built-in/Send_tools';
