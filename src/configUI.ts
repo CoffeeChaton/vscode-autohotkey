@@ -31,6 +31,9 @@ function getConfig(Configs: vscode.WorkspaceConfiguration): TConfigs {
             code500Max: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code500'), // NeverUsedVar
             code502Max: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code502'), // of var
             code503Max: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code503'), // of param
+            code511Max: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code511'), // ban var/parma name same fn-Name
+            code512Max: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code512'), // ban global-var name same fn-name
+            code513Max: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code513'), // ban label-name same fn-name
             code800Deprecated: getConfigs<boolean>(Configs, 'AhkNekoHelp.Diag.code800Deprecated'),
             useModuleValDiag: getConfigs<boolean>(Configs, 'AhkNekoHelp.Diag.useModuleValDiag'),
         },

@@ -99,7 +99,7 @@ export function otherCodeAction(
     if (!(selection instanceof vscode.Selection)) return [];
 
     const { active } = selection;
-    const ahkFn: CAhkFunc | undefined = getFileAllFunc(AhkFileData.AST)
+    const ahkFn: CAhkFunc | undefined = getFileAllFunc.up(AhkFileData.AST)
         .find((ahkFunc: CAhkFunc): boolean => ahkFunc.nameRange.contains(active));
 
     const need: vscode.CodeAction[] = [];

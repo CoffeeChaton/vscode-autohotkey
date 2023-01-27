@@ -32,7 +32,7 @@ export type TModuleVar = {
 function getModuleAllowList(DocStrMap: TTokenStream, Ast: TAstRoot): readonly boolean[] {
     const rangeList: readonly vscode.Range[] = [
         ...getFileAllClass(Ast),
-        ...getFileAllFunc(Ast),
+        ...getFileAllFunc.up(Ast),
     ]
         .map((TopSymbol: CAhkClass | CAhkFunc): vscode.Range => TopSymbol.range);
 

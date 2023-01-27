@@ -9,18 +9,10 @@ export function DeepAnalysisAllFiles(): null {
     const t1: number = Date.now();
 
     const ahkFnList: CAhkFunc[] = [];
-    for (
-        const {
-            uri,
-            AST,
-            DocStrMap,
-            ModuleVar,
-        } of pm.DocMap.values()
-    ) { // keep output order is OK
-        const DAList: readonly CAhkFunc[] = getDAListTop(AST);
-        ahkFnList.push(...DAList);
-        setBaseDiag(uri, DocStrMap, AST);
-        digDAFile(DAList, ModuleVar, uri, DocStrMap);
+    for (const AhkFileData of pm.DocMap.values()) { // keep output order is OK
+        ahkFnList.push(...getDAListTop(AhkFileData.AST));
+        setBaseDiag(AhkFileData);
+        digDAFile(AhkFileData);
     }
 
     WordFrequencyStatistics(ahkFnList, Date.now() - t1);
@@ -39,5 +31,6 @@ paramMapSize is 1926
 valMapSize is 2033
 textMapSize is 434
 All Size is 4393
-Done in 3 ms
+Done in 9 ms
+; +6ms with c511 c512 c513, because not with weakMap cache
 */

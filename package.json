@@ -130,6 +130,27 @@
                         "maximum": 999,
                         "markdownDescription": "(code503) case sensitivity check of parameter, a file max checks number. use ```0``` to close warn."
                     },
+                    "AhkNekoHelp.Diag.code511": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0,
+                        "maximum": 999,
+                        "markdownDescription": "(code511) ban var/param name same function-name. use ```0``` to close info."
+                    },
+                    "AhkNekoHelp.Diag.code512": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0,
+                        "maximum": 999,
+                        "markdownDescription": "(code512) ban global-var-name same function-name. use ```0``` to close info."
+                    },
+                    "AhkNekoHelp.Diag.code513": {
+                        "type": "number",
+                        "default": 99,
+                        "minimum": 0,
+                        "maximum": 999,
+                        "markdownDescription": "(code513) ban label-name same function-name. use ```0``` to close info."
+                    },
                     "AhkNekoHelp.Diag.code800Deprecated": {
                         "type": "boolean",
                         "default": true,
@@ -247,7 +268,7 @@
         "onLanguage:ahk"
     ],
     "devDependencies": {
-        "@swc/core": "^1.3.28",
+        "@swc/core": "^1.3.29",
         "@swc/jest": "^0.2.24",
         "@types/assert": "^1.5.6",
         "@types/jest": "^29.4.0",

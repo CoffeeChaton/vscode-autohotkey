@@ -31,7 +31,10 @@ function setClassBase(lStr: string, colFix: number, name: string): string {
 
 export function getClass(FuncInput: TFuncInput): CAhkClass | null {
     const {
-        lStr, fistWordUp, fistWordUpCol, line
+        lStr,
+        fistWordUp,
+        fistWordUpCol,
+        line,
     } = FuncInput.AhkTokenLine;
 
     if (fistWordUp !== 'CLASS') return null;

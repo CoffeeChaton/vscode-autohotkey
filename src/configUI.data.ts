@@ -35,7 +35,11 @@ type TempConfigs = {
         code500Max: number, // NeverUsedVar
         code502Max: number, // of var
         code503Max: number, // of param
+        code511Max: number, // ban param/var-name same fn-name
+        code512Max: number, // ban global-var name same fn-name
+        code513Max: number, // ban label-var name same fn-name
         code800Deprecated: boolean,
+        //  useDiagGlobalVarUnused: boolean, // of global-var
         useModuleValDiag: boolean,
     },
     baseScanIgnoredList: readonly string[],

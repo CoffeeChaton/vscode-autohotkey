@@ -2,6 +2,11 @@
 /* eslint-disable no-magic-numbers */
 import type { DeepReadonly } from './globalEnum';
 
+type TLink =
+    | `https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/ahk/diag${number}.ahk`
+    | `https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#${string}`
+    | `https://www.autohotkey.com/docs/v1/${string}`;
+
 // ScriptError(_T("Global variables must not be declared in this function."), aLineText);
 // ScriptError(_T("Local variables must not be declared in this function."), aLineText);
 
@@ -14,40 +19,55 @@ export const enum EDiagCodeDA {
     code504 = 504, // Variadic param * >1
     code505 = 505, // param parsed Error -> unknown style
     code506 = 506, // base8 base2 diag of not support number formats
-    // code511 = 511, //  paramMapSize > 10
+    // ban name
+    code511 = 511, // ban var/param name same function-name.
+    code512 = 512, // ban global-var name same function-name.
+    code513 = 513, // ban label-var name same function-name.
 }
 
 export type TDiagsDA = {
     [k in EDiagCodeDA]: {
         msg: string,
-        path: `https://www.autohotkey.com/docs/${string}`,
+        path: TLink,
     };
 };
 
 export const DiagsDA: DeepReadonly<TDiagsDA> = {
     500: {
         msg: 'var is assigned but never used.',
-        path: 'https://www.autohotkey.com/docs/Variables.htm',
+        path: 'https://www.autohotkey.com/docs/v1/Variables.htm',
     },
     501: {
         msg: 'param is assigned but never used.',
-        path: 'https://www.autohotkey.com/docs/Functions.htm#optional',
+        path: 'https://www.autohotkey.com/docs/v1/Functions.htm#optional',
     },
     502: {
         msg: 'case sensitivity',
-        path: 'https://www.autohotkey.com/docs/Concepts.htm#names',
+        path: 'https://www.autohotkey.com/docs/v1/Concepts.htm#names',
     },
     504: {
         msg: 'Note: The "variadic" parameter can only appear at the end of the formal parameter list.',
-        path: 'https://www.autohotkey.com/docs/Functions.htm#Variadic',
+        path: 'https://www.autohotkey.com/docs/v1/Functions.htm#Variadic',
     },
     505: {
         msg: 'param parsed Error -> unknown style',
-        path: 'https://www.autohotkey.com/docs/Functions.htm#param',
+        path: 'https://www.autohotkey.com/docs/v1/Functions.htm#param',
     },
     506: {
         msg: 'not support of this number formats',
-        path: 'https://www.autohotkey.com/docs/Concepts.htm#numbers',
+        path: 'https://www.autohotkey.com/docs/v1/Concepts.htm#numbers',
+    },
+    511: {
+        msg: 'var/param name same func-Name',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/ahk/diag511.ahk',
+    },
+    512: {
+        msg: 'global-var name same func-Name',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/ahk/diag511.ahk',
+    },
+    513: {
+        msg: 'label-var name same func-Name',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/ahk/diag513.ahk',
     },
 };
 
@@ -102,7 +122,7 @@ export const enum EDiagCode {
     /**
      * - TODO: move 899 -> 8xx
      * - 899 is Command -> func
-     * - https://www.autohotkey.com/docs/Language.htm#commands-vs-functions
+     * - https://www.autohotkey.com/docs/v1/Language.htm#commands-vs-functions
      */
     code899 = 899, // 899 is Command -> func
 
@@ -112,9 +132,6 @@ export const enum EDiagCode {
     code903 = 903,
 }
 
-type TLink =
-    | `https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#${string}`
-    | `https://www.autohotkey.com/docs/${string}`;
 export type TDiags = {
     [k in EDiagCode]: {
         msg: string,
@@ -129,15 +146,15 @@ export const Diags: DeepReadonly<TDiags> = {
     },
     111: {
         msg: '`Default:` Too much ',
-        path: 'https://www.autohotkey.com/docs/commands/Switch.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/Switch.htm',
     },
     113: {
         msg: '`Case :` not find ',
-        path: 'https://www.autohotkey.com/docs/commands/Switch.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/Switch.htm',
     },
     120: {
         msg: 'unknown options of Multiline',
-        path: 'https://www.autohotkey.com/docs/Scripts.htm#Join',
+        path: 'https://www.autohotkey.com/docs/v1/Scripts.htm#Join',
     },
     121: {
         msg: 'Multiline:join > 15 characters',
@@ -169,85 +186,85 @@ export const Diags: DeepReadonly<TDiags> = {
     },
     301: {
         msg: 'function or Method is so big',
-        path: 'https://www.autohotkey.com/docs/Functions.htm',
+        path: 'https://www.autohotkey.com/docs/v1/Functions.htm',
         // is user setting.
     },
     602: {
         msg: 'recommended that the following names not be used: On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.',
-        path: 'https://www.autohotkey.com/docs/misc/Labels.htm#syntax-and-usage=',
+        path: 'https://www.autohotkey.com/docs/v1/misc/Labels.htm#syntax-and-usage=',
     },
     603: {
         msg: 'Unknown #Directives',
-        path: 'https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/_AllowSameLineComments.htm',
     },
     801: {
         msg: 'Deprecated: Use `Loop, Reg, KeyName` instead.',
-        path: 'https://www.autohotkey.com/docs/commands/LoopReg.htm#old',
+        path: 'https://www.autohotkey.com/docs/v1/commands/LoopReg.htm#old',
     },
     802: {
         msg: 'Deprecated: Use `Loop, Files, FilePattern` instead.',
-        path: 'https://www.autohotkey.com/docs/commands/LoopFile.htm#old',
+        path: 'https://www.autohotkey.com/docs/v1/commands/LoopFile.htm#old',
     },
     803: {
         msg: 'Deprecated: Use `Var := Var / Value` or `Var /= Value` instead.',
-        path: 'https://www.autohotkey.com/docs/commands/EnvDiv.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/EnvDiv.htm',
     },
     804: {
         msg: 'Deprecated: Use `Var := Var * Value` or `Var *= Value` instead.',
-        path: 'https://www.autohotkey.com/docs/commands/EnvMult.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/EnvMult.htm',
     },
     806: {
         msg: 'Deprecated: Use `If (expression)` instead.',
-        path: 'https://www.autohotkey.com/docs/commands/IfEqual.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/IfEqual.htm',
     },
     811: {
         msg: 'Deprecated: Use the `OnClipboardChange()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/OnClipboardChange.htm#label',
+        path: 'https://www.autohotkey.com/docs/v1/commands/OnClipboardChange.htm#label',
     },
     812: {
         msg: 'Deprecated: Use the `OnExit()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/OnExit.htm#command',
+        path: 'https://www.autohotkey.com/docs/v1/commands/OnExit.htm#command',
     },
     813: {
         msg: 'Deprecated: Use the `Gui,` command instead.',
-        path: 'https://www.autohotkey.com/docs/commands/Progress.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/Progress.htm',
     },
     814: {
         msg: 'Deprecated: Use expression assignments like `Var := Value` instead.',
-        path: 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/SetEnv.htm',
     },
     815: {
         msg: 'Deprecated: Use the `Format()` function instead.',
-        path: 'https://www.autohotkey.com/docs/commands/SetFormat.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/SetFormat.htm',
     },
     816: {
         msg: 'Deprecated: Use the `Gui` command instead.',
-        path: 'https://www.autohotkey.com/docs/commands/SplashTextOn.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/SplashTextOn.htm',
     },
     824: {
         msg: 'Deprecated: This command is not recommended for use in new scripts.',
-        path: 'https://www.autohotkey.com/docs/commands/Transform.htm',
-        // TODO search SubCommand and suggest of new func https://www.autohotkey.com/docs/commands/Transform.htm
+        path: 'https://www.autohotkey.com/docs/v1/commands/Transform.htm',
+        // TODO search SubCommand and suggest of new func https://www.autohotkey.com/docs/v1/commands/Transform.htm
     },
     825: {
         msg: 'Deprecated: #AllowSameLineComments was removed.',
-        path: 'https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/_AllowSameLineComments.htm',
     },
     899: {
         msg: 'Deprecated: try to use function replace Command(obsolete code)',
-        path: 'https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
+        path: 'https://www.autohotkey.com/docs/v1/Language.htm#commands-vs-functions',
         // TODO -> move more 899 -> 8xx code
     },
     901: {
         msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',
-        path: 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/_EscapeChar.htm',
     },
     902: {
         msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',
-        path: 'https://www.autohotkey.com/docs/commands/_CommentFlag.htm',
+        path: 'https://www.autohotkey.com/docs/v1/commands/_CommentFlag.htm',
     },
     903: {
         msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',
-        path: 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related',
+        path: 'https://www.autohotkey.com/docs/v1/commands/_EscapeChar.htm#Related',
     },
 };

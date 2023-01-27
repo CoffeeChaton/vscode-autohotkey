@@ -53,5 +53,10 @@
             "scope": "workspace"
         }
     },
-    "workbench.localHistory.enabled": false
+    "workbench.localHistory.enabled": false,
+    "markdownlint.config": {
+        "no-inline-html": {
+            "allowed_elements": ["details", "summary", "b"]
+        }
+    }
 }

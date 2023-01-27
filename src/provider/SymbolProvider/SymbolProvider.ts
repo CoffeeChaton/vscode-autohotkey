@@ -8,18 +8,17 @@ import {
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
-import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { isAhkTab } from '../../tools/fsTools/isAhk';
 import { setBaseDiag } from '../Diagnostic/setBaseDiag';
 
 function SymbolProviderCore(document: vscode.TextDocument): vscode.DocumentSymbol[] {
-    const result: TAhkFileData | null = pm.updateDocDef(document);
-    if (result === null) return [];
+    const AhkFileData: TAhkFileData | null = pm.updateDocDef(document);
+    if (AhkFileData === null) return [];
 
-    const { DocStrMap, AST, ModuleVar } = result;
-    if (isAhkTab(document.uri) && needDiag()) {
-        setBaseDiag(document.uri, DocStrMap, AST);
-        digDAFile(getDAListTop(AST), ModuleVar, document.uri, DocStrMap);
+    const { AST, uri } = AhkFileData;
+    if (isAhkTab(uri) && needDiag()) {
+        setBaseDiag(AhkFileData);
+        digDAFile(AhkFileData);
     }
 
     showTimeSpend(path.basename(document.uri.fsPath));

@@ -1,8 +1,8 @@
 /* eslint-disable no-magic-numbers */
-import type * as vscode from 'vscode';
 import type { TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
 import { getDiagConfig } from '../../configUI';
 import { diagColl, getWithOutNekoDiag } from '../../core/diagColl';
+import type { TAhkFileData } from '../../core/ProjectManager';
 import type { TAhkTokenLine, TTokenStream } from '../../globalEnum';
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import type { CDiagBase } from './tools/CDiagBase';
@@ -14,6 +14,7 @@ import { getAssignErr } from './tools/lineErr/assignErr';
 
 const wm = new WeakMap<TTokenStream, readonly CDiagBase[]>();
 
+// TODO use CMemo
 function baseDiagnostic(DocStrMap: TTokenStream, AST: TAstRoot): readonly CDiagBase[] {
     const cache: readonly CDiagBase[] | undefined = wm.get(DocStrMap);
     if (cache !== undefined) return cache;
@@ -29,7 +30,12 @@ function baseDiagnostic(DocStrMap: TTokenStream, AST: TAstRoot): readonly CDiagB
     return diagList;
 }
 
-export function setBaseDiag(uri: vscode.Uri, DocStrMap: TTokenStream, AST: TAstRoot): void {
+export function setBaseDiag(AhkFileData: TAhkFileData): void {
+    const {
+        uri,
+        AST,
+        DocStrMap,
+    } = AhkFileData;
     const baseDiagSet = new Set<CDiagBase>(baseDiagnostic(DocStrMap, AST));
 
     const DiagShow: CDiagBase[] = [];

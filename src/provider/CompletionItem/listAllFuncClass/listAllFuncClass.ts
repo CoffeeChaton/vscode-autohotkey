@@ -56,7 +56,7 @@ function partSnip(AstRoot: TAstRoot, fileName: string): readonly vscode.Completi
     }
 
     const item: readonly vscode.CompletionItem[] = [
-        ...getFileAllFunc(AstRoot)
+        ...getFileAllFunc.up(AstRoot)
             .map((ahkFunc: CAhkFunc): vscode.CompletionItem => setFuncSnip(fileName, ahkFunc)),
         ...getFileAllClass(AstRoot)
             .map((ahkClass: CAhkClass): vscode.CompletionItem => setClassSnip(fileName, ahkClass)),

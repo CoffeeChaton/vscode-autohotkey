@@ -8,7 +8,7 @@ type TFnMap = ReadonlyMap<string, CAhkFunc>;
 const FileAllFuncMemo = new CMemo<TAstRoot, TFnMap>((ASTRoot: TAstRoot): TFnMap => {
     type TMapMake = [string, CAhkFunc];
     return new Map<string, CAhkFunc>(
-        getFileAllFunc(ASTRoot)
+        getFileAllFunc.up(ASTRoot)
             .map((ahkFunc: CAhkFunc): TMapMake => [ahkFunc.upName, ahkFunc]),
     );
 });

@@ -75,7 +75,6 @@
     "root": true,
     "rules": {
         "@fluffyfox/ban-eslint-disable": "off",
-        "@typescript-eslint/member-delimiter-style": "off",
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",
         "@typescript-eslint/await-thenable": "error",
@@ -96,6 +95,7 @@
                 "SwitchCase": 1
             }
         ],
+        "@typescript-eslint/member-delimiter-style": "off",
         "@typescript-eslint/member-ordering": "warn",
         "@typescript-eslint/no-array-constructor": "warn",
         "@typescript-eslint/no-empty-interface": "warn",
@@ -347,6 +347,7 @@
         "sort-keys": "off",
         "unicorn/custom-error-definition": "error",
         "unicorn/filename-case": "off",
+        "unicorn/no-empty-file": "warn",
         "unicorn/no-keyword-prefix": "off",
         "unicorn/no-null": "off",
         "unicorn/numeric-separators-style": [

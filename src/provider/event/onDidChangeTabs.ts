@@ -5,7 +5,6 @@ import { rmFileDiag } from '../../core/diagColl';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { delOldCache, pm } from '../../core/ProjectManager';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
-import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { isAhkTab } from '../../tools/fsTools/isAhk';
 import { setBaseDiag } from '../Diagnostic/setBaseDiag';
 
@@ -18,9 +17,8 @@ export function onDidChangeActiveTab(e: vscode.TextEditor | undefined): void {
         const AhkFileData: TAhkFileData | null = pm.getDocMap(uri.fsPath) ?? pm.updateDocDef(document);
         if (AhkFileData === null) return;
 
-        const { AST, DocStrMap, ModuleVar } = AhkFileData;
-        setBaseDiag(uri, DocStrMap, AST);
-        digDAFile(getDAListTop(AST), ModuleVar, uri, DocStrMap);
+        setBaseDiag(AhkFileData);
+        digDAFile(AhkFileData);
     }
 }
 

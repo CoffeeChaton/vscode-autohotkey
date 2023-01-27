@@ -23,7 +23,7 @@ function getEachFnRefNumber(AhkFileData: TAhkFileData): TRef {
     const Ref1: string[] = [];
     const RefN: string[] = [];
 
-    for (const funcSymbol of getFileAllFunc(AhkFileData.AST)) {
+    for (const funcSymbol of getFileAllFunc.up(AhkFileData.AST)) {
         const { name } = funcSymbol;
 
         const len: number = getFuncRef(funcSymbol).length - 1;

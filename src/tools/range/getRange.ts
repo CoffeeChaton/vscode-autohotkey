@@ -12,7 +12,13 @@ function getSearchLineFix(DocStrMap: TTokenStream, searchLine: number, RangeEnd:
     return RangeEnd;
 }
 
-export function getRange(DocStrMap: TTokenStream, defLine: number, searchLine: number, RangeEnd: number, startCharacter: number): vscode.Range {
+export function getRange(
+    DocStrMap: TTokenStream,
+    defLine: number,
+    searchLine: number,
+    RangeEnd: number,
+    startCharacter: number,
+): vscode.Range {
     //  selectionRange must be contained in fullRange
 
     const searchLineFix = getSearchLineFix(DocStrMap, searchLine, RangeEnd);

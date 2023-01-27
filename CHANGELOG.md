@@ -4,34 +4,47 @@
 
 - TODO add: more doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
 - TODO add: diag `OnMessage(MsgNumber , fn)` fn-param-lint
-- TODO add: diag don't allow `label-name` or `var-name` name like func.
 - TODO doc: move built-in uri to ahk doc v1
-- fix: fn-Def
-
-```ahk
-fnDef1(){
-    ;
-} fnDef2(){ ; also a fn def
-    ;
-}
-
-class ClassExp {
-    method1(){
-
-    } method2(){  ; also a  method def
-
-    }
-}
-```
-
 - FIXME: fix: syntax-highlight
+  <details>
+    <summary>exp code</summary>
 
-```ahk
-GetKeyState(WhichKey, Mode = "") {
-    GetKeyState, v, %WhichKey%, %Mode%
-    Return, v
-}
-```
+  ```ahk
+  GetKeyState(WhichKey, Mode = "") {
+      GetKeyState, v, %WhichKey%, %Mode%
+      Return, v
+  }
+  ```
+
+  </details>
+
+- add: diag don't allow `label-name` or `var-name` name like func.
+  >
+  > - [c511 var/param "varName" is the same func "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C511Class.ts)
+  > - [c512 global-val "varName" is the same func "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C512Class.ts)
+  > - [c513 label "varName" is the same func "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C513Class.ts)
+
+- fix: fn-Def `startWith("}")`
+  <details>
+    <summary>exp code</summary>
+
+  ```ahk
+  fnDef1(){
+      ;
+  } fnDef2(){ ; also a fn def
+      ;
+  }
+
+  class ClassExp {
+      method1(){
+
+      } method2(){  ; also a  method def
+
+      }
+  }
+  ```
+
+  </details>
 
 ## NEXT 0.0.19(2023-01-23)
 
@@ -43,7 +56,7 @@ GetKeyState(WhichKey, Mode = "") {
 - add: cmd `list this file-def-functions ref` [#11](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/11)
 - add: CodeLens with func ref of all pack [CodeLensFuncRef](image/CodeLensFuncRef.png)
 - add: `log.info('Extension active!')` [#8](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/8)
-- feat: move reoprt to new-file, not use OUTPUT
+- feat: move report to new-file, not use OUTPUT
 - fix: Structured of config [configStructured](image/CHANGELOG/v0-0-19.png)
 - fix: syntax-highlight of `Loop, Files|Parse|Read|Reg`
 - fix: syntax-highlight of `gui`
@@ -241,7 +254,7 @@ hotkey, KeyName , Label_or_fnName, Options
 ```
 
 - add : `label` goto def / find all ref of `goto` `goSub` `Break` `Continue` `SetTimer` `hotkey`
-- add : doc of `clipboard` `clipboardall` `ComSpec` `errorlevel` `false` `programfiles` `true`
+- add : doc of `clipboard` `clipboardAll` `ComSpec` `errorLevel` `false` `programFiles` `true`
 - add : doc of Command `181/218 = 83%`
 - fix : Command of `} Command` of `{ Command`
 - fix : `var =` warn (code107) && remove diag after next line is [multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation)
@@ -249,7 +262,7 @@ hotkey, KeyName , Label_or_fnName, Options
 - add : auto diag of multiline [diag121 ~ 126](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag126)
 - add : semantic-highlight of var in [multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation)
 - style1 is OK, but has some highlight bug of style2.
-  ![multilineBug](image/CHANGELOG/v0-0-12-multilineBug.png)
+  [multilineBug](image/CHANGELOG/v0-0-12-multilineBug.png)
 
 ## 0.0.11(2022-10-09)
 
@@ -271,7 +284,7 @@ hotkey, KeyName , Label_or_fnName, Options
 - add diag `107` [note](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag107)
 - add diag `c505` err of param unknown name style.
 - add OutputVar Command set variables exp `FileGetShortcut, LinkFile , OutTarget, OutDir ...`, can semantic-highlight of `Out`.
-- fix: hover of msgbox() has document error
+- fix: hover of MsgBox() has document error
 - perf: diag of `getCommandErr()` and `getLabelErr()` use hashMap replace regexp.
 
 ## 0.0.8(2022-09-25)
@@ -286,7 +299,7 @@ hotkey, KeyName , Label_or_fnName, Options
 
 ### 1. fix semantic-highlight of `value name` === `keyword`
 
-![img](image/CHANGELOG/v0-0-7-fix-semantic-highlight.png)
+[img](image/CHANGELOG/v0-0-7-fix-semantic-highlight.png)
 
 > _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
 > example code from [VA.ahk](https://github.com/ahkscript/VistaAudio/blob/master/VA.ahk#L465)_
@@ -303,7 +316,7 @@ base10 `99` == base2 `0b1100011` == base8 `0o143` , but ahk v1 just support base
 
 ### 3. Better highlight of Numbers
 
-![img](image/CHANGELOG/v0-0-7-highlight-of-Numbers.png)
+[img](image/CHANGELOG/v0-0-7-highlight-of-Numbers.png)
 
 > _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)_
 
@@ -354,7 +367,7 @@ because of vscode.settings options provided
 - add Diag `c302` of `Function name too long, name len > (255 -2) characters.`
 - add Diag `c505` of `param parsed Error -> unknown style`
 - add Completion of `#Include`
-  ![Completion of Include](image/Completion_Include.gif)
+  [Completion of Include](image/Completion_Include.gif)
 
 - Fix: highlight of number
 - Fix: hover of `#Include`

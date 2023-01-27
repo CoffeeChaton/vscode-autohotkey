@@ -16,7 +16,7 @@ function getDAList(AST: Readonly<TAhkSymbolList>, result: CAhkFunc[]): void {
 }
 
 const DAListMemo = new CMemo<TAstRoot, readonly CAhkFunc[]>((AstRoot: TAstRoot): readonly CAhkFunc[] => {
-    const result: CAhkFunc[] = [...getFileAllFunc(AstRoot)];
+    const result: CAhkFunc[] = [...getFileAllFunc.up(AstRoot)];
     for (const DA of getFileAllClass(AstRoot)) {
         getDAList(DA.children, result);
     }
