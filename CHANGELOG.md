@@ -18,6 +18,22 @@
 
   </details>
 
+- FIXME: Def `startWith("}")`
+
+  ```ahk
+  Switch A {
+    case 1: i :=0
+  } Switch B { ;<------------------- //FIXME
+    case 2: j :=0
+  }
+
+  class ca {
+
+  } class cb { ; <------------------- //FIXME
+
+  }
+  ```
+
 - add: diag don't allow `label-name` or `var-name` name like func.
   >
   > - [c511 var/param "varName" is the same func "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C511Class.ts)
@@ -46,7 +62,7 @@
 
   </details>
 
-## NEXT 0.0.19(2023-01-23)
+## 0.0.19(2023-01-23)
 
 > add: ahk v2 [announcement](https://www.autohotkey.com/boards/viewtopic.php?f=24&t=112989) with [README.md](README.md), happy to ahk v2 </br>
 > this pack while support until ahk v1 while not fix bug.

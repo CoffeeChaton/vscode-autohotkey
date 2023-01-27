@@ -77,10 +77,38 @@ support to find like
 
 1. `functionName(` , call function.
 2. `"functionName"` , wrapped in text.
-   >
-   > - exp: [func()](https://www.autohotkey.com/docs/commands/Func.htm) or [RegisterCallback](https://www.autohotkey.com/docs/commands/RegisterCallback.htm)
-   > - `fnObject := func("functionName")`
-   > - `fnObject := RegisterCallback("functionName")`
+   <details>
+   <summary>some exp code</summary>
+
+   ```ahk
+    #NoEnv
+    #Warn All
+    SetControlDelay, 0
+
+    ~F9:: fn_exp(["fnA","fnB"])
+    ~F10:: fn_exp(["fnB","fnA"])
+
+    fn_exp(fnList){
+        For _Key, fn in fnList {
+            funcOnj := Func(fn)
+            funcOnj.Call()
+        }
+    }
+
+    fnA(){
+        MsgBox, % "i am fnA"
+    }
+
+    fnB(){
+        MsgBox, % "i am fnB"
+    }
+   ```
+
+   > - also can use
+   > - `fnObject := func("functionName")` [[read doc of func()]](https://www.autohotkey.com/docs/commands/Func.htm)
+   > - `fnObject := RegisterCallback("functionName")` [read doc of RegisterCallback](https://www.autohotkey.com/docs/commands/RegisterCallback.htm)
+
+   </details>
 
 3. [SetTimer](https://www.autohotkey.com/docs/commands/SetTimer.htm), exp: `SetTimer , Label_or_functionName`
 4. [Hotkey](https://www.autohotkey.com/docs/commands/Hotkey.htm), exp: `Hotkey, KeyName , Label_or_functionName`
@@ -88,7 +116,7 @@ support to find like
 
 ## Function rename
 
-- auto rename with your can use [[🔍Find All References support]](#find-all-references-support) to find.
+- (default via `F2`) rename with your can use [[🔍Find Ref of Function]](#find-ref-of-function) to find.
 
 ## Hover
 
@@ -101,10 +129,10 @@ support to find like
 
 2. Add comment of function ?
 
-```ahk
-/**
+   ```ahk
+   /**
     * in /** block.
-    * and the line first character is '*'
+    * and the line first character is '*' or ';'
     * can use partial grammar of markdown.
     * exp@email.com
     * [Markdown Rule](https://en.wikipedia.org/wiki/Markdown)
@@ -114,10 +142,11 @@ support to find like
     * _ABC_ _ABC_
     * - - -
     *  `monospace`
-*/
-```
-
-![hover3](image/hover3.png)
+   */
+   fn(param){
+       ; some code
+   }
+   ```
 
 ## Diagnostic and lint
 
@@ -126,14 +155,10 @@ support to find like
 1. warning about use `=` not `:=` to assign.
 2. warning of Switch
    \
-   `default : too much`\
    `Case : not find`
 3. use `;@ahk-neko-ignore [number] line.` to ignore,
    \
    exp: `;@ahk-neko-ignore 999 line.`
-
-![Diagnostic1](image/Diagnostic1.png)
-![Diagnostic2](image/Diagnostic2.png)
 
 ## CodeFormat
 
@@ -144,8 +169,6 @@ support to find like
 // TODO: write more doc
 
 - **beta test now.**
-
-![fmt](image/fmt.png)
 
 ## IntelliSense
 
@@ -180,45 +203,50 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
 - exp of your `settings.json` ReadMore of [highlighting](https://code.visualstudio.com/docs/getstarted/themes#_editor-syntax-highlighting)
 - [Source code](./syntaxes/ahk.tmLanguage.json)
 
-```jsonc
-// settings.json
-{
-    "editor.tokenColorCustomizations": {
-        "textMateRules": [
-            {
-                "scope": "keyword.other.unit.numeric.hexadecimal.ahk",
-                "settings": {
-                    "foreground": "#E06C75"
-                }
-            },
-            {
-                "scope": "keyword.other.unit.numeric.decimal.ahk",
-                "settings": {
-                    "foreground": "#E06C75"
-                }
-            },
-            {
-                "scope": "constant.numeric.hexadecimal.ahk",
-                "settings": {
-                    "foreground": "#D19A66"
-                }
-            },
-            {
-                "scope": "constant.numeric.decimal.ahk",
-                "settings": {
-                    "foreground": "#D19A66"
-                }
-            }
-        ]
-    }
-}
-```
+  <details>
+    <summary>settings.json</summary>
+
+  ````jsonc
+  // settings.json
+  {
+      "editor.tokenColorCustomizations": {
+          "textMateRules": [
+              {
+                  "scope": "keyword.other.unit.numeric.hexadecimal.ahk",
+                  "settings": {
+                      "foreground": "#E06C75"
+                  }
+              },
+              {
+                  "scope": "keyword.other.unit.numeric.decimal.ahk",
+                  "settings": {
+                      "foreground": "#E06C75"
+                  }
+              },
+              {
+                  "scope": "constant.numeric.hexadecimal.ahk",
+                  "settings": {
+                      "foreground": "#D19A66"
+                  }
+              },
+              {
+                  "scope": "constant.numeric.decimal.ahk",
+                  "settings": {
+                      "foreground": "#D19A66"
+                  }
+              }
+          ]
+      }
+  }
+  ```
+  </details>
+  ````
 
 ## Privacy Statement
 
 - Do not upload any information.
 - without vscode, 0 dependencies, Safe and Privacy.
-- just scan workspaces or open file. not auto scan like [`A_Desktop`](https://www.autohotkey.com/docs/Variables.htm#Desktop) or [`A_MyDocuments`](https://www.autohotkey.com/docs/Variables.htm#MyDocuments) or any file without workspaces.
+- just scan workspaces or open file. not auto scan any file without workspaces.
 - If you need to place .ahk in other folders, this Extensions support [Multi-root Workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces).
 
 ## Performance
