@@ -73,9 +73,9 @@ export function AnalyzeCommand(AhkTokenList: TTokenStream, fullFuncMap: TFullFun
     const ed: string[] = [
         '/**',
         '* @Analyze Command',
-        '*   Commands vs Functions -> https://www.autohotkey.com/docs/Language.htm#commands-vs-functions',
+        '*   Commands vs Functions -> https://www.autohotkey.com/docs/v1/Language.htm#commands-vs-functions',
         '*   if you what to user function replace command, you can use Functions.ahk',
-        '*   Functions.ahk -> https://www.autohotkey.com/docs/Functions.htm#Other_Functions',
+        '*   Functions.ahk -> https://www.autohotkey.com/docs/v1/Functions.htm#Other_Functions',
         '*/',
         'loop, 0 {',
     ];

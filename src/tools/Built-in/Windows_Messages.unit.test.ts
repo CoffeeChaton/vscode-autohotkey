@@ -34,7 +34,7 @@ describe('check Windows_Messages', () => {
 
         expect(errState === 0).toBeTruthy();
 
-        // https://www.autohotkey.com/docs/misc/SendMessageList.htm at 2022/7/23
+        // https://www.autohotkey.com/docs/v1/misc/SendMessageList.htm at 2022/7/23
 
         // eslint-disable-next-line no-magic-numbers
         expect(winMsg.size === 207).toBeTruthy();

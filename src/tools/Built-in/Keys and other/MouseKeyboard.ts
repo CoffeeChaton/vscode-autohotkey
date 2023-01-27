@@ -4,13 +4,13 @@ import * as vscode from 'vscode';
 const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => {
     type TListKeys = {
         group: string,
-        uri: `https://www.autohotkey.com/docs/KeyList.htm#${string}`,
+        uri: `https://www.autohotkey.com/docs/v1/KeyList.htm#${string}`,
         list: readonly string[],
     };
 
     const Mouse: TListKeys = {
         group: 'Mouse',
-        uri: 'https://www.autohotkey.com/docs/KeyList.htm#mouse',
+        uri: 'https://www.autohotkey.com/docs/v1/KeyList.htm#mouse',
         list: [
             'LButton',
             'MButton',
@@ -27,7 +27,7 @@ const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly vscode
     //
     const keyboard: TListKeys = {
         group: 'Keyboard',
-        uri: 'https://www.autohotkey.com/docs/KeyList.htm#keyboard',
+        uri: 'https://www.autohotkey.com/docs/v1/KeyList.htm#keyboard',
         list: [
             'CapsLock',
             'Space',
@@ -85,7 +85,7 @@ const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly vscode
 
     const MultimediaKeys: TListKeys = {
         group: 'Multimedia Keys',
-        uri: 'https://www.autohotkey.com/docs/KeyList.htm#multimedia',
+        uri: 'https://www.autohotkey.com/docs/v1/KeyList.htm#multimedia',
         list: [
             'Browser_Back',
             'Browser_Forward',
@@ -113,7 +113,7 @@ const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly vscode
 
     const OtherKeys: TListKeys = {
         group: 'Other Keys',
-        uri: 'https://www.autohotkey.com/docs/KeyList.htm#other',
+        uri: 'https://www.autohotkey.com/docs/v1/KeyList.htm#other',
         list: [
             'AppsKey',
             'PrintScreen',

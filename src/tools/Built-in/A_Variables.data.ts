@@ -378,7 +378,7 @@ export const AVariablesList: TElement[] = [
     },
     {
         body: 'A_LoopField',
-        uri: 'https://www.autohotkey.com/docs/v1/commands/LoopParse.htm',
+        uri: 'https://www.autohotkey.com/docs/v1/lib/LoopParse.htm',
         group: 'Loop',
     },
     {
@@ -458,32 +458,32 @@ export const AVariablesList: TElement[] = [
     },
     {
         body: 'A_LoopReadLine',
-        uri: 'https://www.autohotkey.com/docs/v1/commands/LoopReadFile.htm',
+        uri: 'https://www.autohotkey.com/docs/v1/lib/LoopReadFile.htm',
         group: 'Loop',
     },
     {
         body: 'A_LoopRegKey',
-        uri: 'https://www.autohotkey.com/docs/v1/commands/LoopReg.htm#Remarks',
+        uri: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#Remarks',
         group: 'Loop',
     },
     {
         body: 'A_LoopRegName',
-        uri: 'https://www.autohotkey.com/docs/v1/commands/LoopReg.htm#Remarks',
+        uri: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#Remarks',
         group: 'Loop',
     },
     {
         body: 'A_LoopRegSubKey',
-        uri: 'https://www.autohotkey.com/docs/v1/commands/LoopReg.htm#Remarks',
+        uri: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#Remarks',
         group: 'Loop',
     },
     {
         body: 'A_LoopRegTimeModified',
-        uri: 'https://www.autohotkey.com/docs/v1/commands/LoopReg.htm#Remarks',
+        uri: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#Remarks',
         group: 'Loop',
     },
     {
         body: 'A_LoopRegType',
-        uri: 'https://www.autohotkey.com/docs/v1/commands/LoopReg.htm#Remarks',
+        uri: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#Remarks',
         group: 'Loop',
     },
     {

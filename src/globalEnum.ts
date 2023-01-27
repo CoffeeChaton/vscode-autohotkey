@@ -29,7 +29,7 @@ export const enum EDetail {
 }
 
 /**
- * https://www.autohotkey.com/docs/Scripts.htm#continuation-section
+ * https://www.autohotkey.com/docs/v1/Scripts.htm#continuation-section
  */
 export const enum EMultiline {
     none = 0,
@@ -44,12 +44,12 @@ export type TPos = Readonly<{
 }>;
 
 /**
- * https://www.autohotkey.com/docs/Scripts.htm#continuation-section
+ * https://www.autohotkey.com/docs/v1/Scripts.htm#continuation-section
  */
 export type TMultilineFlag =
     | DeepReadonly<{
-        Join: TPos[], // https://www.autohotkey.com/docs/Scripts.htm#Join
-        LTrim: TPos[], // https://www.autohotkey.com/docs/Scripts.htm#LTrim
+        Join: TPos[], // https://www.autohotkey.com/docs/v1/Scripts.htm#Join
+        LTrim: TPos[], // https://www.autohotkey.com/docs/v1/Scripts.htm#LTrim
         RTrim0: TPos[],
         CommentFlag: TPos[], // C
         PercentFlag: TPos[], // %

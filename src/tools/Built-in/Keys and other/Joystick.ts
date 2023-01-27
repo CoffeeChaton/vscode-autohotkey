@@ -54,7 +54,7 @@ const JoySnippets: readonly vscode.CompletionItem[] = ((): readonly vscode.Compl
         const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
             .appendCodeblock(key, 'ahk')
             .appendMarkdown('Joystick')
-            .appendMarkdown('[\\(Read Doc\\)](https://www.autohotkey.com/docs/KeyList.htm#Joystick)');
+            .appendMarkdown('[\\(Read Doc\\)](https://www.autohotkey.com/docs/v1/KeyList.htm#Joystick)');
         md.supportHtml = true;
 
         const item: vscode.CompletionItem = new vscode.CompletionItem({

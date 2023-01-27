@@ -12,7 +12,7 @@ export type TBaseLineParam = {
 export class CAhkDirectives extends vscode.DocumentSymbol {
     // #Directives
     // exp #AllowSameLineComments
-    // https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm
+    // https://www.autohotkey.com/docs/v1/lib/_AllowSameLineComments.htm
     public readonly uri: vscode.Uri;
     /**
      * hashtag is without # && toUpperCase()
@@ -39,7 +39,7 @@ export class CAhkDirectives extends vscode.DocumentSymbol {
 }
 
 export class CAhkHotKeys extends vscode.DocumentSymbol {
-    // https://www.autohotkey.com/docs/misc/Labels.htm
+    // https://www.autohotkey.com/docs/v1/misc/Labels.htm
     public readonly uri: vscode.Uri;
 
     declare public readonly kind: vscode.SymbolKind.Event;
@@ -92,7 +92,7 @@ export class CAhkHotString extends vscode.DocumentSymbol {
  * ```
  */
 export class CAhkLabel extends vscode.DocumentSymbol {
-    // https://www.autohotkey.com/docs/misc/Labels.htm
+    // https://www.autohotkey.com/docs/v1/misc/Labels.htm
     // Label names must be unique throughout the whole script.
     public readonly uri: vscode.Uri;
 

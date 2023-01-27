@@ -17,7 +17,7 @@ function getLoopErr(lStr: string, line: number, col: number): CDiagBase | null {
     const colL = lStr.indexOf(SecondSection, col + 4);
     const colR = colL + SecondSection.length;
     if ((/^RootKey$/iu).test(SecondSection)) {
-        // https://www.autohotkey.com/docs/commands/LoopReg.htm#old
+        // https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#old
         return new CDiagBase({
             value: EDiagCode.code801,
             range: new vscode.Range(line, colL, line, colR),
@@ -29,7 +29,7 @@ function getLoopErr(lStr: string, line: number, col: number): CDiagBase | null {
     if ((/^FilePattern$/iu).test(SecondSection)) {
         // I can't recognize `Loop, FilePattern` syntax
         // https://www.autohotkey.com/boards/viewtopic.php?p=494782#p494782
-        // https://www.autohotkey.com/docs/commands/LoopFile.htm#old
+        // https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#old
         // maybe is never error?
         return new CDiagBase({
             value: EDiagCode.code802,
@@ -42,7 +42,7 @@ function getLoopErr(lStr: string, line: number, col: number): CDiagBase | null {
     //     201: {
     //     msg: 'If Count is a variable reference such as `%varName%` or `% expression`',
     //     path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag201',
-    // https://www.autohotkey.com/docs/commands/Loop.htm
+    // https://www.autohotkey.com/docs/v1/lib/Loop.htm
     return new CDiagBase({
         value: EDiagCode.code201,
         range: new vscode.Range(line, colL, line, colR),

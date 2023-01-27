@@ -142,7 +142,7 @@ export function getMultiline(
         : [EMultiline.none, null]; // 99%
 }
 
-// https://www.autohotkey.com/docs/Scripts.htm#continuation-section
+// https://www.autohotkey.com/docs/v1/Scripts.htm#continuation-section
 
 // 0.1% case, but can run....
 // Var = ; <---------------------- not :=

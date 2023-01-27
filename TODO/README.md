@@ -1,12 +1,25 @@
 # TODO TODO list
 
 - [add test of tmLanguage.json](https://github.com/Microsoft/TypeScript-TmLanguage)
-- [diag of `If Var op Value`](https://www.autohotkey.com/docs/Language.htm#if-statement)
+- [diag of `If Var op Value`](https://www.autohotkey.com/docs/v1/Language.htm#if-statement)
 - [not use switch in js](https://github.com/microsoft/TypeScript/pull/50225)
 - add `RegExMatch((Text := q.Read()), "OU)([^\x00-\x7F])", Found)` of `Found`...
 - add diag auto check of `catch{} ;null catch`
 - add diag of `%\w%\w`
 - add hover of `;@ahk-neko-ignore`
+- fix: syntax-highlight
+  <details>
+    <summary>exp code</summary>
+
+  ```ahk
+  GetKeyState(WhichKey, Mode = "") {
+      GetKeyState, v, %WhichKey%, %Mode%
+      Return, v
+  }
+  ```
+
+  </details>
+
 - fix: label/func match with `Menu`
 
   ```ahk
@@ -16,10 +29,26 @@
   ;                                                       ^
   ```
 
+- hover var-doc as jsdoc-style
+
+  ```ahk
+  fun(cc){
+
+      /**
+      * jsdoc-style
+      */
+      bb := 0 ;; cpp-style
+
+      ; hover var-name and show doc
+      ; OK use `;;` to add cpp-style
+      ; TODO add jsdoc-style
+  }
+  ```
+
 - [info magic of `,`](https://www.autohotkey.com/docs/v1/Variables.htm#comma) ex: `x:=1, y=2, a=b=c` or `x:=1, %y%=2`
 - Parser: -> AST
 - Scanner: -> Token
-- test of <https://www.autohotkey.com/docs/scripts/index.htm>
+- test of <https://www.autohotkey.com/docs/v1/scripts/index.htm>
 - move some `.ts` -> `ahk-doc.json`
 - add: support of `user-def-.h.ahk`
 - test: add vscode.test
@@ -64,7 +93,7 @@ Loop, Parse, clipboard, `n, `r
 // ObjRemoveAt()
 // ObjSetCapacity()
 // These functions are equivalent to built-in methods of the Object type. It is usually recommended to use the corresponding method instead.
-<https://www.autohotkey.com/docs/lib/index.htm>
+<https://www.autohotkey.com/docs/v1/lib/index.htm>
 
 Object
-<https://www.autohotkey.com/docs/lib/RegExMatch.htm#MatchObject>
+<https://www.autohotkey.com/docs/v1/lib/RegExMatch.htm#MatchObject>

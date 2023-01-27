@@ -5,11 +5,11 @@ export type TAhkBaseObj = {
     ahkFileOpen: boolean,
     ahkFuncObject: boolean,
     ahkBase: boolean,
-    ahkCatch: boolean, // https://www.autohotkey.com/docs/commands/Throw.htm#Exception
+    ahkCatch: boolean, // https://www.autohotkey.com/docs/v1/lib/Throw.htm#Exception
 };
 
 export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
-    // fileOpen() https://www.autohotkey.com/docs/commands/FileOpen.htm
+    // fileOpen() https://www.autohotkey.com/docs/v1/lib/FileOpen.htm
     // file := FileOpen(Filename, Flags , Encoding)
     //          ^
     if (!Obj.ahkFileOpen && (/^FileOpen\(/iu).test(strPart)) {
@@ -17,7 +17,7 @@ export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
         Obj.ahkBase = true;
         return Obj;
     }
-    // https://www.autohotkey.com/docs/commands/Func.htm
+    // https://www.autohotkey.com/docs/v1/lib/Func.htm
     // FunctionReference := Func(FunctionName)
     //                       ^
     if (!Obj.ahkFuncObject && (/^Func\(/iu).test(strPart)) {
@@ -25,7 +25,7 @@ export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
         Obj.ahkBase = true;
         return Obj;
     }
-    // https://www.autohotkey.com/docs/commands/Array.htm
+    // https://www.autohotkey.com/docs/v1/lib/Array.htm
     // Array := [Item1, Item2, ..., ItemN]
     //          ^ ; this `[`
     if (!Obj.ahkArray && (strPart.startsWith('[') || (/^Array\(/iu).test(strPart))) {
@@ -34,7 +34,7 @@ export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
         return Obj;
     }
 
-    // https://www.autohotkey.com/docs/Objects.htm#Usage_Freeing_Objects
+    // https://www.autohotkey.com/docs/v1/Objects.htm#Usage_Freeing_Objects
     // obj := {}  ; Creates an object.
     //        ^ ; this `{'
     //
@@ -45,7 +45,7 @@ export function ahkBaseUp(strPart: string, Obj: TAhkBaseObj): TAhkBaseObj {
         return Obj;
     }
 
-    // https://www.autohotkey.com/docs/commands/Throw.htm#Exception
+    // https://www.autohotkey.com/docs/v1/lib/Throw.htm#Exception
     // err := Exception()
     // err.message = "some error"
     // throw err

@@ -10,7 +10,7 @@ function winMsg2Md(k: string, v: [number, string]): vscode.MarkdownString {
         .appendCodeblock(body, 'ahk')
         .appendMarkdown('Windows Messages')
         .appendMarkdown('\n\n')
-        .appendMarkdown('[Read More of Windows Messages](https://www.autohotkey.com/docs/misc/SendMessageList.htm)');
+        .appendMarkdown('[Read More of Windows Messages](https://www.autohotkey.com/docs/v1/misc/SendMessageList.htm)');
     md.supportHtml = true;
     return md;
 }

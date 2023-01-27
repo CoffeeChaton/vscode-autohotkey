@@ -76,10 +76,10 @@ const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TBiFuncMap] => {
         {
             group: 'COM',
             keyRawName: 'ComObjMissing',
-            link: 'https://www.autohotkey.com/docs/commands/ComObjActive.htm',
+            link: 'https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm',
             msg: [
                 'Creates an object which may be used in place of an optional parameter\'s default value when calling a method of a COM object.',
-                '[[v1.1.12+]](https://www.autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.12.00 "Applies to AutoHotkey v1.1.12 and later"):',
+                '[[v1.1.12+]](https://www.autohotkey.com/docs/v1/AHKL_ChangeLog.htm#v1.1.12.00 "Applies to AutoHotkey v1.1.12 and later"):',
                 ' This function is obsolete. Instead, simply write two consecutive commas, as in `Obj.Method(1,,3)`',
                 '**Deprecated:** The usages shown below are deprecated and may be altered or unavailable in a future release.',
             ],
@@ -92,7 +92,7 @@ const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TBiFuncMap] => {
         {
             group: 'COM',
             keyRawName: 'ComObjParameter',
-            link: 'https://www.autohotkey.com/docs/commands/ComObjActive.htm',
+            link: 'https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm',
             msg: [
                 'Wraps a value and type to pass as a parameter to a COM method.',
                 'In current versions, any function-call beginning with "ComObj" ',
@@ -107,12 +107,12 @@ const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TBiFuncMap] => {
         {
             group: 'COM',
             keyRawName: 'ComObjEnwrap',
-            link: 'https://www.autohotkey.com/docs/commands/ComObjActive.htm',
+            link: 'https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm',
             msg: [
                 'Wraps/unwraps a COM object.',
                 'In current versions, any function-call beginning with "ComObj" ',
                 'that does not match one of the other COM functions actually calls ComObjActive.',
-                'For example, `ComObjEnwrap(DispPtr)` and `[ComObjActive](https://www.autohotkey.com/docs/lib/ComObjActive.htm)(DispPtr)`',
+                'For example, `ComObjEnwrap(DispPtr)` and `[ComObjActive](https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm)(DispPtr)`',
             ],
             insert: 'ComObjEnwrap($0)',
             exp: [
@@ -123,7 +123,7 @@ const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TBiFuncMap] => {
         {
             group: 'COM',
             keyRawName: 'ComObjUnwrap',
-            link: 'https://www.autohotkey.com/docs/commands/ComObjActive.htm',
+            link: 'https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm',
             msg: [
                 'Wraps/unwraps a COM object.',
                 '**Deprecated:** The usages shown below are deprecated and may be altered or unavailable in a future release.',
@@ -190,10 +190,10 @@ const ComObjResult: TBiFuncMsg = {
         .appendCodeblock('ComObjActive()', 'ahk')
         .appendMarkdown(
             // eslint-disable-next-line max-len
-            'In current versions, any function-call beginning with "ComObj" that does not match one of the other COM functions actually calls `ComObjActive`. For example, `ComObjEnwrap(DispPtr)` and `[ComObjActive](https://www.autohotkey.com/docs/lib/ComObjActive.htm)(DispPtr)` are both equivalent to `[ComObject](https://www.autohotkey.com/docs/lib/ComObjActive.htm)(DispPtr)` (_VarType_ 9 is implied). However, this behaviour will be unavailable in a future release, so it is best to use only `[ComObject](https://www.autohotkey.com/docs/lib/ComObjActive.htm)()` and `[ComObjActive](https://www.autohotkey.com/docs/lib/ComObjActive.htm)()` as shown on this page.',
+            'In current versions, any function-call beginning with "ComObj" that does not match one of the other COM functions actually calls `ComObjActive`. For example, `ComObjEnwrap(DispPtr)` and `[ComObjActive](https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm)(DispPtr)` are both equivalent to `[ComObject](https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm)(DispPtr)` (_VarType_ 9 is implied). However, this behaviour will be unavailable in a future release, so it is best to use only `[ComObject](https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm)()` and `[ComObjActive](https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm)()` as shown on this page.',
         )
         .appendMarkdown('\n')
-        .appendMarkdown('[(Read Doc)](https://www.autohotkey.com/docs/commands/ComObjActive.htm#Remarks)'),
+        .appendMarkdown('[(Read Doc)](https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm#Remarks)'),
 };
 
 export function getBuiltInFuncMD(keyUp: string): TBiFuncMsg | undefined {

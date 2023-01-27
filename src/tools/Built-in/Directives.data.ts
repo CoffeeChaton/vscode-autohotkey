@@ -9,7 +9,7 @@ type TDirectivesList = Readonly<{
     doc: string,
 
     recommended: boolean,
-    link: `https://www.autohotkey.com/docs/${string}`,
+    link: `https://www.autohotkey.com/docs/v1/${string}`,
     exp: readonly string[],
 }>;
 
@@ -22,7 +22,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#AllowSameLineComments',
         doc: '**This directive was removed.** AutoIt scripts are no longer supported.\nOnly for AutoIt v2 (.aut) scripts: Allows a comment to appear on the same line as a command.',
         recommended: false,
-        link: 'https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_AllowSameLineComments.htm',
         exp: ['#AllowSameLineComments'],
     },
     {
@@ -30,7 +30,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#ClipboardTimeout, ${1:Milliseconds}',
         doc: 'Changes how long the script keeps trying to access the clipboard when the first attempt fails.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_ClipboardTimeout.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_ClipboardTimeout.htm',
         exp: [
             '#ClipboardTimeout Milliseconds',
             ';Milliseconds as ms',
@@ -45,7 +45,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#CommentFlag, ${1:NewString}',
         doc: 'Changes the script\'s comment symbol from semicolon to some other string.\n**Deprecated:** This directive is not recommended for use in new scripts. Use the default comment flag (semicolon) instead.',
         recommended: false,
-        link: 'https://www.autohotkey.com/docs/commands/_CommentFlag.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_CommentFlag.htm',
         exp: [
             '#CommentFlag NewString',
         ],
@@ -55,7 +55,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#Delimiter, ${1:NewString}',
         doc: '**Deprecated:** These directives are not recommended for use in new scripts. Use the default dereference character (percent) and the default delimiter character (comma) instead.',
         recommended: false,
-        link: 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Delimiter',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_EscapeChar.htm#Delimiter',
         exp: [
             '#Delimiter NewString',
         ],
@@ -65,7 +65,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#DerefChar, ${1:NewString}',
         doc: '**Deprecated:** These directives are not recommended for use in new scripts. Use the default dereference character (percent) and the default delimiter character (comma) instead.',
         recommended: false,
-        link: 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm#DerefChar',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_EscapeChar.htm#DerefChar',
         exp: [
             '#DerefChar NewString',
         ],
@@ -75,7 +75,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#ErrorStdOut',
         doc: 'Sends any syntax error that prevents a script from launching to stderr rather than displaying a dialog.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_ErrorStdOut.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_ErrorStdOut.htm',
         exp: [
             '#ErrorStdOut Encoding',
             '; Encoding as String',
@@ -89,15 +89,15 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#EscapeChar, ${1:NewString}',
         doc: 'Changes the script\'s escape character (e.g. accent vs. backslash).**Deprecated:** This directive is not recommended for use in new scripts. Use the default escape character (accent/backtick) instead.',
         recommended: false,
-        link: 'https://www.autohotkey.com/docs/commands/_EscapeChar.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_EscapeChar.htm',
         exp: ['#EscapeChar NewString'],
     },
     {
         keyRawName: '#HotkeyInterval',
         insert: '#HotkeyInterval, ${1:Milliseconds}',
-        doc: 'Along with [#MaxHotkeysPerInterval](https://www.autohotkey.com/docs/commands/_MaxHotkeysPerInterval.htm), specifies the rate of [hotkey](https://www.autohotkey.com/docs/Hotkeys.htm) activations beyond which a warning dialog will be displayed.',
+        doc: 'Along with [#MaxHotkeysPerInterval](https://www.autohotkey.com/docs/v1/lib/_MaxHotkeysPerInterval.htm), specifies the rate of [hotkey](https://www.autohotkey.com/docs/v1/Hotkeys.htm) activations beyond which a warning dialog will be displayed.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_HotkeyInterval.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_HotkeyInterval.htm',
         exp: [
             '#HotkeyInterval Milliseconds',
             '; Milliseconds as ms',
@@ -111,9 +111,9 @@ export const DirectivesList: TDirectivesList[] = [
     {
         keyRawName: '#HotkeyModifierTimeout',
         insert: '#HotkeyModifierTimeout, ${1:Milliseconds}',
-        doc: 'Affects the behavior of [hotkey](https://www.autohotkey.com/docs/Hotkeys.htm) modifiers: `Ctrl`, `Alt`, `Win`, and `Shift`.',
+        doc: 'Affects the behavior of [hotkey](https://www.autohotkey.com/docs/v1/Hotkeys.htm) modifiers: `Ctrl`, `Alt`, `Win`, and `Shift`.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_HotkeyModifierTimeout.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_HotkeyModifierTimeout.htm',
         exp: [
             '#HotkeyModifierTimeout Milliseconds',
             '; Milliseconds as ms',
@@ -128,9 +128,9 @@ export const DirectivesList: TDirectivesList[] = [
     {
         keyRawName: '#Hotstring',
         insert: '#Hotstring, ${1|NoMouse,EndChars NewChars,NewOptions|}',
-        doc: 'Changes [hotstring](https://www.autohotkey.com/docs/Hotstrings.htm) options or ending characters.',
+        doc: 'Changes [hotstring](https://www.autohotkey.com/docs/v1/Hotstrings.htm) options or ending characters.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_Hotstring.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_Hotstring.htm',
         exp: [
             '#Hotstring NoMouse',
             '#Hotstring EndChars NewChars',
@@ -140,13 +140,13 @@ export const DirectivesList: TDirectivesList[] = [
     {
         keyRawName: '#If',
         insert: '#If, $0',
-        doc: 'Creates context-sensitive [hotkeys](https://www.autohotkey.com/docs/Hotkeys.htm) and [hotstrings](https://www.autohotkey.com/docs/Hotstrings.htm). Such hotkeys perform a different action (or none at all) depending on the result of an expression.',
+        doc: 'Creates context-sensitive [hotkeys](https://www.autohotkey.com/docs/v1/Hotkeys.htm) and [hotstrings](https://www.autohotkey.com/docs/v1/Hotstrings.htm). Such hotkeys perform a different action (or none at all) depending on the result of an expression.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_If.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_If.htm',
         exp: [
             '#IF Expression',
             '; Expression',
-            ';   Any valid [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions).',
+            ';   Any valid [expression](https://www.autohotkey.com/docs/v1/Variables.htm#Expressions).',
             '',
             '; Note: Scripts should not assume that the expression is only evaluated when the key is pressed',
             '; Note: Use of #If in an unresponsive script may cause input lag or break hotkeys',
@@ -160,7 +160,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#IfTimeout, ${1:Timeout}',
         doc: 'Sets the maximum time that may be spent evaluating a single #If expression.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_IfTimeout.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_IfTimeout.htm',
         exp: [
             '#IfTimeout Timeout',
             '; Timeout',
@@ -175,7 +175,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#IfWinActive',
         doc: 'This directive was removed. AutoIt scripts are no longer supported.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_IfWinActive.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_IfWinActive.htm',
         exp: [
             '#IfWinActive WinTitle, WinText',
             '#IfWinExist WinTitle, WinText',
@@ -189,7 +189,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#IfWinExist',
         doc: 'This directive was removed. AutoIt scripts are no longer supported.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_IfWinActive.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_IfWinActive.htm',
         exp: [
             '#IfWinActive WinTitle, WinText',
             '#IfWinExist WinTitle, WinText',
@@ -203,7 +203,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#IfWinNotActive',
         doc: 'This directive was removed. AutoIt scripts are no longer supported.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_IfWinActive.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_IfWinActive.htm',
         exp: [
             '#IfWinActive WinTitle, WinText',
             '#IfWinExist WinTitle, WinText',
@@ -217,7 +217,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#IfWinNotExist',
         doc: 'This directive was removed. AutoIt scripts are no longer supported.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_IfWinActive.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_IfWinActive.htm',
         exp: [
             '#IfWinActive WinTitle, WinText',
             '#IfWinExist WinTitle, WinText',
@@ -231,7 +231,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#Include',
         doc: 'Causes the script to behave as though the specified file\'s contents are present at this exact position.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_Include.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_Include.htm',
         exp: [
             '#Include FileOrDirName',
             '#Include <LibName>',
@@ -244,7 +244,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#IncludeAgain',
         doc: 'Causes the script to behave as though the specified file\'s contents are present at this exact position.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_Include.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_Include.htm',
         exp: [
             '#Include FileOrDirName',
             '#Include <LibName>',
@@ -257,7 +257,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#InputLevel, ${1:0}',
         doc: 'Controls which artificial keyboard and mouse events are ignored by hotkeys and hotstrings. [Level] - An integer between 0 and 100. If omitted, it defaults to 0.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_InputLevel.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_InputLevel.htm',
         exp: [
             '#InputLevel Level',
             '; Level',
@@ -275,7 +275,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#InstallKeybdHook',
         doc: 'Forces the unconditional installation of the keyboard hook.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_InstallKeybdHook.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_InstallKeybdHook.htm',
         exp: [
             '#InstallKeybdHook',
         ],
@@ -285,7 +285,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#InstallMouseHook',
         doc: 'Forces the unconditional installation of the mouse hook.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_InstallKeybdHook.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_InstallKeybdHook.htm',
         exp: [
             '#InstallMouseHook',
         ],
@@ -295,7 +295,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#KeyHistory, ${1:MaxEvents}',
         doc: 'Sets the maximum number of keyboard and mouse events displayed by the KeyHistory window. You can set it to 0 to disable key history.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_InstallKeybdHook.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_InstallKeybdHook.htm',
         exp: [
             '#KeyHistory MaxEvents',
             '; MaxEvents as int',
@@ -311,7 +311,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#LTrim, ${1|On,Off|}',
         doc: 'LTrim: Omits spaces and tabs at the beginning of each line. This is primarily used to allow the continuation section to be indented. Also, this option may be turned on for multiple continuation sections by specifying #LTrim on a line by itself. #LTrim is positional: it affects all continuation sections physically beneath it. The setting may be turned off via #LTrim Off.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/Scripts.htm#LTrim',
+        link: 'https://www.autohotkey.com/docs/v1/Scripts.htm#LTrim',
         exp: [
             '#LTrim On|Off',
         ],
@@ -321,7 +321,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#MaxHotkeysPerInterval, ${1:Value}',
         doc: 'Along with #HotkeyInterval, specifies the rate of hotkey activations beyond which a warning dialog will be displayed.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_MaxHotkeysPerInterval.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_MaxHotkeysPerInterval.htm',
         exp: [
             '#MaxHotkeysPerInterval Value',
             '; Value as int',
@@ -333,7 +333,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#MaxMem, ${1:Megabytes}',
         doc: 'Sets the maximum capacity of each variable to the specified number of megabytes.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_MaxMem.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_MaxMem.htm',
         exp: [
             '#MaxMem Megabytes',
             '; Megabytes as int 1 ~ 4095 (MB)',
@@ -348,7 +348,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#MaxThreads, ${1:Value}',
         doc: 'Sets the maximum number of simultaneous threads.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_MaxThreads.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_MaxThreads.htm',
         exp: [
             '#MaxThreads Value',
             '; Value as int 1 ~ 255 (threads)',
@@ -363,7 +363,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#MaxThreadsBuffer, ${1|On,Off|}',
         doc: 'Causes some or all hotkeys to buffer rather than ignore keypresses when their #MaxThreadsPerHotkey limit has been reached.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_MaxThreadsBuffer.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_MaxThreadsBuffer.htm',
         exp: [
             '#MaxThreadsBuffer OnOff',
             '; OnOff as On or Off',
@@ -378,7 +378,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#MaxThreadsPerHotkey, ${1:Value}',
         doc: 'Sets the maximum number of simultaneous threads per hotkey or hotstring.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_MaxThreadsPerHotkey.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_MaxThreadsPerHotkey.htm',
         exp: [
             '#MaxThreadsPerHotkey Value',
             '; Value as int && < 255',
@@ -393,7 +393,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#MenuMaskKey, ${1:KeyName}',
         doc: 'Changes which key is used to mask `Win` or `Alt` keyup events.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_MenuMaskKey.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_MenuMaskKey.htm',
         exp: [
             '#MenuMaskKey KeyName',
             '; KeyName as VKnn or SCnnn',
@@ -406,7 +406,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#NoEnv',
         doc: 'Avoids checking empty variables to see if they are environment variables (recommended for all new scripts).',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_NoEnv.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_NoEnv.htm',
         exp: [
             '#NoEnv',
             '; recommended for all new scripts',
@@ -415,9 +415,9 @@ export const DirectivesList: TDirectivesList[] = [
     {
         keyRawName: '#NoTrayIcon',
         insert: '#NoTrayIcon',
-        doc: 'Disables the showing of a [tray icon](https://www.autohotkey.com/docs/Program.htm#tray-icon).',
+        doc: 'Disables the showing of a [tray icon](https://www.autohotkey.com/docs/v1/Program.htm#tray-icon).',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_NoTrayIcon.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_NoTrayIcon.htm',
         exp: [
             '#NoTrayIcon',
         ],
@@ -425,9 +425,9 @@ export const DirectivesList: TDirectivesList[] = [
     {
         keyRawName: '#Persistent',
         insert: '#Persistent',
-        doc: 'Keeps a script permanently running (that is, until the user closes it or [ExitApp](https://www.autohotkey.com/docs/commands/ExitApp.htm) is encountered).',
+        doc: 'Keeps a script permanently running (that is, until the user closes it or [ExitApp](https://www.autohotkey.com/docs/v1/lib/ExitApp.htm) is encountered).',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_Persistent.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_Persistent.htm',
         exp: [
             '#Persistent',
         ],
@@ -437,7 +437,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#Requires #Requires AutoHotkey ${1:v1.1.33+}',
         doc: 'Displays an error and quits if a version requirement is not met.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_Requires.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_Requires.htm',
         exp: [
             '#Requires Requirement',
             '',
@@ -453,7 +453,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#SingleInstance, ${1|force,ignore,prompt,off|}',
         doc: 'Determines whether a script is allowed to run again when it is already running.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_SingleInstance.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_SingleInstance.htm',
         exp: [
             '#SingleInstance ForceIgnorePromptOff',
             ';  Force: Skips the dialog box and replaces the old instance automatically.',
@@ -467,9 +467,9 @@ export const DirectivesList: TDirectivesList[] = [
     {
         keyRawName: '#UseHook',
         insert: '#UseHook, ${1|On,Off|}',
-        doc: 'Forces the use of the hook to implement all or some keyboard [hotkeys](https://www.autohotkey.com/docs/Hotkeys.htm).',
+        doc: 'Forces the use of the hook to implement all or some keyboard [hotkeys](https://www.autohotkey.com/docs/v1/Hotkeys.htm).',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_UseHook.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_UseHook.htm',
         exp: [
             '#UseHook OnOff',
             '; OnOff',
@@ -487,7 +487,7 @@ export const DirectivesList: TDirectivesList[] = [
             '#Warn,$0 ${1|All,Unreachable,ClassOverwrite,LocalSameAsGlobal,UseEnv,UseUnsetLocal,UseUnsetGlobal|}, ${2|MsgBox,StdOut,OutputDebug,Off|}',
         doc: 'Enables or disables warnings for specific conditions which may indicate an error, such as a typo or missing "global" declaration.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_Warn.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_Warn.htm',
         exp: [
             '#Warn WarningType, WarningMode',
             '; WarningType',
@@ -513,7 +513,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#WinActivateForce',
         doc: 'Skips the gentle method of activating a window and goes straight to the forceful method.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/_Warn.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_Warn.htm',
         exp: [
             '#WinActivateForce',
         ],

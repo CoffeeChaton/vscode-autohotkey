@@ -43,7 +43,7 @@ function hint0Msg(hint0: string[]): string[] {
     msg.push(
         '[hint = 0] some file not "include" or not use "#Include"',
         '    just support explicit use "#Include"',
-        '    not  support implicit now ;https://www.autohotkey.com/docs/Functions.htm#lib',
+        '    not  support implicit now ;https://www.autohotkey.com/docs/v1/Functions.htm#lib',
         '',
     );
     for (const fsPath of hint0) {
@@ -56,7 +56,7 @@ function hint2MoreMsg(hintMap: ReadonlyMap<string, TValue>): string[] {
     const msg: string[] = [];
     msg.push(
         '[hint > 1]',
-        '    "#Include" vs "#IncludeAgain" ; https://www.autohotkey.com/docs/commands/_Include.htm#Remarks',
+        '    "#Include" vs "#IncludeAgain" ; https://www.autohotkey.com/docs/v1/lib/_Include.htm#Remarks',
         '    "#Include" ensures that FileName is included only once, even if multiple inclusions are encountered for it.',
         '    By contrast, #IncludeAgain allows multiple inclusions of the same file, while being the same as #Include in all other respects.',
         '',

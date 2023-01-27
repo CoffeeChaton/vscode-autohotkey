@@ -4,8 +4,8 @@ import { getLStr } from './removeSpecialChar';
 
 export function isSetVarTradition(textTrimStart: string): boolean {
     // Var = Value
-    // https://www.autohotkey.com/docs/Variables.htm#operators
-    // is https://www.autohotkey.com/docs/commands/SetEnv.htm
+    // https://www.autohotkey.com/docs/v1/Variables.htm#operators
+    // is https://www.autohotkey.com/docs/v1/lib/SetEnv.htm
     const col0: number = textTrimStart.indexOf('=');
 
     if (col0 < 1) return false;

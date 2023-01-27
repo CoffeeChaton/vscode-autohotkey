@@ -57,4 +57,4 @@ export function OutputVarCommandPlus(need: TGetFnDefNeed, keyWord: string, col: 
 }
 
 // not plan to support
-// GuiControl ,, ControlID , value https://www.autohotkey.com/docs/commands/GuiControl.htm#Blank
+// GuiControl ,, ControlID , value https://www.autohotkey.com/docs/v1/lib/GuiControl.htm#Blank

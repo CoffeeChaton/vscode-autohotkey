@@ -5,7 +5,7 @@ import { getValMeta } from './getValMeta';
 
 /**
  * OutputVar
- * [Other Functions](https://www.autohotkey.com/docs/Functions.htm#Other_Functions)
+ * [Other Functions](https://www.autohotkey.com/docs/v1/Functions.htm#Other_Functions)
  * - https://github.com/polyethene/AutoHotkey-Scripts/blob/master/Functions.ahk
  * Provides a callable function for each AutoHotkey command that has an OutputVar.
  */

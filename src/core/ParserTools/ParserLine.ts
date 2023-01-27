@@ -63,7 +63,7 @@ const LineRuler = [
         },
 
         test(strTrim: string): boolean {
-            // https://www.autohotkey.com/docs/misc/Labels.htm#syntax-and-usage
+            // https://www.autohotkey.com/docs/v1/misc/Labels.htm#syntax-and-usage
             // HotString labels consist of a colon, zero or more options, another colon, an abbreviation and double-colon.
             // if (!strTrim.startsWith(':')) return false;
             if (!strTrim.includes('::')) return false;

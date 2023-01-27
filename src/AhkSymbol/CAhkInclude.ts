@@ -101,7 +101,7 @@ function getRawData(path1: string, fsPath: string): TRawData {
 }
 
 export class CAhkInclude extends vscode.DocumentSymbol {
-    // https://www.autohotkey.com/docs/commands/_Include.htm
+    // https://www.autohotkey.com/docs/v1/lib/_Include.htm
 
     // #Include Compiler.ahk
     // #include *i __debug.ahk

@@ -54,7 +54,7 @@ export function AnalyzeRefFunc(AhkTokenList: TTokenStream, fullFuncMap: TFullFun
     const ed: string[] = [
         '/**',
         '* @Analyze Function',
-        '* > read more of [Built-in Functions](https://www.autohotkey.com/docs/Functions.htm#BuiltIn)',
+        '* > read more of [Built-in Functions](https://www.autohotkey.com/docs/v1/Functions.htm#BuiltIn)',
         '*/',
         'loop, 0 {',
     ];

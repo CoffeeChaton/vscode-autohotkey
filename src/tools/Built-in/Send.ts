@@ -5,7 +5,7 @@ type TA_SendCore = {
     icon: string,
     doc: string[],
     body: string,
-    link: `https://www.autohotkey.com/docs/${string}`,
+    link: `https://www.autohotkey.com/docs/v1/${string}`,
 };
 
 type TA_Send = {
@@ -23,14 +23,14 @@ export const A_Send: TA_Send = {
             '    Send {Text} your text',
         ],
         body: 'Text',
-        link: 'https://www.autohotkey.com/docs/commands/Send.htm#Text',
+        link: 'https://www.autohotkey.com/docs/v1/lib/Send.htm#Text',
     },
     Up: {
         label: '{Up}',
         icon: '↑',
         doc: ['↑ (up arrow) on main keyboard'],
         body: 'Up',
-        link: 'https://www.autohotkey.com/docs/commands/Send.htm#keynames',
+        link: 'https://www.autohotkey.com/docs/v1/lib/Send.htm#keynames',
     },
     // 'Blind',
     // 'Click',
@@ -55,5 +55,5 @@ export const A_Send: TA_Send = {
     // 'Click 100, 200, 0',
 };
 
-// TODO send Key names https://www.autohotkey.com/docs/commands/Send.htm#keynames
-// https://www.autohotkey.com/docs/commands/Send.htm#vk
+// TODO send Key names https://www.autohotkey.com/docs/v1/lib/Send.htm#keynames
+// https://www.autohotkey.com/docs/v1/lib/Send.htm#vk

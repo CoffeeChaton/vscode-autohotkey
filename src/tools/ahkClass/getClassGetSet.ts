@@ -28,7 +28,7 @@ export function getClassGetSet(FuncInput: TFuncInput): CAhkClassGetSet | null {
     });
 }
 
-// https://www.autohotkey.com/docs/Objects.htm#Custom_Classes_property
+// https://www.autohotkey.com/docs/v1/Objects.htm#Custom_Classes_property
 // class ClassName extends BaseClassName
 // {
 //     InstanceVar := Expression

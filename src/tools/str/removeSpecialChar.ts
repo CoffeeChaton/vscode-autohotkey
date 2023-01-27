@@ -10,7 +10,7 @@ export function getLStr(textRaw: string): string {
     if (textRaw.startsWith(';')) return '';
     if ((/^\s*;/u).test(textRaw)) return '';
 
-    // https://www.autohotkey.com/docs/misc/EscapeChar.htm
+    // https://www.autohotkey.com/docs/v1/misc/EscapeChar.htm
     const textFix = textRaw.replaceAll(/`[,%`;nrbtvaf]/gu, '__').replaceAll(/"[^"]*"/gu, fnReplacerStr);
     const i = textFix.indexOf(';');
 

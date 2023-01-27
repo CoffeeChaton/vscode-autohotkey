@@ -11,7 +11,7 @@ const F12FuncKeysSnippets: readonly vscode.CompletionItem[] = ((): readonly vsco
             .appendMarkdown('Function Keys')
             .appendMarkdown('\n\n')
             .appendMarkdown('The 12 or more function keys at the top of most keyboards.')
-            .appendMarkdown('[Read Doc](https://www.autohotkey.com/docs/KeyList.htm#function)');
+            .appendMarkdown('[Read Doc](https://www.autohotkey.com/docs/v1/KeyList.htm#function)');
 
         md.supportHtml = true;
 

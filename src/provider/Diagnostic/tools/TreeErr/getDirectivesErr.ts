@@ -22,14 +22,14 @@ const DiagDirectivesMap: ReadonlyMap<string, TDiagMsg> = ((): ReadonlyMap<string
     };
     const arr: TRulerErr[] = [
         {
-            // change of ` https://www.autohotkey.com/docs/commands/_EscapeChar.htm
+            // change of ` https://www.autohotkey.com/docs/v1/lib/_EscapeChar.htm
             keyRawName: 'EscapeChar',
             value: EDiagCode.code901,
             severity: vscode.DiagnosticSeverity.Error,
             tags: [vscode.DiagnosticTag.Deprecated],
         },
         {
-            // change of ; https://www.autohotkey.com/docs/commands/_CommentFlag.htm
+            // change of ; https://www.autohotkey.com/docs/v1/lib/_CommentFlag.htm
             keyRawName: 'CommentFlag',
             value: EDiagCode.code902,
             severity: vscode.DiagnosticSeverity.Error,
@@ -37,7 +37,7 @@ const DiagDirectivesMap: ReadonlyMap<string, TDiagMsg> = ((): ReadonlyMap<string
         },
         {
             /*
-             * change of % , #DerefChar https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related
+             * change of % , #DerefChar https://www.autohotkey.com/docs/v1/lib/_EscapeChar.htm#Related
              * #DerefChar
              */
             keyRawName: 'DerefChar',
@@ -47,7 +47,7 @@ const DiagDirectivesMap: ReadonlyMap<string, TDiagMsg> = ((): ReadonlyMap<string
         },
         {
             /*
-             * change of % , #DerefChar https://www.autohotkey.com/docs/commands/_EscapeChar.htm#Related
+             * change of % , #DerefChar https://www.autohotkey.com/docs/v1/lib/_EscapeChar.htm#Related
              * #Delimiter
              */
             keyRawName: 'Delimiter',
@@ -56,7 +56,7 @@ const DiagDirectivesMap: ReadonlyMap<string, TDiagMsg> = ((): ReadonlyMap<string
             tags: [vscode.DiagnosticTag.Deprecated],
         },
         {
-            // https://www.autohotkey.com/docs/commands/_AllowSameLineComments.htm
+            // https://www.autohotkey.com/docs/v1/lib/_AllowSameLineComments.htm
             keyRawName: 'AllowSameLineComments',
             value: EDiagCode.code825,
             severity: vscode.DiagnosticSeverity.Warning,

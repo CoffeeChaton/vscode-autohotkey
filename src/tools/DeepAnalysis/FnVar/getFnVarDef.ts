@@ -155,7 +155,7 @@ export function getFnVarDef(
         // DllCall("DllFile\Function" , Type1, Arg1, Type2, Arg2, "Cdecl ReturnType")
         // ----------------------------------------------------------------^
         // FoundPos := RegExMatch(Haystack, NeedleRegEx , OutputVar, StartingPos := 1)
-        //                                  ^ "i)abc"    https://www.autohotkey.com/docs/commands/RegExMatch.htm#MatchObject
+        //                                  ^ "i)abc"    https://www.autohotkey.com/docs/v1/lib/RegExMatch.htm#MatchObject
         // --------------------------------------------------^
         // New GUI options: +HwndOutputVar, +ParentGUI
         //                     ^ ...WTF?

@@ -20,14 +20,14 @@
 
 ### diag107
 
-[SetEnv (Var = Value)](https://www.autohotkey.com/docs/commands/SetEnv.htm)
+[SetEnv (Var = Value)](https://www.autohotkey.com/docs/v1/lib/SetEnv.htm)
 
-> **Deprecated:** This command or a legacy assignment is not recommended for use in new scripts. Use [expression assignments](https://www.autohotkey.com/docs/commands/SetExpression.htm) like `Var := Value` instead.
+> **Deprecated:** This command or a legacy assignment is not recommended for use in new scripts. Use [expression assignments](https://www.autohotkey.com/docs/v1/lib/SetExpression.htm) like `Var := Value` instead.
 
 ```js
 107: {
     msg: 'assign warning',
-    path: 'https://www.autohotkey.com/docs/commands/SetEnv.htm',
+    path: 'https://www.autohotkey.com/docs/v1/lib/SetEnv.htm',
 },
 ```
 
@@ -42,11 +42,11 @@ try it [diag107](./ahk/diag107.ahk)
 ```js
 121: {
     msg: 'Multi-line:join > 15 characters',
-    path: 'https://www.autohotkey.com/docs/Scripts.htm#Join',
+    path: 'https://www.autohotkey.com/docs/v1/Scripts.htm#Join',
 },
 ```
 
-the word `Join` should be followed immediately by as many as `15` characters.[[Read Doc]](https://www.autohotkey.com/docs/Scripts.htm#Join)
+the word `Join` should be followed immediately by as many as `15` characters.[[Read Doc]](https://www.autohotkey.com/docs/v1/Scripts.htm#Join)
 
 ![diag121](./img/diag121.png)
 
@@ -57,7 +57,7 @@ some idea [diag121](./ahk/diag121.ahk)
 ```js
 122: {
     msg: 'ahk-neko-help not supported "," or "`" flag now.',
-    path: 'https://www.autohotkey.com/docs/Scripts.htm#continuation-section',
+    path: 'https://www.autohotkey.com/docs/v1/Scripts.htm#continuation-section',
 },
 ```
 
@@ -87,7 +87,7 @@ please use tell me, how to use this flag? [report](https://github.com/CoffeeChat
 
 ![diag125](./img/diag125.png)
 
-> - [Multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) style1 / exp1 just support `%varName%` style.
+> - [Multiline](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation-section) style1 / exp1 just support `%varName%` style.
 > - at this exp `% var%` `%` has a space, this error is at line `9`, but ahk-L report this error at line `5`.
 > - try it [diag125](./ahk/diag125.ahk)
 
@@ -102,22 +102,22 @@ please use tell me, how to use this flag? [report](https://github.com/CoffeeChat
 
 ![diag126](./img/diag126.png)
 
-> - [Multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) style1 / exp1 just support `%varName%` style.
+> - [Multiline](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation-section) style1 / exp1 just support `%varName%` style.
 > - try to write like line `11` `12` `13`, this error is at line `11`, but ahk-L report error at line `6`.
 > - I know there has some highlight bug at line 12 of `.a` and line 13 of `[" b"]`. [v0.0.12(2022-10-28)](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/CHANGELOG.md#00122022-10-28)
 
-if [Multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) is very big, this diagnostic can help you to find the problem more quickly.
+if [Multiline](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation-section) is very big, this diagnostic can help you to find the problem more quickly.
 
 > try it [diag126](./ahk/diag126.ahk)
 
 ### diag201
 
-[Loop , Count](https://www.autohotkey.com/docs/commands/Loop.htm#Parameters)
+[Loop , Count](https://www.autohotkey.com/docs/v1/lib/Loop.htm#Parameters)
 
 ```js
 201: {
     msg: 'If Count is a variable reference such as `%varName%` or `% expression`',
-    path: 'https://www.autohotkey.com/docs/commands/Loop.htm#Parameters'
+    path: 'https://www.autohotkey.com/docs/v1/lib/Loop.htm#Parameters'
 },
 ```
 
@@ -149,11 +149,11 @@ When I switch back to ahk from other languages, I often make mistakes on this ex
 ```js
 506: {
     msg: 'ahk v1 not support of this number formats',
-    path: 'https://www.autohotkey.com/docs/Concepts.htm#numbers',
+    path: 'https://www.autohotkey.com/docs/v1/Concepts.htm#numbers',
 },
 ```
 
-`c506` is diagnosis of ahk v1 not support number formats [number](https://www.autohotkey.com/docs/Concepts.htm#numbers)
+`c506` is diagnosis of ahk v1 not support number formats [number](https://www.autohotkey.com/docs/v1/Concepts.htm#numbers)
 
 > base10 `99` === base2 `0o1100011` === base8 `0b143` === base16 `0x63`, but ahk v1 just support base10 base16
 >
@@ -190,6 +190,6 @@ if (OutputVar > 0.5){
 
 ## DEV note
 
-<https://www.autohotkey.com/docs/Language.htm#commands-vs-functions>
+<https://www.autohotkey.com/docs/v1/Language.htm#commands-vs-functions>
 
 > In AutoHotkey v1, it is currently not possible to call a command from an expression, or to call a function using the command syntax.

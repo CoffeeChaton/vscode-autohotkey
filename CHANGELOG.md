@@ -1,23 +1,20 @@
 # Changelog
 
+## NEXT 0.0.21(2023-02-28)
+
+<https://www.autohotkey.com/docs/v1/Language.htm#commands-vs-functions>
+
+- [Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose
+- [Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
+- [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm#Functor)
+- [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
+- [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm#Functor)
+
 ## NEXT 0.0.20(2023-02-XX)
 
 - TODO add: more doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
 - TODO add: diag `OnMessage(MsgNumber , fn)` fn-param-lint
 - TODO doc: move built-in uri to ahk doc v1
-- FIXME: fix: syntax-highlight
-  <details>
-    <summary>exp code</summary>
-
-  ```ahk
-  GetKeyState(WhichKey, Mode = "") {
-      GetKeyState, v, %WhichKey%, %Mode%
-      Return, v
-  }
-  ```
-
-  </details>
-
 - add: diag don't allow `label-name` or `var-name` name like func.
   >
   > - `c511` diag [var/param "varName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C511Class.ts)
@@ -224,8 +221,8 @@ Search(node, find, return="") {
 - add: cache to find all ref of `function()`
 - add: doc of Command to 218 ruler
 - add: progress of dev tools
-- add: support [Multi-line](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) `%` flag
-- fix: [Multi-line](https://www.autohotkey.com/docs/Scripts.htm#continuation-section) isExpress
+- add: support [Multi-line](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation-section) `%` flag
+- fix: [Multi-line](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation-section) isExpress
 
 ## 0.0.13(2022-11-02)
 
@@ -269,10 +266,10 @@ hotkey, KeyName , Label_or_fnName, Options
 - add : doc of `clipboard` `clipboardAll` `ComSpec` `errorLevel` `false` `programFiles` `true`
 - add : doc of Command `181/218 = 83%`
 - fix : Command of `} Command` of `{ Command`
-- fix : `var =` warn (code107) && remove diag after next line is [multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation)
+- fix : `var =` warn (code107) && remove diag after next line is [multiline](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation)
 
 - add : auto diag of multiline [diag121 ~ 126](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#diag126)
-- add : semantic-highlight of var in [multiline](https://www.autohotkey.com/docs/Scripts.htm#continuation)
+- add : semantic-highlight of var in [multiline](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation)
 - style1 is OK, but has some highlight bug of style2.
   [multilineBug](image/CHANGELOG/v0-0-12-multilineBug.png)
 
@@ -316,7 +313,7 @@ hotkey, KeyName , Label_or_fnName, Options
 > _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
 > example code from [VA.ahk](https://github.com/ahkscript/VistaAudio/blob/master/VA.ahk#L465)_
 
-### 2. add Diag `c506` of not support number formats [number](https://www.autohotkey.com/docs/Concepts.htm#numbers)
+### 2. add Diag `c506` of not support number formats [number](https://www.autohotkey.com/docs/v1/Concepts.htm#numbers)
 
 base10 `99` == base2 `0b1100011` == base8 `0o143` , but ahk v1 just support base10 and base16
 
@@ -398,7 +395,7 @@ because of vscode.settings options provided
 ## 0.0.5(2022-09-05)
 
 - add [note](./note/README.md)
-- add diag of [multi-line](https://www.autohotkey.com/docs/Scripts.htm#continuation)
+- add diag of [multi-line](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation)
   1. join > 15char
   2. unknown option of multi-line
 
@@ -407,7 +404,7 @@ because of vscode.settings options provided
 - add option of `AhkNekoHelp.snippets.Command`
 - add Command of `List #Include Tree`
 - fix highlight of `#include exp.ahk`
-- fix highlight of [multi-line](https://www.autohotkey.com/docs/Scripts.htm#continuation)
+- fix highlight of [multi-line](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation)
 - style: config use markdown
 
 ## 0.0.3(2022-08-13)

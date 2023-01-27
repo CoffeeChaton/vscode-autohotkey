@@ -3,15 +3,15 @@ import * as vscode from 'vscode';
 import type { TTokenStream } from '../../../globalEnum';
 import { EMultiline } from '../../../globalEnum';
 
-// https://www.autohotkey.com/docs/Scripts.htm#continuation-section
+// https://www.autohotkey.com/docs/v1/Scripts.htm#continuation-section
 const mdOfMultiLine116: vscode.MarkdownString = new vscode.MarkdownString('', true);
 
 mdOfMultiLine116.appendMarkdown(
     [
-        '### Multi-line ([Read Doc](https://www.autohotkey.com/docs/Scripts.htm#continuation-section))\n\n',
+        '### Multi-line ([Read Doc](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation-section))\n\n',
         '**Method #2**: This method should be used to merge a large number of lines or when the lines are not suitable for Method #1.',
-        'Although this method is especially useful for [auto-replace hotStrings](https://www.autohotkey.com/docs/Hotstrings.htm)',
-        ', it can also be used with any command or [expression](https://www.autohotkey.com/docs/Variables.htm#Expressions).\n\n',
+        'Although this method is especially useful for [auto-replace hotStrings](https://www.autohotkey.com/docs/v1/Hotstrings.htm)',
+        ', it can also be used with any command or [expression](https://www.autohotkey.com/docs/v1/Variables.htm#Expressions).\n\n',
         '**some example**: of [AutoHotkey_L-Docs](https://github.com/Lexikos/AutoHotkey_L-Docs/blob/master/compile_chm.ahk#L52)',
         '\n\n',
     ].join(''),

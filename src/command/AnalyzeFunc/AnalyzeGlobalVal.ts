@@ -16,9 +16,9 @@ export function AnalyzeGlobalVal(AhkTokenList: TTokenStream): string[] {
     const ed: string[] = [
         '/**',
         '* @Analyze Global Val',
-        '* > read more of [Local and Global Variables](https://www.autohotkey.com/docs/Functions.htm#Locals)',
-        '* > [LocalSameAsGlobal](https://www.autohotkey.com/docs/commands/_Warn.htm)',
-        '* @suggest use [#Warn All, OutputDebug](https://www.autohotkey.com/docs/commands/_Warn.htm)',
+        '* > read more of [Local and Global Variables](https://www.autohotkey.com/docs/v1/Functions.htm#Locals)',
+        '* > [LocalSameAsGlobal](https://www.autohotkey.com/docs/v1/lib/_Warn.htm)',
+        '* @suggest use [#Warn All, OutputDebug](https://www.autohotkey.com/docs/v1/lib/_Warn.htm)',
         '*/',
         'loop, 0 {',
     ];

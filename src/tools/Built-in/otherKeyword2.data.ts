@@ -7,7 +7,7 @@ type TOtherKeywordElement = {
     doc: string,
 
     recommended: boolean,
-    link: `https://www.autohotkey.com/docs/${string}`,
+    link: `https://www.autohotkey.com/docs/v1/${string}`,
     exp: readonly string[],
 };
 
@@ -19,9 +19,9 @@ export const otherKeyword2: TOtherKeywordElement[] = [
         upName: 'AND',
         keyRawName: 'and',
         body: 'and',
-        doc: 'Both of these are **logical-AND**. For example: `x > 3 and x < 10`. To enhance performance, [short-circuit evaluation](https://www.autohotkey.com/docs/Functions.htm#ShortCircuit) is applied. Also, a line that begins with AND/OR/&&/|| (or any other operator) is automatically [appended to](https://www.autohotkey.com/docs/Scripts.htm#continuation) the line above it.',
+        doc: 'Both of these are **logical-AND**. For example: `x > 3 and x < 10`. To enhance performance, [short-circuit evaluation](https://www.autohotkey.com/docs/v1/Functions.htm#ShortCircuit) is applied. Also, a line that begins with AND/OR/&&/|| (or any other operator) is automatically [appended to](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation) the line above it.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/Variables.htm#and',
+        link: 'https://www.autohotkey.com/docs/v1/Variables.htm#and',
         exp: [
             ';exp of "And"',
             'x > 3 and x < 10',
@@ -36,9 +36,9 @@ export const otherKeyword2: TOtherKeywordElement[] = [
         upName: 'BETWEEN',
         keyRawName: 'Between',
         body: 'between',
-        doc: 'Determines whether [traditional assignments](https://www.autohotkey.com/docs/commands/SetEnv.htm "Deprecated. New scripts should use Var := Value instead.") like `Var1 = %Var2%` omit spaces and tabs from the beginning and end of _Var2_.',
+        doc: 'Checks whether a [variable\'s](https://www.autohotkey.com/docs/v1/Variables.htm) contents are numerically or alphabetically between two values (inclusive).',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/AutoTrim.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/IfBetween.htm',
         exp: [
             'if Var Between LowerBound and UpperBound',
             'if Var not Between LowerBound and UpperBound',
@@ -52,9 +52,9 @@ export const otherKeyword2: TOtherKeywordElement[] = [
         upName: 'IN',
         keyRawName: 'in',
         body: 'in',
-        doc: '',
+        doc: 'Checks whether a [variable\'s](https://www.autohotkey.com/docs/v1/Variables.htm) contents match one of the items in a list.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/IfIn.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/IfIn.htm',
         exp: [
             ';EXP of If In',
             'if Var in MatchList',
@@ -68,9 +68,9 @@ export const otherKeyword2: TOtherKeywordElement[] = [
         upName: 'IS',
         keyRawName: 'is',
         body: 'is',
-        doc: '',
+        doc: 'Checks whether a [variable\'s](https://www.autohotkey.com/docs/v1/Variables.htm) contents are numeric, uppercase, etc.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/commands/IfIs.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/IfIs.htm',
         exp: [
             ';EXP of If Is',
             'if Var is Type',
@@ -83,11 +83,11 @@ export const otherKeyword2: TOtherKeywordElement[] = [
         body: 'new',
         doc: 'Creates a new object derived from another object.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/Variables.htm#new',
+        link: 'https://www.autohotkey.com/docs/v1/Variables.htm#new',
         exp: [
             'x := new y(z) ; (where y is a variable, not a function name)',
             '',
-            '; https://www.autohotkey.com/docs/Objects.htm#Custom_NewDelete',
+            '; https://www.autohotkey.com/docs/v1/Objects.htm#Custom_NewDelete',
             'm1 := new GMem(0, 20)',
             '',
             'class GMem',
@@ -115,7 +115,7 @@ export const otherKeyword2: TOtherKeywordElement[] = [
         body: 'not',
         doc: '**Logical-NOT**. Except for its lower precedence, this is the same as the **!** operator.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/Variables.htm#not',
+        link: 'https://www.autohotkey.com/docs/v1/Variables.htm#not',
         exp: [
             '; exp of "Not"',
             'not (x = 3 or y = 3)',
@@ -126,9 +126,9 @@ export const otherKeyword2: TOtherKeywordElement[] = [
         upName: 'OR',
         keyRawName: 'or',
         body: 'or',
-        doc: 'Both of these are **logical-OR**. For example: `x <= 3 or x >= 10`. To enhance performance, [short-circuit evaluation](https://www.autohotkey.com/docs/Functions.htm#ShortCircuit) is applied.',
+        doc: 'Both of these are **logical-OR**. For example: `x <= 3 or x >= 10`. To enhance performance, [short-circuit evaluation](https://www.autohotkey.com/docs/v1/Functions.htm#ShortCircuit) is applied.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/Variables.htm#or',
+        link: 'https://www.autohotkey.com/docs/v1/Variables.htm#or',
         exp: [
             '; exp of "Or"',
             'x <= 3 or x >= 10',

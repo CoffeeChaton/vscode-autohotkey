@@ -146,11 +146,11 @@ export const Diags: DeepReadonly<TDiags> = {
     },
     111: {
         msg: '`Default:` Too much ',
-        path: 'https://www.autohotkey.com/docs/v1/commands/Switch.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/Switch.htm',
     },
     113: {
         msg: '`Case :` not find ',
-        path: 'https://www.autohotkey.com/docs/v1/commands/Switch.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/Switch.htm',
     },
     120: {
         msg: 'unknown options of Multiline',
@@ -195,60 +195,60 @@ export const Diags: DeepReadonly<TDiags> = {
     },
     603: {
         msg: 'Unknown #Directives',
-        path: 'https://www.autohotkey.com/docs/v1/commands/_AllowSameLineComments.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/_AllowSameLineComments.htm',
     },
     801: {
         msg: 'Deprecated: Use `Loop, Reg, KeyName` instead.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/LoopReg.htm#old',
+        path: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#old',
     },
     802: {
         msg: 'Deprecated: Use `Loop, Files, FilePattern` instead.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/LoopFile.htm#old',
+        path: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#old',
     },
     803: {
         msg: 'Deprecated: Use `Var := Var / Value` or `Var /= Value` instead.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/EnvDiv.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/EnvDiv.htm',
     },
     804: {
         msg: 'Deprecated: Use `Var := Var * Value` or `Var *= Value` instead.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/EnvMult.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/EnvMult.htm',
     },
     806: {
         msg: 'Deprecated: Use `If (expression)` instead.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/IfEqual.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/IfEqual.htm',
     },
     811: {
         msg: 'Deprecated: Use the `OnClipboardChange()` function instead.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/OnClipboardChange.htm#label',
+        path: 'https://www.autohotkey.com/docs/v1/lib/OnClipboardChange.htm#label',
     },
     812: {
         msg: 'Deprecated: Use the `OnExit()` function instead.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/OnExit.htm#command',
+        path: 'https://www.autohotkey.com/docs/v1/lib/OnExit.htm#command',
     },
     813: {
         msg: 'Deprecated: Use the `Gui,` command instead.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/Progress.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/Progress.htm',
     },
     814: {
         msg: 'Deprecated: Use expression assignments like `Var := Value` instead.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/SetEnv.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/SetEnv.htm',
     },
     815: {
         msg: 'Deprecated: Use the `Format()` function instead.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/SetFormat.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/SetFormat.htm',
     },
     816: {
         msg: 'Deprecated: Use the `Gui` command instead.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/SplashTextOn.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/SplashTextOn.htm',
     },
     824: {
         msg: 'Deprecated: This command is not recommended for use in new scripts.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/Transform.htm',
-        // TODO search SubCommand and suggest of new func https://www.autohotkey.com/docs/v1/commands/Transform.htm
+        path: 'https://www.autohotkey.com/docs/v1/lib/Transform.htm',
+        // TODO search SubCommand and suggest of new func https://www.autohotkey.com/docs/v1/lib/Transform.htm
     },
     825: {
         msg: 'Deprecated: #AllowSameLineComments was removed.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/_AllowSameLineComments.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/_AllowSameLineComments.htm',
     },
     899: {
         msg: 'Deprecated: try to use function replace Command(obsolete code)',
@@ -257,14 +257,14 @@ export const Diags: DeepReadonly<TDiags> = {
     },
     901: {
         msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/_EscapeChar.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/_EscapeChar.htm',
     },
     902: {
         msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/_CommentFlag.htm',
+        path: 'https://www.autohotkey.com/docs/v1/lib/_CommentFlag.htm',
     },
     903: {
         msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',
-        path: 'https://www.autohotkey.com/docs/v1/commands/_EscapeChar.htm#Related',
+        path: 'https://www.autohotkey.com/docs/v1/lib/_EscapeChar.htm#Related',
     },
 };

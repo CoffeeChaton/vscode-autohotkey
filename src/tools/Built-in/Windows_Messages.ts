@@ -2,10 +2,10 @@
 /* eslint-disable max-lines */
 /* eslint-disable no-magic-numbers */
 
-// https://www.autohotkey.com/docs/commands/PostMessage.htm
-// https://www.autohotkey.com/docs/misc/SendMessage.htm
-// https://www.autohotkey.com/docs/misc/SendMessageList.htm
-// https://www.autohotkey.com/docs/misc/Styles.htm
+// https://www.autohotkey.com/docs/v1/lib/PostMessage.htm
+// https://www.autohotkey.com/docs/v1/misc/SendMessage.htm
+// https://www.autohotkey.com/docs/v1/misc/SendMessageList.htm
+// https://www.autohotkey.com/docs/v1/misc/Styles.htm
 
 /**
  * @param str0x '0x03E8' pleas do not to use '0x03_E8'

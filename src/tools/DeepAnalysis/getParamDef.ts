@@ -14,7 +14,7 @@ function getKeyRawName(param: string): TParamData {
     const key0: string = isByRef
         ? param.replace(/^ByRef\s+/iu, '')
         : param;
-    const isVariadic: boolean = param.endsWith('*'); // https://www.autohotkey.com/docs/Functions.htm#Variadic
+    const isVariadic: boolean = param.endsWith('*'); // https://www.autohotkey.com/docs/v1/Functions.htm#Variadic
     const keyRawName: string = isVariadic
         ? key0.replace(/\*$/u, '')
         : key0;

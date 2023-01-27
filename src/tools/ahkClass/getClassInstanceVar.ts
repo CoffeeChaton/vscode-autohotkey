@@ -38,7 +38,7 @@ export function getClassInstanceVar(FuncInput: TFuncInput): CAhkClassInstanceVar
     });
 }
 
-// https://www.autohotkey.com/docs/Objects.htm#Custom_Classes
+// https://www.autohotkey.com/docs/v1/Objects.htm#Custom_Classes
 
 // class ClassName extends BaseClassName
 // {

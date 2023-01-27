@@ -70,4 +70,4 @@ export function MultilineHighlight(DocStrMap: TTokenStream): TSemanticTokensLeaf
 
 // ^\s*\(
 
-// https://www.autohotkey.com/docs/Scripts.htm#continuation-section
+// https://www.autohotkey.com/docs/v1/Scripts.htm#continuation-section

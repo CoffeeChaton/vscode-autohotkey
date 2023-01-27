@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { to0X, winMsgRe } from './Windows_Messages';
 
-// https://www.autohotkey.com/docs/Concepts.htm#numbers
+// https://www.autohotkey.com/docs/v1/Concepts.htm#numbers
 function str2Number(str: string): number | null {
     if ((/^0x[\dA-F]+$/iu).test(str)) {
         // base 16
@@ -20,7 +20,7 @@ function str2Number(str: string): number | null {
     // }
 
     // !str.startsWith('0') wtf... ahk 001 === 1
-    // https://www.autohotkey.com/docs/Concepts.htm#numbers
+    // https://www.autohotkey.com/docs/v1/Concepts.htm#numbers
     if ((/\d+/u).test(str)) {
         // base 10
         return Number.parseInt(str, 10);
@@ -45,7 +45,7 @@ export function numberFindWinMsg(wordUp: string): vscode.MarkdownString | null {
         .appendMarkdown('Did you mean ?')
         .appendCodeblock(body, 'ahk')
         .appendMarkdown('\n\n')
-        .appendMarkdown('[Read More of Windows Messages](https://www.autohotkey.com/docs/misc/SendMessageList.htm)');
+        .appendMarkdown('[Read More of Windows Messages](https://www.autohotkey.com/docs/v1/misc/SendMessageList.htm)');
     md.supportHtml = true;
 
     return md;

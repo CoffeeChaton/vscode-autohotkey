@@ -21,7 +21,7 @@ export type TParamMetaIn = {
     c502Array: TC502New[],
     parsedErrRange: vscode.Range | null,
     isByRef: boolean,
-    isVariadic: boolean, // https://www.autohotkey.com/docs/Functions.htm#Variadic
+    isVariadic: boolean, // https://www.autohotkey.com/docs/v1/Functions.htm#Variadic
     commentList: string[],
 };
 export type TParamMetaOut = DeepReadonly<TParamMetaIn>;

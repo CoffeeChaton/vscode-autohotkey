@@ -21,13 +21,13 @@ export const otherKeyword1: TCommandElement[] = [
         ].join('\n'),
         doc: [
             'At its root, a "class" is a set or category of things having some property or attribute in common.',
-            'Since a [base](https://www.autohotkey.com/docs/Objects.htm#Custom_Objects) or',
-            '[prototype](https://www.autohotkey.com/docs/Objects.htm#Custom_Prototypes) object defines properties and beHaviour for set of objects,',
+            'Since a [base](https://www.autohotkey.com/docs/v1/Objects.htm#Custom_Objects) or',
+            '[prototype](https://www.autohotkey.com/docs/v1/Objects.htm#Custom_Prototypes) object defines properties and beHaviour for set of objects,',
             'it can also be called a _class_ object.',
             'For convenience, base objects can be defined using the "class" keyword as shown below:',
         ].join('\n'),
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/Objects.htm#Custom_Classes',
+        link: 'https://www.autohotkey.com/docs/v1/Objects.htm#Custom_Classes',
         exp: [
             'class ClassName extends BaseClassName',
             '{',
@@ -63,7 +63,7 @@ export const otherKeyword1: TCommandElement[] = [
         body: 'static',
         doc: 'Static variables are always implicitly local, but differ from locals because their values are remembered between calls.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/Functions.htm#static',
+        link: 'https://www.autohotkey.com/docs/v1/Functions.htm#static',
         exp: [
             'LogToFile(TextToLog)',
             '{',
@@ -81,7 +81,7 @@ export const otherKeyword1: TCommandElement[] = [
         body: 'global',
         doc: 'To refer to an existing global variable inside a function (or create a new one), declare the variable as global prior to using it.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/Functions.htm#Global',
+        link: 'https://www.autohotkey.com/docs/v1/Functions.htm#Global',
         exp: [
             'global LogFileName  ; This global variable was previously given a value somewhere outside this function.',
         ],
@@ -97,7 +97,7 @@ export const otherKeyword1: TCommandElement[] = [
             'Separate functions may also safely use the same variable names.',
         ].join('\n'),
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/Functions.htm#Local',
+        link: 'https://www.autohotkey.com/docs/v1/Functions.htm#Local',
         exp: [
             'local a',
             'Local b := 0',

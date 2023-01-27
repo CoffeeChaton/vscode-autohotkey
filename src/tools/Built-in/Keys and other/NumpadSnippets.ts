@@ -39,7 +39,7 @@ const NumSnippets: readonly vscode.CompletionItem[] = ((): readonly vscode.Compl
     for (const [key, code] of Object.entries(NumObj)) {
         const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
             .appendCodeblock(`${key} -> ${code}`, 'ahk')
-            .appendMarkdown('[Read Doc](https://www.autohotkey.com/docs/KeyList.htm#numpad)');
+            .appendMarkdown('[Read Doc](https://www.autohotkey.com/docs/v1/KeyList.htm#numpad)');
         md.supportHtml = true;
 
         const item: vscode.CompletionItem = new vscode.CompletionItem({

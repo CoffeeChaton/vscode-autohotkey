@@ -36,7 +36,7 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 ## FunctionSymbol
 
 1. Detect source Function as symbol
-2. support [continuation](https://www.autohotkey.com/docs/Scripts.htm#continuation) at Outline.
+2. support [continuation](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation) at Outline.
    ![FunctionSymbol](image/FunctionSymbol.png)
 
 ## CodeSymbol
@@ -105,13 +105,13 @@ support to find like
    ```
 
    > - also can use
-   > - `fnObject := func("functionName")` [[read doc of func()]](https://www.autohotkey.com/docs/commands/Func.htm)
-   > - `fnObject := RegisterCallback("functionName")` [read doc of RegisterCallback](https://www.autohotkey.com/docs/commands/RegisterCallback.htm)
+   > - `fnObject := func("functionName")` [[read doc of func()]](https://www.autohotkey.com/docs/v1/lib/Func.htm)
+   > - `fnObject := RegisterCallback("functionName")` [read doc of RegisterCallback](https://www.autohotkey.com/docs/v1/lib/RegisterCallback.htm)
 
    </details>
 
-3. [SetTimer](https://www.autohotkey.com/docs/commands/SetTimer.htm), exp: `SetTimer , Label_or_functionName`
-4. [Hotkey](https://www.autohotkey.com/docs/commands/Hotkey.htm), exp: `Hotkey, KeyName , Label_or_functionName`
+3. [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm), exp: `SetTimer , Label_or_functionName`
+4. [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm), exp: `Hotkey, KeyName , Label_or_functionName`
 5. read more of [funcRef](src/command/AnalysisFuncReference/funcRef.ahk)
 
 ## Function rename
@@ -121,7 +121,7 @@ support to find like
 ## Hover
 
 - Hover to view details on variables, function, command
-- Over 200 [Command and Function](https://www.autohotkey.com/docs/commands/) documenting built-in
+- Over 200 [Command and Function](https://www.autohotkey.com/docs/v1/lib/) documenting built-in
 
 1. Hover function to show return value or comment
 
@@ -145,6 +145,22 @@ support to find like
    */
    fn(param){
        ; some code
+   }
+   ```
+
+3. add comment of line to
+
+   ```ahk
+   fun(){
+
+       /**
+       * jsdoc-style
+       */
+       bb := 0 ;; cpp-style
+
+       ; hover var-name and show doc
+       ; OK use `;;` to add cpp-style
+       ; TODO add jsdoc-style
    }
    ```
 
@@ -252,7 +268,7 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
 ## Performance
 
 - The best way to improve startup times is to exclude unnecessary files, via [settings.json](https://code.visualstudio.com/docs/getstarted/settings) `AhkNekoHelp.baseScan.IgnoredList`
-- When editing becomes slow, split the file, via [`#Include`](https://www.autohotkey.com/docs/commands/_Include.htm)
+- When editing becomes slow, split the file, via [`#Include`](https://www.autohotkey.com/docs/v1/lib/_Include.htm)
 
 <!-- - TODO use...try to find each file parsing time. -->
 
