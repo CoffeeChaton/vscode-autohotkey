@@ -3,7 +3,7 @@ import { CAhkCase, CAhkDefault, CAhkSwitch } from '../AhkSymbol/CAhkSwitch';
 import { getRange } from '../tools/range/getRange';
 import { getRangeCaseBlock } from '../tools/range/getRangeCaseBlock';
 import type { TFuncInput } from './getChildren';
-import { EFatherName, getChildren } from './getChildren';
+import { getChildren } from './getChildren';
 import { getCaseName, getSwitchName } from './ParserTools/getSwitchCaseName';
 import { ParserLine } from './ParserTools/ParserLine';
 
@@ -38,7 +38,6 @@ export const ParserBlock = {
                 uri,
                 GValMap,
             },
-            EFatherName.ACase,
         );
 
         const selectionRange = new vscode.Range(
@@ -82,7 +81,6 @@ export const ParserBlock = {
                 uri,
                 GValMap,
             },
-            EFatherName.ADefautl,
         );
 
         const selectionRange = new vscode.Range(
@@ -124,7 +122,6 @@ export const ParserBlock = {
                 uri,
                 GValMap,
             },
-            EFatherName.ASwitch,
         );
 
         const selectionRange = new vscode.Range(

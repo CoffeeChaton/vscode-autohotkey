@@ -6,9 +6,8 @@ import type { TAhkSymbolList } from '../AhkSymbol/TAhkSymbolIn';
 import { getClassGetSet } from '../tools/ahkClass/getClassGetSet';
 import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
 import { getRange } from '../tools/range/getRange';
-import { replacerSpace } from '../tools/str/removeSpecialChar';
 import type { TFuncInput } from './getChildren';
-import { EFatherName, getChildren } from './getChildren';
+import { getChildren } from './getChildren';
 import { getFunc } from './ParserFunc';
 
 function setClassInsertText(children: TAhkSymbolList): string {
@@ -38,8 +37,14 @@ export function getClass(FuncInput: TFuncInput): CAhkClass | null {
     } = FuncInput.AhkTokenLine;
 
     if (fistWordUp !== 'CLASS') return null;
+    const lStrFix: string = lStr
+        // eslint-disable-next-line no-magic-numbers
+        .slice(fistWordUpCol + 5).trimStart() // 5 === 'CLASS'.len
+        .padStart(lStr.length, ' ');
+
     // class ClassName extends BaseClassName
-    const ma: RegExpMatchArray | null = lStr.match(/(?<=^\s*Class\s+)(\w+)/iu);
+    //       ^^^^^^^^^
+    const ma: RegExpMatchArray | null = lStrFix.match(/(\w+)/iu);
     if (ma === null) return null;
 
     const {
@@ -63,10 +68,9 @@ export function getClass(FuncInput: TFuncInput): CAhkClass | null {
             uri,
             GValMap,
         },
-        EFatherName.AClass,
     );
 
-    const col: number = ma.index ?? lStr.replace(/^\s*Class\s+/iu, replacerSpace).indexOf(name);
+    const col: number = ma.index ?? lStrFix.indexOf(name);
 
     return new CAhkClass({
         name,

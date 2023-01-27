@@ -5,7 +5,7 @@ import type { TFsPath, TTokenStream } from '../../globalEnum';
 import type { TModuleVar } from '../../tools/DeepAnalysis/getModuleVarMap';
 import { getModuleVarMap } from '../../tools/DeepAnalysis/getModuleVarMap';
 import { isAhk } from '../../tools/fsTools/isAhk';
-import { EFatherName, getChildren } from '../getChildren';
+import { getChildren } from '../getChildren';
 import { getClass } from '../getClass';
 import { ParserBlock } from '../Parser';
 import { getFunc } from '../ParserFunc';
@@ -107,7 +107,6 @@ export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
             uri,
             GValMap,
         },
-        EFatherName.ARoot,
     );
 
     const AhkCache: TMemo = {

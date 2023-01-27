@@ -16,7 +16,7 @@ import { getTextInRange } from '../tools/getTextInRange';
 import { getFuncDocCore } from '../tools/MD/getFuncDocMD';
 import { getRange } from '../tools/range/getRange';
 import type { TFuncInput } from './getChildren';
-import { EFatherName, getChildren } from './getChildren';
+import { getChildren } from './getChildren';
 import { ParserBlock } from './Parser';
 import { ParserLine } from './ParserTools/ParserLine';
 
@@ -74,7 +74,6 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
             uri,
             GValMap,
         },
-        EFatherName.AFunc,
     );
 
     const AhkTokenList: TTokenStream = getDocStrMapMask(range, DocStrMap);

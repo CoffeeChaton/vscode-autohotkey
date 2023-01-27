@@ -10,7 +10,7 @@ export function getCaseName(textRaw: string, lStr: string): string | null {
 }
 
 export function getSwitchName(textRaw: string): string {
-    return textRaw.replace(/^\s*switch\b\s*/iu, '')
+    return textRaw.replace(/^[ \t}]*switch\b\s*/iu, '')
         .replace(/\{\s*$/u, '')
         .trim(); // ahk allow switchName === ''
 }

@@ -18,29 +18,13 @@
 
   </details>
 
-- FIXME: Def `startWith("}")`
-
-  ```ahk
-  Switch A {
-    case 1: i :=0
-  } Switch B { ;<------------------- //FIXME
-    case 2: j :=0
-  }
-
-  class ca {
-
-  } class cb { ; <------------------- //FIXME
-
-  }
-  ```
-
 - add: diag don't allow `label-name` or `var-name` name like func.
   >
   > - `c511` diag [var/param "varName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C511Class.ts)
   > - `c512` diag [global-val "varName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C512Class.ts)
   > - `c513` diag [label "labelName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C513Class.ts)
 
-- fix: fn-Def `startWith("}")`
+- fix: Def `startWith("}")`
   <details>
     <summary>exp code</summary>
 
@@ -57,6 +41,18 @@
       } method2(){  ; also a  method def
 
       }
+  }
+
+    Switch A {
+      case 1: i :=0
+  }  Switch B   { ;<------------------- also Switch
+      case 2: j :=0
+  }
+
+    class  ca  {
+
+  }    class cb { ; <------------------- also class
+
   }
   ```
 
