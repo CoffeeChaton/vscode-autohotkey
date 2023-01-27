@@ -2,22 +2,36 @@
 /* eslint-disable max-len */
 /* eslint-disable max-lines */
 
-type TUri =
-    | 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#vars'
-    | `https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#${string}`
-    | `https://www.autohotkey.com/docs/v1/Variables.htm#${string}`;
-
-type TElement = {
+export type TAElement = {
     body: `A_${string}`,
-    group: 'Date' | 'GUI' | 'Hotkeys' | 'Loop' | 'Misc.' | 'OS' | 'Script' | 'Setting' | 'Spec' | 'User Idle Time',
-    uri: TUri,
+    group:
+        | 'Date'
+        | 'GUI'
+        | 'Hotkeys'
+        | 'Loop'
+        | 'LoopFile'
+        | 'LoopParse'
+        | 'LoopReadFile'
+        | 'LoopReg'
+        | 'Misc.'
+        | 'OS'
+        | 'Script'
+        | 'Setting'
+        | 'Spec'
+        | 'User Idle Time',
+    uri:
+        | 'https://www.autohotkey.com/docs/v1/lib/LoopParse.htm#LoopField'
+        | 'https://www.autohotkey.com/docs/v1/lib/LoopReadFile.htm#LoopReadLine'
+        | 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#vars' // doc not id
+        | `https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFile${string}`
+        | `https://www.autohotkey.com/docs/v1/Variables.htm#${string}`,
     doc: string,
 };
 
 /**
  * after initialization clear
  */
-export const AVariablesList: TElement[] = [
+export const AVariablesList: TAElement[] = [
     {
         body: 'A_AhkPath',
         uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#AhkPath',
@@ -58,23 +72,23 @@ export const AVariablesList: TElement[] = [
         body: 'A_BatchLines',
         uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#BatchLines',
         group: 'Setting',
-        doc: '(synonymous with A_NumBatchLines) The current value as set by SetBatchLines. Examples: 200 or 10ms (depending on format).',
+        doc: '(synonymous with `A_NumBatchLines`) The current value as set by SetBatchLines. Examples: 200 or 10ms (depending on format).',
     },
     {
         body: 'A_NumBatchLines',
         uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#BatchLines',
         group: 'Setting',
-        doc: '(synonymous with A_NumBatchLines) The current value as set by [SetBatchLines](https://www.autohotkey.com/docs/v1/lib/SetBatchLines.htm). Examples: 200 or 10ms (depending on format).',
+        doc: '(synonymous with `A_BatchLines`) The current value as set by [SetBatchLines](https://www.autohotkey.com/docs/v1/lib/SetBatchLines.htm). Examples: 200 or 10ms (depending on format).',
     },
     {
         body: 'A_CaretX',
-        uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#CaretX',
+        uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#Caret',
         group: 'Misc.',
         doc: 'The current X and Y coordinates of the caret (text insertion point). The coordinates are relative to the active window unless CoordMode is used to make them relative to the entire screen. If there is no active window or the caret position cannot be determined, these variables are blank.         \nThe following script allows you to move the caret around to see its current position displayed in an auto-update tooltip. Note that some windows (e.g. certain versions of MS Word) report the same caret position regardless of its actual position.        #PersistentSetTimer, WatchCaret, 100returnWatchCaret: ToolTip, X%A_CaretX% Y%A_CaretY%, A_CaretX, A_CaretY - 20return ',
     },
     {
         body: 'A_CaretY',
-        uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#CaretY',
+        uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#Caret',
         group: 'Misc.',
         doc: 'The current X and Y coordinates of the caret (text insertion point). The coordinates are relative to the active window unless CoordMode is used to make them relative to the entire screen. If there is no active window or the caret position cannot be determined, these variables are blank.         \nThe following script allows you to move the caret around to see its current position displayed in an auto-update tooltip. Note that some windows (e.g. certain versions of MS Word) report the same caret position regardless of its actual position.        #PersistentSetTimer, WatchCaret, 100returnWatchCaret: ToolTip, X%A_CaretX% Y%A_CaretY%, A_CaretX, A_CaretY - 20return ',
     },
@@ -142,7 +156,7 @@ export const AVariablesList: TElement[] = [
         body: 'A_DD',
         uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#DD',
         group: 'Date',
-        doc: 'Current 2-digit day of the month (01-31). Synonymous with A_MDay.',
+        doc: 'Current 2-digit day of the month (01-31). Synonymous with `A_MDay` or `A_DD`.',
     },
     {
         body: 'A_MDay',
@@ -452,147 +466,147 @@ export const AVariablesList: TElement[] = [
     },
     {
         body: 'A_LoopField',
-        uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#LoopField',
-        group: 'Loop',
-        doc: 'See parsing loop.',
+        uri: 'https://www.autohotkey.com/docs/v1/lib/LoopParse.htm#LoopField',
+        group: 'LoopParse',
+        doc: 'The built-in variable **A_LoopField** exists within any parsing loop. It contains the contents of the current substring (field) from _InputVar_. If an inner parsing loop is enclosed by an outer parsing loop, the innermost loop\'s field will take precedence.',
     },
     {
         body: 'A_LoopFileAttrib',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileAttrib',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The attributes of the file currently retrieved.',
     },
     {
         body: 'A_LoopFileDir',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileDir',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The path of the directory in which A_LoopFileName resides. If FilePattern contains a relative path rather than an absolute path, the path here will also be relative. A root directory will not contain a trailing backslash. For example: C:',
     },
     {
         body: 'A_LoopFileExt',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileExt',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The file\'s extension (e.g. TXT, DOC, or EXE). The period (.) is not included.',
     },
     {
         body: 'A_LoopFileFullPath',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileFullPath',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The path and name of the file/folder currently retrieved. If FilePattern contains a relative path rather than an absolute path, the path here will also be relative. In addition, any short (8.3) folder names in FilePattern will still be short (see next item to get the long version).        \nA_LoopFilePath is available in [v1.1.28+] as an alias of A_LoopFileFullPath, which is a misnomer. ',
     },
     {
         body: 'A_LoopFileLongPath',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileLongPath',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'This is different than A_LoopFileFullPath in the following ways: 1) It always contains the absolute/complete path of the file even if FilePattern contains a relative path; 2) Any short (8.3) folder names in FilePattern itself are converted to their long names; 3) Characters in FilePattern are converted to uppercase or lowercase to match the case stored in the file system. This is useful for converting file names -- such as those passed into a script as command line parameters -- to their exact path names as shown by Explorer. ',
     },
     {
         body: 'A_LoopFileName',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileName',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The name of the file or folder currently retrieved (without the path).',
     },
     {
         body: 'A_LoopFilePath',
-        uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFilePath',
-        group: 'Loop',
+        uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileFullPath',
+        group: 'LoopFile',
         doc: 'The path and name of the file/folder currently retrieved. If FilePattern contains a relative path rather than an absolute path, the path here will also be relative. In addition, any short (8.3) folder names in FilePattern will still be short (see next item to get the long version).        \nA_LoopFilePath is available in [v1.1.28+] as an alias of A_LoopFileFullPath, which is a misnomer. ',
     },
     {
         body: 'A_LoopFileShortName',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileShortName',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The 8.3 short name, or alternate name of the file. If the file doesn\'t have one (due to the long name being shorter than 8.3 or perhaps because short-name generation is disabled on an NTFS file system), A_LoopFileName will be retrieved instead. ',
     },
     {
         body: 'A_LoopFileShortPath',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileShortPath',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The 8.3 short path and name of the file/folder currently retrieved. For example: C:\\MYDOCU~1\\ADDRES~1.txt. If FilePattern contains a relative path rather than an absolute path, the path here will also be relative.         \nTo retrieve the complete 8.3 path and name for a single file or folder, specify its name for FilePattern as in this example:         Loop, C:\\My Documents\\Address List.txt ShortPathName := A_LoopFileShortPath        \nNote: This variable will be blank if the file does not have a short name, which can happen on systems where NtfsDisable8dot3NameCreation has been set in the registry. It will also be blank if FilePattern contains a relative path and the body of the loop uses SetWorkingDir to switch away from the working directory in effect for the loop itself. ',
     },
     {
         body: 'A_LoopFileSize',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileSize',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The size in bytes of the file currently retrieved. Files larger than 4 gigabytes are also supported.',
     },
     {
         body: 'A_LoopFileSizeKB',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileSizeKB',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The size in Kbytes of the file currently retrieved, rounded down to the nearest integer.',
     },
     {
         body: 'A_LoopFileSizeMB',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileSizeMB',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The size in Mbytes of the file currently retrieved, rounded down to the nearest integer.',
     },
     {
         body: 'A_LoopFileTimeAccessed',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileTimeAccessed',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The time the file was last accessed. Format YYYYMMDDHH24MISS.',
     },
     {
         body: 'A_LoopFileTimeCreated',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileTimeCreated',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The time the file was created. Format YYYYMMDDHH24MISS.',
     },
     {
         body: 'A_LoopFileTimeModified',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#LoopFileTimeModified',
-        group: 'Loop',
+        group: 'LoopFile',
         doc: 'The time the file was last modified. Format YYYYMMDDHH24MISS.',
     },
     {
         body: 'A_LoopReadLine',
-        uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#LoopReadLine',
-        group: 'Loop',
-        doc: 'See file-reading loop.',
+        uri: 'https://www.autohotkey.com/docs/v1/lib/LoopReadFile.htm#LoopReadLine',
+        group: 'LoopReadFile',
+        doc: 'The built-in variable **A_LoopReadLine** exists within any file-reading loop. It contains the contents of the current line excluding the carriage return and linefeed (`r`n) that marks the end of the line. If an inner file-reading loop is enclosed by an outer file-reading loop, the innermost loop\'s file-line will take precedence.',
     },
     {
         body: 'A_LoopRegKey',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#vars',
-        group: 'Loop',
+        group: 'LoopReg',
         doc: 'The name of the root key being accessed (HKEY_LOCAL_MACHINE, HKEY_USERS, HKEY_CURRENT_USER, HKEY_CLASSES_ROOT, or HKEY_CURRENT_CONFIG). For remote registry access, this value will not include the computer name.',
     },
     {
         body: 'A_LoopRegName',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#vars',
-        group: 'Loop',
+        group: 'LoopReg',
         doc: 'Name of the currently retrieved item, which can be either a value name or the name of a subkey. Value names displayed by Windows RegEdit as "(Default)" will be retrieved if a value has been assigned to them, but A_LoopRegName will be blank for them.',
     },
     {
         body: 'A_LoopRegSubKey',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#vars',
-        group: 'Loop',
+        group: 'LoopReg',
         doc: 'Name of the current subkey. This will be the same as the Key parameter unless the Recurse        parameter is being used to recursively explore other subkeys. In that case, it will be the full path of the currently retrieved item, not including the root key. For example: Software\\SomeApplication\\My SubKey',
     },
     {
         body: 'A_LoopRegTimeModified',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#vars',
-        group: 'Loop',
+        group: 'LoopReg',
         doc: 'The time the current subkey or any of its values was last modified. Format YYYYMMDDHH24MISS. This variable will be empty if the currently retrieved item is not a subkey (i.e. A_LoopRegType is not the word KEY).',
     },
     {
         body: 'A_LoopRegType',
         uri: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#vars',
-        group: 'Loop',
+        group: 'LoopReg',
         doc: 'The type of the currently retrieved item, which is one of the following words: KEY (i.e. the currently retrieved item is a subkey not a value), REG_SZ, REG_EXPAND_SZ, REG_MULTI_SZ, REG_DWORD, REG_QWORD, REG_BINARY, REG_LINK, REG_RESOURCE_LIST, REG_FULL_RESOURCE_DESCRIPTOR, REG_RESOURCE_REQUIREMENTS_LIST, REG_DWORD_BIG_ENDIAN (probably rare on most Windows hardware). It will be empty if the currently retrieved item is of an unknown type.',
     },
     {
         body: 'A_MM',
         uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#MM',
         group: 'Date',
-        doc: 'Current 2-digit month (01-12). Synonymous with `A_Mon`.',
+        doc: 'Current 2-digit month (01-12). Synonymous with `A_Mon` or `A_MM`.',
     },
     {
         body: 'A_Mon',
         uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#MM',
         group: 'Date',
-        doc: 'Current 2-digit month (01-12). Synonymous with `A_MM`.',
+        doc: 'Current 2-digit month (01-12). Synonymous with `A_Mon` or `A_MM`.',
     },
     {
         body: 'A_MMM',
@@ -826,9 +840,9 @@ export const AVariablesList: TElement[] = [
     },
     {
         body: 'A_StoreCapsLockMode',
-        uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#StoreCapsLockMode',
+        uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#StoreCapslockMode',
         group: 'Setting',
-        doc: '[v1.1.23+]: The current mode (On or Off) set by SetStoreCapsLockMode.',
+        doc: '[[v1.1.23+]:](https://www.autohotkey.com/docs/v1/AHKL_ChangeLog.htm#v1.1.23.00 "Applies to AutoHotkey v1.1.23 and later") The current mode (On or Off) set by [SetStoreCapsLockMode](https://www.autohotkey.com/docs/v1/lib/SetStoreCapslockMode.htm).',
     },
     {
         body: 'A_StringCaseSense',
@@ -994,12 +1008,12 @@ export const AVariablesList: TElement[] = [
         body: 'A_YYYY',
         uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#YYYY',
         group: 'Date',
-        doc: 'Current 4-digit year (e.g. 2004). Synonymous with `A_Year`.        \nNote: To retrieve a formatted time or date appropriate for your locale and language, use FormatTime, OutputVar (time and long date) or FormatTime, OutputVar,, LongDate (retrieves long-format date). ',
+        doc: 'Current 4-digit year (e.g. 2004). Synonymous with `A_Year` or `A_YYYY`.        \nNote: To retrieve a formatted time or date appropriate for your locale and language, use FormatTime, OutputVar (time and long date) or FormatTime, OutputVar,, LongDate (retrieves long-format date). ',
     },
     {
         body: 'A_Year',
         uri: 'https://www.autohotkey.com/docs/v1/Variables.htm#YYYY',
         group: 'Date',
-        doc: 'Current 4-digit year (e.g. 2004). Synonymous with `A_YYYY`.        \nNote: To retrieve a formatted time or date appropriate for your locale and language, use FormatTime, OutputVar (time and long date) or FormatTime, OutputVar,, LongDate (retrieves long-format date). ',
+        doc: 'Current 4-digit year (e.g. 2004). Synonymous with `A_Year` or `A_YYYY`.        \nNote: To retrieve a formatted time or date appropriate for your locale and language, use FormatTime, OutputVar (time and long date) or FormatTime, OutputVar,, LongDate (retrieves long-format date). ',
     },
 ];

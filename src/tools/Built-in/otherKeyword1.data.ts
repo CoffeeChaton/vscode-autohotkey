@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-template-curly-in-string */
 import type { TCommandElement } from './Command.data';
 
