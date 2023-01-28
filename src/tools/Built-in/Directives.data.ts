@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /* cSpell:disable */
 /* eslint-disable max-len */
 /* eslint-disable max-lines */
@@ -9,7 +10,11 @@ type TDirectivesList = Readonly<{
     doc: string,
 
     recommended: boolean,
-    link: `https://www.autohotkey.com/docs/v1/${string}`,
+    link:
+        | 'https://www.autohotkey.com/docs/v1/lib/_EscapeChar.htm#Delimiter'
+        | 'https://www.autohotkey.com/docs/v1/lib/_EscapeChar.htm#DerefChar'
+        | 'https://www.autohotkey.com/docs/v1/Scripts.htm#LTrim'
+        | `https://www.autohotkey.com/docs/v1/lib/_${string}.htm`,
     exp: readonly string[],
 }>;
 
@@ -285,7 +290,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#InstallMouseHook',
         doc: 'Forces the unconditional installation of the mouse hook.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/v1/lib/_InstallKeybdHook.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_InstallMouseHook.htm',
         exp: [
             '#InstallMouseHook',
         ],
@@ -295,7 +300,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#KeyHistory, ${1:MaxEvents}',
         doc: 'Sets the maximum number of keyboard and mouse events displayed by the KeyHistory window. You can set it to 0 to disable key history.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/v1/lib/_InstallKeybdHook.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_KeyHistory.htm',
         exp: [
             '#KeyHistory MaxEvents',
             '; MaxEvents as int',
@@ -513,7 +518,7 @@ export const DirectivesList: TDirectivesList[] = [
         insert: '#WinActivateForce',
         doc: 'Skips the gentle method of activating a window and goes straight to the forceful method.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/v1/lib/_Warn.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/_WinActivateForce.htm',
         exp: [
             '#WinActivateForce',
         ],
