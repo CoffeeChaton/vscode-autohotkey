@@ -14,7 +14,7 @@ type TStatementElement = Readonly<{
     body: string,
     doc: string,
     recommended: boolean,
-    link: `https://www.autohotkey.com/docs/v1/${string}`,
+    link: `https://www.autohotkey.com/docs/v1/lib/${string}.htm`,
     exp: readonly string[],
     //
     diag?: TStatementDiag,
@@ -110,7 +110,7 @@ export const Statement: TStatementElement[] = [
         body: 'Critical, ${1|Off,On|}',
         doc: 'Prevents the current thread from being interrupted by other threads, or enables it to be interrupted.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/v1/lib/CoordMode.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/Critical.htm',
         exp: [
             'Critical [, OnOffNumeric]',
             ';          TargetType',

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { Statement } from './statement.data';
 
@@ -72,5 +73,49 @@ describe('check Statement ruler', () => {
             .replace(')\\b', '');
 
         expect(st1).toBe(arr1.join('|'));
+    });
+
+    it('check : uri', () => {
+        expect.hasAssertions();
+
+        type TSpecialUri = [
+            string,
+            typeof Statement[number]['link'],
+        ];
+        const specialUriList: TSpecialUri[] = [];
+        for (const v of Statement) {
+            const { link, keyRawName } = v;
+
+            const tag = link
+                .replace('https://www.autohotkey.com/docs/v1/lib/', '')
+                .replace('.htm', '');
+            if (tag !== keyRawName) {
+                specialUriList.push([keyRawName, link]);
+            }
+        }
+
+        expect(specialUriList).toStrictEqual(
+            [
+                ['Case', 'https://www.autohotkey.com/docs/v1/lib/Switch.htm'],
+                ['Default', 'https://www.autohotkey.com/docs/v1/lib/Switch.htm'],
+                // GoSub -> Gosub
+                ['GoSub', 'https://www.autohotkey.com/docs/v1/lib/Gosub.htm'],
+                ['If', 'https://www.autohotkey.com/docs/v1/lib/IfExpression.htm'],
+                // If / IfEqual / IfNotEqual / IfLess / IfLessOrEqual / IfGreater / IfGreaterOrEqual
+                ['IfGreater', 'https://www.autohotkey.com/docs/v1/lib/IfEqual.htm'],
+                ['IfGreaterOrEqual', 'https://www.autohotkey.com/docs/v1/lib/IfEqual.htm'],
+                ['IfLess', 'https://www.autohotkey.com/docs/v1/lib/IfEqual.htm'],
+                ['IfLessOrEqual', 'https://www.autohotkey.com/docs/v1/lib/IfEqual.htm'],
+                ['IfNotEqual', 'https://www.autohotkey.com/docs/v1/lib/IfEqual.htm'],
+                // IfExist / IfNotExist
+                ['IfNotExist', 'https://www.autohotkey.com/docs/v1/lib/IfExist.htm'],
+                // IfInString / IfNotInString
+                ['IfNotInString', 'https://www.autohotkey.com/docs/v1/lib/IfInString.htm'],
+                // IfWinActive / IfWinNotActive
+                ['IfWinNotActive', 'https://www.autohotkey.com/docs/v1/lib/IfWinActive.htm'],
+                // IfWinExist / IfWinNotExist
+                ['IfWinNotExist', 'https://www.autohotkey.com/docs/v1/lib/IfWinExist.htm'],
+            ],
+        );
     });
 });

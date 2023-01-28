@@ -1,11 +1,30 @@
 /* eslint-disable max-len */
 /* eslint-disable no-template-curly-in-string */
-import type { TCommandElement } from './Command.data';
+type TOtherKeyword1 = Readonly<{
+    upName: string,
+    keyRawName: string,
+    body: string,
+    doc: string,
+    recommended: boolean,
+    link: `https://www.autohotkey.com/docs/v1/${string}.htm${string}`,
+    exp: readonly string[],
+    //
+    /**
+     * S -> string?
+     * O -> output
+     * E -> number?
+     * I -> input varName
+     * F -> functionName
+     * L -> label
+     * FO -> funcObject
+     */
+    _paramType: string[],
+}>;
 
 /**
  * after initialization clear
  */
-export const otherKeyword1: TCommandElement[] = [
+export const otherKeyword1: TOtherKeyword1[] = [
     {
         upName: 'CLASS',
         keyRawName: 'Class',
