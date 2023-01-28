@@ -9,7 +9,7 @@ function findDirectivesWithPos(
     position: vscode.Position,
 ): CAhkDirectives | CAhkInclude | undefined {
     for (const ah of AST) {
-        if (ah.range.contains(position)) {
+        if (ah.selectionRange.contains(position)) {
             return ah instanceof CAhkDirectives || ah instanceof CAhkInclude
                 ? ah
                 : findDirectivesWithPos(ah.children, position);

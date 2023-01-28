@@ -32,7 +32,12 @@ export class CAhkDirectives extends vscode.DocumentSymbol {
             uri,
         }: TBaseLineParam,
     ) {
-        super(name, '#Directives', vscode.SymbolKind.Event, range, selectionRange);
+        const { start } = selectionRange;
+        const selectionRangeFix = new vscode.Range(
+            start,
+            new vscode.Position(start.line, start.character + name.length),
+        );
+        super(name, '#Directives', vscode.SymbolKind.Event, range, selectionRangeFix);
         this.uri = uri;
         this.hashtag = name.replace('#', '').toUpperCase();
     }

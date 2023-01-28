@@ -1,5 +1,5 @@
 {
-    "fileTypes": ["ahk"],
+    "fileTypes": [ "ahk" ],
     "name": "AutoHotkey",
     "patterns": [
         { "include": "#escaped_char" },
@@ -227,6 +227,12 @@
                     "name": "keyword.control.import.ahk"
                 },
                 {
+                    "captures": { "1": { "name": "keyword.control.directives._if.ahk" } },
+                    "patterns": [ { "include": "#expression" } ],
+                    "match": "^[ \\t]*(?i:(#if))[ \\t]+",
+                    "name": "meta._if.keyword.control.directives.ahk"
+                },
+                {
                     "captures": {
                         "1": { "name": "string.parameter.directives.ahk" },
                         "2": { "name": "comment.line.semicolon.directive.ahk" }
@@ -449,7 +455,7 @@
             },
             "end": "^[ \\t]*\\)",
             "name": "string.multiline.ahk",
-            "patterns": [{ "include": "#escaped_char" }]
+            "patterns": [ { "include": "#escaped_char" } ]
         }
     },
     "scopeName": "source.ahk"
