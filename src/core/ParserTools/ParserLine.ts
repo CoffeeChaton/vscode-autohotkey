@@ -1,6 +1,6 @@
 import type * as vscode from 'vscode';
 import { CAhkInclude } from '../../AhkSymbol/CAhkInclude';
-import type { CAhkComment, TLineClass } from '../../AhkSymbol/CAhkLine';
+import type { CAhkComment, TBaseLineParam, TLineClass } from '../../AhkSymbol/CAhkLine';
 import {
     CAhkDirectives,
     CAhkHotKeys,
@@ -11,22 +11,17 @@ import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 import type { TFuncInput } from '../getChildren';
 import { getComment } from './getComment';
 
-type TClassName =
-    | typeof CAhkDirectives
-    | typeof CAhkHotKeys
-    | typeof CAhkHotString
-    | typeof CAhkInclude
-    | typeof CAhkLabel;
-
 type TLineRuler = Readonly<{
-    ClassName: TClassName,
+    makeSymbol: (obj: TBaseLineParam) => TLineClass,
     getName: (strTrim: string) => string | null,
     test: (strTrim: string) => boolean,
 }>;
 
 const LineRuler = [
     {
-        ClassName: CAhkInclude,
+        makeSymbol(obj: TBaseLineParam): CAhkInclude {
+            return new CAhkInclude(obj);
+        },
 
         getName(strTrim: string): string | null {
             return strTrim;
@@ -38,7 +33,9 @@ const LineRuler = [
         },
     },
     {
-        ClassName: CAhkLabel,
+        makeSymbol(obj: TBaseLineParam): CAhkLabel {
+            return new CAhkLabel(obj);
+        },
 
         getName(strTrim: string): string {
             const col = strTrim.indexOf(':');
@@ -53,7 +50,9 @@ const LineRuler = [
         },
     },
     {
-        ClassName: CAhkHotString,
+        makeSymbol(obj: TBaseLineParam): CAhkHotString {
+            return new CAhkHotString(obj);
+        },
 
         getName(strTrim: string): string | null {
             const e: RegExpMatchArray | null = strTrim.match(/^(:[^:]*:[^:]+::)/u);
@@ -71,7 +70,9 @@ const LineRuler = [
         },
     },
     {
-        ClassName: CAhkHotKeys,
+        makeSymbol(obj: TBaseLineParam): CAhkHotKeys {
+            return new CAhkHotKeys(obj);
+        },
 
         getName(strTrim: string): string | null {
             // ex ~F10::
@@ -89,7 +90,9 @@ const LineRuler = [
         },
     },
     {
-        ClassName: CAhkDirectives,
+        makeSymbol(obj: TBaseLineParam): CAhkDirectives {
+            return new CAhkDirectives(obj);
+        },
 
         getName(strTrim: string): string | null {
             // ex #NoEnv
@@ -119,13 +122,13 @@ export function ParserLine(FuncInput: TFuncInput): CAhkComment | TLineClass | nu
     const { AhkTokenLine, uri } = FuncInput;
     const { line } = AhkTokenLine;
 
-    for (const { test, getName, ClassName } of LineRuler) {
+    for (const { test, getName, makeSymbol } of LineRuler) {
         if (!test(strTrim)) continue;
         const name: string | null = getName(strTrim);
         if (name === null) continue;
 
         const rangeOfLine: vscode.Range = getRangeOfLine(line, lStr, lStr.length);
-        return new ClassName({
+        return makeSymbol({
             name,
             range: rangeOfLine,
             selectionRange: rangeOfLine,

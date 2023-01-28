@@ -42,7 +42,8 @@
                 "2": { "name": "entity.name.type.class.ahk" },
                 "3": { "name": "storage.modifier.type.class.extends.ahk" },
                 "4": { "name": "entity.name.type.class.ahk" }
-            }
+            },
+            "patterns": [ { "include": "#comment" } ]
         },
         "command": {
             "patterns": [
