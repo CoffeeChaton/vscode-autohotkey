@@ -10,7 +10,7 @@
   >- OK [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm#Functor)
   >- OK [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm#Functor)
 
-## 0.0.20(2023-02-XX)
+## 0.0.20(2023-01-28)
 
 - add: `ctrl + T` , go to Symbol append prefix
   >
