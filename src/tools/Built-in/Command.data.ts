@@ -29,7 +29,7 @@ export type TCommandElement = Readonly<{
     body: string,
     doc: string,
     recommended: boolean,
-    link: `https://www.autohotkey.com/docs/v1/${string}`,
+    link: `https://www.autohotkey.com/docs/v1/lib/${string}.htm${'' | '#command'}`,
     exp: readonly string[],
     //
     diag?: TAllowDiagCode,
@@ -1070,9 +1070,9 @@ export const LineCommand: TCommandElement[] = [
         upName: 'FILEREMOVEDIR',
         keyRawName: 'FileRemoveDir',
         body: 'FileRemoveDir, % "${1:Path}", ${2|true,false|}',
-        doc: 'Deletes a folder.\n - `DirName`: Name of the directory to delete, which is assumed to be in [%A_WorkingDir%](https://www.autohotkey.com/docs/v1/Variables.htm#WorkingDir) if an absolute path isn\'t specified.',
+        doc: 'Deletes a folder.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/v1/lib/FileRecycleEmpty.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/FileRemoveDir.htm',
         exp: [
             'FileRemoveDir, DirName [, Recurse]',
             '',
@@ -2613,9 +2613,9 @@ export const LineCommand: TCommandElement[] = [
         upName: 'SOUNDGETWAVEVOLUME',
         keyRawName: 'SoundGetWaveVolume',
         body: 'SoundGetWaveVolume, ${1:OutputVar} [, ${2:DeviceNumber}]',
-        doc: 'Retrieves the wave output volume for a sound device.',
+        doc: 'Retrieves the wave output volume of a sound device.',
         recommended: true,
-        link: 'https://www.autohotkey.com/docs/v1/lib/SoundGet.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/SoundGetWaveVolume.htm',
         exp: [
             'SoundGetWaveVolume, OutputVar [, DeviceNumber]',
             '',
@@ -2967,9 +2967,11 @@ export const LineCommand: TCommandElement[] = [
         upName: 'STRINGSPLIT',
         keyRawName: 'StringSplit',
         body: 'StringSplit, ${1:OutputArray}, ${2:InputVar} [, ${3:Delimiters}, ${4:OmitChars}]',
-        doc: 'Retrieves a number of characters from the left or right-hand side of a string.\n\n**Deprecated:** These commands are not recommended for use in new scripts. Use the [SubStr](https://www.autohotkey.com/docs/v1/lib/SubStr.htm) function instead.',
+        doc: 'Separates a string into an array of substrings using the specified delimiters.'
+            + ''
+            + '**Deprecated:** This command is not recommended for use in new scripts. Use the [StrSplit](https://www.autohotkey.com/docs/v1/lib/StrSplit.htm) function instead.',
         recommended: false,
-        link: 'https://www.autohotkey.com/docs/v1/lib/StringLeft.htm',
+        link: 'https://www.autohotkey.com/docs/v1/lib/StringSplit.htm',
         exp: [
             'StringSplit, OutputArray, InputVar [, Delimiters, OmitChars]',
         ],

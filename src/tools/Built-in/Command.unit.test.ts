@@ -4,6 +4,7 @@
 
 import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { EDiagCode } from '../../diag';
+import type { TCommandElement } from './Command.data';
 import { LineCommand } from './Command.data';
 
 type TErrObj = {
@@ -184,5 +185,60 @@ describe('check LineCommand ruler', () => {
             .replace(')\\b(?!\\()', '');
 
         expect(tsData).toBe(st1);
+    });
+
+    it('check: uri ruler', () => {
+        expect.hasAssertions();
+
+        type TSpecialUri = [
+            string,
+            TCommandElement['link'],
+        ];
+        const specialUriList: TSpecialUri[] = [];
+        for (const v of LineCommand) {
+            const { link, keyRawName } = v;
+
+            const tag = link
+                .replace('https://www.autohotkey.com/docs/v1/lib/', '')
+                .replace('.htm', '')
+                .replace('#command', '');
+            if (tag !== keyRawName) {
+                specialUriList.push([keyRawName, link]);
+            }
+        }
+
+        expect(specialUriList).toStrictEqual([
+            // ControlSend[Raw]
+            ['ControlSendRaw', 'https://www.autohotkey.com/docs/v1/lib/ControlSend.htm'],
+            // Run / RunWait
+            ['RunWait', 'https://www.autohotkey.com/docs/v1/lib/Run.htm'],
+            // Send, SendRaw, SendInput, SendPlay, SendEvent
+            ['SendEvent', 'https://www.autohotkey.com/docs/v1/lib/Send.htm'],
+            ['SendInput', 'https://www.autohotkey.com/docs/v1/lib/Send.htm'],
+            ['SendMessage', 'https://www.autohotkey.com/docs/v1/lib/PostMessage.htm'],
+            ['SendPlay', 'https://www.autohotkey.com/docs/v1/lib/Send.htm'],
+            ['SendRaw', 'https://www.autohotkey.com/docs/v1/lib/Send.htm'],
+            // SetCapsLockState / SetNumLockState / SetScrollLockState
+            ['SetCapsLockState', 'https://www.autohotkey.com/docs/v1/lib/SetNumScrollCapsLockState.htm'],
+            ['SetNumLockState', 'https://www.autohotkey.com/docs/v1/lib/SetNumScrollCapsLockState.htm'],
+            ['SetScrollLockState', 'https://www.autohotkey.com/docs/v1/lib/SetNumScrollCapsLockState.htm'],
+            // FIXME SetStoreCapsLockMode  -> Lock -> lock
+            ['SetStoreCapsLockMode', 'https://www.autohotkey.com/docs/v1/lib/SetStoreCapslockMode.htm'],
+            // Progress / SplashImage
+            ['SplashImage', 'https://www.autohotkey.com/docs/v1/lib/Progress.htm'],
+            // SplashTextOn / SplashTextOff
+            ['SplashTextOff', 'https://www.autohotkey.com/docs/v1/lib/SplashTextOn.htm'],
+            // StringLeft / StringRight
+            ['StringRight', 'https://www.autohotkey.com/docs/v1/lib/StringLeft.htm'],
+            ['StringTrimRight', 'https://www.autohotkey.com/docs/v1/lib/StringTrimLeft.htm'],
+            // StringLower / StringUpper
+            ['StringUpper', 'https://www.autohotkey.com/docs/v1/lib/StringLower.htm'],
+            // url -> URL
+            ['UrlDownloadToFile', 'https://www.autohotkey.com/docs/v1/lib/URLDownloadToFile.htm'],
+            // WinMinimizeAll / WinMinimizeAllUndo
+            ['WinMinimizeAllUndo', 'https://www.autohotkey.com/docs/v1/lib/WinMinimizeAll.htm'],
+            // WinWaitActive / WinWaitNotActive
+            ['WinWaitNotActive', 'https://www.autohotkey.com/docs/v1/lib/WinWaitActive.htm'],
+        ]);
     });
 });
