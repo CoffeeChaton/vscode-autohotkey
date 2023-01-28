@@ -33,7 +33,7 @@ type TBuiltInFuncElement = Readonly<{
     group: TElementGroup,
     link:
         | 'https://www.autohotkey.com/docs/v1/Objects.htm#Usage_Simple_Arrays'
-        | `https://www.autohotkey.com/docs/v1/lib/${string}`,
+        | `https://www.autohotkey.com/docs/v1/lib/${string}.htm${string}`,
     msg: readonly string[],
     insert: string,
     exp: readonly string[],
