@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
 /* eslint-disable no-template-curly-in-string */
 
@@ -5,7 +6,9 @@ type TStatement2Element = Readonly<{
     keyRawName: string,
     body: string,
     doc: string,
-    link: `https://www.autohotkey.com/docs/v1/${string}`,
+    link:
+        | 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#new'
+        | `https://www.autohotkey.com/docs/v1/lib/${'If' | 'Loop'}${string}.htm`,
     exp: readonly string[],
 }>;
 
@@ -102,7 +105,7 @@ export const statement2Data: TStatement2Element[] = [
         body:
             'Loop, Reg, ${1|HKEY_LOCAL_MACHINE,HKEY_USERS,HKEY_CURRENT_USER,HKEY_CLASSES_ROOT,HKEY_CURRENT_CONFIG|}\\ $0 [, ${2:Mode_KVR}]',
         doc: 'Retrieves the contents of the specified registry subkey, one item at a time.',
-        link: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm#new',
+        link: 'https://www.autohotkey.com/docs/v1/lib/LoopReg.htm',
         exp: [
             ';Deletes Internet Explorer\'s history of URLs typed by the user.',
             'Loop, HKEY_CURRENT_USER, Software\\Microsoft\\Internet Explorer\\TypedURLs',
