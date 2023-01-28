@@ -14,7 +14,34 @@ const DocSymbol2SymbolInfo = new CMemo<TAstRoot, vscode.SymbolInformation[]>( //
             uri,
         } = AhkSymbol;
 
-        return new vscode.SymbolInformation(name, kind, detail, new vscode.Location(uri, range));
+        let nameFix = name;
+        switch (kind) {
+            case vscode.SymbolKind.Class:
+                nameFix = `class ${name}`;
+                break;
+            case vscode.SymbolKind.Function:
+                nameFix = `fn ${name}()`;
+                break;
+            case vscode.SymbolKind.Namespace:
+                nameFix = `label ${name}`;
+                break;
+            case vscode.SymbolKind.Event:
+                switch (detail) {
+                    case 'HotKeys':
+                        nameFix = `HK ${name}`;
+                        break;
+                    case 'HotString':
+                        nameFix = `HS ${name}`;
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+
+        return new vscode.SymbolInformation(nameFix, kind, detail, new vscode.Location(uri, range));
     })
 );
 

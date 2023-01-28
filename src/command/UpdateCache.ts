@@ -33,10 +33,8 @@ export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileDat
             // may say "The file is not displayed in the editor because it is either binary or uses an unsupported text encoding.""
             if (error instanceof Error) {
                 log.error(error, `scan to "${uri.fsPath}" has err`);
-                log.show();
             } else {
                 log.error('Unknown Error', `scan to "${uri.fsPath}" has err`);
-                log.show();
             }
         }
     }

@@ -2,26 +2,25 @@
 
 ## NEXT 0.0.21(2023-02-28)
 
-- [v1.1.20+](https://www.autohotkey.com/docs/v1/misc/Labels.htm#Functions): Functions can be used in place of labels in a number of cases, including:
+- TODO [v1.1.20+](https://www.autohotkey.com/docs/v1/misc/Labels.htm#Functions): Functions can be used in place of labels in a number of cases, including:
   >
-  >- [Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose
-  >- [Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
-  >- [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm#Functor)
-  >- [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
-  >- [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm#Functor)
+  >- //TODO [Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose
+  >- //TODO[Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
+  >- //TODO [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
+  >- OK [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm#Functor)
+  >- OK [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm#Functor)
 
-- [A_EventInfo](https://www.autohotkey.com/docs/v1/Variables.htm#EventInfo)
+## 0.0.20(2023-02-XX)
+
+- add: `ctrl + T` , go to Symbol append prefix
   >
-  > - The OnClipboardChange label
-  > - Mouse wheel hotkeys (WheelDown/Up/Left/Right)
-  > - OnMessage()
-  > - RegisterCallback()
-  > - Regular Expression Callouts
-  > - GUI events, namely GuiContextMenu, GuiDropFiles, ListBox, ListView, TreeView, and StatusBar. If there is no additional information for an event, A_EventInfo contains 0.
+  > - class -> `class className`
+  > - function -> `fn functionName()`
+  > - label -> `label labelName:`
+  > - HotKeys -> `HK HotKeysName`
+  > - HotString -> `HS HotStringName`
 
-## NEXT 0.0.20(2023-02-XX)
-
-- add: `158/158` doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
+- add: `100%` doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
 - add: diag don't allow `label-name` or `var-name` name like func.
   >
   > - `c511` diag [var/param "varName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C511Class.ts)

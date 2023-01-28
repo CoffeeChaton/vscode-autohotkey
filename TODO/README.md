@@ -21,6 +21,15 @@
 
   </details>
 
+- TODO check this mean [A_EventInfo](https://www.autohotkey.com/docs/v1/Variables.htm#EventInfo)
+  >
+  > - The OnClipboardChange label
+  > - Mouse wheel hotkeys (WheelDown/Up/Left/Right)
+  > - OnMessage()
+  > - RegisterCallback()
+  > - Regular Expression Callouts
+  > - GUI events, namely GuiContextMenu, GuiDropFiles, ListBox, ListView, TreeView, and StatusBar. If there is no additional information for an event, A_EventInfo contains 0.
+
 - fix: label/func match with `Menu`
 
   ```ahk
