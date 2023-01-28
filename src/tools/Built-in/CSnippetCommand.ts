@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
 import type { TCommandElement } from './Command.data';
+import type { TOtherKeyword1 } from './otherKeyword1.data';
 
 export class CSnippetCommand extends vscode.CompletionItem {
     public readonly upName: string;
     public readonly recommended: boolean;
-    public constructor(v: TCommandElement, md: vscode.MarkdownString) {
+    public constructor(v: TCommandElement | TOtherKeyword1, md: vscode.MarkdownString) {
         const {
             keyRawName,
             body,

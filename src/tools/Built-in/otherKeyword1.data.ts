@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-template-curly-in-string */
-type TOtherKeyword1 = Readonly<{
+export type TOtherKeyword1 = Readonly<{
     upName: string,
     keyRawName: string,
     body: string,
