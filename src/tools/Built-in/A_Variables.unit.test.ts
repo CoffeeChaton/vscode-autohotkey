@@ -259,7 +259,7 @@ describe('check A_Variables ruler', () => {
         expect(st1).toBe(arr1.join('|'));
     });
 
-    it('check LoopFile', () => {
+    it('check uri', () => {
         expect.hasAssertions();
 
         const errList: TErrObj[] = [];
@@ -444,5 +444,56 @@ describe('check A_Variables ruler', () => {
             // https://www.autohotkey.com/docs/v1/lib/LoopFile.htm#Special_Variables
         ]);
         expect(errList).toHaveLength(0);
+    });
+
+    it('check : doc with human censored', () => {
+        expect.hasAssertions();
+
+        const docList: string[] = [];
+        for (const e of AVariablesList) {
+            const { doc, body, group } = e;
+
+            if (doc.includes('(https://www.autohotkey.com/docs/v1/')) continue;
+            if (doc.includes('```ahk\n') && doc.includes(body)) continue;
+            if (group === 'LoopFile' || group === 'LoopReg') continue;
+
+            docList.push(body);
+        }
+
+        expect(arr1).toHaveLength(max);
+        // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
+        expect(docList.sort()).toStrictEqual([
+            'A_ComputerName',
+            'A_Cursor',
+            'A_DD',
+            'A_DDD',
+            'A_DDDD',
+            'A_IconNumber',
+            'A_IconTip',
+            'A_InitialWorkingDir',
+            'A_IPAddress1',
+            'A_IPAddress2',
+            'A_IPAddress3',
+            'A_IPAddress4',
+            'A_LoopField',
+            'A_LoopReadLine',
+            'A_MDay',
+            'A_Min',
+            'A_MM',
+            'A_MMM',
+            'A_MMMM',
+            'A_Mon',
+            'A_OSType',
+            'A_PriorHotkey',
+            'A_ScriptDir',
+            'A_Sec',
+            'A_ThisMenu',
+            'A_ThisMenuItemPos',
+            'A_TimeSincePriorHotkey',
+            'A_TimeSinceThisHotkey',
+            'A_UserName',
+            'A_WDay',
+            'A_YDay',
+        ].sort());
     });
 });

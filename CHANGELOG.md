@@ -2,25 +2,33 @@
 
 ## NEXT 0.0.21(2023-02-28)
 
-1. TODO test `#tag` of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
-2. <https://www.autohotkey.com/docs/v1/Language.htm#commands-vs-functions>
+- [v1.1.20+](https://www.autohotkey.com/docs/v1/misc/Labels.htm#Functions): Functions can be used in place of labels in a number of cases, including:
+  >
+  >- [Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose
+  >- [Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
+  >- [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm#Functor)
+  >- [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
+  >- [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm#Functor)
 
-- [Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose
-- [Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
-- [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm#Functor)
-- [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
-- [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm#Functor)
+- [A_EventInfo](https://www.autohotkey.com/docs/v1/Variables.htm#EventInfo)
+  >
+  > - The OnClipboardChange label
+  > - Mouse wheel hotkeys (WheelDown/Up/Left/Right)
+  > - OnMessage()
+  > - RegisterCallback()
+  > - Regular Expression Callouts
+  > - GUI events, namely GuiContextMenu, GuiDropFiles, ListBox, ListView, TreeView, and StatusBar. If there is no additional information for an event, A_EventInfo contains 0.
 
 ## NEXT 0.0.20(2023-02-XX)
 
-- add: 100% doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
-- doc: move built-in uri to ahk doc v1
+- add: `158/158` doc of [A_Variables](src/tools/Built-in/A_Variables.data.ts)
 - add: diag don't allow `label-name` or `var-name` name like func.
   >
   > - `c511` diag [var/param "varName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C511Class.ts)
   > - `c512` diag [global-val "varName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C512Class.ts)
   > - `c513` diag [label "labelName" is the same func-name "funcName()"](src/provider/Diagnostic/tools/CDiagFnLib/C513Class.ts)
 
+- fix: move built-in uri to ahk doc v1 && add unit.test
 - fix: Def `startWith("}")`
   <details><summary>example code</summary>
 

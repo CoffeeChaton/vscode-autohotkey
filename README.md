@@ -110,9 +110,15 @@ support to find like
 
    </details>
 
-3. [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm), exp: `SetTimer , Label_or_functionName`
-4. [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm), exp: `Hotkey, KeyName , Label_or_functionName`
-5. read more of [funcRef](src/command/AnalysisFuncReference/funcRef.ahk)
+3. <https://www.autohotkey.com/docs/v1/misc/Labels.htm#Functions>
+   >
+   > - OK [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm#Functor)
+   > - OK [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm#Functor)
+   > - ;TODO [Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose
+   > - ;TODO [Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
+   > - ;TODO [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
+
+4. read more of [funcRef](src/command/AnalysisFuncReference/funcRef.ahk)
 
 ## Function rename
 

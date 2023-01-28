@@ -13,6 +13,27 @@
             "},"
         ],
         "description": "just a temp snippets"
+    },
+        "makeDoc1": {
+        "scope": "typescript",
+        // "prefix": ".01",
+        "body": [
+            "[",
+            "'',",
+            "].join('\\n'),\n",
+        ],
+        "description": "just a temp snippets"
+    },
+    "makeDoc2": {
+        "scope": "typescript",
+        // "prefix": ".02",
+        "body": [
+            "            '',",
+            "            '```ahk',",
+            "            '    ',",
+            "            '```',",
+        ],
+        "description": "just a temp snippets"
     }
 }
 // https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variables
