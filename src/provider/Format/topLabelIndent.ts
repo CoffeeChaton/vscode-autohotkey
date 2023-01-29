@@ -3,6 +3,7 @@
 /* eslint-disable max-depth */
 /* eslint-disable unicorn/no-new-array */
 import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import { CAhkInclude } from '../../AhkSymbol/CAhkInclude';
 import {
     CAhkComment,
     CAhkDirectives,
@@ -13,13 +14,6 @@ import {
 import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import type { DeepReadonly } from '../../globalEnum';
-
-function HSorHTNeedToIndent(TopSymbol: TTopSymbol): boolean {
-    return (
-        TopSymbol instanceof CAhkHotKeys
-        || TopSymbol instanceof CAhkHotString
-    ) && TopSymbol.AfterString.length === 0; // ::es,:: ESLint ; not need to Indent
-}
 
 const lineIsIFRegexps: DeepReadonly<RegExp[]> = [
     /^if(?:MsgBox)?\b/iu,
@@ -42,7 +36,6 @@ function LineIsIFCase(lStr: string): boolean {
 
 export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boolean): readonly (0 | 1)[] {
     const { AST, DocStrMap } = AhkFileData;
-    const DocStrMapLen: number = DocStrMap.length;
 
     const list: (0 | 1)[] = [...DocStrMap].map((): 0 => 0);
     if (!useTopLabelIndent) return list;
@@ -51,11 +44,23 @@ export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boo
         AST.map((TopSymbol: TTopSymbol): [number, TTopSymbol] => [TopSymbol.range.start.line, TopSymbol]),
     );
 
+    const DocStrMapLen: number = DocStrMap.length;
     for (const TopSymbol of AST) {
         // + Label:
         // + ::HotString::
         // + ~F12::
-        if (!(TopSymbol instanceof CAhkLabel || HSorHTNeedToIndent(TopSymbol))) continue;
+        if (
+            !(TopSymbol instanceof CAhkLabel
+                || TopSymbol instanceof CAhkHotKeys
+                || TopSymbol instanceof CAhkHotString)
+        ) {
+            continue;
+        }
+
+        if (TopSymbol.AfterString.length > 0) {
+            continue;
+        }
+        // TopSymbol: CAhkHotKeys | CAhkHotString | CAhkLabel
 
         const start: number = TopSymbol.selectionRange.start.line;
 
@@ -63,8 +68,15 @@ export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boo
         for (let line = start + 1; line < DocStrMapLen; line++) {
             const lnDef: TTopSymbol | undefined = topSymbolList.get(line);
             if (lnDef !== undefined) {
-                if (TopSymbol instanceof CAhkDirectives) continue; // allow #directives
-                if (TopSymbol instanceof CAhkComment) continue; // allow ;; comments
+                // allow #directives && ;; comments
+                if (
+                    lnDef instanceof CAhkInclude
+                    || lnDef instanceof CAhkDirectives
+                    || lnDef instanceof CAhkComment
+                ) {
+                    list[line] = 1;
+                    continue;
+                }
 
                 // Function Hotkeys indentation https://www.autohotkey.com/docs/v1/Hotkeys.htm#Function
                 if (lnDef instanceof CAhkFunc) {
@@ -75,7 +87,11 @@ export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boo
                     isSolve = true;
                     break;
                 }
-                if (TopSymbol instanceof CAhkLabel || TopSymbol instanceof CAhkHotString) {
+                if (
+                    lnDef instanceof CAhkLabel
+                    || lnDef instanceof CAhkHotString
+                    || lnDef instanceof CAhkHotKeys
+                ) {
                     isSolve = true;
                     break;
                 }
@@ -89,6 +105,7 @@ export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boo
         if (isSolve) {
             continue;
         }
+
         // -------------------
         // ~F12
         //     deep++
@@ -109,7 +126,7 @@ export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boo
             }
         }
     }
-    //
+
     return list;
 }
 
