@@ -1,4 +1,6 @@
+import type { TAhkTokenLine } from '../../globalEnum';
 import { EDetail, EMultiline } from '../../globalEnum';
+import { CommandMDMap } from '../../tools/Built-in/Command.tools';
 
 function textReplace(textElement: string): string {
     return textElement.replaceAll(/ *, */gu, ', ')
@@ -75,17 +77,20 @@ function fnStrGroup(text: string): string {
     return head + newBody.trimStart();
 }
 
-export function lineReplace({
-    text,
-    lStrTrim,
-    detail,
-    multiline,
-}: { text: string, lStrTrim: string, detail: readonly EDetail[], multiline: EMultiline }): string {
+export function lineReplace(AhkTokenLine: TAhkTokenLine, text: string, lStrTrim: string): string {
+    const {
+        detail,
+        multiline,
+        fistWordUp,
+    } = AhkTokenLine;
+
     return (lStrTrim === ''
             || detail.includes(EDetail.inSkipSign2)
             || detail.includes(EDetail.inComment)
             || multiline !== EMultiline.none
-            || lStrTrim.startsWith(':') || lStrTrim.includes('::'))
+            || lStrTrim.startsWith(':')
+            || lStrTrim.includes('::')
+            || CommandMDMap.has(fistWordUp))
         ? text
         : fnStrGroup(text);
 }
