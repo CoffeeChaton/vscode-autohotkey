@@ -1,0 +1,140 @@
+/* eslint-disable max-lines-per-function */
+/* eslint-disable max-statements */
+/* eslint-disable max-depth */
+/* eslint-disable unicorn/no-new-array */
+import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import {
+    CAhkComment,
+    CAhkDirectives,
+    CAhkHotKeys,
+    CAhkHotString,
+    CAhkLabel,
+} from '../../AhkSymbol/CAhkLine';
+import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkFileData } from '../../core/ProjectManager';
+import type { DeepReadonly } from '../../globalEnum';
+
+function HSorHTNeedToIndent(TopSymbol: TTopSymbol): boolean {
+    return (
+        TopSymbol instanceof CAhkHotKeys
+        || TopSymbol instanceof CAhkHotString
+    ) && TopSymbol.AfterString.length === 0; // ::es,:: ESLint ; not need to Indent
+}
+
+const lineIsIFRegexps: DeepReadonly<RegExp[]> = [
+    /^if(?:MsgBox)?\b/iu,
+    /^else\b/iu,
+    // /^loop\b/iu,
+    // /^for\b/iu,
+    // /^while\b/iu,
+    /^if(?:not)?exist\b/iu,
+    /^ifWin(?:not)?(?:active|exist)\b/iu,
+    /^if(?:not)?inString\b/iu,
+    // /^try\b/iu,
+    // /^catch\b/iu,
+    // /^switch\b/iu,
+];
+
+function LineIsIFCase(lStr: string): boolean {
+    const lStrTrimFix: string = lStr.trim().replace(/^\}\s*/u, '');
+    return lineIsIFRegexps.some((reg: Readonly<RegExp>): boolean => reg.test(lStrTrimFix));
+}
+
+export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boolean): readonly (0 | 1)[] {
+    const { AST, DocStrMap } = AhkFileData;
+    const DocStrMapLen: number = DocStrMap.length;
+
+    const list: (0 | 1)[] = [...DocStrMap].map((): 0 => 0);
+    if (!useTopLabelIndent) return list;
+
+    const topSymbolList: ReadonlyMap<number, TTopSymbol> = new Map(
+        AST.map((TopSymbol: TTopSymbol): [number, TTopSymbol] => [TopSymbol.range.start.line, TopSymbol]),
+    );
+
+    for (const TopSymbol of AST) {
+        // + Label:
+        // + ::HotString::
+        // + ~F12::
+        if (!(TopSymbol instanceof CAhkLabel || HSorHTNeedToIndent(TopSymbol))) continue;
+
+        const start: number = TopSymbol.selectionRange.start.line;
+
+        let isSolve = false;
+        for (let line = start + 1; line < DocStrMapLen; line++) {
+            const lnDef: TTopSymbol | undefined = topSymbolList.get(line);
+            if (lnDef !== undefined) {
+                if (TopSymbol instanceof CAhkDirectives) continue; // allow #directives
+                if (TopSymbol instanceof CAhkComment) continue; // allow ;; comments
+
+                // Function Hotkeys indentation https://www.autohotkey.com/docs/v1/Hotkeys.htm#Function
+                if (lnDef instanceof CAhkFunc) {
+                    const ed = lnDef.range.end.line;
+                    for (let lineFn = lnDef.range.start.line; lineFn <= ed; lineFn++) {
+                        list[lineFn] = 1;
+                    }
+                    isSolve = true;
+                    break;
+                }
+                if (TopSymbol instanceof CAhkLabel || TopSymbol instanceof CAhkHotString) {
+                    isSolve = true;
+                    break;
+                }
+                break; // if (TopSymbol instanceof CAhkLabel || TopSymbol instanceof CAhkHotString) break;
+            }
+            const { lStr } = DocStrMap[line];
+            if (lStr.length > 0 && lStr.trim().length > 0) {
+                break; // not only whitespace, comments
+            }
+        }
+        if (isSolve) {
+            continue;
+        }
+        // -------------------
+        // ~F12
+        //     deep++
+        // return
+
+        let oldLineIsIF = false;
+        for (let line = start + 1; line < DocStrMapLen; line++) {
+            list[line] = 1;
+            //
+            const { lStr, fistWordUp } = DocStrMap[line];
+            if (['RETURN', 'EXIT', 'EXITAPP', 'RELOAD'].includes(fistWordUp)) {
+                if (!oldLineIsIF) {
+                    list[line] = 0;
+                    break;
+                }
+            } else if (LineIsIFCase(lStr)) {
+                oldLineIsIF = true;
+            }
+        }
+    }
+    //
+    return list;
+}
+
+// i don't like ahk-plus try to fmt label in func...
+//
+// fn(arr){
+//     For _Key, Value in arr {
+//         if (Value == "EX"){
+//             Goto, loopExit1
+//         }
+//         ; do something
+//     }
+//
+//     loopExit1:
+//     ; do something but i don't want indentation
+// }
+//
+// but i need to indentation of top label: now.
+
+// Function Hotkeys indentation
+// https://www.autohotkey.com/docs/v1/Hotkeys.htm#Function
+// ~F10:
+// ::el,,::
+// ::el2,,::
+// ;There must only be whitespace, comments or directives between the hotkey/hotstring labels or label and the function.
+//     def_fn(){
+//
+//    }

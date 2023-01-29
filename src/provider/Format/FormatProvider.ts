@@ -1,5 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import type * as vscode from 'vscode';
+import { getFormatConfig } from '../../configUI';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { EFormatChannel } from '../../globalEnum';
@@ -7,6 +8,7 @@ import { fmtDiffInfo } from './fmtDiffInfo';
 import { getDeepKeywords } from './getDeepKeywords';
 import { getSwitchRange } from './SwitchCase';
 import type { TDiffMap } from './TFormat';
+import { topLabelIndent } from './topLabelIndent';
 import { fn_Warn_thisLineText_WARN } from './TWarnUse';
 
 type TFmtCoreArgs = {
@@ -31,6 +33,9 @@ export function FormatCore(
 
     const AhkFileData: TAhkFileData | null = pm.updateDocDef(document);
     if (AhkFileData === null) return [];
+
+    const { formatTextReplace, useTopLabelIndent } = getFormatConfig();
+    const topLabelIndentList: readonly (0 | 1)[] = topLabelIndent(AhkFileData, useTopLabelIndent);
     const { DocStrMap } = AhkFileData;
 
     let oldDeep = 0;
@@ -53,6 +58,8 @@ export function FormatCore(
                 oldDeep,
                 options,
                 switchRangeArray,
+                topLabelDeep: topLabelIndentList[line],
+                formatTextReplace,
             }, AhkTokenLine));
         } else if (line > fmtEnd) {
             break;

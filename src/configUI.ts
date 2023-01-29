@@ -37,8 +37,11 @@ function getConfig(Configs: vscode.WorkspaceConfiguration): TConfigs {
             code800Deprecated: getConfigs<boolean>(Configs, 'AhkNekoHelp.Diag.code800Deprecated'),
             useModuleValDiag: getConfigs<boolean>(Configs, 'AhkNekoHelp.Diag.useModuleValDiag'),
         },
+        format: {
+            formatTextReplace: getConfigs<boolean>(Configs, 'AhkNekoHelp.format.textReplace'),
+            useTopLabelIndent: getConfigs<boolean>(Configs, 'AhkNekoHelp.format.useTopLabelIndent'),
+        },
         baseScanIgnoredList: getConfigs<readonly string[]>(Configs, 'AhkNekoHelp.baseScan.IgnoredList'),
-        formatTextReplace: getConfigs<boolean>(Configs, 'AhkNekoHelp.format.textReplace'),
         snippets: {
             blockFilesList: getConfigs<readonly string[]>(Configs, 'AhkNekoHelp.snippets.blockFilesList'),
             CommandOption: getConfigs<ECommandOption>(Configs, 'AhkNekoHelp.snippets.CommandOption'),
@@ -74,8 +77,8 @@ export function getCodeLenConfig(): TConfigs['CodeLens'] {
     return config.CodeLens;
 }
 
-export function getFormatConfig(): boolean {
-    return config.formatTextReplace;
+export function getFormatConfig(): TConfigs['format'] {
+    return config.format;
 }
 
 export function useSymbolProvider(): boolean {

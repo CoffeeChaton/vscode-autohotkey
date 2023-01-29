@@ -2,7 +2,8 @@
 
 ## NEXT 0.0.21(2023-02-28)
 
-- fix: class def-line comment
+- feat: add format config with `"AhkNekoHelp.format.useTopLabelIndent": true`
+- fix: class def-line comment syntax-highlight
 - fix: `#if` syntax-highlight and hover
 - TODO [v1.1.20+](https://www.autohotkey.com/docs/v1/misc/Labels.htm#Functions): Functions can be used in place of labels in a number of cases, including:
   >

@@ -42,8 +42,11 @@ type TempConfigs = {
         //  useDiagGlobalVarUnused: boolean, // of global-var
         useModuleValDiag: boolean,
     },
+    format: {
+        formatTextReplace: boolean,
+        useTopLabelIndent: boolean,
+    },
     baseScanIgnoredList: readonly string[],
-    formatTextReplace: boolean,
     snippets: {
         blockFilesList: readonly string[],
         CommandOption: ECommandOption,

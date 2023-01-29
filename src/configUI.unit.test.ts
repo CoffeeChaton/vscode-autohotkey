@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3] }] */
 import { contributes } from '../package.json';
 
 describe('check package ruler', () => {
@@ -20,6 +21,12 @@ describe('check package ruler', () => {
         }
 
         for (const [k, v] of Object.entries(contributes.configuration[2].properties)) {
+            if (!k.startsWith('AhkNekoHelp.format')) errList0.push(k);
+
+            msg.push([k, v.type as unknown as string]);
+        }
+
+        for (const [k, v] of Object.entries(contributes.configuration[3].properties)) {
             if (!k.startsWith('AhkNekoHelp.')) errList0.push(k);
 
             msg.push([k, v.type as unknown as string]);
@@ -28,9 +35,10 @@ describe('check package ruler', () => {
         expect(errList0).toHaveLength(0);
         expect(msg).toStrictEqual(
             [
+                // [0]
                 ['AhkNekoHelp.CodeLens.showFuncReference', 'boolean'],
                 ['AhkNekoHelp.CodeLens.showDevTool', 'boolean'],
-                //
+                // [1]
                 ['AhkNekoHelp.Diag.AMasterSwitch', 'string'],
                 ['AhkNekoHelp.Diag.code107LegacyAssignment', 'boolean'],
                 ['AhkNekoHelp.Diag.code300FuncSize', 'number'],
@@ -42,9 +50,11 @@ describe('check package ruler', () => {
                 ['AhkNekoHelp.Diag.code513', 'number'],
                 ['AhkNekoHelp.Diag.code800Deprecated', 'boolean'],
                 ['AhkNekoHelp.Diag.useModuleValDiag', 'boolean'],
-                //
-                ['AhkNekoHelp.baseScan.IgnoredList', 'array'],
+                // [2]
                 ['AhkNekoHelp.format.textReplace', 'boolean'],
+                ['AhkNekoHelp.format.useTopLabelIndent', 'boolean'],
+                // last
+                ['AhkNekoHelp.baseScan.IgnoredList', 'array'],
                 ['AhkNekoHelp.snippets.CommandOption', 'number'],
                 ['AhkNekoHelp.snippets.blockFilesList', 'array'],
                 ['AhkNekoHelp.statusBar.displayColor', 'string'],

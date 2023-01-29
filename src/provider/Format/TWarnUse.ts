@@ -1,9 +1,5 @@
 import * as vscode from 'vscode';
-import { getFormatConfig } from '../../configUI';
-import type {
-    DeepReadonly,
-    TAhkTokenLine,
-} from '../../globalEnum';
+import type { DeepReadonly, TAhkTokenLine } from '../../globalEnum';
 
 import { ContinueLongLine } from './ContinueLongLine';
 import { lineReplace } from './fmtReplace';
@@ -19,13 +15,15 @@ type TWarnUse =
         oldDeep: number,
         options: vscode.FormattingOptions,
         switchRangeArray: vscode.Range[],
+        topLabelDeep: 0 | 1,
+        formatTextReplace: boolean,
     }>
     & {
         DiffMap: TDiffMap,
     };
 
 function wrap(args: TWarnUse, text: string, AhkTokenLine: TAhkTokenLine): vscode.TextEdit {
-    const { lStrTrim, DiffMap } = args;
+    const { lStrTrim, DiffMap, formatTextReplace } = args;
     const {
         detail,
         line,
@@ -33,7 +31,7 @@ function wrap(args: TWarnUse, text: string, AhkTokenLine: TAhkTokenLine): vscode
         textRaw,
     } = AhkTokenLine;
 
-    const newText: string = getFormatConfig() // WTF
+    const newText: string = formatTextReplace // WTF
         ? lineReplace({
             text,
             lStrTrim,
@@ -60,6 +58,7 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
         oldDeep,
         options, // by self
         switchRangeArray,
+        topLabelDeep,
     } = args;
     const { line, multiline, multilineFlag } = AhkTokenLine;
     if (multilineFlag !== null && multilineFlag.LTrim.length === 0) {
@@ -83,7 +82,8 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
 
     const deepFix = Math.max(
         0,
-        oldDeep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(multiline, multilineFlag),
+        oldDeep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(multiline, multilineFlag)
+            + topLabelDeep,
     );
 
     const TabSpaces = options.insertSpaces

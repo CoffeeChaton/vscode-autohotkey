@@ -165,7 +165,23 @@
             },
             {
                 "type": "object",
-                "title": "3. misc",
+                "title": "3. format",
+                "properties": {
+                    "AhkNekoHelp.format.textReplace": {
+                        "type": "boolean",
+                        "default": false,
+                        "markdownDescription": "`Alpha test options`, It is **not recommended** to turn on except for advanced users."
+                    },
+                    "AhkNekoHelp.format.useTopLabelIndent": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Indent the `label`, `HotString`, and `HotKey` at the top of the document"
+                    }
+                }
+            },
+            {
+                "type": "object",
+                "title": "4. misc",
                 "properties": {
                     "AhkNekoHelp.baseScan.IgnoredList": {
                         "type": "array",
@@ -184,11 +200,6 @@
                             "type": "string"
                         },
                         "markdownDescription": "[workspace](https://code.visualstudio.com/docs/editor/workspaces) scan blockList, Disable AhkNekoHelp when the file path contains a match of any of the provided **Array of [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/RegExp)**. \n\nNote: pathname separator use ```\"/\"``` **not windows-style** ```\"\\\"```"
-                    },
-                    "AhkNekoHelp.format.textReplace": {
-                        "type": "boolean",
-                        "default": false,
-                        "markdownDescription": "`Alpha test options`, It is **not recommended** to turn on except for advanced users."
                     },
                     "AhkNekoHelp.snippets.CommandOption": {
                         "type": "number",
