@@ -454,7 +454,7 @@
                 "1": { "name": "keyword.multiline.ahk" },
                 "2": { "name": "comment.line.semicolon.ahk" }
             },
-            "end": "^[ \\t]*\\)",
+            "end": "^[ \\t]*\\)(?:\")?",
             "name": "string.multiline.ahk",
             "patterns": [ { "include": "#escaped_char" } ]
         }
