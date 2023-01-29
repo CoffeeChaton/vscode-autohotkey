@@ -19,6 +19,7 @@ type TLineRuler = Readonly<{
 
 const LineRuler = [
     {
+        // #Include
         makeSymbol(obj: TBaseLineParam): CAhkInclude {
             return new CAhkInclude(obj);
         },
@@ -33,6 +34,7 @@ const LineRuler = [
         },
     },
     {
+        // label:
         makeSymbol(obj: TBaseLineParam): CAhkLabel {
             return new CAhkLabel(obj);
         },
@@ -50,6 +52,9 @@ const LineRuler = [
         },
     },
     {
+        // :?:; btu::; but
+        //    ^has ;
+        // ::hs,,::HotString
         makeSymbol(obj: TBaseLineParam): CAhkHotString {
             return new CAhkHotString(obj);
         },
@@ -70,12 +75,12 @@ const LineRuler = [
         },
     },
     {
+        // ~F10::
         makeSymbol(obj: TBaseLineParam): CAhkHotKeys {
             return new CAhkHotKeys(obj);
         },
 
         getName(strTrim: string): string | null {
-            // ex ~F10::
             const m: RegExpMatchArray | null = strTrim.match(/^([^:]+::)/u);
             return (m === null)
                 ? null
@@ -90,13 +95,13 @@ const LineRuler = [
         },
     },
     {
+        // #NoEnv
         makeSymbol(obj: TBaseLineParam): CAhkDirectives {
             return new CAhkDirectives(obj);
         },
 
         getName(strTrim: string): string | null {
-            // ex #NoEnv
-            const m: RegExpMatchArray | null = strTrim.match(/^(#\w+)[\s,$]/u);
+            const m: RegExpMatchArray | null = strTrim.match(/^(#\w+)\b/u);
             return (m === null)
                 ? null
                 : m[1];
@@ -106,7 +111,7 @@ const LineRuler = [
             // Hotkey labels consist of a hotkey followed by double-colon.
             // if (strTrim.startsWith(':')) return false;
             if (!strTrim.startsWith('#')) return false;
-            return (/^#\w+[\s,$]/u).test(strTrim);
+            return (/^#\w+\b/u).test(strTrim);
         },
     },
 ] as const satisfies readonly TLineRuler[];
