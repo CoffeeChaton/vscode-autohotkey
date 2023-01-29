@@ -176,6 +176,16 @@
                         "type": "boolean",
                         "default": true,
                         "markdownDescription": "Indent the `label`, `HotString`, and `HotKey` at the top of the document"
+                    },
+                    "AhkNekoHelp.format.useParenthesesIndent": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Indent the wih `(` and `)` not close"
+                    },
+                    "AhkNekoHelp.format.useSquareBracketsIndent": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Indent the wih `[` and `]` not close"
                     }
                 }
             },

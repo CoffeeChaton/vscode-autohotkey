@@ -10,7 +10,7 @@ export function getDeepLTrim(Multiline: EMultiline, multilineFlag: TMultilineFla
         case EMultiline.start:
             return 1;
         case EMultiline.mid:
-            if (multilineFlag === null) return 0;
+            if (multilineFlag === null) return 0; // fake case....just keep TypeScript happy
             if (multilineFlag.LTrim.length === 0) return 0;
             return 1;
         case EMultiline.end:

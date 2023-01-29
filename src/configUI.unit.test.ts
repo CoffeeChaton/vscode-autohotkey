@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3] }] */
 import { contributes } from '../package.json';
 
@@ -53,6 +54,8 @@ describe('check package ruler', () => {
                 // [2]
                 ['AhkNekoHelp.format.textReplace', 'boolean'],
                 ['AhkNekoHelp.format.useTopLabelIndent', 'boolean'],
+                ['AhkNekoHelp.format.useParenthesesIndent', 'boolean'],
+                ['AhkNekoHelp.format.useSquareBracketsIndent', 'boolean'],
                 // last
                 ['AhkNekoHelp.baseScan.IgnoredList', 'array'],
                 ['AhkNekoHelp.snippets.CommandOption', 'number'],

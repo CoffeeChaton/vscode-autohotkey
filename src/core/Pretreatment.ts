@@ -150,7 +150,6 @@ export function Pretreatment(
                     SecondWordUpCol: -1,
                     SecondWordUp: '',
                     lStr: '',
-                    deep,
                     deep2: [deep],
                     textRaw,
                     detail: [EDetail.inComment],
@@ -184,7 +183,6 @@ export function Pretreatment(
                 lStr: multiline === EMultiline.mid
                     ? getMultilineLStr({ multilineFlag, textRaw })
                     : '',
-                deep,
                 deep2: [deep],
                 textRaw,
                 detail: [],
@@ -207,7 +205,6 @@ export function Pretreatment(
                 SecondWordUpCol: -1,
                 SecondWordUp: '',
                 lStr: '',
-                deep,
                 deep2: [deep],
                 textRaw,
                 detail: textTrimStart.startsWith(';;')
@@ -233,7 +230,6 @@ export function Pretreatment(
                 SecondWordUpCol: -1,
                 SecondWordUp: '',
                 lStr: SetVarTradition(textRaw),
-                deep,
                 deep2: [deep],
                 textRaw,
                 detail: [EDetail.inSkipSign2],
@@ -275,7 +271,6 @@ export function Pretreatment(
                 SecondWordUpCol: -1,
                 SecondWordUp: '',
                 lStr: '',
-                deep,
                 deep2: [deep],
                 textRaw,
                 detail,
@@ -363,7 +358,6 @@ export function Pretreatment(
             SecondWordUpCol,
             SecondWordUp,
             lStr,
-            deep,
             deep2,
             textRaw,
             detail,

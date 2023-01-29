@@ -24,7 +24,17 @@
 
   </details>
 
-- feat: add format config with `"AhkNekoHelp.format.useTopLabelIndent": true`
+- feat: add format config
+
+  ```jsonc
+  {
+      "AhkNekoHelp.format.useTopLabelIndent": true,
+      "AhkNekoHelp.format.useParenthesesIndent": true,
+      "AhkNekoHelp.format.useSquareBracketsIndent": true
+  }
+  ```
+
+- feat: add format `ahk-obj not close` case
 - fix: analyze `~F10:: hotKey` `::hk,,:: HotString` Symbol
 - fix: analyze `#Directives` Symbol
 - fix: big-change fix `getLStr()`

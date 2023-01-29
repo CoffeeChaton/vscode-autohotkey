@@ -22,7 +22,7 @@ export function getRange(
     //  selectionRange must be contained in fullRange
 
     const searchLineFix = getSearchLineFix(DocStrMap, searchLine, RangeEnd);
-    const startDeep = DocStrMap[searchLineFix].deep - 1;
+    const startDeep = (DocStrMap[searchLineFix].deep2.at(-1) ?? 0) - 1;
     for (let line = searchLineFix + 1; line <= RangeEnd; line++) {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (DocStrMap[line] === undefined) {

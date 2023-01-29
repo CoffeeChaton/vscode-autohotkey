@@ -40,6 +40,8 @@ function getConfig(Configs: vscode.WorkspaceConfiguration): TConfigs {
         format: {
             formatTextReplace: getConfigs<boolean>(Configs, 'AhkNekoHelp.format.textReplace'),
             useTopLabelIndent: getConfigs<boolean>(Configs, 'AhkNekoHelp.format.useTopLabelIndent'),
+            useParenthesesIndent: getConfigs<boolean>(Configs, 'AhkNekoHelp.format.useParenthesesIndent'),
+            useSquareBracketsIndent: getConfigs<boolean>(Configs, 'AhkNekoHelp.format.useSquareBracketsIndent'),
         },
         baseScanIgnoredList: getConfigs<readonly string[]>(Configs, 'AhkNekoHelp.baseScan.IgnoredList'),
         snippets: {

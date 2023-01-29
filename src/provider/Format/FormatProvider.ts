@@ -4,6 +4,8 @@ import { getFormatConfig } from '../../configUI';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { EFormatChannel } from '../../globalEnum';
+import type { TBrackets } from '../../tools/Bracket';
+import { calcAllFileBrackets } from './calcAllFileBrackets';
 import { fmtDiffInfo } from './fmtDiffInfo';
 import { getDeepKeywords } from './getDeepKeywords';
 import { getSwitchRange } from './SwitchCase';
@@ -16,7 +18,7 @@ type TFmtCoreArgs = {
      * always update status
      */
     document: vscode.TextDocument,
-    options: vscode.FormattingOptions,
+    options: vscode.FormattingOptions, // TODO add more config
     fmtStart: number,
     fmtEnd: number,
     from: EFormatChannel,
@@ -40,11 +42,17 @@ export function FormatCore(
     const AhkFileData: TAhkFileData | null = pm.updateDocDef(document);
     if (AhkFileData === null) return [];
 
-    const { formatTextReplace, useTopLabelIndent } = getFormatConfig();
-    const topLabelIndentList: readonly (0 | 1)[] = topLabelIndent(AhkFileData, useTopLabelIndent);
-    const { DocStrMap, uri } = AhkFileData;
+    const {
+        formatTextReplace,
+        useTopLabelIndent,
+        useParenthesesIndent,
+        useSquareBracketsIndent,
+    } = getFormatConfig();
 
-    let oldDeep = 0;
+    const { DocStrMap, uri } = AhkFileData;
+    const topLabelIndentList: readonly (0 | 1)[] = topLabelIndent(AhkFileData, useTopLabelIndent);
+    const allFileBrackets: readonly TBrackets[] = calcAllFileBrackets(DocStrMap);
+
     let occ = 0;
 
     const switchRangeArray: vscode.Range[] = [];
@@ -52,15 +60,21 @@ export function FormatCore(
 
     const DiffMap: TDiffMap = new Map();
     for (const AhkTokenLine of DocStrMap) {
-        const { line, lStr } = AhkTokenLine;
+        const { line, lStr, cll } = AhkTokenLine;
         const lStrTrim: string = lStr.trim();
 
         if (line >= fmtStart && line <= fmtEnd) {
+            const brackets: TBrackets = allFileBrackets[line];
+
+            let bracketsDeep: number = brackets[0];
+            if (useSquareBracketsIndent) bracketsDeep += brackets[1];
+            if (useParenthesesIndent) bracketsDeep += brackets[2];
+
             newTextList.push(fn_Warn_thisLineText_WARN({
                 DiffMap,
                 lStrTrim,
                 occ,
-                oldDeep,
+                bracketsDeep,
                 options,
                 switchRangeArray,
                 topLabelDeep: topLabelIndentList[line],
@@ -73,11 +87,9 @@ export function FormatCore(
         const switchRange: vscode.Range | null = getSwitchRange(DocStrMap, lStrTrim, line);
         if (switchRange !== null) switchRangeArray.push(switchRange);
 
-        oldDeep = DocStrMap[line].deep;
-
-        occ = (lStrTrim.endsWith('{') && !lStrTrim.startsWith('{'))
+        occ = lStrTrim.endsWith('{') && !lStrTrim.startsWith('{')
             ? occ
-            : getDeepKeywords(lStrTrim, occ);
+            : getDeepKeywords(lStrTrim, occ, cll);
     }
 
     if (DiffMap.size > 0) {
@@ -89,6 +101,8 @@ export function FormatCore(
             from,
         });
     }
+
+    //  console.log({ ms: Date.now() - timeStart, allFileBrackets, topLabelIndentList });
 
     return newTextList;
 }

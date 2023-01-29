@@ -45,6 +45,14 @@ type TempConfigs = {
     format: {
         formatTextReplace: boolean,
         useTopLabelIndent: boolean,
+        /**
+         * "Indent the wih `(` and `)` not close"
+         */
+        useParenthesesIndent: boolean,
+        /**
+         * "Indent the wih `[` and `]` not close"
+         */
+        useSquareBracketsIndent: boolean,
     },
     baseScanIgnoredList: readonly string[],
     snippets: {

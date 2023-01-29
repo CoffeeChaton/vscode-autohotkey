@@ -77,7 +77,6 @@ export type TAhkTokenLine = DeepReadonly<{
     // --
     lStr: string,
     textRaw: string,
-    deep: number,
     deep2: number[],
     detail: readonly EDetail[],
     line: number,

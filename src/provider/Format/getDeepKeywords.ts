@@ -1,5 +1,4 @@
 import type { DeepReadonly } from '../../globalEnum';
-import { ContinueLongLine } from './ContinueLongLine';
 
 // Edge cases, someone will let the label-name as a control-flow-statement name.
 const commandRegexps: DeepReadonly<RegExp[]> = [
@@ -16,16 +15,16 @@ const commandRegexps: DeepReadonly<RegExp[]> = [
     /^switch\b(?!:)/iu,
 ];
 
-export function getDeepKeywords(lStrTrim: string, oneCommandCode: number): number {
+export function getDeepKeywords(lStrTrim: string, oneCommandCode: number, cll: 0 | 1): number {
     const occ: number = Math.max(oneCommandCode, 0);
     const lStrTrimFix: string = lStrTrim.replace(/^[ \t}]*/u, '');
 
     const tf: boolean = commandRegexps.some((reg: Readonly<RegExp>): boolean => reg.test(lStrTrimFix));
     if (tf) return occ + 1;
 
-    if (ContinueLongLine(lStrTrimFix) !== 0) return occ;
+    if (cll === 1) return occ;
 
-    return occ - 1;
+    return 0;
 }
 
 // FIXME fmt

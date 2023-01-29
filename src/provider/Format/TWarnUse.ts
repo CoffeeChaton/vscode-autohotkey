@@ -1,7 +1,7 @@
+/* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 import type { DeepReadonly, TAhkTokenLine } from '../../globalEnum';
 
-import { ContinueLongLine } from './ContinueLongLine';
 import { lineReplace } from './fmtReplace';
 import { getDeepLTrim } from './getDeepLTrim';
 import { inSwitchBlock } from './SwitchCase';
@@ -11,7 +11,7 @@ type TWarnUse =
     & DeepReadonly<{
         lStrTrim: string,
         occ: number,
-        oldDeep: number,
+        bracketsDeep: number,
         options: vscode.FormattingOptions,
         switchRangeArray: vscode.Range[],
         topLabelDeep: 0 | 1,
@@ -43,7 +43,7 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
     const {
         lStrTrim,
         occ,
-        oldDeep,
+        bracketsDeep,
         options, // by self
         switchRangeArray,
         topLabelDeep,
@@ -53,9 +53,10 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
         multiline,
         multilineFlag,
         textRaw,
+        cll,
     } = AhkTokenLine;
     if (multilineFlag !== null && multilineFlag.LTrim.length === 0) {
-        return wrap(args, textRaw, AhkTokenLine); // WTF**********
+        return wrap(args, textRaw, AhkTokenLine); // in multi-line and not open LTrim flag
     }
 
     const WarnLineBodyWarn: string = textRaw.trimStart();
@@ -63,27 +64,50 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
         return wrap(args, '', AhkTokenLine);
     }
 
-    const switchDeep = inSwitchBlock(lStrTrim, line, switchRangeArray);
-    const LineDeep: 0 | 1 = (occ === 0)
-        ? ContinueLongLine(lStrTrim)
+    const switchDeep: number = inSwitchBlock(lStrTrim, line, switchRangeArray);
+    const LineDeep: 0 | 1 = (occ === 0 && lStrTrim !== '') // AhkTokenLine.cll Include `;`
+        ? cll
         : 0;
 
+    /**
+     * 1. case1
+     *     ```ahk
+     *     fn(){
+     *         return
+     *     } ;<------- need -1
+     *
+     * 2. case2
+     *    ```ahk
+     *     if (bbb === ccc)
+     *     { ; <------ need -1
+     *
+     *     }
+     *     ```
+     */
     const curlyBracketsChange: -1 | 0 = lStrTrim.startsWith('}') || (occ > 0 && lStrTrim.startsWith('{'))
         ? -1
         : 0;
 
+    const lTrimDeep: 0 | 1 = getDeepLTrim(multiline, multilineFlag);
     const deepFix = Math.max(
         0,
-        oldDeep + occ + curlyBracketsChange + LineDeep + switchDeep + getDeepLTrim(multiline, multilineFlag)
-            + topLabelDeep,
+        occ
+            + curlyBracketsChange
+            + LineDeep
+            + switchDeep
+            + lTrimDeep
+            + topLabelDeep
+            + bracketsDeep,
     );
 
-    const TabSpaces = options.insertSpaces
+    //  console.log(line, z, deepFix);
+    const { insertSpaces, tabSize } = options;
+    const TabSpaces: ' ' | '\t' = insertSpaces
         ? ' '
         : '\t';
 
-    const TabSize = options.insertSpaces
-        ? options.tabSize
+    const TabSize: number = insertSpaces
+        ? tabSize
         : 1;
 
     const DeepStr = TabSpaces.repeat(deepFix * TabSize);
