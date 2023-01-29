@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import * as vscode from 'vscode';
+import type { TAhkTokenLine } from '../globalEnum';
 import type { CAhkInclude } from './CAhkInclude';
 
 export type TBaseLineParam = {
@@ -7,6 +8,7 @@ export type TBaseLineParam = {
     range: vscode.Range,
     selectionRange: vscode.Range,
     uri: vscode.Uri,
+    AhkTokenLine: TAhkTokenLine,
 };
 
 export class CAhkDirectives extends vscode.DocumentSymbol {
@@ -43,9 +45,13 @@ export class CAhkDirectives extends vscode.DocumentSymbol {
     }
 }
 
+/**
+ * @example ~F10::
+ */
 export class CAhkHotKeys extends vscode.DocumentSymbol {
     // https://www.autohotkey.com/docs/v1/misc/Labels.htm
     public readonly uri: vscode.Uri;
+    public readonly AfterString: string;
 
     declare public readonly kind: vscode.SymbolKind.Event;
     declare public readonly detail: 'HotKeys';
@@ -57,15 +63,28 @@ export class CAhkHotKeys extends vscode.DocumentSymbol {
             range,
             selectionRange,
             uri,
+            AhkTokenLine,
         }: TBaseLineParam,
     ) {
-        super(name, 'HotKeys', vscode.SymbolKind.Event, range, selectionRange);
+        // // ex ~F10::
+        const { lStr } = AhkTokenLine;
+        const { start } = selectionRange;
+        const selectionRangeFix = new vscode.Range(
+            start,
+            new vscode.Position(start.line, lStr.indexOf(name) + name.length),
+        );
+        super(name, 'HotKeys', vscode.SymbolKind.Event, range, selectionRangeFix);
         this.uri = uri;
+        this.AfterString = lStr.replace(name, '').trim();
     }
 }
 
+/**
+ * @example ::ts,:: typescript
+ */
 export class CAhkHotString extends vscode.DocumentSymbol {
     public readonly uri: vscode.Uri;
+    public readonly AfterString: string;
 
     declare public readonly kind: vscode.SymbolKind.Event;
     declare public readonly detail: 'HotString';
@@ -77,10 +96,18 @@ export class CAhkHotString extends vscode.DocumentSymbol {
             range,
             selectionRange,
             uri,
+            AhkTokenLine,
         }: TBaseLineParam,
     ) {
-        super(name, 'HotString', vscode.SymbolKind.Event, range, selectionRange);
+        const { lStr } = AhkTokenLine;
+        const { start } = selectionRange;
+        const selectionRangeFix = new vscode.Range(
+            start,
+            new vscode.Position(start.line, lStr.indexOf(name) + name.length),
+        );
+        super(name, 'HotString', vscode.SymbolKind.Event, range, selectionRangeFix);
         this.uri = uri;
+        this.AfterString = lStr.replace(name, '').trim();
     }
 }
 

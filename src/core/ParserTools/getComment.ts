@@ -21,7 +21,7 @@ export function getComment(FuncInput: TFuncInput): CAhkComment | null {
     const doubleSemicolon: number = textRaw.indexOf(';;');
 
     const name: string = textRaw.trim();
-    // FIXME
+
     const range: vscode.Range = new vscode.Range(
         new vscode.Position(line, doubleSemicolon),
         new vscode.Position(line, textRaw.length),
@@ -31,5 +31,6 @@ export function getComment(FuncInput: TFuncInput): CAhkComment | null {
         range,
         selectionRange: range,
         uri,
+        AhkTokenLine,
     });
 }

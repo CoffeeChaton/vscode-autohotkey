@@ -133,6 +133,7 @@ export function ParserLine(FuncInput: TFuncInput): CAhkComment | TLineClass | nu
             range: rangeOfLine,
             selectionRange: rangeOfLine,
             uri,
+            AhkTokenLine,
         });
     }
     return null;
