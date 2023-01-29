@@ -1,8 +1,10 @@
 import * as path from 'node:path';
-import { EVersion } from '../../Enum/EVersion';
-import type { EFormatChannel } from '../../globalEnum';
-import { fmtLog } from '../vscWindows/log';
-import type { TDiffMap } from './TFormat';
+import { EVersion } from '../../../Enum/EVersion';
+import type { EFormatChannel } from '../../../globalEnum';
+import { fmtLog } from '../../vscWindows/log';
+
+type TStrChange = [string, string];
+export type TDiffMap = Map<number, TStrChange>;
 
 type TDiffParm = {
     DiffMap: TDiffMap,

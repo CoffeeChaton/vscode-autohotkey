@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import type { DeepReadonly, TTokenStream } from '../../globalEnum';
-import { getRange } from '../../tools/range/getRange';
+import type { DeepReadonly, TTokenStream } from '../../../globalEnum';
+import { getRange } from '../../../tools/range/getRange';
 
 export function getSwitchRange(
     DocStrMap: TTokenStream,

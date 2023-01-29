@@ -1,6 +1,6 @@
-import type { TMultilineFlag } from '../../globalEnum';
-import { EMultiline } from '../../globalEnum';
-import { enumLog } from '../../tools/enumErr';
+import type { TMultilineFlag } from '../../../globalEnum';
+import { EMultiline } from '../../../globalEnum';
+import { enumLog } from '../../../tools/enumErr';
 
 // return deep of LTrim
 export function getDeepLTrim(Multiline: EMultiline, multilineFlag: TMultilineFlag): 0 | 1 {

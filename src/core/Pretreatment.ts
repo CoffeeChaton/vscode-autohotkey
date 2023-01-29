@@ -7,7 +7,6 @@ import * as vscode from 'vscode';
 import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum';
 import { EDetail, EMultiline } from '../globalEnum';
 import { getIgnore } from '../provider/Diagnostic/getIgnore';
-import { ContinueLongLine } from '../provider/Format/ContinueLongLine';
 import { log } from '../provider/vscWindows/log';
 import { getMultiline } from '../tools/str/getMultiline';
 import { getMultilineLStr } from '../tools/str/getMultilineLStr';
@@ -17,6 +16,7 @@ import { isSetVarTradition, SetVarTradition } from '../tools/str/traditionSetVar
 import { getFistWordUpData } from './getFistWordUpData';
 import { getSecondUp } from './getSecondUp';
 import { callDeep2 } from './ParserTools/calcDeep';
+import { ContinueLongLine } from './ParserTools/ContinueLongLine';
 
 /**
  * Avoid too many messages

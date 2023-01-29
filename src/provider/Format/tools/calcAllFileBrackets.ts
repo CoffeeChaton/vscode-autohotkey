@@ -1,7 +1,7 @@
-import type { TAhkTokenLine, TTokenStream } from '../../globalEnum';
-import type { TBrackets } from '../../tools/Bracket';
-import { calcBracket } from '../../tools/Bracket';
-import { CommandMDMap } from '../../tools/Built-in/Command.tools';
+import type { TAhkTokenLine, TTokenStream } from '../../../globalEnum';
+import type { TBrackets } from '../../../tools/Bracket';
+import { calcBracket } from '../../../tools/Bracket';
+import { CommandMDMap } from '../../../tools/Built-in/Command.tools';
 
 function calcLineBrackets(AhkTokenLine: TAhkTokenLine, oldBrackets: TBrackets): TBrackets {
     const {

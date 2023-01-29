@@ -2,18 +2,18 @@
 /* eslint-disable max-statements */
 /* eslint-disable max-depth */
 /* eslint-disable unicorn/no-new-array */
-import { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import { CAhkInclude } from '../../AhkSymbol/CAhkInclude';
+import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
+import { CAhkInclude } from '../../../AhkSymbol/CAhkInclude';
 import {
     CAhkComment,
     CAhkDirectives,
     CAhkHotKeys,
     CAhkHotString,
     CAhkLabel,
-} from '../../AhkSymbol/CAhkLine';
-import type { TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
-import type { TAhkFileData } from '../../core/ProjectManager';
-import type { DeepReadonly } from '../../globalEnum';
+} from '../../../AhkSymbol/CAhkLine';
+import type { TTopSymbol } from '../../../AhkSymbol/TAhkSymbolIn';
+import type { TAhkFileData } from '../../../core/ProjectManager';
+import type { DeepReadonly } from '../../../globalEnum';
 
 const lineIsIFRegexps: DeepReadonly<RegExp[]> = [
     /^if(?:MsgBox)?\b/iu,
@@ -78,7 +78,17 @@ export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boo
                     continue;
                 }
 
-                // Function Hotkeys indentation https://www.autohotkey.com/docs/v1/Hotkeys.htm#Function
+                /**
+                 * Function Hotkeys indentation
+                 * https://www.autohotkey.com/docs/v1/Hotkeys.htm#Function
+                 * ~F10:
+                 * ::el,,::
+                 * ::el2,,::
+                 * ;There must only be whitespace, comments or directives between the hotkey/hotstring labels or label and the function.
+                 *    def_fn(){
+                 *
+                 *   }
+                 */
                 if (lnDef instanceof CAhkFunc) {
                     const ed = lnDef.range.end.line;
                     for (let lineFn = lnDef.range.start.line; lineFn <= ed; lineFn++) {
@@ -152,13 +162,3 @@ export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boo
 // }
 //
 // but i need to indentation of top label: now.
-
-// Function Hotkeys indentation
-// https://www.autohotkey.com/docs/v1/Hotkeys.htm#Function
-// ~F10:
-// ::el,,::
-// ::el2,,::
-// ;There must only be whitespace, comments or directives between the hotkey/hotstring labels or label and the function.
-//     def_fn(){
-//
-//    }

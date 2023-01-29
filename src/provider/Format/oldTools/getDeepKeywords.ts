@@ -1,4 +1,4 @@
-import type { DeepReadonly } from '../../globalEnum';
+import type { DeepReadonly } from '../../../globalEnum';
 
 // Edge cases, someone will let the label-name as a control-flow-statement name.
 const commandRegexps: DeepReadonly<RegExp[]> = [

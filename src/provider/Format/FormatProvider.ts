@@ -5,12 +5,12 @@ import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { EFormatChannel } from '../../globalEnum';
 import type { TBrackets } from '../../tools/Bracket';
-import { calcAllFileBrackets } from './calcAllFileBrackets';
-import { fmtDiffInfo } from './fmtDiffInfo';
-import { getDeepKeywords } from './getDeepKeywords';
-import { getSwitchRange } from './SwitchCase';
-import type { TDiffMap } from './TFormat';
-import { topLabelIndent } from './topLabelIndent';
+import { getDeepKeywords } from './oldTools/getDeepKeywords';
+import { getSwitchRange } from './oldTools/SwitchCase';
+import { calcAllFileBrackets } from './tools/calcAllFileBrackets';
+import type { TDiffMap } from './tools/fmtDiffInfo';
+import { fmtDiffInfo } from './tools/fmtDiffInfo';
+import { topLabelIndent } from './tools/topLabelIndent';
 import { fn_Warn_thisLineText_WARN } from './TWarnUse';
 
 type TFmtCoreArgs = {

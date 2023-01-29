@@ -1,11 +1,10 @@
 /* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 import type { DeepReadonly, TAhkTokenLine } from '../../globalEnum';
-
 import { lineReplace } from './fmtReplace';
-import { getDeepLTrim } from './getDeepLTrim';
-import { inSwitchBlock } from './SwitchCase';
-import type { TDiffMap } from './TFormat';
+import { inSwitchBlock } from './oldTools/SwitchCase';
+import type { TDiffMap } from './tools/fmtDiffInfo';
+import { getDeepLTrim } from './tools/getDeepLTrim';
 
 type TWarnUse =
     & DeepReadonly<{
