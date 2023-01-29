@@ -3,6 +3,7 @@
 ## NEXT 0.0.21(2023-02-28)
 
 - feat: add format config with `"AhkNekoHelp.format.useTopLabelIndent": true`
+- fix: analyze `~F10:: hotKey` `::hk,,:: HotString` Symbol
 - fix: analyze `#Directives` Symbol
 - fix: big-change fix `getLStr()`
 - fix: class def-line comment syntax-highlight

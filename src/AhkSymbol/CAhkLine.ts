@@ -127,7 +127,7 @@ export class CAhkLabel extends vscode.DocumentSymbol {
     // https://www.autohotkey.com/docs/v1/misc/Labels.htm
     // Label names must be unique throughout the whole script.
     public readonly uri: vscode.Uri;
-
+    public readonly AfterString: '';
     /**
      * label: -> LABEL
      */
@@ -147,6 +147,7 @@ export class CAhkLabel extends vscode.DocumentSymbol {
         super(name, 'label', vscode.SymbolKind.Namespace, range, selectionRange);
         this.uri = uri;
         this.upName = name.slice(0, -1).toUpperCase();
+        this.AfterString = '';
     }
 }
 
