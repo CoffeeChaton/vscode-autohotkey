@@ -3,7 +3,7 @@ import { CAhkSwitch } from '../../AhkSymbol/CAhkSwitch';
 import type { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TAhkFileData } from '../../core/ProjectManager';
 
-function searchAST(AST: Readonly<TAhkSymbolList>, position: vscode.Position): CAhkSwitch[] {
+function searchAstDefSwitch(AST: Readonly<TAhkSymbolList>, position: vscode.Position): CAhkSwitch[] {
     const result: CAhkSwitch[] = [];
     for (const sw of AST) {
         if (sw.range.contains(position)) {
@@ -14,7 +14,7 @@ function searchAST(AST: Readonly<TAhkSymbolList>, position: vscode.Position): CA
                     if (caseOrDefault.selectionRange.contains(position)) return result;
                 }
             }
-            result.push(...searchAST(sw.children, position));
+            result.push(...searchAstDefSwitch(sw.children, position));
         }
     }
     return result;
@@ -42,7 +42,7 @@ export function getDefSwitch(
     if (!(fistWordUp === 'CASE' || fistWordUp === 'DEFAULT')) return null;
     if (position.character > fistWordUpCol + fistWordUp.length) return null;
 
-    const sw: CAhkSwitch | undefined = searchAST(AST, position).at(-1);
+    const sw: CAhkSwitch | undefined = searchAstDefSwitch(AST, position).at(-1);
     if (sw === undefined) return null;
 
     return [

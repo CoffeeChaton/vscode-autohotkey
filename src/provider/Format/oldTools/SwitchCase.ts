@@ -13,18 +13,18 @@ export function getSwitchRange(
     const lineFix = textFix.endsWith('{')
         ? line
         : line + 1;
-    const RangeEnd = DocStrMap.length;
-    const range = getRange(DocStrMap, lineFix, lineFix, RangeEnd, fistWordUpCol);
-    const PosStart = new vscode.Position(range.start.line, DocStrMap[range.start.line + 1].textRaw.length);
-    const PosEnd = new vscode.Position(range.end.line - 1, DocStrMap[range.end.line - 1].textRaw.length);
+
+    const { start, end } = getRange(DocStrMap, lineFix, lineFix, DocStrMap.length, fistWordUpCol);
+    const PosStart = new vscode.Position(start.line, DocStrMap[start.line + 1].textRaw.length);
+    const PosEnd = new vscode.Position(end.line - 1, DocStrMap[end.line - 1].textRaw.length);
     return new vscode.Range(PosStart, PosEnd);
 }
 
 export function inSwitchBlock(textFix: string, line: number, switchRangeArray: DeepReadonly<vscode.Range[]>): number {
     const Pos = new vscode.Position(line, 0);
     let switchDeep = 0;
-    for (const sw of switchRangeArray) {
-        if (sw.contains(Pos)) switchDeep++;
+    for (const range of switchRangeArray) {
+        if (range.contains(Pos)) switchDeep++;
     }
     if (
         (/^\s*case[\s,]/iu).test(textFix)

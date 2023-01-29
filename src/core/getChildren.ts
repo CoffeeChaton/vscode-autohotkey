@@ -56,15 +56,11 @@ export function getChildren<T extends vscode.DocumentSymbol>(
             if (DocumentSymbol !== null) {
                 result.push(DocumentSymbol);
                 Resolved = DocumentSymbol.range.end.line; // <-----------------
-                if (Resolved > DocumentSymbol.range.start.line) {
-                    if ((/^[ \t}]*[^ \t}]/u).test(DocStrMap[DocumentSymbol.range.end.line].lStr)) {
-                        Resolved--; // Happy case ....
-                        // old case  -> Deep Analysis : 744 Symbol, function : 665 , method: 79
-                        // -2 to fix -> Deep Analysis : 738 Symbol, function : 665 , method: 73
-                        // console.log('OO', DocumentSymbol.range.end.line, DocStrMap[DocumentSymbol.range.end.line].textRaw);
-                    } else {
-                        // console.log('XX', DocumentSymbol.range.end.line, DocStrMap[DocumentSymbol.range.end.line].textRaw);
-                    }
+                if (
+                    Resolved > DocumentSymbol.range.start.line
+                    && (/^[ \t}]*[^ \t}]/u).test(DocStrMap[DocumentSymbol.range.end.line].lStr)
+                ) { // not only `}`
+                    Resolved--;
                 }
 
                 break;

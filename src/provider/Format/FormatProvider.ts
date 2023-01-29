@@ -6,7 +6,7 @@ import { pm } from '../../core/ProjectManager';
 import { EFormatChannel } from '../../globalEnum';
 import type { TBrackets } from '../../tools/Bracket';
 import { getDeepKeywords } from './oldTools/getDeepKeywords';
-import { getSwitchRange } from './oldTools/SwitchCase';
+import { getSwitchRange, inSwitchBlock } from './oldTools/SwitchCase';
 import { calcAllFileBrackets } from './tools/calcAllFileBrackets';
 import type { TDiffMap } from './tools/fmtDiffInfo';
 import { fmtDiffInfo } from './tools/fmtDiffInfo';
@@ -76,7 +76,7 @@ export function FormatCore(
                 occ,
                 bracketsDeep,
                 options,
-                switchRangeArray,
+                switchDeep: inSwitchBlock(lStrTrim, line, switchRangeArray),
                 topLabelDeep: topLabelIndentList[line],
                 formatTextReplace,
             }, AhkTokenLine));

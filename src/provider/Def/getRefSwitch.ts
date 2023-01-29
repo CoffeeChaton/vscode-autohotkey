@@ -5,7 +5,7 @@ import type { TAhkSymbolList } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
 
-function searchAST(AST: Readonly<TAhkSymbolList>, position: vscode.Position): CAhkSwitch[] {
+function searchAstRefSwitch(AST: Readonly<TAhkSymbolList>, position: vscode.Position): CAhkSwitch[] {
     const result: CAhkSwitch[] = [];
     for (const sw of AST) {
         if (sw.range.contains(position)) {
@@ -14,7 +14,7 @@ function searchAST(AST: Readonly<TAhkSymbolList>, position: vscode.Position): CA
 
                 if (sw.selectionRange.contains(position)) return result;
             }
-            result.push(...searchAST(sw.children, position));
+            result.push(...searchAstRefSwitch(sw.children, position));
         }
     }
     return result;
@@ -31,7 +31,7 @@ export function getRefSwitch(
     const { fistWordUp } = AhkTokenLine;
 
     if (fistWordUp === 'SWITCH' && wordUp === 'SWITCH') {
-        const sw: CAhkSwitch | undefined = searchAST(AST, position).at(-1);
+        const sw: CAhkSwitch | undefined = searchAstRefSwitch(AST, position).at(-1);
         if (sw === undefined) return null;
 
         return sw

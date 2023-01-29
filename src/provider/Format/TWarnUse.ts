@@ -2,7 +2,6 @@
 import * as vscode from 'vscode';
 import type { DeepReadonly, TAhkTokenLine } from '../../globalEnum';
 import { lineReplace } from './fmtReplace';
-import { inSwitchBlock } from './oldTools/SwitchCase';
 import type { TDiffMap } from './tools/fmtDiffInfo';
 import { getDeepLTrim } from './tools/getDeepLTrim';
 
@@ -12,7 +11,7 @@ type TWarnUse =
         occ: number,
         bracketsDeep: number,
         options: vscode.FormattingOptions,
-        switchRangeArray: vscode.Range[],
+        switchDeep: number,
         topLabelDeep: 0 | 1,
         formatTextReplace: boolean,
     }>
@@ -44,11 +43,10 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
         occ,
         bracketsDeep,
         options, // by self
-        switchRangeArray,
+        switchDeep,
         topLabelDeep,
     } = args;
     const {
-        line,
         multiline,
         multilineFlag,
         textRaw,
@@ -63,7 +61,6 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
         return wrap(args, '', AhkTokenLine);
     }
 
-    const switchDeep: number = inSwitchBlock(lStrTrim, line, switchRangeArray);
     const LineDeep: 0 | 1 = (occ === 0 && lStrTrim !== '') // AhkTokenLine.cll Include `;`
         ? cll
         : 0;
@@ -99,7 +96,6 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
             + bracketsDeep,
     );
 
-    //  console.log(line, z, deepFix);
     const { insertSpaces, tabSize } = options;
     const TabSpaces: ' ' | '\t' = insertSpaces
         ? ' '
