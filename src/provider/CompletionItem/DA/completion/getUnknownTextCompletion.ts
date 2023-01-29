@@ -21,6 +21,7 @@ export function getUnknownTextCompletion(
             snipKind: vscode.CompletionItemKind.Text,
             kind,
             commentList: [],
+            jsDocStyle: '',
         });
     });
 }

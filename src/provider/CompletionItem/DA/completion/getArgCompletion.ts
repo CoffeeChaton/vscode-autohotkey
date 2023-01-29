@@ -29,6 +29,7 @@ export function getParamCompletion(
             snipKind: vscode.CompletionItemKind.Variable,
             kind,
             commentList,
+            jsDocStyle: '',
         });
     });
 }
