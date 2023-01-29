@@ -28,6 +28,7 @@ export function setModuleVarCompletion(
             refRangeList,
             defRangeList,
             commentList,
+            jsDocStyle,
         } = v;
 
         const recStr: ESnippetRecBecause | undefined = recMap.get(keyRawName);
@@ -58,6 +59,7 @@ export function setModuleVarCompletion(
             funcName: '',
             recStr: recStr ?? '',
             commentList,
+            jsDocStyle,
         });
 
         if (recStr !== undefined) {

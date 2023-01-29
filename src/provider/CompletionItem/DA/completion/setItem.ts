@@ -13,6 +13,7 @@ type TSetItem = {
     snipKind: vscode.CompletionItemKind,
     kind: vscode.SymbolKind.Function | vscode.SymbolKind.Method,
     commentList: readonly string[],
+    jsDocStyle: string,
 };
 
 export function setItemCore(
@@ -26,6 +27,7 @@ export function setItemCore(
         snipKind,
         kind,
         commentList,
+        jsDocStyle,
     }: TSetItem,
 ): vscode.CompletionItem {
     const recStr: ESnippetRecBecause | undefined = recMap.get(keyRawName);
@@ -52,6 +54,7 @@ export function setItemCore(
         funcName,
         recStr: recStr ?? '',
         commentList,
+        jsDocStyle,
     });
 
     if (recStr !== undefined) {

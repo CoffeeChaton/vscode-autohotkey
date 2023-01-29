@@ -2,6 +2,28 @@
 
 ## NEXT 0.0.21(2023-02-28)
 
+- feat: add jsdoc-style comments of variable ![img](image/CHANGELOG/v0.0.21.png)
+
+  <details><summary>example code</summary>
+
+  ```ahk
+  f2(){
+      /**
+      * - [markdowm-syntax](https://www.markdownguide.org/basic-syntax/)
+      * - list2
+      * - Love **is** bold
+      *
+      * style look like jsDoc
+      * and you need write before at var first-def line
+      */
+      c :=0
+
+      MsgBox, % c
+  }
+  ```
+
+  </details>
+
 - feat: add format config with `"AhkNekoHelp.format.useTopLabelIndent": true`
 - fix: analyze `~F10:: hotKey` `::hk,,:: HotString` Symbol
 - fix: analyze `#Directives` Symbol

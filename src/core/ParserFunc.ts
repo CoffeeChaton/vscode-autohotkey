@@ -87,7 +87,7 @@ export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
     // if is static mode
     const allowList: readonly boolean[] = getAllowsListOfFunc(DocStrMap, startLine, endLine);
 
-    const { valMap, fnMode } = getFnVarDef(allowList, AhkTokenList, paramMap, GValMap, EFnMode.normal);
+    const { valMap, fnMode } = getFnVarDef(allowList, AhkTokenList, paramMap, GValMap, EFnMode.normal, DocStrMap);
     const textMap: TTextMapIn = getUnknownTextMap(allowList, AhkTokenList, paramMap, valMap, GValMap, name); // eval!!
 
     const selectionRangeText: string = getTextInRange(selectionRange, DocStrMap);

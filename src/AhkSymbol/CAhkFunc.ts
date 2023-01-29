@@ -35,7 +35,8 @@ export type TValMetaIn = {
     defRangeList: vscode.Range[],
     refRangeList: vscode.Range[],
     c502Array: TC502New[],
-    commentList: string[],
+    commentList: string[], // c++ style comments
+    jsDocStyle: string, //
     fnMode: EFnMode,
 };
 export type TValMetaOut = DeepReadonly<TValMetaIn>;

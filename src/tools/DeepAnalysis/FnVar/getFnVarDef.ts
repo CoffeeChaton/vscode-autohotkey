@@ -61,12 +61,14 @@ type TFnVarDef = {
     fnMode: EFnMode,
 };
 
+// eslint-disable-next-line max-params
 export function getFnVarDef(
     allowList: readonly boolean[],
     AhkTokenList: TTokenStream,
     paramMap: TParamMapIn,
     GValMap: TGValMap,
     fnModeDefault: EFnMode,
+    DocStrMap: TTokenStream,
 ): TFnVarDef {
     let fnMode: EFnMode = fnModeDefault;
     let fistWordVarMix: '' | 'GLOBAL' | 'LOCAL' | 'STATIC' = '';
@@ -161,6 +163,15 @@ export function getFnVarDef(
         //                     ^ ...WTF?
     }
 
+    // add jsdoc style comments
+    for (const v of valMap.values()) {
+        //
+        const fistLine: number = v.defRangeList[0].start.line;
+        if (fistLine === 0) continue;
+        const { ahkDoc } = DocStrMap[fistLine - 1];
+        v.jsDocStyle = ahkDoc;
+    }
+    //
     return {
         valMap,
         fnMode,

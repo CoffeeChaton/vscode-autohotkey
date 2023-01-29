@@ -45,6 +45,7 @@ export function DeepAnalysisHover(
             funcName: name,
             recStr: '',
             commentList,
+            jsDocStyle: '',
         });
     }
 
@@ -54,6 +55,7 @@ export function DeepAnalysisHover(
             refRangeList,
             defRangeList,
             commentList,
+            jsDocStyle,
         } = value;
         if (!PosInRange([...refRangeList, ...defRangeList], position)) return null;
 
@@ -64,6 +66,7 @@ export function DeepAnalysisHover(
             funcName: name,
             recStr: '',
             commentList,
+            jsDocStyle,
         });
     }
 
@@ -79,6 +82,7 @@ export function DeepAnalysisHover(
             funcName: name,
             recStr: '',
             commentList: [],
+            jsDocStyle: '',
         });
     }
 

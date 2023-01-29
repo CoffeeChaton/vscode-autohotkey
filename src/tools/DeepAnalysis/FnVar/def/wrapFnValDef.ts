@@ -38,5 +38,6 @@ export function wrapFnValDef({
                 : '',
         ],
         fnMode,
+        jsDocStyle: '', // default with ''
     };
 }

@@ -16,6 +16,7 @@ export function getValCompletion(
             refRangeList,
             defRangeList,
             commentList,
+            jsDocStyle,
             // ahkValType,
         } = v;
         // const typeValType = getAhkTypeName(ahkValType);
@@ -29,6 +30,7 @@ export function getValCompletion(
             snipKind: vscode.CompletionItemKind.Variable,
             kind,
             commentList,
+            jsDocStyle,
         });
     });
 }

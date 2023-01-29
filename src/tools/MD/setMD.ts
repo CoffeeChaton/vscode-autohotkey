@@ -23,7 +23,15 @@ type TSetMD = {
     funcName: string,
     recStr: ESnippetRecBecause | '',
     commentList: readonly string[],
+    jsDocStyle: string,
 };
+
+function commentList2Str(commentList: readonly string[]): string {
+    const commentList2 = commentList.filter((v: string): boolean => v !== '');
+    return commentList2.length > 0
+        ? `---\n\n${commentList2.join('\n\n')}\n\n---\n\n`
+        : '';
+}
 
 export function setMD(
     {
@@ -33,17 +41,17 @@ export function setMD(
         funcName,
         recStr,
         commentList,
+        jsDocStyle,
     }: TSetMD,
 ): vscode.MarkdownString {
-    const commentList2 = commentList.filter((v: string): boolean => v !== '');
-    const commentListStr = commentList2.length > 0
-        ? `---\n\n${commentList2.join('\n\n')}\n\n---\n\n`
-        : '';
+    const doc: string = jsDocStyle === ''
+        ? commentList2Str(commentList)
+        : `---\n\n${jsDocStyle}\n\n---\n\n`;
 
     return new vscode.MarkdownString('', true)
         .appendCodeblock(`${prefix} of ${funcName}()`)
         .appendMarkdown(recStr)
-        .appendMarkdown(commentListStr)
+        .appendMarkdown(doc)
         .appendMarkdown('- def    \n')
         .appendMarkdown(RangeList2Str(defRangeList))
         .appendMarkdown('   \n')

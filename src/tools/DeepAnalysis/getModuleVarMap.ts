@@ -118,7 +118,7 @@ export function getModuleVarMap(
     const name: string = path.basename(fsPath);
 
     const allowList: readonly boolean[] = getModuleAllowList(DocStrMap, AST);
-    const { valMap } = getFnVarDef(allowList, AhkTokenList, paramMap, new Map(), EFnMode.global);
+    const { valMap } = getFnVarDef(allowList, AhkTokenList, paramMap, new Map(), EFnMode.global, DocStrMap);
     const ModuleTextMap: TTextMapIn = getUnknownTextMap(allowList, AhkTokenList, paramMap, valMap, GValMap, name);
 
     moveGValMap2ModuleMap(GValMap, valMap);
