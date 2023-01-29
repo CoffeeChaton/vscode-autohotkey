@@ -1,30 +1,31 @@
 import type { DeepReadonly } from '../../globalEnum';
 import { ContinueLongLine } from './ContinueLongLine';
 
+// Edge cases, someone will let the label-name as a control-flow-statement name.
 const commandRegexps: DeepReadonly<RegExp[]> = [
-    /^if(?:MsgBox)?\b/iu,
-    /^else\b/iu,
-    /^loop\b/iu,
-    /^for\b/iu,
-    /^while\b/iu,
-    /^if(?:not)?exist\b/iu,
-    /^ifWin(?:not)?(?:active|exist)\b/iu,
-    /^if(?:not)?inString\b/iu,
-    /^try\b/iu,
-    /^catch\b/iu,
-    /^switch\b/iu,
+    /^if(?:MsgBox)?\b(?!:)/iu,
+    /^else\b(?!:)/iu,
+    /^loop\b(?!:)/iu,
+    /^for\b(?!:)/iu,
+    /^while\b(?!:)/iu,
+    /^if(?:not)?exist\b(?!:)/iu,
+    /^ifWin(?:not)?(?:active|exist)\b(?!:)/iu,
+    /^if(?:not)?inString\b(?!:)/iu,
+    /^try\b(?!:)/iu,
+    /^catch\b(?!:)/iu,
+    /^switch\b(?!:)/iu,
 ];
 
 export function getDeepKeywords(lStrTrim: string, oneCommandCode: number): number {
     const occ: number = Math.max(oneCommandCode, 0);
-    const lStrTrimFix: string = lStrTrim.replace(/^\}\s*/u, '');
+    const lStrTrimFix: string = lStrTrim.replace(/^[ \t}]*/u, '');
 
     const tf: boolean = commandRegexps.some((reg: Readonly<RegExp>): boolean => reg.test(lStrTrimFix));
     if (tf) return occ + 1;
 
     if (ContinueLongLine(lStrTrimFix) !== 0) return occ;
 
-    return 0;
+    return occ - 1;
 }
 
 // FIXME fmt

@@ -19,9 +19,7 @@ export function fmtDiffInfo(
         from,
     }: TDiffParm,
 ): void {
-    if (DiffMap.size === 0) return;
-
-    const msg = [
+    const msg: string[] = [
         '\n',
         '-----------Format Diff Start--------------------------------',
         `${from} ${EVersion.formatRange} "${path.basename(fsPath)}", ${Date.now() - timeStart} ms`,

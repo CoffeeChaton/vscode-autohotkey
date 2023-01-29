@@ -9,7 +9,6 @@ import { getDeepKeywords } from './getDeepKeywords';
 import { getSwitchRange } from './SwitchCase';
 import type { TDiffMap } from './TFormat';
 import { topLabelIndent } from './topLabelIndent';
-import type { TEndOfLine } from './TWarnUse';
 import { fn_Warn_thisLineText_WARN } from './TWarnUse';
 
 type TFmtCoreArgs = {
@@ -41,10 +40,6 @@ export function FormatCore(
     const AhkFileData: TAhkFileData | null = pm.updateDocDef(document);
     if (AhkFileData === null) return [];
 
-    const endOfLine: TEndOfLine = document.lineAt(0).text.endsWith('\r\n')
-        ? '\r\n'
-        : '\n';
-
     const { formatTextReplace, useTopLabelIndent } = getFormatConfig();
     const topLabelIndentList: readonly (0 | 1)[] = topLabelIndent(AhkFileData, useTopLabelIndent);
     const { DocStrMap, uri } = AhkFileData;
@@ -62,7 +57,6 @@ export function FormatCore(
 
         if (line >= fmtStart && line <= fmtEnd) {
             newTextList.push(fn_Warn_thisLineText_WARN({
-                endOfLine,
                 DiffMap,
                 lStrTrim,
                 occ,
@@ -86,13 +80,15 @@ export function FormatCore(
             : getDeepKeywords(lStrTrim, occ);
     }
 
-    const { fsPath } = uri;
-    fmtDiffInfo({
-        DiffMap,
-        fsPath,
-        timeStart,
-        from,
-    });
+    if (DiffMap.size > 0) {
+        const { fsPath } = uri;
+        fmtDiffInfo({
+            DiffMap,
+            fsPath,
+            timeStart,
+            from,
+        });
+    }
 
     return newTextList;
 }
