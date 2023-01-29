@@ -105,12 +105,19 @@ export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boo
         if (isSolve) {
             continue;
         }
-
+        /**
+         * ~F12::
+         *     { ;<-----------user use '{' to manage manually
+         *     }
+         * Returns
+         */
+        if (DocStrMap[start + 1].lStr.trimStart().startsWith('{')) {
+            continue;
+        }
         // -------------------
         // ~F12
         //     deep++
         // return
-
         let oldLineIsIF = false;
         for (let line = start + 1; line < DocStrMapLen; line++) {
             list[line] = 1;
