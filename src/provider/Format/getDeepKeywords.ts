@@ -15,14 +15,14 @@ const commandRegexps: DeepReadonly<RegExp[]> = [
     /^switch\b/iu,
 ];
 
-export function getDeepKeywords(textFix: string, oneCommandCode: number): number {
-    const occ = Math.max(oneCommandCode, 0);
-    const textFixTwo = textFix.replace(/^\}\s*/u, '');
+export function getDeepKeywords(lStrTrim: string, oneCommandCode: number): number {
+    const occ: number = Math.max(oneCommandCode, 0);
+    const lStrTrimFix: string = lStrTrim.replace(/^\}\s*/u, '');
 
-    const tf = commandRegexps.some((reg: Readonly<RegExp>) => reg.test(textFixTwo));
+    const tf: boolean = commandRegexps.some((reg: Readonly<RegExp>): boolean => reg.test(lStrTrimFix));
     if (tf) return occ + 1;
 
-    if (ContinueLongLine(textFixTwo) !== 0) return occ;
+    if (ContinueLongLine(lStrTrimFix) !== 0) return occ;
 
     return 0;
 }

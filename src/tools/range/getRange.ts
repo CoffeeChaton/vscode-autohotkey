@@ -44,14 +44,14 @@ export function getRange(
     }
 
     log.error([
-        '"get Range Error"',
-        `startDeep${startDeep}`,
-        'DocStrMap[line].deep',
-        `textRaw: ${DocStrMap[searchLine].textRaw}`,
-        `defLine ${defLine}`,
-        `searchLineFix ${searchLineFix}`,
-        `startDeep ${startDeep}`,
-        `RangeEnd ${RangeEnd}`,
+        '"get Range Error"----',
+        `- startDeep: ${startDeep}`,
+        `- textRaw: ${DocStrMap[searchLine].textRaw}`,
+        `- defLine: ${defLine}`,
+        `- searchLineFix: "${searchLineFix}"`,
+        `- startDeep: ${startDeep}`,
+        `- RangeEnd: ${RangeEnd}`,
+        '------------------------',
     ].join('\n'));
     return new vscode.Range(defLine, 0, searchLine + 1, 0);
 }

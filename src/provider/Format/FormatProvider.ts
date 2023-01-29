@@ -42,7 +42,7 @@ export function FormatCore(
     const DiffMap: TDiffMap = new Map();
     for (const AhkTokenLine of DocStrMap) {
         const { line, lStr } = AhkTokenLine;
-        const lStrTrim = lStr.trim();
+        const lStrTrim: string = lStr.trim();
 
         if (line >= fmtStart && line <= fmtEnd) {
             newTextList.push(fn_Warn_thisLineText_WARN({
@@ -65,7 +65,7 @@ export function FormatCore(
 
         occ = (lStrTrim.endsWith('{') && !lStrTrim.startsWith('{'))
             ? occ
-            : getDeepKeywords(lStrTrim, occ); // TODO fmt_a1
+            : getDeepKeywords(lStrTrim, occ);
     }
 
     fmtDiffInfo({

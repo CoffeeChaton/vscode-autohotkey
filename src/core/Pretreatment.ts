@@ -292,7 +292,7 @@ export function Pretreatment(
         }
 
         /**
-         * // FIXME deep2
+         * // deep2
          */
         let deep2: number[] = [deep];
         if (!lStrTrim.includes('::')) {

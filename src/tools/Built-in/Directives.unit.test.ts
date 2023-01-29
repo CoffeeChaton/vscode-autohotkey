@@ -13,7 +13,7 @@ describe('check #Directive ruler', () => {
             .map((v): string => v.keyRawName.replace('#', ''))
             .sort();
 
-        const st1 = (repository.directives.patterns[1].match)
+        const st1 = (repository.directives.patterns.at(-1)?.match ?? '')
             .replace('^[ \\t]*#\\b(?i:', '')
             .replace(')\\b([^;]*)([ \\t]+;.*)?$', '');
 
