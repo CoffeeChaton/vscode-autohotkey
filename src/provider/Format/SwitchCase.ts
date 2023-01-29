@@ -3,21 +3,20 @@ import type { DeepReadonly, TTokenStream } from '../../globalEnum';
 import { getRange } from '../../tools/range/getRange';
 
 export function getSwitchRange(
-    document: vscode.TextDocument,
     DocStrMap: TTokenStream,
     textFix: string,
     line: number,
 ): vscode.Range | null {
-    const { fistWordUp, fistWordUpCol } = DocStrMap[line];
+    const { fistWordUp, fistWordUpCol } = DocStrMap[line]; // WTF
     if (fistWordUp !== 'SWITCH') return null;
 
     const lineFix = textFix.endsWith('{')
         ? line
         : line + 1;
-    const RangeEnd = document.lineCount;
+    const RangeEnd = DocStrMap.length;
     const range = getRange(DocStrMap, lineFix, lineFix, RangeEnd, fistWordUpCol);
-    const PosStart = new vscode.Position(range.start.line, document.lineAt(range.start.line + 1).range.end.character);
-    const PosEnd = new vscode.Position(range.end.line - 1, document.lineAt(range.end.line - 1).range.end.character);
+    const PosStart = new vscode.Position(range.start.line, DocStrMap[range.start.line + 1].textRaw.length);
+    const PosEnd = new vscode.Position(range.end.line - 1, DocStrMap[range.end.line - 1].textRaw.length);
     return new vscode.Range(PosStart, PosEnd);
 }
 

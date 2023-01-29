@@ -9,9 +9,13 @@ import { getDeepKeywords } from './getDeepKeywords';
 import { getSwitchRange } from './SwitchCase';
 import type { TDiffMap } from './TFormat';
 import { topLabelIndent } from './topLabelIndent';
+import type { TEndOfLine } from './TWarnUse';
 import { fn_Warn_thisLineText_WARN } from './TWarnUse';
 
 type TFmtCoreArgs = {
+    /**
+     * always update status
+     */
     document: vscode.TextDocument,
     options: vscode.FormattingOptions,
     fmtStart: number,
@@ -31,12 +35,19 @@ export function FormatCore(
 ): vscode.TextEdit[] {
     const timeStart: number = Date.now();
 
+    /**
+     * always update status
+     */
     const AhkFileData: TAhkFileData | null = pm.updateDocDef(document);
     if (AhkFileData === null) return [];
 
+    const endOfLine: TEndOfLine = document.lineAt(0).text.endsWith('\r\n')
+        ? '\r\n'
+        : '\n';
+
     const { formatTextReplace, useTopLabelIndent } = getFormatConfig();
     const topLabelIndentList: readonly (0 | 1)[] = topLabelIndent(AhkFileData, useTopLabelIndent);
-    const { DocStrMap } = AhkFileData;
+    const { DocStrMap, uri } = AhkFileData;
 
     let oldDeep = 0;
     let occ = 0;
@@ -51,8 +62,8 @@ export function FormatCore(
 
         if (line >= fmtStart && line <= fmtEnd) {
             newTextList.push(fn_Warn_thisLineText_WARN({
+                endOfLine,
                 DiffMap,
-                document,
                 lStrTrim,
                 occ,
                 oldDeep,
@@ -65,7 +76,7 @@ export function FormatCore(
             break;
         }
 
-        const switchRange: vscode.Range | null = getSwitchRange(document, DocStrMap, lStrTrim, line);
+        const switchRange: vscode.Range | null = getSwitchRange(DocStrMap, lStrTrim, line);
         if (switchRange !== null) switchRangeArray.push(switchRange);
 
         oldDeep = DocStrMap[line].deep;
@@ -75,9 +86,10 @@ export function FormatCore(
             : getDeepKeywords(lStrTrim, occ);
     }
 
+    const { fsPath } = uri;
     fmtDiffInfo({
         DiffMap,
-        fsPath: document.uri.fsPath,
+        fsPath,
         timeStart,
         from,
     });

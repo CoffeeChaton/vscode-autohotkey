@@ -7,9 +7,11 @@ import { getDeepLTrim } from './getDeepLTrim';
 import { inSwitchBlock } from './SwitchCase';
 import type { TDiffMap } from './TFormat';
 
+export type TEndOfLine = '\n' | '\r\n';
+
 type TWarnUse =
     & DeepReadonly<{
-        document: vscode.TextDocument,
+        endOfLine: TEndOfLine,
         lStrTrim: string,
         occ: number,
         oldDeep: number,
@@ -24,20 +26,10 @@ type TWarnUse =
 
 function wrap(args: TWarnUse, text: string, AhkTokenLine: TAhkTokenLine): vscode.TextEdit {
     const { lStrTrim, DiffMap, formatTextReplace } = args;
-    const {
-        detail,
-        line,
-        multiline,
-        textRaw,
-    } = AhkTokenLine;
+    const { line, textRaw } = AhkTokenLine;
 
-    const newText: string = formatTextReplace // WTF
-        ? lineReplace({
-            text,
-            lStrTrim,
-            detail,
-            multiline,
-        })
+    const newText: string = formatTextReplace
+        ? lineReplace(AhkTokenLine, text, lStrTrim) // Alpha test options
         : text;
 
     if (newText !== text) {
@@ -52,7 +44,7 @@ function wrap(args: TWarnUse, text: string, AhkTokenLine: TAhkTokenLine): vscode
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkTokenLine): vscode.TextEdit {
     const {
-        document,
+        endOfLine,
         lStrTrim,
         occ,
         oldDeep,
@@ -60,13 +52,18 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
         switchRangeArray,
         topLabelDeep,
     } = args;
-    const { line, multiline, multilineFlag } = AhkTokenLine;
+    const {
+        line,
+        multiline,
+        multilineFlag,
+        textRaw,
+    } = AhkTokenLine;
     if (multilineFlag !== null && multilineFlag.LTrim.length === 0) {
-        return wrap(args, document.lineAt(line).text, AhkTokenLine); // WTF**********
+        return wrap(args, textRaw + endOfLine, AhkTokenLine); // WTF**********
     }
 
     // const WarnLineBodyWarn: string = textRaw.replace(/\r$/u, '').trimStart();
-    const WarnLineBodyWarn: string = document.lineAt(line).text.trimStart();
+    const WarnLineBodyWarn: string = textRaw.trimStart();
     if (WarnLineBodyWarn === '') {
         return wrap(args, WarnLineBodyWarn, AhkTokenLine);
     }
