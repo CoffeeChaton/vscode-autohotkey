@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/indent */
-/* eslint-disable max-len */
 /* eslint-disable max-lines */
+/* eslint-disable @typescript-eslint/indent */
 /* cSpell:disable */
 
 export type TAElement = {

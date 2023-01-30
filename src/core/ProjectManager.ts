@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 import { ECommand } from '../command/ECommand';
 import { getIgnoredList } from '../configUI';

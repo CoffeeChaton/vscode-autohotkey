@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 type TOtherKeywordElement = {
     upName: string,
     keyRawName: string,

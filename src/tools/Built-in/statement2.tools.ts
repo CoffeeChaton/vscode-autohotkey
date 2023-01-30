@@ -1,7 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable no-template-curly-in-string */
-
 import * as vscode from 'vscode';
 import { statement2Data } from './statement2.data';
 

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 import type { DeepReadonly, TAhkTokenLine } from '../../globalEnum';
 import { lineReplace } from './fmtReplace';

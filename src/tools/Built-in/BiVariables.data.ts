@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 type TBiVElement = {
     keyRawName: string,
     link: `https://www.autohotkey.com/docs/v1/${string}`,

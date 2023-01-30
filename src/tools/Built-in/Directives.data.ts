@@ -1,7 +1,6 @@
+/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/indent */
 /* cSpell:disable */
-/* eslint-disable max-len */
-/* eslint-disable max-lines */
 /* eslint-disable no-template-curly-in-string */
 
 type TDirectivesList = Readonly<{

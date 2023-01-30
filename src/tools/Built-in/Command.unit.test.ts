@@ -1,7 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-statements */
-/* eslint-disable max-lines-per-function */
-
 import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { EDiagCode } from '../../diag';
 import type { TCommandElement } from './Command.data';

@@ -41,7 +41,6 @@ function getReturnText(lStr: string, textRaw: string, col: number): string {
     return `    Return ${name.trim()}`;
 }
 
-// eslint-disable-next-line max-lines-per-function
 export function getFuncDocCore(
     {
         fileName,

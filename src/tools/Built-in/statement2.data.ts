@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/indent */
-/* eslint-disable max-len */
 /* eslint-disable no-template-curly-in-string */
 
 type TStatement2Element = Readonly<{

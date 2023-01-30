@@ -1,8 +1,7 @@
-/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // import * as vscode from 'vscode';
-import type { TAhkTokenLine } from '../../../globalEnum';
+import type { TAhkTokenLine } from '../../globalEnum';
 
 const MsgBoxParam = (() => {
     type TMsgBoxParamElement = {

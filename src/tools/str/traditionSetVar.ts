@@ -48,7 +48,6 @@ export function isSetVarTradition(textTrimStart: string): boolean {
     return (/^[%\w.[\]]+$/u).test(eqLeftStr);
 }
 
-// eslint-disable-next-line max-lines-per-function
 export function SetVarTradition(textRaw: string): string {
     const col1 = textRaw.indexOf('=') + 1;
     const len = textRaw.length;

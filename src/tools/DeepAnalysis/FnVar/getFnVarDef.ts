@@ -1,4 +1,3 @@
-/* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
 import type { TParamMapIn, TValMapIn, TValMetaIn } from '../../../AhkSymbol/CAhkFunc';
 import type { TGValMap } from '../../../core/ParserTools/ahkGlobalDef';

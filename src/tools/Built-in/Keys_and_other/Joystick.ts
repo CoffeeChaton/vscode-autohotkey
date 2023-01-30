@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 
 const JoySnippets: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => {

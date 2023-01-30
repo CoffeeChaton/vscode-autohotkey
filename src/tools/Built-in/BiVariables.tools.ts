@@ -1,6 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import * as vscode from 'vscode';

@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 
-// eslint-disable-next-line max-lines-per-function
 const NumSnippets: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => {
     const NumObj = {
         NumLock: 'NumLock',

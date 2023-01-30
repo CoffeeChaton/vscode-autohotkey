@@ -1,7 +1,4 @@
-/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
-/* eslint-disable max-statements */
-
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import type { TAhkTokenLine, TMultilineFlag, TTokenStream } from '../globalEnum';

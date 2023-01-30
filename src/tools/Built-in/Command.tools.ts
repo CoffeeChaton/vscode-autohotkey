@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable max-lines-per-function */
+
 import * as vscode from 'vscode';
 import { Diags } from '../../diag';
 import type { TAllowDiagCode } from './Command.data';

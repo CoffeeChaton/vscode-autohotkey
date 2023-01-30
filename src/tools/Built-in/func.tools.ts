@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
 /* eslint no-magic-numbers: ["error", { "ignore": [0,3] }] */
 import * as vscode from 'vscode';
 import { funcDataList } from './func.data';
@@ -189,7 +187,6 @@ const ComObjResult: TBiFuncMsg = {
         .appendMarkdown('Built-in Function (COM)')
         .appendCodeblock('ComObjActive()', 'ahk')
         .appendMarkdown(
-            // eslint-disable-next-line max-len
             'In current versions, any function-call beginning with "ComObj" that does not match one of the other COM functions actually calls `ComObjActive`. For example, `ComObjEnwrap(DispPtr)` and `[ComObjActive](https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm)(DispPtr)` are both equivalent to `[ComObject](https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm)(DispPtr)` (_VarType_ 9 is implied). However, this behaviour will be unavailable in a future release, so it is best to use only `[ComObject](https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm)()` and `[ComObjActive](https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm)()` as shown on this page.',
         )
         .appendMarkdown('\n')

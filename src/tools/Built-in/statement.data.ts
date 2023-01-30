@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable max-lines */
 /* eslint-disable no-template-curly-in-string */
 

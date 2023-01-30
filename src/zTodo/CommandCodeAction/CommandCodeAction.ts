@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as vscode from 'vscode';
-import { ECommand } from '../../../command/ECommand';
-import type { TAhkFileData } from '../../../core/ProjectManager';
-import type { TAhkTokenLine } from '../../../globalEnum';
+import { ECommand } from '../../command/ECommand';
+import type { TAhkFileData } from '../../core/ProjectManager';
+import type { TAhkTokenLine } from '../../globalEnum';
 import type { TCompletionMsgBoxParam } from './CompletionMsgBox';
 
 function CommandCodeAction(

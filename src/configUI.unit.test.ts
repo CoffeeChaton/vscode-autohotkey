@@ -1,5 +1,5 @@
-/* eslint-disable max-lines-per-function */
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3] }] */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { contributes } from '../package.json';
 
 describe('check package ruler', () => {

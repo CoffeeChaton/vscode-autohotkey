@@ -1,5 +1,4 @@
 /* eslint-disable max-lines-per-function */
-/* eslint-disable max-statements */
 import * as vscode from 'vscode';
 import type {
     TParamMapIn,

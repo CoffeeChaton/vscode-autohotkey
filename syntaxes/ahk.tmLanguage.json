@@ -1,5 +1,5 @@
 {
-    "fileTypes": [ "ahk" ],
+    "fileTypes": ["ahk"],
     "name": "AutoHotkey",
     "patterns": [
         { "include": "#escaped_char" },
@@ -43,7 +43,7 @@
                 "3": { "name": "storage.modifier.type.class.extends.ahk" },
                 "4": { "name": "entity.name.type.class.ahk" }
             },
-            "patterns": [ { "include": "#comment" } ]
+            "patterns": [{ "include": "#comment" }]
         },
         "command": {
             "patterns": [
@@ -229,7 +229,7 @@
                 },
                 {
                     "captures": { "1": { "name": "keyword.control.directives._if.ahk" } },
-                    "patterns": [ { "include": "#expression" } ],
+                    "patterns": [{ "include": "#expression" }],
                     "match": "^[ \\t]*(?i:(#if))[ \\t]+",
                     "name": "meta._if.keyword.control.directives.ahk"
                 },
@@ -456,7 +456,7 @@
             },
             "end": "^[ \\t]*\\)(?:\")?",
             "name": "string.multiline.ahk",
-            "patterns": [ { "include": "#escaped_char" } ]
+            "patterns": [{ "include": "#escaped_char" }]
         }
     },
     "scopeName": "source.ahk"

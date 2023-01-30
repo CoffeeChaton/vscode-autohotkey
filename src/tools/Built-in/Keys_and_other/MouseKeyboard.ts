@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 
 const MouseKeyboardSnip: readonly vscode.CompletionItem[] = ((): readonly vscode.CompletionItem[] => {

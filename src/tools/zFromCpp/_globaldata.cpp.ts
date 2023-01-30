@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /* eslint no-magic-numbers: "off" */
 
 // action_args = aLineText;
@@ -306,7 +305,7 @@ function StrChrAny(aStr: readonly string[], aCharList: readonly string[]): strin
  * inline LPTSTR Script::ParseActionType(LPTSTR aBufTarget, LPTSTR aBufSource, bool aDisplayErrors)
  * ```
  */
-function ParseActionType(aBufTarget: string, aBufSource: readonly string[], aDisplayErrors: boolean): string {
+function _ParseActionType(aBufTarget: string, aBufSource: readonly string[], aDisplayErrors: boolean): string {
     // end_flags
 
     const end_marker: string | null = StrChrAny(aBufSource, end_flags);
@@ -336,7 +335,7 @@ function ParseActionType(aBufTarget: string, aBufSource: readonly string[], aDis
  * }
  * ```
  */
-function ConvertActionType(aActionTypeString: string): TActionTypeType {
+function _ConvertActionType(aActionTypeString: string): TActionTypeType {
     const upName: string = aActionTypeString.toUpperCase();
 
     const ed: number | undefined = enum_act.get(upName);

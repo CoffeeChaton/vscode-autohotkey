@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import * as vscode from 'vscode';
 import type { TTokenStream } from '../../../globalEnum';
 import { EMultiline } from '../../../globalEnum';

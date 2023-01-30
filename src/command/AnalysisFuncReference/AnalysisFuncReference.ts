@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import * as path from 'node:path';
 import * as vscode from 'vscode';

@@ -1,7 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-statements */
-/* eslint-disable max-depth */
-/* eslint-disable max-lines-per-function */
 import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import type { TAElement } from './A_Variables.data';
 import { AVariablesList } from './A_Variables.data';

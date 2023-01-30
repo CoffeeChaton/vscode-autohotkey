@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import type * as vscode from 'vscode';
 import type { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { getDiagConfig } from '../../../configUI';

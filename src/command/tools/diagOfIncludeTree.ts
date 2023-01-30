@@ -78,7 +78,6 @@ function hint2MoreMsg(hintMap: ReadonlyMap<string, TValue>): string[] {
     return msg;
 }
 
-// eslint-disable-next-line max-lines-per-function
 export function diagOfIncludeTree(result: TTreeResult[], selectPath: string): string[] {
     const hintMap: ReadonlyMap<string, TValue> = initializeDiagIncludeTreeMap(result);
     const hint0: string[] = [];

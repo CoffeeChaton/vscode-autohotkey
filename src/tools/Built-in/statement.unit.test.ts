@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { Statement } from './statement.data';
 

@@ -43,7 +43,6 @@ function getAllowsListOfFunc(DocStrMap: TTokenStream, startLine: number, endLine
 }
 
 // TODO spilt this func
-// eslint-disable-next-line max-lines-per-function
 export function getFunc(FuncInput: TFuncInput): CAhkFunc | null {
     const { line, lStr } = FuncInput.AhkTokenLine;
 

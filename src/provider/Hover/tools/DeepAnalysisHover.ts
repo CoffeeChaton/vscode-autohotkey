@@ -12,7 +12,6 @@ function PosInRange(arr: readonly vscode.Range[], position: vscode.Position): bo
     return arr.some((range: vscode.Range): boolean => range.contains(position));
 }
 
-// eslint-disable-next-line max-lines-per-function
 export function DeepAnalysisHover(
     DA: CAhkFunc,
     wordUp: string,

@@ -1,7 +1,6 @@
 /* eslint-disable max-lines-per-function */
-/* eslint-disable max-statements */
 /* eslint-disable max-depth */
-/* eslint-disable unicorn/no-new-array */
+
 import { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import { CAhkInclude } from '../../../AhkSymbol/CAhkInclude';
 import {
@@ -97,6 +96,7 @@ export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boo
                     isSolve = true;
                     break;
                 }
+
                 if (
                     lnDef instanceof CAhkLabel
                     || lnDef instanceof CAhkHotString
@@ -115,6 +115,7 @@ export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boo
         if (isSolve) {
             continue;
         }
+
         /**
          * ~F12::
          *     { ;<-----------user use '{' to manage manually

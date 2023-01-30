@@ -1,6 +1,5 @@
-/* cSpell:disable */
-/* eslint-disable max-len */
 /* eslint-disable max-lines */
+/* cSpell:disable */
 /* eslint-disable no-template-curly-in-string */
 
 import { EDiagCode } from '../../diag';

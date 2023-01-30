@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-
 /**
  * after initialization clear
  */

@@ -49,7 +49,8 @@
             "rules": {
                 "jest-formatting/padding-around-describe-blocks": "error",
                 "jest-formatting/padding-around-test-blocks": "error",
-                "jest/no-conditional-in-test": "off"
+                "jest/no-conditional-in-test": "off",
+                "max-lines-per-function": "off"
             }
         }
     ],
@@ -219,16 +220,10 @@
             "error",
             4
         ],
-        "max-len": [
-            "error",
-            {
-                "code": 150,
-                "tabWidth": 4
-            }
-        ],
+        "max-len": "off",
         "max-lines": [
-            "error",
-            200
+            "warn",
+            500
         ],
         "max-nested-callbacks": [
             "error",
@@ -238,11 +233,12 @@
             "error",
             5
         ],
-        "max-statements": [
-            1,
-            30
+        "max-statements": "off",
+        "max-lines-per-function": [
+            "warn",
+            100
         ],
-        "max-statements-per-line": "error",
+        "max-statements-per-line": "warn",
         "multiline-comment-style": "off",
         "multiline-ternary": [
             "error",

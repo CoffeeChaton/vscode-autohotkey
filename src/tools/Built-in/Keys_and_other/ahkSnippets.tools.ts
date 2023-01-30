@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
 import * as vscode from 'vscode';
 import { ahkSnippetsData } from './ahkSnippets.data';
 

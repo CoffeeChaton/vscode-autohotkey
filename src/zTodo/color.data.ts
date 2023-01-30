@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const colorDataList = {
     Black: '000000',
     Silver: 'C0C0C0',

@@ -1,5 +1,3 @@
-/* eslint-disable max-statements */
-/* eslint-disable max-lines-per-function */
 import type { TMultilineFlag } from '../../globalEnum';
 
 /**

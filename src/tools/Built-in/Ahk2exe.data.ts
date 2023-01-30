@@ -1,6 +1,4 @@
-/* eslint-disable max-lines */
 /* eslint-disable no-template-curly-in-string */
-/* eslint-disable max-len */
 
 type TAhk2exeDataElement = {
     keyRawName: string,

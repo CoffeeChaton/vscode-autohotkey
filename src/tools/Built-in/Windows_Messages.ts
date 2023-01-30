@@ -1,5 +1,4 @@
 /* cSpell:disable */
-/* eslint-disable max-lines */
 /* eslint-disable no-magic-numbers */
 
 // https://www.autohotkey.com/docs/v1/lib/PostMessage.htm
@@ -37,7 +36,6 @@ type TWinMsg = ReadonlyMap<string, [number, string]>;
  */
 type TWinMsgRe = ReadonlyMap<number, string[]>;
 
-// eslint-disable-next-line max-lines-per-function
 export const [winMsg, winMsgRe] = ((): [TWinMsg, TWinMsgRe] => {
     const wmEnum = {
         WM_NULL: 0x0000,

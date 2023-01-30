@@ -13,7 +13,6 @@ type TGetMultilineFlag = {
     line: number,
 };
 
-// eslint-disable-next-line max-lines-per-function, max-statements
 function getMultilineFlag({ textRaw, result, line }: TGetMultilineFlag): TMultilineFlag {
     const arr: readonly string[] = textRaw
         .replace(/^\s*\(\s*/u, replacerSpace)

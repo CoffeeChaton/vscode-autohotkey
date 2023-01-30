@@ -1,7 +1,4 @@
-/* eslint-disable max-len */
 /* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
-
 import * as vscode from 'vscode';
 import type { TAhkBaseObj } from './ahkBase_tools';
 

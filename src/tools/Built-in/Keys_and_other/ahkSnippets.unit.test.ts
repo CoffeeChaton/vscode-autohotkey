@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { repository } from '../../../../syntaxes/ahk.tmLanguage.json';
 import { ahkSnippetsData } from './ahkSnippets.data';
 

@@ -1,5 +1,3 @@
-/* eslint-disable max-statements */
-/* eslint-disable max-lines-per-function */
 import { repository } from '../../../syntaxes/ahk.tmLanguage.json';
 import { funcDataList } from './func.data';
 

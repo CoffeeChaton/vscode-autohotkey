@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable no-template-curly-in-string */
 export type TOtherKeyword1 = Readonly<{
     upName: string,
