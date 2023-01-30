@@ -1,46 +1,85 @@
-import type { DeepReadonly } from '../../../globalEnum';
+import type { TAhkTokenLine } from '../../../globalEnum';
 
 /**
- * // TODO add diag of crazy code
- * // FIXME fix syntax-highlight of for()
+ * // TODO
+ * if()   <---not \s to (, but also is foc
+ * while()
  */
-const commandRegexps: DeepReadonly<RegExp[]> = [
-    /^if\b(?!:)/iu,
-    /^while\b(?!:)/iu,
-    // ahk v1 allow like if() and while()
-    //        but there are flow of command
 
-    // Edge cases, someone will let the label-name as a control-flow-statement name. -> not :
-    // Edge cases, someone will let the funcs-name as a control-flow-statement name. -> not (
-    /^ifMsgBox\b(?!:|\()/iu,
-    /^else\b(?!:|\()/iu,
-    /^loop\b(?!:|\()/iu,
-    /^for\b(?!:|\()/iu,
-    /^if(?:not)?exist\b(?!:|\()/iu,
-    /^ifWin(?:not)?(?:active|exist)\b(?!:|\()/iu,
-    /^if(?:not)?inString\b(?!:|\()/iu,
-    /^try\b(?!:|\()/iu,
-    /^catch\b(?!:|\()/iu,
-    /^switch\b(?!:|\()/iu,
-];
+const focSet: ReadonlySet<string> = new Set(
+    // src/tools/Built-in/statement.data.ts
+    [
+        // 'BREAK', does not affect the next line
+        // 'CASE', useSwitchCase
+        'CATCH',
+        // 'CONTINUE', does not affect the next line
+        // 'CRITICAL', does not affect the next line
+        // 'DEFAULT', useSwitchCase
+        'ELSE',
+        // 'EXIT', does not affect the next line
+        // 'EXITAPP', does not affect the next line
+        'FINALLY',
+        'FOR',
+        // 'GoSub',
+        // 'GOTO',
+        'IF',
+        'IfEqual',
+        'IfExist',
+        'IfGreater',
+        'IfGreaterOrEqual',
+        'IfInString',
+        'IfLess',
+        'IfLessOrEqual',
+        'IfMsgBox',
+        'IfNotEqual',
+        'IfNotExist',
+        'IfNotInString',
+        'IfWinActive',
+        'IfWinExist',
+        'IfWinNotActive',
+        'IfWinNotExist',
+        'LOOP',
+        // 'RETURN', does not affect the next line
+        // 'SWITCH', useSwitchCase
+        // 'THROW', useSwitchCase
+        'TRY',
+        'WHILE',
+        // 'UNTIL',
+    ].map((s: string): string => s.toUpperCase()),
+);
 
-export function getDeepKeywords(lStrTrim: string, oneCommandCode: number, cll: 0 | 1): number {
-    if (lStrTrim.endsWith('{') && !lStrTrim.startsWith('{')) {
-        return oneCommandCode;
+export type TOccObj = {
+    lockDeepList: number[],
+    occ: number,
+};
+
+export function getDeepKeywords(lStrTrim: string, oldOccObj: TOccObj, AhkTokenLine: TAhkTokenLine): TOccObj {
+    const { occ, lockDeepList } = oldOccObj;
+
+    const { fistWordUp } = AhkTokenLine;
+    if (focSet.has(fistWordUp)) {
+        if (lStrTrim.endsWith('{')) {
+            return { ...oldOccObj }; // managed by curly braces
+        }
+        const tempLockList: number[] = [...lockDeepList];
+
+        const { deep2 } = AhkTokenLine;
+        tempLockList.push(deep2.at(-1) ?? 0);
+
+        return {
+            lockDeepList: tempLockList,
+            occ: occ + 1,
+        };
     }
 
-    const occ: number = oneCommandCode < 0 // Math.max(oneCommandCode, 0);
-        ? 0
-        : oneCommandCode;
+    const { cll } = AhkTokenLine;
+    if (cll === 1) return { ...oldOccObj };
 
-    const lStrTrimFix: string = lStrTrim.replace(/^[ \t}]*/u, '');
-
-    const tf: boolean = commandRegexps.some((reg: Readonly<RegExp>): boolean => reg.test(lStrTrimFix));
-    if (tf) return occ + 1;
-
-    if (cll === 1) return occ;
-
-    return 0;
+    //  const lockDeep: number[] = [...oldOccObj.lockDeepList];
+    //  oneCommandCode < 0 // Math.max(oneCommandCode, 0);
+    //     ? 0
+    //     : oneCommandCode;
+    return { ...oldOccObj, occ: 0 };
 }
 
 // FIXME fmt

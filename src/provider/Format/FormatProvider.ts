@@ -5,6 +5,7 @@ import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { EFormatChannel } from '../../globalEnum';
 import type { TBrackets } from '../../tools/Bracket';
+import type { TOccObj } from './oldTools/getDeepKeywords';
 import { getDeepKeywords } from './oldTools/getDeepKeywords';
 import { getSwitchRange, inSwitchBlock } from './oldTools/SwitchCase';
 import { calcAllFileBrackets } from './tools/calcAllFileBrackets';
@@ -53,14 +54,17 @@ export function FormatCore(
     const topLabelIndentList: readonly (0 | 1)[] = topLabelIndent(AhkFileData, useTopLabelIndent);
     const allFileBrackets: readonly TBrackets[] = calcAllFileBrackets(DocStrMap);
 
-    let occ = 0;
+    let oldOccObj: TOccObj = {
+        lockDeepList: [],
+        occ: 0,
+    };
 
     const switchRangeArray: vscode.Range[] = [];
     const newTextList: vscode.TextEdit[] = [];
 
     const DiffMap: TDiffMap = new Map();
     for (const AhkTokenLine of DocStrMap) {
-        const { line, lStr, cll } = AhkTokenLine;
+        const { line, lStr } = AhkTokenLine;
         const lStrTrim: string = lStr.trim();
 
         if (line >= fmtStart && line <= fmtEnd) {
@@ -73,7 +77,7 @@ export function FormatCore(
             newTextList.push(fn_Warn_thisLineText_WARN({
                 DiffMap,
                 lStrTrim,
-                occ,
+                occ: oldOccObj.occ,
                 bracketsDeep,
                 options,
                 switchDeep: inSwitchBlock(lStrTrim, line, switchRangeArray),
@@ -87,7 +91,7 @@ export function FormatCore(
         const switchRange: vscode.Range | null = getSwitchRange(DocStrMap, lStrTrim, line);
         if (switchRange !== null) switchRangeArray.push(switchRange);
 
-        occ = getDeepKeywords(lStrTrim, occ, cll);
+        oldOccObj = getDeepKeywords(lStrTrim, oldOccObj, AhkTokenLine);
     }
 
     if (DiffMap.size > 0) {
