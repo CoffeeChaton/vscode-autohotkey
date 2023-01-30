@@ -62,7 +62,7 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
     }
 
     const LineDeep: 0 | 1 = (occ === 0 && lStrTrim !== '') // AhkTokenLine.cll Include `;`
-        ? cll
+        ? cll // 0 | 1
         : 0;
 
     /**
