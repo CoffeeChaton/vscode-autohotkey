@@ -87,9 +87,7 @@ export function FormatCore(
         const switchRange: vscode.Range | null = getSwitchRange(DocStrMap, lStrTrim, line);
         if (switchRange !== null) switchRangeArray.push(switchRange);
 
-        occ = lStrTrim.endsWith('{') && !lStrTrim.startsWith('{')
-            ? occ
-            : getDeepKeywords(lStrTrim, occ, cll);
+        occ = getDeepKeywords(lStrTrim, occ, cll);
     }
 
     if (DiffMap.size > 0) {

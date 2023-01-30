@@ -25,7 +25,14 @@ const commandRegexps: DeepReadonly<RegExp[]> = [
 ];
 
 export function getDeepKeywords(lStrTrim: string, oneCommandCode: number, cll: 0 | 1): number {
-    const occ: number = Math.max(oneCommandCode, 0);
+    if (lStrTrim.endsWith('{') && !lStrTrim.startsWith('{')) {
+        return oneCommandCode;
+    }
+
+    const occ: number = oneCommandCode < 0 // Math.max(oneCommandCode, 0);
+        ? 0
+        : oneCommandCode;
+
     const lStrTrimFix: string = lStrTrim.replace(/^[ \t}]*/u, '');
 
     const tf: boolean = commandRegexps.some((reg: Readonly<RegExp>): boolean => reg.test(lStrTrimFix));
