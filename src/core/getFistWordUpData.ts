@@ -2,6 +2,12 @@ export function getFistWordCore(lStrTrimFix: string): string {
     const ma1: string | undefined = lStrTrimFix.match(/^(default)\s*:/iu)?.[1];
     if (ma1 !== undefined) return ma1;
 
+    /**
+     * } else$
+     */
+    const ma2: string | undefined = lStrTrimFix.match(/^(\w+)$/u)?.[1];
+    if (ma2 !== undefined) return ma2;
+
     return lStrTrimFix.match(/^(\w+)[\s,]+(?![:+\-*/~.|&^]=)/u)?.[1]
         ?? '';
 }
@@ -14,6 +20,9 @@ function getFistWord(lStrTrim: string): string {
     // OK        || (/^[{}]\s*/iu).test(subStr);
 
     if ((/^[{}]/u).test(lStrTrim)) {
+        /**
+         * } else$
+         */
         const lStrTrimFix: string = lStrTrim.replace(/^[{} \t]*/u, '');
         return getFistWordCore(lStrTrimFix);
     }
