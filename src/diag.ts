@@ -22,6 +22,8 @@ export const enum EDiagCodeDA {
     code511 = 511, // ban var/param name same function-name.
     code512 = 512, // ban global-var name same function-name.
     code513 = 513, // ban label-var name same function-name.
+    // TODO ban name with cache
+    // code521 = 521, // ban name look like `new not and or`
 }
 
 export type TDiagsDA = {

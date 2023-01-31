@@ -57,24 +57,47 @@ export type TOccObj = {
     status: string,
 };
 
-function focElseCase(AhkTokenLine: TAhkTokenLine, oldOccObj: TOccObj): TOccObj {
-    const {
-        fistWordUpCol,
-        SecondWordUp,
-        lStr,
-    } = AhkTokenLine;
-    const lStrFix: string = lStr.slice(fistWordUpCol + SecondWordUp.length).trim();
+function forIfCase({ AhkTokenLine, matrixBrackets, oldOccObj }: {
+    AhkTokenLine: TAhkTokenLine,
+    matrixBrackets: readonly TBrackets[],
+    oldOccObj: TOccObj,
+}): TOccObj {
+    const { line } = AhkTokenLine;
+    const { occ, lockDeepList } = oldOccObj;
+    const tempLockList: number[] = [...lockDeepList];
+
+    const { deep2 } = AhkTokenLine;
+    tempLockList.push(deep2.at(-1) ?? 0);
+
+    const ifBlockClose: boolean = matrixBrackets[line][2] === 0;
+
     /**
-     * else {
-     * ;    ^ this
-     *
-     * else if() {
-     * ;         ^ this
+     * if (a ; <---------not close
+     *  + b
+     *  + c
      */
-    if (lStrFix.startsWith('{') || lStrFix.startsWith('{')) {
-        return { ...oldOccObj }; // managed by curly braces
+    if (!ifBlockClose) {
+        return {
+            ...oldOccObj,
+            status: `if ( ,not close at ln ${line}`, // TODO
+        };
     }
 
+    /**
+     * 99% case
+     * if (a ); <---------close
+     *
+     * or
+     * oldIf case
+     */
+    return {
+        lockDeepList: tempLockList,
+        occ: occ + 1,
+        status: 'if () case',
+    };
+}
+
+function focElseCase(AhkTokenLine: TAhkTokenLine, oldOccObj: TOccObj): TOccObj {
     /**
      * //TODO else MsgBox % "hi hi"
      */
@@ -99,6 +122,7 @@ function focElseCase(AhkTokenLine: TAhkTokenLine, oldOccObj: TOccObj): TOccObj {
         status: '',
     }; // TODO
 }
+
 export function getDeepKeywords({
     lStrTrim,
     oldOccObj,
@@ -130,45 +154,9 @@ export function getDeepKeywords({
             return { ...oldOccObj }; // managed by curly braces
         }
 
-        if (fistWordUp === 'IF') {
-            const ifBlockClose: boolean = matrixBrackets[line][2] === 0;
-            if (!ifBlockClose) {
-                /**
-                 * if (a ; <---------not close
-                 *  + b
-                 *  + c
-                 */
-                const tempLockList: number[] = [...lockDeepList];
+        if (fistWordUp === 'IF') return forIfCase({ oldOccObj, AhkTokenLine, matrixBrackets });
+        if (fistWordUp === 'ELSE') return focElseCase(AhkTokenLine, oldOccObj);
 
-                const { deep2 } = AhkTokenLine;
-                tempLockList.push(deep2.at(-1) ?? 0);
-
-                return {
-                    ...oldOccObj,
-                    status: `not close at ln ${line}`, // TODO
-                };
-            }
-            /**
-             * 99% case
-             * if (a ); <---------close
-             *
-             * or
-             * oldIf case
-             */
-            const tempLockList: number[] = [...lockDeepList];
-
-            const { deep2 } = AhkTokenLine;
-            tempLockList.push(deep2.at(-1) ?? 0);
-
-            return {
-                lockDeepList: tempLockList,
-                occ: occ + 1,
-                status: '',
-            };
-        }
-        if (fistWordUp === 'ELSE') {
-            return focElseCase(AhkTokenLine, oldOccObj);
-        }
         // other key word
         const tempLockList: number[] = [...lockDeepList];
 
