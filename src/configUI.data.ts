@@ -43,6 +43,7 @@ type TempConfigs = {
         useModuleValDiag: boolean,
     },
     format: {
+        AMasterSwitchUseFormatProvider: boolean,
         formatTextReplace: boolean,
         useTopLabelIndent: boolean,
         /**

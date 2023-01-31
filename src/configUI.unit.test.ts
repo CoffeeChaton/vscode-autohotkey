@@ -52,6 +52,7 @@ describe('check package ruler', () => {
                 ['AhkNekoHelp.Diag.code800Deprecated', 'boolean'],
                 ['AhkNekoHelp.Diag.useModuleValDiag', 'boolean'],
                 // [2]
+                ['AhkNekoHelp.format.AMasterSwitchUseFormatProvider', 'boolean'],
                 ['AhkNekoHelp.format.textReplace', 'boolean'],
                 ['AhkNekoHelp.format.useTopLabelIndent', 'boolean'],
                 ['AhkNekoHelp.format.useParenthesesIndent', 'boolean'],

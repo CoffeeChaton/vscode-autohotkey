@@ -167,6 +167,11 @@
                 "type": "object",
                 "title": "3. format",
                 "properties": {
+                    "AhkNekoHelp.format.AMasterSwitchUseFormatProvider": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "if you want to use other format tools or manual processing, close this"
+                    },
                     "AhkNekoHelp.format.textReplace": {
                         "type": "boolean",
                         "default": false,
