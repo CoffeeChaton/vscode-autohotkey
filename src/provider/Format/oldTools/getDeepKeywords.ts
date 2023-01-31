@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,-999] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,4,-999] }] */
 /* eslint-disable max-lines-per-function */
 import type { TAhkTokenLine, TTokenStream } from '../../../globalEnum';
 import type { TBrackets } from '../../../tools/Bracket';
@@ -97,11 +97,44 @@ function forIfCase({ AhkTokenLine, matrixBrackets, oldOccObj }: {
     };
 }
 
-function focElseCase(AhkTokenLine: TAhkTokenLine, oldOccObj: TOccObj): TOccObj {
+function focOccDiff({ oldOccObj }: {
+    AhkTokenLine: TAhkTokenLine,
+    matrixBrackets: readonly TBrackets[],
+    oldOccObj: TOccObj,
+}): TOccObj {
+    // FIXME check deep and occ-- not just let occ = 0
+    //
+    //  const lockDeep: number[] = [...oldOccObj.lockDeepList];
+    //  oneCommandCode < 0 // Math.max(oneCommandCode, 0);
+    //     ? 0
+    //     : oneCommandCode;
+    return { ...oldOccObj, occ: 0 };
+}
+
+function focElseCase({ AhkTokenLine, matrixBrackets, oldOccObj }: {
+    AhkTokenLine: TAhkTokenLine,
+    matrixBrackets: readonly TBrackets[],
+    oldOccObj: TOccObj,
+}): TOccObj {
+    const { lStr, fistWordUpCol } = AhkTokenLine;
     /**
-     * //TODO else MsgBox % "hi hi"
+     * 1. case like
+     *     else Return "AA"
+     *     else foo()
+     * 2. not need to check end with '{' case
+     *
+     * 'else'.len is 4
      */
-    // if (lStrFix.length !== 0) occ--
+    const afterElseStr = lStr.slice(fistWordUpCol + 4)
+        .replace(/^\s*,/u, '') // fix ----> "else," WTF?
+        .trim();
+    if (afterElseStr.length > 0) {
+        // check start with 'if' case
+        if ((/^if(?:\s|\()/iu).test(afterElseStr)) {
+            return forIfCase({ AhkTokenLine, matrixBrackets, oldOccObj });
+        }
+        return focOccDiff({ AhkTokenLine, matrixBrackets, oldOccObj });
+    }
 
     /**
      * else ;nothings <--- after else not any string
@@ -112,15 +145,11 @@ function focElseCase(AhkTokenLine: TAhkTokenLine, oldOccObj: TOccObj): TOccObj {
     const { deep2 } = AhkTokenLine;
     tempLockList.push(deep2.at(-1) ?? 0);
 
-    // const occNew = occ > 0
-    //     ? occ - 1
-    //     : 0;
-
     return {
         lockDeepList: tempLockList,
         occ: occ + 1,
         status: '',
-    }; // TODO
+    };
 }
 
 export function getDeepKeywords({
@@ -154,8 +183,8 @@ export function getDeepKeywords({
             return { ...oldOccObj }; // managed by curly braces
         }
 
-        if (fistWordUp === 'IF') return forIfCase({ oldOccObj, AhkTokenLine, matrixBrackets });
-        if (fistWordUp === 'ELSE') return focElseCase(AhkTokenLine, oldOccObj);
+        if (fistWordUp === 'IF') return forIfCase({ AhkTokenLine, matrixBrackets, oldOccObj });
+        if (fistWordUp === 'ELSE') return focElseCase({ AhkTokenLine, matrixBrackets, oldOccObj });
 
         // other key word
         const tempLockList: number[] = [...lockDeepList];
@@ -187,13 +216,7 @@ export function getDeepKeywords({
         return { ...oldOccObj };
     }
 
-    // FIXME check deep and occ-- not just let occ = 0
-    //
-    //  const lockDeep: number[] = [...oldOccObj.lockDeepList];
-    //  oneCommandCode < 0 // Math.max(oneCommandCode, 0);
-    //     ? 0
-    //     : oneCommandCode;
-    return { ...oldOccObj, occ: 0 };
+    return focOccDiff({ AhkTokenLine, matrixBrackets, oldOccObj });
 }
 
 // FIXME fmt
