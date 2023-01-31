@@ -1,4 +1,4 @@
-import type * as vscode from 'vscode';
+import * as vscode from 'vscode';
 import { CAhkInclude } from '../../../AhkSymbol/CAhkInclude';
 import { CAhkDirectives } from '../../../AhkSymbol/CAhkLine';
 import type { TAhkSymbolList, TAstRoot } from '../../../AhkSymbol/TAhkSymbolIn';
@@ -18,13 +18,19 @@ function findDirectivesWithPos(
     return undefined;
 }
 
+const unknownDirectivesMD = new vscode.MarkdownString(
+    'unknown #Directives in ahk-v1\n [[read doc]](https://www.autohotkey.com/docs/v1/lib/index.htm)',
+    true,
+);
+
 export function hoverDirectives(
     position: vscode.Position,
     AstRoot: TAstRoot,
 ): vscode.MarkdownString | undefined {
     const ah: CAhkDirectives | CAhkInclude | undefined = findDirectivesWithPos(AstRoot, position);
+    if (ah === undefined) return undefined;
 
-    return ah === undefined
-        ? undefined
-        : DirectivesMDMap.get(ah.hashtag);
+    const md: vscode.MarkdownString | undefined = DirectivesMDMap.get(ah.hashtag);
+    if (md !== undefined) return md;
+    return unknownDirectivesMD;
 }

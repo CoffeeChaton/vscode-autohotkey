@@ -193,8 +193,8 @@ export const Diags: DeepReadonly<TDiags> = {
         path: 'https://www.autohotkey.com/docs/v1/misc/Labels.htm#syntax-and-usage=',
     },
     603: {
-        msg: 'Unknown #Directives',
-        path: 'https://www.autohotkey.com/docs/v1/lib/_AllowSameLineComments.htm',
+        msg: 'unknown #Directives in ahk-v1',
+        path: 'https://www.autohotkey.com/docs/v1/lib/index.htm',
     },
     801: {
         msg: 'Deprecated: Use `Loop, Reg, KeyName` instead.',
