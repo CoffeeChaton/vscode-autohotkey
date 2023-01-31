@@ -1,4 +1,6 @@
+/* eslint-disable max-lines-per-function */
 import type { TAhkTokenLine } from '../../../globalEnum';
+import type { TBrackets } from '../../../tools/Bracket';
 
 /**
  * // TODO
@@ -51,16 +53,105 @@ const focSet: ReadonlySet<string> = new Set(
 export type TOccObj = {
     lockDeepList: number[],
     occ: number,
+    status: string,
 };
 
-export function getDeepKeywords(lStrTrim: string, oldOccObj: TOccObj, AhkTokenLine: TAhkTokenLine): TOccObj {
+function focElseCase(AhkTokenLine: TAhkTokenLine, oldOccObj: TOccObj): TOccObj {
+    const {
+        fistWordUpCol,
+        SecondWordUp,
+        lStr,
+    } = AhkTokenLine;
+    const lStrFix: string = lStr.slice(fistWordUpCol + SecondWordUp.length).trim();
+    /**
+     * else {
+     * ;    ^ this
+     *
+     * else if() {
+     * ;         ^ this
+     */
+    if (lStrFix.startsWith('{') || lStrFix.startsWith('{')) {
+        return { ...oldOccObj }; // managed by curly braces
+    }
+
+    /**
+     * else MsgBox % "hi hi"
+     */
+    const { occ, lockDeepList } = oldOccObj;
+    const tempLockList: number[] = [...lockDeepList];
+
+    const { deep2 } = AhkTokenLine;
+    tempLockList.push(deep2.at(-1) ?? 0);
+
+    // const occNew = occ > 0
+    //     ? occ - 1
+    //     : 0;
+
+    return {
+        lockDeepList: tempLockList,
+        occ: occ + 1,
+        status: '',
+    }; // TODO
+}
+export function getDeepKeywords({
+    lStrTrim,
+    oldOccObj,
+    AhkTokenLine,
+    allFileBrackets,
+}: {
+    lStrTrim: string,
+    oldOccObj: TOccObj,
+    AhkTokenLine: TAhkTokenLine,
+    allFileBrackets: readonly TBrackets[],
+}): TOccObj {
     const { occ, lockDeepList } = oldOccObj;
 
     const { fistWordUp } = AhkTokenLine;
+
     if (focSet.has(fistWordUp)) {
-        if (lStrTrim.endsWith('{')) {
-            return { ...oldOccObj }; // managed by curly braces
+        if (lStrTrim.endsWith('{')) return { ...oldOccObj }; // managed by curly braces
+
+        if (fistWordUp === 'IF') {
+            const { line } = AhkTokenLine;
+            const ifBlockClose: boolean = allFileBrackets[line][2] === 0;
+            if (!ifBlockClose) {
+                /**
+                 * if (a ; <---------not close
+                 *  + b
+                 *  + c
+                 */
+                const tempLockList: number[] = [...lockDeepList];
+
+                const { deep2 } = AhkTokenLine;
+                tempLockList.push(deep2.at(-1) ?? 0);
+
+                return {
+                    ...oldOccObj,
+                    status: `not close at ln ${line}`, // TODO
+                };
+            }
+            /**
+             * 99% case
+             * if (a ); <---------close
+             *
+             * or
+             * oldIf case
+             */
+            const tempLockList: number[] = [...lockDeepList];
+
+            const { deep2 } = AhkTokenLine;
+            tempLockList.push(deep2.at(-1) ?? 0);
+
+            return {
+                lockDeepList: tempLockList,
+                occ: occ + 1,
+                status: '',
+            };
         }
+        if (fistWordUp === 'ELSE') {
+            return focElseCase(AhkTokenLine, oldOccObj);
+        }
+        // other key word
         const tempLockList: number[] = [...lockDeepList];
 
         const { deep2 } = AhkTokenLine;
@@ -69,6 +160,7 @@ export function getDeepKeywords(lStrTrim: string, oldOccObj: TOccObj, AhkTokenLi
         return {
             lockDeepList: tempLockList,
             occ: occ + 1,
+            status: '',
         };
     }
 

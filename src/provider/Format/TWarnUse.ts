@@ -1,8 +1,8 @@
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,-999] }] */
 import * as vscode from 'vscode';
 import type { DeepReadonly, TAhkTokenLine } from '../../globalEnum';
 import { lineReplace } from './fmtReplace';
 import type { TDiffMap } from './tools/fmtDiffInfo';
-import { getDeepLTrim } from './tools/getDeepLTrim';
 
 type TWarnUse =
     & DeepReadonly<{
@@ -13,6 +13,7 @@ type TWarnUse =
         switchDeep: number,
         topLabelDeep: 0 | 1,
         formatTextReplace: boolean,
+        MultLine: -999 | 0 | 1,
     }>
     & {
         DiffMap: TDiffMap,
@@ -44,14 +45,13 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
         options, // by self
         switchDeep,
         topLabelDeep,
+        MultLine,
     } = args;
     const {
-        multiline,
-        multilineFlag,
         textRaw,
         cll,
     } = AhkTokenLine;
-    if (multilineFlag !== null && multilineFlag.LTrim.length === 0) {
+    if (MultLine === -999) {
         return wrap(args, textRaw, AhkTokenLine); // in multi-line and not open LTrim flag
     }
 
@@ -60,7 +60,7 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
         return wrap(args, '', AhkTokenLine);
     }
 
-    const LineDeep: 0 | 1 = (occ === 0 && lStrTrim !== '') // AhkTokenLine.cll Include `;`
+    const fixCll: 0 | 1 = (occ === 0 && lStrTrim !== '') // AhkTokenLine.cll Include `;`
         ? cll // 0 | 1
         : 0;
 
@@ -79,20 +79,19 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
      *     }
      *     ```
      */
-    const curlyBracketsChange: -1 | 0 = lStrTrim.startsWith('}') || (occ > 0 && lStrTrim.startsWith('{'))
+    const tempFixOfBracketsChange: -1 | 0 = lStrTrim.startsWith('}') || (occ > 0 && lStrTrim.startsWith('{'))
         ? -1
         : 0;
 
-    const lTrimDeep: 0 | 1 = getDeepLTrim(multiline, multilineFlag);
     const deepFix = Math.max(
         0,
         occ
-            + curlyBracketsChange
-            + LineDeep
+            + tempFixOfBracketsChange
+            + fixCll
             + switchDeep
-            + lTrimDeep
-            + topLabelDeep
-            + bracketsDeep,
+            + MultLine
+            + topLabelDeep // matrix
+            + bracketsDeep, // matrix
     );
 
     const { insertSpaces, tabSize } = options;

@@ -1,16 +1,16 @@
-import type { TMultilineFlag } from '../../../globalEnum';
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,-999] }] */
+import type { TMultilineFlag, TTokenStream } from '../../../globalEnum';
 import { EMultiline } from '../../../globalEnum';
 import { enumLog } from '../../../tools/enumErr';
 
-// return deep of LTrim
-export function getDeepLTrim(Multiline: EMultiline, multilineFlag: TMultilineFlag): 0 | 1 {
+function getDeepLTrim(Multiline: EMultiline, multilineFlag: TMultilineFlag): 0 | 1 {
     switch (Multiline) {
         case EMultiline.none:
             return 0;
         case EMultiline.start:
             return 1;
         case EMultiline.mid:
-            if (multilineFlag === null) return 0; // fake case....just keep TypeScript happy
+            if (multilineFlag === null) return 0;
             if (multilineFlag.LTrim.length === 0) return 0;
             return 1;
         case EMultiline.end:
@@ -19,6 +19,26 @@ export function getDeepLTrim(Multiline: EMultiline, multilineFlag: TMultilineFla
             enumLog(Multiline, getDeepLTrim.name);
             return 0;
     }
+}
+/**
+ * -9999 is mean not find of `(lTrim`
+ */
+export function getMatrixMultLine(DocStrMap: TTokenStream): readonly (-999 | 0 | 1)[] {
+    //
+    const list: (-999 | 0 | 1)[] = [];
+    for (const AhkTokenLine of DocStrMap) {
+        //
+        const { multiline, multilineFlag } = AhkTokenLine;
+        if (multilineFlag !== null && multilineFlag.LTrim.length === 0) {
+            list.push(-999);
+            continue;
+        }
+
+        const lTrimDeep: 0 | 1 = getDeepLTrim(multiline, multilineFlag);
+        list.push(lTrimDeep);
+        //
+    }
+    return list;
 }
 
 /*

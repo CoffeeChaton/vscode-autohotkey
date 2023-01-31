@@ -305,7 +305,7 @@ function StrChrAny(aStr: readonly string[], aCharList: readonly string[]): strin
  * inline LPTSTR Script::ParseActionType(LPTSTR aBufTarget, LPTSTR aBufSource, bool aDisplayErrors)
  * ```
  */
-function _ParseActionType(aBufTarget: string, aBufSource: readonly string[], aDisplayErrors: boolean): string {
+function _ParseActionType(aBufTarget: string, aBufSource: readonly string[], _aDisplayErrors: boolean): string {
     // end_flags
 
     const end_marker: string | null = StrChrAny(aBufSource, end_flags);

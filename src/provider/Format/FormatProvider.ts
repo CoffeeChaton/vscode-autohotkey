@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,-999] }] */
 /* eslint-disable max-lines-per-function */
 import type * as vscode from 'vscode';
 import { getFormatConfig } from '../../configUI';
@@ -11,6 +12,7 @@ import { getSwitchRange, inSwitchBlock } from './oldTools/SwitchCase';
 import { calcAllFileBrackets } from './tools/calcAllFileBrackets';
 import type { TDiffMap } from './tools/fmtDiffInfo';
 import { fmtDiffInfo } from './tools/fmtDiffInfo';
+import { getMatrixMultLine } from './tools/getMatrixMultLine';
 import { topLabelIndent } from './tools/topLabelIndent';
 import { fn_Warn_thisLineText_WARN } from './TWarnUse';
 
@@ -48,17 +50,22 @@ export function FormatCore(
         useTopLabelIndent,
         useParenthesesIndent,
         useSquareBracketsIndent,
+        AMasterSwitchUseFormatProvider,
     } = getFormatConfig();
+    if (!AMasterSwitchUseFormatProvider) return [];
 
     const { DocStrMap, uri } = AhkFileData;
     const topLabelIndentList: readonly (0 | 1)[] = topLabelIndent(AhkFileData, useTopLabelIndent);
     const allFileBrackets: readonly TBrackets[] = calcAllFileBrackets(DocStrMap);
+    const matrixMultLine: readonly (-999 | 0 | 1)[] = getMatrixMultLine(DocStrMap);
 
     let oldOccObj: TOccObj = {
         lockDeepList: [],
         occ: 0,
+        status: '',
     };
-
+    const memo: (Readonly<TOccObj>)[] = [];
+    memo.push({ ...oldOccObj });
     const switchRangeArray: vscode.Range[] = [];
     const newTextList: vscode.TextEdit[] = [];
 
@@ -82,6 +89,7 @@ export function FormatCore(
                 options,
                 switchDeep: inSwitchBlock(lStrTrim, line, switchRangeArray),
                 topLabelDeep: topLabelIndentList[line],
+                MultLine: matrixMultLine[line],
                 formatTextReplace,
             }, AhkTokenLine));
         } else if (line > fmtEnd) {
@@ -91,7 +99,13 @@ export function FormatCore(
         const switchRange: vscode.Range | null = getSwitchRange(DocStrMap, lStrTrim, line);
         if (switchRange !== null) switchRangeArray.push(switchRange);
 
-        oldOccObj = getDeepKeywords(lStrTrim, oldOccObj, AhkTokenLine);
+        oldOccObj = getDeepKeywords({
+            lStrTrim,
+            oldOccObj,
+            AhkTokenLine,
+            allFileBrackets,
+        });
+        memo.push({ ...oldOccObj });
     }
 
     if (DiffMap.size > 0) {
@@ -104,6 +118,7 @@ export function FormatCore(
         });
     }
 
+    console.log({ ms: Date.now() - timeStart, matrixMultLine, DocStrMap });
     //  console.log({ ms: Date.now() - timeStart, allFileBrackets, topLabelIndentList });
 
     return newTextList;
