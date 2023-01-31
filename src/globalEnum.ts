@@ -74,7 +74,9 @@ export type TAhkTokenLine = DeepReadonly<{
     fistWordUp: string,
     SecondWordUp: string,
     SecondWordUpCol: number,
-    // --
+    /**
+     * In the case of a hypothesis as an expression, the formatted text keeps the front indentation
+     */
     lStr: string,
     textRaw: string,
     deep2: number[],
@@ -82,6 +84,10 @@ export type TAhkTokenLine = DeepReadonly<{
     line: number,
     multiline: EMultiline,
     multilineFlag: TMultilineFlag,
+    /**
+     * continuation last line
+     * but allow lStr === ''
+     */
     cll: 0 | 1,
     lineComment: string,
     displayErr: boolean,

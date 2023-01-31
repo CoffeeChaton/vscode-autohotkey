@@ -76,7 +76,12 @@ function focElseCase(AhkTokenLine: TAhkTokenLine, oldOccObj: TOccObj): TOccObj {
     }
 
     /**
-     * else MsgBox % "hi hi"
+     * //TODO else MsgBox % "hi hi"
+     */
+    // if (lStrFix.length !== 0) occ--
+
+    /**
+     * else ;nothings <--- after else not any string
      */
     const { occ, lockDeepList } = oldOccObj;
     const tempLockList: number[] = [...lockDeepList];
@@ -110,7 +115,7 @@ export function getDeepKeywords({
     const { occ, lockDeepList } = oldOccObj;
 
     const { fistWordUp, line } = AhkTokenLine;
-
+    //  console.log(line, oldOccObj);
     if (focSet.has(fistWordUp)) {
         if (lStrTrim.endsWith('{')) return { ...oldOccObj }; // managed by curly braces
         const nextLine: TAhkTokenLine | undefined = DocStrMap.at(line + 1);
@@ -177,9 +182,25 @@ export function getDeepKeywords({
         };
     }
 
-    const { cll } = AhkTokenLine;
-    if (cll === 1) return { ...oldOccObj };
+    const nextLine: TAhkTokenLine | undefined = DocStrMap.at(line + 1);
+    if (nextLine === undefined) {
+        return {
+            lockDeepList: [],
+            occ,
+            status: 'end of file part2',
+        };
+    }
+    if (nextLine.multilineFlag !== null) {
+        return { ...oldOccObj }; // managed by multiline
+    }
 
+    const { cll } = AhkTokenLine;
+    if (cll === 1) {
+        return { ...oldOccObj };
+    }
+
+    // FIXME check deep and occ-- not just let occ = 0
+    //
     //  const lockDeep: number[] = [...oldOccObj.lockDeepList];
     //  oneCommandCode < 0 // Math.max(oneCommandCode, 0);
     //     ? 0

@@ -21,13 +21,13 @@ const CLL: DeepReadonly<RegExp[]> = [
     /^-[^-]/u, // -
     /^\*[^/]/u, // /^*  but not */
     /^\//u, // /
-    /^and\b/iu,
-    /^or\b/iu,
+    /^and\s/iu, //
+    /^or\s/iu, // in edge cases, someone used `new` as a variable name
     /^\|\|/u, // ||
     /^&&/u, // &&
     /^[!~&/<>|^]/u,
-    /^new\b/iu,
-    /^not\b/iu,
+    /^new\s+(?!:?=)/iu, // in edge cases, someone used `new` as a variable name
+    /^not\s+/iu, // in edge cases, someone used `new` as a variable name
     // Don't do it /^%/, because ``` %i%Name := ... ```
 ];
 

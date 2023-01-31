@@ -2,6 +2,7 @@
 /* eslint-disable max-lines-per-function */
 import type * as vscode from 'vscode';
 import { getFormatConfig } from '../../configUI';
+import type { TConfigs } from '../../configUI.data';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { EFormatChannel } from '../../globalEnum';
@@ -45,13 +46,12 @@ export function FormatCore(
     const AhkFileData: TAhkFileData | null = pm.updateDocDef(document);
     if (AhkFileData === null) return [];
 
+    const userConfigs: TConfigs['format'] = getFormatConfig();
     const {
         formatTextReplace,
         useTopLabelIndent,
-        useParenthesesIndent,
-        useSquareBracketsIndent,
         AMasterSwitchUseFormatProvider,
-    } = getFormatConfig();
+    } = userConfigs;
     if (!AMasterSwitchUseFormatProvider) return [];
 
     const { DocStrMap, uri } = AhkFileData;
@@ -75,28 +75,17 @@ export function FormatCore(
         const lStrTrim: string = lStr.trim();
 
         if (line >= fmtStart && line <= fmtEnd) {
-            const brackets: TBrackets = matrixBrackets[line];
-
-            let bracketsDeep: number = brackets[0];
-            if (useSquareBracketsIndent) bracketsDeep += brackets[1];
-            if (useParenthesesIndent) bracketsDeep += brackets[2];
-            if (bracketsDeep < 0) {
-                /**
-                 * MsgBox % fn(a ;<------ "(" not match -> 0  ; this bug && need to fix after LStr fix
-                 * +b) ; <--------------- ")" ==== 0 -1 === -1
-                 */
-                bracketsDeep = 0;
-            }
             newTextList.push(fn_Warn_thisLineText_WARN({
                 DiffMap,
                 lStrTrim,
                 occ: oldOccObj.occ,
-                bracketsDeep,
+                brackets: matrixBrackets[line],
                 options,
                 switchDeep: inSwitchBlock(lStrTrim, line, switchRangeArray),
                 topLabelDeep: matrixTopLabe[line],
                 MultLine: matrixMultLine[line],
                 formatTextReplace,
+                userConfigs,
             }, AhkTokenLine));
         } else if (line > fmtEnd) {
             break;
@@ -125,7 +114,7 @@ export function FormatCore(
         });
     }
 
-    //  console.log({ ms: Date.now() - timeStart, allFileBrackets, topLabelIndentList });
+    // console.log({ ms: Date.now() - timeStart, memo });
 
     return newTextList;
 }
