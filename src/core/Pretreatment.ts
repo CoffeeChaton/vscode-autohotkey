@@ -250,7 +250,9 @@ export function Pretreatment(
         }
 
         // ---------
-        const lStr: string = getLStr(textRaw);
+        const lStr: string = multiline === EMultiline.end
+            ? getLStr(textRaw.replace(/^[ \t]*\)"?/u, '').padStart(textRaw.length, ' '))
+            : getLStr(textRaw);
         const lStrTrim: string = lStr.trim();
         const detail: EDetail[] = [];
         const lineComment: string = textRaw.length - lStr.length > 2
