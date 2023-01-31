@@ -12,8 +12,6 @@ function calcLineBrackets(AhkTokenLine: TAhkTokenLine, oldBrackets: TBrackets): 
         SecondWordUpCol,
     } = AhkTokenLine;
 
-    // MsgBox , { ( [
-    // Run newText[0].txt
     // TODO with LStr fix like
     /**
      * MsgBox % call(a
@@ -41,10 +39,6 @@ export function getMatrixFileBrackets(DocStrMap: TTokenStream): readonly TBracke
         list.push(brackets);
     }
     list.pop();
-
-    /**
-     * try to fix -1 case
-     */
 
     return list;
 }

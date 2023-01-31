@@ -47,10 +47,11 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
         topLabelDeep,
         MultLine,
     } = args;
-    const {
-        textRaw,
-        cll,
-    } = AhkTokenLine;
+    const { textRaw, cll } = AhkTokenLine;
+
+    /**
+     * keep warning of this line!
+     */
     if (MultLine === -999) {
         return wrap(args, textRaw, AhkTokenLine); // in multi-line and not open LTrim flag
     }

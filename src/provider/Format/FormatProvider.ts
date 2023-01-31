@@ -80,7 +80,13 @@ export function FormatCore(
             let bracketsDeep: number = brackets[0];
             if (useSquareBracketsIndent) bracketsDeep += brackets[1];
             if (useParenthesesIndent) bracketsDeep += brackets[2];
-
+            if (bracketsDeep < 0) {
+                /**
+                 * MsgBox % fn(a ;<------ "(" not match -> 0  ; this bug && need to fix after LStr fix
+                 * +b) ; <--------------- ")" ==== 0 -1 === -1
+                 */
+                bracketsDeep = 0;
+            }
             newTextList.push(fn_Warn_thisLineText_WARN({
                 DiffMap,
                 lStrTrim,
@@ -104,6 +110,7 @@ export function FormatCore(
             oldOccObj,
             AhkTokenLine,
             matrixBrackets,
+            DocStrMap,
         });
         memo.push({ ...oldOccObj });
     }
@@ -118,7 +125,6 @@ export function FormatCore(
         });
     }
 
-    // console.log({ ms: Date.now() - timeStart, matrixBrackets, DocStrMap });
     //  console.log({ ms: Date.now() - timeStart, allFileBrackets, topLabelIndentList });
 
     return newTextList;

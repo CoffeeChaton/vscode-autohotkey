@@ -1,5 +1,6 @@
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,-999] }] */
 /* eslint-disable max-lines-per-function */
-import type { TAhkTokenLine } from '../../../globalEnum';
+import type { TAhkTokenLine, TTokenStream } from '../../../globalEnum';
 import type { TBrackets } from '../../../tools/Bracket';
 
 /**
@@ -98,21 +99,33 @@ export function getDeepKeywords({
     oldOccObj,
     AhkTokenLine,
     matrixBrackets,
+    DocStrMap,
 }: {
     lStrTrim: string,
     oldOccObj: TOccObj,
     AhkTokenLine: TAhkTokenLine,
     matrixBrackets: readonly TBrackets[],
+    DocStrMap: TTokenStream,
 }): TOccObj {
     const { occ, lockDeepList } = oldOccObj;
 
-    const { fistWordUp } = AhkTokenLine;
+    const { fistWordUp, line } = AhkTokenLine;
 
     if (focSet.has(fistWordUp)) {
         if (lStrTrim.endsWith('{')) return { ...oldOccObj }; // managed by curly braces
+        const nextLine: TAhkTokenLine | undefined = DocStrMap.at(line + 1);
+        if (nextLine === undefined) {
+            return {
+                lockDeepList: [],
+                occ,
+                status: 'end of file',
+            };
+        }
+        if (nextLine.lStr.trim().startsWith('{')) {
+            return { ...oldOccObj }; // managed by curly braces
+        }
 
         if (fistWordUp === 'IF') {
-            const { line } = AhkTokenLine;
             const ifBlockClose: boolean = matrixBrackets[line][2] === 0;
             if (!ifBlockClose) {
                 /**
