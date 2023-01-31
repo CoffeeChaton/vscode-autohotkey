@@ -9,11 +9,11 @@ import type { TBrackets } from '../../tools/Bracket';
 import type { TOccObj } from './oldTools/getDeepKeywords';
 import { getDeepKeywords } from './oldTools/getDeepKeywords';
 import { getSwitchRange, inSwitchBlock } from './oldTools/SwitchCase';
-import { calcAllFileBrackets } from './tools/calcAllFileBrackets';
 import type { TDiffMap } from './tools/fmtDiffInfo';
 import { fmtDiffInfo } from './tools/fmtDiffInfo';
+import { getMatrixFileBrackets } from './tools/getMatrixFileBrackets';
 import { getMatrixMultLine } from './tools/getMatrixMultLine';
-import { topLabelIndent } from './tools/topLabelIndent';
+import { getMatrixTopLabe } from './tools/getMatrixTopLabe';
 import { fn_Warn_thisLineText_WARN } from './TWarnUse';
 
 type TFmtCoreArgs = {
@@ -55,8 +55,8 @@ export function FormatCore(
     if (!AMasterSwitchUseFormatProvider) return [];
 
     const { DocStrMap, uri } = AhkFileData;
-    const topLabelIndentList: readonly (0 | 1)[] = topLabelIndent(AhkFileData, useTopLabelIndent);
-    const allFileBrackets: readonly TBrackets[] = calcAllFileBrackets(DocStrMap);
+    const matrixTopLabe: readonly (0 | 1)[] = getMatrixTopLabe(AhkFileData, useTopLabelIndent);
+    const matrixBrackets: readonly TBrackets[] = getMatrixFileBrackets(DocStrMap);
     const matrixMultLine: readonly (-999 | 0 | 1)[] = getMatrixMultLine(DocStrMap);
 
     let oldOccObj: TOccObj = {
@@ -75,7 +75,7 @@ export function FormatCore(
         const lStrTrim: string = lStr.trim();
 
         if (line >= fmtStart && line <= fmtEnd) {
-            const brackets: TBrackets = allFileBrackets[line];
+            const brackets: TBrackets = matrixBrackets[line];
 
             let bracketsDeep: number = brackets[0];
             if (useSquareBracketsIndent) bracketsDeep += brackets[1];
@@ -88,7 +88,7 @@ export function FormatCore(
                 bracketsDeep,
                 options,
                 switchDeep: inSwitchBlock(lStrTrim, line, switchRangeArray),
-                topLabelDeep: topLabelIndentList[line],
+                topLabelDeep: matrixTopLabe[line],
                 MultLine: matrixMultLine[line],
                 formatTextReplace,
             }, AhkTokenLine));
@@ -103,7 +103,7 @@ export function FormatCore(
             lStrTrim,
             oldOccObj,
             AhkTokenLine,
-            allFileBrackets,
+            matrixBrackets,
         });
         memo.push({ ...oldOccObj });
     }
@@ -118,7 +118,7 @@ export function FormatCore(
         });
     }
 
-    console.log({ ms: Date.now() - timeStart, matrixMultLine, DocStrMap });
+    // console.log({ ms: Date.now() - timeStart, matrixBrackets, DocStrMap });
     //  console.log({ ms: Date.now() - timeStart, allFileBrackets, topLabelIndentList });
 
     return newTextList;

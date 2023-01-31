@@ -60,10 +60,6 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
         return wrap(args, '', AhkTokenLine);
     }
 
-    const fixCll: 0 | 1 = (occ === 0 && lStrTrim !== '') // AhkTokenLine.cll Include `;`
-        ? cll // 0 | 1
-        : 0;
-
     /**
      * 1. case1
      *     ```ahk
@@ -83,13 +79,17 @@ export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkToke
         ? -1
         : 0;
 
+    const fixCll: 0 | 1 = (occ === 0 && lStrTrim !== '') // AhkTokenLine.cll Include `;`
+        ? cll // 0 | 1
+        : 0;
+
     const deepFix = Math.max(
         0,
-        occ
+        occ // fix this now...
             + tempFixOfBracketsChange
             + fixCll
             + switchDeep
-            + MultLine
+            + MultLine // matrix
             + topLabelDeep // matrix
             + bracketsDeep, // matrix
     );

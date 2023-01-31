@@ -97,12 +97,12 @@ export function getDeepKeywords({
     lStrTrim,
     oldOccObj,
     AhkTokenLine,
-    allFileBrackets,
+    matrixBrackets,
 }: {
     lStrTrim: string,
     oldOccObj: TOccObj,
     AhkTokenLine: TAhkTokenLine,
-    allFileBrackets: readonly TBrackets[],
+    matrixBrackets: readonly TBrackets[],
 }): TOccObj {
     const { occ, lockDeepList } = oldOccObj;
 
@@ -113,7 +113,7 @@ export function getDeepKeywords({
 
         if (fistWordUp === 'IF') {
             const { line } = AhkTokenLine;
-            const ifBlockClose: boolean = allFileBrackets[line][2] === 0;
+            const ifBlockClose: boolean = matrixBrackets[line][2] === 0;
             if (!ifBlockClose) {
                 /**
                  * if (a ; <---------not close

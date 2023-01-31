@@ -33,7 +33,7 @@ function LineIsIFCase(lStr: string): boolean {
     return lineIsIFRegexps.some((reg: Readonly<RegExp>): boolean => reg.test(lStrTrimFix));
 }
 
-export function topLabelIndent(AhkFileData: TAhkFileData, useTopLabelIndent: boolean): readonly (0 | 1)[] {
+export function getMatrixTopLabe(AhkFileData: TAhkFileData, useTopLabelIndent: boolean): readonly (0 | 1)[] {
     const { AST, DocStrMap } = AhkFileData;
 
     const list: (0 | 1)[] = [...DocStrMap].map((): 0 => 0);

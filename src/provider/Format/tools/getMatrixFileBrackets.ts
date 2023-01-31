@@ -14,7 +14,11 @@ function calcLineBrackets(AhkTokenLine: TAhkTokenLine, oldBrackets: TBrackets): 
 
     // MsgBox , { ( [
     // Run newText[0].txt
-    // TODO with LStr fix
+    // TODO with LStr fix like
+    /**
+     * MsgBox % call(a
+     *  +b )
+     */
     let lStrFix: string = lStr;
     if (CommandMDMap.has(fistWordUp)) {
         lStrFix = lStrFix.slice(0, fistWordUpCol);
@@ -27,7 +31,7 @@ function calcLineBrackets(AhkTokenLine: TAhkTokenLine, oldBrackets: TBrackets): 
     return calcBracket(lStrFix, oldBrackets);
 }
 
-export function calcAllFileBrackets(DocStrMap: TTokenStream): readonly TBrackets[] {
+export function getMatrixFileBrackets(DocStrMap: TTokenStream): readonly TBrackets[] {
     let brackets: TBrackets = [0, 0, 0];
     const list: TBrackets[] = [];
     list.push(brackets);
@@ -37,5 +41,10 @@ export function calcAllFileBrackets(DocStrMap: TTokenStream): readonly TBrackets
         list.push(brackets);
     }
     list.pop();
+
+    /**
+     * try to fix -1 case
+     */
+
     return list;
 }

@@ -35,6 +35,10 @@ export function inSwitchBlock(textFix: string, line: number, switchRangeArray: D
     return switchDeep;
 }
 
+/**
+ * if not bug, not need to change to Matrix...
+ * minimize of `new ClassName()`
+ */
 /*
 test code
 ```ahk
