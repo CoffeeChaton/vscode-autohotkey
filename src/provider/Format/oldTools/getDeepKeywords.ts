@@ -51,66 +51,38 @@ const focSet: ReadonlySet<string> = new Set(
     ].map((s: string): string => s.toUpperCase()),
 );
 
-export type TOccObj = {
-    lockDeepList: readonly number[],
+type TLockObj = {
+    lockDeep: number,
+    lockOcc: number,
+};
+
+export type TLnStatus = {
+    lockList: readonly TLockObj[],
     occ: number,
     status: string,
 };
 
-function forIfCase({ AhkTokenLine, matrixBrackets, oldOccObj }: {
+function addLock({ lnStatus, AhkTokenLine }: {
     AhkTokenLine: TAhkTokenLine,
-    matrixBrackets: readonly TBrackets[],
-    oldOccObj: TOccObj,
-}): TOccObj {
-    const { line } = AhkTokenLine;
-    const { occ, lockDeepList } = oldOccObj;
-    const tempLockList: number[] = [...lockDeepList];
+    lnStatus: TLnStatus,
+}): TLnStatus {
+    const lockOcc: number = lnStatus.occ;
+    const lockDeep: number = AhkTokenLine.deep2.at(-1) ?? 0;
 
-    const ifBlockClose: boolean = matrixBrackets[line][2] === 0;
-
-    /**
-     * if (a ; <---------not close
-     *  + b
-     *  + c
-     */
-    if (!ifBlockClose) {
-        return {
-            ...oldOccObj,
-            status: `if ( ,not close at ln ${line}`, // TODO
-        };
-    }
-
-    /**
-     * 99% case
-     * if (a ); <---------close
-     *
-     * or
-     * oldIf case
-     */
     return {
-        lockDeepList: tempLockList,
-        occ: occ + 1,
-        status: 'if () case',
+        lockList: [...lnStatus.lockList, { lockOcc, lockDeep }],
+        occ: lnStatus.occ,
+        status: 'add lock',
     };
-}
-
-function addLock({ oldOccObj, AhkTokenLine }: {
-    AhkTokenLine: TAhkTokenLine,
-    oldOccObj: TOccObj,
-}): readonly number[] {
-    const tempLockList: number[] = [...oldOccObj.lockDeepList];
-    tempLockList.push(AhkTokenLine.deep2.at(-1) ?? 0);
-
-    return tempLockList;
 }
 
 function focOccDiff({ oldOccObj, AhkTokenLine }: {
     AhkTokenLine: TAhkTokenLine,
     matrixBrackets: readonly TBrackets[],
-    oldOccObj: TOccObj,
-}): TOccObj {
+    oldOccObj: TLnStatus,
+}): TLnStatus {
     return {
-        lockDeepList: [],
+        lockList: [],
         occ: 0,
         status: 'occ -> 0',
     };
@@ -145,19 +117,52 @@ function focOccDiff({ oldOccObj, AhkTokenLine }: {
     // };
 }
 
-function focElseCase({ AhkTokenLine, matrixBrackets, oldOccObj }: {
+function forIfCase({ AhkTokenLine, matrixBrackets, lnStatus }: {
     AhkTokenLine: TAhkTokenLine,
     matrixBrackets: readonly TBrackets[],
-    oldOccObj: TOccObj,
-}): TOccObj {
-    const { lStr, fistWordUpCol } = AhkTokenLine;
+    lnStatus: TLnStatus,
+}): TLnStatus {
+    const { line } = AhkTokenLine;
+
     /**
-     * 1. case like
-     *     else Return "AA"
-     *     else foo()
-     * 2. not need to check end with '{' case
+     * if (a ; <---------not close
+     *  + b
+     *  + c
+     */
+    const ifBlockClose: boolean = matrixBrackets[line][2] === 0;
+    if (!ifBlockClose) {
+        return {
+            ...lnStatus,
+            status: `if ( ,not close at ln ${line}`, // TODO
+        };
+    }
+
+    /**
+     * 99% case
+     * if (a ); <---------close
      *
-     * 'else'.len is 4
+     * or
+     * oldIf case
+     */
+    const { occ, lockList } = lnStatus;
+    return {
+        lockList: [...lockList],
+        occ: occ + 1,
+        status: 'if () case',
+    };
+}
+
+function focElseCase({ AhkTokenLine, matrixBrackets, lnStatus }: {
+    AhkTokenLine: TAhkTokenLine,
+    matrixBrackets: readonly TBrackets[],
+    lnStatus: TLnStatus,
+}): TLnStatus {
+    const { lStr, fistWordUpCol } = AhkTokenLine;
+
+    /**
+     * 1. end if     -> forIfCase
+     * 2. else return
+     * 3. else foo()
      */
     const afterElseStr = lStr.slice(fistWordUpCol + 4)
         .replace(/^\s*,/u, '') // fix ----> "else," WTF?
@@ -165,17 +170,17 @@ function focElseCase({ AhkTokenLine, matrixBrackets, oldOccObj }: {
     if (afterElseStr.length > 0) {
         // check start with 'if' case
         if ((/^if(?:\s|\()/iu).test(afterElseStr)) {
-            return forIfCase({ AhkTokenLine, matrixBrackets, oldOccObj });
+            return forIfCase({ AhkTokenLine, matrixBrackets, lnStatus });
         }
-        return focOccDiff({ AhkTokenLine, matrixBrackets, oldOccObj });
+        return focOccDiff({ AhkTokenLine, matrixBrackets, oldOccObj: lnStatus });
     }
 
     /**
      * else ;nothings <--- after else not any string
      */
-    const { occ } = oldOccObj;
+    const { occ, lockList } = lnStatus;
     return {
-        lockDeepList: addLock({ oldOccObj, AhkTokenLine }),
+        lockList: [...lockList],
         occ: occ + 1,
         status: 'else end with spec',
     };
@@ -183,39 +188,40 @@ function focElseCase({ AhkTokenLine, matrixBrackets, oldOccObj }: {
 
 export function getDeepKeywords({
     lStrTrim,
-    oldOccObj,
+    lnStatus,
     AhkTokenLine,
     matrixBrackets,
     DocStrMap,
 }: {
     lStrTrim: string,
-    oldOccObj: TOccObj,
+    lnStatus: TLnStatus,
     AhkTokenLine: TAhkTokenLine,
     matrixBrackets: readonly TBrackets[],
     DocStrMap: TTokenStream,
-}): TOccObj {
-    const { occ } = oldOccObj;
+}): TLnStatus {
+    const { occ } = lnStatus;
 
     const { fistWordUp, line } = AhkTokenLine;
     //  console.log(line, oldOccObj);
     if (focSet.has(fistWordUp)) {
-        if (lStrTrim.endsWith('{')) return { ...oldOccObj }; // managed by curly braces
+        if (lStrTrim.endsWith('{')) return addLock({ lnStatus, AhkTokenLine }); // managed by curly braces
         const nextLine: TAhkTokenLine | undefined = DocStrMap.at(line + 1);
         if (nextLine === undefined) {
             return {
-                lockDeepList: [],
+                lockList: [],
                 occ: 0,
                 status: 'end of file',
             };
         }
-        if (nextLine.lStr.trim().startsWith('{')) return { ...oldOccObj }; // managed by curly braces
+        if (nextLine.lStr.trim().startsWith('{')) return addLock({ lnStatus, AhkTokenLine }); // managed by curly braces
 
-        if (fistWordUp === 'IF') return forIfCase({ AhkTokenLine, matrixBrackets, oldOccObj });
-        if (fistWordUp === 'ELSE') return focElseCase({ AhkTokenLine, matrixBrackets, oldOccObj });
+        if (fistWordUp === 'IF') return forIfCase({ AhkTokenLine, matrixBrackets, lnStatus });
+        if (fistWordUp === 'ELSE') return focElseCase({ AhkTokenLine, matrixBrackets, lnStatus });
 
         // other key word
+        const { lockList } = lnStatus;
         return {
-            lockDeepList: addLock({ oldOccObj, AhkTokenLine }),
+            lockList: [...lockList],
             occ: occ + 1,
             status: `other key word+ "${fistWordUp}"`,
         };
@@ -224,21 +230,21 @@ export function getDeepKeywords({
     const nextLine: TAhkTokenLine | undefined = DocStrMap.at(line + 1);
     if (nextLine === undefined) {
         return {
-            lockDeepList: [],
+            lockList: [],
             occ: 0,
             status: 'end of file part2',
         };
     }
     if (nextLine.multilineFlag !== null) {
-        return { ...oldOccObj }; // managed by multiline
+        return { ...lnStatus }; // managed by multiline
     }
 
     const { cll } = AhkTokenLine;
     if (cll === 1) {
-        return { ...oldOccObj };
+        return { ...lnStatus };
     }
 
-    return focOccDiff({ AhkTokenLine, matrixBrackets, oldOccObj });
+    return focOccDiff({ AhkTokenLine, matrixBrackets, oldOccObj: lnStatus });
 }
 
 // FIXME fmt

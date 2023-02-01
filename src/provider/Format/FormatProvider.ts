@@ -7,7 +7,7 @@ import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { EFormatChannel } from '../../globalEnum';
 import type { TBrackets } from '../../tools/Bracket';
-import type { TOccObj } from './oldTools/getDeepKeywords';
+import type { TLnStatus } from './oldTools/getDeepKeywords';
 import { getDeepKeywords } from './oldTools/getDeepKeywords';
 import { getSwitchRange, inSwitchBlock } from './oldTools/SwitchCase';
 import type { TDiffMap } from './tools/fmtDiffInfo';
@@ -59,13 +59,13 @@ export function FormatCore(
     const matrixBrackets: readonly TBrackets[] = getMatrixFileBrackets(DocStrMap);
     const matrixMultLine: readonly (-999 | 0 | 1)[] = getMatrixMultLine(DocStrMap);
 
-    let oldOccObj: TOccObj = {
-        lockDeepList: [],
+    let lnStatus: TLnStatus = {
+        lockList: [],
         occ: 0,
         status: 'file start',
     };
-    const memo: (Readonly<TOccObj>)[] = [];
-    memo.push({ ...oldOccObj });
+    const memo: (Readonly<TLnStatus>)[] = [];
+    memo.push({ ...lnStatus });
     const switchRangeArray: vscode.Range[] = [];
     const newTextList: vscode.TextEdit[] = [];
 
@@ -78,7 +78,7 @@ export function FormatCore(
             newTextList.push(fn_Warn_thisLineText_WARN({
                 DiffMap,
                 lStrTrim,
-                occ: oldOccObj.occ,
+                occ: lnStatus.occ,
                 brackets: matrixBrackets[line],
                 options,
                 switchDeep: inSwitchBlock(lStrTrim, line, switchRangeArray),
@@ -94,14 +94,14 @@ export function FormatCore(
         const switchRange: vscode.Range | null = getSwitchRange(DocStrMap, lStrTrim, line);
         if (switchRange !== null) switchRangeArray.push(switchRange);
 
-        oldOccObj = getDeepKeywords({
+        lnStatus = getDeepKeywords({
             lStrTrim,
-            oldOccObj,
+            lnStatus,
             AhkTokenLine,
             matrixBrackets,
             DocStrMap,
         });
-        memo.push({ ...oldOccObj });
+        memo.push({ ...lnStatus });
     }
 
     if (DiffMap.size > 0) {
