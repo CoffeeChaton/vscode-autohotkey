@@ -77,19 +77,18 @@ function addLock({ lnStatus, AhkTokenLine }: {
     };
 }
 
-function focOccDiff({ lnStatus: oldOccObj, AhkTokenLine }: {
+function focOccDiff({ lnStatus, AhkTokenLine }: {
     AhkTokenLine: TAhkTokenLine,
     matrixBrackets: readonly TBrackets[],
     lnStatus: TLnStatus,
 }): TLnStatus {
-    //    FIXME;
-    const { occ, lockList } = oldOccObj;
+    const { occ, lockList } = lnStatus;
 
     if (occ === 0) { // happy path
         return {
             lockList: [],
             occ: 0,
-            status: 'occ -> 0 case1',
+            status: 'old occ is 0',
         };
     }
 
@@ -100,35 +99,28 @@ function focOccDiff({ lnStatus: oldOccObj, AhkTokenLine }: {
         return {
             lockList: [],
             occ: 0,
-            status: 'occ -> 0 case2',
+            status: 'occ -> 0 as locList.len ===0',
         };
     }
 
     const { line, deep2 } = AhkTokenLine;
     const thisLineDeep = deep2.at(-1) ?? 0;
     const { lockDeep, lockOcc } = lastLock;
-    if (thisLineDeep !== lockDeep) {
-        if (thisLineDeep > lockDeep) {
-            console.log('>');
-        }
-        if (thisLineDeep < lockDeep) {
-            console.log('<');
+    if (thisLineDeep < lockDeep) {
+        // console.log(`< at ln ${line}`);
 
-            const newOcc = occ > 0
-                ? occ - 1
-                : 0;
+        const newOcc = occ > 0
+            ? occ - 1
+            : 0;
 
-            return {
-                lockList: [...lockList],
-                occ: newOcc,
-                status: `occ- at deep < lockDeep -- ln ${line}`,
-            };
-        }
         return {
-            lockList: [...lockList],
-            occ,
+            lockList: [...tempLockList],
+            occ: newOcc,
             status: `occ-copy case--at deep <> lockDeep -- ln ${line}`,
         };
+    }
+    if (thisLineDeep !== lockDeep) {
+        console.log(`!== case ln ${line}`);
     }
 
     let newOcc = occ - 1;
@@ -138,7 +130,7 @@ function focOccDiff({ lnStatus: oldOccObj, AhkTokenLine }: {
         return {
             lockList: tempLockList,
             occ: lockOcc,
-            status: `occ-- case--51-- ln ${line}`,
+            status: `occ-- case--51-- ln ${line} (trigger lock protection)`,
         };
     }
 
@@ -238,7 +230,7 @@ export function getDeepKeywords({
     const { occ } = lnStatus;
 
     const { fistWordUp, line } = AhkTokenLine;
-
+    console.log(line, lnStatus);
     if (focSet.has(fistWordUp)) {
         if (lStrTrim.endsWith('{')) return addLock({ lnStatus, AhkTokenLine }); // managed by curly braces
         const nextLine: TAhkTokenLine | undefined = DocStrMap.at(line + 1);
@@ -272,12 +264,12 @@ export function getDeepKeywords({
         };
     }
     if (nextLine.multilineFlag !== null) {
-        return { ...lnStatus }; // managed by multiline
+        return { ...lnStatus, status: 'managed by multiline' }; // managed by multiline
     }
 
     const { cll } = AhkTokenLine;
     if (cll === 1) {
-        return { ...lnStatus };
+        return { ...lnStatus, status: 'continuation last line' };
     }
 
     return focOccDiff({ AhkTokenLine, matrixBrackets, lnStatus });
