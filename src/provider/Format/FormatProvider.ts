@@ -62,7 +62,7 @@ export function FormatCore(
     let oldOccObj: TOccObj = {
         lockDeepList: [],
         occ: 0,
-        status: '',
+        status: 'file start',
     };
     const memo: (Readonly<TOccObj>)[] = [];
     memo.push({ ...oldOccObj });

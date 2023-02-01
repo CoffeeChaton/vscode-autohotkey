@@ -52,7 +52,7 @@ const focSet: ReadonlySet<string> = new Set(
 );
 
 export type TOccObj = {
-    lockDeepList: number[],
+    lockDeepList: readonly number[],
     occ: number,
     status: string,
 };
@@ -65,9 +65,6 @@ function forIfCase({ AhkTokenLine, matrixBrackets, oldOccObj }: {
     const { line } = AhkTokenLine;
     const { occ, lockDeepList } = oldOccObj;
     const tempLockList: number[] = [...lockDeepList];
-
-    const { deep2 } = AhkTokenLine;
-    tempLockList.push(deep2.at(-1) ?? 0);
 
     const ifBlockClose: boolean = matrixBrackets[line][2] === 0;
 
@@ -97,18 +94,55 @@ function forIfCase({ AhkTokenLine, matrixBrackets, oldOccObj }: {
     };
 }
 
-function focOccDiff({ oldOccObj }: {
+function addLock({ oldOccObj, AhkTokenLine }: {
+    AhkTokenLine: TAhkTokenLine,
+    oldOccObj: TOccObj,
+}): readonly number[] {
+    const tempLockList: number[] = [...oldOccObj.lockDeepList];
+    tempLockList.push(AhkTokenLine.deep2.at(-1) ?? 0);
+
+    return tempLockList;
+}
+
+function focOccDiff({ oldOccObj, AhkTokenLine }: {
     AhkTokenLine: TAhkTokenLine,
     matrixBrackets: readonly TBrackets[],
     oldOccObj: TOccObj,
 }): TOccObj {
-    // FIXME check deep and occ-- not just let occ = 0
-    //
-    //  const lockDeep: number[] = [...oldOccObj.lockDeepList];
-    //  oneCommandCode < 0 // Math.max(oneCommandCode, 0);
-    //     ? 0
-    //     : oneCommandCode;
-    return { ...oldOccObj, occ: 0 };
+    return {
+        lockDeepList: [],
+        occ: 0,
+        status: 'occ -> 0',
+    };
+    // FIXME
+    // const { occ, lockDeepList } = oldOccObj;
+
+    // if (occ === 0 || lockDeepList.length === 0) { // happy path
+    //     return {
+    //         lockDeepList: [],
+    //         occ: 0,
+    //         status: 'occ -> 0',
+    //     };
+    // }
+
+    // const tempLockList: number[] = [...lockDeepList];
+
+    // const occDiff: number | undefined = tempLockList.pop();
+    // if (occDiff === undefined || occDiff === 0) {
+    //     return {
+    //         lockDeepList: [],
+    //         occ: 0,
+    //         status: 'occ -> 0',
+    //     };
+    // }
+
+    // const { line, deep2 } = AhkTokenLine;
+
+    // return {
+    //     lockDeepList: tempLockList,
+    //     occ: 0, // FIXME:
+    //     status: `occ-- at ln ${line}`,
+    // };
 }
 
 function focElseCase({ AhkTokenLine, matrixBrackets, oldOccObj }: {
@@ -139,16 +173,11 @@ function focElseCase({ AhkTokenLine, matrixBrackets, oldOccObj }: {
     /**
      * else ;nothings <--- after else not any string
      */
-    const { occ, lockDeepList } = oldOccObj;
-    const tempLockList: number[] = [...lockDeepList];
-
-    const { deep2 } = AhkTokenLine;
-    tempLockList.push(deep2.at(-1) ?? 0);
-
+    const { occ } = oldOccObj;
     return {
-        lockDeepList: tempLockList,
+        lockDeepList: addLock({ oldOccObj, AhkTokenLine }),
         occ: occ + 1,
-        status: '',
+        status: 'else end with spec',
     };
 }
 
@@ -165,7 +194,7 @@ export function getDeepKeywords({
     matrixBrackets: readonly TBrackets[],
     DocStrMap: TTokenStream,
 }): TOccObj {
-    const { occ, lockDeepList } = oldOccObj;
+    const { occ } = oldOccObj;
 
     const { fistWordUp, line } = AhkTokenLine;
     //  console.log(line, oldOccObj);
@@ -175,27 +204,20 @@ export function getDeepKeywords({
         if (nextLine === undefined) {
             return {
                 lockDeepList: [],
-                occ,
+                occ: 0,
                 status: 'end of file',
             };
         }
-        if (nextLine.lStr.trim().startsWith('{')) {
-            return { ...oldOccObj }; // managed by curly braces
-        }
+        if (nextLine.lStr.trim().startsWith('{')) return { ...oldOccObj }; // managed by curly braces
 
         if (fistWordUp === 'IF') return forIfCase({ AhkTokenLine, matrixBrackets, oldOccObj });
         if (fistWordUp === 'ELSE') return focElseCase({ AhkTokenLine, matrixBrackets, oldOccObj });
 
         // other key word
-        const tempLockList: number[] = [...lockDeepList];
-
-        const { deep2 } = AhkTokenLine;
-        tempLockList.push(deep2.at(-1) ?? 0);
-
         return {
-            lockDeepList: tempLockList,
+            lockDeepList: addLock({ oldOccObj, AhkTokenLine }),
             occ: occ + 1,
-            status: '',
+            status: `other key word+ "${fistWordUp}"`,
         };
     }
 
@@ -203,7 +225,7 @@ export function getDeepKeywords({
     if (nextLine === undefined) {
         return {
             lockDeepList: [],
-            occ,
+            occ: 0,
             status: 'end of file part2',
         };
     }
