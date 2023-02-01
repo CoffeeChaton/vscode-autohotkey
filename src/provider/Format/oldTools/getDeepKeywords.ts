@@ -66,55 +66,91 @@ function addLock({ lnStatus, AhkTokenLine }: {
     AhkTokenLine: TAhkTokenLine,
     lnStatus: TLnStatus,
 }): TLnStatus {
-    const lockOcc: number = lnStatus.occ;
+    const { occ, lockList } = lnStatus;
+    const lockOcc: number = occ;
     const lockDeep: number = AhkTokenLine.deep2.at(-1) ?? 0;
 
     return {
-        lockList: [...lnStatus.lockList, { lockOcc, lockDeep }],
-        occ: lnStatus.occ,
+        lockList: [...lockList, { lockOcc, lockDeep }],
+        occ,
         status: 'add lock',
     };
 }
 
-function focOccDiff({ oldOccObj, AhkTokenLine }: {
+function focOccDiff({ lnStatus: oldOccObj, AhkTokenLine }: {
     AhkTokenLine: TAhkTokenLine,
     matrixBrackets: readonly TBrackets[],
-    oldOccObj: TLnStatus,
+    lnStatus: TLnStatus,
 }): TLnStatus {
+    //    FIXME;
+    const { occ, lockList } = oldOccObj;
+
+    if (occ === 0) { // happy path
+        return {
+            lockList: [],
+            occ: 0,
+            status: 'occ -> 0 case1',
+        };
+    }
+
+    const tempLockList: TLockObj[] = [...lockList];
+
+    const lastLock: TLockObj | undefined = tempLockList.pop();
+    if (lastLock === undefined) {
+        return {
+            lockList: [],
+            occ: 0,
+            status: 'occ -> 0 case2',
+        };
+    }
+
+    const { line, deep2 } = AhkTokenLine;
+    const thisLineDeep = deep2.at(-1) ?? 0;
+    const { lockDeep, lockOcc } = lastLock;
+    if (thisLineDeep !== lockDeep) {
+        if (thisLineDeep > lockDeep) {
+            console.log('>');
+        }
+        if (thisLineDeep < lockDeep) {
+            console.log('<');
+
+            const newOcc = occ > 0
+                ? occ - 1
+                : 0;
+
+            return {
+                lockList: [...lockList],
+                occ: newOcc,
+                status: `occ- at deep < lockDeep -- ln ${line}`,
+            };
+        }
+        return {
+            lockList: [...lockList],
+            occ,
+            status: `occ-copy case--at deep <> lockDeep -- ln ${line}`,
+        };
+    }
+
+    let newOcc = occ - 1;
+    if (newOcc < lockOcc) {
+        newOcc = lockOcc;
+        tempLockList.push(lastLock);
+        return {
+            lockList: tempLockList,
+            occ: lockOcc,
+            status: `occ-- case--51-- ln ${line}`,
+        };
+    }
+
+    if (lockOcc !== 0) {
+        tempLockList.push(lastLock);
+    }
+
     return {
-        lockList: [],
-        occ: 0,
-        status: 'occ -> 0',
+        lockList: tempLockList,
+        occ: lockOcc,
+        status: `occ-- case--53-- ln ${line}`,
     };
-    // FIXME
-    // const { occ, lockDeepList } = oldOccObj;
-
-    // if (occ === 0 || lockDeepList.length === 0) { // happy path
-    //     return {
-    //         lockDeepList: [],
-    //         occ: 0,
-    //         status: 'occ -> 0',
-    //     };
-    // }
-
-    // const tempLockList: number[] = [...lockDeepList];
-
-    // const occDiff: number | undefined = tempLockList.pop();
-    // if (occDiff === undefined || occDiff === 0) {
-    //     return {
-    //         lockDeepList: [],
-    //         occ: 0,
-    //         status: 'occ -> 0',
-    //     };
-    // }
-
-    // const { line, deep2 } = AhkTokenLine;
-
-    // return {
-    //     lockDeepList: tempLockList,
-    //     occ: 0, // FIXME:
-    //     status: `occ-- at ln ${line}`,
-    // };
 }
 
 function forIfCase({ AhkTokenLine, matrixBrackets, lnStatus }: {
@@ -172,7 +208,7 @@ function focElseCase({ AhkTokenLine, matrixBrackets, lnStatus }: {
         if ((/^if(?:\s|\()/iu).test(afterElseStr)) {
             return forIfCase({ AhkTokenLine, matrixBrackets, lnStatus });
         }
-        return focOccDiff({ AhkTokenLine, matrixBrackets, oldOccObj: lnStatus });
+        return focOccDiff({ AhkTokenLine, matrixBrackets, lnStatus });
     }
 
     /**
@@ -202,7 +238,7 @@ export function getDeepKeywords({
     const { occ } = lnStatus;
 
     const { fistWordUp, line } = AhkTokenLine;
-    //  console.log(line, oldOccObj);
+
     if (focSet.has(fistWordUp)) {
         if (lStrTrim.endsWith('{')) return addLock({ lnStatus, AhkTokenLine }); // managed by curly braces
         const nextLine: TAhkTokenLine | undefined = DocStrMap.at(line + 1);
@@ -244,7 +280,7 @@ export function getDeepKeywords({
         return { ...lnStatus };
     }
 
-    return focOccDiff({ AhkTokenLine, matrixBrackets, oldOccObj: lnStatus });
+    return focOccDiff({ AhkTokenLine, matrixBrackets, lnStatus });
 }
 
 // FIXME fmt
