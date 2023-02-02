@@ -1,3 +1,7 @@
+; this is a fake ahk...
+; Randomly copied from some open code base, and randomly added code until it looks complicated enough
+; , as a test file under complex conditions.
+; if I have time, I will construct a test case that can run.
 Search0() ;-------------------------------------------------------------------------------------------------------------
 Search(node, find, return="") { ;---------------------------------------------------------------------------------------
     found := this.xml.SelectNodes(node "[contains(.,'" RegExReplace(find, "&", "')][contains(.,'") "')]") ;-------------
