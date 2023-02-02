@@ -122,7 +122,15 @@ export function ParserLine(FuncInput: TFuncInput): CAhkComment | TLineClass | nu
     const strTrim: string = lStr.trim();
     if (strTrim === '') return getComment(FuncInput);
 
-    // Not use this because ~F12:: c
+    /**
+     * Not use this because
+     * ```ahk
+     * #Warn, All, MsgBox;
+     * ~F12:: MsgBox, % "text"
+     * ;      ^^^^^^ fistWordUp .EQ. MsgBox
+     *
+     * ```
+     */
     // if (fistWordUp !== '' && fistWordUp !== 'DEFAULT') {
     //     return null;
     // }

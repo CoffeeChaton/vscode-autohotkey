@@ -107,3 +107,8 @@ Loop, Parse, clipboard, `n, `r
 
 Object
 <https://www.autohotkey.com/docs/v1/lib/RegExMatch.htm#MatchObject>
+
+<!-- - not add file Watcher!
+  >
+  > - The file watcher only real purpose is to watch for files that might change outside of VSCode.<https://github.com/Gruntfuggly/todo-tree/issues/636#issuecomment-1343341793>
+  > - Even M$, it took a lot of time to announce the use of<https://devblogs.microsoft.com/typescript/announcing-typescript-4-9-beta/#file-watching-changes> -->

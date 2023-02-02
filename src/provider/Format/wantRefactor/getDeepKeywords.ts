@@ -138,7 +138,7 @@ function focOccDiff({ lnStatus, AhkTokenLine }: {
         return {
             occ: newOcc,
             lockList: [...tempLockList],
-            status: `occ-copy case--141--at deep <> lockDeep -- ln ${line}`,
+            status: `occ-- case--141--at deep < lockDeep -- ln ${line}`,
         };
     }
     // if (thisLineDeep > lockDeep) {

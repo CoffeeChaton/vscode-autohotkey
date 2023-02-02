@@ -133,16 +133,16 @@ support to find like
 
    ![hover2](image/hover2.jpg)
 
-2. Add comment of function ?
+2. add comment of function
 
    ```ahk
    /**
-    * in /** block.
-    * and the line first character is '*' or ';'
-    * can use partial grammar of markdown.
-    * exp@email.com
-    * [Markdown Rule](https://en.wikipedia.org/wiki/Markdown)
-    * <https://en.wikipedia.org/wiki/Markdown>
+    * - in /** block.
+    * - and the line first character is '*' or ';'
+    * - can use partial grammar of markdown.
+    * - exp@email.com
+    * - [Markdown Rule](https://en.wikipedia.org/wiki/Markdown)
+    * - <https://en.wikipedia.org/wiki/Markdown>
     * ![Image](/D:/icon.png "icon")
     * ~~ABC~~
     * _ABC_ _ABC_
@@ -154,19 +154,24 @@ support to find like
    }
    ```
 
-3. add comment of line to
+3. add jsdoc-style comments of variable ![img](image/CHANGELOG/v0.0.21.png)
 
    ```ahk
-   fun(){
-
+   f2(){
        /**
-       * jsdoc-style
+       * - [markdowm-syntax](https://www.markdownguide.org/basic-syntax/)
+       * - list2
+       * - Love **is** bold
+       *
+       * style look like jsDoc
+       * and you need write before at var first-def line
        */
-       bb := 0 ;; cpp-style
+       style1 := 0
 
-       ; hover var-name and show doc
-       ; OK use `;;` to add cpp-style
-       ; TODO add jsdoc-style
+       MsgBox, % style1 ; try to hover of "style1"!
+
+       style2 := 1 ; i look like c++ doc style
+       MsgBox, % style2 ; try to hover of "style2"!
    }
    ```
 
@@ -186,11 +191,8 @@ support to find like
 
 1. Right click then click format document.
 2. or `alt` + `shift` + `f`
-3. add switch case format
-
-// TODO: write more doc
-
-- **beta test now.**
+3. format `switch case`
+4. [read more exp](src/provider/Format/exp)
 
 ## IntelliSense
 

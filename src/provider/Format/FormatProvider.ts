@@ -7,9 +7,9 @@ import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { EFormatChannel } from '../../globalEnum';
 import type { TBrackets } from '../../tools/Bracket';
-import type { TLnStatus } from './oldTools/getDeepKeywords';
-import { getDeepKeywords } from './oldTools/getDeepKeywords';
-import { getSwitchRange, inSwitchBlock } from './oldTools/SwitchCase';
+import type { TLnStatus } from './wantRefactor/getDeepKeywords';
+import { getDeepKeywords } from './wantRefactor/getDeepKeywords';
+import { getSwitchRange, inSwitchBlock } from './wantRefactor/SwitchCase';
 import type { TDiffMap } from './tools/fmtDiffInfo';
 import { fmtDiffInfo } from './tools/fmtDiffInfo';
 import { getMatrixFileBrackets } from './tools/getMatrixFileBrackets';
@@ -101,7 +101,7 @@ export function FormatCore(
             matrixBrackets,
             DocStrMap,
         });
-        memo.push({ ...lnStatus });
+        // memo.push({ ...lnStatus });
     }
 
     if (DiffMap.size > 0) {

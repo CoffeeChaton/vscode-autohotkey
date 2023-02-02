@@ -23,8 +23,6 @@ export function onDidChangeActiveTab(e: vscode.TextEditor | undefined): void {
 }
 
 function checkPmFileExist(): void {
-    // Where should I watch of a files exists?
-    // better model? https://devblogs.microsoft.com/typescript/announcing-typescript-4-9-beta/#file-watching-changes
     for (const [fsPath, { uri }] of pm.DocMap) {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
         if (!fs.existsSync(fsPath)) {

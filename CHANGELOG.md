@@ -16,14 +16,18 @@
       * style look like jsDoc
       * and you need write before at var first-def line
       */
-      c :=0
+      style1 := 0
 
-      MsgBox, % c
+      MsgBox, % style1 ; try to hover of "style1"!
+
+      style2 := 1 ; i look like c++ doc style
+      MsgBox, % style2 ; try to hover of "style2"!
   }
   ```
 
   </details>
 
+- feat: add format `ahk-obj not close` case
 - feat: add format config
 
   ```jsonc
@@ -34,10 +38,9 @@
   }
   ```
 
-- feat: add format `ahk-obj not close` case
+- feat: diagnosis `#Directives` Symbol provide clear information
 - fix: analyze `~F10:: hotKey` `::hk,,:: HotString` Symbol
-- fix: analyze `#Directives` Symbol
-- fix: big-change fix `getLStr()`
+- fix: `big-change` fix `getLStr()`
 - fix: class def-line comment syntax-highlight
 - fix: `#if` syntax-highlight and hover
 - TODO [v1.1.20+](https://www.autohotkey.com/docs/v1/misc/Labels.htm#Functions): Functions can be used in place of labels in a number of cases, including:
