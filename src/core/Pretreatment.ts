@@ -14,6 +14,7 @@ import { getFistWordUpData } from './getFistWordUpData';
 import { getSecondUp } from './getSecondUp';
 import { callDeep2 } from './ParserTools/calcDeep';
 import { ContinueLongLine } from './ParserTools/ContinueLongLine';
+import { getLStrHotStr } from './ParserTools/getLStrHotStr';
 
 /**
  * Avoid too many messages
@@ -270,6 +271,29 @@ export function Pretreatment(
                 SecondWordUpCol: -1,
                 SecondWordUp: '',
                 lStr: '',
+                deep2: [deep],
+                textRaw,
+                detail,
+                line,
+                cll: 0,
+                lineComment,
+                multiline,
+                multilineFlag: null,
+                displayErr,
+                displayFnErr,
+                ahkDoc,
+            });
+            continue;
+        }
+
+        if ((/^:[^:]*:[^:]+::/u).test(lStrTrim)) {
+            // monkey patch of hotStr
+            result.push({
+                fistWordUpCol: -1,
+                fistWordUp: '',
+                SecondWordUpCol: -1,
+                SecondWordUp: '',
+                lStr: getLStrHotStr(textRaw),
                 deep2: [deep],
                 textRaw,
                 detail,

@@ -39,6 +39,8 @@
   ```
 
 - feat: diagnosis `#Directives` Symbol provide clear information
+- fix: ahk-hot-string syntax-highlight
+  ![img](image/CHANGELOG/v0.0.21-2.png)
 - fix: analyze `~F10:: hotKey` `::hk,,:: HotString` Symbol
 - fix: `big-change` fix `getLStr()`
 - fix: class def-line comment syntax-highlight
