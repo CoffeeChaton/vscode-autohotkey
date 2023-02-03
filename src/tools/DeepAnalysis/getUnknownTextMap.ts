@@ -6,7 +6,7 @@ import type {
     TTextMapIn,
     TTextMetaIn,
     TValMapIn,
-    TValMetaIn,
+    TValMetaIn
 } from '../../AhkSymbol/CAhkFunc';
 import type { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
@@ -58,10 +58,11 @@ export function getUnknownTextMap(
             detail,
         } = AhkTokenLine;
 
-        if (!allowList[line]) continue; // in arg Range
         if (line > allowList.length) break;
 
-        if (detail.includes(EDetail.isHotStrLine)) continue;
+        if (!allowList[line] || detail.includes(EDetail.isHotStrLine) || detail.includes(EDetail.isLabelLine)) {
+            continue;
+        }
 
         for (const v of lStr.matchAll(/(?<![.#])\b(\w+)\b(?!\()/gu)) {
             const keyRawName: string = v[1];
