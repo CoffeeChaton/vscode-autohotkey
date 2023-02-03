@@ -35,6 +35,7 @@ const LineRuler = [
     },
     {
         // label:
+        // isLabelLine
         makeSymbol(obj: TBaseLineParam): CAhkLabel {
             return new CAhkLabel(obj);
         },

@@ -98,7 +98,7 @@ export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
 
     const GValMap: TGValMap = ahkGlobalMain(DocStrMap);
     const AST: TAstRoot = getChildren<CTopClass>(
-        [getClass, getFunc, ParserBlock.getSwitchBlock, ParserLine],
+        [getClass, getFunc, ParserBlock.getSwitchBlock, ParserLine], // FIXME: spilt ParserLine
         {
             DocStrMap,
             RangeStartLine: 0,

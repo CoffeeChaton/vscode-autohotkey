@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /* eslint-disable max-lines-per-function */
 import * as path from 'node:path';
 import * as vscode from 'vscode';
@@ -287,7 +288,7 @@ export function Pretreatment(
         }
 
         if ((/^:[^:]*:[^:]+::/u).test(lStrTrim)) {
-            // monkey patch of hotStr
+            // of hotStr
             result.push({
                 ahkDoc,
                 cll: 0,
@@ -300,6 +301,29 @@ export function Pretreatment(
                 line,
                 lineComment,
                 lStr: getLStrHotStr(textRaw),
+                multiline,
+                multilineFlag: null,
+                SecondWordUp: '',
+                SecondWordUpCol: -1,
+                textRaw,
+            });
+            continue;
+        }
+
+        if ((/^\w+:$/u).test(lStrTrim)) {
+            // of hotKey
+            result.push({
+                ahkDoc,
+                cll: 0,
+                deep2: [deep],
+                detail: [...detail, EDetail.isLabelLine],
+                displayErr,
+                displayFnErr,
+                fistWordUp: '',
+                fistWordUpCol: -1,
+                line,
+                lineComment,
+                lStr,
                 multiline,
                 multilineFlag: null,
                 SecondWordUp: '',
