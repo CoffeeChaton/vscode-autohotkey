@@ -14,6 +14,7 @@ import type {
 import type { TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
 import type { TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
+import { EDetail } from '../../globalEnum';
 import { getFileAllClass } from '../visitor/getFileAllClassList';
 import { getFileAllFunc } from '../visitor/getFileAllFuncList';
 import { newC502 } from './FnVar/def/c502';
@@ -46,7 +47,11 @@ function getModuleAllowList(DocStrMap: TTokenStream, Ast: TAstRoot): readonly bo
     allowList.fill(true);
 
     // wtf style..
-    for (const { line } of DocStrMap) {
+    for (const { line, detail } of DocStrMap) {
+        if (detail.includes(EDetail.isHotStrLine)) {
+            allowList[line] = false;
+            continue;
+        }
         if (line < rangeList[i].start.line) {
             // none   allowList[line] = true;
         } else if (line >= rangeList[i].start.line && line <= rangeList[i].end.line) {

@@ -12,11 +12,11 @@ export function getLStrHotStr(textRaw: string): string {
         const s: string = textRaw[i];
         if (
             s === ';' // check "\s;"
-            && (/[ \t]$/u).test(str)
+            && (textRaw[i - 1] === ' ' || textRaw[i - 1] === '\t')
         ) {
             return str;
         }
-        str += s;
+        str += '^';
     }
     return str;
 }

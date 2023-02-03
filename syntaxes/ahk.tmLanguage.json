@@ -327,7 +327,7 @@
             "name": "string.hotstring.ahk",
             "begin": "^[ \\t]*(:([^:]*?):([^:]+)::)",
             "beginCaptures": {
-                "1": { "name": "meta.embedded.ahk" },
+                "1": { "name": "keyword.operator.ahk" },
                 "2": { "name": "entity.name.function.hotstring.flag.ahk" },
                 "3": { "name": "entity.name.function.hotstring.trigger.ahk" }
             },

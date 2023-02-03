@@ -143,22 +143,22 @@ export function Pretreatment(
             CommentBlock = inCommentBlock(textTrimStart, CommentBlock);
             if (CommentBlock) {
                 result.push({
-                    fistWordUpCol: -1,
-                    fistWordUp: '',
-                    SecondWordUpCol: -1,
-                    SecondWordUp: '',
-                    lStr: '',
-                    deep2: [deep],
-                    textRaw,
-                    detail: [EDetail.inComment],
-                    line,
+                    ahkDoc,
                     cll: 1,
-                    lineComment: '',
-                    multiline,
-                    multilineFlag: null,
+                    deep2: [deep],
+                    detail: [EDetail.inComment],
                     displayErr,
                     displayFnErr,
-                    ahkDoc,
+                    fistWordUp: '',
+                    fistWordUpCol: -1,
+                    line,
+                    lineComment: '',
+                    lStr: '',
+                    multiline,
+                    multilineFlag: null,
+                    SecondWordUp: '',
+                    SecondWordUpCol: -1,
+                    textRaw,
                 });
                 continue;
             }
@@ -174,48 +174,48 @@ export function Pretreatment(
         });
         if (multiline === EMultiline.start || multiline === EMultiline.mid) {
             result.push({
-                fistWordUpCol: -1,
+                ahkDoc,
+                cll: 1,
+                deep2: [deep],
+                detail: [],
+                displayErr,
+                displayFnErr,
                 fistWordUp: '',
-                SecondWordUpCol: -1,
-                SecondWordUp: '',
+                fistWordUpCol: -1,
+                line,
+                lineComment: '',
                 lStr: multiline === EMultiline.mid
                     ? getMultilineLStr({ multilineFlag, textRaw })
                     : '',
-                deep2: [deep],
-                textRaw,
-                detail: [],
-                line,
-                cll: 1,
-                lineComment: '',
                 multiline,
                 multilineFlag,
-                displayErr,
-                displayFnErr,
-                ahkDoc,
+                SecondWordUp: '',
+                SecondWordUpCol: -1,
+                textRaw,
             });
             continue;
         }
 
         if (textTrimStart.startsWith(';')) {
             result.push({
-                fistWordUpCol: -1,
-                fistWordUp: '',
-                SecondWordUpCol: -1,
-                SecondWordUp: '',
-                lStr: '',
+                ahkDoc,
+                cll: 1,
                 deep2: [deep],
-                textRaw,
                 detail: textTrimStart.startsWith(';;')
                     ? [EDetail.inComment, EDetail.hasDoubleSemicolon]
                     : [EDetail.inComment],
-                line,
-                cll: 1,
-                lineComment: textTrimStart.replace(/^;\s*/u, ''),
-                multiline,
-                multilineFlag: null,
                 displayErr,
                 displayFnErr,
-                ahkDoc,
+                fistWordUp: '',
+                fistWordUpCol: -1,
+                line,
+                lineComment: textTrimStart.replace(/^;\s*/u, ''),
+                lStr: '',
+                multiline,
+                multilineFlag: null,
+                SecondWordUp: '',
+                SecondWordUpCol: -1,
+                textRaw,
             });
 
             continue;
@@ -223,22 +223,22 @@ export function Pretreatment(
 
         if (isSetVarTradition(textTrimStart)) {
             result.push({
-                fistWordUpCol: -1,
-                fistWordUp: '',
-                SecondWordUpCol: -1,
-                SecondWordUp: '',
-                lStr: SetVarTradition(textRaw),
-                deep2: [deep],
-                textRaw,
-                detail: [EDetail.inSkipSign2],
-                line,
+                ahkDoc,
                 cll: 0,
-                lineComment: '',
-                multiline,
-                multilineFlag: null,
+                deep2: [deep],
+                detail: [EDetail.inSkipSign2],
                 displayErr,
                 displayFnErr,
-                ahkDoc,
+                fistWordUp: '',
+                fistWordUpCol: -1,
+                line,
+                lineComment: '',
+                lStr: SetVarTradition(textRaw),
+                multiline,
+                multilineFlag: null,
+                SecondWordUp: '',
+                SecondWordUpCol: -1,
+                textRaw,
             });
             continue;
         }
@@ -266,22 +266,22 @@ export function Pretreatment(
 
         if (lStrTrim === '') {
             result.push({
-                fistWordUpCol: -1,
-                fistWordUp: '',
-                SecondWordUpCol: -1,
-                SecondWordUp: '',
-                lStr: '',
-                deep2: [deep],
-                textRaw,
-                detail,
-                line,
+                ahkDoc,
                 cll: 0,
-                lineComment,
-                multiline,
-                multilineFlag: null,
+                deep2: [deep],
+                detail,
                 displayErr,
                 displayFnErr,
-                ahkDoc,
+                fistWordUp: '',
+                fistWordUpCol: -1,
+                line,
+                lineComment,
+                lStr: '',
+                multiline,
+                multilineFlag: null,
+                SecondWordUp: '',
+                SecondWordUpCol: -1,
+                textRaw,
             });
             continue;
         }
@@ -289,22 +289,22 @@ export function Pretreatment(
         if ((/^:[^:]*:[^:]+::/u).test(lStrTrim)) {
             // monkey patch of hotStr
             result.push({
-                fistWordUpCol: -1,
-                fistWordUp: '',
-                SecondWordUpCol: -1,
-                SecondWordUp: '',
-                lStr: getLStrHotStr(textRaw),
-                deep2: [deep],
-                textRaw,
-                detail,
-                line,
+                ahkDoc,
                 cll: 0,
-                lineComment,
-                multiline,
-                multilineFlag: null,
+                deep2: [deep],
+                detail: [...detail, EDetail.isHotStrLine],
                 displayErr,
                 displayFnErr,
-                ahkDoc,
+                fistWordUp: '',
+                fistWordUpCol: -1,
+                line,
+                lineComment,
+                lStr: getLStrHotStr(textRaw),
+                multiline,
+                multilineFlag: null,
+                SecondWordUp: '',
+                SecondWordUpCol: -1,
+                textRaw,
             });
             continue;
         }
@@ -376,22 +376,22 @@ export function Pretreatment(
         const { SecondWordUpCol, SecondWordUp } = getSecondUp(lStr, fistWordUp, fistWordUpCol);
 
         result.push({
-            fistWordUpCol,
-            fistWordUp,
-            SecondWordUpCol,
-            SecondWordUp,
-            lStr,
-            deep2,
-            textRaw,
-            detail,
-            line,
+            ahkDoc,
             cll,
-            lineComment,
-            multiline,
-            multilineFlag: null,
+            deep2,
+            detail,
             displayErr,
             displayFnErr,
-            ahkDoc,
+            fistWordUp,
+            fistWordUpCol,
+            line,
+            lineComment,
+            lStr,
+            multiline,
+            multilineFlag: null,
+            SecondWordUp,
+            SecondWordUpCol,
+            textRaw,
         });
     }
 

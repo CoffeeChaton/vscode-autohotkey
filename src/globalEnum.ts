@@ -26,6 +26,7 @@ export const enum EDetail {
     deepAdd = 5,
     deepSubtract = 6,
     hasDoubleSemicolon = 8,
+    isHotStrLine = 9,
 }
 
 /**

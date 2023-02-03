@@ -10,6 +10,7 @@ import type {
 } from '../../AhkSymbol/CAhkFunc';
 import type { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
+import { EDetail } from '../../globalEnum';
 import { AVariablesMDMap } from '../Built-in/A_Variables.tools';
 import { Bi_VarMDMap } from '../Built-in/BiVariables.tools';
 import { CommandMDMap } from '../Built-in/Command.tools';
@@ -54,10 +55,13 @@ export function getUnknownTextMap(
             line,
             fistWordUpCol,
             SecondWordUpCol,
+            detail,
         } = AhkTokenLine;
 
         if (!allowList[line]) continue; // in arg Range
         if (line > allowList.length) break;
+
+        if (detail.includes(EDetail.isHotStrLine)) continue;
 
         for (const v of lStr.matchAll(/(?<![.#])\b(\w+)\b(?!\()/gu)) {
             const keyRawName: string = v[1];
