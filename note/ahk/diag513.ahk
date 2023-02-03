@@ -5,7 +5,7 @@
 /**
 * avoid unexpected
 */
-fn_exp1(){
+fn_exp1() {
     SetTimer,doSomething, -100
     ; The label has a higher calling order
     ; If the label has the same name, and the label is very far away,
@@ -21,7 +21,7 @@ fn_exp1(){
     ;so I provide this diagnostic rule here
 }
 
-doSomething(){
+doSomething() {
     MsgBox, %  "i am function"
 }
 

@@ -8,7 +8,7 @@ Class Class_Report_fn_ref
         ; nothing
     }
 
-    Ref0() {        
+    Ref0() {
         MsgBox, 
             ( LTrim
                 never user`n

@@ -30,7 +30,7 @@ fn_exp2() {
 /**
 * switch back from another language
 */
-fn_exp3(fn) { 
+fn_exp3(fn) {
     ; ahk-v1 not support "higher order function"
     fn() ; this line is not a function name passed with param.
     ; if you need "higher order function" suggest to switch to ahk-v2, ahk-v2 is release.
@@ -48,6 +48,6 @@ fn_funcObjectExp(param1, param2) {
 */
 
 ;#Include very very mony function .... or distance 1000+ lines
-fn(){
+fn() {
     MsgBox, % "my name is fn()"
 }
