@@ -7,15 +7,15 @@ import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { EFormatChannel } from '../../globalEnum';
 import type { TBrackets } from '../../tools/Bracket';
-import type { TLnStatus } from './wantRefactor/getDeepKeywords';
-import { getDeepKeywords } from './wantRefactor/getDeepKeywords';
-import { getSwitchRange, inSwitchBlock } from './wantRefactor/SwitchCase';
 import type { TDiffMap } from './tools/fmtDiffInfo';
 import { fmtDiffInfo } from './tools/fmtDiffInfo';
 import { getMatrixFileBrackets } from './tools/getMatrixFileBrackets';
 import { getMatrixMultLine } from './tools/getMatrixMultLine';
 import { getMatrixTopLabe } from './tools/getMatrixTopLabe';
 import { fn_Warn_thisLineText_WARN } from './TWarnUse';
+import type { TLnStatus } from './wantRefactor/getDeepKeywords';
+import { getDeepKeywords } from './wantRefactor/getDeepKeywords';
+import { getSwitchRange, inSwitchBlock } from './wantRefactor/SwitchCase';
 
 type TFmtCoreArgs = {
     /**

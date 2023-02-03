@@ -1,5 +1,5 @@
 {
-    "fileTypes": [ "ahk" ],
+    "fileTypes": ["ahk"],
     "name": "AutoHotkey",
     "patterns": [
         { "include": "#escaped_char" },
@@ -43,7 +43,7 @@
                 "3": { "name": "storage.modifier.type.class.extends.ahk" },
                 "4": { "name": "entity.name.type.class.ahk" }
             },
-            "patterns": [ { "include": "#comment" } ]
+            "patterns": [{ "include": "#comment" }]
         },
         "command": {
             "patterns": [
@@ -229,7 +229,7 @@
                 },
                 {
                     "captures": { "1": { "name": "keyword.control.directives._if.ahk" } },
-                    "patterns": [ { "include": "#expression" } ],
+                    "patterns": [{ "include": "#expression" }],
                     "match": "^[ \\t]*(?i:(#if))[ \\t]+",
                     "name": "meta._if.keyword.control.directives.ahk"
                 },
@@ -327,12 +327,12 @@
             "name": "string.hotstring.ahk",
             "begin": "^[ \\t]*(:([^:]*?):([^:]+)::)",
             "beginCaptures": {
-                "1": { "name": "meta.embedded" },
+                "1": { "name": "meta.embedded.ahk" },
                 "2": { "name": "entity.name.function.hotstring.flag.ahk" },
                 "3": { "name": "entity.name.function.hotstring.trigger.ahk" }
             },
             "end": "\\n",
-            "patterns": [ { "include": "#comment" } ]
+            "patterns": [{ "include": "#comment" }]
         },
         "keyword_mouse_keyboard": {
             "match": "\\b(?!MsgBox)(?<![.#])(?i:LButton|MButton|RButton|WheelDown|WheelLeft|WheelRight|WheelUp|XButton1|XButton2|CapsLock|Space|Tab|Enter|Escape|Esc|BackSpace|BS|ScrollLock|Delete|Del|Insert|Ins|Home|End|PgUp|PgDn|Up|Down|Left|Right|LWin|RWin|Control|LControl|RControl|Ctrl|LCtrl|RCtrl|Alt|LAlt|RAlt|AltDown|AltUp|Shift|LShift|RShift|ShiftDown|ShiftUp|CtrlDown|CtrlUp|LWinDown|LWinUp|RWinDown|RWinUp|Browser_Back|Browser_Forward|Browser_Refresh|Browser_Stop|Browser_Search|Browser_Favorites|Browser_Home|Volume_Mute|Volume_Down|Volume_Up|Media_Next|Media_Prev|Media_Stop|Media_Play_Pause|Launch_Mail|Launch_Media|Launch_App1|Launch_App2|AppsKey|PrintScreen|CtrlBreak|Pause|Help|Sleep|NumLock|Numpad0|Numpad1|Numpad2|Numpad3|Numpad4|Numpad5|Numpad6|Numpad7|Numpad8|Numpad9|NumpadMult|NumpadAdd|NumpadSub|NumpadDiv|NumpadDot|NumpadDel|NumpadIns|NumpadUp|NumpadDown|NumpadLeft|NumpadRight|NumpadHome|NumpadEnd|NumpadPgUp|NumpadPgDn|NumpadEnter|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|f13|f14|f15|f16|f17|f18|f19|f20|f21|f22|f23|f24|Browser_Back|Browser_Forward|Browser_Refresh|Browser_Stop|Browser_Search|Browser_Favorites|Browser_Home|Volume_Mute|Volume_Down|Volume_Up|Media_Next|Media_Prev|Media_Stop|Media_Play_Pause|Launch_Mail|Launch_Media|Launch_App1|Launch_App2|JoyX|JoyY|JoyZ|JoyR|JoyU|JoyV|JoyPOV|JoyName|JoyButtons|JoyAxes|JoyInfo|Joy1|Joy2|Joy3|Joy4|Joy5|Joy6|Joy7|Joy8|Joy9|Joy10|Joy11|Joy12|Joy13|Joy14|Joy15|Joy16|Joy17|Joy18|Joy19|Joy20|Joy21|Joy22|Joy23|Joy24|Joy25|Joy26|Joy27|Joy28|Joy29|Joy30|Joy31|Joy32)\\b(?!\\()",
@@ -459,7 +459,7 @@
             },
             "end": "^[ \\t]*\\)(?:\")?",
             "name": "string.multiline.ahk",
-            "patterns": [ { "include": "#escaped_char" } ]
+            "patterns": [{ "include": "#escaped_char" }]
         }
     },
     "scopeName": "source.ahk"
