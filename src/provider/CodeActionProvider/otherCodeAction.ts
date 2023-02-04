@@ -67,12 +67,17 @@ function posAtFnReference(
     active: vscode.Position,
     wordUp: string,
 ): never[] | [vscode.CodeAction] {
-    const funcSymbol: CAhkFunc | null = getFuncWithName(wordUp);
-    if (funcSymbol === null) return [];
-
     const AhkTokenLine: TAhkTokenLine = AhkFileData.DocStrMap[active.line];
 
-    if (!posAtFnRef({ AhkTokenLine, position: active, wordUp })) {
+    // dprint-ignore
+    const wordUpFix: string = (/^g\w+$/iu).test(wordUp) && (AhkTokenLine.fistWordUp === 'GUI' || AhkTokenLine.SecondWordUp === 'GUI')
+        ? wordUp.replace(/^g/iu, '')
+        : wordUp;
+
+    const funcSymbol: CAhkFunc | null = getFuncWithName(wordUpFix);
+    if (funcSymbol === null) return [];
+
+    if (!posAtFnRef({ AhkTokenLine, position: active, wordUpFix })) {
         return [];
     }
     //

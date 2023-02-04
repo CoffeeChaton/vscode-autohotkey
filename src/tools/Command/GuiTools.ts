@@ -16,8 +16,6 @@ function getMenuFuncData(lStr: string, col: number): TScanData[] | null {
     if (arr.length < 3) return null;
 
     const a1: TScanData = arr[1];
-    console.log({ arr, a2: a1 });
-
     if ((/^add$/iu).test(a1.RawNameNew)) {
         // a0    a1   a2    a3
         // Gui, Add, Text, cBlue gLaunchGoogle, Click here to launch Google.

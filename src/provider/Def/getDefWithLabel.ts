@@ -85,7 +85,7 @@ function getDefWithLabelCore(wordUpCase: string): vscode.Location[] | null {
 }
 
 /**
- * i will not support this case...
+ * //TODO goto label
  *
  * ```ahk
  * GroupAdd, GroupName , WinTitle, WinText, Label, ExcludeTitle, ExcludeText
