@@ -4,6 +4,7 @@ import type { CAhkLabel } from '../../AhkSymbol/CAhkLine';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
+import { getGuiFunc } from '../../tools/Command/GuiTools';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
 import { getMenuFunc } from '../../tools/Command/MenuTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
@@ -24,6 +25,24 @@ function LabelRefHotkey(AhkTokenLine: TAhkTokenLine, wordUp: string): vscode.Ran
     );
 }
 
+function LabelRefGui(AhkTokenLine: TAhkTokenLine, wordUp: string): vscode.Range | null {
+    if (!wordUp.startsWith('G')) return null;
+    const GuiDataList: TScanData[] | null = getGuiFunc(AhkTokenLine);
+    if (GuiDataList !== null) {
+        const wordUpCaseFix = wordUp.replace(/^g/iu, '');
+        for (const { RawNameNew, lPos } of GuiDataList) {
+            if (RawNameNew.toUpperCase() === wordUpCaseFix) {
+                const { line } = AhkTokenLine;
+                return new vscode.Range(
+                    new vscode.Position(line, lPos),
+                    new vscode.Position(line, lPos + RawNameNew.length),
+                );
+            }
+        }
+    }
+    return null;
+}
+
 function getLabelRef(wordUp: string): vscode.Location[] {
     // TODO for performance use keyword match replace regex!
     // eslint-disable-next-line security/detect-non-literal-regexp
@@ -35,6 +54,12 @@ function getLabelRef(wordUp: string): vscode.Location[] {
             const range: vscode.Range | null = LabelRefHotkey(AhkTokenLine, wordUp);
             if (range !== null) {
                 List.push(new vscode.Location(uri, range));
+                continue;
+            }
+
+            const range2: vscode.Range | null = LabelRefGui(AhkTokenLine, wordUp);
+            if (range2 !== null) {
+                List.push(new vscode.Location(uri, range2));
                 continue;
             }
 
@@ -119,6 +144,16 @@ export function getDefWithLabel(
 
     const MenuData: TScanData | null = getMenuFunc(AhkTokenLine);
     if (MenuData?.RawNameNew.toUpperCase() === wordUpCase) return getDefWithLabelCore(wordUpCase);
+
+    const GuiDataList: TScanData[] | null = getGuiFunc(AhkTokenLine);
+    if (GuiDataList !== null) {
+        const wordUpCaseFix: string = wordUpCase.replace(/^g/iu, '');
+        for (const { RawNameNew } of GuiDataList) {
+            if (RawNameNew.toUpperCase() === wordUpCaseFix) {
+                return getDefWithLabelCore(wordUpCaseFix);
+            }
+        }
+    }
 
     const ma: RegExpMatchArray | null = lStrFix.match(/\b(SetTimer[\s,%]+)\w*$/iu);
     if (ma !== null) {
