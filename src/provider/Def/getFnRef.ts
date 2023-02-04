@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,6] }] */
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TAhkFileData } from '../../core/ProjectManager';
@@ -10,20 +11,24 @@ import { getMenuFunc } from '../../tools/Command/MenuTools';
 import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
+import { findLabel } from '../../tools/labels';
 
 type TLineFnCall = {
     upName: string,
     line: number,
     col: number,
+
+    /**
+     * 1. by funcName(
+     * 2. by "funcName"
+     * 3. by SetTimer
+     * 4. by Hotkey
+     * 5. by Menu
+     * 6. by Gui
+     */
+    by: 1 | 2 | 3 | 4 | 5 | 6,
 };
 
-// /**
-//  * 1.lStr    exp funcName(
-//  * 2. textRaw exp "funcName"
-//  * 3. by Hotkey
-//  * 4. by SetTimer
-//  * by: 1 | 2 | 3 | 4
-//  */
 type TFuncRef = Omit<TLineFnCall, 'upName'>;
 
 export function fnRefLStr(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
@@ -40,6 +45,7 @@ export function fnRefLStr(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
             upName,
             line,
             col,
+            by: 1,
         });
     }
     // don't search of
@@ -70,6 +76,7 @@ export function fnRefTextRaw(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
             upName,
             line,
             col,
+            by: 2,
         });
     }
     // don't search of
@@ -94,13 +101,14 @@ const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[]>>(
             if (filterLineList.includes(line)) continue;
 
             for (
-                const { upName, col } of [...fnRefLStr(AhkTokenLine), ...fnRefTextRaw(AhkTokenLine)]
+                const { upName, col, by } of [...fnRefLStr(AhkTokenLine), ...fnRefTextRaw(AhkTokenLine)]
                     .sort((a: TLineFnCall, b: TLineFnCall): number => a.col - b.col)
             ) {
                 const arr: TFuncRef[] = map.get(upName) ?? [];
                 arr.push({
                     line,
                     col,
+                    by,
                 });
                 map.set(upName, arr);
             }
@@ -111,9 +119,17 @@ const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[]>>(
                     const { RawNameNew, lPos } = Data;
                     const upName: string = RawNameNew.toUpperCase();
                     const arr: TFuncRef[] = map.get(upName) ?? [];
+                    // eslint-disable-next-line no-nested-ternary
+                    const by: 3 | 4 | 5 = fn === getSetTimerWrap
+                        ? 3
+                        : (fn === getHotkeyWrap
+                            ? 4
+                            : 5);
+
                     arr.push({
                         line,
                         col: lPos,
+                        by,
                     });
                     map.set(upName, arr);
                     break; // <-- only exists in one of the [getHotkeyWrap, getSetTimerWrap]
@@ -127,6 +143,7 @@ const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[]>>(
                     arr.push({
                         line,
                         col: lPos,
+                        by: 6,
                     });
                     map.set(upName, arr);
                 }
@@ -141,6 +158,7 @@ export type TFnRefLike = {
     uri: vscode.Uri,
     line: number,
     col: number,
+    by: TFuncRef['by'],
 };
 
 type TMap = Map<string, readonly TFnRefLike[]>;
@@ -162,7 +180,12 @@ export function getFuncRef(funcSymbol: CAhkFunc): readonly TFnRefLike[] {
         // set fileMap
         const { uri } = AhkFileData;
         const list: readonly TFnRefLike[] = (fileFuncRef.up(AhkFileData).get(upName) ?? [])
-            .map(({ line, col }: TFuncRef): TFnRefLike => ({ uri, line, col }));
+            .map(({ line, col, by }: TFuncRef): TFnRefLike => ({
+                uri,
+                line,
+                col,
+                by,
+            }));
 
         allList.push(...list);
 
@@ -170,13 +193,25 @@ export function getFuncRef(funcSymbol: CAhkFunc): readonly TFnRefLike[] {
         wm.set(AhkFileData, fileMap);
     }
     // log.info(`find Ref of ${funcSymbol.name}() , use ${Date.now() - timeStart} ms`);
-    return allList;
+
+    const hasSameLabel: boolean = findLabel(upName) !== null;
+
+    const allowList: TFnRefLike[] = [];
+    for (const re of allList) {
+        if (hasSameLabel && re.by > 2) {
+            continue;
+        }
+        allowList.push(re);
+    }
+    return allowList;
 }
 
 export function RefLike2Location(funcSymbol: CAhkFunc): vscode.Location[] {
     const refLikeList: readonly TFnRefLike[] = getFuncRef(funcSymbol);
 
-    const wordUpLen: number = funcSymbol.upName.length;
+    const { upName } = funcSymbol;
+
+    const wordUpLen: number = upName.length;
     const arr1: vscode.Location[] = [];
     for (const re of refLikeList) {
         const { uri, line, col } = re;

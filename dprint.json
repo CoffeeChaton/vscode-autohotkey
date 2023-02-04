@@ -1,11 +1,9 @@
 {
     "excludes": [
-        "**/*-lock.json",
-        "**/coverage",
         "**/dist",
         "**/node_modules",
-        "**/out",
-        "**/.vscode-test"
+        "**/.vscode-test",
+        "**/ahk.tmLanguage.json"
     ],
     "includes": [
         "**/*.{ts,tsx,js,jsx,cjs,mjs,json,md,toml}"
