@@ -15,7 +15,6 @@ function getMenuFuncData(lStr: string, col: number): TScanData | null {
     const a2: TScanData | undefined = arr.at(2);
 
     if (a2 === undefined) return null;
-    console.log(arr);
 
     if ((/^add$/iu).test(a2.RawNameNew)) {
         // Menu, MenuName, Add , MenuItemName, LabelOrSubmenu, Options

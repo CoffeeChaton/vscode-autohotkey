@@ -1,5 +1,6 @@
 import type * as vscode from 'vscode';
 import type { TAhkTokenLine } from '../../globalEnum';
+import { getGuiFunc } from '../../tools/Command/GuiTools';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
 import { getMenuFunc } from '../../tools/Command/MenuTools';
 import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
@@ -25,17 +26,17 @@ export function posAtFnRef(
     {
         AhkTokenLine,
         position,
-        wordUp,
+        wordUpFix,
     }: {
         AhkTokenLine: TAhkTokenLine,
         position: vscode.Position,
-        wordUp: string,
+        wordUpFix: string,
     },
 ): boolean {
     const { character } = position;
-    const len: number = wordUp.length;
+    const len: number = wordUpFix.length;
     for (const { upName, col } of [...fnRefLStr(AhkTokenLine), ...fnRefTextRaw(AhkTokenLine)]) {
-        if (upName === wordUp && (character >= col || character <= col + len)) return true;
+        if (upName === wordUpFix && (character >= col || character <= col + len)) return true;
     }
 
     const setTimerData: TScanData | null = getSetTimerWrap(AhkTokenLine);
@@ -47,6 +48,9 @@ export function posAtFnRef(
     const MenuData: TScanData | null = getMenuFunc(AhkTokenLine);
     if (MenuData !== null) return true;
 
+    const GuiData: TScanData[] | null = getGuiFunc(AhkTokenLine);
+    if (GuiData !== null && GuiData.length > 0) return true;
+
     // not ref... but allow goto-def
     // expansion--start
     for (const ma of AhkTokenLine.textRaw.matchAll(/(?<![.`%#])\b(\w+)\(/giu)) {
@@ -54,7 +58,7 @@ export function posAtFnRef(
         if (col === undefined) continue;
 
         const upName: string = ma[1].toUpperCase();
-        if (upName === wordUp && (character >= col || character <= col + len)) return true;
+        if (upName === wordUpFix && (character >= col || character <= col + len)) return true;
     }
     // expansion--end
 

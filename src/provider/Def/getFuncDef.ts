@@ -18,16 +18,20 @@ export function getFuncDef(
 
     if (isPosAtMethodName(getDAWithPos(AST, position), position)) return null;
 
-    const funcSymbol: CAhkFunc | null = getFuncWithName(wordUp);
-    if (funcSymbol === null) return null;
-
     const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
+
+    // dprint-ignore
+    const wordUpFix: string = (/^g\w+$/iu).test(wordUp) && (AhkTokenLine.fistWordUp === 'GUI' || AhkTokenLine.SecondWordUp === 'GUI')
+        ? wordUp.replace(/^g/iu, '')
+        : wordUp;
+    const funcSymbol: CAhkFunc | null = getFuncWithName(wordUpFix);
+    if (funcSymbol === null) return null;
 
     if (
         !posAtFnRef({
             AhkTokenLine,
             position,
-            wordUp,
+            wordUpFix,
         })
     ) {
         // c := c();

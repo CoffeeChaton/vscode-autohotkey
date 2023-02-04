@@ -4,6 +4,7 @@ import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
 import { CMemo } from '../../tools/CMemo';
+import { getGuiFunc } from '../../tools/Command/GuiTools';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
 import { getMenuFunc } from '../../tools/Command/MenuTools';
 import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
@@ -116,6 +117,18 @@ const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[]>>(
                     });
                     map.set(upName, arr);
                     break; // <-- only exists in one of the [getHotkeyWrap, getSetTimerWrap]
+                }
+            }
+            const guiFnList: TScanData[] | null = getGuiFunc(AhkTokenLine);
+            if (guiFnList !== null) {
+                for (const { RawNameNew, lPos } of guiFnList) {
+                    const upName: string = RawNameNew.toUpperCase();
+                    const arr: TFuncRef[] = map.get(upName) ?? [];
+                    arr.push({
+                        line,
+                        col: lPos,
+                    });
+                    map.set(upName, arr);
                 }
             }
         }

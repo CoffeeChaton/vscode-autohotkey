@@ -1,10 +1,33 @@
 import * as vscode from 'vscode';
 import type { TAhkTokenLine, TTokenStream } from '../../globalEnum';
+import { getGuiFunc } from '../../tools/Command/GuiTools';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
 import { getMenuFunc } from '../../tools/Command/MenuTools';
 import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import type { TSemanticTokensLeaf } from './tools';
+
+function GuiFuncHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]): 0 | 1 {
+    // Menu, MenuName, Add , MenuItemName, LabelOrSubmenu, Options
+    // Menu, MenuName, Insert , MenuItemName, ItemToInsert, LabelOrSubmenu, Options
+    const GuiDataList: TScanData[] | null = getGuiFunc(AhkTokenLine);
+    if (GuiDataList === null || GuiDataList.length === 0) return 0;
+
+    const { line } = AhkTokenLine;
+
+    for (const { RawNameNew, lPos } of GuiDataList) {
+        Tokens.push({
+            range: new vscode.Range(
+                new vscode.Position(line, lPos),
+                new vscode.Position(line, lPos + RawNameNew.length),
+            ),
+            tokenType: 'function',
+            tokenModifiers: [],
+        });
+    }
+
+    return 1;
+}
 
 function MenuHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]): 0 | 1 {
     // Menu, MenuName, Add , MenuItemName, LabelOrSubmenu, Options
@@ -72,18 +95,11 @@ function HotkeyHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLea
     return 1;
 }
 
-// TODO support Menu
-// Menu, MenuName, Add , MenuItemName,        LabelOrSubmenu, Options
-// Menu, Tray,     add, Force Update Scripts, UpdateScripts,
-//                                             ^
-// Menu, MenuName, Insert , MenuItemName, ItemToInsert, LabelOrSubmenu, Options
-//                                                            ^
-
 export function funcHighlight(DocStrMap: TTokenStream): TSemanticTokensLeaf[] {
     const Tokens: TSemanticTokensLeaf[] = [];
 
     type TFn = (AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]) => 0 | 1;
-    const fnList: TFn[] = [SetTimerHighlight, HotkeyHighlight, MenuHighlight];
+    const fnList: TFn[] = [SetTimerHighlight, HotkeyHighlight, MenuHighlight, GuiFuncHighlight];
 
     for (const AhkTokenLine of DocStrMap) {
         for (const fn of fnList) {
