@@ -5,6 +5,7 @@ import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
+import { getMenuFunc } from '../../tools/Command/MenuTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { findLabel } from '../../tools/labels';
@@ -115,6 +116,9 @@ export function getDefWithLabel(
 
     const HotkeyData: TScanData | null = getHotkeyWrap(AhkTokenLine);
     if (HotkeyData?.RawNameNew.toUpperCase() === wordUpCase) return getDefWithLabelCore(wordUpCase);
+
+    const MenuData: TScanData | null = getMenuFunc(AhkTokenLine);
+    if (MenuData?.RawNameNew.toUpperCase() === wordUpCase) return getDefWithLabelCore(wordUpCase);
 
     const ma: RegExpMatchArray | null = lStrFix.match(/\b(SetTimer[\s,%]+)\w*$/iu);
     if (ma !== null) {

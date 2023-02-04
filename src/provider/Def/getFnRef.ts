@@ -5,6 +5,7 @@ import { pm } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
 import { CMemo } from '../../tools/CMemo';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
+import { getMenuFunc } from '../../tools/Command/MenuTools';
 import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
@@ -103,7 +104,7 @@ const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[]>>(
                 map.set(upName, arr);
             }
 
-            for (const fn of [getSetTimerWrap, getHotkeyWrap]) {
+            for (const fn of [getSetTimerWrap, getHotkeyWrap, getMenuFunc]) {
                 const Data: TScanData | null = fn(AhkTokenLine);
                 if (Data !== null) {
                     const { RawNameNew, lPos } = Data;

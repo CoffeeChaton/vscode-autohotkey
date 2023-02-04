@@ -1,6 +1,7 @@
 import type * as vscode from 'vscode';
 import type { TAhkTokenLine } from '../../globalEnum';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
+import { getMenuFunc } from '../../tools/Command/MenuTools';
 import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import { fnRefLStr, fnRefTextRaw } from './getFnRef';
@@ -42,6 +43,9 @@ export function posAtFnRef(
 
     const HotkeyData: TScanData | null = getHotkeyWrap(AhkTokenLine);
     if (HotkeyData !== null) return true;
+
+    const MenuData: TScanData | null = getMenuFunc(AhkTokenLine);
+    if (MenuData !== null) return true;
 
     // not ref... but allow goto-def
     // expansion--start

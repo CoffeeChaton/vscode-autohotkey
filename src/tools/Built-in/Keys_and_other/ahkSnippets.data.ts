@@ -3,6 +3,7 @@
  */
 export const ahkSnippetsData: string[] = [
     // GUI
+    'Insert',
     'Bold',
     'italic',
     'strike',
