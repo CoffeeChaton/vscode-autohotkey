@@ -6,7 +6,7 @@ specifiers:
   '@types/assert': ^1.5.6
   '@types/jest': ^29.4.0
   '@types/node': ^18.11.18
-  '@types/vscode': ^1.74.1
+  '@types/vscode': ^1.75.0
   '@typescript-eslint/eslint-plugin': ^5.50.0
   '@typescript-eslint/parser': ^5.50.0
   '@vscode/test-electron': ^2.2.3
@@ -39,7 +39,7 @@ devDependencies:
   '@types/assert': 1.5.6
   '@types/jest': 29.4.0
   '@types/node': 18.11.18
-  '@types/vscode': 1.74.1
+  '@types/vscode': 1.75.0
   '@typescript-eslint/eslint-plugin': 5.50.0_go4drrxstycfikanvu45pi4vgq
   '@typescript-eslint/parser': 5.50.0_4vsywjlpuriuw3tl5oq6zy5a64
   '@vscode/test-electron': 2.2.3
@@ -1209,8 +1209,8 @@ packages:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: true
 
-  /@types/vscode/1.74.1:
-    resolution: {integrity: sha512-/4bwu5Lz2tQIhCDfGyEho36jEBHfEGgbuajgFZgRIfsfK/U0vv8diYIvQRiz8cc9tGlzd7m/NJscEJ7gFExJ4g==}
+  /@types/vscode/1.75.0:
+    resolution: {integrity: sha512-SAr0PoOhJS6FUq5LjNr8C/StBKALZwDVm3+U4pjF/3iYkt3GioJOPV/oB1Sf1l7lROe4TgrMyL5N1yaEgTWycw==}
     dev: true
 
   /@types/yargs-parser/21.0.0:
@@ -1658,7 +1658,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001450
-      electron-to-chromium: 1.4.285
+      electron-to-chromium: 1.4.286
       node-releases: 2.0.9
       update-browserslist-db: 1.0.10_browserslist@4.21.5
     dev: true
@@ -2052,8 +2052,8 @@ packages:
       readable-stream: 2.3.7
     dev: true
 
-  /electron-to-chromium/1.4.285:
-    resolution: {integrity: sha512-47o4PPgxfU1KMNejz+Dgaodf7YTcg48uOfV1oM6cs3adrl2+7R+dHkt3Jpxqo0LRCbGJEzTKMUt0RdvByb/leg==}
+  /electron-to-chromium/1.4.286:
+    resolution: {integrity: sha512-Vp3CVhmYpgf4iXNKAucoQUDcCrBQX3XLBtwgFqP9BUXuucgvAV9zWp1kYU7LL9j4++s9O+12cb3wMtN4SJy6UQ==}
     dev: true
 
   /emittery/0.13.1:

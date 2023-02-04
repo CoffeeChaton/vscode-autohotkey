@@ -12,6 +12,8 @@ import { getFunc } from '../ParserFunc';
 import { Pretreatment } from '../Pretreatment';
 import type { TGValMap } from './ahkGlobalDef';
 import { ahkGlobalMain } from './ahkGlobalDef';
+import { ParserHotKey } from './ParserHotKey';
+import { ParserHotStr } from './ParserHotStr';
 import { ParserLine } from './ParserLine';
 
 /**
@@ -98,7 +100,7 @@ export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
 
     const GValMap: TGValMap = ahkGlobalMain(DocStrMap);
     const AST: TAstRoot = getChildren<CTopClass>(
-        [getClass, getFunc, ParserBlock.getSwitchBlock, ParserLine], // FIXME: spilt ParserLine
+        [getClass, getFunc, ParserBlock.getSwitchBlock, ParserHotStr, ParserLine, ParserHotKey],
         {
             DocStrMap,
             RangeStartLine: 0,

@@ -6,7 +6,7 @@ import type {
     TTextMapIn,
     TTextMetaIn,
     TValMapIn,
-    TValMetaIn
+    TValMetaIn,
 } from '../../AhkSymbol/CAhkFunc';
 import type { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';

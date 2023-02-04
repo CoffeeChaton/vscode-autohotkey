@@ -8,7 +8,7 @@ import type {
     TTextMapOut,
     TValMapIn,
     TValMapOut,
-    TValMetaIn
+    TValMetaIn,
 } from '../../AhkSymbol/CAhkFunc';
 
 import type { TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';

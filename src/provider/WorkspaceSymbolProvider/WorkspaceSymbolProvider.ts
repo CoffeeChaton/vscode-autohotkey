@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
-import type { TAhkSymbol, TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
+import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
 import { pm } from '../../core/ProjectManager';
 import { CMemo } from '../../tools/CMemo';
 
 // dprint-ignore
 const DocSymbol2SymbolInfo = new CMemo<TAstRoot, vscode.SymbolInformation[]>( // 4ms -> 0ms
-    (AstRoot: TAstRoot): vscode.SymbolInformation[] => AstRoot.map((AhkSymbol: TAhkSymbol): vscode.SymbolInformation => {
+    (AstRoot: TAstRoot): vscode.SymbolInformation[] => AstRoot.map((AhkSymbol: TTopSymbol): vscode.SymbolInformation => {
         const {
             name,
             kind,

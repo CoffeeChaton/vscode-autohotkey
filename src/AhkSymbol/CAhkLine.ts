@@ -174,7 +174,5 @@ export class CAhkComment extends vscode.DocumentSymbol {
 export type TLineClass =
     | CAhkComment
     | CAhkDirectives
-    | CAhkHotKeys
-    | CAhkHotString
     | CAhkInclude
     | CAhkLabel;
