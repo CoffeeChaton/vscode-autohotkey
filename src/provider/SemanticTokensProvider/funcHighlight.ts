@@ -18,6 +18,13 @@ function GuiFuncHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLe
     for (const { RawNameNew, lPos } of GuiDataList) {
         Tokens.push({
             range: new vscode.Range(
+                new vscode.Position(line, lPos - 1),
+                new vscode.Position(line, lPos),
+            ),
+            tokenType: 'keyword',
+            tokenModifiers: [],
+        }, {
+            range: new vscode.Range(
                 new vscode.Position(line, lPos),
                 new vscode.Position(line, lPos + RawNameNew.length),
             ),
