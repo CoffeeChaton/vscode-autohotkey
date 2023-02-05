@@ -29,26 +29,19 @@ exp2() {
 
     SetTimer , funcName, PeriodOnOffDelete, Priority
     ;            ^-----------------------label || func || funcObj
+    Menu, MenuName, Add , MenuItemName, funcName, Options
+    ;                                   ^-----------------------label || func || funcObj 
+    Menu, MenuName, Add , funcName ;If LabelOrSubmenu is omitted, MenuItemName will be used as both the label and the menu item's name.
+    ;                     ^-----------------------label || func || funcObj 
 }
 
 MsgBox % "suggest to use ctrl + shift + f to search other case" 
 TODO() { ; TODO func-Ref-case
-    ;https://www.autohotkey.com/docs/v1/lib/Gui.htm#Events 
-    ;[v1.1.20 +]: If not a valid label name, a function name can be used instead
-
-    ;https://www.autohotkey.com/docs/v1/lib/Sort.htm#Options
-    ;[v1.1.20+]: If it is not the name of an existing label, LabelOrSubmenu can be the name of a function
-
-    ;https://www.autohotkey.com/docs/v1/lib/Menu.htm#Add
-    ;F MyFunction [v1.0.47+]: Uses custom sorting according to the criteria in MyFunction
-
+    ;Sort F-flag https://www.autohotkey.com/docs/v1/lib/Sort.htm#Options
+    ;F MyFunction [v1.0.47+]
 
     ; <https://www.autohotkey.com/docs/v1/misc/Labels.htm#Functions
     ; - TODO [Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose
-    ; - TODO [Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
-    ; - TODO [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
-    ; - OK   [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm#Functor)
-    ; - OK   [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm#Functor)
 }
 
 notPlanToSupport() {

@@ -1,6 +1,27 @@
 # Changelog
 
-## NEXT 0.0.21(2023-02-28)
+## Next 0.0.22(2023-02-28)
+
+- TODO: add config of hover try to get WinMsg `hover2winMsgMd` `numberFindWinMsg`
+- TODO: Sort F-flag `Sort, MyVar, F IntegerSort D` <https://www.autohotkey.com/docs/v1/lib/Sort.htm#Options>
+- TODO: use CodeLens at file top show more tools<https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/19#issuecomment-1416783262>
+  1. report this file def-func usage in each file
+  2. report this def/ref global variables
+  3. analyze this file ref-func is from
+- TODO: more format config in file `;@ahk-neko-format-XXXX`
+- TODO: more check of Rename newName exp: newName has been defined as `function` `class` `label`
+- TODO: more diag of fn() are using but not find def
+- TODO: fix syntax-highlight of `else()` `GoSub` etc...
+- TODO: more diag of same name as fn-name exp
+
+  ```ahk
+  ~F10:: else()
+  else(){ ; <-warning this
+
+  }
+  ```
+
+## 0.0.21(2023-02-05)
 
 - feat: add jsdoc-style comments of variable ![img](image/CHANGELOG/v0.0.21.png)
 

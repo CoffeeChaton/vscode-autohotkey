@@ -118,7 +118,9 @@ support to find like
    > - OK [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
    > - not plan to support ~~[Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose~~
 
-4. read more of [funcRef](src/command/AnalysisFuncReference/funcRef.ahk)
+4. TODO Sort F-flag <https://www.autohotkey.com/docs/v1/lib/Sort.htm#Options>
+5. not plan to support RegEx CallOut Functions<https://www.autohotkey.com/docs/v1/misc/RegExCallout.htm#callout-functions>
+6. read more of [funcRef](src/command/AnalysisFuncReference/funcRef.ahk)
 
 ## Function rename
 
