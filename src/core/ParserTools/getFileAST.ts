@@ -6,6 +6,7 @@ import type { TFsPath, TTokenStream } from '../../globalEnum';
 import type { TModuleVar } from '../../tools/DeepAnalysis/getModuleVarMap';
 import { getModuleVarMap } from '../../tools/DeepAnalysis/getModuleVarMap';
 import { fsPathIsAllow } from '../../tools/fsTools/getUriList';
+import { getWorkspaceRoot } from '../../tools/fsTools/getWorkspaceRoot';
 import { isAhk } from '../../tools/fsTools/isAhk';
 import { getChildren } from '../getChildren';
 import { getClass } from '../getClass';
@@ -119,7 +120,8 @@ export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
         && languageId === 'ahk'
         && !fsPath.startsWith('\\')
         && isAhk(fsPath)
-        && fsPathIsAllow(fsPath, getIgnoredList());
+        && fsPathIsAllow(fsPath, getIgnoredList())
+        && getWorkspaceRoot().some((wsUri: vscode.Uri): boolean => fsPath.startsWith(wsUri.fsPath));
 
     const AhkCache: TMemo = {
         DocStrMap,

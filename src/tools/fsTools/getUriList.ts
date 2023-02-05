@@ -2,6 +2,7 @@
 import * as fs from 'node:fs';
 import * as vscode from 'vscode';
 import { getIgnoredList } from '../../configUI';
+import { getWorkspaceRoot } from './getWorkspaceRoot';
 import { isAhk } from './isAhk';
 
 type TFsPath = string;
@@ -26,14 +27,14 @@ function CollectorFsPath(fsPath: TFsPath, blockList: readonly RegExp[], Collecto
 }
 
 export function getUriList(): vscode.Uri[] | null {
-    const WorkspaceFolderList: readonly vscode.WorkspaceFolder[] | undefined = vscode.workspace.workspaceFolders;
-    if (WorkspaceFolderList === undefined) return null;
+    const WorkspaceFolderList: vscode.Uri[] = getWorkspaceRoot();
+    if (WorkspaceFolderList.length === 0) return null;
 
     const blockList: readonly RegExp[] = getIgnoredList();
     const Collector: Set<TFsPath> = new Set<TFsPath>();
 
-    for (const folder of WorkspaceFolderList) {
-        const rootFsPath: string = folder.uri.fsPath.replaceAll('\\', '/');
+    for (const uri of WorkspaceFolderList) {
+        const rootFsPath: string = uri.fsPath.replaceAll('\\', '/');
         CollectorFsPath(rootFsPath, blockList, Collector);
     }
 

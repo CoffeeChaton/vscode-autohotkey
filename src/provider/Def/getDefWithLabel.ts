@@ -66,10 +66,15 @@ function getLabelRef(wordUp: string): vscode.Location[] {
         for (const AhkTokenLine of DocStrMap) {
             const { detail, lStr, line } = AhkTokenLine;
             if (detail.includes(EDetail.isLabelLine) && lStr.trim().toUpperCase() === (`${wordUp}:`)) {
-                List.push(new vscode.Location(uri, new vscode.Range(
-                    new vscode.Position(line, lStr.search(/\S/u)),
-                    new vscode.Position(line, lStr.indexOf(':'))
-                )));
+                List.push(
+                    new vscode.Location(
+                        uri,
+                        new vscode.Range(
+                            new vscode.Position(line, lStr.search(/\S/u)),
+                            new vscode.Position(line, lStr.indexOf(':')),
+                        ),
+                    ),
+                );
                 continue;
             }
             const range: vscode.Range | null = LabelRefHotkey(AhkTokenLine, wordUp);
