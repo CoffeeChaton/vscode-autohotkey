@@ -1,9 +1,7 @@
 import * as vscode from 'vscode';
 import { ECommand } from '../command/ECommand';
-import { getIgnoredList } from '../configUI';
 import type { TFsPath } from '../globalEnum';
 import { log } from '../provider/vscWindows/log';
-import { fsPathIsAllow } from '../tools/fsTools/getUriList';
 import { isAhk } from '../tools/fsTools/isAhk';
 import { rmFileDiag } from './diagColl';
 import type { TMemo } from './ParserTools/getFileAST';
@@ -79,19 +77,27 @@ export const pm = {
         const result: TAhkFileData | 'isAhk2' = getFileAST(document);
         if (result === 'isAhk2') return null;
 
-        const { uri, languageId } = document;
-        const { fsPath, scheme } = uri;
-        if (
-            scheme === 'file'
-            && languageId === 'ahk'
-            && !fsPath.startsWith('\\')
-            && isAhk(fsPath)
-            && fsPathIsAllow(fsPath, getIgnoredList())
-        ) {
-            pm.DocMap.set(fsPath, result);
+        if (result.externallyVisible) {
+            pm.DocMap.set(document.uri.fsPath, result);
         }
 
         return result;
+    },
+
+    /**
+     * https://stackoverflow.com/questions/68518501/vscode-workspace-ondidchangetextdocument-is-called-even-when-there-is-no-conte
+     * https://github.com/Microsoft/vscode/issues/50344
+     *
+     * https://github.com/microsoft/vscode-discussions/discussions/90#discussioncomment-3312180
+     *
+     * - When the user types something
+     * - When Undo and Redo are fired
+     * - When Save is fired
+     * - When Formatters are fired
+     */
+    changeDoc(e: vscode.TextDocumentChangeEvent): void {
+        const { document } = e;
+        pm.updateDocDef(document);
     },
 } as const;
 

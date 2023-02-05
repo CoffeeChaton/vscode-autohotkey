@@ -1,10 +1,6 @@
 import * as path from 'node:path';
 import type * as vscode from 'vscode';
-import {
-    needDiag,
-    showTimeSpend,
-    useSymbolProvider,
-} from '../../configUI';
+import { needDiag, showTimeSpend, useSymbolProvider } from '../../configUI';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';

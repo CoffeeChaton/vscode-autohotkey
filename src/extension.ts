@@ -55,7 +55,7 @@ export function activate(context: ExtensionContext): void {
         languages.registerRenameProvider(selector, RenameProvider),
         languages.registerWorkspaceSymbolProvider(WorkspaceSymbolProvider),
         // workspace-------------------
-        // workspace.onDidChangeTextDocument(pm.changeDoc),
+        workspace.onDidChangeTextDocument(pm.changeDoc),
         // workspace.onDidOpenTextDocument(pm.OpenFile),
         // workspace.onDidSaveTextDocument(pm.OnDidSaveTextDocument),
         // workspace.registerTextDocumentContentProvider(selector, e),

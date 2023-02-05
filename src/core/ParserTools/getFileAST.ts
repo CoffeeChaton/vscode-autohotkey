@@ -1,9 +1,11 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-5,-1,0,1,10] }] */
 import * as vscode from 'vscode';
 import type { TAstRoot, TTopSymbol } from '../../AhkSymbol/TAhkSymbolIn';
+import { getIgnoredList } from '../../configUI';
 import type { TFsPath, TTokenStream } from '../../globalEnum';
 import type { TModuleVar } from '../../tools/DeepAnalysis/getModuleVarMap';
 import { getModuleVarMap } from '../../tools/DeepAnalysis/getModuleVarMap';
+import { fsPathIsAllow } from '../../tools/fsTools/getUriList';
 import { isAhk } from '../../tools/fsTools/isAhk';
 import { getChildren } from '../getChildren';
 import { getClass } from '../getClass';
@@ -29,6 +31,7 @@ export type TMemo = Readonly<{
     readonly DocFullSize: number,
     readonly uri: vscode.Uri,
     readonly ModuleVar: TModuleVar,
+    readonly externallyVisible: boolean,
 }>;
 
 function strListDeepEq(DocStrMap: TTokenStream, fullTextList: readonly string[]): boolean {
@@ -90,8 +93,9 @@ export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
     if (fullTextList.at(-1)?.trim() !== '') fullTextList.push('');
 
     const DocFullSize: number = fullText.length;
-    const { uri } = document;
-    const { fsPath } = uri;
+    const { uri, languageId } = document;
+    const { fsPath, scheme } = uri;
+
     const oldCache: TMemo | undefined = BaseScanMemo.getMemo(fsPath, fullTextList, DocFullSize);
     if (oldCache !== undefined) return oldCache;
 
@@ -111,12 +115,19 @@ export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
         },
     );
 
+    const externallyVisible: boolean = scheme === 'file'
+        && languageId === 'ahk'
+        && !fsPath.startsWith('\\')
+        && isAhk(fsPath)
+        && fsPathIsAllow(fsPath, getIgnoredList());
+
     const AhkCache: TMemo = {
         DocStrMap,
         AST,
         DocFullSize,
         uri,
         ModuleVar: getModuleVarMap(DocStrMap, GValMap, AST, fsPath),
+        externallyVisible,
     };
     BaseScanMemo.setMemo(fsPath, AhkCache);
 

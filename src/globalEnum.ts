@@ -103,7 +103,10 @@ export type TAhkToken = TAhkTokenLine[];
 
 export type TTokenStream = readonly TAhkTokenLine[];
 
-export type TFsPath = string; // vscode.uru.fsPath
+/**
+ * vscode.uru.fsPath
+ */
+export type TFsPath = string;
 
 export const enum EFormatChannel {
     byFormatAllFile = 'Format File',
