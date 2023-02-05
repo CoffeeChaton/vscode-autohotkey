@@ -361,10 +361,6 @@
                     "name": "punctuation.bracket.ahk"
                 },
                 {
-                    "match": "%(\\w+)%",
-                    "captures": { "1": { "name": "variable.dereference.ahk" } }
-                },
-                {
                     "match": "%",
                     "name": "punctuation.definition.variable.percent.ahk"
                 },

@@ -4,8 +4,6 @@
 
 - feat: add jsdoc-style comments of variable ![img](image/CHANGELOG/v0.0.21.png)
 
-  <details><summary>example code</summary>
-
   ```ahk
   f2(){
       /**
@@ -25,12 +23,11 @@
   }
   ```
 
-  </details>
-
 - feat: add format `ahk-obj not close` case
 - feat: add format config
 
   ```jsonc
+  // settings.json
   {
       "AhkNekoHelp.format.useTopLabelIndent": true,
       "AhkNekoHelp.format.useParenthesesIndent": true,
@@ -47,7 +44,7 @@
 - fix: `#if` syntax-highlight and hover
 - [v1.1.20+](https://www.autohotkey.com/docs/v1/misc/Labels.htm#Functions): Functions can be used in place of labels in a number of cases, including:
   >
-  >- not plan to support ~~[Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose~~
+  >- not plan to support [~~[Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose~~]
   >- OK [Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
   >- OK [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
   >- OK [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm#Functor)

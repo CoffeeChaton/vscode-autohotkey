@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { ECommand } from '../command/ECommand';
 import { getIgnoredList } from '../configUI';
 import type { TFsPath } from '../globalEnum';
 import { log } from '../provider/vscWindows/log';
@@ -55,6 +54,7 @@ export const pm = {
     },
 
     async renameFiles(e: vscode.FileRenameEvent): Promise<void> {
+        // TODO add config of package?
         const eventMsg: string[] = e.files
             .filter(({ oldUri, newUri }): boolean => isAhk(oldUri.fsPath) || isAhk(newUri.fsPath))
             .map(({ oldUri, newUri }): string => `    ${oldUri.fsPath} \n -> ${newUri.fsPath}`);
@@ -63,8 +63,6 @@ export const pm = {
 
         const docList0: Thenable<vscode.TextDocument>[] = renameFileNameBefore(e);
         for (const doc of await Promise.all(docList0)) pm.updateDocDef(doc);
-
-        await vscode.commands.executeCommand(ECommand.ListAllInclude);
 
         log.info([
             '> ["FileRenameEvent"]',

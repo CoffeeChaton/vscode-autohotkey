@@ -64,6 +64,12 @@ export function getUnknownTextMap(
             continue;
         }
 
+        /**
+         * //FIXME:
+         * b:=0
+         * a:={b:10}
+         * ;   ^ b is key, not var
+         */
         for (const v of lStr.matchAll(/(?<![.#])\b(\w+)\b(?!\()/gu)) {
             const keyRawName: string = v[1];
             const wordUp: string = keyRawName.toUpperCase();

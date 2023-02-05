@@ -12,7 +12,7 @@ export const enum EPrefix {
 
 function RangeList2Str(RangeList: readonly vscode.Range[]): string {
     return RangeList
-        .map((range: vscode.Range): string => `line ${range.start.line + 1}, col ${range.start.character + 1}  `)
+        .map((range: vscode.Range): string => `  - line ${range.start.line + 1}, col ${range.start.character + 1}</br>`)
         .join('\n');
 }
 
@@ -47,16 +47,19 @@ export function setMD(
     const doc: string = jsDocStyle === ''
         ? commentList2Str(commentList)
         : `---\n\n${jsDocStyle}\n\n---\n\n`;
-
-    return new vscode.MarkdownString('', true)
+    const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
         .appendCodeblock(`${prefix} of ${funcName}()`)
         .appendMarkdown(recStr)
         .appendMarkdown(doc)
-        .appendMarkdown('- def    \n')
+        .appendMarkdown('- <details><summary>def</summary>\n')
         .appendMarkdown(RangeList2Str(defRangeList))
-        .appendMarkdown('   \n')
-        .appendMarkdown('- ref    \n')
-        .appendMarkdown(RangeList2Str(refRangeList));
+        .appendMarkdown('\n</details>')
+        .appendMarkdown('\n')
+        .appendMarkdown('- <details><summary>ref</summary>\n')
+        .appendMarkdown(RangeList2Str(refRangeList))
+        .appendMarkdown('\n</details>');
+    md.supportHtml = true;
+    return md;
 }
 
 // icon https://code.visualstudio.com/api/references/icons-in-labels

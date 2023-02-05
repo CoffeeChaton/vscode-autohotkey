@@ -3,7 +3,8 @@ import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
-import { getFuncDef } from '../Def/getFuncDef';
+import type { TFnRefLike } from '../Def/getFnRef';
+import { getFuncRef } from '../Def/getFnRef';
 
 function RenameProviderCore(
     document: vscode.TextDocument,
@@ -17,21 +18,32 @@ function RenameProviderCore(
 
     const DA: CAhkFunc | null = getDAWithPos(AST, position);
     if (DA === null || !DA.nameRange.contains(position) || DA.kind === vscode.SymbolKind.Method) {
-        void vscode.window.showInformationMessage('please use rename at function def range');
+        void vscode.window.showInformationMessage('please use rename at function def name range');
         return null;
     }
 
-    const userDefLink: vscode.Location[] | null = getFuncDef(AhkFileData, position, DA.upName, true);
-    if (userDefLink === null) return null;
+    const userDefLink: readonly TFnRefLike[] = getFuncRef(DA);
+    if (userDefLink.length === 0) return null;
 
+    const fnNameLen: number = DA.name.length;
     const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
-    for (const Loc of userDefLink) {
+    for (const v of userDefLink) {
+        const {
+            uri,
+            line,
+            col,
+        } = v;
+        const range: vscode.Range = new vscode.Range(
+            new vscode.Position(line, col),
+            new vscode.Position(line, col + fnNameLen),
+        );
         edit.replace(
-            Loc.uri,
-            Loc.range,
+            uri,
+            range,
             newName,
         );
     }
+    // TODO rename,For safety, do not replace func("fnName") case, please use ctrl+f to replace the search
     return edit;
 }
 
@@ -51,6 +63,7 @@ export const RenameProvider: vscode.RenameProvider = {
             void vscode.window.showInformationMessage(`Please use normal newName, not support of "${newName}"`);
             return null;
         }
+        // TODO check newName
 
         return RenameProviderCore(document, position, newName);
     },
