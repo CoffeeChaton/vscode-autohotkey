@@ -27,7 +27,7 @@ function CollectorFsPath(fsPath: TFsPath, blockList: readonly RegExp[], Collecto
 }
 
 export function getUriList(): vscode.Uri[] | null {
-    const WorkspaceFolderList: vscode.Uri[] = getWorkspaceRoot();
+    const WorkspaceFolderList: readonly vscode.Uri[] = getWorkspaceRoot();
     if (WorkspaceFolderList.length === 0) return null;
 
     const blockList: readonly RegExp[] = getIgnoredList();

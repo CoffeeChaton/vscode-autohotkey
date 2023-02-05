@@ -114,9 +114,9 @@ support to find like
    >
    > - OK [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm#Functor)
    > - OK [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm#Functor)
-   > - ;TODO [Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose
-   > - ;TODO [Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
-   > - ;TODO [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
+   > - OK [Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
+   > - OK [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
+   > - not plan to support ~~[Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose~~
 
 4. read more of [funcRef](src/command/AnalysisFuncReference/funcRef.ahk)
 

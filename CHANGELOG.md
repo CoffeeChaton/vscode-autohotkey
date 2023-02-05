@@ -45,11 +45,11 @@
 - fix: `big-change` fix `getLStr()`
 - fix: class def-line comment syntax-highlight
 - fix: `#if` syntax-highlight and hover
-- TODO [v1.1.20+](https://www.autohotkey.com/docs/v1/misc/Labels.htm#Functions): Functions can be used in place of labels in a number of cases, including:
+- [v1.1.20+](https://www.autohotkey.com/docs/v1/misc/Labels.htm#Functions): Functions can be used in place of labels in a number of cases, including:
   >
-  >- //TODO [Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose
-  >- //TODO[Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
-  >- //TODO [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
+  >- not plan to support ~~[Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose~~
+  >- OK [Gui control events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#label) (g-labels)
+  >- OK [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
   >- OK [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm#Functor)
   >- OK [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm#Functor)
 

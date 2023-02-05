@@ -1,12 +1,13 @@
 import * as fs from 'node:fs';
 import * as vscode from 'vscode';
-import { needDiag } from '../../configUI';
+import { getIgnoredList, needDiag } from '../../configUI';
 import { rmFileDiag } from '../../core/diagColl';
-import { BaseScanMemo } from '../../core/ParserTools/getFileAST';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { delOldCache, pm } from '../../core/ProjectManager';
 import { digDAFile } from '../../tools/DeepAnalysis/Diag/digDAFile';
-import { isAhkTab } from '../../tools/fsTools/isAhk';
+import { fsPathIsAllow } from '../../tools/fsTools/getUriList';
+import { getWorkspaceRoot } from '../../tools/fsTools/getWorkspaceRoot';
+import { isAhk, isAhkTab } from '../../tools/fsTools/isAhk';
 import { setBaseDiag } from '../Diagnostic/setBaseDiag';
 
 export function onDidChangeActiveTab(e: vscode.TextEditor | undefined): void {
@@ -41,15 +42,23 @@ export function onDidChangeTabs(tabChangeEvent: vscode.TabChangeEvent): void {
 
         const { uri } = tab.input;
         if (isAhkTab(uri)) {
-            const { fsPath } = uri;
+            const { fsPath, scheme } = uri;
+
             rmFileDiag(uri); // clear all diag of ahk-neko-help
 
-            const isExternallyVisible: boolean | undefined = BaseScanMemo.memo.get(fsPath)?.at(-1)?.externallyVisible;
-            if (isExternallyVisible !== undefined && !isExternallyVisible) {
+            const externallyVisible: boolean = scheme === 'file'
+                && !fsPath.startsWith('\\')
+                && isAhk(fsPath)
+                && fsPathIsAllow(fsPath, getIgnoredList());
+
+            const wsList: readonly vscode.Uri[] = getWorkspaceRoot();
+            const isInWorkspace: boolean = wsList.some((wsUri: vscode.Uri): boolean => fsPath.startsWith(wsUri.fsPath));
+
+            if (!externallyVisible || !isInWorkspace) {
                 /**
                  * prevent unlimited memory growth
                  */
-                BaseScanMemo.memo.delete(fsPath);
+                delOldCache(uri);
             }
 
             // eslint-disable-next-line security/detect-non-literal-fs-filename

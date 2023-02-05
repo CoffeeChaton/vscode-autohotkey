@@ -1,7 +1,9 @@
 import * as vscode from 'vscode';
 import { ECommand } from '../command/ECommand';
+import { getIgnoredList } from '../configUI';
 import type { TFsPath } from '../globalEnum';
 import { log } from '../provider/vscWindows/log';
+import { fsPathIsAllow } from '../tools/fsTools/getUriList';
 import { isAhk } from '../tools/fsTools/isAhk';
 import { rmFileDiag } from './diagColl';
 import type { TMemo } from './ParserTools/getFileAST';
@@ -77,8 +79,22 @@ export const pm = {
         const result: TAhkFileData | 'isAhk2' = getFileAST(document);
         if (result === 'isAhk2') return null;
 
-        if (result.externallyVisible) {
-            pm.DocMap.set(document.uri.fsPath, result);
+        const { uri, languageId } = document;
+        const { fsPath, scheme } = uri;
+
+        if (
+            scheme === 'file'
+            && languageId === 'ahk'
+            && !fsPath.startsWith('\\')
+            && isAhk(fsPath)
+            && fsPathIsAllow(fsPath, getIgnoredList())
+        ) {
+            pm.DocMap.set(fsPath, result);
+        } else {
+            /**
+             *  getIgnoredList() may change
+             */
+            pm.DocMap.delete(fsPath);
         }
 
         return result;
