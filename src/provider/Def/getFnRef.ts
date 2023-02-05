@@ -34,7 +34,7 @@ type TFuncRef = Omit<TLineFnCall, 'upName'>;
 export function fnRefLStr(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
     const { lStr, line } = AhkTokenLine;
     const arr: TLineFnCall[] = [];
-    for (const ma of lStr.matchAll(/(?<![.`%#])\b(\w+)\(/giu)) {
+    for (const ma of lStr.matchAll(/(?<![.`%#]|new\s)\b(\w+)\(/giu)) {
         // -------------------------------------------------^funcName(      of lStr
         const col: number | undefined = ma.index;
         if (col === undefined) continue;

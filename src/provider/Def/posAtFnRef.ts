@@ -53,7 +53,7 @@ export function posAtFnRef(
 
     // not ref... but allow goto-def
     // expansion--start
-    for (const ma of AhkTokenLine.textRaw.matchAll(/(?<![.`%#])\b(\w+)\(/giu)) {
+    for (const ma of AhkTokenLine.textRaw.matchAll(/(?<![.`%#]|new\s)\b(\w+)\(/giu)) {
         const col: number | undefined = ma.index;
         if (col === undefined) continue;
 
