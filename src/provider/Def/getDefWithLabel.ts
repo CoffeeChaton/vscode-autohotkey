@@ -4,6 +4,7 @@ import type { CAhkLabel } from '../../AhkSymbol/CAhkLine';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../globalEnum';
+import { EDetail } from '../../globalEnum';
 import { getGuiFunc } from '../../tools/Command/GuiTools';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
 import { getMenuFunc } from '../../tools/Command/MenuTools';
@@ -25,13 +26,25 @@ function LabelRefHotkey(AhkTokenLine: TAhkTokenLine, wordUp: string): vscode.Ran
     );
 }
 
+function LabelRefMenu(AhkTokenLine: TAhkTokenLine, wordUp: string): vscode.Range | null {
+    const MenuData: TScanData | null = getMenuFunc(AhkTokenLine);
+    if (MenuData === null) return null;
+
+    const { RawNameNew, lPos } = MenuData;
+    if (RawNameNew.toUpperCase() !== wordUp) return null;
+
+    const { line } = AhkTokenLine;
+    return new vscode.Range(
+        new vscode.Position(line, lPos),
+        new vscode.Position(line, lPos + RawNameNew.length),
+    );
+}
+
 function LabelRefGui(AhkTokenLine: TAhkTokenLine, wordUp: string): vscode.Range | null {
-    if (!wordUp.startsWith('G')) return null;
     const GuiDataList: TScanData[] | null = getGuiFunc(AhkTokenLine);
     if (GuiDataList !== null) {
-        const wordUpCaseFix = wordUp.replace(/^g/iu, '');
         for (const { RawNameNew, lPos } of GuiDataList) {
-            if (RawNameNew.toUpperCase() === wordUpCaseFix) {
+            if (RawNameNew.toUpperCase() === wordUp) {
                 const { line } = AhkTokenLine;
                 return new vscode.Range(
                     new vscode.Position(line, lPos),
@@ -51,9 +64,23 @@ function getLabelRef(wordUp: string): vscode.Location[] {
     const List: vscode.Location[] = [];
     for (const { DocStrMap, uri } of pm.getDocMapValue()) {
         for (const AhkTokenLine of DocStrMap) {
+            const { detail, lStr, line } = AhkTokenLine;
+            if (detail.includes(EDetail.isLabelLine) && lStr.trim().toUpperCase() === (`${wordUp}:`)) {
+                List.push(new vscode.Location(uri, new vscode.Range(
+                    new vscode.Position(line, lStr.search(/\S/u)),
+                    new vscode.Position(line, lStr.indexOf(':'))
+                )));
+                continue;
+            }
             const range: vscode.Range | null = LabelRefHotkey(AhkTokenLine, wordUp);
             if (range !== null) {
                 List.push(new vscode.Location(uri, range));
+                continue;
+            }
+
+            const menuRange: vscode.Range | null = LabelRefMenu(AhkTokenLine, wordUp);
+            if (menuRange !== null) {
+                List.push(new vscode.Location(uri, menuRange));
                 continue;
             }
 
@@ -62,8 +89,6 @@ function getLabelRef(wordUp: string): vscode.Location[] {
                 List.push(new vscode.Location(uri, range2));
                 continue;
             }
-
-            const { line, lStr } = AhkTokenLine;
 
             const ma: RegExpMatchArray | null = lStr.match(reg);
             if (ma === null) continue;
