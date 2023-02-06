@@ -1,34 +1,26 @@
 import * as vscode from 'vscode';
 import { winMsg } from './Windows_Messages';
 
-function winMsg2Md(k: string, v: [number, string]): vscode.MarkdownString {
-    // WM_DDE_EXECUTE -> [1000,'0x03E8']
-    // WM_DDE_EXECUTE := 0x03E8 ; 1000
-
-    const body = `${k} := ${v[1]} ; ${v[0]}`;
-    const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
-        .appendCodeblock(body, 'ahk')
-        .appendMarkdown('Windows Messages')
-        .appendMarkdown('\n\n')
-        .appendMarkdown('[Read More of Windows Messages](https://www.autohotkey.com/docs/v1/misc/SendMessageList.htm)');
-    md.supportHtml = true;
-    return md;
-}
-
-type TWinMsgMDMap = ReadonlyMap<string, vscode.MarkdownString>;
-
-const winMsgMDMap: TWinMsgMDMap = ((): TWinMsgMDMap => {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const { snippetWinMsg, winMsgMDMap } = (() => {
     const map1 = new Map<string, vscode.MarkdownString>();
-    //
-    for (const [k, v] of winMsg.entries()) {
-        map1.set(k, winMsg2Md(k, v));
-    }
-    return map1;
-})();
 
-const snippetWinMsg: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
     const tempList: vscode.CompletionItem[] = [];
     for (const [k, v] of winMsg.entries()) {
+        // WM_DDE_EXECUTE -> [1000,'0x03E8']
+        // WM_DDE_EXECUTE := 0x03E8 ; 1000
+
+        const body = `${k} := ${v[1]} ; ${v[0]}`;
+        const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
+            .appendCodeblock(body, 'ahk')
+            .appendMarkdown('Windows Messages')
+            .appendMarkdown('\n\n')
+            .appendMarkdown(
+                '[Read More of Windows Messages](https://www.autohotkey.com/docs/v1/misc/SendMessageList.htm)',
+            );
+        md.supportHtml = true;
+
+        map1.set(k, md);
         const item = new vscode.CompletionItem({
             label: k, // Left
             description: 'winMsg', // Right
@@ -44,11 +36,14 @@ const snippetWinMsg: readonly vscode.CompletionItem[] = ((): vscode.CompletionIt
             ]);
 
         item.detail = 'Windows Messages (neko-help)'; // description
-        item.documentation = winMsgMDMap.get(k.toUpperCase()) ?? winMsg2Md(k, v);
+        item.documentation = md;
 
         tempList.push(item);
     }
-    return tempList;
+    return {
+        snippetWinMsg: tempList as readonly vscode.CompletionItem[],
+        winMsgMDMap: map1 as ReadonlyMap<string, vscode.MarkdownString>,
+    };
 })();
 
 export function getSnippetWinMsg(PartStr: string): readonly vscode.CompletionItem[] {

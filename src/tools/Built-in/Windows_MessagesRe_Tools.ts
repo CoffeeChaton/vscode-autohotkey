@@ -21,7 +21,7 @@ function str2Number(str: string): number | null {
 
     // !str.startsWith('0') wtf... ahk 001 === 1
     // https://www.autohotkey.com/docs/v1/Concepts.htm#numbers
-    if ((/\d+/u).test(str)) {
+    if ((/^\d+$/u).test(str)) {
         // base 10
         return Number.parseInt(str, 10);
     }
@@ -39,7 +39,7 @@ export function numberFindWinMsg(wordUp: string): vscode.MarkdownString | null {
     }
     // `${str} maybe is [${msg.join(', ')}] ?`
     const fail = ` := ${to0X(number)} ; ${number}\n`;
-    const body = msg.join(fail) + fail;
+    const body: string = msg.join(fail) + fail;
 
     const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
         .appendMarkdown('Did you mean ?')
