@@ -5,6 +5,7 @@ export const enum ECommand {
     ListAllFunc = 'ahk.nekoHelp.ListAllFunc',
     ListAllInclude = 'ahk.nekoHelp.ListAllInclude',
     ListIncludeTree = 'ahk.nekoHelp.ListIncludeTree',
+    showFileReport = 'ahk.nekoHelp.showFileReport',
     showFuncAnalyze = 'ahk.nekoHelp.showFuncAnalyze',
     showUnknownAnalyze = 'ahk.nekoHelp.showUnknownAnalyze',
 }

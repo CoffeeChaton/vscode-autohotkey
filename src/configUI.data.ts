@@ -19,6 +19,7 @@ type TempConfigs = {
     CodeLens: {
         showFuncReference: boolean,
         showDevTool: boolean,
+        showFileReport: boolean,
     },
     Diag: {
         AMasterSwitch: EDiagMasterSwitch,

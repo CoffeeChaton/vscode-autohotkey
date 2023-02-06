@@ -75,6 +75,11 @@
                         "type": "boolean",
                         "default": false,
                         "markdownDescription": "show Func and Method dev tools"
+                    },
+                    "AhkNekoHelp.CodeLens.showFileReport": {
+                        "type": "boolean",
+                        "default": false,
+                        "markdownDescription": "show CodeLens at file top"
                     }
                 }
             },

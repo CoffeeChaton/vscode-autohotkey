@@ -2,7 +2,9 @@ import * as vscode from 'vscode';
 import type { AnalyzeFuncMain } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
 import type { CmdFindFuncRef } from '../../command/CmdFindFuncRef';
 import { ECommand } from '../../command/ECommand';
+import type { getFileReport } from '../../command/getFileReport/getFileReport';
 import { getCodeLenConfig } from '../../configUI';
+import type { TConfigs } from '../../configUI.data';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
@@ -10,15 +12,28 @@ import { getFuncRef } from '../Def/getFnRef';
 import type { showUnknownAnalyze } from './showUnknownAnalyze';
 
 function CodeLensCore(
-    fsPath: string,
-    { showFuncReference, showDevTool }: { showFuncReference: boolean, showDevTool: boolean },
+    document: vscode.TextDocument,
+    { showFuncReference, showDevTool, showFileReport }: TConfigs['CodeLens'],
 ): vscode.CodeLens[] {
-    const AhkFileData: TAhkFileData | undefined = pm.getDocMap(fsPath); // i don't what to show CodeLens with temp-file
-    if (AhkFileData === undefined) return [];
+    const { fsPath } = document.uri;
+    const AhkFileData: TAhkFileData | null = pm.getDocMap(fsPath) ?? pm.updateDocDef(document);
+    if (AhkFileData === null) return [];
 
     const { AST, DocStrMap, uri } = AhkFileData;
 
-    const need: vscode.CodeLens[] = [];
+    const need: vscode.CodeLens[] = showFileReport
+        ? [
+            new vscode.CodeLens(new vscode.Range(0, 0, 1, 0), {
+                title: 'Analyze this ahk file',
+                command: ECommand.showFileReport,
+                tooltip: 'by neko-help dev tools',
+                arguments: [document] satisfies Parameters<typeof getFileReport>,
+            }),
+        ]
+        : [];
+
+    if (!showFuncReference && !showDevTool) return need;
+
     for (const fnSymbol of getDAListTop(AST)) {
         if (showDevTool) {
             const cmd0: vscode.Command = {
@@ -67,9 +82,6 @@ export const CodeLensProvider: vscode.CodeLensProvider = {
         document: vscode.TextDocument,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.CodeLens[]> {
-        const { showFuncReference, showDevTool } = getCodeLenConfig();
-        if (!showFuncReference && !showDevTool) return null;
-
-        return CodeLensCore(document.uri.fsPath, { showFuncReference, showDevTool });
+        return CodeLensCore(document, getCodeLenConfig());
     },
 };

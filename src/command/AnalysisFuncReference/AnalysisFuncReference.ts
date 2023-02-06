@@ -47,7 +47,7 @@ function getEachFnRefNumber(AhkFileData: TAhkFileData): TRef {
     };
 }
 
-function AnalysisFuncReference(document: vscode.TextDocument): null {
+export function AnalysisFuncReferenceCore(document: vscode.TextDocument): null {
     const t1 = Date.now();
     const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
     if (AhkFileData === null) {
@@ -183,7 +183,7 @@ export function AnalysisFuncReferenceWrap(): null {
         void vscode.window.showInformationMessage('you don\'t open any ahk file');
     }
     if (visibleListAhk.length === 1) {
-        void AnalysisFuncReference(visibleListAhk[0]);
+        void AnalysisFuncReferenceCore(visibleListAhk[0]);
         return null;
     }
 
@@ -202,7 +202,7 @@ export function AnalysisFuncReferenceWrap(): null {
             if (pick === undefined) return null;
             const { select } = pick;
             log.info(`select "${select.fileName}"`);
-            void AnalysisFuncReference(select);
+            void AnalysisFuncReferenceCore(select);
             return null;
         });
     return null;

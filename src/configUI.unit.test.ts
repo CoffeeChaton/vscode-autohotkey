@@ -39,6 +39,7 @@ describe('check package ruler', () => {
                 // [0]
                 ['AhkNekoHelp.CodeLens.showFuncReference', 'boolean'],
                 ['AhkNekoHelp.CodeLens.showDevTool', 'boolean'],
+                ['AhkNekoHelp.CodeLens.showFileReport', 'boolean'],
                 // [1]
                 ['AhkNekoHelp.Diag.AMasterSwitch', 'string'],
                 ['AhkNekoHelp.Diag.code107LegacyAssignment', 'boolean'],
