@@ -220,12 +220,14 @@
         "directives": {
             "patterns": [
                 {
-                    "captures": {
-                        "1": { "name": "keyword.operator.arithmetic.ahk" },
-                        "2": { "name": "entity.name.namespace.import.ahk" }
+                    "name": "entity.name.namespace.import.ahk",
+                    "begin": "^[ \\t]*((?i:#include(?:Again)?))[ \\t]+(\\*i)?",
+                    "beginCaptures": {
+                        "1": { "name": "keyword.control.import.ahk" },
+                        "2": { "name": "keyword.operator.arithmetic.ahk" }
                     },
-                    "match": "^[ \\t]*#(?i:include(?:Again)?)[ \\t]+(\\*i)?(.*)$",
-                    "name": "keyword.control.import.ahk"
+                    "end": "\\n",
+                    "patterns": [ { "include": "#comment" } ]
                 },
                 {
                     "captures": { "1": { "name": "keyword.control.directives._if.ahk" } },
