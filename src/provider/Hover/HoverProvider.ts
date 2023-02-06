@@ -13,6 +13,7 @@ import { getHoverStatement } from '../../tools/Built-in/statement.tools';
 import { hover2winMsgMd } from '../../tools/Built-in/Windows_Messages_Tools';
 import { numberFindWinMsg } from '../../tools/Built-in/Windows_MessagesRe_Tools';
 import { hoverWinTitleParam } from '../../tools/Built-in/WinTitle/WinTitleParameter.tools';
+import { HoverAtGuiGFunc } from '../../tools/Command/GuiTools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStrNext } from '../../tools/isPosAtStr';
@@ -85,6 +86,9 @@ function HoverProviderCore(
         const DAmd: vscode.MarkdownString | null = DeepAnalysisHover(AhkFunc, wordUp, position);
         if (DAmd !== null) return new vscode.Hover(DAmd);
     }
+
+    const hoverGuiList: vscode.MarkdownString | null = HoverAtGuiGFunc(AhkTokenLine, position);
+    if (hoverGuiList !== null) return new vscode.Hover(hoverGuiList);
 
     type TFn = (wordUp: string) => vscode.MarkdownString | null | undefined;
 
