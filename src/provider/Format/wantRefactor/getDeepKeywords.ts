@@ -238,6 +238,10 @@ function focElseCase({ AhkTokenLine, matrixBrackets, lnStatus }: {
     };
 }
 
+export const enum EFmtMagicStr {
+    caseA = 'HotFix#22',
+}
+
 export function getDeepKeywords({
     lStrTrim,
     lnStatus,
@@ -251,7 +255,7 @@ export function getDeepKeywords({
     matrixBrackets: readonly TBrackets[],
     DocStrMap: TTokenStream,
 }): TLnStatus {
-    const { occ, lockList } = lnStatus;
+    const { occ, lockList, status } = lnStatus;
     const { fistWordUp, line } = AhkTokenLine;
     // console.log(line, lnStatus);
     if (focSet.has(fistWordUp)) {
@@ -264,7 +268,13 @@ export function getDeepKeywords({
                 status: 'end of file',
             };
         }
-        if (nextLine.lStr.trim().startsWith('{')) return addLock({ lnStatus, AhkTokenLine }); // managed by curly braces
+        if (nextLine.lStr.trim().startsWith('{')) {
+            return {
+                occ,
+                lockList,
+                status: EFmtMagicStr.caseA,
+            };
+        } // managed by curly braces
 
         if (fistWordUp === 'IF') return forIfCase({ AhkTokenLine, matrixBrackets, lnStatus });
         if (fistWordUp === 'ELSE') return focElseCase({ AhkTokenLine, matrixBrackets, lnStatus });
@@ -275,6 +285,10 @@ export function getDeepKeywords({
             lockList: [...lockList],
             status: `other key word+ "${fistWordUp}"`,
         };
+    }
+
+    if (status === EFmtMagicStr.caseA) {
+        return addLock({ lnStatus, AhkTokenLine });
     }
 
     const nextLine: TAhkTokenLine | undefined = DocStrMap.at(line + 1);

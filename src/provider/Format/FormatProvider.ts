@@ -14,7 +14,8 @@ import { getMatrixMultLine } from './tools/getMatrixMultLine';
 import { getMatrixTopLabe } from './tools/getMatrixTopLabe';
 import { fn_Warn_thisLineText_WARN } from './TWarnUse';
 import type { TLnStatus } from './wantRefactor/getDeepKeywords';
-import { getDeepKeywords } from './wantRefactor/getDeepKeywords';
+import { EFmtMagicStr, getDeepKeywords } from './wantRefactor/getDeepKeywords';
+
 import { getSwitchRange, inSwitchBlock } from './wantRefactor/SwitchCase';
 
 type TFmtCoreArgs = {
@@ -75,10 +76,14 @@ export function FormatCore(
         const lStrTrim: string = lStr.trim();
 
         if (line >= fmtStart && line <= fmtEnd) {
+            const { occ, status } = lnStatus;
+            const occHotFix: number = status === EFmtMagicStr.caseA
+                ? occ + 1
+                : occ;
             newTextList.push(fn_Warn_thisLineText_WARN({
                 DiffMap,
                 lStrTrim,
-                occ: lnStatus.occ,
+                occ: occHotFix,
                 brackets: matrixBrackets[line],
                 options,
                 switchDeep: inSwitchBlock(lStrTrim, line, switchRangeArray),
