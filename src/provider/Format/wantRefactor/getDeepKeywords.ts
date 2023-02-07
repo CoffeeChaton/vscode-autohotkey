@@ -257,6 +257,9 @@ export function getDeepKeywords({
 }): TLnStatus {
     const { occ, lockList, status } = lnStatus;
     const { fistWordUp, line } = AhkTokenLine;
+    if (status === EFmtMagicStr.caseA) {
+        return addLock({ lnStatus, AhkTokenLine });
+    } // FIXME: if this line is `{ if` case
     // console.log(line, lnStatus);
     if (focSet.has(fistWordUp)) {
         if (lStrTrim.endsWith('{')) return addLock({ lnStatus, AhkTokenLine }); // managed by curly braces
@@ -285,10 +288,6 @@ export function getDeepKeywords({
             lockList: [...lockList],
             status: `other key word+ "${fistWordUp}"`,
         };
-    }
-
-    if (status === EFmtMagicStr.caseA) {
-        return addLock({ lnStatus, AhkTokenLine });
     }
 
     const nextLine: TAhkTokenLine | undefined = DocStrMap.at(line + 1);
