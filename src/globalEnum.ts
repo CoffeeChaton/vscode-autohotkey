@@ -27,7 +27,7 @@ export const enum EDetail {
     deepSubtract = 6,
     hasDoubleSemicolon = 8,
     isHotStrLine = 9,
-    //  isHotKeyLine = 10,
+    isHotKeyLine = 10,
     isLabelLine = 11,
 }
 

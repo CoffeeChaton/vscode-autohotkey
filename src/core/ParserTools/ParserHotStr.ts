@@ -41,5 +41,5 @@ export function ParserHotStr(FuncInput: TFuncInput): CAhkHotString | null {
         ),
         uri,
         AhkTokenLine,
-    });
+    }, lStr.replace(name, '').trim());
 }

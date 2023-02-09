@@ -12,9 +12,9 @@ describe('check #Directive ruler', () => {
             .map((v): string => v.keyRawName.replace('#', ''))
             .sort();
 
-        const st1 = (repository.directives.patterns.at(-1)?.match ?? '')
-            .replace('^[ \\t]*#\\b(?i:', '')
-            .replace(')\\b([^;]*)([ \\t]+;.*)?$', '');
+        const st1 = (repository.directives.patterns.at(-1)?.begin ?? '')
+            .replace('^[ \\t]*(#\\b(?i:', '')
+            .replace('))\\b', '');
 
         expect(arr1).toHaveLength(max);
         expect(st1).toBe(arr1.join('|'));

@@ -165,6 +165,73 @@ export function Pretreatment(
             }
         }
 
+        if ((/^:[^:]*:[^:]+::/u).test(textTrimStart)) {
+            /**
+             * of hotStr
+             *
+             * (::
+             * foo(){
+             * MsgBox % "hotStr of ("
+             * }
+             */
+            result.push({
+                ahkDoc,
+                cll: 0,
+                deep2: [deep],
+                detail: [EDetail.isHotStrLine],
+                displayErr,
+                displayFnErr,
+                fistWordUp: '',
+                fistWordUpCol: -1,
+                line,
+                lineComment: '',
+                lStr: getLStrHotStr(textRaw),
+                multiline,
+                multilineFlag: null,
+                SecondWordUp: '',
+                SecondWordUpCol: -1,
+                textRaw,
+            });
+            continue;
+        }
+
+        if (textTrimStart.includes('::')) {
+            /**
+             * of hotKey
+             *
+             * (::
+             *     foo(){
+             *         MsgBox % "hotStr of ("
+             *     }
+             */
+            const lStr: string = getLStr(textRaw);
+
+            if (lStr.includes('::')) {
+                result.push({
+                    ahkDoc,
+                    cll: 0,
+                    deep2: [deep],
+                    detail: [EDetail.isHotKeyLine],
+                    displayErr,
+                    displayFnErr,
+                    fistWordUp: '',
+                    fistWordUpCol: -1,
+                    line,
+                    lineComment: '',
+                    /**
+                     * FIXME:
+                     */
+                    lStr: lStr.replace(/[^:]+::/u, '').padStart(lStr.length, ' '),
+                    multiline,
+                    multilineFlag: null,
+                    SecondWordUp: '',
+                    SecondWordUpCol: -1,
+                    textRaw,
+                });
+                continue;
+            }
+        }
+
         [multiline, multilineFlag] = getMultiline({
             textTrimStart,
             multiline,
@@ -278,29 +345,6 @@ export function Pretreatment(
                 line,
                 lineComment,
                 lStr: '',
-                multiline,
-                multilineFlag: null,
-                SecondWordUp: '',
-                SecondWordUpCol: -1,
-                textRaw,
-            });
-            continue;
-        }
-
-        if ((/^:[^:]*:[^:]+::/u).test(lStrTrim)) {
-            // of hotStr
-            result.push({
-                ahkDoc,
-                cll: 0,
-                deep2: [deep],
-                detail: [...detail, EDetail.isHotStrLine],
-                displayErr,
-                displayFnErr,
-                fistWordUp: '',
-                fistWordUpCol: -1,
-                line,
-                lineComment,
-                lStr: getLStrHotStr(textRaw),
                 multiline,
                 multilineFlag: null,
                 SecondWordUp: '',

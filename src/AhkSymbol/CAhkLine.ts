@@ -63,19 +63,12 @@ export class CAhkHotKeys extends vscode.DocumentSymbol {
             range,
             selectionRange,
             uri,
-            AhkTokenLine,
         }: TBaseLineParam,
+        AfterString: string,
     ) {
-        // // ex ~F10::
-        const { lStr } = AhkTokenLine;
-        const { start } = selectionRange;
-        const selectionRangeFix = new vscode.Range(
-            start,
-            new vscode.Position(start.line, lStr.indexOf(name) + name.length),
-        );
-        super(name, 'HotKeys', vscode.SymbolKind.Event, range, selectionRangeFix);
+        super(name, 'HotKeys', vscode.SymbolKind.Event, range, selectionRange);
         this.uri = uri;
-        this.AfterString = lStr.replace(name, '').trim();
+        this.AfterString = AfterString;
     }
 }
 
@@ -96,18 +89,12 @@ export class CAhkHotString extends vscode.DocumentSymbol {
             range,
             selectionRange,
             uri,
-            AhkTokenLine,
         }: TBaseLineParam,
+        AfterString: string,
     ) {
-        const { lStr } = AhkTokenLine;
-        const { start } = selectionRange;
-        const selectionRangeFix = new vscode.Range(
-            start,
-            new vscode.Position(start.line, lStr.indexOf(name) + name.length),
-        );
-        super(name, 'HotString', vscode.SymbolKind.Event, range, selectionRangeFix);
+        super(name, 'HotString', vscode.SymbolKind.Event, range, selectionRange);
         this.uri = uri;
-        this.AfterString = lStr.replace(name, '').trim();
+        this.AfterString = AfterString;
     }
 }
 

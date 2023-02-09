@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { CAhkHotKeys } from '../../AhkSymbol/CAhkLine';
 
 import { EDetail } from '../../globalEnum';
-import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 import type { TFuncInput } from '../getChildren';
 
 /**
@@ -32,24 +31,27 @@ export function ParserHotKey(FuncInput: TFuncInput): CAhkHotKeys | null {
         detail,
     } = AhkTokenLine;
 
-    if (detail.includes(EDetail.isHotStrLine) || detail.includes(EDetail.isLabelLine)) {
-        return null;
-    }
+    if (!detail.includes(EDetail.isHotKeyLine)) return null;
 
-    const ma: RegExpMatchArray | null = lStr.match(/^([^:]+::)/u);
+    const textRawTrimStart: string = textRaw.trimStart();
+    const ma: RegExpMatchArray | null = textRawTrimStart.match(/^([^:]+::)/u);
     if (ma === null) return null;
 
     const name: string = ma[1].trim();
-    const col: number = lStr.search(/\S/u);
+    const col: number = textRaw.length - textRawTrimStart.length;
+    const start: vscode.Position = new vscode.Position(line, col);
 
     return new CAhkHotKeys({
         name,
-        range: getRangeOfLine(line, lStr, textRaw.length),
+        range: new vscode.Range(
+            start,
+            new vscode.Position(line, textRaw.length),
+        ),
         selectionRange: new vscode.Range(
-            new vscode.Position(line, col),
+            start,
             new vscode.Position(line, col + name.length),
         ),
         uri,
         AhkTokenLine,
-    });
+    }, lStr.replace(name, '').trim());
 }
