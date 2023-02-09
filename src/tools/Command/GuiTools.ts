@@ -1,11 +1,6 @@
-import * as vscode from 'vscode';
-import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
-import type { CAhkLabel } from '../../AhkSymbol/CAhkLine';
 import type { TAhkTokenLine } from '../../globalEnum';
 import type { TScanData } from '../DeepAnalysis/FnVar/def/spiltCommandAll';
 import { spiltCommandAll } from '../DeepAnalysis/FnVar/def/spiltCommandAll';
-import { getFuncWithName } from '../DeepAnalysis/getFuncWithName';
-import { findLabel } from '../labels';
 
 function getMenuFuncData(lStr: string, col: number): TScanData[] | null {
     const strF: string = lStr
@@ -75,31 +70,6 @@ export function getGuiFunc(AhkTokenLine: TAhkTokenLine): TScanData[] | null {
         return SecondWordUp === 'GUI'
             ? getMenuFuncData(lStr, SecondWordUpCol)
             : null;
-    }
-
-    return null;
-}
-
-export function HoverAtGuiGFunc(AhkTokenLine: TAhkTokenLine, position: vscode.Position): vscode.MarkdownString | null {
-    const GuiDataList: TScanData[] | null = getGuiFunc(AhkTokenLine);
-    if (GuiDataList === null || GuiDataList.length === 0) return null;
-
-    const { character } = position;
-    for (const { RawNameNew, lPos } of GuiDataList) {
-        //
-        if (lPos <= character && (lPos + RawNameNew.length) >= character) {
-            const upName: string = RawNameNew.toUpperCase();
-            const label: CAhkLabel | null = findLabel(upName);
-            if (label !== null) {
-                return new vscode.MarkdownString(`a label def at ${label.uri.fsPath}`, true);
-            }
-            const fn: CAhkFunc | null = getFuncWithName(upName);
-            if (fn !== null) {
-                return fn.md;
-            }
-
-            //    return new vscode.MarkdownString(`can not find any`, true);
-        }
     }
 
     return null;

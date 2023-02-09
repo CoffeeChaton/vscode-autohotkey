@@ -13,7 +13,6 @@ import { getHoverStatement } from '../../tools/Built-in/statement.tools';
 import { hover2winMsgMd } from '../../tools/Built-in/Windows_Messages_Tools';
 import { numberFindWinMsg } from '../../tools/Built-in/Windows_MessagesRe_Tools';
 import { hoverWinTitleParam } from '../../tools/Built-in/WinTitle/WinTitleParameter.tools';
-import { HoverAtGuiGFunc } from '../../tools/Command/GuiTools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { isPosAtStrNext } from '../../tools/isPosAtStr';
@@ -22,6 +21,7 @@ import { hoverAhk2exe } from './tools/hoverAhk2exe';
 import { hoverClassName } from './tools/hoverClassName';
 import { hoverDirectives } from './tools/hoverDirectives';
 import { hoverGlobalVar } from './tools/hoverGlobalVar';
+import { hoverLabelOrFunc } from './tools/hoverLabelFn';
 import { hoverMultiLine } from './tools/hoverMultiLine';
 
 function HoverOfFunc(
@@ -87,8 +87,13 @@ function HoverProviderCore(
         if (DAmd !== null) return new vscode.Hover(DAmd);
     }
 
-    const hoverGuiList: vscode.MarkdownString | null = HoverAtGuiGFunc(AhkTokenLine, position);
-    if (hoverGuiList !== null) return new vscode.Hover(hoverGuiList);
+    const hoverLabelOrFuncMd: vscode.MarkdownString | null = hoverLabelOrFunc(
+        AhkFileData,
+        AhkTokenLine,
+        wordUp,
+        position,
+    );
+    if (hoverLabelOrFuncMd !== null) return new vscode.Hover(hoverLabelOrFuncMd);
 
     type TFn = (wordUp: string) => vscode.MarkdownString | null | undefined;
 

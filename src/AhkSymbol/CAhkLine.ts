@@ -119,6 +119,8 @@ export class CAhkLabel extends vscode.DocumentSymbol {
      * label: -> LABEL
      */
     public readonly upName: string;
+    public readonly md: vscode.MarkdownString;
+
     declare public readonly kind: vscode.SymbolKind.Namespace;
     declare public readonly detail: 'label';
     declare public readonly children: never[];
@@ -130,11 +132,13 @@ export class CAhkLabel extends vscode.DocumentSymbol {
             selectionRange,
             uri,
         }: TBaseLineParam,
+        md: vscode.MarkdownString,
     ) {
         super(name, 'label', vscode.SymbolKind.Namespace, range, selectionRange);
         this.uri = uri;
         this.upName = name.slice(0, -1).toUpperCase();
         this.AfterString = '';
+        this.md = md;
     }
 }
 

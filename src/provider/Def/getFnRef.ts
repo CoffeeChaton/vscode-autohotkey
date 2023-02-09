@@ -29,7 +29,7 @@ type TLineFnCall = {
     by: 1 | 2 | 3 | 4 | 5 | 6,
 };
 
-type TFuncRef = Omit<TLineFnCall, 'upName'>;
+export type TFuncRef = Omit<TLineFnCall, 'upName'>;
 
 export function fnRefLStr(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
     const { lStr, line } = AhkTokenLine;
@@ -87,7 +87,7 @@ export function fnRefTextRaw(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
     return arr;
 }
 
-const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[]>>(
+export const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[]>>(
     (AhkFileData: TAhkFileData): Map<string, TFuncRef[]> => {
         const { DocStrMap, AST } = AhkFileData;
         const filterLineList: number[] = getDAListTop(AST)
