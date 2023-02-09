@@ -21,6 +21,7 @@ import { hoverAhk2exe } from './tools/hoverAhk2exe';
 import { hoverClassName } from './tools/hoverClassName';
 import { hoverDirectives } from './tools/hoverDirectives';
 import { hoverGlobalVar } from './tools/hoverGlobalVar';
+import { hoverLabel } from './tools/hoverLabel';
 import { hoverLabelOrFunc } from './tools/hoverLabelFn';
 import { hoverMultiLine } from './tools/hoverMultiLine';
 
@@ -87,6 +88,8 @@ function HoverProviderCore(
         if (DAmd !== null) return new vscode.Hover(DAmd);
     }
 
+    const labelMd: vscode.MarkdownString | null = hoverLabel(AhkFileData, position, wordUp);
+    if (labelMd !== null) return new vscode.Hover(labelMd);
     const hoverLabelOrFuncMd: vscode.MarkdownString | null = hoverLabelOrFunc(
         AhkFileData,
         AhkTokenLine,

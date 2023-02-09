@@ -270,7 +270,7 @@
         "flow_of_control": {
             "patterns": [
                 {
-                    "match": "\\b(?!MsgBox)(?<![.#])(?i:(Goto|GoSub))\\b[ \\t]*?,?[ \\t]*([a-zA-Z_]*\\w*)",
+                    "match": "\\b(?!MsgBox)(?<![.#])(?i:(goto|goSub|Break|Continue|OnExit))\\b[ \\t]*?,?[ \\t]*([a-zA-Z_]*\\w*)",
                     "name": "meta.goto.gosub.ahk",
                     "captures": {
                         "1": { "name": "keyword.control.flow.ahk" },

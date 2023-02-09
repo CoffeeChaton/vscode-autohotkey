@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { CAhkLabel } from '../../AhkSymbol/CAhkLine';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
@@ -8,8 +7,8 @@ import { EDetail } from '../../globalEnum';
 import { getGuiFunc } from '../../tools/Command/GuiTools';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
 import { getMenuFunc } from '../../tools/Command/MenuTools';
+import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
-import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { findLabel } from '../../tools/labels';
 
 function LabelRefHotkey(AhkTokenLine: TAhkTokenLine, wordUp: string): vscode.Range | null {
@@ -169,11 +168,11 @@ export function getDefWithLabel(
         return getDefWithLabelCore(wordUpCase);
     }
 
-    const HotkeyData: TScanData | null = getHotkeyWrap(AhkTokenLine);
-    if (HotkeyData?.RawNameNew.toUpperCase() === wordUpCase) return getDefWithLabelCore(wordUpCase);
+    const Data: TScanData | null = getHotkeyWrap(AhkTokenLine)
+        ?? getMenuFunc(AhkTokenLine)
+        ?? getSetTimerWrap(AhkTokenLine);
 
-    const MenuData: TScanData | null = getMenuFunc(AhkTokenLine);
-    if (MenuData?.RawNameNew.toUpperCase() === wordUpCase) return getDefWithLabelCore(wordUpCase);
+    if (Data?.RawNameNew.toUpperCase() === wordUpCase) return getDefWithLabelCore(wordUpCase);
 
     const GuiDataList: TScanData[] | null = getGuiFunc(AhkTokenLine);
     if (GuiDataList !== null) {
@@ -183,43 +182,6 @@ export function getDefWithLabel(
                 return getDefWithLabelCore(wordUpCaseFix);
             }
         }
-    }
-
-    const ma: RegExpMatchArray | null = lStrFix.match(/\b(SetTimer[\s,%]+)\w*$/iu);
-    if (ma !== null) {
-        /**
-         * ma1 has "%" -> aVar->HasObject()  ----> getValDefInFunc()
-         *
-         * ```c++
-         * IObject *Script::FindCallable(LPTSTR aLabelName, Var *aVar, int aParamCount) {
-         *     if (aVar && aVar->HasObject())
-         *     if (Label *label = FindLabel(aLabelName))
-         *     if (Func *func = FindFunc(aLabelName))
-         *     //...
-         * }
-         * ```
-         */
-        const ma1: string = ma[1];
-        if (ma1.includes('%')) {
-            // no search funcObj in this way.  ----> getValDefInFunc()
-            return null;
-        }
-
-        /**
-         * ```c++
-         * if (Label *label = FindLabel(aLabelName))
-         * ```
-         */
-        const label: vscode.Location[] | null = getDefWithLabelCore(wordUpCase);
-        if (label !== null) return label;
-
-        /**
-         * ```c++
-         * if (Func *func = FindFunc(aLabelName))
-         * ```
-         */
-        const fn: CAhkFunc | null = getFuncWithName(wordUpCase);
-        if (fn !== null) return [new vscode.Location(fn.uri, fn.range)];
     }
 
     return null;
