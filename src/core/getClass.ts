@@ -8,7 +8,7 @@ import { getClassInstanceVar } from '../tools/ahkClass/getClassInstanceVar';
 import { getRange } from '../tools/range/getRange';
 import type { TFuncInput } from './getChildren';
 import { getChildren } from './getChildren';
-import { getFunc } from './ParserFunc';
+import { getFunc } from './ParserTools/ParserFunc';
 
 function setClassInsertText(children: TAhkSymbolList): string {
     for (const ch of children) {
