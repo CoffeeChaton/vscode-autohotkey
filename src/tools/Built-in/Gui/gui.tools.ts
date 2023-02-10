@@ -19,7 +19,7 @@ const { snippetGui, GuiMDMap } = (() => {
         } = v;
         const upName: string = SubCommand.toUpperCase();
         const md: vscode.MarkdownString = new vscode.MarkdownString('', true)
-            .appendMarkdown('Gui')
+            .appendMarkdown('Gui-sub-command')
             .appendCodeblock(body, 'ahk')
             .appendMarkdown(`[(Read Doc)](${link})\n\n`)
             .appendMarkdown(doc)

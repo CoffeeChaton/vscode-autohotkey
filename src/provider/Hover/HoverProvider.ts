@@ -21,6 +21,7 @@ import { hoverAhk2exe } from './tools/hoverAhk2exe';
 import { hoverClassName } from './tools/hoverClassName';
 import { hoverDirectives } from './tools/hoverDirectives';
 import { hoverGlobalVar } from './tools/hoverGlobalVar';
+import { hoverGuiParam } from './tools/hoverGuiParam';
 import { hoverLabel } from './tools/hoverLabel';
 import { hoverLabelOrFunc } from './tools/hoverLabelFn';
 import { hoverMultiLine } from './tools/hoverMultiLine';
@@ -98,6 +99,8 @@ function HoverProviderCore(
     );
     if (hoverLabelOrFuncMd !== null) return new vscode.Hover(hoverLabelOrFuncMd);
 
+    const guiParam: vscode.MarkdownString | null = hoverGuiParam(AhkTokenLine, position);
+    if (guiParam !== null) return new vscode.Hover(guiParam);
     type TFn = (wordUp: string) => vscode.MarkdownString | null | undefined;
 
     for (

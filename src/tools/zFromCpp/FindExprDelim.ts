@@ -39,10 +39,11 @@ export function FindExprDelim(aBuf: string, aDelimiter: string, aStartIndex: num
                 return mark;
             case ':':
                 if (aBuf[mark + 1] === '=') continue;
-                // Since aDelimiter is zero, this colon doesn't belong to a ternary expression
-                // or object literal which is part of this sub-expression, so should effectively
-                // terminate the sub-expression (likely a fat arrow function).
-                return mark;
+                // // Since aDelimiter is zero, this colon doesn't belong to a ternary expression
+                // // or object literal which is part of this sub-expression, so should effectively
+                // // terminate the sub-expression (likely a fat arrow function).
+                // return mark;
+                continue;
             case '?':
                 if (aDelimiter !== ':') continue; // The following isn't needed in this case.
                 // Scan for the corresponding ':' (or some other closing symbol if that's missing)

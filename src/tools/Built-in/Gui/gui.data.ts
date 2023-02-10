@@ -13,7 +13,7 @@ export type TGuiCmdElement = Readonly<{
 export const guiSubCommandList: TGuiCmdElement[] = [
     {
         SubCommand: 'New',
-        body: 'Gui, ${1:GuiName}:New [, ${2:Options}, ${3:Title}]',
+        body: 'Gui, ${1:GuiName:}New [, ${2:Options}, ${3:Title}]',
         doc: 'Creates a new window.',
         link: 'https://www.autohotkey.com/docs/v1/lib/Gui.htm#New',
         exp: [
@@ -161,14 +161,14 @@ export const guiSubCommandList: TGuiCmdElement[] = [
     },
     {
         SubCommand: 'Flash',
-        body: 'Gui, Flash , ${1:Off}',
+        body: 'Gui, Flash , ${1| ,Off|}',
         doc: 'Blinks the window and its taskbar button.',
         link: 'https://www.autohotkey.com/docs/v1/lib/Gui.htm#Flash',
         exp: ['Gui, Flash [, Off]'],
     },
     {
         SubCommand: 'Default',
-        body: 'Gui, ${1:GuiName:}:Default',
+        body: 'Gui, ${1:GuiName}:Default',
         doc: 'Changes the current thread\'s default GUI window name.',
         link: 'https://www.autohotkey.com/docs/v1/lib/Gui.htm#Default',
         exp: [
@@ -180,7 +180,7 @@ export const guiSubCommandList: TGuiCmdElement[] = [
     {
         SubCommand: 'Options',
         body:
-            'Gui, ${1:GuiName:}:+-AlwaysOnTop +-Border +-Caption +-Delimiter +-Disabled +-DPIScale +-HwndOutputVar +-LabelName +-LastFound +-LastFoundExist +-MaximizeBox +-MinimizeBox +-MinSize +-MaxSize +-OwnDialogs +-Owner +-Parent +-Resize +-SysMenu +-Theme +-ToolWindow',
+            'Gui, ${1:GuiName:} +-AlwaysOnTop +-Border +-Caption +-Delimiter +-Disabled +-DPIScale +-HwndOutputVar +-LabelName +-LastFound +-LastFoundExist +-MaximizeBox +-MinimizeBox +-MinSize +-MaxSize +-OwnDialogs +-Owner +-Parent +-Resize +-SysMenu +-Theme +-ToolWindow',
         doc: 'One or more options may be specified immediately after the GUI command.',
         link: 'https://www.autohotkey.com/docs/v1/lib/Gui.htm#Options',
         exp: [
