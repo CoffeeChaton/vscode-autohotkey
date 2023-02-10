@@ -12,7 +12,7 @@ export function getSnippetCommand(subStr: string): readonly CSnippetCommand[] {
     const isOK: boolean = (/^\w+$/u).test(subStr)
         || (/^case\s[^:]+:\s*\w*$/iu).test(subStr)
         || (/^default\s*:\s*\w*$/iu).test(subStr)
-        || (/::\s*\w*$/iu).test(subStr); // allow hotstring or hotkey
+        || (!subStr.trim().startsWith(':') && (/::\s*\w*$/iu).test(subStr)); // allow hotkey
 
     // || (/^[{}]\s*\w*$/iu).test(subStr);
     // { MsgBox hi!

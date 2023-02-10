@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import * as vscode from 'vscode';
 import { getCommandOptions } from '../../../configUI';
@@ -36,7 +35,7 @@ const { snippetGui, GuiMDMap } = (() => {
             description: 'Gui-sub-command', // Right
         });
         item.kind = vscode.CompletionItemKind.Keyword;
-        item.insertText = body;
+        item.insertText = new vscode.SnippetString(body);
         item.detail = 'Gui';
         item.documentation = md;
 
@@ -60,7 +59,7 @@ export function getSnippetGui(subStr: string): readonly vscode.CompletionItem[] 
     const isOK: boolean = (/^G\w*$/iu).test(subStr)
         || (/^case\s[^:]+:\s*G\w*$/iu).test(subStr)
         || (/^default\s*:\s*G\w*$/iu).test(subStr)
-        || (/::\s*G\w*$/iu).test(subStr); // allow hotstring or hotkey
+        || (!subStr.trim().startsWith(':') && (/::\s*G\w*$/iu).test(subStr)); // just allow hotkey, not allow hotString
 
     if (!isOK) return [];
 
@@ -84,30 +83,4 @@ export function getSnippetGui(subStr: string): readonly vscode.CompletionItem[] 
     }
 }
 
-// function getGuiSubCmdDoc(
-//     DocStrMap: TTokenStream,
-//     position: vscode.Position,
-// ): vscode.MarkdownString | undefined {
-//     const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
-//     const {
-//         fistWordUp,
-//         fistWordUpCol,
-//         SecondWordUp,
-//         SecondWordUpCol,
-//     } = AhkTokenLine;
-
-//     // eslint-disable-next-line no-nested-ternary
-//     const col: number = fistWordUp === 'GUI'
-//         ? fistWordUpCol
-//         : (SecondWordUp === 'GUI'
-//             ? SecondWordUpCol
-//             : 0);
-
-//     if (col === 0) return undefined;
-
-//     if (position.character < col + 'gui,'.length) return undefined;
-//     //
-//     .log('position', position);
-
-//     return undefined;
-// }
+export const GuiMDMapOut: ReadonlyMap<string, vscode.MarkdownString> = GuiMDMap;
