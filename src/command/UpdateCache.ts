@@ -5,6 +5,7 @@ import type { TAhkFileData } from '../core/ProjectManager';
 import { pm } from '../core/ProjectManager';
 import { log } from '../provider/vscWindows/log';
 import { getUriList } from '../tools/fsTools/getUriList';
+import { showFileList } from '../tools/fsTools/showFileList';
 
 export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileData[] | null> {
     rmAllDiag();
@@ -46,7 +47,8 @@ export async function UpdateCacheUi(): Promise<void> {
     const t1: number = Date.now();
     const list: TAhkFileData[] | null = await UpdateCacheAsync(true) ?? [];
     const t2: number = Date.now();
-    log.info(`Refresh Resource ${t2 - t1} ms, file: ${list.length}`);
+    const fsPathList: string[] = list.map((v: TAhkFileData): string => v.uri.fsPath);
+    log.info(`Refresh Resource ${t2 - t1} ms, file: ${list.length}\n${showFileList(fsPathList)}`);
     // log.info(`file: [\n${
     //     list
     //         .map((AhkFileData: TAhkFileData): string => AhkFileData.uri.fsPath)

@@ -5,6 +5,7 @@ import { EFormatChannel } from '../globalEnum';
 import { FormatCore } from '../provider/Format/FormatProvider';
 import { log } from '../provider/vscWindows/log';
 import { getUriList } from '../tools/fsTools/getUriList';
+import { showFileList } from '../tools/fsTools/showFileList';
 import { UpdateCacheAsync } from './UpdateCache';
 
 async function formatByPathAsync(
@@ -87,7 +88,7 @@ export async function FormatAllFile(): Promise<null> {
     await Promise.all(results);
     const t2: number = Date.now();
 
-    log.info(`FormatAllFile -> ${t2 - t1} ms`);
+    log.info(`FormatAllFile -> ${t2 - t1} ms\n${showFileList(uriList.map((uri: vscode.Uri): string => uri.fsPath))}`);
     log.show();
 
     await UpdateCacheAsync(false);
