@@ -4,12 +4,12 @@
     "patterns": [
         { "include": "#escaped_char" },
         { "include": "#comment" },
-        { "include": "#string_multi_line" },
         { "include": "#label_line" },
         { "include": "#hotstring" },
         { "include": "#hotkey" },
         { "include": "#directives" },
         { "include": "#class_def_line" },
+        { "include": "#string_multi_line" },
         { "include": "#command" },
         { "include": "#builtin_variable" },
         { "include": "#other_keyword" },
@@ -449,7 +449,7 @@
             ]
         },
         "string_multi_line": {
-            "begin": "^[ \\t]*\\((((?!::|[);]))*)([ \\t];.*)?$",
+            "begin": "^[ \\t]*\\((([^);])*)([ \\t];.*)?$",
             "beginCaptures": {
                 "1": { "name": "keyword.multiline.ahk" },
                 "2": { "name": "comment.line.semicolon.ahk" }
