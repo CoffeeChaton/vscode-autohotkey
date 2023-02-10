@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [0,1,-999] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,-999] }] */
 import type { TMultilineFlag, TTokenStream } from '../../../globalEnum';
 import { EMultiline } from '../../../globalEnum';
 import { enumLog } from '../../../tools/enumErr';
@@ -32,6 +32,13 @@ export function getMatrixMultLine(DocStrMap: TTokenStream): readonly (-999 | 0 |
         if (multilineFlag !== null && multilineFlag.LTrim.length === 0) {
             list.push(-999);
             continue;
+        }
+        if (multiline === EMultiline.end) {
+            const last: -999 | 0 | 1 = list.at(-1) ?? 0;
+            if (last === -999) {
+                list.push(-999);
+                continue;
+            }
         }
 
         const lTrimDeep: 0 | 1 = getDeepLTrim(multiline, multilineFlag);
