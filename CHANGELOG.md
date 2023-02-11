@@ -1,5 +1,32 @@
 # Changelog
 
+## Next 0.0.23(2023-02-XX)
+
+- feat: find func reference at `Sort, MyVar, F IntegerSort`
+
+  ```ahk
+  MyVar := "5,3,7,9,1,13,999,-4"
+  Sort, MyVar, F IntegerSort D,
+  ;              ^^^^^^^^^^^ func after F[ \t]
+  MsgBox, % "MyVar is " MyVar
+
+  IntegerSort(a1, a2)
+  {
+    return a1 - a2
+  }
+  ```
+
+- feat: add hover of `label:`
+- feat: better log of `FormatAllFile` and `Refresh Resource`
+- fix: case of multi_line vs hotkey , exp : `(:: foo()` is hotkey not multi_line
+- fix: completion of `Gui, add` `Gui, new` ...etc
+- fix: format `HotStr` trigger range has `([{`
+- fix: format do not indent `HotKey` `HotStr` `Label` line, even if it is through
+- fix: format multi_line tail out of control
+- fix: [#21](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/21)
+  1. feat: add hover of `Gui, Sub-commands`
+  2. feat: add support variable `Gui, add` `vVarName`
+
 ## 0.0.22(2023-02-07)
 
 - feat: add hove of `Gui` g-label part1 [#21](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/21)

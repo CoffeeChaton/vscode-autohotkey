@@ -4,6 +4,7 @@ import { getGuiFunc } from '../../tools/Command/GuiTools';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
 import { getMenuFunc } from '../../tools/Command/MenuTools';
 import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
+import { getSortFunc } from '../../tools/Command/sotrTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import { fnRefLStr, fnRefTextRaw } from './getFnRef';
 
@@ -39,14 +40,11 @@ export function posAtFnRef(
         if (upName === wordUpFix && (character >= col || character <= col + len)) return true;
     }
 
-    const setTimerData: TScanData | null = getSetTimerWrap(AhkTokenLine);
-    if (setTimerData !== null) return true;
-
-    const HotkeyData: TScanData | null = getHotkeyWrap(AhkTokenLine);
-    if (HotkeyData !== null) return true;
-
-    const MenuData: TScanData | null = getMenuFunc(AhkTokenLine);
-    if (MenuData !== null) return true;
+    const Data: TScanData | null = getSetTimerWrap(AhkTokenLine)
+        ?? getHotkeyWrap(AhkTokenLine)
+        ?? getMenuFunc(AhkTokenLine)
+        ?? getSortFunc(AhkTokenLine);
+    if (Data !== null) return true;
 
     const GuiData: readonly TScanData[] | null = getGuiFunc(AhkTokenLine, 0);
     if (GuiData !== null && GuiData.length > 0) return true;

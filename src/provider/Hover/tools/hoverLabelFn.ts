@@ -48,12 +48,15 @@ export function hoverLabelOrFunc(
              * 4. by Hotkey
              * 5. by Menu
              * 6. by Gui
-             *
+             * 7. by Sort <--- not allow find label
              * but case1 case2 don't using at this
              */
 
-            const label: CAhkLabel | null = findLabel(wordUpFix);
-            if (label !== null) return label.md;
+            // eslint-disable-next-line no-magic-numbers
+            if (by !== 7) { // 7. by Sort <--- not allow find label
+                const label: CAhkLabel | null = findLabel(wordUpFix);
+                if (label !== null) return label.md;
+            }
 
             const fn: CAhkFunc | null = getFuncWithName(wordUpFix);
             if (fn !== null) return fn.md;

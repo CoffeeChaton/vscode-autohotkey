@@ -170,7 +170,7 @@ export function getDefWithLabel(
 
     const Data: TScanData | null = getHotkeyWrap(AhkTokenLine)
         ?? getMenuFunc(AhkTokenLine)
-        ?? getSetTimerWrap(AhkTokenLine);
+        ?? getSetTimerWrap(AhkTokenLine); // don't find `Sort`
 
     if (Data?.RawNameNew.toUpperCase() === wordUpCase) return getDefWithLabelCore(wordUpCase);
 

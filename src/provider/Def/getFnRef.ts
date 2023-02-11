@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,6] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,6,7] }] */
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TAhkFileData } from '../../core/ProjectManager';
@@ -9,6 +9,7 @@ import { getGuiFunc } from '../../tools/Command/GuiTools';
 import { getHotkeyWrap } from '../../tools/Command/HotkeyTools';
 import { getMenuFunc } from '../../tools/Command/MenuTools';
 import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
+import { getSortFunc } from '../../tools/Command/sotrTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { findLabel } from '../../tools/labels';
@@ -25,8 +26,9 @@ type TLineFnCall = {
      * 4. by Hotkey
      * 5. by Menu
      * 6. by Gui
+     * 7. by Sort
      */
-    by: 1 | 2 | 3 | 4 | 5 | 6,
+    by: 1 | 2 | 3 | 4 | 5 | 6 | 7,
 };
 
 export type TFuncRef = Omit<TLineFnCall, 'upName'>;
@@ -113,18 +115,20 @@ export const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[
                 map.set(upName, arr);
             }
 
-            for (const fn of [getSetTimerWrap, getHotkeyWrap, getMenuFunc]) {
+            for (const fn of [getSetTimerWrap, getHotkeyWrap, getMenuFunc, getSortFunc] as const) {
                 const Data: TScanData | null = fn(AhkTokenLine);
                 if (Data !== null) {
                     const { RawNameNew, lPos } = Data;
                     const upName: string = RawNameNew.toUpperCase();
                     const arr: TFuncRef[] = map.get(upName) ?? [];
-                    // eslint-disable-next-line no-nested-ternary
-                    const by: 3 | 4 | 5 = fn === getSetTimerWrap
-                        ? 3
-                        : (fn === getHotkeyWrap
-                            ? 4
-                            : 5);
+
+                    const by: 3 | 4 | 5 | 7 = ((): 3 | 4 | 5 | 7 => {
+                        if (fn === getSetTimerWrap) return 3;
+                        if (fn === getHotkeyWrap) return 4;
+                        if (fn === getMenuFunc) return 5;
+                        /* if (fn === getSortFunc) */
+                        return 7;
+                    })();
 
                     arr.push({
                         line,
@@ -198,7 +202,7 @@ export function getFuncRef(funcSymbol: CAhkFunc): readonly TFnRefLike[] {
 
     const allowList: TFnRefLike[] = [];
     for (const re of allList) {
-        if (hasSameLabel && re.by > 2) {
+        if (hasSameLabel && (re.by > 2) && (re.by !== 7)) {
             continue;
         }
         allowList.push(re);
