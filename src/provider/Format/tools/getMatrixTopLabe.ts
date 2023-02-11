@@ -129,18 +129,31 @@ export function getMatrixTopLabe(AhkFileData: TAhkFileData, useTopLabelIndent: b
         // ~F12
         //     deep++
         // return
-        let oldLineIsIF = false;
         for (let line = start + 1; line < DocStrMapLen; line++) {
             list[line] = 1;
-            //
-            const { lStr, fistWordUp } = DocStrMap[line];
-            if (['RETURN', 'EXIT', 'EXITAPP', 'RELOAD'].includes(fistWordUp)) {
-                if (!oldLineIsIF) {
-                    list[line] = 0;
+            /**
+             * Do not indent, even if it is through
+             */
+
+            const lnDef: TTopSymbol | undefined = topSymbolList.get(line);
+            if (
+                lnDef instanceof CAhkLabel
+                || lnDef instanceof CAhkHotString
+                || lnDef instanceof CAhkHotKeys
+            ) {
+                list[line] = 0;
+                if (lnDef instanceof CAhkHotKeys && lnDef.AfterString.trim().length > 0) {
                     break;
                 }
-            } else if (LineIsIFCase(lStr)) {
-                oldLineIsIF = true;
+            }
+
+            const { fistWordUp } = DocStrMap[line];
+            if (
+                ['RETURN', 'EXIT', 'EXITAPP', 'RELOAD'].includes(fistWordUp)
+                && !LineIsIFCase(DocStrMap.at(line - 1)?.lStr ?? '') // check line-1 //FIXME: use foc?
+            ) {
+                list[line] = 0;
+                break;
             }
         }
     }
