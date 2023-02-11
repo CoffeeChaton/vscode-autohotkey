@@ -6,7 +6,7 @@ import { getMenuFunc } from '../../tools/Command/MenuTools';
 import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
 import { getSortFunc } from '../../tools/Command/sotrTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
-import { fnRefLStr, fnRefTextRaw } from './getFnRef';
+import { fnRefLStr, fnRefTextRaw, fnRefTextRawReg } from './getFnRef';
 
 /**
 * ```ahk
@@ -36,7 +36,13 @@ export function posAtFnRef(
 ): boolean {
     const { character } = position;
     const len: number = wordUpFix.length;
-    for (const { upName, col } of [...fnRefLStr(AhkTokenLine), ...fnRefTextRaw(AhkTokenLine)]) {
+    for (
+        const { upName, col } of [
+            ...fnRefLStr(AhkTokenLine),
+            ...fnRefTextRaw(AhkTokenLine),
+            ...fnRefTextRawReg(AhkTokenLine),
+        ]
+    ) {
         if (upName === wordUpFix && (character >= col || character <= col + len)) return true;
     }
 

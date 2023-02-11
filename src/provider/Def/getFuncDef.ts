@@ -5,6 +5,7 @@ import type { TAhkTokenLine } from '../../globalEnum';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { RefLike2Location } from './getFnRef';
+import { getFucDefWordUpFix } from './getFucDefWordUpFix';
 import { isPosAtMethodName } from './isPosAtMethodName';
 import { posAtFnRef } from './posAtFnRef';
 
@@ -18,12 +19,11 @@ export function getFuncDef(
 
     if (isPosAtMethodName(getDAWithPos(AST, position), position)) return null;
 
-    const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
+    const { line, character } = position;
+    const AhkTokenLine: TAhkTokenLine = DocStrMap[line];
 
     // dprint-ignore
-    const wordUpFix: string = (/^g\w+$/iu).test(wordUp) && (AhkTokenLine.fistWordUp === 'GUI' || AhkTokenLine.SecondWordUp === 'GUI')
-        ? wordUp.replace(/^g/iu, '')
-        : wordUp;
+    const wordUpFix: string = getFucDefWordUpFix(AhkTokenLine, wordUp, character);
     const funcSymbol: CAhkFunc | null = getFuncWithName(wordUpFix);
     if (funcSymbol === null) return null;
 

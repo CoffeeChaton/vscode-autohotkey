@@ -10,6 +10,7 @@ import type { TAhkTokenLine } from '../../globalEnum';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
 import { getFileAllFunc } from '../../tools/visitor/getFileAllFuncList';
 import type { showUnknownAnalyze } from '../CodeLens/showUnknownAnalyze';
+import { getFucDefWordUpFix } from '../Def/getFucDefWordUpFix';
 import { posAtFnRef } from '../Def/posAtFnRef';
 
 function atFnHead(
@@ -69,10 +70,7 @@ function posAtFnReference(
 ): never[] | [vscode.CodeAction] {
     const AhkTokenLine: TAhkTokenLine = AhkFileData.DocStrMap[active.line];
 
-    // dprint-ignore
-    const wordUpFix: string = (/^g\w+$/iu).test(wordUp) && (AhkTokenLine.fistWordUp === 'GUI' || AhkTokenLine.SecondWordUp === 'GUI')
-        ? wordUp.replace(/^g/iu, '')
-        : wordUp;
+    const wordUpFix: string = getFucDefWordUpFix(AhkTokenLine, wordUp, active.character);
 
     const funcSymbol: CAhkFunc | null = getFuncWithName(wordUpFix);
     if (funcSymbol === null) return [];

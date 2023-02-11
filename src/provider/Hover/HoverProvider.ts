@@ -15,7 +15,6 @@ import { numberFindWinMsg } from '../../tools/Built-in/Windows_MessagesRe_Tools'
 import { hoverWinTitleParam } from '../../tools/Built-in/WinTitle/WinTitleParameter.tools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
-import { isPosAtStrNext } from '../../tools/isPosAtStr';
 import { DeepAnalysisHover } from './tools/DeepAnalysisHover';
 import { hoverAhk2exe } from './tools/hoverAhk2exe';
 import { hoverClassName } from './tools/hoverClassName';
@@ -58,7 +57,7 @@ function HoverProviderCore(
 
     // pos at Comment range...
     const AhkTokenLine: TAhkTokenLine = DocStrMap[position.line];
-    const { lStr, textRaw } = AhkTokenLine;
+    const { lStr } = AhkTokenLine;
     if (position.character > lStr.length) return hoverAhk2exe(AhkTokenLine, position);
 
     // ex: #Warn
@@ -76,8 +75,6 @@ function HoverProviderCore(
 
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b(?!\()/u);
     if (range === undefined) return null;
-
-    if (isPosAtStrNext(textRaw, lStr, position)) return null;
 
     const wordUp: string = document.getText(range).toUpperCase();
 

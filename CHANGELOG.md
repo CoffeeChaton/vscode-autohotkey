@@ -2,7 +2,7 @@
 
 ## Next 0.0.23(2023-02-XX)
 
-- feat: find func reference at `Sort, MyVar, F IntegerSort`
+- feat: find func reference at `Sort, MyVar, F IntegerSort` [[Read doc]](https://www.autohotkey.com/docs/v1/lib/Sort.htm)
 
   ```ahk
   MyVar := "5,3,7,9,1,13,999,-4"
@@ -16,6 +16,18 @@
   }
   ```
 
+- feat: find func reference at `RegEx CallOut Functions` [[Read doc]](https://www.autohotkey.com/docs/v1/misc/RegExCallout.htm#callout-functions)
+
+  ```ahk
+  Haystack := "The quick brown fox jumps over the lazy dog."
+  RegExMatch(Haystack, "i)(The) (\w+)\b(?CCallout)")
+  ;                                       ^^^^^^^ func
+  Callout(m) {
+    MsgBox m=%m%`nm1=%m1%`nm2=%m2%
+    return 1
+  }
+  ```
+
 - feat: add hover of `label:`
 - feat: better log of `FormatAllFile` and `Refresh Resource`
 - fix: case of multi_line vs hotkey , exp : `(:: foo()` is hotkey not multi_line
@@ -24,8 +36,9 @@
 - fix: format do not indent `HotKey` `HotStr` `Label` line, even if it is through
 - fix: format multi_line tail out of control
 - fix: [#21](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/21)
-  1. feat: add hover of `Gui, Sub-commands`
-  2. feat: add support variable `Gui, add` `vVarName`
+
+1. feat: add hover of `Gui, Sub-commands`
+2. feat: add support variable `Gui, add` `vVarName`
 
 ## 0.0.22(2023-02-07)
 
@@ -39,24 +52,24 @@
 
 - feat: add jsdoc-style comments of variable ![img](image/CHANGELOG/v0.0.21.png)
 
-  ```ahk
-  f2(){
-      /**
-      * - [markdowm-syntax](https://www.markdownguide.org/basic-syntax/)
-      * - list2
-      * - Love **is** bold
-      *
-      * style look like jsDoc
-      * and you need write before at var first-def line
-      */
-      style1 := 0
+```ahk
+f2(){
+    /**
+    * - [markdowm-syntax](https://www.markdownguide.org/basic-syntax/)
+    * - list2
+    * - Love **is** bold
+    *
+    * style look like jsDoc
+    * and you need write before at var first-def line
+    */
+    style1 := 0
 
-      MsgBox, % style1 ; try to hover of "style1"!
+    MsgBox, % style1 ; try to hover of "style1"!
 
-      style2 := 1 ; i look like c++ doc style
-      MsgBox, % style2 ; try to hover of "style2"!
-  }
-  ```
+    style2 := 1 ; i look like c++ doc style
+    MsgBox, % style2 ; try to hover of "style2"!
+}
+```
 
 - feat: add format `ahk-obj not close` case
 - feat: add format config

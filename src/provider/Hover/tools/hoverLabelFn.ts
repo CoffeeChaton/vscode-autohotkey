@@ -3,12 +3,11 @@ import type { CAhkFunc } from '../../../AhkSymbol/CAhkFunc';
 import type { CAhkLabel } from '../../../AhkSymbol/CAhkLine';
 import type { TAhkFileData } from '../../../core/ProjectManager';
 import type { TAhkTokenLine } from '../../../globalEnum';
-import { getGuiFunc } from '../../../tools/Command/GuiTools';
-import type { TScanData } from '../../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import { getFuncWithName } from '../../../tools/DeepAnalysis/getFuncWithName';
 import { findLabel } from '../../../tools/labels';
 import type { TFuncRef } from '../../Def/getFnRef';
-import { fileFuncRef } from '../../Def/getFnRef';
+import { EFnRefBy, fileFuncRef } from '../../Def/getFnRef';
+import { getFucDefWordUpFix } from '../../Def/getFucDefWordUpFix';
 
 /**
  * ```ahk
@@ -22,18 +21,11 @@ export function hoverLabelOrFunc(
     position: vscode.Position,
 ): vscode.MarkdownString | null {
     const refMap: ReadonlyMap<string, TFuncRef[]> = fileFuncRef.up(AhkFileData);
-
-    /**
-     * fix gui GLabel = =||
-     */
-    const GuiDataList: readonly TScanData[] | null = getGuiFunc(AhkTokenLine, 0);
-    const wordUpFix: string = GuiDataList !== null && wordUp.startsWith('G')
-        ? wordUp.replace(/^g/iu, '')
-        : wordUp;
+    const { character, line } = position;
+    const wordUpFix: string = getFucDefWordUpFix(AhkTokenLine, wordUp, character);
 
     const locList: TFuncRef[] | undefined = refMap.get(wordUpFix);
     if (locList === undefined) return null;
-    const { character, line } = position;
 
     for (const { line: refLine, col, by } of locList) {
         if (
@@ -48,12 +40,12 @@ export function hoverLabelOrFunc(
              * 4. by Hotkey
              * 5. by Menu
              * 6. by Gui
-             * 7. by Sort <--- not allow find label
-             * but case1 case2 don't using at this
+             * 7. by Sort
+             * 8. by (?CCallout) https://www.autohotkey.com/docs/v1/misc/RegExCallout.htm#callout-functions
              */
-
+            // FIXME i need to san check
             // eslint-disable-next-line no-magic-numbers
-            if (by !== 7) { // 7. by Sort <--- not allow find label
+            if (by < EFnRefBy.Sort) { // 7. by Sort <--- not allow find label
                 const label: CAhkLabel | null = findLabel(wordUpFix);
                 if (label !== null) return label.md;
             }

@@ -1,7 +1,6 @@
 import type * as vscode from 'vscode';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
-import { isPosAtStrNext } from '../../tools/isPosAtStr';
 import { getClassDef } from '../Def/getClassDef';
 import { posAtLabelDef } from '../Def/getDefWithLabel';
 import { getFuncDef } from '../Def/getFuncDef';
@@ -14,9 +13,6 @@ function ReferenceProviderCore(
 ): vscode.Location[] | null {
     const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
     if (AhkFileData === null) return null;
-
-    const { textRaw, lStr } = AhkFileData.DocStrMap[position.line];
-    if (isPosAtStrNext(textRaw, lStr, position)) return null;
 
     const range: vscode.Range | undefined = document.getWordRangeAtPosition(position, /(?<![.`])\b\w+\b/iu);
     if (range === undefined) return null;

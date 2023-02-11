@@ -75,10 +75,14 @@ Install extension via Visual Studio Marketplace [AutoHotkey NekoHelp](https://ma
 
 support to find like
 
-1. `functionName(` , call function.
-2. `"functionName"` , wrapped in text.
+1. `functionName(` , call function, but does not contain like `new ClassName()`
+2. `"functionName"` , wrapped in text, _Warning_, refactoring may accidentally modify such references.
    <details>
    <summary>some exp code</summary>
+
+   > - also can use
+   > - `fnObject := func("functionName")` [[read doc of func()]](https://www.autohotkey.com/docs/v1/lib/Func.htm)
+   > - `fnObject := RegisterCallback("functionName")` [read doc of RegisterCallback](https://www.autohotkey.com/docs/v1/lib/RegisterCallback.htm)
 
    ```ahk
     #NoEnv
@@ -104,13 +108,9 @@ support to find like
     }
    ```
 
-   > - also can use
-   > - `fnObject := func("functionName")` [[read doc of func()]](https://www.autohotkey.com/docs/v1/lib/Func.htm)
-   > - `fnObject := RegisterCallback("functionName")` [read doc of RegisterCallback](https://www.autohotkey.com/docs/v1/lib/RegisterCallback.htm)
-
    </details>
 
-3. <https://www.autohotkey.com/docs/v1/misc/Labels.htm#Functions>
+3. label -> function <https://www.autohotkey.com/docs/v1/misc/Labels.htm#Functions>
    >
    > - OK [SetTimer](https://www.autohotkey.com/docs/v1/lib/SetTimer.htm#Functor)
    > - OK [Hotkey](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm#Functor)
@@ -118,8 +118,32 @@ support to find like
    > - OK [Menu](https://www.autohotkey.com/docs/v1/lib/Menu.htm#Functor)
    > - not plan to support ~~[Gui events](https://www.autohotkey.com/docs/v1/lib/Gui.htm#Labels) such as GuiClose~~
 
-4. TODO Sort F-flag <https://www.autohotkey.com/docs/v1/lib/Sort.htm#Options>
-5. not plan to support RegEx CallOut Functions<https://www.autohotkey.com/docs/v1/misc/RegExCallout.htm#callout-functions>
+4. `Sort` F-flag <https://www.autohotkey.com/docs/v1/lib/Sort.htm#Options>
+
+   ```ahk
+   MyVar := "5,3,7,9,1,13,999,-4"
+   Sort, MyVar, F IntegerSort D,
+   ;              ^^^^^^^^^^^ func after F[ \t]
+   MsgBox, % "MyVar is " MyVar
+
+   IntegerSort(a1, a2)
+   {
+        return a1 - a2
+   }
+   ```
+
+5. `RegEx` CallOut Functions<https://www.autohotkey.com/docs/v1/misc/RegExCallout.htm#callout-functions>
+
+   ```ahk
+   Haystack := "The quick brown fox jumps over the lazy dog."
+   RegExMatch(Haystack, "i)(The) (\w+)\b(?CCallout)")
+   ;                                       ^^^^^^^ func in (?CFuncName)
+   Callout(m) {
+        MsgBox m=%m%`nm1=%m1%`nm2=%m2%
+        return 1
+   }
+   ```
+
 6. read more of [funcRef](src/command/AnalysisFuncReference/funcRef.ahk)
 
 ## Function rename

@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,6,7] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,6,7,8] }] */
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TAhkFileData } from '../../core/ProjectManager';
@@ -14,21 +14,31 @@ import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandA
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { findLabel } from '../../tools/labels';
 
-type TLineFnCall = {
+/**
+ * 1. by funcName(
+ * 2. by "funcName"
+ * 3. by SetTimer
+ * 4. by Hotkey
+ * 5. by Menu
+ * 6. by Gui
+ * 7. by Sort
+ * 8. by (?CCallout) https://www.autohotkey.com/docs/v1/misc/RegExCallout.htm#callout-functions
+ */
+export const enum EFnRefBy {
+    justCall = 1,
+    wordWrap = 2,
+    SetTimer = 3,
+    Hotkey = 4,
+    Menu = 5,
+    Gui = 6,
+    Sort = 7,
+    Reg = 8,
+}
+export type TLineFnCall = {
     upName: string,
     line: number,
     col: number,
-
-    /**
-     * 1. by funcName(
-     * 2. by "funcName"
-     * 3. by SetTimer
-     * 4. by Hotkey
-     * 5. by Menu
-     * 6. by Gui
-     * 7. by Sort
-     */
-    by: 1 | 2 | 3 | 4 | 5 | 6 | 7,
+    by: EFnRefBy,
 };
 
 export type TFuncRef = Omit<TLineFnCall, 'upName'>;
@@ -47,7 +57,7 @@ export function fnRefLStr(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
             upName,
             line,
             col,
-            by: 1,
+            by: EFnRefBy.justCall,
         });
     }
     // don't search of
@@ -78,7 +88,7 @@ export function fnRefTextRaw(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
             upName,
             line,
             col,
-            by: 2,
+            by: EFnRefBy.wordWrap,
         });
     }
     // don't search of
@@ -88,6 +98,44 @@ export function fnRefTextRaw(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
     // )
     return arr;
 }
+
+export function fnRefTextRawReg(AhkTokenLine: TAhkTokenLine): TLineFnCall[] {
+    // `RegEx` CallOut Functions<https://www.autohotkey.com/docs/v1/misc/RegExCallout.htm#callout-functions>
+    const { lStr, textRaw, line } = AhkTokenLine;
+    const arr: TLineFnCall[] = [];
+    for (const ma of textRaw.slice(0, lStr.length).matchAll(/"([^"]*)"/gu)) {
+        // -----------------------------------------------------------match all "string"
+        if (!ma[1].includes('(?')) continue;
+        const col: number | undefined = ma.index;
+        if (col === undefined) continue;
+        // RegExMatch(Haystack, "i)(The) (\w+)\b(?CCallout)")
+        //                                      ^^^^^^^^^^^
+        //                      "               (?CFuncName)
+        //                      ^ not close     (?C        )
+        //                                      ^^^        ^
+        for (const maa of ma[1].matchAll(/(?<=\(\?C)(\w+)\)/giu)) {
+            const upName: string = maa[1].toUpperCase();
+            arr.push({
+                upName,
+                line,
+                col: '"'.length + col + (maa.index ?? 0),
+                by: EFnRefBy.Reg,
+            });
+        }
+    }
+    return arr;
+}
+
+type TFnRefWithCmd = Readonly<{
+    fn: (AhkTokenLine: TAhkTokenLine) => TScanData | null,
+    by: EFnRefBy,
+}>;
+const CmdRefFuncList = [
+    { fn: getSetTimerWrap, by: EFnRefBy.SetTimer },
+    { fn: getHotkeyWrap, by: EFnRefBy.Hotkey },
+    { fn: getMenuFunc, by: EFnRefBy.Menu },
+    { fn: getSortFunc, by: EFnRefBy.Sort },
+] as const satisfies readonly TFnRefWithCmd[];
 
 export const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[]>>(
     (AhkFileData: TAhkFileData): Map<string, TFuncRef[]> => {
@@ -103,8 +151,11 @@ export const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[
             if (filterLineList.includes(line)) continue;
 
             for (
-                const { upName, col, by } of [...fnRefLStr(AhkTokenLine), ...fnRefTextRaw(AhkTokenLine)]
-                    .sort((a: TLineFnCall, b: TLineFnCall): number => a.col - b.col)
+                const { upName, col, by } of [
+                    ...fnRefLStr(AhkTokenLine),
+                    ...fnRefTextRaw(AhkTokenLine),
+                    ...fnRefTextRawReg(AhkTokenLine),
+                ].sort((a: TLineFnCall, b: TLineFnCall): number => a.col - b.col)
             ) {
                 const arr: TFuncRef[] = map.get(upName) ?? [];
                 arr.push({
@@ -115,20 +166,12 @@ export const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[
                 map.set(upName, arr);
             }
 
-            for (const fn of [getSetTimerWrap, getHotkeyWrap, getMenuFunc, getSortFunc] as const) {
+            for (const { fn, by } of CmdRefFuncList) {
                 const Data: TScanData | null = fn(AhkTokenLine);
                 if (Data !== null) {
                     const { RawNameNew, lPos } = Data;
                     const upName: string = RawNameNew.toUpperCase();
                     const arr: TFuncRef[] = map.get(upName) ?? [];
-
-                    const by: 3 | 4 | 5 | 7 = ((): 3 | 4 | 5 | 7 => {
-                        if (fn === getSetTimerWrap) return 3;
-                        if (fn === getHotkeyWrap) return 4;
-                        if (fn === getMenuFunc) return 5;
-                        /* if (fn === getSortFunc) */
-                        return 7;
-                    })();
 
                     arr.push({
                         line,
@@ -147,7 +190,7 @@ export const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[
                     arr.push({
                         line,
                         col: lPos,
-                        by: 6,
+                        by: EFnRefBy.Gui,
                     });
                     map.set(upName, arr);
                 }
@@ -202,7 +245,7 @@ export function getFuncRef(funcSymbol: CAhkFunc): readonly TFnRefLike[] {
 
     const allowList: TFnRefLike[] = [];
     for (const re of allList) {
-        if (hasSameLabel && (re.by > 2) && (re.by !== 7)) {
+        if (hasSameLabel && (re.by > 2) && (re.by < EFnRefBy.Sort)) {
             continue;
         }
         allowList.push(re);

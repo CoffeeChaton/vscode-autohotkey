@@ -6,6 +6,8 @@ import { getMenuFunc } from '../../tools/Command/MenuTools';
 import { getSetTimerWrap } from '../../tools/Command/SetTimerTools';
 import { getSortFunc } from '../../tools/Command/sotrTools';
 import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
+import type { TLineFnCall } from '../Def/getFnRef';
+import { fnRefTextRawReg } from '../Def/getFnRef';
 import type { TSemanticTokensLeaf } from './tools';
 
 function GuiFuncHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]): 0 | 1 {
@@ -40,12 +42,12 @@ function GuiFuncHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLe
 function cmdFnHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]): 0 | 1 {
     // SetTimer , Label_or_fnName, PeriodOnOffDelete, Priority
 
-    const setTimerData: TScanData | null = getSetTimerWrap(AhkTokenLine)
+    const Data: TScanData | null = getSetTimerWrap(AhkTokenLine)
         ?? getMenuFunc(AhkTokenLine)
         ?? getSortFunc(AhkTokenLine);
-    if (setTimerData === null) return 0;
+    if (Data === null) return 0;
 
-    const { RawNameNew, lPos } = setTimerData;
+    const { RawNameNew, lPos } = Data;
 
     const { line } = AhkTokenLine;
     Tokens.push({
@@ -85,11 +87,50 @@ function HotkeyHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLea
     return 1;
 }
 
+function regFnHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]): 0 | 1 {
+    // I need to check San = =||
+    const DataList: TLineFnCall[] = fnRefTextRawReg(AhkTokenLine);
+    if (DataList.length === 0) return 0;
+
+    for (const Data of DataList) {
+        const { upName, col } = Data;
+
+        const { line } = AhkTokenLine;
+        Tokens.push(
+            {
+                range: new vscode.Range(
+                    new vscode.Position(line, col - '(?C'.length), //
+                    new vscode.Position(line, col),
+                ),
+                tokenType: 'keyword',
+                tokenModifiers: [],
+            },
+            {
+                range: new vscode.Range(
+                    new vscode.Position(line, col),
+                    new vscode.Position(line, col + upName.length),
+                ),
+                tokenType: 'function',
+                tokenModifiers: [],
+            },
+            {
+                range: new vscode.Range(
+                    new vscode.Position(line, col + upName.length),
+                    new vscode.Position(line, col + upName.length + ')'.length),
+                ),
+                tokenType: 'keyword',
+                tokenModifiers: [],
+            },
+        );
+    }
+    return 1;
+}
+
 export function funcHighlight(DocStrMap: TTokenStream): TSemanticTokensLeaf[] {
     const Tokens: TSemanticTokensLeaf[] = [];
 
     type TFn = (AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]) => 0 | 1;
-    const fnList: TFn[] = [cmdFnHighlight, HotkeyHighlight, GuiFuncHighlight];
+    const fnList: TFn[] = [cmdFnHighlight, HotkeyHighlight, GuiFuncHighlight, regFnHighlight];
 
     for (const AhkTokenLine of DocStrMap) {
         for (const fn of fnList) {
