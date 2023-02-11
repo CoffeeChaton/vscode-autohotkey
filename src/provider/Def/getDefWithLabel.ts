@@ -40,7 +40,7 @@ function LabelRefMenu(AhkTokenLine: TAhkTokenLine, wordUp: string): vscode.Range
 }
 
 function LabelRefGui(AhkTokenLine: TAhkTokenLine, wordUp: string): vscode.Range | null {
-    const GuiDataList: TScanData[] | null = getGuiFunc(AhkTokenLine, 0);
+    const GuiDataList: readonly TScanData[] | null = getGuiFunc(AhkTokenLine, 0);
     if (GuiDataList !== null) {
         for (const { RawNameNew, lPos } of GuiDataList) {
             if (RawNameNew.toUpperCase() === wordUp) {
@@ -174,7 +174,7 @@ export function getDefWithLabel(
 
     if (Data?.RawNameNew.toUpperCase() === wordUpCase) return getDefWithLabelCore(wordUpCase);
 
-    const GuiDataList: TScanData[] | null = getGuiFunc(AhkTokenLine, 0);
+    const GuiDataList: readonly TScanData[] | null = getGuiFunc(AhkTokenLine, 0);
     if (GuiDataList !== null) {
         const wordUpCaseFix: string = wordUpCase.replace(/^g/iu, '');
         for (const { RawNameNew } of GuiDataList) {
