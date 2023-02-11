@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { CAhkHotString } from '../../AhkSymbol/CAhkLine';
 
 import { EDetail } from '../../globalEnum';
-import { getRangeOfLine } from '../../tools/range/getRangeOfLine';
 import type { TFuncInput } from '../getChildren';
 
 /**
@@ -23,7 +22,7 @@ export function ParserHotStr(FuncInput: TFuncInput): CAhkHotString | null {
 
     // lock as getLStrHotStr
     const { AhkTokenLine, uri } = FuncInput;
-    const { textRaw, line, lStr } = AhkTokenLine;
+    const { textRaw, line } = AhkTokenLine;
 
     const ma: RegExpMatchArray | null = textRaw.match(/^(\s*:[^:]*:[^:]+::)/u);
     if (ma === null) return null;
@@ -32,14 +31,22 @@ export function ParserHotStr(FuncInput: TFuncInput): CAhkHotString | null {
 
     const name: string = ma[1].trim();
 
+    const AfterString: string = textRaw
+        .replace(name, '')
+        .replace(/[ \t];.*/u, '')
+        .trim();
+
     return new CAhkHotString({
         name,
-        range: getRangeOfLine(line, lStr, textRaw.length),
+        range: new vscode.Range(
+            new vscode.Position(line, col),
+            new vscode.Position(line, textRaw.length),
+        ),
         selectionRange: new vscode.Range(
             new vscode.Position(line, col),
             new vscode.Position(line, col + name.length),
         ),
         uri,
         AhkTokenLine,
-    }, lStr.replace(name, '').trim());
+    }, AfterString);
 }

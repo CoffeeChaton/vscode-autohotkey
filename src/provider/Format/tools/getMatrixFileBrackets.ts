@@ -1,5 +1,4 @@
 import type { TAhkTokenLine, TTokenStream } from '../../../globalEnum';
-import { EDetail } from '../../../globalEnum';
 import type { TBrackets } from '../../../tools/Bracket';
 import { calcBracket } from '../../../tools/Bracket';
 import { CommandMDMap } from '../../../tools/Built-in/Command.tools';
@@ -11,7 +10,6 @@ function calcLineBrackets(AhkTokenLine: TAhkTokenLine, oldBrackets: TBrackets): 
         fistWordUpCol,
         SecondWordUp,
         SecondWordUpCol,
-        detail,
     } = AhkTokenLine;
 
     // TODO with LStr fix like
@@ -26,14 +24,6 @@ function calcLineBrackets(AhkTokenLine: TAhkTokenLine, oldBrackets: TBrackets): 
         lStrFix = lStrFix.slice(0, SecondWordUpCol);
     } else if (lStrFix.trim().startsWith('#') && !(/^#if\b/iu).test(lStrFix.trim())) {
         lStrFix = '';
-    }
-
-    const lStrLen: number = lStr.length;
-    if (detail.includes(EDetail.isHotKeyLine)) {
-        lStrFix = lStrFix.replace(/.*::/u, '').padStart(lStrLen, ' ');
-    }
-    if (detail.includes(EDetail.isHotStrLine)) {
-        lStrFix = lStrFix.replace(/^\s*:[^:]*:[^:]+::/u, '').padStart(lStrLen, ' ');
     }
 
     return calcBracket(lStrFix, oldBrackets);
