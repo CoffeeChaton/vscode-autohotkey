@@ -48,7 +48,7 @@ export function posAtFnRef(
     const MenuData: TScanData | null = getMenuFunc(AhkTokenLine);
     if (MenuData !== null) return true;
 
-    const GuiData: TScanData[] | null = getGuiFunc(AhkTokenLine);
+    const GuiData: TScanData[] | null = getGuiFunc(AhkTokenLine, 0);
     if (GuiData !== null && GuiData.length > 0) return true;
 
     // not ref... but allow goto-def

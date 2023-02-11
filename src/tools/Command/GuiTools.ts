@@ -2,7 +2,7 @@ import type { TAhkTokenLine } from '../../globalEnum';
 import type { TScanData } from '../DeepAnalysis/FnVar/def/spiltCommandAll';
 import { spiltCommandAll } from '../DeepAnalysis/FnVar/def/spiltCommandAll';
 
-function getMenuFuncData(lStr: string, col: number): TScanData[] | null {
+function getMenuFuncData(lStr: string, col: number, flag: 0 | 1): readonly TScanData[] | null {
     const strF: string = lStr
         .slice(col)
         .replace(/^\s*GUI\b\s*,?\s*/iu, 'GUI,')
@@ -28,14 +28,18 @@ function getMenuFuncData(lStr: string, col: number): TScanData[] | null {
         const lStrFix: string = lStr.slice(lPos, lPos + RawNameNew.length);
 
         const list: TScanData[] = [];
-        for (const ma of lStrFix.matchAll(/\bg(\w+)/giu)) {
+        const reg: RegExp = flag === 0
+            ? /\bg(\w+)/giu
+            : /\bv(\w+)/giu;
+
+        for (const ma of lStrFix.matchAll(reg)) {
             const { index } = ma;
             if (index === undefined) continue;
             const fnName: string = ma[1].trim();
 
             list.push({
                 RawNameNew: fnName,
-                lPos: index + lPos + 1, // +1 is gFuncName lPos is replace padStart
+                lPos: index + lPos + 1, // +1 is gFuncName/vVarName lPos is replace padStart
             });
         }
         return list;
@@ -57,18 +61,20 @@ function getMenuFuncData(lStr: string, col: number): TScanData[] | null {
  *
  * G: GoSub (g-label). <https://www.autohotkey.com/docs/v1/lib/Gui.htm#Events>
  * <https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/17>
+ *
+ * V: Variable. Associates a variable with a control. <https://www.autohotkey.com/docs/v1/lib/Gui.htm#Events>
  */
-export function getGuiFunc(AhkTokenLine: TAhkTokenLine): TScanData[] | null {
+export function getGuiFunc(AhkTokenLine: TAhkTokenLine, flag: 0 | 1): readonly TScanData[] | null {
     const { fistWordUp } = AhkTokenLine;
     if (fistWordUp === 'GUI') {
         const { lStr, fistWordUpCol } = AhkTokenLine;
-        return getMenuFuncData(lStr, fistWordUpCol);
+        return getMenuFuncData(lStr, fistWordUpCol, flag);
     }
 
     if (fistWordUp === 'CASE' || fistWordUp === 'DEFAULT' || fistWordUp === 'TRY') {
         const { SecondWordUp, SecondWordUpCol, lStr } = AhkTokenLine;
         return SecondWordUp === 'GUI'
-            ? getMenuFuncData(lStr, SecondWordUpCol)
+            ? getMenuFuncData(lStr, SecondWordUpCol, flag)
             : null;
     }
 

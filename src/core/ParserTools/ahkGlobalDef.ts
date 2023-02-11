@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import type { TTokenStream } from '../../globalEnum';
 import { EDetail } from '../../globalEnum';
 import type { TBrackets } from '../../tools/Bracket';
+import { getGuiFunc } from '../../tools/Command/GuiTools';
+import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandAll';
 import type { TVarData } from './varMixedAnnouncement';
 import { varMixedAnnouncement } from './varMixedAnnouncement';
 
@@ -54,15 +56,24 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
     const GValMap = new Map<TUpName, TGlobalVal>();
     let lastLineIsGlobal = false;
     let BracketsRaw: TBrackets = [0, 0, 0];
-    for (
+    for (const AhkTokenLine of DocStrMap) {
         const {
             cll,
             detail,
             fistWordUp,
             line,
             lStr,
-        } of DocStrMap
-    ) {
+        } = AhkTokenLine;
+
+        const guiVList: readonly TScanData[] | null = getGuiFunc(AhkTokenLine, 1);
+        if (guiVList !== null) {
+            // https://www.autohotkey.com/docs/v1/lib/Gui.htm#Events
+            const varDataList: TVarData[] = guiVList
+                .map(({ RawNameNew, lPos }: TScanData): TVarData => ({ rawName: RawNameNew, ch: lPos }));
+            setGlobalVar({ varDataList, line, GValMap });
+            continue;
+        }
+
         if (fistWordUp === 'GLOBAL' || isGlobal(detail, lStr)) {
             if ((/\bGLOBAL\s*$/iu).test(lStr)) continue;
             lastLineIsGlobal = true;

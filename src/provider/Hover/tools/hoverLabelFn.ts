@@ -26,7 +26,7 @@ export function hoverLabelOrFunc(
     /**
      * fix gui GLabel = =||
      */
-    const GuiDataList: TScanData[] | null = getGuiFunc(AhkTokenLine);
+    const GuiDataList: TScanData[] | null = getGuiFunc(AhkTokenLine, 0);
     const wordUpFix: string = GuiDataList !== null && wordUp.startsWith('G')
         ? wordUp.replace(/^g/iu, '')
         : wordUp;

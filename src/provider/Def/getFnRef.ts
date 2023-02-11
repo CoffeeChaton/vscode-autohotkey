@@ -135,7 +135,7 @@ export const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[
                     break; // <-- only exists in one of the [getHotkeyWrap, getSetTimerWrap]
                 }
             }
-            const guiFnList: TScanData[] | null = getGuiFunc(AhkTokenLine);
+            const guiFnList: TScanData[] | null = getGuiFunc(AhkTokenLine, 0);
             if (guiFnList !== null) {
                 for (const { RawNameNew, lPos } of guiFnList) {
                     const upName: string = RawNameNew.toUpperCase();

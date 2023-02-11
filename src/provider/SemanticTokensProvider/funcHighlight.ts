@@ -10,7 +10,7 @@ import type { TSemanticTokensLeaf } from './tools';
 function GuiFuncHighlight(AhkTokenLine: TAhkTokenLine, Tokens: TSemanticTokensLeaf[]): 0 | 1 {
     // Menu, MenuName, Add , MenuItemName, LabelOrSubmenu, Options
     // Menu, MenuName, Insert , MenuItemName, ItemToInsert, LabelOrSubmenu, Options
-    const GuiDataList: TScanData[] | null = getGuiFunc(AhkTokenLine);
+    const GuiDataList: TScanData[] | null = getGuiFunc(AhkTokenLine, 0);
     if (GuiDataList === null || GuiDataList.length === 0) return 0;
 
     const { line } = AhkTokenLine;
