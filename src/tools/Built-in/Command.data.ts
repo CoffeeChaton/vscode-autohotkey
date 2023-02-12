@@ -1794,24 +1794,6 @@ export const LineCommand: TCommandElement[] = [
         ],
     },
     {
-        upName: 'PAUSE',
-        keyRawName: 'Pause',
-        body: 'Pause, [ ${1|On,Off,Toggle|}, ${2|0,1|} ]',
-        doc: 'Pauses the script\'s [current thread](https://www.autohotkey.com/docs/v1/misc/Threads.htm).',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/v1/lib/Pause.htm',
-        exp: [
-            'Pause , OnOffToggle, OperateOnUnderlyingThread',
-            '; exp',
-            'Pause::Pause  ; The Pause/Break key.',
-            '#p::Pause  ; Win+P',
-        ],
-        _paramType: [
-            'S',
-            'S',
-        ],
-    },
-    {
         upName: 'PIXELGETCOLOR',
         keyRawName: 'PixelGetColor',
         body: 'PixelGetColor, ${1:OutputVar}, ${2:X}, ${3:Y} [, ${4|Alt,Slow,RGB|}]',
@@ -1991,18 +1973,6 @@ export const LineCommand: TCommandElement[] = [
             'S',
             'S',
         ],
-    },
-    {
-        upName: 'RELOAD',
-        keyRawName: 'Reload',
-        body: 'Reload',
-        doc: 'Replaces the currently running instance of the script with a new one.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/v1/lib/Reload.htm',
-        exp: [
-            '^!r::Reload  ; Ctrl+Alt+R',
-        ],
-        _paramType: [],
     },
     {
         upName: 'RUN',

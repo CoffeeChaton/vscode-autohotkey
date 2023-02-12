@@ -27,6 +27,14 @@ type TErrObj = {
 };
 
 describe('check Statement ruler', () => {
+    const max = 38;
+
+    it(`check: size .EQ. ${max}`, () => {
+        expect.hasAssertions();
+
+        expect(Statement).toHaveLength(max);
+    });
+
     it('exp: and or break if return', () => {
         expect.hasAssertions();
 
@@ -65,12 +73,14 @@ describe('check Statement ruler', () => {
     it('check : tmLanguage', () => {
         expect.hasAssertions();
 
-        const arr1: string[] = Statement.map((v): string => v.keyRawName);
+        const arr1: readonly string[] = Statement.map((v): string => v.keyRawName);
 
         const st1: string = (repository.flow_of_control.patterns.at(-1)?.match ?? '')
             .replace('\\b(?!MsgBox)(?<![.#])(?i:', '')
             .replace(')\\b', '');
 
+        // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
+        expect(arr1).toStrictEqual([...arr1].sort());
         expect(st1).toBe(arr1.join('|'));
     });
 

@@ -498,6 +498,36 @@ export const Statement: TStatementElement[] = [
         ],
     },
     {
+        upName: 'PAUSE',
+        keyRawName: 'Pause',
+        body: 'Pause, [ ${1|On,Off,Toggle|}, ${2|0,1|} ]',
+        doc: 'Pauses the script\'s [current thread](https://www.autohotkey.com/docs/v1/misc/Threads.htm).',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/v1/lib/Pause.htm',
+        exp: [
+            'Pause , OnOffToggle, OperateOnUnderlyingThread',
+            '; exp',
+            'Pause::Pause  ; The Pause/Break key.',
+            '#p::Pause  ; Win+P',
+        ],
+        _paramType: [
+            'S',
+            'S',
+        ],
+    },
+    {
+        upName: 'RELOAD',
+        keyRawName: 'Reload',
+        body: 'Reload',
+        doc: 'Replaces the currently running instance of the script with a new one.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/v1/lib/Reload.htm',
+        exp: [
+            '^!r::Reload  ; Ctrl+Alt+R',
+        ],
+        _paramType: [],
+    },
+    {
         upName: 'RETURN',
         keyRawName: 'Return',
         body: 'Return',
@@ -574,6 +604,19 @@ export const Statement: TStatementElement[] = [
         ],
     },
     {
+        upName: 'UNTIL',
+        keyRawName: 'Until',
+        body: 'Until $0',
+        doc: 'Applies a condition to the continuation of a Loop or For-loop.',
+        recommended: true,
+        link: 'https://www.autohotkey.com/docs/v1/lib/Until.htm',
+        exp: [
+            'Loop {',
+            '    ...',
+            '} Until Expression',
+        ],
+    },
+    {
         upName: 'WHILE',
         keyRawName: 'While',
         body: 'While ($0) {\n    \n}',
@@ -597,19 +640,6 @@ export const Statement: TStatementElement[] = [
             '    }',
             '    ToolTip',
             '}',
-        ],
-    },
-    {
-        upName: 'UNTIL',
-        keyRawName: 'Until',
-        body: 'Until $0',
-        doc: 'Applies a condition to the continuation of a Loop or For-loop.',
-        recommended: true,
-        link: 'https://www.autohotkey.com/docs/v1/lib/Until.htm',
-        exp: [
-            'Loop {',
-            '    ...',
-            '} Until Expression',
         ],
     },
 ];

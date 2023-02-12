@@ -9,7 +9,7 @@ type TErrObj = {
 };
 
 describe('check LineCommand ruler', () => {
-    const max = 180;
+    const max = 178;
 
     it(`check: Command size .EQ. ${max}`, () => {
         expect.hasAssertions();
@@ -172,15 +172,16 @@ describe('check LineCommand ruler', () => {
     it('check: tmLanguage', () => {
         expect.hasAssertions();
 
-        const tsData = LineCommand
-            .map((v) => v.keyRawName)
-            .join('|');
+        const tsData: readonly string[] = LineCommand
+            .map((v): string => v.keyRawName);
 
-        const st1 = (repository.command.patterns.at(-1)?.begin ?? '')
+        const st1: string = (repository.command.patterns.at(-1)?.begin ?? '')
             .replace('(?:^|[ \\t:])\\b(?i:', '')
             .replace(')\\b(?!\\()', '');
 
-        expect(tsData).toBe(st1);
+        // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
+        expect(tsData).toStrictEqual([...tsData].sort());
+        expect(tsData.join('|')).toBe(st1);
     });
 
     it('check: uri ruler', () => {
