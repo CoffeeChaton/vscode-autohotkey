@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,6,7,8] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,7,8,11,12,13,14] }] */
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { TAhkFileData } from '../../core/ProjectManager';
@@ -14,26 +14,44 @@ import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandA
 import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { findLabel } from '../../tools/labels';
 
-/**
- * 1. by funcName(
- * 2. by "funcName"
- * 3. by SetTimer
- * 4. by Hotkey
- * 5. by Menu
- * 6. by Gui
- * 7. by Sort
- * 8. by (?CCallout) https://www.autohotkey.com/docs/v1/misc/RegExCallout.htm#callout-functions
- */
 export const enum EFnRefBy {
+    /**
+     * by funcName(
+     */
     justCall = 1,
+    /**
+     * by "funcName"
+     */
     wordWrap = 2,
-    SetTimer = 3,
-    Hotkey = 4,
-    Menu = 5,
-    Gui = 6,
-    Sort = 7,
+    /**
+     * Sort f-flag
+     */
+    SortFlag = 7,
+    /**
+     * by (?CCallout) https://www.autohotkey.com/docs/v1/misc/RegExCallout.htm#callout-functions
+     */
     Reg = 8,
+    //
+    SetTimer = 11,
+    Hotkey = 12,
+    Menu = 13,
+    Gui = 14,
+    //
+
+    /**
+     * Do not use compare
+     * need ts5.0
+     * https://github.com/microsoft/TypeScript/issues/52701
+     */
+    banCompare = 'Do not use compare',
 }
+export function mayBeIsLabel(by: EFnRefBy): boolean {
+    if ([EFnRefBy.SetTimer, EFnRefBy.Hotkey, EFnRefBy.Hotkey, EFnRefBy.Gui].includes(by)) {
+        return true;
+    }
+    return false;
+}
+
 export type TLineFnCall = {
     upName: string,
     line: number,
@@ -134,7 +152,7 @@ const CmdRefFuncList = [
     { fn: getSetTimerWrap, by: EFnRefBy.SetTimer },
     { fn: getHotkeyWrap, by: EFnRefBy.Hotkey },
     { fn: getMenuFunc, by: EFnRefBy.Menu },
-    { fn: getSortFunc, by: EFnRefBy.Sort },
+    { fn: getSortFunc, by: EFnRefBy.SortFlag },
 ] as const satisfies readonly TFnRefWithCmd[];
 
 export const fileFuncRef = new CMemo<TAhkFileData, ReadonlyMap<string, TFuncRef[]>>(
@@ -205,7 +223,7 @@ export type TFnRefLike = {
     uri: vscode.Uri,
     line: number,
     col: number,
-    by: TFuncRef['by'],
+    by: EFnRefBy,
 };
 
 type TMap = Map<string, readonly TFnRefLike[]>;
@@ -245,7 +263,10 @@ export function getFuncRef(funcSymbol: CAhkFunc): readonly TFnRefLike[] {
 
     const allowList: TFnRefLike[] = [];
     for (const re of allList) {
-        if (hasSameLabel && (re.by > 2) && (re.by < EFnRefBy.Sort)) {
+        /**
+         * Check is Label
+         */
+        if (hasSameLabel && mayBeIsLabel(re.by)) {
             continue;
         }
         allowList.push(re);

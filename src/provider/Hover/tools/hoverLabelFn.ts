@@ -6,7 +6,7 @@ import type { TAhkTokenLine } from '../../../globalEnum';
 import { getFuncWithName } from '../../../tools/DeepAnalysis/getFuncWithName';
 import { findLabel } from '../../../tools/labels';
 import type { TFuncRef } from '../../Def/getFnRef';
-import { EFnRefBy, fileFuncRef } from '../../Def/getFnRef';
+import { fileFuncRef, mayBeIsLabel } from '../../Def/getFnRef';
 import { getFucDefWordUpFix } from '../../Def/getFucDefWordUpFix';
 
 /**
@@ -30,22 +30,9 @@ export function hoverLabelOrFunc(
     for (const { line: refLine, col, by } of locList) {
         if (
             (refLine === line)
-            && by > 2
             && (col <= character && (col + wordUpFix.length) >= character)
         ) {
-            /**
-             * 1. by funcName(
-             * 2. by "funcName"
-             * 3. by SetTimer
-             * 4. by Hotkey
-             * 5. by Menu
-             * 6. by Gui
-             * 7. by Sort
-             * 8. by (?CCallout) https://www.autohotkey.com/docs/v1/misc/RegExCallout.htm#callout-functions
-             */
-            // FIXME i need to san check
-            // eslint-disable-next-line no-magic-numbers
-            if (by < EFnRefBy.Sort) { // 7. by Sort <--- not allow find label
+            if (mayBeIsLabel(by)) {
                 const label: CAhkLabel | null = findLabel(wordUpFix);
                 if (label !== null) return label.md;
             }
