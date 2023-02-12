@@ -43,7 +43,7 @@ function getModuleVarDef(
     const valMeta: TValMetaOut | undefined = ModuleVar.ModuleValMap.get(wordUpFix);
     if (valMeta !== undefined) {
         if (listAllUsing) {
-            return searchAllVarRef(wordUpFix);
+            return searchAllVarRef(wordUpFix, true);
         }
 
         const { defRangeList } = valMeta;

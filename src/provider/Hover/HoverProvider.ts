@@ -101,7 +101,10 @@ function HoverProviderCore(
     }
 
     const wordUpFix: string = getFucDefWordUpFix(AhkTokenLine, wordUp, position.character);
-    if (wordUp.startsWith('V') && `V${wordUpFix}` === wordUp) {
+    if (
+        (wordUp.startsWith('V') && `V${wordUpFix}` === wordUp)
+        || (wordUp.startsWith('HWND') && `HWND${wordUpFix}` === wordUp)
+    ) {
         const guiVVar: vscode.MarkdownString | null = hoverGlobalVar(wordUpFix);
         if (guiVVar !== null) return new vscode.Hover(guiVVar);
     }

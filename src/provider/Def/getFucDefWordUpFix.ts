@@ -25,6 +25,16 @@ export function getFucDefWordUpFix(AhkTokenLine: TAhkTokenLine, wordUp: string, 
         }
     }
 
+    if ((/^hwnd/iu).test(wordUp)) {
+        for (const { RawNameNew, lPos } of getGuiFunc(AhkTokenLine, 1) ?? []) {
+            if (
+                `HWND${RawNameNew.toUpperCase()}` === wordUp && (character >= lPos || character <= lPos + wordUp.length)
+            ) {
+                return RawNameNew.toUpperCase();
+            }
+        }
+    }
+
     /**
      * (?CFuncName)
      */
