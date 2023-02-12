@@ -70,7 +70,7 @@ export function getUnknownTextMap(
          * a:={b:10}
          * ;   ^ b is key, not var
          */
-        for (const v of lStr.matchAll(/(?<![.#])\b(\w+)\b(?!\()/gu)) {
+        for (const v of lStr.matchAll(/(?<![.#])\b(\w+)\b(?!\(|\s*:[^=])/gu)) {
             const keyRawName: string = v[1];
             const wordUp: string = keyRawName.toUpperCase();
 
