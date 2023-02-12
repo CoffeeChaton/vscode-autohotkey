@@ -88,8 +88,8 @@ export function lineReplace(AhkTokenLine: TAhkTokenLine, text: string, lStrTrim:
             || detail.includes(EDetail.inSkipSign2)
             || detail.includes(EDetail.inComment)
             || multiline !== EMultiline.none
-            || lStrTrim.startsWith(':')
-            || lStrTrim.includes('::')
+            || detail.includes(EDetail.isHotKeyLine)
+            || detail.includes(EDetail.isHotStrLine)
             || CommandMDMap.has(fistWordUp))
         ? text
         : fnStrGroup(text);
