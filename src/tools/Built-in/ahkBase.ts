@@ -160,13 +160,19 @@ const ItemOfAhkObj: readonly vscode.CompletionItem[] = ((): vscode.CompletionIte
     ];
     const itemS: vscode.CompletionItem[] = [];
     for (const { label, documentation } of BaseObj) {
-        const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Method);
+        const item = new vscode.CompletionItem({
+            label,
+            description: 'BaseObj',
+        }, vscode.CompletionItemKind.Method);
         item.detail = 'neko help : AhkObj Methods';
         item.documentation = new vscode.MarkdownString(documentation.join('\n\n'), true);
         itemS.push(item);
     }
 
-    const BaseItem = new vscode.CompletionItem('Base', vscode.CompletionItemKind.Property);
+    const BaseItem = new vscode.CompletionItem({
+        label: 'Base',
+        description: 'BaseObj',
+    }, vscode.CompletionItemKind.Property);
     BaseItem.detail = 'neko help : AhkObj  Property';
     BaseItem.documentation = new vscode.MarkdownString(
         [
@@ -273,7 +279,10 @@ const ItemOfFileOpen: readonly vscode.CompletionItem[] = ((): vscode.CompletionI
         },
     ];
     for (const { label, documentation } of ahkFileOpenMethod) {
-        const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Method);
+        const item = new vscode.CompletionItem({
+            label, // Left
+            description: 'File := FileOpen()', // Right
+        }, vscode.CompletionItemKind.Method);
         item.detail = 'neko help : FileOpen() Method';
         item.documentation = new vscode.MarkdownString(documentation.join('\n\n'), true);
         itemS.push(item);
@@ -348,7 +357,10 @@ const ItemOfFileOpen: readonly vscode.CompletionItem[] = ((): vscode.CompletionI
         },
     ];
     for (const { label, documentation } of ahkFileOpenProperties) {
-        const item: vscode.CompletionItem = new vscode.CompletionItem(label, vscode.CompletionItemKind.Property);
+        const item: vscode.CompletionItem = new vscode.CompletionItem({
+            label,
+            description: 'File := FileOpen()',
+        }, vscode.CompletionItemKind.Property);
         item.detail = 'neko help : FileOpen() -> Properties';
         item.documentation = new vscode.MarkdownString(documentation.join('\n\n'), true);
         itemS.push(item);
@@ -374,7 +386,10 @@ const ItemOfFileOpen: readonly vscode.CompletionItem[] = ((): vscode.CompletionI
             'If a Try statement is active and no bytes were read, an exception is thrown. However, no exception is thrown if at least one byte was read, even if the size of the given NumType is greater than the number of bytes read. Instead, the missing bytes are assumed to be zero.',
             'https://www.autohotkey.com/docs/v1/objects/File.htm#ReadNum',
         ];
-        const item = new vscode.CompletionItem(v, vscode.CompletionItemKind.Method);
+        const item = new vscode.CompletionItem({
+            label: v,
+            description: 'File := FileOpen()',
+        }, vscode.CompletionItemKind.Method);
         item.detail = 'neko help : FileOpen() -> ReadNumType';
         item.documentation = new vscode.MarkdownString(documentation.join('\n\n'), true);
         itemS.push(item);
@@ -400,7 +415,10 @@ const ItemOfFileOpen: readonly vscode.CompletionItem[] = ((): vscode.CompletionI
             '*Returns* the number of bytes that were written. For instance, WriteUInt returns 4 if successful.',
             'https://www.autohotkey.com/docs/v1/objects/File.htm#WriteNum',
         ];
-        const item = new vscode.CompletionItem(v, vscode.CompletionItemKind.Method);
+        const item = new vscode.CompletionItem({
+            label: v,
+            description: 'File := FileOpen()',
+        }, vscode.CompletionItemKind.Method);
         item.detail = 'neko help : FileOpen() -> WriteNumType';
         item.documentation = new vscode.MarkdownString(documentation.join('\n\n'), true);
         itemS.push(item);
@@ -409,6 +427,7 @@ const ItemOfFileOpen: readonly vscode.CompletionItem[] = ((): vscode.CompletionI
 })();
 
 const ItemOfFunc: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[] => {
+    // FIXME add doc of https://www.autohotkey.com/docs/v1/lib/FuncObj.htm
     const itemS: vscode.CompletionItem[] = [];
     for (
         const v of [
@@ -420,7 +439,10 @@ const ItemOfFunc: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[
             '__Handle',
         ]
     ) {
-        const item = new vscode.CompletionItem(v, vscode.CompletionItemKind.Property);
+        const item = new vscode.CompletionItem({
+            label: v,
+            description: 'fn := Func()',
+        }, vscode.CompletionItemKind.Property);
         item.detail = 'neko help : Func() Property';
         itemS.push(item);
     }
@@ -432,15 +454,16 @@ const ItemOfFunc: readonly vscode.CompletionItem[] = ((): vscode.CompletionItem[
             'IsOptional(',
         ]
     ) {
-        const item = new vscode.CompletionItem(`${v})`, vscode.CompletionItemKind.Method);
+        const item = new vscode.CompletionItem({
+            label: `${v})`,
+            description: 'fn := Func()',
+        }, vscode.CompletionItemKind.Method);
         item.detail = 'neko help : Func() Methods';
         item.insertText = new vscode.SnippetString(v)
             .appendTabstop()
             .appendText(')'); // SnippetString;
         itemS.push(item);
     }
-
-    // FIXME add doc of https://www.autohotkey.com/docs/v1/lib/FuncObj.htm
     return itemS;
 })();
 
@@ -497,7 +520,10 @@ const ItemOfAhkCatch: readonly vscode.CompletionItem[] = ((): vscode.CompletionI
                 '    MsgBox, % "What : " err.What ;Hotkey',
                 '}',
             ].join('\n'));
-        const item: vscode.CompletionItem = new vscode.CompletionItem(label, vscode.CompletionItemKind.Property);
+        const item: vscode.CompletionItem = new vscode.CompletionItem({
+            label,
+            description: 'catch err',
+        }, vscode.CompletionItemKind.Property);
         item.detail = 'neko help: error -> Exception()';
         item.documentation = md;
         itemS.push(item);
