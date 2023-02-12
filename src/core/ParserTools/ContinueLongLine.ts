@@ -33,8 +33,6 @@ const CLL: DeepReadonly<RegExp[]> = [
 
 export function ContinueLongLine(textFix: string): 0 | 1 {
     // [ContinueLongLine](https://www.autohotkey.com/docs/v1/Scripts.htm#continuation)
-    // Hotkeys && HotStrings has '::'
-    if (textFix.includes('::')) return 0;
 
     return CLL.some((reg: Readonly<RegExp>) => reg.test(textFix))
         ? 1

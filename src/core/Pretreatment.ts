@@ -204,9 +204,13 @@ export function Pretreatment(
              *         MsgBox % "hotStr of ("
              *     }
              */
-            const lStr: string = getLStr(textRaw);
+            const lStrA: string = getLStr(textRaw);
 
-            if (lStr.includes('::')) {
+            if (lStrA.includes('::')) {
+                const lStr: string = lStrA.replace(/[^:]+::/u, '').padStart(lStrA.length, ' ');
+                const { fistWordUpCol, fistWordUp } = getFistWordUpData({ lStrTrim: lStr.trim(), lStr, cll: 0 });
+                const { SecondWordUpCol, SecondWordUp } = getSecondUp(lStr, fistWordUp, fistWordUpCol);
+
                 result.push({
                     ahkDoc,
                     cll: 0,
@@ -214,18 +218,15 @@ export function Pretreatment(
                     detail: [EDetail.isHotKeyLine],
                     displayErr,
                     displayFnErr,
-                    fistWordUp: '',
-                    fistWordUpCol: -1,
+                    fistWordUp,
+                    fistWordUpCol,
                     line,
                     lineComment: '',
-                    /**
-                     * FIXME:
-                     */
-                    lStr: lStr.replace(/[^:]+::/u, '').padStart(lStr.length, ' '),
+                    lStr,
                     multiline,
                     multilineFlag: null,
-                    SecondWordUp: '',
-                    SecondWordUpCol: -1,
+                    SecondWordUp,
+                    SecondWordUpCol,
                     textRaw,
                 });
                 continue;

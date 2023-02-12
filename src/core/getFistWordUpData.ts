@@ -27,23 +27,6 @@ function getFistWord(lStrTrim: string): string {
         return getFistWordCore(lStrTrimFix);
     }
 
-    if (lStrTrim.includes('::')) {
-        // CAhkHotString -> :*:btw::
-        /**
-         * CAhkHotString
-         * ::ts,,::TypeScript
-         * ::ahk,,:: MsgBox, % "ahk"
-         * ;        ^^^^^^^^^^^^^^^^^ str
-         */
-        if ((/^:[^:]*:[^:]+::/u).test(lStrTrim)) {
-            return '';
-        }
-        // CAhkHotKeys   -> ~F10:: foo()
-        const lStrTrimFix: string = lStrTrim
-            .replace(/^[^:]+::\s*/u, '');
-        return getFistWordCore(lStrTrimFix);
-    }
-
     // not need to fix
     return getFistWordCore(lStrTrim);
 }
