@@ -15,7 +15,12 @@ function getMenuFuncData(lStr: string, col: number, flag: 0 | 1): readonly TScan
     if (arr.length < 3) return null;
 
     const a1: TScanData = arr[1];
-    if ((/^add$/iu).test(a1.RawNameNew)) {
+    // src/tools/Built-in/Gui/gui.data.ts
+    // allow like
+    // Gui, GuiName: add
+    //      ^^^^^^^ has GuiName
+    //              ^has \s
+    if ((/\badd\b/iu).test(a1.RawNameNew)) {
         // a0    a1   a2    a3
         // Gui, Add, Text, cBlue gLaunchGoogle, Click here to launch Google.
         //                 ^^^^^^^^^^^^^^^^^^^

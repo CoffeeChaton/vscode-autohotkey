@@ -15,6 +15,7 @@ import { numberFindWinMsg } from '../../tools/Built-in/Windows_MessagesRe_Tools'
 import { hoverWinTitleParam } from '../../tools/Built-in/WinTitle/WinTitleParameter.tools';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
+import { getFucDefWordUpFix } from '../Def/getFucDefWordUpFix';
 import { DeepAnalysisHover } from './tools/DeepAnalysisHover';
 import { hoverAhk2exe } from './tools/hoverAhk2exe';
 import { hoverClassName } from './tools/hoverClassName';
@@ -97,6 +98,12 @@ function HoverProviderCore(
     if (AhkFunc !== null) {
         const DAmd: vscode.MarkdownString | null = DeepAnalysisHover(AhkFunc, wordUp, position);
         if (DAmd !== null) return new vscode.Hover(DAmd);
+    }
+
+    const wordUpFix: string = getFucDefWordUpFix(AhkTokenLine, wordUp, position.character);
+    if (wordUp.startsWith('V') && `V${wordUpFix}` === wordUp) {
+        const guiVVar: vscode.MarkdownString | null = hoverGlobalVar(wordUpFix);
+        if (guiVVar !== null) return new vscode.Hover(guiVVar);
     }
 
     type TFn = (wordUp: string) => vscode.MarkdownString | null | undefined;

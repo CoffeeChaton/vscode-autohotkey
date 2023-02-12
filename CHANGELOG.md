@@ -30,15 +30,23 @@
 
 - feat: add hover of `label:`
 - feat: better log of `FormatAllFile` and `Refresh Resource`
+- fix: move `Reload` `Pause` from cmd -> foc, also fix syntax-highlight
 - fix: case of multi_line vs hotkey , exp : `(:: foo()` is hotkey not multi_line
 - fix: completion of `Gui, add` `Gui, new` ...etc
 - fix: format `HotStr` trigger range has `([{`
 - fix: format do not indent `HotKey` `HotStr` `Label` line, even if it is through
 - fix: format multi_line tail out of control
 - fix: [#21](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/21)
+  1. feat: add hover of `Gui, Sub-commands`
+  2. feat: add support variable `Gui, add` `vVarName`
 
-1. feat: add hover of `Gui, Sub-commands`
-2. feat: add support variable `Gui, add` `vVarName`
+  ```ahk
+  Gui, MInfo:Margin, 7, 7
+  ;----^^^^^                hover here show `hover at GuiName`
+  ;----------^^^^^^         hover here show `Sets the margin/spacing used whenever no explicit position has been specified for a control.`
+  Gui, MInfo: Margin, 7, 7
+  ;----------^ allow \s
+  ```
 
 ## 0.0.22(2023-02-07)
 

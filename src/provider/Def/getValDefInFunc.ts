@@ -6,7 +6,7 @@ import type {
 } from '../../AhkSymbol/CAhkFunc';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
-import type { TModuleVar } from '../../tools/DeepAnalysis/getModuleVarMap';
+import { getFucDefWordUpFix } from './getFucDefWordUpFix';
 import { searchAllVarRef } from './searchAllVarRef';
 
 function rangeList2LocList(rangeList: readonly vscode.Range[], uri: vscode.Uri): vscode.Location[] {
@@ -30,16 +30,20 @@ function metaRangeList(
 }
 
 function getModuleVarDef(
-    ModuleVar: TModuleVar,
     position: vscode.Position,
     wordUp: string,
     listAllUsing: boolean,
     uri: vscode.Uri,
+    AhkFileData: TAhkFileData,
 ): vscode.Location[] | null {
-    const valMeta: TValMetaOut | undefined = ModuleVar.ModuleValMap.get(wordUp);
+    const { ModuleVar, DocStrMap } = AhkFileData;
+
+    const wordUpFix: string = getFucDefWordUpFix(DocStrMap[position.line], wordUp, position.character);
+
+    const valMeta: TValMetaOut | undefined = ModuleVar.ModuleValMap.get(wordUpFix);
     if (valMeta !== undefined) {
         if (listAllUsing) {
-            return searchAllVarRef(wordUp);
+            return searchAllVarRef(wordUpFix);
         }
 
         const { defRangeList } = valMeta;
@@ -58,10 +62,10 @@ export function getValDefInFunc(
     wordUp: string,
     listAllUsing: boolean,
 ): vscode.Location[] | null {
-    const { AST, ModuleVar } = AhkFileData;
+    const { AST } = AhkFileData;
 
     const DA: CAhkFunc | null = getDAWithPos(AST, position);
-    if (DA === null) return getModuleVarDef(ModuleVar, position, wordUp, listAllUsing, uri);
+    if (DA === null) return getModuleVarDef(position, wordUp, listAllUsing, uri, AhkFileData);
 
     if (DA.nameRange.contains(position)) return null; // fnName === val
 
@@ -78,5 +82,5 @@ export function getValDefInFunc(
         return metaRangeList(defRangeList, refRangeList, listAllUsing, position, uri);
     }
 
-    return getModuleVarDef(ModuleVar, position, wordUp, listAllUsing, uri);
+    return getModuleVarDef(position, wordUp, listAllUsing, uri, AhkFileData);
 }

@@ -15,6 +15,17 @@ export function getFucDefWordUpFix(AhkTokenLine: TAhkTokenLine, wordUp: string, 
     }
 
     /**
+     * fix gui GLabel = =||
+     */
+    if ((/^v/iu).test(wordUp)) {
+        for (const { RawNameNew, lPos } of getGuiFunc(AhkTokenLine, 1) ?? []) {
+            if (`V${RawNameNew.toUpperCase()}` === wordUp && (character >= lPos || character <= lPos + wordUp.length)) {
+                return RawNameNew.toUpperCase();
+            }
+        }
+    }
+
+    /**
      * (?CFuncName)
      */
     if ((/^c/iu).test(wordUp)) {
