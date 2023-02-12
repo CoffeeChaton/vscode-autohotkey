@@ -81,11 +81,6 @@ function HoverProviderCore(
     const ahkClassMd: vscode.MarkdownString | null = hoverClassName(AhkFileData, position, wordUp);
     if (ahkClassMd !== null) return new vscode.Hover(ahkClassMd);
 
-    if (AhkFunc !== null) {
-        const DAmd: vscode.MarkdownString | null = DeepAnalysisHover(AhkFunc, wordUp, position);
-        if (DAmd !== null) return new vscode.Hover(DAmd);
-    }
-
     const labelMd: vscode.MarkdownString | null = hoverLabel(AhkFileData, position, wordUp);
     if (labelMd !== null) return new vscode.Hover(labelMd);
     const hoverLabelOrFuncMd: vscode.MarkdownString | null = hoverLabelOrFunc(
@@ -98,6 +93,12 @@ function HoverProviderCore(
 
     const guiParam: vscode.MarkdownString | null = hoverGuiParam(AhkTokenLine, position);
     if (guiParam !== null) return new vscode.Hover(guiParam);
+
+    if (AhkFunc !== null) {
+        const DAmd: vscode.MarkdownString | null = DeepAnalysisHover(AhkFunc, wordUp, position);
+        if (DAmd !== null) return new vscode.Hover(DAmd);
+    }
+
     type TFn = (wordUp: string) => vscode.MarkdownString | null | undefined;
 
     for (

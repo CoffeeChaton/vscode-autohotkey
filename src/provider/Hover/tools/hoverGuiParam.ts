@@ -42,7 +42,7 @@ function hoverGuiParamCore(lStr: string, col: number, character: number): vscode
         const word: string = GuiNameCol > -1
             ? RawNameNew.slice(GuiNameCol).replace(':', '')
             : RawNameNew;
-        const md: vscode.MarkdownString | undefined = GuiMDMapOut.get(word.toUpperCase());
+        const md: vscode.MarkdownString | undefined = GuiMDMapOut.get(word.trim().toUpperCase());
         if (md !== undefined) return md;
         if (RawNameNew.includes('+') || RawNameNew.includes('-')) {
             const mdOpt: vscode.MarkdownString | undefined = GuiMDMapOut.get('Options'.toUpperCase());
