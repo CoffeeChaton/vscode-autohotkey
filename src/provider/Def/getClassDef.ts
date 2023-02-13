@@ -13,7 +13,7 @@ export function getClassDef(
     }
 
     return listAllUsing
-        ? searchAllVarRef(wordUp, false)
+        ? searchAllVarRef(wordUp)
         : [new vscode.Location(classDef.uri, classDef.selectionRange)]; // ssd -> 0~1 ms
 }
 

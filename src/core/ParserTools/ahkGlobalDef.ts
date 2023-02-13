@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3] }] */
 import * as vscode from 'vscode';
 import type { TTokenStream } from '../../globalEnum';
 import { EDetail } from '../../globalEnum';
@@ -7,11 +8,17 @@ import type { TScanData } from '../../tools/DeepAnalysis/FnVar/def/spiltCommandA
 import type { TVarData } from './varMixedAnnouncement';
 import { varMixedAnnouncement } from './varMixedAnnouncement';
 
-type TGValData = {
+export type TGValData = {
     rawName: string,
     range: vscode.Range,
+    by: EGlobalDefBy,
 };
 
+export const enum EGlobalDefBy {
+    byGlobal = 1,
+    byGui = 2,
+    byRef = 3,
+}
 export type TGlobalVal = {
     defRangeList: TGValData[],
     refRangeList: TGValData[],
@@ -22,7 +29,12 @@ export type TGValMap = ReadonlyMap<TUpName, TGlobalVal>;
 export type TGValMapReadOnly = ReadonlyMap<TUpName, Readonly<TGlobalVal>>;
 
 function setGlobalVar(
-    { varDataList, line, GValMap }: { varDataList: TVarData[], line: number, GValMap: Map<string, TGlobalVal> },
+    {
+        varDataList,
+        line,
+        GValMap,
+        by,
+    }: { varDataList: TVarData[], line: number, GValMap: Map<string, TGlobalVal>, by: EGlobalDefBy },
 ): void {
     for (const { ch, rawName } of varDataList) {
         const ValUpName: string = rawName.toUpperCase();
@@ -34,6 +46,7 @@ function setGlobalVar(
                 new vscode.Position(line, ch),
                 new vscode.Position(line, ch + rawName.length),
             ),
+            by,
         };
 
         if (oldVal === undefined) {
@@ -70,7 +83,13 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
             // https://www.autohotkey.com/docs/v1/lib/Gui.htm#Events
             const varDataList: TVarData[] = guiVList
                 .map(({ RawNameNew, lPos }: TScanData): TVarData => ({ rawName: RawNameNew, ch: lPos }));
-            setGlobalVar({ varDataList, line, GValMap });
+
+            setGlobalVar({
+                varDataList,
+                line,
+                GValMap,
+                by: EGlobalDefBy.byGui,
+            });
             continue;
         }
 
@@ -91,7 +110,12 @@ export function ahkGlobalMain(DocStrMap: TTokenStream): TGValMap {
 
         const { varDataList, Brackets } = varMixedAnnouncement(strF, BracketsRaw);
         BracketsRaw = Brackets;
-        setGlobalVar({ varDataList, line, GValMap });
+        setGlobalVar({
+            varDataList,
+            line,
+            GValMap,
+            by: EGlobalDefBy.byGlobal,
+        });
     }
 
     return GValMap;

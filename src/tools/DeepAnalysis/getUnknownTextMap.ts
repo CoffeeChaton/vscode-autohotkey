@@ -9,6 +9,7 @@ import type {
     TValMetaIn,
 } from '../../AhkSymbol/CAhkFunc';
 import type { TGlobalVal, TGValMap } from '../../core/ParserTools/ahkGlobalDef';
+import { EGlobalDefBy } from '../../core/ParserTools/ahkGlobalDef';
 import type { TTokenStream } from '../../globalEnum';
 import { EDetail } from '../../globalEnum';
 import { AVariablesMDMap } from '../Built-in/A_Variables.tools';
@@ -132,6 +133,7 @@ export function getUnknownTextMap(
                             startPosOfGlobal,
                             new vscode.Position(line, character + wordUp.length),
                         ),
+                        by: EGlobalDefBy.byRef,
                     });
                 }
                 continue;

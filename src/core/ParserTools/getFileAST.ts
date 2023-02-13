@@ -9,7 +9,7 @@ import { getChildren } from '../getChildren';
 import { getClass } from '../getClass';
 import { ParserBlock } from '../Parser';
 import { Pretreatment } from '../Pretreatment';
-import type { TGValMap } from './ahkGlobalDef';
+import type { TGValMap, TGValMapReadOnly } from './ahkGlobalDef';
 import { ahkGlobalMain } from './ahkGlobalDef';
 import { getFunc } from './ParserFunc';
 import { ParserHotKey } from './ParserHotKey';
@@ -29,6 +29,7 @@ export type TMemo = Readonly<{
     readonly DocFullSize: number,
     readonly uri: vscode.Uri,
     readonly ModuleVar: TModuleVar,
+    readonly GValMap: TGValMapReadOnly,
 }>;
 
 function strListDeepEq(DocStrMap: TTokenStream, fullTextList: readonly string[]): boolean {
@@ -118,6 +119,7 @@ export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
         DocFullSize,
         uri,
         ModuleVar: getModuleVarMap(DocStrMap, GValMap, AST, fsPath),
+        GValMap,
     };
     BaseScanMemo.setMemo(fsPath, AhkCache);
 

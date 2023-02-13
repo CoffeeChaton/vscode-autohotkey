@@ -7,7 +7,7 @@ import type {
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import { getFucDefWordUpFix } from './getFucDefWordUpFix';
-import { searchAllVarRef } from './searchAllVarRef';
+import { searchAllGlobalVarRef } from './searchAllVarRef';
 
 function rangeList2LocList(rangeList: readonly vscode.Range[], uri: vscode.Uri): vscode.Location[] {
     return rangeList.map((range) => new vscode.Location(uri, range));
@@ -43,7 +43,7 @@ function getModuleVarDef(
     const valMeta: TValMetaOut | undefined = ModuleVar.ModuleValMap.get(wordUpFix);
     if (valMeta !== undefined) {
         if (listAllUsing) {
-            return searchAllVarRef(wordUpFix, true);
+            return searchAllGlobalVarRef(wordUpFix);
         }
 
         const { defRangeList } = valMeta;
