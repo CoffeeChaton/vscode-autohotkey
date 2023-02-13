@@ -449,7 +449,7 @@
             ]
         },
         "string_multi_line": {
-            "begin": "^[ \\t]*\\((([^);])*)([ \\t];.*)?$",
+            "begin": "^[ \\t]*\\(((?:[^);])*)([ \\t];.*)?$",
             "beginCaptures": {
                 "1": { "name": "keyword.multiline.ahk" },
                 "2": { "name": "comment.line.semicolon.ahk" }
