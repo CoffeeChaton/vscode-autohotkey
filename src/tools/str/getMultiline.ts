@@ -117,7 +117,7 @@ export function getMultiline(
     }: TGetMultiline,
 ): [EMultiline, TMultilineFlag] {
     if (multiline === EMultiline.none) {
-        return textTrimStart.startsWith('(') && !textTrimStart.includes(')')
+        return textTrimStart.startsWith('(') /* && !textTrimStart.includes(')') */
             ? [EMultiline.start, getMultilineFlag({ textRaw, result, line })]
             : [EMultiline.none, null]; // 99%
     }
