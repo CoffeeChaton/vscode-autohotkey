@@ -8,7 +8,7 @@ type TrGroup = typeof baseGroup[number];
 
 type TSnip = { readonly [k in TrGroup]: readonly vscode.CompletionItem[] };
 
-type TBiFuncMsg = {
+export type TBiFuncMsg = {
     readonly md: vscode.MarkdownString,
     readonly keyRawName: string,
 };

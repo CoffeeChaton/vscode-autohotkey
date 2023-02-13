@@ -30,6 +30,10 @@
 
 - feat: add hover of `label:`
 - feat: better log of `FormatAllFile` and `Refresh Resource`
+- feat: use CodeLens at file top show more tools
+  1. report this file def-func usage in each file
+  2. TODO analyze this file ref-func Source
+  3. report this def/ref global variables
 - fix: move `Reload` `Pause` from cmd -> foc, also fix syntax-highlight
 - fix: case of multi_line vs hotkey , exp : `(:: foo()` is hotkey not multi_line
 - fix: completion of `Gui, add` `Gui, new` ...etc

@@ -16,8 +16,8 @@ function CodeLensCore(
     { showFuncReference, showDevTool, showFileReport }: TConfigs['CodeLens'],
 ): vscode.CodeLens[] {
     const { fsPath } = document.uri;
-    const AhkFileData: TAhkFileData | null = pm.getDocMap(fsPath) ?? pm.updateDocDef(document);
-    if (AhkFileData === null) return [];
+    const AhkFileData: TAhkFileData | undefined = pm.getDocMap(fsPath);
+    if (AhkFileData === undefined) return [];
 
     const { AST, DocStrMap, uri } = AhkFileData;
 
