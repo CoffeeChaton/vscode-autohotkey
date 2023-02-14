@@ -144,7 +144,6 @@ describe('check LineCommand ruler', () => {
                 const st2: string = maList[i][1];
                 if (str === 'O' && !st2.startsWith('Out')) {
                     errList3.push(keyRawName);
-                    continue;
                 }
             }
 

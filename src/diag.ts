@@ -257,6 +257,7 @@ export const Diags: DeepReadonly<TDiags> = {
         // TODO -> move more 899 -> 8xx code
     },
     901: {
+        // eslint-disable-next-line sonarjs/no-duplicate-string
         msg: 'ahk-doc not recommended and ahk-neko-help is not work of this Directives.',
         path: 'https://www.autohotkey.com/docs/v1/lib/_EscapeChar.htm',
     },

@@ -18,6 +18,7 @@
         "plugin:promise/recommended",
         "plugin:regexp/recommended",
         "plugin:security/recommended",
+        "plugin:sonarjs/recommended",
         "plugin:unicorn/all",
         "sukka/typescript"
     ],
@@ -52,6 +53,15 @@
                 "jest/no-conditional-in-test": "off",
                 "max-lines-per-function": "off"
             }
+        },
+        {
+            "files": [
+                "**/*.data.ts",
+                "**/*.unit.test.ts"
+            ],
+            "rules": {
+                "sonarjs/no-duplicate-string": "off"
+            }
         }
     ],
     "parser": "@typescript-eslint/parser",
@@ -70,11 +80,14 @@
         "import",
         "promise",
         "security",
+        "sonarjs",
         "unicorn"
         // "immutable",
     ],
     "root": true,
     "rules": {
+        "@typescript-eslint/key-spacing": "off",
+        "sonarjs/cognitive-complexity": "off",
         "@fluffyfox/ban-eslint-disable": "off",
         "@typescript-eslint/adjacent-overload-signatures": "warn",
         "@typescript-eslint/array-type": "warn",

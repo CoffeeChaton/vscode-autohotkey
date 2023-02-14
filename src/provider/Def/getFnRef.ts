@@ -46,10 +46,7 @@ export const enum EFnRefBy {
     banCompare = 'Do not use compare',
 }
 export function mayBeIsLabel(by: EFnRefBy): boolean {
-    if ([EFnRefBy.SetTimer, EFnRefBy.Hotkey, EFnRefBy.Hotkey, EFnRefBy.Gui].includes(by)) {
-        return true;
-    }
-    return false;
+    return [EFnRefBy.SetTimer, EFnRefBy.Hotkey, EFnRefBy.Hotkey, EFnRefBy.Gui].includes(by);
 }
 
 export type TLineFnCall = {

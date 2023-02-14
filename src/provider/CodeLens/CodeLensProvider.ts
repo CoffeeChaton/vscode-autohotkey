@@ -11,6 +11,10 @@ import { getDAListTop } from '../../tools/DeepAnalysis/getDAList';
 import { getFuncRef } from '../Def/getFnRef';
 import type { showUnknownAnalyze } from './showUnknownAnalyze';
 
+const enum ECodeLensStr {
+    tooltip = 'by neko-help dev tools',
+}
+
 function CodeLensCore(
     document: vscode.TextDocument,
     { showFuncReference, showDevTool, showFileReport }: TConfigs['CodeLens'],
@@ -26,7 +30,7 @@ function CodeLensCore(
             new vscode.CodeLens(new vscode.Range(0, 0, 1, 0), {
                 title: 'Analyze this ahk file',
                 command: ECommand.showFileReport,
-                tooltip: 'by neko-help dev tools',
+                tooltip: ECodeLensStr.tooltip,
                 arguments: [document] satisfies Parameters<typeof getFileReport>,
             }),
         ]
@@ -39,7 +43,7 @@ function CodeLensCore(
             const cmd0: vscode.Command = {
                 title: 'Analyze',
                 command: ECommand.showFuncAnalyze,
-                tooltip: 'by neko-help dev tools',
+                tooltip: ECodeLensStr.tooltip,
                 arguments: [
                     fnSymbol,
                     DocStrMap.slice(fnSymbol.selectionRange.start.line + 1, fnSymbol.range.end.line + 1),
@@ -51,7 +55,7 @@ function CodeLensCore(
                 const cmd1: vscode.Command = {
                     title: 'unknownText',
                     command: ECommand.showUnknownAnalyze,
-                    tooltip: 'by neko-help dev tools',
+                    tooltip: ECodeLensStr.tooltip,
                     arguments: [fnSymbol] satisfies Parameters<typeof showUnknownAnalyze>,
                 };
                 need.push(new vscode.CodeLens(fnSymbol.range, cmd1));
@@ -62,7 +66,7 @@ function CodeLensCore(
             const cmd2: vscode.Command = {
                 title: `Reference ${getFuncRef(fnSymbol).length - 1}`,
                 command: ECommand.CmdFindFuncRef,
-                tooltip: 'by neko-help dev tools',
+                tooltip: ECodeLensStr.tooltip,
                 arguments: [
                     uri,
                     fnSymbol.range.start,

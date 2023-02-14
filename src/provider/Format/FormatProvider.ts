@@ -65,8 +65,8 @@ export function FormatCore(
         occ: 0,
         status: 'file start',
     };
-    const memo: (Readonly<TLnStatus>)[] = [];
-    memo.push({ ...lnStatus });
+    // const memo: (Readonly<TLnStatus>)[] = [];
+    // memo.push({ ...lnStatus });
     const switchRangeArray: vscode.Range[] = [];
     const newTextList: vscode.TextEdit[] = [];
 

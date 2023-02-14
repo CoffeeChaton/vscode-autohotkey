@@ -10,12 +10,8 @@ export function isPosAtStrNext(textRaw: string, lStr: string, position: vscode.P
     const sL = text.length;
     for (let i = 0; i < sL; i++) {
         if (col === i) return tf !== 1;
-        switch (text[i]) {
-            case '"':
-                tf *= -1;
-                break;
-            default:
-                break;
+        if (text[i] === '"') {
+            tf *= -1;
         }
     }
     return false; // at line end

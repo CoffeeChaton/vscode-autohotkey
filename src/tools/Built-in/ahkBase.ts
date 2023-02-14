@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable max-lines */
 import * as vscode from 'vscode';
 import type { TAhkBaseObj } from './ahkBase_tools';

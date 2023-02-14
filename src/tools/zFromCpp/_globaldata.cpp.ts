@@ -310,6 +310,7 @@ function _ParseActionType(aBufTarget: string, aBufSource: readonly string[], _aD
 
     const end_marker: string | null = StrChrAny(aBufSource, end_flags);
 
+    // eslint-disable-next-line sonarjs/no-all-duplicated-branches
     if (end_marker === null) {
         // No delimiter found, so set end_marker to the location of the last char in string.
     } else {

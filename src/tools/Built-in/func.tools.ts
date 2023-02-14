@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 /* eslint no-magic-numbers: ["error", { "ignore": [0,3] }] */
 import * as vscode from 'vscode';
 import { funcDataList } from './func.data';

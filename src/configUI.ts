@@ -114,6 +114,7 @@ export function getCustomize(): TConfigs['customize'] {
 
 export function needDiag(): boolean {
     const { AMasterSwitch } = config.Diag;
+    // eslint-disable-next-line sonarjs/prefer-single-boolean-return
     if (
         AMasterSwitch === EDiagMasterSwitch.never
         || (AMasterSwitch === EDiagMasterSwitch.auto && vscode.workspace.workspaceFolders === undefined)

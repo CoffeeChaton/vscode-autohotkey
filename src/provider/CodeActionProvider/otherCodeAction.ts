@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
 import type { AnalyzeFuncMain } from '../../command/AnalyzeFunc/AnalyzeThisFunc';
