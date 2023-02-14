@@ -434,7 +434,7 @@
         "string": {
             "begin": "(\")",
             "beginCaptures": { "1": { "name": "punctuation.definition.string.begin.ahk" } },
-            "end": "(\")(?!\")|^",
+            "end": "(?:(\")(?!\"))|$",
             "endCaptures": { "1": { "name": "punctuation.definition.string.end.ahk" } },
             "name": "string.quoted.double.ahk",
             "patterns": [
