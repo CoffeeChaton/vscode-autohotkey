@@ -3,6 +3,7 @@ import type { DeepReadonly } from './globalEnum';
 
 type TLink =
     | `https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/ahk/diag${number}.ahk`
+    | `https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/code${number}.md`
     | `https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/tree/master/note#${string}`
     | `https://www.autohotkey.com/docs/v1/${string}`;
 
@@ -90,6 +91,8 @@ export const enum EDiagCode {
     code201 = 201, // 200~299 is not expression // need use %
     // 300~399 is func err
     code301 = 301, // user-config function size
+
+    code304 = 304, // avoid def-func-name look like foc (FlowOfControl)
 
     // code600~699 warn user
 
@@ -189,6 +192,10 @@ export const Diags: DeepReadonly<TDiags> = {
         msg: 'function or Method is so big',
         path: 'https://www.autohotkey.com/docs/v1/Functions.htm',
         // is user setting.
+    },
+    304: {
+        msg: 'avoid def-func-name look like Flow Of Control',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/code304.md',
     },
     602: {
         msg: 'recommended that the following names not be used: On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.',

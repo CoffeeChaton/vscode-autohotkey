@@ -114,6 +114,11 @@
                         "maximum": 100000,
                         "markdownDescription": "(code300) lint of function/Method size (just calc non-blank lines)"
                     },
+                    "AhkNekoHelp.Diag.code304AvoidConfusingFuncNames": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "([code304](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/code304.md)) avoid def-func-name look like Flow Of Control"
+                    },
                     "AhkNekoHelp.Diag.code500": {
                         "type": "number",
                         "default": 20,

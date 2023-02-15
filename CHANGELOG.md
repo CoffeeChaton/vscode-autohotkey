@@ -32,11 +32,28 @@
 - feat: better log of `FormatAllFile` and `Refresh Resource`
 - feat: use CodeLens at file top show more tools
   1. report this file def-func usage in each file
-  2. TODO analyze this file ref-func Source
+  2. analyze this file ref-func Source
   3. report this def/ref global variables
 - fix: move `Reload` `Pause` from cmd -> foc, also fix syntax-highlight
 - fix: case of multi_line vs hotkey , exp : `(:: foo()` is hotkey not multi_line
 - fix: completion of `Gui, add` `Gui, new` ...etc
+- fix: syntax-highlight of `else()` `GoSub()` ...etc to look like `func()` , because it's legal and works.
+  >
+  > - and i Provider a diag [code304](note/code304.md) ban define a function name look like [Flow of Control](https://www.autohotkey.com/docs/v1/Language.htm#control-flow).
+
+  ```ahk
+  else()
+  GoSub()
+
+  else(){ ; define a function name as else
+    MsgBox % "i am else func..."
+  }
+
+  GoSub() { ; define a function name as GoSub
+    MsgBox % "i am GoSub func..."
+  }
+  ```
+
 - fix: format `HotStr` trigger range has `([{`
 - fix: format do not indent `HotKey` `HotStr` `Label` line, even if it is through
 - fix: format multi_line tail out of control

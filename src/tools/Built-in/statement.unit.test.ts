@@ -77,7 +77,7 @@ describe('check Statement ruler', () => {
 
         const st1: string = (repository.flow_of_control.patterns.at(-1)?.match ?? '')
             .replace('\\b(?!MsgBox)(?<![.#])(?i:', '')
-            .replace(')\\b', '');
+            .replace(')\\b(?!\\()', '');
 
         // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
         expect(arr1).toStrictEqual([...arr1].sort());

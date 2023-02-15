@@ -3,7 +3,7 @@ import type { TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
 import { CMemo } from '../CMemo';
 import { getFileAllFunc } from './getFileAllFuncList';
 
-type TFnMap = ReadonlyMap<string, CAhkFunc>;
+export type TFnMap = ReadonlyMap<string, CAhkFunc>;
 
 const FileAllFuncMemo = new CMemo<TAstRoot, TFnMap>((ASTRoot: TAstRoot): TFnMap => {
     type TMapMake = [string, CAhkFunc];

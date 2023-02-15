@@ -270,7 +270,7 @@
         "flow_of_control": {
             "patterns": [
                 {
-                    "match": "\\b(?!MsgBox)(?<![.#])(?i:(goto|goSub|Break|Continue|OnExit))\\b[ \\t]*?,?[ \\t]*([a-zA-Z_]*\\w*)",
+                    "match": "\\b(?!MsgBox)(?<![.#])(?i:(goto|goSub|Break|Continue|OnExit))\\b[ \\t]*?,?[ \\t]*([a-zA-Z_]\\w*)",
                     "name": "meta.goto.gosub.ahk",
                     "captures": {
                         "1": { "name": "keyword.control.flow.ahk" },
@@ -279,7 +279,7 @@
                 },
                 { "include": "#flow_of_control_loop_plus" },
                 {
-                    "match": "\\b(?!MsgBox)(?<![.#])(?i:Break|Case|Catch|Continue|Critical|Default|Else|Exit|ExitApp|Finally|For|GoSub|Goto|If|IfEqual|IfExist|IfGreater|IfGreaterOrEqual|IfInString|IfLess|IfLessOrEqual|IfMsgBox|IfNotEqual|IfNotExist|IfNotInString|IfWinActive|IfWinExist|IfWinNotActive|IfWinNotExist|Loop|Pause|Reload|Return|Switch|Throw|Try|Until|While)\\b",
+                    "match": "\\b(?!MsgBox)(?<![.#])(?i:Break|Case|Catch|Continue|Critical|Default|Else|Exit|ExitApp|Finally|For|GoSub|Goto|If|IfEqual|IfExist|IfGreater|IfGreaterOrEqual|IfInString|IfLess|IfLessOrEqual|IfMsgBox|IfNotEqual|IfNotExist|IfNotInString|IfWinActive|IfWinExist|IfWinNotActive|IfWinNotExist|Loop|Pause|Reload|Return|Switch|Throw|Try|Until|While)\\b(?!\\()",
                     "name": "keyword.control.flow.ahk"
                 }
             ]

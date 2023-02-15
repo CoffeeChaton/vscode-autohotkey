@@ -11,6 +11,7 @@ import { getLineErr } from './tools/getLineErr';
 import { getMultilineDiag } from './tools/getMultilineDiag';
 import { getTreeErr } from './tools/getTreeErr';
 import { getAssignErr } from './tools/lineErr/assignErr';
+import { getCode304Err } from './tools/lineErr/getCode304';
 
 const wm = new WeakMap<TTokenStream, readonly CDiagBase[]>();
 
@@ -39,7 +40,12 @@ export function setBaseDiag(AhkFileData: TAhkFileData): void {
     const baseDiagSet = new Set<CDiagBase>(baseDiagnostic(DocStrMap, AST));
 
     const DiagShow: CDiagBase[] = [];
-    const { code800Deprecated, code107, code300fnSize } = getDiagConfig();
+    const {
+        code800Deprecated,
+        code107,
+        code304,
+        code300fnSize,
+    } = getDiagConfig();
 
     for (const diag of baseDiagSet) {
         const { value } = diag.code;
@@ -50,6 +56,9 @@ export function setBaseDiag(AhkFileData: TAhkFileData): void {
     }
     if (code107) {
         DiagShow.push(...getAssignErr(DocStrMap));
+    }
+    if (code304) {
+        DiagShow.push(...getCode304Err(AhkFileData));
     }
 
     diagColl.set(uri, [

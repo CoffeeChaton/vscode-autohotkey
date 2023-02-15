@@ -29,6 +29,7 @@ function getConfig(Configs: vscode.WorkspaceConfiguration): TConfigs {
             AMasterSwitch: getConfigs<EDiagMasterSwitch>(Configs, 'AhkNekoHelp.Diag.AMasterSwitch'),
             code107: getConfigs<boolean>(Configs, 'AhkNekoHelp.Diag.code107LegacyAssignment'),
             code300fnSize: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code300FuncSize'),
+            code304: getConfigs<boolean>(Configs, 'AhkNekoHelp.Diag.code304AvoidConfusingFuncNames'),
             code500Max: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code500'), // NeverUsedVar
             code502Max: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code502'), // of var
             code503Max: getConfigs<number>(Configs, 'AhkNekoHelp.Diag.code503'), // of param
