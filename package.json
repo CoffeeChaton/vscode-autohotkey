@@ -78,7 +78,7 @@
                     },
                     "AhkNekoHelp.CodeLens.showFileReport": {
                         "type": "boolean",
-                        "default": false,
+                        "default": true,
                         "markdownDescription": "show CodeLens at file top"
                     }
                 }
@@ -335,7 +335,7 @@
         "vscode-tmgrammar-test": "^0.1.1"
     },
     "engines": {
-        "vscode": "^1.75.0"
+        "vscode": "^1.75.1"
     },
     "icon": "icon.png",
     "galleryBanner": {

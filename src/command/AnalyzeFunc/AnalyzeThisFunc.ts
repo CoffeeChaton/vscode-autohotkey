@@ -6,10 +6,9 @@ import type {
     TValMapOut,
 } from '../../AhkSymbol/CAhkFunc';
 import type { TTokenStream } from '../../globalEnum';
-import { EFormatChannel } from '../../globalEnum';
-import { FormatCore } from '../../provider/Format/FormatProvider';
 import type { TFullFuncMap } from '../../tools/Func/getAllFunc';
 import { getAllFunc } from '../../tools/Func/getAllFunc';
+import { fmtOutPutReport } from '../tools/fmtOutPutReport';
 import { AnalyzeCommand } from './AnalyzeCommand';
 import { AnalyzeGlobalVal } from './AnalyzeGlobalVal';
 import { AnalyzeRefFunc } from './AnalyzeRefFunc';
@@ -18,26 +17,6 @@ function showElement(map: TParamMapOut | TTextMapOut | TValMapOut): string {
     return [...map.values()]
         .map((e): string => e.keyRawName)
         .join(', ');
-}
-
-// --------
-
-async function fmtAnalyze(document: vscode.TextDocument): Promise<void> {
-    const TextEdit: vscode.TextEdit[] = FormatCore({
-        document,
-        options: {
-            tabSize: 4,
-            insertSpaces: true,
-        },
-        fmtStart: 0,
-        fmtEnd: document.lineCount - 1,
-        from: EFormatChannel.byFormatAllFile,
-        needDiff: true,
-    });
-
-    const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
-    edit.set(document.uri, TextEdit);
-    await vscode.workspace.applyEdit(edit);
 }
 
 export async function AnalyzeFuncMain(DA: CAhkFunc, AhkTokenList: TTokenStream): Promise<void> {
@@ -71,7 +50,7 @@ export async function AnalyzeFuncMain(DA: CAhkFunc, AhkTokenList: TTokenStream):
         content: ed.join('\n'),
     });
 
-    await fmtAnalyze(document);
+    await fmtOutPutReport(document);
 
     await vscode.window.showTextDocument(document);
 }

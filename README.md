@@ -136,15 +136,21 @@ support to find like
 
    ```ahk
    Haystack := "The quick brown fox jumps over the lazy dog."
-   RegExMatch(Haystack, "i)(The) (\w+)\b(?CCallout)")
+   RegExMatch(Haystack, "i)(The) (\w+)\b(?CCallOut)")
    ;                                       ^^^^^^^ func in (?CFuncName)
-   Callout(m) {
-        MsgBox m=%m%`nm1=%m1%`nm2=%m2%
-        return 1
+   CallOut(m) {
+       MsgBox ,
+           (LTrim C
+               m=%m% ;  m=The quick
+               m1=%m1% ;m1=The   ; m1 is Pseudo-Arrays https://www.autohotkey.com/docs/v1/misc/Arrays.htm#pseudo
+               m2=%m2% ;m2=quick ; m2 is Pseudo-Arrays also
+           )
+       return 1
    }
    ```
 
-6. read more of [funcRef](src/command/AnalysisFuncReference/funcRef.ahk)
+6. not plan to support like `%func%()` `Func%A_Index%()` [Dynamically Calling a Function](https://www.autohotkey.com/docs/v1/Functions.htm#DynCall)
+7. read more of [funcRef](src/command/AnalysisFuncReference/funcRef.ahk)
 
 ## Function rename
 

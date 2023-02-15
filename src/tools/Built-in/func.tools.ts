@@ -12,6 +12,7 @@ type TSnip = { readonly [k in TrGroup]: readonly vscode.CompletionItem[] };
 export type TBiFuncMsg = {
     readonly md: vscode.MarkdownString,
     readonly keyRawName: string,
+    readonly uri: string,
 };
 type TBiFuncMap = ReadonlyMap<string, TBiFuncMsg>;
 
@@ -136,20 +137,20 @@ const [SnippetObj, BuiltInFuncMDMap] = ((): [TSnip, TBiFuncMap] => {
     ] as const;
 
     for (const vv of otherComObjFuncList) {
-        const { keyRawName } = vv;
+        const { keyRawName, link } = vv;
         const upName = keyRawName.toUpperCase();
         const v = {
             upName,
             ...vv,
         };
         const md: vscode.MarkdownString = makeMd(v);
-        map2.set(upName, { keyRawName, md });
+        map2.set(upName, { keyRawName, md, uri: link });
     }
 
     for (const v of funcDataList) {
-        const { keyRawName, upName } = v;
+        const { keyRawName, upName, link } = v;
         const md: vscode.MarkdownString = makeMd(v);
-        map2.set(upName, { keyRawName, md });
+        map2.set(upName, { keyRawName, md, uri: link });
 
         const item: vscode.CompletionItem = makeSnip(v, md);
 
@@ -192,6 +193,7 @@ const ComObjResult: TBiFuncMsg = {
         )
         .appendMarkdown('\n')
         .appendMarkdown('[(Read Doc)](https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm#Remarks)'),
+    uri: 'https://www.autohotkey.com/docs/v1/lib/ComObjActive.htm#Remarks',
 };
 
 export function getBuiltInFuncMD(keyUp: string): TBiFuncMsg | undefined {

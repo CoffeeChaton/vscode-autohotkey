@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
@@ -5,50 +6,23 @@ import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import type { TFuncRef } from '../../provider/Def/getFnRef';
 import { EFnRefBy, fileFuncRef } from '../../provider/Def/getFnRef';
-
-import type { TTokenStream } from '../../globalEnum';
 import type { TBiFuncMsg } from '../../tools/Built-in/func.tools';
 import { getBuiltInFuncMD } from '../../tools/Built-in/func.tools';
 import type { TFullFuncMap } from '../../tools/Func/getAllFunc';
 import { getAllFunc } from '../../tools/Func/getAllFunc';
+import { fmtOutPutReport } from '../tools/fmtOutPutReport';
+import type {
+    TRefBuiltInFn,
+    TRefJustBy2,
+    TRefUnknown,
+    TRefUseDef,
+} from './cm2Tools/allCmd2type';
+import { BuiltInFn2StrList } from './cm2Tools/BuiltInFn2StrList';
+import { mayUseByStr } from './cm2Tools/mayUseByStr';
+import { refUseDef2StrList } from './cm2Tools/refUseDef2StrList';
+import { unKnowSourceToStrList } from './cm2Tools/unKnowSourceToStrList';
 
-function unKnowSourceToStrList(DocStrMap: TTokenStream, refUnknown: Map<string, TFuncRef[]>): string[] {
-    // fnName = ( LTrm C)
-    // ( LTrm C
-    // ln xx ; textRaw
-    // )
-    const arr: string[] = [];
-
-    for (const [k, refList] of refUnknown) {
-        arr.push(`${k} =`, '( LTrim C');
-        for (const { line, col } of refList) {
-            const { textRaw } = DocStrMap[line];
-            arr.push(`[ln ${line + 1}, col ${col + 1}] ; ${textRaw.trim()}`);
-        }
-        arr.push(')');
-    }
-    return arr;
-}
-
-function BuiltInFn2StrList(DocStrMap: TTokenStream, refBuiltInFn: Map<string, [TFuncRef[], TBiFuncMsg]>): string[] {
-    // fnName = ( LTrm C)
-    // ( LTrm C
-    // ln xx ; textRaw
-    // )
-    const arr: string[] = [];
-
-    for (const [_k, [refList, { keyRawName }]] of refBuiltInFn) {
-        arr.push(`${keyRawName} =`, '( LTrim C', `${keyRawName}()`, '[ln, col]');
-        for (const { line, col } of refList) {
-            const { textRaw } = DocStrMap[line];
-            arr.push(`[${line + 1}, ${col + 1}] ; ${textRaw.trim()}`);
-        }
-        arr.push(')');
-    }
-    return arr;
-}
-
-export function cmd2AnalysisThisFuncSource(document: vscode.TextDocument): null {
+export async function cmd2AnalysisThisFuncSource(document: vscode.TextDocument): Promise<null> {
     //
     const t1: number = Date.now();
     const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
@@ -61,10 +35,11 @@ export function cmd2AnalysisThisFuncSource(document: vscode.TextDocument): null 
     const refMap: ReadonlyMap<string, TFuncRef[]> = fileFuncRef.up(AhkFileData);
     const fnMap: TFullFuncMap = getAllFunc();
 
-    const refUseDef = new Map<string, [TFuncRef[], CAhkFunc]>();
-    const refJustBy2 = new Map<string, [TFuncRef[], CAhkFunc]>(); // by "funcName"
-    const refBuiltInFn = new Map<string, [TFuncRef[], TBiFuncMsg]>();
-    const refUnknown = new Map<string, TFuncRef[]>();
+    const refUseDef: TRefUseDef = new Map();
+    const refBuiltInFn: TRefBuiltInFn = new Map();
+    const refJustBy2: TRefJustBy2 = new Map(); // by "funcName"
+    const refJustBy2ButNotFindSource: TRefUnknown = new Map(); // by "funcName" but not found source
+    const refUnknown: TRefUnknown = new Map();
 
     for (const [upFnName, RefList] of refMap) {
         const justByRef2: boolean = RefList.every((ref: TFuncRef): boolean => ref.by === EFnRefBy.wordWrap);
@@ -73,6 +48,9 @@ export function cmd2AnalysisThisFuncSource(document: vscode.TextDocument): null 
             if (justByRef2) {
                 refJustBy2.set(upFnName, [RefList, ahkFunc]);
             } else {
+                /**
+                 * FIXME: check Label-name .EQ. func-Name ....= =||
+                 */
                 refUseDef.set(upFnName, [RefList, ahkFunc]);
             }
             continue;
@@ -82,7 +60,9 @@ export function cmd2AnalysisThisFuncSource(document: vscode.TextDocument): null 
             refBuiltInFn.set(upFnName, [RefList, BuiltInFnMsg]);
             continue;
         }
-        if (!justByRef2) {
+        if (justByRef2) {
+            refJustBy2ButNotFindSource.set(upFnName, RefList);
+        } else {
             refUnknown.set(upFnName, RefList);
         }
     }
@@ -90,16 +70,12 @@ export function cmd2AnalysisThisFuncSource(document: vscode.TextDocument): null 
     const ms: number = Date.now() - t1;
     const content: string = [
         '',
-        ';; cmd2_report_this_func_source',
-        `source := "${path.basename(document.uri.fsPath)}"`,
-        `sourcePath := "${document.uri.fsPath}"`,
+        'class cmd2_report_this_func_source { ',
+        `static source := "${path.basename(document.uri.fsPath)}"`,
+        `static sourcePath := "${document.uri.fsPath}"`,
         '',
         'unknownSource() {',
         '; Looks like a function, but I can\'t get the source of',
-        // fnName = ( LTrm C)
-        // ( LTrm C
-        // ln xx ; textRaw
-        // )
         ...unKnowSourceToStrList(DocStrMap, refUnknown),
         '}',
         '',
@@ -108,14 +84,31 @@ export function cmd2AnalysisThisFuncSource(document: vscode.TextDocument): null 
         ...BuiltInFn2StrList(DocStrMap, refBuiltInFn),
         '}',
         '',
+        'fromUserDef() {',
+        ...refUseDef2StrList(DocStrMap, refUseDef),
+        '}',
+        '',
+        'strHasSameName() {',
+        '; by "funcName" and has a function with the same name',
+        ...mayUseByStr(DocStrMap, refJustBy2),
+        '}',
+        '',
+        'mayUseByStr() {',
+        '; by "funcName" , but not any function has same name',
+        ...unKnowSourceToStrList(DocStrMap, refJustBy2ButNotFindSource),
+        '}',
+        '}',
         'MsgBox % "please read https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp#find-ref-of-function"',
         `MsgBox % "Done : " ${ms} " ms"`,
         '',
     ].join('\n');
-    void vscode.workspace.openTextDocument({
+    const docOut: vscode.TextDocument = await vscode.workspace.openTextDocument({
         language: 'ahk',
         content,
-    }).then((doc: vscode.TextDocument): Thenable<vscode.TextEditor> => vscode.window.showTextDocument(doc));
+    });
+
+    await fmtOutPutReport(docOut);
+    await vscode.window.showTextDocument(docOut);
 
     return null;
 }
