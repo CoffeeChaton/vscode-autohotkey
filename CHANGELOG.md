@@ -28,6 +28,7 @@
   }
   ```
 
+- feat: Provider a diag [code601](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/code601.md) avoid def-func-name affect [`Hotkey, KeyName , Label`](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm)
 - feat: add hover of `label:`
 - feat: better log of `FormatAllFile` and `Refresh Resource`
 - feat: use CodeLens at file top show more tools

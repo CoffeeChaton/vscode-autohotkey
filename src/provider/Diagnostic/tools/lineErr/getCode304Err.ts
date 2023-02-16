@@ -21,7 +21,7 @@ const code304ErrList: readonly string[] = [
     'For',
     'GoSub',
     'Goto',
-    // 'If', ahk-v1 [`IF` `While` is not function](https://github.com/AutoHotkey/AutoHotkey/blob/v1.1/source/script.cpp#L1404)
+    // 'If', ahk-v1 [`IF` `While` cannot be defined as a function](https://github.com/AutoHotkey/AutoHotkey/blob/v1.1/source/script.cpp#L1404)
     'IfMsgBox',
     'Loop',
     'Pause',
@@ -31,7 +31,7 @@ const code304ErrList: readonly string[] = [
     'Throw',
     'Try',
     'Until',
-    // 'While', ahk-v1 [`IF` `While` is not function](https://github.com/AutoHotkey/AutoHotkey/blob/v1.1/source/script.cpp#L1404)
+    // 'While', ahk-v1 [`IF` `While` cannot be defined as a function](https://github.com/AutoHotkey/AutoHotkey/blob/v1.1/source/script.cpp#L1404)
 ].map((v: string): string => v.toUpperCase());
 
 const code304Err = new CMemo<TAhkFileData, readonly CDiagBase[]>((AhkFileData: TAhkFileData): readonly CDiagBase[] => {

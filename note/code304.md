@@ -36,11 +36,11 @@
 
 - Trigger conditions
 
-  a function defined name looks like block name
+  a function defined name looks like ban name list
 
   ```js
   // a function defined name looks
-  const blockName = [
+  const banName = [
       'Break',
       'Case',
       'Catch',
@@ -54,7 +54,7 @@
       'For',
       'GoSub',
       'Goto',
-      // 'If', ahk-v1 [`IF` `While` is not function](https://github.com/AutoHotkey/AutoHotkey/blob/v1.1/source/script.cpp#L1404)
+      // 'If', ahk-v1 [`IF` `While` cannot be defined as a function](https://github.com/AutoHotkey/AutoHotkey/blob/v1.1/source/script.cpp#L1404)
       'IfMsgBox',
       'Loop',
       'Pause',
@@ -64,6 +64,6 @@
       'Throw',
       'Try',
       'Until',
-      // 'While', ahk-v1 [`IF` `While` is not function](https://github.com/AutoHotkey/AutoHotkey/blob/v1.1/source/script.cpp#L1404)
+      // 'While', ahk-v1 [`IF` `While` cannot be defined as a function](https://github.com/AutoHotkey/AutoHotkey/blob/v1.1/source/script.cpp#L1404)
   ];
   ```

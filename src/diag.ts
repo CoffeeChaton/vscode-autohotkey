@@ -97,6 +97,12 @@ export const enum EDiagCode {
     // code600~699 warn user
 
     /**
+     * Avoid defining function names like `On()` , `Off()`
+     *
+     * On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.
+     */
+    code601 = 601,
+    /**
      * Label name of `On:` , `Off:`
      *
      * On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.
@@ -197,9 +203,13 @@ export const Diags: DeepReadonly<TDiags> = {
         msg: 'avoid def-func-name look like Flow Of Control',
         path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/code304.md',
     },
+    601: {
+        msg: 'Avoid defining function names like On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/code601.md',
+    },
     602: {
         msg: 'recommended that the following names not be used: On, Off, Toggle, AltTab, ShiftAltTab, AltTabAndMenu and AltTabMenuDismiss.',
-        path: 'https://www.autohotkey.com/docs/v1/misc/Labels.htm#syntax-and-usage=',
+        path: 'https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/code601.md',
     },
     603: {
         msg: 'unknown #Directives in ahk-v1',

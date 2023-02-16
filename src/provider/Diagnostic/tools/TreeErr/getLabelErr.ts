@@ -39,7 +39,7 @@ const DiagLabelErrMap: ReadonlyMap<string, TDiagMsg> = new Map([
         code: EDiagCode.code602,
         tags: [],
     }],
-    ['ALTTABMENUDISMISS:', {
+    ['ALTTABMENUDISMISS:', { // https://www.autohotkey.com/docs/v1/Hotkeys.htm#alttab
         code: EDiagCode.code602,
         tags: [],
     }],

@@ -11,7 +11,8 @@ import { getLineErr } from './tools/getLineErr';
 import { getMultilineDiag } from './tools/getMultilineDiag';
 import { getTreeErr } from './tools/getTreeErr';
 import { getAssignErr } from './tools/lineErr/assignErr';
-import { getCode304Err } from './tools/lineErr/getCode304';
+import { getCode304Err } from './tools/lineErr/getCode304Err';
+import { getCode601Err } from './tools/lineErr/getCode601Err';
 
 const wm = new WeakMap<TTokenStream, readonly CDiagBase[]>();
 
@@ -39,7 +40,9 @@ export function setBaseDiag(AhkFileData: TAhkFileData): void {
     } = AhkFileData;
     const baseDiagSet = new Set<CDiagBase>(baseDiagnostic(DocStrMap, AST));
 
-    const DiagShow: CDiagBase[] = [];
+    const DiagShow: CDiagBase[] = [
+        ...getCode601Err(AhkFileData),
+    ];
     const {
         code800Deprecated,
         code107,
