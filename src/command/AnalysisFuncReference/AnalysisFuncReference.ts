@@ -7,6 +7,7 @@ import { getFuncRef } from '../../provider/Def/getFnRef';
 import { log } from '../../provider/vscWindows/log';
 import { isAhkTab } from '../../tools/fsTools/isAhk';
 import { getFileAllFunc } from '../../tools/visitor/getFileAllFuncList';
+import { fmtOutPutReport } from '../tools/fmtOutPutReport';
 
 type TRef = {
     Ref0: readonly string[],
@@ -47,7 +48,7 @@ function getEachFnRefNumber(AhkFileData: TAhkFileData): TRef {
     };
 }
 
-export function AnalysisFuncReferenceCore(document: vscode.TextDocument): null {
+export async function AnalysisFuncRefCore(document: vscode.TextDocument): Promise<null> {
     const t1 = Date.now();
     const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
     if (AhkFileData === null) {
@@ -70,7 +71,7 @@ export function AnalysisFuncReferenceCore(document: vscode.TextDocument): null {
         '            ( LTrim',
         '                never user`n',
         // '                fnA()',
-        ...Ref0.map((str: string): string => `                ${str}`),
+        ...Ref0,
         // '                fnC()',
         '            )',
         '    }',
@@ -79,7 +80,7 @@ export function AnalysisFuncReferenceCore(document: vscode.TextDocument): null {
         '        MsgBox, ',
         '            ( LTrim',
         '                only used in 1 place`n',
-        ...Ref1.map((str: string): string => `                ${str}`),
+        ...Ref1,
         '            )',
         '    }',
         '',
@@ -87,7 +88,7 @@ export function AnalysisFuncReferenceCore(document: vscode.TextDocument): null {
         '        MsgBox, ',
         '            ( LTrim',
         '                RefMore`n',
-        ...RefN.map((str: string): string => `                ${str}`),
+        ...RefN,
         '            )',
         '    }',
         '}',
@@ -100,10 +101,21 @@ export function AnalysisFuncReferenceCore(document: vscode.TextDocument): null {
         '',
         `MsgBox % "Done : " ${ms} " ms"`,
         '',
+        '; other exp----------------------------------------------------------------------------------------------------',
+        'Callout(m) {',
+        '    MsgBox m=%m%`nm1=%m1%`nm2=%m2%',
+        '    return 1',
+        '}',
+        '',
+        'IntegerSort(a1, a2) {',
+        '    return a1 - a2',
+        '}',
+        '',
         'funcName() {',
         '    ;save this file to try gotoDef && find-all-references',
         '    Return "ABC"',
         '}',
+        '',
         'exp1() {',
         '    funcName := funcName() ;',
         '    ;X          ^',
@@ -167,20 +179,14 @@ export function AnalysisFuncReferenceCore(document: vscode.TextDocument): null {
         '    cc := fn%i%() ;',
         '}',
         '',
-        'Callout(m) {',
-        '    MsgBox m=%m%`nm1=%m1%`nm2=%m2%',
-        '    return 1',
-        '}',
-        '',
-        'IntegerSort(a1, a2) {',
-        '    return a1 - a2',
-        '}',
     ].join('\r\n');
 
-    void vscode.workspace.openTextDocument({
+    const docOut: vscode.TextDocument = await vscode.workspace.openTextDocument({
         language: 'ahk',
         content,
-    }).then((doc: vscode.TextDocument): Thenable<vscode.TextEditor> => vscode.window.showTextDocument(doc));
+    });
+    await fmtOutPutReport(docOut);
+    await vscode.window.showTextDocument(docOut);
 
     //  log.info(`AnalysisFuncReference of "${document.fileName}" , use ${ms} ms`);
     return null;
@@ -197,7 +203,7 @@ export function AnalysisFuncReferenceWrap(): null {
         void vscode.window.showInformationMessage('you don\'t open any ahk file');
     }
     if (visibleListAhk.length === 1) {
-        void AnalysisFuncReferenceCore(visibleListAhk[0]);
+        void AnalysisFuncRefCore(visibleListAhk[0]);
         return null;
     }
 
@@ -216,7 +222,7 @@ export function AnalysisFuncReferenceWrap(): null {
             if (pick === undefined) return null;
             const { select } = pick;
             log.info(`select "${select.fileName}"`);
-            void AnalysisFuncReferenceCore(select);
+            void AnalysisFuncRefCore(select);
             return null;
         });
     return null;

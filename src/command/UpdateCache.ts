@@ -48,6 +48,6 @@ export async function UpdateCacheUi(): Promise<void> {
     const list: TAhkFileData[] | null = await UpdateCacheAsync(true) ?? [];
     const t2: number = Date.now();
     const fsPathList: string[] = list.map((v: TAhkFileData): string => v.uri.fsPath);
-    log.info(`Refresh Resource ${t2 - t1} ms, file: ${list.length}\n${showFileList(fsPathList)}`);
+    log.info(`${showFileList(fsPathList)}\nRefresh Resource ${t2 - t1} ms, file: ${list.length}`);
     log.show();
 }

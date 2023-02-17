@@ -88,7 +88,8 @@ export async function FormatAllFile(): Promise<null> {
     await Promise.all(results);
     const t2: number = Date.now();
 
-    log.info(`FormatAllFile -> ${t2 - t1} ms\n${showFileList(uriList.map((uri: vscode.Uri): string => uri.fsPath))}`);
+    const fsPathList: string[] = uriList.map((uri: vscode.Uri): string => uri.fsPath);
+    log.info(`${showFileList(fsPathList)}\nFormatAllFile -> ${t2 - t1} ms`);
     log.show();
 
     await UpdateCacheAsync(false);

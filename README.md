@@ -171,9 +171,9 @@ support to find like
 ## Function rename
 
 - (default via `F2`) rename with your can use [[🔍Find Ref of Function]](#find-ref-of-function) to find.
-- TODO: check of Rename (via `f2`) newName
-  1. TODO newFnName has been defined as `function` `class` `label`
-  2. default not rename `"fnName"` and log.info using case
+- check of Rename newName
+  1. check newFnName has been defined as `function` `class` `label`
+  2. default not rename `"fnName"` , can use `AhkNekoHelp.Rename.functionInStr` open it [[Read more]](note/code601.md)
   3. _warn_ this extension not match `fn%var%()` or `%fn%%var%()` or `str = fnName` case
 
 ## Hover

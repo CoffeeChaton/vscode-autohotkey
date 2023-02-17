@@ -112,7 +112,7 @@ export const RenameProvider: vscode.RenameProvider = {
         }
 
         if ((/^\d/u).test(newName) || (/^_+$/u).test(newName)) {
-            void vscode.window.showInformationMessage(`Please use normal newName, not support of "${newName}"`);
+            void vscode.window.showInformationMessage(`Please use normal name, not support of "${newName}"`);
             return null;
         }
         const warnMsg: string = checkRenameNewName(newName);

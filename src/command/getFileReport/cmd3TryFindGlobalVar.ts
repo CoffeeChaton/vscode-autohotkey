@@ -4,6 +4,7 @@ import type { TGValData } from '../../core/ParserTools/ahkGlobalDef';
 import { EGlobalDefBy } from '../../core/ParserTools/ahkGlobalDef';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
+import { fmtOutPutReport } from '../tools/fmtOutPutReport';
 
 /**
  * valName ; ln99 global valName...
@@ -67,7 +68,7 @@ function getByDefModuleVar(AhkFileData: TAhkFileData, set: Set<string>): readonl
     return arr.map(({ line, rawName, textRaw }: TMsg): string => `${line + 1} , ${rawName} ; ${textRaw.trim()}`);
 }
 
-export function cmd2TryFindGlobalVar(document: vscode.TextDocument): null {
+export async function cmd2TryFindGlobalVar(document: vscode.TextDocument): Promise<null> {
     const t1: number = Date.now();
     const AhkFileData: TAhkFileData | null = pm.getDocMap(document.uri.fsPath) ?? pm.updateDocDef(document);
     if (AhkFileData === null) {
@@ -95,31 +96,29 @@ export function cmd2TryFindGlobalVar(document: vscode.TextDocument): null {
         `    static sourcePath := "${document.uri.fsPath}"`,
         '',
         '    byGlobalLine() {',
+        '        ; by Global varName1,varName2`n',
         '        MsgBox, ',
         '            ( LTrim C',
-        '                by Global varName1,varName2`n',
-        // '                fnA()',
         ...byGlobalLine.map((str: string): string => `                ${str}`),
-        // '                fnC()',
         '            )',
         '    }',
         '',
         '    byGui() {',
+        '        ; if use `Global` declaration , then hide with this block',
+        '        ; Gui, Add, ListView, hwndOutPutVar vVarName',
+        '        ; `n;                     ^^^^^^^^   ^^^^^^^',
+        '        ; hwndOutPutVar -> OutPutVar ; https://www.autohotkey.com/docs/v1/lib/Gui.htm#Controls_Uncommon_Styles_and_Options',
+        '        ; vVarName -> VarName ; https://www.autohotkey.com/docs/v1/lib/Gui.htm#Events',
         '        MsgBox, ',
         '            ( LTrim C ; if use `Global` declaration , then hide with this block',
-        '                Gui, Add, ListView, hwndOutPutVar vVarName',
-        '                `n;                     ^^^^^^^^   ^^^^^^^',
-        '                hwndOutPutVar -> OutPutVar ; https://www.autohotkey.com/docs/v1/lib/Gui.htm#Controls_Uncommon_Styles_and_Options',
-        '                vVarName -> VarName ; https://www.autohotkey.com/docs/v1/lib/Gui.htm#Events',
-        '                `n',
         ...byGuiDef.map((str: string): string => `                ${str}`),
         '            )',
         '    }',
         '',
         '    maybeIsGlobal() {',
+        '        ; maybe is Global',
         '        MsgBox, ',
         '            ( LTrim C ; if use `Global` or `Gui` declaration , then hide with this block',
-        '                maybe is Global`n',
         ...byModuleVar.map((str: string): string => `                ${str}`),
         '            )',
         '    }',
@@ -137,10 +136,11 @@ export function cmd2TryFindGlobalVar(document: vscode.TextDocument): null {
         '',
     ].join('\n');
 
-    void vscode.workspace.openTextDocument({
+    const docOut: vscode.TextDocument = await vscode.workspace.openTextDocument({
         language: 'ahk',
         content,
-    }).then((doc: vscode.TextDocument): Thenable<vscode.TextEditor> => vscode.window.showTextDocument(doc));
-
+    });
+    await fmtOutPutReport(docOut);
+    await vscode.window.showTextDocument(docOut);
     return null;
 }

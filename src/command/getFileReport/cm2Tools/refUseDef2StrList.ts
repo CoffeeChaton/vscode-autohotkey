@@ -14,7 +14,7 @@ export function refUseDef2StrList(DocStrMap: TTokenStream, refUseDef: Readonly<T
         const msg: string[] = [
             `${name} :="`,
             '( LTrim C',
-            `${name}() ; ${fsPath} [${range.start.line}, ${range.start.character}]`,
+            `${name}() ; ${fsPath} [${range.start.line + 1}, ${range.start.character + 1}]`,
             '[ln, col]',
         ];
         for (const { line, col } of refList) {
