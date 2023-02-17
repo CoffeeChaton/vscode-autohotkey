@@ -268,6 +268,11 @@
                         "type": "boolean",
                         "default": false,
                         "markdownDescription": "use *light bulb* gotoDef / fundAllRef, [look Issues #10](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/10)"
+                    },
+                    "AhkNekoHelp.Rename.functionInStr": {
+                        "type": "boolean",
+                        "default": false,
+                        "markdownDescription": "if function-name in string like `func(\"funcName\")` , default not replace it to new name [[read more]](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/89f0879239ef6250fc15c0fd0ea7ce95519e3487/note/code601.md)"
                     }
                 }
             }

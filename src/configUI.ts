@@ -14,8 +14,8 @@ const enum EStr {
 
 function getConfigs<T>(Configs: vscode.WorkspaceConfiguration, section: TConfigKey): T {
     const ed: T | undefined = Configs.get<T>(section.replace('AhkNekoHelp.', ''));
-    if (ed !== undefined) return ed;
-    throw new CConfigError(section);
+    if (ed === undefined) throw new CConfigError(section);
+    return ed;
 }
 
 function getConfig(Configs: vscode.WorkspaceConfiguration): TConfigs {
@@ -59,6 +59,7 @@ function getConfig(Configs: vscode.WorkspaceConfiguration): TConfigs {
         customize: {
             CodeAction2GotoDefRef: getConfigs<boolean>(Configs, 'AhkNekoHelp.customize.CodeAction2GotoDefRef'),
         },
+        RenameFunctionInStr: getConfigs<boolean>(Configs, 'AhkNekoHelp.Rename.functionInStr'),
     } as const;
 
     statusBarItem.color = ed.statusBarDisplayColor;
@@ -111,6 +112,10 @@ export function getDiagConfig(): TConfigs['Diag'] {
 
 export function getCustomize(): TConfigs['customize'] {
     return config.customize;
+}
+
+export function geRenameConfig(): TConfigs['RenameFunctionInStr'] {
+    return config.RenameFunctionInStr;
 }
 
 export function needDiag(): boolean {

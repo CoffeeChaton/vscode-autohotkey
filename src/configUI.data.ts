@@ -67,6 +67,7 @@ type TempConfigs = {
     customize: {
         CodeAction2GotoDefRef: boolean,
     },
+    RenameFunctionInStr: boolean,
 };
 
 /**

@@ -1,10 +1,12 @@
 import * as vscode from 'vscode';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import { geRenameConfig } from '../../configUI';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
 import type { TFnRefLike } from '../Def/getFnRef';
-import { getFuncRef } from '../Def/getFnRef';
+import { EFnRefBy, getFuncRef } from '../Def/getFnRef';
+import { log } from '../vscWindows/log';
 
 function RenameProviderCore(
     document: vscode.TextDocument,
@@ -25,14 +27,23 @@ function RenameProviderCore(
     const userDefLink: readonly TFnRefLike[] = getFuncRef(DA);
     if (userDefLink.length === 0) return null;
 
+    const replaceBy2: boolean = geRenameConfig();
+
     const fnNameLen: number = DA.name.length;
+    const { DocStrMap } = AhkFileData;
+    const strList: string[] = [];
     const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
     for (const v of userDefLink) {
         const {
             uri,
             line,
             col,
+            by,
         } = v;
+        if (by === EFnRefBy.wordWrap) {
+            strList.push(DocStrMap[line].textRaw.trim());
+            if (!replaceBy2) continue;
+        }
         const range: vscode.Range = new vscode.Range(
             new vscode.Position(line, col),
             new vscode.Position(line, col + fnNameLen),
@@ -43,7 +54,19 @@ function RenameProviderCore(
             newName,
         );
     }
-    // TODO rename,For safety, do not replace func("fnName") case, please use ctrl+f to replace the search
+    if (strList.length > 0) {
+        log.warn(
+            [
+                `rename event "${DA.name}()" -> "${newName}()"`,
+                '[',
+                ...strList.map((s: string): string => `    ${s}`),
+                `] For safety, please check "${DA.name}" case, use ctrl+f search the following case`,
+            ].join('\n'),
+        );
+        log.show();
+    } else {
+        log.info(`rename event "${DA.name}()" -> "${newName}()"`);
+    }
     return edit;
 }
 

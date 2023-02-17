@@ -59,13 +59,14 @@ describe('check package ruler', () => {
                 ['AhkNekoHelp.format.useTopLabelIndent', 'boolean'],
                 ['AhkNekoHelp.format.useParenthesesIndent', 'boolean'],
                 ['AhkNekoHelp.format.useSquareBracketsIndent', 'boolean'],
-                // last
+                // misc
                 ['AhkNekoHelp.baseScan.IgnoredList', 'array'],
                 ['AhkNekoHelp.snippets.CommandOption', 'number'],
                 ['AhkNekoHelp.snippets.blockFilesList', 'array'],
                 ['AhkNekoHelp.statusBar.displayColor', 'string'],
                 ['AhkNekoHelp.useSymbolProvider', 'boolean'],
                 ['AhkNekoHelp.customize.CodeAction2GotoDefRef', 'boolean'],
+                ['AhkNekoHelp.Rename.functionInStr', 'boolean'],
             ],
         );
     });

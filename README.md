@@ -150,11 +150,31 @@ support to find like
    ```
 
 6. not plan to support like `%func%()` `Func%A_Index%()` [Dynamically Calling a Function](https://www.autohotkey.com/docs/v1/Functions.htm#DynCall)
-7. read more of [funcRef](src/command/AnalysisFuncReference/funcRef.ahk)
+7. _warn_ this extension not match case
+
+   ```ahk
+   var := "name"
+   fn%var%()
+
+   fn := "fn"
+   %fn%%var%()
+   str = fnName ; not use := && ""
+   func(str).call()
+
+   fnName(){
+        MsgBox % "i am fnName"
+   }
+   ```
+
+8. read more of [funcRef](src/command/AnalysisFuncReference/funcRef.ahk)
 
 ## Function rename
 
 - (default via `F2`) rename with your can use [[🔍Find Ref of Function]](#find-ref-of-function) to find.
+- TODO: check of Rename (via `f2`) newName
+  1. TODO newFnName has been defined as `function` `class` `label`
+  2. default not rename `"fnName"` and log.info using case
+  3. _warn_ this extension not match `fn%var%()` or `%fn%%var%()` or `str = fnName` case
 
 ## Hover
 
