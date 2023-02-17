@@ -28,11 +28,13 @@ async function formatByPathAsync(
             needDiff: true,
         }),
     );
-    await vscode.workspace.applyEdit(WorkspaceEdit);
+    const ms: number = Date.now() - t1;
+
+    await vscode.workspace.applyEdit(WorkspaceEdit); // vscode check more thing of format?
 
     return {
         fsPath: uri.fsPath,
-        ms: Date.now() - t1,
+        ms,
     };
 }
 

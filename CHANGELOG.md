@@ -1,6 +1,6 @@
 # Changelog
 
-## Next 0.0.23(2023-02-XX)
+## 0.0.23(2023-02-17)
 
 - feat: find func reference at `Sort, MyVar, F IntegerSort` [[Read doc]](https://www.autohotkey.com/docs/v1/lib/Sort.htm)
 
@@ -38,6 +38,7 @@
 - feat: check of Rename newName
   1. check newFnName has been defined as `function` `class` `label`
   2. default not rename `"fnName"` , can use `AhkNekoHelp.Rename.functionInStr` open it [[Read more]](note/code601.md)
+- feat: via `'0 -> Refresh Resource from workspace'` to find each file parsing time.
 - fix: move `Reload` `Pause` from cmd -> `Flow of Control`, also fix syntax-highlight
 - fix: case of multi_line vs hotkey , exp : `(:: foo()` is hotkey not multi_line
 - fix: completion of `Gui, add` `Gui, new` ...etc

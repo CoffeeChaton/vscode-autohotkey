@@ -282,7 +282,7 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
   <details>
     <summary>settings.json</summary>
 
-  ````jsonc
+  ```jsonc
   // settings.json
   {
       "editor.tokenColorCustomizations": {
@@ -315,8 +315,8 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
       }
   }
   ```
+
   </details>
-  ````
 
 ## Privacy Statement
 
@@ -330,7 +330,7 @@ _theme from [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=z
 - The best way to improve startup times is to exclude unnecessary files, via [settings.json](https://code.visualstudio.com/docs/getstarted/settings) `AhkNekoHelp.baseScan.IgnoredList`
 - When editing becomes slow, split the file, via [`#Include`](https://www.autohotkey.com/docs/v1/lib/_Include.htm)
 
-<!-- - TODO use...try to find each file parsing time. -->
+- via `'Refresh Resource'` to find each file parsing time.
 
 ## Credits
 
