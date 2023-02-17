@@ -28,7 +28,7 @@
   }
   ```
 
-- feat: Provider a diag [code601](note/code601.md) avoid def-func-name affect [`Hotkey, KeyName , Label`](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm)
+- feat: Provider a diag [note/code601.md](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/code601.md) avoid def-func-name affect [`Hotkey, KeyName , Label`](https://www.autohotkey.com/docs/v1/lib/Hotkey.htm)
 - feat: add hover of `label:`
 - feat: better log of `FormatAllFile` and `Refresh Resource`
 - feat: use CodeLens at file top show more tools
@@ -37,13 +37,13 @@
   3. report this def/ref global variables
 - feat: check of Rename newName
   1. check newFnName has been defined as `function` `class` `label`
-  2. default not rename `"fnName"` , can use `AhkNekoHelp.Rename.functionInStr` open it [[Read more]](note/code601.md)
+  2. default not rename `"fnName"` , can use `AhkNekoHelp.Rename.functionInStr` open it [[Read more]](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/code601.md)
 - feat: via `'0 -> Refresh Resource from workspace'` to find each file parsing time.
 - fix: move `Reload` `Pause` from cmd -> `Flow of Control`, also fix syntax-highlight
 - fix: case of multi_line vs hotkey , exp : `(:: foo()` is hotkey not multi_line
 - fix: completion of `Gui, add` `Gui, new` ...etc
 - fix: syntax-highlight of `else()` `GoSub()` ...etc to look like `func()` , because it's legal and works.
-  > and i Provider a diag a diag [code304](note/code304.md) check define a function name look like [Flow of Control](https://www.autohotkey.com/docs/v1/Language.htm#control-flow).
+  > and i Provider a diag a diag [code304](https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/blob/master/note/code304.md) check define a function name look like [Flow of Control](https://www.autohotkey.com/docs/v1/Language.htm#control-flow).
 
 - fix: format `HotStr` trigger range has `([{`
 - fix: format do not indent `HotKey` `HotStr` `Label` line, even if it is through

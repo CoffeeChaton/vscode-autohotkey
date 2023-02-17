@@ -58,5 +58,6 @@
         "no-inline-html": {
             "allowed_elements": ["details", "summary", "b"]
         }
-    }
+    },
+    "markdown.extension.list.indentationSize": "inherit"
 }
