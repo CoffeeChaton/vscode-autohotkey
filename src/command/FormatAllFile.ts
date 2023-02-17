@@ -5,13 +5,15 @@ import { EFormatChannel } from '../globalEnum';
 import { FormatCore } from '../provider/Format/FormatProvider';
 import { log } from '../provider/vscWindows/log';
 import { getUriList } from '../tools/fsTools/getUriList';
+import type { TShowFileParam } from '../tools/fsTools/showFileList';
 import { showFileList } from '../tools/fsTools/showFileList';
 import { UpdateCacheAsync } from './UpdateCache';
 
 async function formatByPathAsync(
     uri: vscode.Uri,
     options: vscode.FormattingOptions,
-): Promise<void> {
+): Promise<TShowFileParam> {
+    const t1: number = Date.now();
     const document: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
 
     const WorkspaceEdit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
@@ -27,6 +29,11 @@ async function formatByPathAsync(
         }),
     );
     await vscode.workspace.applyEdit(WorkspaceEdit);
+
+    return {
+        fsPath: uri.fsPath,
+        ms: Date.now() - t1,
+    };
 }
 
 async function setFormattingOptions(): Promise<vscode.FormattingOptions | null> {
@@ -81,15 +88,14 @@ export async function FormatAllFile(): Promise<null> {
     if (fmtOpt === null) return null;
 
     const t1: number = Date.now();
-    const results: Promise<void>[] = [];
+    const results: TShowFileParam[] = [];
     for (const uri of uriList) {
-        results.push(formatByPathAsync(uri, fmtOpt));
+        // eslint-disable-next-line no-await-in-loop
+        results.push(await formatByPathAsync(uri, fmtOpt));
     }
-    await Promise.all(results);
     const t2: number = Date.now();
 
-    const fsPathList: string[] = uriList.map((uri: vscode.Uri): string => uri.fsPath);
-    log.info(`${showFileList(fsPathList)}\nFormatAllFile -> ${t2 - t1} ms`);
+    log.info(`${showFileList(results)}\nFormatAllFile -> ${t2 - t1} ms`);
     log.show();
 
     await UpdateCacheAsync(false);

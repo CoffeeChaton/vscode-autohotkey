@@ -30,6 +30,7 @@ export type TMemo = Readonly<{
     readonly uri: vscode.Uri,
     readonly ModuleVar: TModuleVar,
     readonly GValMap: TGValMapReadOnly,
+    readonly ms: number,
 }>;
 
 function strListDeepEq(DocStrMap: TTokenStream, fullTextList: readonly string[]): boolean {
@@ -85,7 +86,7 @@ export const BaseScanMemo = {
 } as const;
 
 export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
-    // const t1 = Date.now();
+    const t1: number = Date.now();
     const fullText: string = document.getText();
     const fullTextList: string[] = fullText.split(/\r?\n/u);
     if (fullTextList.at(-1)?.trim() !== '') fullTextList.push('');
@@ -113,13 +114,15 @@ export function getFileAST(document: vscode.TextDocument): TMemo | 'isAhk2' {
         },
     );
 
+    const ModuleVar: TModuleVar = getModuleVarMap(DocStrMap, GValMap, AST, fsPath);
     const AhkCache: TMemo = {
         DocStrMap,
         AST,
         DocFullSize,
         uri,
-        ModuleVar: getModuleVarMap(DocStrMap, GValMap, AST, fsPath),
+        ModuleVar,
         GValMap,
+        ms: Date.now() - t1,
     };
     BaseScanMemo.setMemo(fsPath, AhkCache);
 
