@@ -1,6 +1,7 @@
 import { CAhkClass } from '../../AhkSymbol/CAhkClass';
 import type { TAstRoot } from '../../AhkSymbol/TAhkSymbolIn';
 
+// FIXME:
 const wmClass = new WeakMap<TAstRoot, readonly CAhkClass[]>();
 
 export function getFileAllClass(AstRoot: TAstRoot): readonly CAhkClass[] {

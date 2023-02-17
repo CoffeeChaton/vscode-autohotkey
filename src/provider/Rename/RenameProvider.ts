@@ -1,9 +1,14 @@
 import * as vscode from 'vscode';
+import type { CAhkClass } from '../../AhkSymbol/CAhkClass';
 import type { CAhkFunc } from '../../AhkSymbol/CAhkFunc';
+import type { CAhkLabel } from '../../AhkSymbol/CAhkLine';
 import { geRenameConfig } from '../../configUI';
 import type { TAhkFileData } from '../../core/ProjectManager';
 import { pm } from '../../core/ProjectManager';
 import { getDAWithPos } from '../../tools/DeepAnalysis/getDAWithPos';
+import { getFuncWithName } from '../../tools/DeepAnalysis/getFuncWithName';
+import { getUserDefTopClassSymbol } from '../../tools/DeepAnalysis/getUserDefTopClassSymbol';
+import { findLabel } from '../../tools/labels';
 import type { TFnRefLike } from '../Def/getFnRef';
 import { EFnRefBy, getFuncRef } from '../Def/getFnRef';
 import { log } from '../vscWindows/log';
@@ -70,6 +75,30 @@ function RenameProviderCore(
     return edit;
 }
 
+function checkRenameNewName(newName: string): string {
+    type TCheckFFn = {
+        fn: (typeof findLabel) | (typeof getFuncWithName) | (typeof getUserDefTopClassSymbol),
+        str: 'class' | 'function' | 'label',
+    };
+    const checkList: readonly TCheckFFn[] = [
+        { str: 'class', fn: getUserDefTopClassSymbol },
+        { str: 'function', fn: getFuncWithName },
+        { str: 'label', fn: findLabel },
+    ];
+
+    const newNameUp: string = newName.toUpperCase();
+
+    for (const { fn, str } of checkList) {
+        const ahkSymbol: CAhkClass | CAhkFunc | CAhkLabel | null = fn(newNameUp);
+        if (ahkSymbol !== null) {
+            const { uri, range } = ahkSymbol;
+            const { line, character } = range.start;
+            return `"${newName}" has same name ${str} at "${uri.fsPath}" [${line + 1}, ${character + 1}]`;
+        }
+    }
+    return '';
+}
+
 export const RenameProvider: vscode.RenameProvider = {
     provideRenameEdits(
         document: vscode.TextDocument,
@@ -86,7 +115,11 @@ export const RenameProvider: vscode.RenameProvider = {
             void vscode.window.showInformationMessage(`Please use normal newName, not support of "${newName}"`);
             return null;
         }
-        // TODO check newName
+        const warnMsg: string = checkRenameNewName(newName);
+        if (warnMsg !== '') {
+            void vscode.window.showWarningMessage(warnMsg);
+            return null;
+        }
 
         return RenameProviderCore(document, position, newName);
     },
