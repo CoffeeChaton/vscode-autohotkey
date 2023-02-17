@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [1,2,3,4,5,6,7,8] }] */
+/* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4,5,6,7,8] }] */
 
 import * as vscode from 'vscode';
 import { EFormatChannel } from '../globalEnum';
@@ -74,8 +74,8 @@ async function setFormattingOptions(): Promise<vscode.FormattingOptions | null> 
 }
 
 export async function FormatAllFile(): Promise<null> {
-    const uriList: vscode.Uri[] | null = getUriList();
-    if (uriList === null) return null;
+    const uriList: vscode.Uri[] = getUriList();
+    if (uriList.length === 0) return null;
 
     const fmtOpt: vscode.FormattingOptions | null = await setFormattingOptions();
     if (fmtOpt === null) return null;

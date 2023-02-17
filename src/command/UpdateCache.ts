@@ -7,15 +7,15 @@ import { log } from '../provider/vscWindows/log';
 import { getUriList } from '../tools/fsTools/getUriList';
 import { showFileList } from '../tools/fsTools/showFileList';
 
-export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileData[] | null> {
+export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileData[]> {
     rmAllDiag();
     pm.DocMap.clear();
     if (clearCache) {
         BaseScanMemo.memo.clear();
     }
 
-    const uriList: vscode.Uri[] | null = getUriList();
-    if (uriList === null) return null;
+    const uriList: vscode.Uri[] = getUriList();
+    if (uriList.length === 0) return [];
 
     const FileListData: TAhkFileData[] = [];
     for (const uri of uriList) {
@@ -45,7 +45,7 @@ export async function UpdateCacheAsync(clearCache: boolean): Promise<TAhkFileDat
 
 export async function UpdateCacheUi(): Promise<void> {
     const t1: number = Date.now();
-    const list: TAhkFileData[] | null = await UpdateCacheAsync(true) ?? [];
+    const list: TAhkFileData[] = await UpdateCacheAsync(true);
     const t2: number = Date.now();
     const fsPathList: string[] = list.map((v: TAhkFileData): string => v.uri.fsPath);
     log.info(`${showFileList(fsPathList)}\nRefresh Resource ${t2 - t1} ms, file: ${list.length}`);

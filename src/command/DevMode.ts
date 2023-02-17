@@ -1,6 +1,5 @@
 /* eslint-disable @fluffyfox/prefer-timer-id */
 import * as vscode from 'vscode';
-import type { TAhkFileData } from '../core/ProjectManager';
 import { log } from '../provider/vscWindows/log';
 import { statusBarItem } from '../provider/vscWindows/statusBarItem';
 import {
@@ -19,12 +18,10 @@ function devTestDA(cycles: number): void {
     const t1: number = Date.now();
 
     void UpdateCacheAsync(true)
-        .then((ed: TAhkFileData[] | null): null => {
-            if (ed !== null) {
-                DevModeData.push(Date.now() - t1);
-                statusBarItem.text = `$(heart) ${DevModeData.length} of ${cycles}`;
-                statusBarItem.show();
-            }
+        .then((): null => {
+            DevModeData.push(Date.now() - t1);
+            statusBarItem.text = `$(heart) ${DevModeData.length} of ${cycles}`;
+            statusBarItem.show();
             return null;
         })
         .catch((error: Error): void => {

@@ -15,7 +15,7 @@ export function statusBarClick(): void {
     };
 
     void vscode.window.showQuickPick<TPick>([
-        { label: '0 -> Refresh Resource', fn: UpdateCacheUi },
+        { label: '0 -> Refresh Resource from workspace', fn: UpdateCacheUi },
         { label: '1 -> dev tools', fn: pressureTest },
         { label: '2 -> list all #Include List', fn: ListAllInclude },
         { label: '3 -> list all #Include Tree', fn: ListIncludeTree },
