@@ -21,7 +21,7 @@ fnA(Var) {
 }
 
 fnB(Var) {
-    ;              V miss,---> var allow !== "0 MsgBox "A""
+    ;      TODO diag    V miss,---> var !== "0 MsgBox "A""
     IfEqual, Var, 0 MsgBox "A"
         MsgBox, % "B"
 
