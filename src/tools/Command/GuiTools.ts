@@ -70,6 +70,13 @@ function getMenuFuncData(lStr: string, col: number, flag: 0 | 1): readonly TScan
  * <https://github.com/CoffeeChaton/vscode-autohotkey-NekoHelp/issues/17>
  *
  * V: Variable. Associates a variable with a control. <https://www.autohotkey.com/docs/v1/lib/Gui.htm#Events>
+ *
+ * ```ahk
+ * GUI, Add, Button, x+1 hp w25 gStartPickingColor vPickuFillBehindColor +hwndhTemp, P
+ * ;                             ^ g-func https://www.autohotkey.com/docs/v1/lib/GuiControls.htm#Text
+ * ;                                                 ^ v-var https://www.autohotkey.com/docs/v1/lib/Gui.htm#Events
+ * ;                                                                           ^ hwnd-var Hwnd OutputVar [v1.1.04+] https://www.autohotkey.com/docs/v1/lib/Gui.htm#Options
+ * ```
  */
 export function getGuiFunc(AhkTokenLine: TAhkTokenLine, flag: 0 | 1): readonly TScanData[] | null {
     const { fistWordUp } = AhkTokenLine;
