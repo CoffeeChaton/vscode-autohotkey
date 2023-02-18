@@ -1,5 +1,9 @@
 # Changelog
 
+## Next 0.0.24(2023-02-XX)
+
+-fix: `1.e3` syntax-highlight
+
 ## 0.0.23(2023-02-17)
 
 - feat: find func reference at `Sort, MyVar, F IntegerSort` [[Read doc]](https://www.autohotkey.com/docs/v1/lib/Sort.htm)

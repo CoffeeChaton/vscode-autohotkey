@@ -411,6 +411,11 @@
                     "captures": { "1": { "name": "keyword.other.unit.numeric.decimal.ahk" } }
                 },
                 {
+                    "match": "\\b(?<!\\.)[0-9]+\\.[0-9]*([eE])[+-]?[0-9]+\\b(?!\\.)",
+                    "name": "constant.numeric.decimal.ahk",
+                    "captures": { "1": { "name": "keyword.other.unit.numeric.decimal.ahk" } }
+                },
+                {
                     "match": "(?<![.#])\\b(?i:False|True)\\b",
                     "name": "variable.other.constant.builtin.ahk"
                 }
