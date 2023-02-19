@@ -57,6 +57,9 @@
     "markdownlint.config": {
         "no-inline-html": {
             "allowed_elements": ["details", "summary", "b"]
+        },
+        "ul-indent": {
+            "indent": 2
         }
     },
     "markdown.extension.list.indentationSize": "inherit"
