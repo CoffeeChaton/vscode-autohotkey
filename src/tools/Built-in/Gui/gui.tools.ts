@@ -78,7 +78,7 @@ export function getSnippetGui(subStr: string): readonly vscode.CompletionItem[] 
             return [];
 
         default:
-            enumLog(opt, getSnippetGui.name);
+            enumLog(opt, 'getSnippetGui');
             return [];
     }
 }

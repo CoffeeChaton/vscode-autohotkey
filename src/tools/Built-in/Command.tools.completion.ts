@@ -44,7 +44,7 @@ export function getSnippetCommand(subStr: string): readonly CSnippetCommand[] {
             return [];
 
         default:
-            enumLog(opt, getSnippetCommand.name);
+            enumLog(opt, 'getSnippetCommand');
             return [];
     }
 }
