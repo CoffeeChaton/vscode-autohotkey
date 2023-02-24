@@ -43,6 +43,7 @@ export const enum EFnRefBy {
      * need ts5.0
      * https://github.com/microsoft/TypeScript/issues/52701
      */
+    // eslint-disable-next-line @typescript-eslint/no-mixed-enums
     banCompare = 'Do not use compare',
 }
 export function mayBeIsLabel(by: EFnRefBy): boolean {

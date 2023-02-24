@@ -21,3 +21,17 @@ Carry out, perform, evaluate, put into effect, etc. _Execute_ basically has the 
 Body
 
 The _body_ of a control flow statement is the statement or group of statements to which it applies. For example, the body of an [if statement](https://www.autohotkey.com/docs/v1/Language.htm#if-statement) is executed only if a specific condition is met.
+
+if all files not changed
+
+| ms       | 0.0.23    | 0.0.24b | x   |
+| -------- | --------- | ------- | --- |
+| 88-files | 1600~1800 | 450~500 | 3X  |
+| 29-files | 700~800   | 50~80   | 10X |
+
+if all files changed
+
+| ms       | 0.0.23    | 0.0.24b   | x  |
+| -------- | --------- | --------- | -- |
+| 88-files | 1600~1800 | 1600~1800 | 1X |
+| 29-files | 700~800   | 700~800   | 1X |

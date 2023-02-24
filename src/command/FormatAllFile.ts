@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import { EFormatChannel } from '../globalEnum';
-import { FormatCore } from '../provider/Format/FormatProvider';
+import { FormatCore, FormatCoreWrap } from '../provider/Format/FormatProvider';
 import { log } from '../provider/vscWindows/log';
 import { getUriList } from '../tools/fsTools/getUriList';
 import type { TShowFileParam } from '../tools/fsTools/showFileList';
@@ -19,14 +19,14 @@ async function formatByPathAsync(
     const WorkspaceEdit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
     WorkspaceEdit.set(
         uri,
-        FormatCore({
+        FormatCoreWrap(FormatCore({
             document,
             options,
             fmtStart: 0,
             fmtEnd: document.lineCount - 1,
             from: EFormatChannel.byFormatAllFile,
             needDiff: true,
-        }),
+        })),
     );
     const ms: number = Date.now() - t1;
 

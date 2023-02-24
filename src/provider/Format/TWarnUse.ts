@@ -1,10 +1,10 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1,2,-999] }] */
-import * as vscode from 'vscode';
+import type * as vscode from 'vscode';
 import type { TConfigs } from '../../configUI.data';
 import type { DeepReadonly, TAhkTokenLine } from '../../globalEnum';
 import type { TBrackets } from '../../tools/Bracket';
 import { lineReplace } from './fmtReplace';
-import type { TDiffMap } from './tools/fmtDiffInfo';
+import type { TFmtCore } from './FormatType';
 
 type TWarnUse =
     & DeepReadonly<{
@@ -19,24 +19,22 @@ type TWarnUse =
     }>
     & {
         brackets: TBrackets,
-        DiffMap: TDiffMap,
     };
 
-function wrap(args: TWarnUse, text: string, AhkTokenLine: TAhkTokenLine): vscode.TextEdit {
-    const { lStrTrim, DiffMap, formatTextReplace } = args;
+function wrap(args: TWarnUse, text: string, AhkTokenLine: TAhkTokenLine): TFmtCore {
+    const { lStrTrim, formatTextReplace } = args;
     const { line, textRaw } = AhkTokenLine;
 
     const newText: string = formatTextReplace
         ? lineReplace(AhkTokenLine, text, lStrTrim) // Alpha test options
         : text;
 
-    if (newText !== text) {
-        DiffMap.set(line, [text, newText]);
-    }
-
-    const endCharacter: number = Math.max(newText.length, textRaw.length);
-    const range = new vscode.Range(line, 0, line, endCharacter);
-    return new vscode.TextEdit(range, newText);
+    return {
+        line,
+        oldText: textRaw,
+        newText,
+        hasOperatorFormat: newText !== text,
+    };
 }
 
 function brackets2Deep(brackets: TBrackets, userConfigs: TConfigs['format']): number {
@@ -54,7 +52,7 @@ function brackets2Deep(brackets: TBrackets, userConfigs: TConfigs['format']): nu
     return bracketsDeep;
 }
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkTokenLine): vscode.TextEdit {
+export function fn_Warn_thisLineText_WARN(args: TWarnUse, AhkTokenLine: TAhkTokenLine): TFmtCore {
     const {
         lStrTrim,
         occ,

@@ -1,6 +1,6 @@
 import type * as vscode from 'vscode';
 import { EFormatChannel } from '../../globalEnum';
-import { FormatCore } from '../Format/FormatProvider';
+import { FormatCore, FormatCoreWrap } from '../Format/FormatProvider';
 
 export const RangeFormatProvider: vscode.DocumentRangeFormattingEditProvider = {
     provideDocumentRangeFormattingEdits(
@@ -9,13 +9,13 @@ export const RangeFormatProvider: vscode.DocumentRangeFormattingEditProvider = {
         options: vscode.FormattingOptions,
         _token: vscode.CancellationToken,
     ): vscode.ProviderResult<vscode.TextEdit[]> {
-        return FormatCore({
+        return FormatCoreWrap(FormatCore({
             document,
             options,
             fmtStart: range.start.line,
             fmtEnd: range.end.line,
             from: EFormatChannel.byFormatRange,
             needDiff: true,
-        });
+        }));
     },
 };
